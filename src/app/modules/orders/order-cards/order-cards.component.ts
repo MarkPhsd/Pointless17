@@ -124,7 +124,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   orderSubscription$ = this._addToListOBS(this.pageSize, 1, false).pipe(
     repeatWhen(notifications =>
       notifications.pipe(
-        tap(() => 
+        tap(() =>
         console.log('')
         ),
         delay(this.seconds))
@@ -213,13 +213,13 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     this.initViewSubscriber()
     try {
       this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
-        if (data) { 
+        if (data) {
           const item = JSON.parse(JSON.stringify(data))
           data = item;
           data.employeeID = this.orderMethodsService.orderSearchEmployeeID;
         }
         this.searchModel = data
-      
+
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
         this.nextPage(true)
@@ -323,7 +323,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     let sendOrder$ = of(null)
     if (this.orderMethodsService?.order) {
       if (!this.orderMethodsService.order.history) {
-        let sendOrder$ = this.paymentMethodsProcess.sendOrderOnExit(this.orderMethodsService.order)
+        let sendOrder$ = this.paymentMethodsProcess.updateSendOrderOnExit(this.orderMethodsService.order)
       }
     }
 

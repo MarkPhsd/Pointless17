@@ -1,5 +1,5 @@
 import { Component, OnInit,Output, Input, EventEmitter, HostListener, ViewChild, OnChanges} from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { IMenuItem, menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
 @Component({
@@ -34,6 +34,7 @@ export class MatToggleSelectorComponent implements OnChanges {
   @Input()  toggleVertical    = true;
   @Input()  type: string;
   // @Input()  sideBar : boolean;
+  action$: Observable<any>;
   departmentID: number;
   subscribed : boolean;
   @Input() styleHeight = ''
@@ -59,12 +60,16 @@ export class MatToggleSelectorComponent implements OnChanges {
   refresh() {
     if (this.toggleButtonClass) { this.toggleButtonClass = 'toggle-button'}
     try {
-      if (this.list$) {
-        this.list$.subscribe(data => {
+      if (this.list$ && this.list$ != undefined) {
+        this.action$ = this.list$.pipe(
+          switchMap(data => {
           this.subscribed = true
-          this.list = this.sortList(data)
-        })
-        return
+          this.list = []
+          if (data) {
+            this.list = this.sortList(data)
+          }
+          return of(data)
+        }))
       }
     } catch (error) {
 

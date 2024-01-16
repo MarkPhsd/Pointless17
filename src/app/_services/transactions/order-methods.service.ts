@@ -212,6 +212,8 @@ export class OrderMethodsService implements OnDestroy {
   clearOrderSubscription() {
     localStorage.removeItem('orderSubscription')
     this.toolbarServiceUI.updateOrderBar(false)
+    this.currentOrder = null;
+    this._currentOrder.next(null)
     this.updateLastItemAdded(null)
     this.updateOrderSubscription(null);
   }
@@ -245,21 +247,25 @@ export class OrderMethodsService implements OnDestroy {
     return order
   }
 
-  preSwitchOrder(order: IPOSOrder) { 
-    if (!this.currentOrder?.id || this.currentOrder?.id == 0) { 
+  preSwitchOrder(order: IPOSOrder) {
+    if (!this.currentOrder?.id || this.currentOrder?.id == 0) {
       this.splitEntryValue = 1;
     }
-    if (this.currentOrder?.id != order?.id) { 
+    if (this.currentOrder?.id != order?.id) {
       this.splitEntryValue = 1;
     }
   }
 
   updateOrder(order: IPOSOrder) {
     try {
+      if (!order) {
+        this.setStateOrder(null)
+        return
+      }
       this.preSwitchOrder(order)
       this.currentOrder = order;
       this._currentOrder.next(order);
-      if (order?.service?.filterType == 0  ) { 
+      if (order?.service?.filterType == 0  ) {
       }
       this.setStateOrder(order);
       this._scanner.next(true)
@@ -278,7 +284,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   getInventoryMonitor(site: ISite, id: number): Observable<IPOSOrder> {
-    return this.orderService.inventoryMonitor(site, this.order.id).pipe(switchMap(data => 
+    return this.orderService.inventoryMonitor(site, this.order.id).pipe(switchMap(data =>
       {
         this.updateOrder(data);
         return of(data)
@@ -313,7 +319,6 @@ export class OrderMethodsService implements OnDestroy {
       order.wholeSaleCostTotal    = currentValue;
 
     }
-
 
     this.storeCreditMethodService.updateSearchModel(null);
 
@@ -351,6 +356,10 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   setStateOrder(order) {
+    if (!order) {
+      localStorage.removeItem('orderSubscription')
+      return;
+    }
     order = this.getCost(order);
     const orderJson = JSON.stringify(order);
     localStorage.setItem('orderSubscription', orderJson);
@@ -379,7 +388,7 @@ export class OrderMethodsService implements OnDestroy {
       this._posSearchModel.next(searchModel);
       return ;
     }
-    
+
     // let model = JSON.parse(JSON.stringify(searchModel)) as IPOSOrderSearchModel
     if (!searchModel.onlineOrders) {  searchModel.onlineOrders = false }
 
@@ -388,7 +397,7 @@ export class OrderMethodsService implements OnDestroy {
     // model.employeeID = this.setEmployeeID(employeeID )
     searchModel.clientID = this.setUserID()
     // model.clientID = this.setUserID()
-    
+
     this.updateOrderSearchModelDirect(JSON.parse(JSON.stringify(searchModel)))
   }
 
@@ -406,7 +415,7 @@ export class OrderMethodsService implements OnDestroy {
     const user = this.userAuthorization.currentUser()
     const employee = (!this.userAuthorization.isAdmin || !this.userAuthorization.isManagement) && this.userAuthorization.isStaff
     const manager = this.userAuthorization.isManagement
-   
+
     if (!this.showAllOrders && manager) {
       const id = employeeID;
       return id;
@@ -1186,15 +1195,15 @@ export class OrderMethodsService implements OnDestroy {
 
   splitOrderFromGroup(id: number, groupID: number, order: IPOSOrder) {
     const site = this.siteService.getAssignedSite()
-    return this.orderService.splitOrderFromGroup(site, id, groupID).pipe(switchMap(data => { 
+    return this.orderService.splitOrderFromGroup(site, id, groupID).pipe(switchMap(data => {
       this.setLastOrderByFilter(groupID, order)
       this.updateOrder(data);
       return of(data)
     }))
   }
 
-  setLastOrderByFilter(groupID: number, order:IPOSOrder) { 
-    order.posOrderItems = order.posOrderItems.filter(data => { 
+  setLastOrderByFilter(groupID: number, order:IPOSOrder) {
+    order.posOrderItems = order.posOrderItems.filter(data => {
       return data.splitGroupID != groupID;
     })
     this.setLastOrder(order)
@@ -1336,12 +1345,12 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-  isProductLowCount(data: ItemPostResults) { 
+  isProductLowCount(data: ItemPostResults) {
     if (data?.message === 'Manager OverRide' && data?.resultErrorDescription === 'Low Product Count') {
-      //we have data. 
+      //we have data.
       console.log('isProductCount', data)
       const item = {menuItem: data.menuItem, quantity: data.quantity, order: data.order}
-    
+
       const  requestData = {action:'saleAuth', postData: item}
       const request = { request: 'checkAuth', requestData: requestData}
       let dialogRef = this.checkAuthDialog(request,  request);
@@ -1349,13 +1358,13 @@ export class OrderMethodsService implements OnDestroy {
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           // this.editDialog.openSaleAuthDialog(order, item, quantity)
-          this.addItemSimpleOverRide(data.order, data.menuItemWithPrice, data.quantity).subscribe(data => { 
+          this.addItemSimpleOverRide(data.order, data.menuItemWithPrice, data.quantity).subscribe(data => {
             // this.siteService.notify(`Item count low. Authorized`, 'close', 10000, 'green');
             this.authenticationService.overRideUser(null)
             this.authenticationService.updateUserAuthstemp(null);
             this._scanner.next(true)
           })
-          
+
         } else {
           this.siteService.notify('Not authorized', 'close', 1000, 'red')
         }
@@ -1948,10 +1957,11 @@ export class OrderMethodsService implements OnDestroy {
 
     // localStorage.setItem('orderSubscription', null);
     localStorage.removeItem('orderSubscription')
-    console.log('clear order')
+    // console.log('clear order')
     this.updateOrderSubscription(null);
     this.splitEntryValue = 0;
-    if (this.userAuthorization.user.roles = 'user') {
+
+    if (this.userAuthorization?.user?.roles == 'user') {
       this.router.navigate(['/app-main-menu']);
       return;
     }
@@ -2330,7 +2340,7 @@ export class OrderMethodsService implements OnDestroy {
     )
     return dialogRef;
   }
-  
+
   getSaleItemAuthAuth(order: IPOSOrder,item: IMenuItem, quantity: number) {
     if (this.authenticationService.userAuths.voidItem) {
       this.editDialog.openSaleAuthDialog(order, item, quantity)

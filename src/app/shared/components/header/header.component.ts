@@ -680,11 +680,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       }))
       return;
     }
-
     this.postLogout()
   }
 
   postLogout() {
+    console.log('post logout')
     this.userSwitchingService.clearLoggedInUser();
     this.smallDeviceLimiter();
   }

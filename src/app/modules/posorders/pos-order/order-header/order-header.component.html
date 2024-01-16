@@ -1,9 +1,9 @@
+<div *ngIf="(printAction$ | async) as item"></div>
 
 <span *ngIf="order">
 
   <div>
     <ng-container [ngTemplateOutlet]="qrCodeDisplayView"></ng-container>
-
   </div>
 
   <ng-template #qrCodeToggle>
@@ -55,7 +55,6 @@
         <div class="button-row" *ngIf="(!qrOrder && !hideButtonOptions)">
 
           <div   class="button-margin" *ngIf="!mainPanel">
-
             <button  class="button" color="primary" mat-raised-button
               (click)="printReceipt()"><mat-icon>print</mat-icon>
             </button>

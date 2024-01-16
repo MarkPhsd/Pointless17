@@ -120,43 +120,100 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   uiTransactions:TransactionUISettings
 
   action$ : Observable<any>;
+  _sendAndLogOut: Subscription;
+  _sendOrderOnExit: Subscription;
 
-  // _sendAndLogOut: Subscription;
-  sendAndLogOut$ = this.paymentMethodsService.sendOrderAndLogOut$.pipe(switchMap(
-      send => {
-        if (!send || send == null) {  return of(null)  }
-        console.log('sendandlogout', send)
-        const noOrder = (!send.order || send.order == undefined)
-        const justLogOut = (noOrder && send.logOut)
-        const browserLogout = (!this.platFormService.isApp() && send.logOut)
-        console.log('just log out', noOrder,  justLogOut, browserLogout)
-        if (justLogOut || browserLogout) { return of(true)  }
-        if (this.platFormService.isApp()) {
-          if (send && send.order) {
-            console.log(this.user)
-            if (!this.user) {
-              return of(true)
-            }
-            const send$ = this.printAction$ = this.sendOrderOnExit(send.order).pipe(switchMap(data => {
-              this.orderMethodsSevice.updateOrder(null)
-              this.paymentMethodsProcessService._sendOrderAndLogOut.next(null)
-              if (send && send.logOut) {
-                  return  of(true)
-                }
-                return of(false)
-              }
-            ))
-            return  send$
-          }
-        }
-        return of(false)
+
+  initLoginStatus() {
+    this.userSwitchingService.clearloginStatus$.pipe(switchMap(data => {
+      //don't send orders here that's done in the sendorder subscriber method
+      return of(data)
+    })).subscribe(data => {
+      console.log('order sent on exit')
+    })
+    return of(null)
+  }
+
+  sendOrderOnExitAndClearOrder(order: IPOSOrder) {
+    return this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
+      if (this.uiTransactions?.prepOrderOnExit) {
+        this.orderMethodsSevice.clearOrder();
       }
-    )).pipe(switchMap(data => {
-      if (data) {
-        this.processLogOut()
-      }
-      return of(false)
+      return of(data)
+    }), catchError(data => {
+      // console.log('data', data)
+      this.siteService.notify(`Error sending order ${data.toString()}`, 'Close', 6000, 'red' )
+      return of(null)
     }))
+  }
+
+  processLogOut() {
+    console.log('processLogOut')
+    this.userIdle.resetTimer();
+    this.orderMethodsSevice.clearOrderSubscription()
+    this.userSwitchingService.clearLoggedInUser();
+    if (this.uiSettings?.pinPadDefaultOnApp && this.platFormService.isApp()) {
+      this.userSwitchingService.openPIN({request: 'switchUser'})
+    }
+  }
+
+  subscribSendOrder() {
+    this._sendOrderOnExit = this.paymentMethodsProcessService.sendOrderOnExit$.pipe(switchMap(
+
+      send => {
+        // console.log('send', send)
+        if (!send?.order || send?.order == null) {
+          // console.log('send on order exit')
+          return of('false')  ;
+        }
+        return this.paymentMethodsService.sendOrderOnExit(send?.order)
+
+      }
+    )).subscribe(data => {
+      console.log('send prep')
+    })
+
+    this._sendAndLogOut  = this.paymentMethodsService.sendOrderAndLogOut$.pipe(switchMap(
+        send => {
+          if (!send || send == null) {
+            // console.log('send and log out no data')
+            return of('false')  ;
+          }
+          const noOrder = (!send.order || send.order == undefined)
+          const justLogOut = (noOrder && send.logOut)
+          const browserLogout = (!this.platFormService.isApp() && send.logOut)
+          if (justLogOut || browserLogout) { return of(true)  }
+
+          if (this.platFormService.isApp()) {
+            if (send && send.order) {
+              if (!this.user) {  return of(true)  }
+              // this.printAction$
+              const send$ = this.sendOrderOnExitAndClearOrder(send.order).pipe(switchMap(data => {
+                this.orderMethodsSevice.updateOrder(null)
+                this.processLogOut()
+                if (send && send.logOut) {
+                    return  of(true)
+                  }
+                  return of(false)
+                }
+              ))
+              return  send$
+            }
+          }
+          return of(false)
+        }
+        // switchMap(
+      )).subscribe(data => {
+        if (data && data != null  && data != 'false') {
+          // console.log('preprocess second Switch', data)
+          this.processLogOut()
+          this.paymentMethodsService.sendOrderAndLogOut(null, null)
+        }
+        //clear send
+        // return of(false)
+      }
+    )
+  }
 
   initUITransactionSettings() {
     this.uiTransactions$ = this.uiSettingsService.getSetting('UITransactionSetting').pipe(
@@ -451,60 +508,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initUITransactionSettings();
     this.initLoginStatus();
     this.subscribeAddress();
-
+    this.subscribSendOrder()
   }
 
-  initLoginStatus() {
-    this.userSwitchingService.clearloginStatus$.subscribe(data => {
-      if (this.orderMethodsSevice.order) {
-        this.action$ = this.sendOrderOnExit(this.orderMethodsSevice.order);
-        return;
-      }
-    })
-    return of(null)
-  }
-
-  sendOrderOnExit(order: IPOSOrder) {
-    return this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
-      if (this.uiTransactions?.exitOrderOnPrintReceipt) {
-        this.orderMethodsSevice.clearOrder();
-      }
-      return of(data)
-    }), catchError(data => {
-      console.log('data', data)
-      this.siteService.notify(`Error sending order ${data.toString()}`, 'Close', 6000, 'red' )
-      return of(null)
-    }))
-  }
-
-  // initOrderMethodsSevice() {
-  //   this._sendOrderFromOrderService = this.orderMethodsSevice.sendOrder$.subscribe(data => {
-  //     if (this.orderMethodsSevice.order) {
-  //       const order = this.orderMethodsSevice.order;
-  //       this.paymentMethodsService._sendOrder.next(order)
-  //     }
-  //   })
-  // }
-
-  // initSendOrderSubscriber() {
-  //   this.paymentMethodsService.sendOrder$.subscribe(order => {
-  //     if (order) {
-  //       this.printAction$ = this.sendOrderOnExit(order);
-  //       return;
-  //     }
-  //   })
-  // }
-
-
-  processLogOut() {
-    // console.trace('process log out')
-    // console.log('processLogOut')
-    this.userIdle.resetTimer();
-    this.orderMethodsSevice.clearOrderSubscription()
-    this.userSwitchingService.clearLoggedInUser();
-    this.userSwitchingService.openPIN({request: 'switchUser'})
-    this.paymentMethodsService._sendOrderAndLogOut.next(null)
-  }
 
 
   initDevice() {
@@ -646,7 +652,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this._barSize)       { this._barSize.unsubscribe();  }
     if(this._uiSettings)     { this._uiSettings.unsubscribe() }
     if (this._sendOrderFromOrderService) { this._sendOrderFromOrderService.unsubscribe()}
-    // if (this._sendAndLogOut) { this._sendAndLogOut.unsubscribe()}
+    if (this._sendAndLogOut) { this._sendAndLogOut.unsubscribe()}
+    if (this._sendOrderOnExit) { this._sendOrderOnExit.unsubscribe()}
     this.userIdle.stopTimer()
   }
 

@@ -39,18 +39,20 @@ export class PrepPrintingServiceService {
     })).pipe(switchMap(data => {
         data.forEach(location => {
           const newItems = [] as PosOrderItem[];
-          posItems.forEach(data => {
-            if (printUnPrintedOnly) {
-              {if(data.printLocation == location.id && !data.printed) {
-                  newItems.push(data)
-              }}
-            } else {
-              {if(data.printLocation == location.id) {
-                  newItems.push(data)
-              }}
-            }
-            }
-          )
+          if (posItems.length != 0) {
+            posItems.forEach(data => {
+              if (printUnPrintedOnly) {
+                {if(data.printLocation == location.id && !data.printed) {
+                    newItems.push(data)
+                }}
+              } else {
+                {if(data.printLocation == location.id) {
+                    newItems.push(data)
+                }}
+              }
+              }
+            )
+          }
           if (newItems.length > 0) {
             const item = this.setOrder(newItems, order, location)
             printOrders.push(item)
@@ -100,7 +102,7 @@ export class PrepPrintingServiceService {
             minWidth:     '450px',
             height:       '600px',
             minHeight:    '600px',
-            data : printOrderList, 
+            data : printOrderList,
 
           },
           ).afterClosed()

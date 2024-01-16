@@ -19,7 +19,15 @@
       <mat-card>
         <mat-card-subtitle>
           <div class="span-column">
-            <mat-label style="font-size:1.3em;font-weight:500">Group: {{currentGroupID}}. Apply all splits before making payments. </mat-label>
+
+            <div *ngIf="currentGroup == '1' || currentGroupID == 1">
+              <h4>Select a group on the left to organize items.</h4>
+            </div>
+
+            <mat-label  *ngIf="currentGroup != '1'"  style="font-size:1.3em;font-weight:500">
+              Group: {{currentGroupID}}. Apply all splits before making payments.
+            </mat-label>
+
             <mat-label>Once payments are made more splits can not be done.</mat-label>
              <mat-card *ngIf="(orderGroupTotal$ | async) as groupOrder; else calculating">
               <mat-card-content>
@@ -73,11 +81,12 @@
             ...saving
           </ng-template>
 
+     
           <div class="span-column" *ngIf="!savingChanges; else savingChangesOn">
             <div class="grid-dual-list">
 
               <div class="col-md-6 col-lg-6 col-sm-12 dualListLeft">
-
+           
                 <div class="primary-container drag-drop-container">
                   Group 1
                   <div
@@ -101,9 +110,11 @@
                 </div>
               </div>
 
-              <div class="col-md-6 col-lg-6 col-sm-12 dualListRight">
+              <div class="col-md-6 col-lg-6 col-sm-12 dualListRight" [hidden]="currentGroup == '1'">
                 <div class="primary-container drag-drop-container" 
-                     *ngIf="currentGroup != '1'">
+                   
+                    >  
+                    <!-- *ngIf="currentGroup != '1'" -->
                   Items in group {{currentGroup}}
                   <div
                     id="selectedItemsList"

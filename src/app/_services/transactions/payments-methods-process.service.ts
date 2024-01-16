@@ -39,6 +39,11 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   public _sendOrderAndLogOut     = new BehaviorSubject<any>(null);
   public  sendOrderAndLogOut$      = this._sendOrderAndLogOut.asObservable();
 
+
+  public _sendOrderOnExit     = new BehaviorSubject<any>(null);
+  public sendOrderOnExit$     = this._sendOrderOnExit.asObservable();
+
+
   ngOnDestroy(): void {
       if (this.dialogSubject){ this.dialogSubject.unsubscribe()}
    }
@@ -68,16 +73,32 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   return EMVSettings
   }
 
+
+  newOrderWithPayloadMethod(site, serviceType){
+    let sendOrder$ = of('true')
+    if (this.orderMethodsService.currentOrder) {
+       sendOrder$ = this.sendOrderOnExit(this.orderMethodsService.currentOrder)
+    }
+    // this.paymentMethodsProcess.updateSendOrderOnExit(this.order);
+    // let sendOrder$ = of('true')
+    return sendOrder$.pipe(switchMap(data => {
+      return this.orderMethodsService.newOrderWithPayloadMethod(site, serviceType)
+    })).pipe(
+      switchMap(data => {
+          return of(data)
+      })
+    )
+
+  }
+
   sendOrderAndLogOut(order: IPOSOrder, logOut: boolean) {
     const item = {order: order, logOut: logOut};
-    // console.log(item)
     this._sendOrderAndLogOut.next(item)
   }
 
   enterPointCashValue(amount, paymentMethod: IPaymentMethod, posPayment: IPOSPayment, order: IPOSOrder ): Observable<IPaymentResponse> {
     const site = this.sitesService.getAssignedSite();
     return this.processPayment(site, posPayment, order, amount, paymentMethod)
-    // return  this.processRewardPoints(site, posPayment, order, amount, paymentMethod)
   }
 
   sendOrderProcess(order: IPOSOrder) {
@@ -134,20 +155,28 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }));
   }
 
+  updateSendOrderOnExit(order: IPOSOrder) {
+    const item = {order: order, logOut: false};
+    this._sendOrderOnExit.next(item)
+  }
+
   sendOrderOnExit(order: IPOSOrder) {
-    console.log('exit', order)
+    // console.log('sendOrderOnExit', order?.id);
+
     let sendOrder$ : Observable<any>;
     if (!order) {  return of(null)  }
     if (this.isApp) {
+      // console.log('isapp', this.isApp)
       return  sendOrder$ = this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
+        // console.log('prepOrderOnExit',  data?.prepOrderOnExit)
         if (data) {
           if (data.prepOrderOnExit) {
-            return this.sendToPrep (order, true, data  )
+            return this.sendToPrep (order, true, data, true  )
           }
         }
         return of(null)
       }),catchError(data => {
-        console.log('Send order on exit error', data.toString())
+        // console.log('Send order on exit error', data.toString())
         return of(data)
       }))
     }
@@ -222,11 +251,11 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 }
 
- sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean, uiTransactions: TransactionUISettings): Observable<any> {
-    if (!this.userAuthorizationService?.user) { 
+ sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean, uiTransactions: TransactionUISettings, cancelUpdateSubscription?: boolean): Observable<any> {
+    if (!this.userAuthorizationService?.user) {
       return of(null)
     }
-    
+
     if (order) {
       const site = this.sitesService.getAssignedSite()
       const expoPrinter = uiTransactions?.expoPrinter
@@ -237,9 +266,10 @@ export class PaymentsMethodsProcessService implements OnDestroy {
                                                             templateID);
       let item$ =  prep$.pipe(
         switchMap( data => {
-          return  this.prepPrintUnPrintedItems(order.id)
+          return  this.prepPrintUnPrintedItems(order.id, cancelUpdateSubscription)
       })
       ,catchError( data => {
+          console.log('error in send to prep', data)
           this.sitesService.notify('Error printing templates' + data.toString(), 'close', 5000, 'red')
           return of(data)
       }))
@@ -249,11 +279,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return of(null)
   }
 
-  prepPrintUnPrintedItems(id: number) {
+  prepPrintUnPrintedItems(id: number, cancelUpdateSubscription?: boolean) {
 
-    if (!this.userAuthorizationService?.user) { 
-      return of(null)
-    }
+    if (!this.userAuthorizationService?.user) { return of(null)  }
     if (id) {
       const site = this.sitesService.getAssignedSite()
       return  this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
@@ -262,9 +290,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         })).pipe(
           switchMap( order => {
           if (order) {
-            this.orderMethodsService.updateOrderSubscription(order)
+            if (!cancelUpdateSubscription) {
+              this.orderMethodsService.updateOrderSubscription(order)
+            }
             return of(order)
           }
+          return of(null)
       }));
     }
     return of(null)

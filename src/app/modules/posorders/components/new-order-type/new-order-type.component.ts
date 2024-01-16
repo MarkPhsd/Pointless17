@@ -11,6 +11,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ChangeDueComponent } from '../balance-due/balance-due.component';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 
 @Component({
   selector: 'new-order-type',
@@ -38,15 +39,16 @@ export class NewOrderTypeComponent  {
               private snackBar                  : MatSnackBar,
               private _bottomSheet              : MatBottomSheet,
               private userAuthorizationService  : UserAuthorizationService,
+              private paymentMethodsProcess: PaymentsMethodsProcessService,
               private authService: AuthenticationService,
               @Optional() private dialogRef     : MatDialogRef<ChangeDueComponent>,
               )
   {
     const site = this.siteService.getAssignedSite();
 
-    if (authService._userAuths.value) { 
+    if (authService._userAuths.value) {
       const auth = authService._userAuths.value;
-      if (auth.allowReconciliation && auth.adjustInventoryCount) { 
+      if (auth.allowReconciliation && auth.adjustInventoryCount) {
         this.serviceTypes$ = this.serviceTypeService.getAllServiceTypes(site)
         return
       }
@@ -57,10 +59,8 @@ export class NewOrderTypeComponent  {
       this.serviceTypes$ = this.serviceTypeService.getAllServiceTypes(site);
       return;
     }
-   
+
     this.serviceTypes$ = this.serviceTypeService.getSaleTypesCached(site)
-
-
   }
 
   onCancel() {
@@ -86,7 +86,6 @@ export class NewOrderTypeComponent  {
         this.dialogRef.close();
       }
     } catch (error) {
-
       // console.log(error)
     }
 
@@ -104,7 +103,7 @@ export class NewOrderTypeComponent  {
       return
     }
     this.newOrderWithPayload(event);
-   }
+  }
 
   changeOrderType(event) {
     const site = this.siteService.getAssignedSite();
@@ -136,13 +135,26 @@ export class NewOrderTypeComponent  {
 
   newOrderWithPayload(serviceType: IServiceType){
     const site = this.siteService.getAssignedSite();
-    this.action$ = this.orderMethodsService.newOrderWithPayload(site, serviceType).pipe(
+    // this.action$ = this.orderMethodsService.newOrderWithPayload(site, serviceType).pipe(
+    //   switchMap(data => {
+    //     this.close()
+    //     return of(data)
+    //   }
+    // ))
+
+    let sendOrder$ = of('true')
+    this.action$ = sendOrder$.pipe(switchMap(data => {
+      return this.paymentMethodsProcess.newOrderWithPayloadMethod(site, serviceType)
+    })).pipe(
       switchMap(data => {
-        this.close()
-        return of(data)
-      }
-    ))
+          return of(data)
+      })
+    )
+
   }
+
+
+
 
   notifyEvent(message: string, title: string) {
     this.snackBar.open(message, title, {duration: 2000, verticalPosition: 'bottom'})

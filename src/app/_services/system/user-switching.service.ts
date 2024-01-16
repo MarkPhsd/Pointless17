@@ -149,10 +149,11 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   clearLoggedInUser() {
-    this._clearloginStatus.next(true)
     this.orderMethodService.updateOrderSubscriptionClearOrder(0)
     this.orderMethodService.updateOrderSearchModel(null);
     this.toolbarUIService.updateDepartmentMenu(0);
+    this._clearloginStatus.next(true)
+    console.log(' Log out ')
     this.authenticationService.logout(this.uiSettingService.homePageSetting?.pinPadDefaultOnApp);
   }
 
@@ -435,7 +436,7 @@ export class UserSwitchingService implements  OnDestroy {
     //set current order (for regular customers)
     const site = this.siteService.getAssignedSite()
     return this.authenticate(userLogin).pipe(switchMap(data => {
- 
+
       if (data && data.errorMessage) {
         this.siteService.notify('Message: Error: ' + data.errorMessage, 'close', 2000, 'red' )
         return of(null)
@@ -445,7 +446,7 @@ export class UserSwitchingService implements  OnDestroy {
         this.siteService.notify('Error: ' + 'No user identified.', 'close', 2000, 'red' )
         return of(null)
       }
-  
+
       if (data && !data.id) {
         this.siteService.notify('Message: Error: No ID for user found.', 'close', 2000, 'red' )
         return of(null)
@@ -465,7 +466,7 @@ export class UserSwitchingService implements  OnDestroy {
           this.siteService.notify('Client not or type found - no authorizations will be assigned.', 'close', 2000, 'red')
           return of(null)
         }
-        if (!overRidePreferences) { 
+        if (!overRidePreferences) {
           const item = JSON.parse(data?.preferences) as UserPreferences;
           this.authenticationService.updatePreferences(item)
         }

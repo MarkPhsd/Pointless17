@@ -527,8 +527,8 @@ export class PrintingService {
         )
         }).catch( err => {
           console.log('Print window Load URL error:', err, options)
-          console.trace('Trace of Printing Error')
-          this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
+          // console.trace('Trace of Printing Error')
+          this.siteService.notify(`Error occured: Check your printer. options: ${options}`,  'Close', 25000, 'red' )
           printWindow.close();
           printWindow = null;
           result = false
@@ -1053,7 +1053,7 @@ export class PrintingService {
     //   }
     // }
 
-    console.log('previewReceipt', autoPrint, order);
+    // console.log('previewReceipt', autoPrint, order);
 
     if (this.uiSettingsService.posDeviceInfo) {
       if (this.platFormService.androidApp) {

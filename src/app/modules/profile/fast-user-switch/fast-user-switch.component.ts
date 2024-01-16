@@ -111,10 +111,13 @@ export class FastUserSwitchComponent implements OnInit {
       const device = localStorage.getItem('devicename')
       this.balanceSheet$ = this.balanceSheetService.isDeviceInUse(site, device).pipe(switchMap(data => {
         this.isLocked = false;
+
         this.employeeAllowed = 0
-        if (data && data.name != 'open') {
-          this.isLocked = true;
-          this.employeeAllowed = data.id
+        if (this.uiHomePage?.lockTerminalToBalanceSheet) {
+          if (data && data.name != 'open') {
+            this.isLocked = true;
+            this.employeeAllowed = data.id
+          }
         }
         return of(data)
       }))
@@ -154,7 +157,7 @@ export class FastUserSwitchComponent implements OnInit {
               if (data.changeItemPrice) {  result = true }
             }
 
-            if (action && action === 'saleAuth') { 
+            if (action && action === 'saleAuth') {
               if (data.changeItemPrice) {  result = true }
             }
 
@@ -239,6 +242,10 @@ export class FastUserSwitchComponent implements OnInit {
     this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
       switchMap(data =>
         {
+          if (!data) {
+            this.notifyEvent('Failed Login', 'Failed Login');
+            return of('failed')
+          }
           let user = {} as IUserProfile
           if (data.user) {  user = data.user } else {  user = data;   }
           this._pinCode.next('');

@@ -13,6 +13,7 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 
@@ -53,6 +54,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   hidePrint = false;
   action$: Observable<any>;
   isApp = this.platFormService.isApp()
+  printAction$: Observable<any>;
 
   site = this.siteService.getAssignedSite();
   locations$ = this.locationsService.getLocationsCached();
@@ -96,6 +98,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
              public  authenticationService: AuthenticationService,
              private coachMarksService: CoachMarksService,
              public  prepPrintingService: PrepPrintingServiceService,
+             private paymentMethodsService: PaymentsMethodsProcessService,
              private httpClient : HttpClient,
     ) {
 
@@ -124,9 +127,16 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   printReceipt(){
     const order = this.order;
-
-    console.log('preview')
-    this.printingService.previewReceipt(this.uiTransactionSettings?.singlePrintReceipt,order)
+    if (this.uiTransactionSettings.prepOrderOnExit) {
+      // this.paymentsMethodsProcessService.updateSendOrderOnExit(order)
+      this.printAction$ = this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
+        console.log('print out action from receipt')
+        this.printingService.previewReceipt(this.uiTransactionSettings?.singlePrintReceipt, order)
+        return of(order)
+      }))
+      return
+    }
+    this.printingService.previewReceipt(this.uiTransactionSettings?.singlePrintReceipt, order)
   }
 
   refreshPrintOption() {

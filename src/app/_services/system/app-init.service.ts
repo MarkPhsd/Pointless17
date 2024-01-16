@@ -62,7 +62,7 @@ export class AppInitService  {
     this.apiUrl      = this.getLocalApiUrl();
     const isApp      = this.platFormService.isApp();
 
-    if (!rememberMe || rememberMe != 'true') {
+    if ((!rememberMe || rememberMe != 'true' ) && isApp) {
       this.clearUserSettings();
     }
 
