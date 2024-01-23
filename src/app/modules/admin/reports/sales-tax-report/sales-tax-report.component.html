@@ -1,3 +1,5 @@
+
+<div *ngIf="printAction$ | async"></div>
 <div class = "summary" >
   <ng-content  select="[summary]"></ng-content>
   <span *ngIf="summaryOnly && site">
@@ -9,7 +11,7 @@
   </span>
 </div>
 
-<div *ngIf="!summaryOnly">
+<div *ngIf="!summaryOnly" #printsection>
   <div  class="mat-card-container"
       *ngIf="site && (sales$ | async) as sale; else loading">
       <mat-card>
@@ -18,11 +20,15 @@
             <div  class="totals_label">
               <h4>   <ng-content  select="[header]"></ng-content> </h4>
             </div>
-            <div>
-              <button mat-raised (click)="downloadCSV()">
+            <div class="no-print">
+              <button  mat-raised (click)="refreshSales()">
+              <mat-icon>refresh</mat-icon></button>
+
+              <button  mat-raised (click)="downloadCSV()">
               <mat-icon>download</mat-icon></button>
-              <!-- <button mat-raised (click)="dataGridView()">
-                <mat-icon>open_in_full</mat-icon></button> -->
+
+              <button mat-raised (click)="print()">
+              <mat-icon>print</mat-icon></button>
             </div>
           </div>
           <div class="grid">
@@ -38,65 +44,65 @@
         <mat-card-content>
           <div *ngIf="sale.resultsMessage"> <mat-icon>warning</mat-icon>{{sale.resultsMessage}} </div>
           <div class="grid" *ngIf="!sale.resultsMessage" >
-            <div class="grid-item totals_label" *ngIf="sale.netSales && sale.netSales !=0 ">Net (pre-tax):</div>
-            <div class="grid-item tax" *ngIf="sale.netSales && sale.netSales !=0 ">{{sale.netSales | currency }}  </div>
+
+            <div class="grid-item totals_label"> Gross (net + taxes  ) :</div>
+            <div  class="grid-item-right tax" > {{ sale.grossSales | currency }}  </div>
+
+            <div class="grid-item totals_label">Net (pre-tax):</div>
+            <div class="grid-item-right tax" >{{sale?.netSales | currency }}  </div>
 
             <div class="grid-item tax_label">Non-Taxable:</div>
-            <div class="grid-item tax">{{sale.nonTaxableSalesTotal | currency}}</div>
-
-            <div class="grid-item tax_label"> C.O.G.S. : </div>
-            <div class="grid-item tax">{{sale.itemCost | currency }}  </div>
+            <div class="grid-item-right tax" >{{sale.nonTaxableSalesTotal | currency}}</div>
 
             <div class="grid-item totals_label">All Taxes:</div>
-            <div class="grid-item tax">{{sale.taxTotal1 + sale.taxTotal2 + sale.taxTotal3 | currency }}  </div>
+            <div class="grid-item-right tax" >{{sale.taxTotal1 + sale.taxTotal2 + sale.taxTotal3 | currency }}  </div>
 
             <div class="grid-item tax_label"> Tax 1: </div>
-            <div class="grid-item tax">{{sale.taxTotal1 | currency }}  </div>
+            <div class="grid-item-right tax" >{{sale.taxTotal1 | currency }}  </div>
 
             <div class="grid-item tax_label"> Tax 2: </div>
-            <div class="grid-item tax"> {{sale.taxTotal2 | currency }} </div>
+            <div class="grid-item-right tax" > {{sale.taxTotal2 | currency }} </div>
 
             <div class="grid-item tax_label"> Tax 3: </div>
-            <div class="grid-item tax"> {{sale.taxTotal3 | currency }}  </div>
+            <div class="grid-item-right tax" >{{sale.taxTotal3 | currency }}  </div>
 
             <div class="grid-item tax_label" > CRV: </div>
-            <div class="grid-item tax"> {{sale.crv | currency }}  </div>
+            <div class="grid-item-right tax" > {{sale.crv | currency }}  </div>
+
+            <div class="grid-item totals_label">Profit (net - cost): </div>
+            <div class="grid-item-right tax" >{{sale.netSales - sale.itemCost | currency }}  </div>
+
+            <div class="grid-item tax_label"> C.O.G.S. : </div>
+            <div class="grid-item-right tax" >{{sale.itemCost | currency }}  </div>
+
+            <div class="grid-item totals_label">Cost of Good %: </div>
+            <div class="grid-item-right tax" > % {{ (( sale.itemCost / sale.netSales )*100).toFixed(2) }}  </div>
+
           </div>
 
-          <mat-divider></mat-divider>
         </mat-card-content>
 
         <mat-card-footer  *ngIf="!sale.resultsMessage" >
-          <div class="grid-footer" >
-            <div class="grid-item field_bold totals_label"> Gross (net + taxes  ) :</div>
-            <div class="grid-item field_bold totals_label"> {{ sale.grossSales | currency }}  </div>
-          </div>
 
           <mat-divider></mat-divider>
-          <div class="grid-footer" >
-            <div class="grid-item other_label">Service Fee/Grat:</div>
-            <div class="grid-item other">{{sale.gratuity | currency }} </div>
+          <div class="grid">
+            <div class="grid-item other_label">Other Charges:</div>
+            <div class="grid-item-right other">{{sale.gratuity | currency }} </div>
           </div>
 
-          <div class="grid-footer" >
-            <div class="grid-item totals_label">Profit (net - cost): </div>
-            <div class="grid-item tax">{{sale.netSales - sale.itemCost | currency }}  </div>
-          </div>
-
-          <div class="grid-footer" *ngIf="sale.netSales && sale.netSales != 0">
-            <div class="grid-item totals_label">Cost of Good %: </div>
-            <div class="grid-item tax"> % {{ (( sale.itemCost / sale.netSales )*100).toFixed(2) }}  </div>
-          </div>
-
-          <div class="grid-footer" *ngIf="laborSummary">
+          <div class="grid" *ngIf="laborSummary">
             <div class="grid-item field_bold totals_label"> Labor  :</div>
-            <div class="grid-item field_bold totals_label"> {{laborSummary?.otPay + laborSummary?.regPay | currency }}  </div>
+            <div class="grid-item-right field_bold totals_label"> {{laborSummary?.otPay + laborSummary?.regPay | currency }}  </div>
           </div>
 
-
-          <div class="grid-footer" *ngIf="laborSummary && sale.netSales && sale.netSales != 0">
+          <div class="grid" *ngIf="laborSummary && sale.netSales && sale.netSales != 0">
             <div class="grid-item field_bold totals_label"> Labor % of Net Sales  :</div>
-            <div class="grid-item field_bold totals_label"> %{{ (((laborSummary?.otPay + laborSummary?.regPay) / (sale.netSales)) *100).toFixed(2)  }}  </div>
+
+            <!-- {{ (payment?.count && payment?.count > 0) ? (payment?.amountPaid / payment?.count).toFixed(2) : 0 | currency }}  -->
+            <div class="grid-item field_bold totals_label"> %
+              {{
+                (sale.netSales && sale?.netSales > 0 && (laborSummary?.otPay +  laborSummary?.regPay)>0 ) ? (((laborSummary?.otPay + laborSummary?.regPay) / (sale.netSales)) *100).toFixed(2) : 0
+              }}  </div>
           </div>
 
         </mat-card-footer>
@@ -109,16 +115,16 @@
           <div class="grid">
             <div  class="totals_label">
               <div class="grid">
-                <div>
+                <div class="no-print">
                   <h4><mat-icon>local_offer</mat-icon> Discounts </h4>
                   <mat-divider class="mat-card-title" ></mat-divider>
                 </div>
 
-                <div>
+                <div  class="no-print">
                   <span  *ngIf="minimized">
                     <button mat-button (click)="minimized = !minimized"><mat-icon>expand</mat-icon>More</button>
                   </span>
-                  <span  *ngIf="!minimized">
+                  <span  class="no-print" *ngIf="!minimized">
                     <button mat-button (click)="minimized = !minimized"><mat-icon>minimize</mat-icon>Less</button>
                   </span>
                 </div>
@@ -150,16 +156,14 @@
             <div class="grid-item other_label">Gift Card:</div>
             <div class="grid-item other">{{sale.giftCardIssuances | currency }} </div>
 
-
-
           </div>
 
           <mat-divider></mat-divider>
         </mat-card-content>
 
         <mat-card-footer  *ngIf="!sale.resultsMessage" >
-          <div class="grid-footer" >
-            <div class="grid-item field_bold totals_label"> Summary :</div>
+          <div class="grid" >
+            <div class="grid-item field_bold totals_label"> Discount Summary :</div>
             <div class="grid-item field_bold totals_label"> {{sale.orderCashDiscount +
                                                             sale.itemCashDiscount +
                                                             sale.orderPercentDiscount +
@@ -175,9 +179,7 @@
           <div class="grid">
             <div  class="totals_label">
               <div class="grid">
-                <div>
-                  <h4> Other </h4>
-                </div>
+                <div>  <h4> Other </h4> </div>
                 <div>
                   <span  *ngIf="minimized">
                     <button mat-button (click)="minimized = !minimized"><mat-icon>expand</mat-icon>More</button>
@@ -205,7 +207,7 @@
 <ng-template #loading>
   <div *ngIf="processing">
     <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
-  </div>"
+  </div>
 </ng-template>
 
 <ng-template #loadingSummary>

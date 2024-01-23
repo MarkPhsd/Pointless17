@@ -122,8 +122,12 @@ export interface DSIEMVSettings {
   MerchantID: string;
   TerminalID: string;
   OperatorID: string;
+  POSPackageID: string;
+  TranDeviceID: string;
+
   UserTrace : string;
   TranCode  : string;
+
   SecureDevice: string;
   ComPort   : string;
   PinPadIpAddress: string;

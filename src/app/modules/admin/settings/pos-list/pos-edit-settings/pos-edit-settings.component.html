@@ -99,7 +99,7 @@
             <mat-label>Enable Scale</mat-label>
           </mat-slide-toggle>
         </div>
-        
+
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="enableExitLabel">
@@ -134,7 +134,7 @@
             <mat-label>Enable Prep View</mat-label>
           </mat-slide-toggle>
         </div>
-        
+
         <div *ngIf="(serviceType$ | async) as list ">
           <mat-form-field style="width: 200px" class="fields"
               appearance="outline">
@@ -243,6 +243,7 @@
           </mat-form-field>
         </div>
 
+
         <div  *ngIf="uiSettings.triposEnabled">
           <mat-form-field  appearance="outline">
             <mat-label>TRIPOS Market Code</mat-label>
@@ -298,14 +299,27 @@
       </div>
 
       <h2><mat-icon>grid_view</mat-icon>UI zoom </h2>
+
+      <div *ngIf="uiSettings.triposEnabled">
+        <mat-form-field appearance="outline">
+          <mat-label>Zoom</mat-label>
+          <input matInput type="text"
+                  formControlName="electronZoom"
+                  (onChange)="setZoomValue($event)"
+                  class="form-control" >
+        </mat-form-field>
+      </div>
       <div>
         <mat-label>Installed Windows App Only</mat-label><br>
         <electron-zoom-control (valueEmit)="setZoomValue($event)" [zoomValue]="terminal.electronZoom"></electron-zoom-control>
       </div>
     </div>
 
-    <ng-container [ngTemplateOutlet]="triPOS"></ng-container>
+    <ng-container [ngTemplateOutlet]="dsiEMVSettingsView"></ng-container>
 
+    <mat-divider></mat-divider>
+
+    <ng-container [ngTemplateOutlet]="triPOS"></ng-container>
   </mat-card-content>
 </mat-card>
 
@@ -314,6 +328,135 @@
     <app-tripos-settings [laneID]="inputForm && inputForm.controls['triposLaneID'].value"></app-tripos-settings>
    </div>
 </ng-template>
+
+<ng-template #dsiEMVSettingsView>
+  <mat-card  *ngIf="dsiEMVSettings  && terminal" [formGroup]="dsiEMVSettings">
+    <mat-card-subtitle>
+     <h4>DSI DCAP Processing</h4>
+    </mat-card-subtitle>
+    <div class="grid-container">
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="dsiEMVSettings"
+              [fieldName]     ="'MerchantID'">
+              MerchantID
+          </app-value-fields>
+        </div>
+        <!-- <div class="grid-item">
+          <app-value-fields
+              [fieldsClass]   ="'field-small'"
+              [fieldType]     ="'text'"
+              [inputForm]     ="dsiEMVSettings"
+              [fieldName]     ="'OperatorID'">
+              OperatorID
+          </app-value-fields>
+        </div> -->
+        <div class="grid-item">
+          <app-value-fields
+              [fieldsClass]   ="'field-small'"
+              [fieldType]     ="'text'"
+              [inputForm]     ="dsiEMVSettings"
+              [fieldName]     ="'IpPort'">
+              IpPort
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldsClass]   ="'field-small'"
+              [fieldType]     ="'text'"
+              [inputForm]     ="dsiEMVSettings"
+              [fieldName]     ="'POSPackageID'">
+              POSPackageID
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldsClass]   ="'field-small'"
+              [fieldType]     ="'text'"
+              [inputForm]     ="dsiEMVSettings"
+              [fieldName]     ="'TranDeviceID'">
+              TranDeviceID
+          </app-value-fields>
+        </div>
+        <!-- <div class="grid-item">
+          <app-value-fields
+              [fieldsClass]   ="'field-small'"
+              [fieldType]     ="'text'"
+              [inputForm]     ="dsiEMVSettings"
+              [fieldName]     ="'UserTrace'">
+              UserTrace
+          </app-value-fields>
+        </div> -->
+        <!-- <div class="grid-item">
+          <app-value-fields
+              [fieldsClass]   ="'field-small'"
+              [fieldType]     ="'text'"
+              [inputForm]     ="dsiEMVSettings"
+              [fieldName]     ="'TranCode'">
+              TranCode
+          </app-value-fields>
+        </div> -->
+        <div class="grid-item">
+          <app-value-fields
+              [fieldsClass]   ="'field-small'"
+              [fieldType]     ="'text'"
+              [inputForm]     ="dsiEMVSettings"
+              [fieldName]     ="'SecureDevice'">
+              SecureDevice
+          </app-value-fields>
+        </div>
+        <!-- <div class="grid-item">
+          <app-value-fields
+              [fieldsClass]   ="'field-small'"
+              [fieldType]     ="'text'"
+              [inputForm]     ="dsiEMVSettings"
+              [fieldName]     ="'ComPort'">
+              ComPort
+          </app-value-fields>
+        </div> -->
+        <div class="grid-item">
+          <app-value-fields
+              [fieldsClass]   ="'field-small'"
+              [fieldType]     ="'test'"
+              [inputForm]     ="dsiEMVSettings"
+              [fieldName]     ="'PinPadIpPort'">
+              PinPadIpPort
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldsClass]   ="'field-small'"
+              [fieldType]     ="'test'"
+              [inputForm]     ="dsiEMVSettings"
+              [fieldName]     ="'HostOrIP'">
+              Host Or IP
+          </app-value-fields>
+        </div>
+
+        <div class="toggle-fields">
+          <div>
+            <mat-slide-toggle
+              formControlName="partialAuth"
+              >
+              <mat-label>Partial Auth</mat-label>
+            </mat-slide-toggle>
+          </div>
+        </div>
+
+        <div class="toggle-fields">
+          <div>
+            <mat-slide-toggle
+                  formControlName="enabled">
+              <mat-label>Enable</mat-label>
+            </mat-slide-toggle>
+          </div>
+          <div>Enabled on each device.</div>
+        </div>
+    </div>
+  </mat-card>
+</ng-template>
+
 
 <!-- <mat-card>
   <mat-card-subtitle>

@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Product } from 'electron/main';
 import { Observable, of, switchMap } from 'rxjs';
-import { IPOSOrder, PosOrderItem, UnitType } from 'src/app/_interfaces';
+import { IPOSOrder, IPurchaseOrderItem, PosOrderItem, UnitType } from 'src/app/_interfaces';
 import { IMenuItem, menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
-import { IUnitTypePaged } from 'src/app/_interfaces/menu/price-categories';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import { IItemBasic, IItemBasicValue, MenuService, OrdersService } from 'src/app/_services';
+import { IItemBasic, IItemBasicValue, MenuService } from 'src/app/_services';
+import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
+import { InventoryLocationsService } from 'src/app/_services/inventory/inventory-locations.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -48,6 +48,8 @@ export class NewOrderItemComponent implements OnInit {
               private orderService: OrderMethodsService,
               private unitTypeService: UnitTypesService,
               private posOrderItemSerivce: POSOrderItemService,
+              private inventoryAssignmentService: InventoryAssignmentService,
+              private inventoryLocationsService: InventoryLocationsService,
               private orderItemService: POSOrderItemService) { }
 
   ngOnInit(): void {
@@ -122,7 +124,7 @@ export class NewOrderItemComponent implements OnInit {
   assignProduct(event) {
     if (this.posOrderItem) {
       //then we want to ensure we get tthe actual product.
-      
+
       const site = this.siteService.getAssignedSite()
       this.action$ = this.menuService.getMenuItemByID(site, event.id).pipe(switchMap(data => {
         this.menuItemSelected = data;
@@ -141,48 +143,48 @@ export class NewOrderItemComponent implements OnInit {
     }
   }
 
-  getItemUnitOptions() { 
-    //json
-    this.unitOptions = null;
-    if (this.menuItemSelected && this.menuItemSelected.json) { 
-      const item = JSON.parse(this.menuItemSelected.json) as menuButtonJSON;
-      if (item) { 
-        if (item.unitTypeSelections) { 
-          const units = JSON.parse(item.unitTypeSelections) as IItemBasic[];
-          if (units) { 
-            this.unitOptions = units;
-          }
-          if (!units) { 
-            this.unitOptions = [] as IItemBasic[];
-          }
-          // if (this.menuItemSelected.unitTypeID) { 
+  getItemUnitOptions() {
+    this.unitOptions = [] as IItemBasic[];
+    if (this.menuItemSelected) {
+      this.assignExtraUOMS(this.menuItemSelected?.json)
+      this.getRegularUnitTypes();
+    }
+  }
 
-          // }
-          
-          const site = this.siteService.getAssignedSite()
-
-          this.repOrderUnitType$ = this.menuService.getProduct(site, this.menuItemSelected.id).pipe(
-            switchMap(data => { 
-              if (data && data?.reOrderUnitTypeID) { 
-                return this.unitTypeService.get(site, data?.reOrderUnitTypeID);
-              }
-              const item = {} as UnitType
-              return of(item)
-            })).pipe(switchMap(data => { 
-              if (data && data.id != 0 ) { 
-                this.unitOptions.push({name: data?.name, id: data?.id})
-              }
-              return of(data)
-            })
-          )
-       
-
+  assignExtraUOMS(items: string) {
+    const item = JSON.parse(items) as menuButtonJSON;
+    if (item) {
+      if (item.unitTypeSelections) {
+        const units = JSON.parse(item.unitTypeSelections) as IItemBasic[];
+        if (units) {
+          this.unitOptions = units;
         }
+        if (!units) {  this.unitOptions = [] as IItemBasic[];   }
       }
     }
   }
 
-  assignUnitType(event) { 
+  getRegularUnitTypes() {
+    const site = this.siteService.getAssignedSite()
+
+    this.repOrderUnitType$ = this.menuService.getProduct(site, this.menuItemSelected.id).pipe(
+      switchMap(data => {
+        if (data && data?.reOrderUnitTypeID) {
+          return this.unitTypeService.get(site, data?.reOrderUnitTypeID);
+        }
+        const item = {} as UnitType
+        return of(item)
+      })).pipe(switchMap(data => {
+        if (data && data.id != 0 ) {
+          this.unitOptions.push({name: data?.name, id: data?.id})
+        }
+        return of(data)
+      })
+    )
+    return;
+  }
+
+  assignUnitType(event) {
     console.log('value', event?.value)
   }
 
@@ -195,12 +197,12 @@ export class NewOrderItemComponent implements OnInit {
     //   this.chips.delete(chip);
     // };
     // this.chips.has(chip) ? removeChip() : addChip();
-    console.log('menuItemSelected', this.menuItemSelected)
-    console.log('posOrderItem', this.posOrderItem.wholeSale)
-    console.log('menuItemSelected', this.menuItemSelected.wholesale)
+    // console.log('menuItemSelected', this.menuItemSelected)
+    // console.log('posOrderItem', this.posOrderItem.wholeSale)
+    // console.log('menuItemSelected', this.menuItemSelected.wholesale)
 
     const site = this.siteService.getAssignedSite()
-    this.unitType$ = this.unitTypeService.get(site, chip?.id).pipe(switchMap(data => { 
+    this.unitType$ = this.unitTypeService.get(site, chip?.id).pipe(switchMap(data => {
       this.posOrderItem.unitName = data?.name;
       this.posOrderItem.unitMultiplier = data.unitMultiplyer;
       this.posOrderItem.unitType = data?.id;
@@ -208,22 +210,22 @@ export class NewOrderItemComponent implements OnInit {
       console.log('data.unitMultiplyer', data.unitMultiplyer)
 
       this.posOrderItem.wholeSale = (this.menuItemSelected.wholesale *  data.unitMultiplyer);
-      console.log('new calc', (this.menuItemSelected.wholesale *  data.unitMultiplyer))
-      console.log('wholesale', this.posOrderItem.wholeSale)
- 
+      // console.log('new calc', (this.menuItemSelected.wholesale *  data.unitMultiplyer))
+      // console.log('wholesale', this.posOrderItem.wholeSale)
+
       this.inputForm.patchValue({wholeSale: this.posOrderItem.wholeSale})
       this.unitSearchForm.patchValue({unitName: chip?.name, unitTypeID: chip?.id})
       this.setChange = true;
-      
+
       this.inputForm.patchValue({unitName: data?.name, unitTypeID: data?.id});
       return of(data)
     }))
   };
 
-  updateSetChange(event) { 
+  updateSetChange(event) {
     this.setChange = false;
   }
-  
+
   assignItem(event) {
     if (event) {
       const unit  = event;
@@ -231,7 +233,7 @@ export class NewOrderItemComponent implements OnInit {
       // if this menuItemSelected exists, then we can set the
       // to a matching product unit price if it exists.
       this.inputForm.patchValue({unitName: event?.name, unitTypeID: event?.id});
-     
+
     }
   }
 
@@ -257,13 +259,10 @@ export class NewOrderItemComponent implements OnInit {
 
   addItem() {
     if (this.inputForm) {
-      if (!this.menuItemSelected) { 
+      if (!this.menuItemSelected) {
         this.siteService.notify('No item yet selected.', 'close', 6000);
         return;
       }
-      console.log(this.posOrderItem);
-      // console.log(this.inputForm.value)
-      // this.posOrderItem = this.inputForm.value;
 
       this.action$  =  this.setThisItem(this.posOrderItem).pipe(switchMap(data => {
         return of(data)
@@ -283,16 +282,14 @@ export class NewOrderItemComponent implements OnInit {
     let newItem : NewItem;
     newItem = {} as NewItem;
 
-    console.log(this.posOrderItem.wholeSale);
+    console.log(this.posOrderItem?.wholeSale);
     const posItem = this.inputForm.value;
     this.posOrderItem.quantity = posItem.quantity;
 
     const cost = this.posOrderItem.wholeSale;
     // console.log('cost', cost)
-
     newItem.menuItem = this.menuItemSelected;
 
-    // console.log('menuItem', this.menuItemSelected)
     newItem.quantity = this.posOrderItem?.quantity;
     newItem.orderID = this.order?.id;
     newItem.barcode = this.menuItem?.barcode;
@@ -303,41 +300,104 @@ export class NewOrderItemComponent implements OnInit {
     const searchModel = {name: this.posOrderItem.productName } as ProductSearchModel;
     let quantity = +this.inputForm.controls['quantity'].value;
 
-    if (this.inputForm.controls['quantity'].value) {
-      const unitName = this.inputForm.controls['unitName'].value
-      const unitTypeID = this.inputForm.controls['unitTypeID'].value
-      newItem.menuItem.unitTypeID = unitTypeID;
-    }
+    // if (this.inputForm.controls['quantity'].value) {
+    const unitName = this.inputForm.controls['unitName'].value
+    const unitTypeID = this.inputForm.controls['unitTypeID'].value
+    newItem.menuItem.unitDescription = unitName;
+    newItem.menuItem.unitTypeID = unitTypeID;
+    newItem.unitTypeID = unitTypeID;
 
-    if (!newItem.menuItem.barcode) {
-      this.siteService.notify('Item requires barcode to be added through purchase orders. Open the catalog, find the item and assign it a barcode.', 'Close',  6000, 'red');
+    if (!newItem.menuItem.barcode && !newItem?.menuItem?.itemType?.requireInStock) {
+      this.siteService.notify('Item requires barcode, or that the item Type option set to RequireInStock, to be added through purchase orders. Open the catalog, find the item and assign it a barcode.', 'Close',  6000, 'red');
       return of({})
     }
 
-    return this.orderService.addItemToOrderFromBarcode( newItem.menuItem.barcode, null, null,
-                                                        quantity,
-                                                        newItem?.menuItem?.unitTypeID, cost).pipe( 
-                                                    switchMap(data => {
+    let item$
+    if (newItem.menuItem.barcode) {
+      item$ =  this.orderService.addItemToOrderFromBarcode( newItem.menuItem.barcode, null, null,
+          quantity,
+          unitTypeID, cost)
+    } else {
+      item$ =  this.orderService.addItemToOrderObs(this.order, this.menuItemSelected, newItem.quantity, null, null, null, unitTypeID )
+    }
+
+    return item$.pipe(switchMap(data => {
       this.initInputForm(null)
-                                                      
-      // console.log('return value', cost);
-
       const item = data as unknown as  ItemPostResults
-      // console.log('order', item.order);
-
       let poItem = {} as PosOrderItem;
       poItem.wholeSale = cost
-      poItem.id = item.posItem.id;
+      poItem.id = item.posItem?.id;
       poItem.orderID = item.posItem.orderID;
-      return of(null)
-      
-    })).pipe(switchMap(data => { 
-      // if (data) { this.orderService.updateOrderSubscriptionOnly(data)  }
+      let pItem = item.posItem as IPurchaseOrderItem
+      return of(pItem)
+    })).pipe(switchMap(data => {
+      let item = data as unknown as IPurchaseOrderItem
+
+      if (newItem?.menuItem?.itemType?.requireInStock ) {
+        if (this.menuItemSelected) {}
+        newItem.menuItem.unitDescription = unitName;
+        newItem.menuItem.unitTypeID = unitTypeID;
+        newItem.unitTypeID = unitTypeID;
+
+        return this.postNewInventoryItem(site, newItem?.menuItem, item,  newItem.quantity).pipe(switchMap(data => {
+          item.inventoryAssignmentID = data.id;
+          this.clearProduct();
+          this.clearUnit()
+          return of(data)
+        }))
+      }
+
       this.clearProduct();
       this.clearUnit()
-      return of({})
+      // console.log('Does not require stock.')
+      return of(null)
     }));
 
+
+
+  }
+
+  //move to service
+  postNewInventoryItem(site, menuItem: IMenuItem, item: IPurchaseOrderItem, quantity: number) {
+    //when posting then also call back and save to the item detail itself.
+    // console.log(item)
+    let inv = {} as IInventoryAssignment;
+    inv.poDetailID = item.id;
+    inv.employeeID = item.employeeID;
+
+    inv = this.inventoryAssignmentService.assignProductToInventory(menuItem, inv)
+    inv = this.inventoryAssignmentService.assignChemicals(menuItem, inv)
+    inv.packageQuantity       = quantity
+    inv.baseQuantityRemaining = inv?.packageQuantity;
+    inv.packageCountRemaining = inv?.packageQuantity;
+    inv.baseQuantity          = inv?.packageQuantity;
+
+    inv.unitOfMeasureName =     menuItem.unitDescription //= unitName;
+    inv.intakeUOM         =     menuItem.unitDescription //= unitTypeID;
+    inv.unitMulitplier    = 1;
+
+    const defaultInventory$   = this.inventoryLocationsService.getDefaultLocation().pipe(switchMap(data => {
+      if (data) {
+        inv.location = data?.name;
+        inv.locationID = data?.id
+      }
+      return of(data);
+    }))
+
+    const postItem$ = this.inventoryAssignmentService.postInventoryAssignment(site, inv)
+
+    const item$ = defaultInventory$.pipe(switchMap(data => {
+        return postItem$
+    }));
+
+    return item$.pipe(switchMap(data => {
+      item.inventoryAssignmentID = data.id;
+      const invItem =  {id: item.id, inventoryID: data.id};
+      const dialogRef = this.inventoryAssignmentService.openInventoryItem(data.id)
+      return  this.posOrderItemSerivce.setInventoryId(site, invItem)
+    })).pipe(switchMap(data => {
+      return of(data)
+    }))
   }
 
   replaceObject(newObj: any, list: any[]): any[] {

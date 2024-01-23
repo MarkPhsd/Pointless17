@@ -137,7 +137,7 @@ export class OrdersService {
   }
 
 
-  inventoryMonitor(site: ISite, id: number) :  Observable<IPOSOrder> { 
+  inventoryMonitor(site: ISite, id: number) :  Observable<IPOSOrder> {
     const controller = "/POSOrders/"
 
     const endPoint  = "InventoryMonitor"
@@ -161,7 +161,6 @@ export class OrdersService {
     return this.http.get<any>(url);
   }
 
-
   getSplitItemsList(site: ISite, orderID: number, groupID: number) :  Observable<IListBoxItem[]>  {
     const controller = "/POSOrders/"
 
@@ -174,7 +173,7 @@ export class OrdersService {
     return this.http.get<IListBoxItem[]>(url);
   }
 
-  
+
   getRelatedSplitOrders(site: ISite, refID: number) :  Observable<IPOSOrder[]>  {
     const controller = "/POSOrders/"
 
@@ -286,6 +285,19 @@ export class OrdersService {
     return this.http.get<IItemBasic[]>(url);
   }
 
+  transferOrder(site: ISite, id: number, sheetID: number) :  Observable<IPOSOrder> {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "transferOrder"
+
+    const parameters = `?id=${id}&sheetID=${sheetID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url);
+  }
+
+
   pOSTReconciliationOrder( site: ISite, name: string) :  Observable<IPOSOrder> {
     const controller = "/POSOrders/"
 
@@ -297,7 +309,6 @@ export class OrdersService {
 
     return this.http.get<IPOSOrder>(url);
   }
-
 
   addReconciliationSection(site: ISite, item: IReconcilePayload): Observable<IPOSOrder> {
 

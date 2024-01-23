@@ -1,9 +1,8 @@
 import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input, TemplateRef , Inject} from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { ElectronService } from 'ngx-electron';
 import { Observable, of, switchMap } from 'rxjs';
 import { CardPointBoltService, PointlessCCDSIEMVAndroidService } from 'src/app/modules/payment-processing/services';
 import { IServiceType, ISetting } from 'src/app/_interfaces';
@@ -12,9 +11,8 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { ITerminalSettings,  SettingsService } from 'src/app/_services/system/settings.service';
+import { ITerminalSettings,  DSIEMVSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 
@@ -29,6 +27,7 @@ export class PosEditSettingsComponent implements OnInit {
 
   @ViewChild('androidPrintingTemplate') androidPrintingTemplate: TemplateRef<any>;
   inputForm: UntypedFormGroup;
+  dsiEMVSettings: FormGroup;
   setting  : any;
   terminal : ITerminalSettings;
   saving$  : Observable<ISetting>;
@@ -51,7 +50,6 @@ export class PosEditSettingsComponent implements OnInit {
   ]
 
   constructor(
-    private _snackBar           : MatSnackBar,
     private fb                  : UntypedFormBuilder,
     private sitesService        : SitesService,
     private settingsService     : SettingsService,
@@ -59,7 +57,6 @@ export class PosEditSettingsComponent implements OnInit {
     private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
     private platFormService     : PlatformService,
     private btPrinterService    : BtPrintingService,
-    private triPOSService       : TriPOSMethodService,
     private printingService     : PrintingService,
     private uiSettingService    : UISettingsService,
     private fileSystemService   : FileSystemService,
@@ -74,7 +71,6 @@ export class PosEditSettingsComponent implements OnInit {
     this.uisettings$ = this.settingsService.getUITransactionSetting().pipe(switchMap(data => {
       this.uiSettings = data;
       // data.dsiEMVNeteEpayEnabled
-
       if (data.cardPointBoltEnabled) {
         this.setCardPointTermialsObservable()
       }
@@ -188,10 +184,35 @@ export class PosEditSettingsComponent implements OnInit {
       triPOSMarketCode: [],
       enablePrepView  : [],
       defaultLabel    : [],
+      dsiEMVSettings  :[],
+    })
+
+    this.dsiEMVSettings = this.fb.group({
+      id         :[],
+      HostOrIP   :[],
+      IpPort     :[],
+      MerchantID :[],
+      TerminalID :[],
+      OperatorID :[],
+      POSPackageID :[],
+      TranDeviceID :[],
+      UserTrace  :[],
+      TranCode   :[],
+      SecureDevice :[],
+      ComPort    :[],
+      PinPadIpAddress :[],
+      PinPadIpPort :[],
+      SequenceNo :[],
+      DisplayTextHandle :[],
+      enabled :[],
+      partialAuth :[],
     })
 
     if (this.terminal) {
       this.inputForm.patchValue(this.terminal)
+    }
+    if (this.terminal) {
+      this.dsiEMVSettings.patchValue(this.terminal?.dsiEMVSettings)
     }
   }
 
@@ -205,6 +226,7 @@ export class PosEditSettingsComponent implements OnInit {
   saveTerminalSetting(close: boolean) {
     const site = this.sitesService.getAssignedSite()
     const item = this.inputForm.value as ITerminalSettings;
+    item.dsiEMVSettings = this.dsiEMVSettings.value as DSIEMVSettings
     const text = JSON.stringify(item);
     this.setting.name   = item.name;
     this.setting.text   = text;

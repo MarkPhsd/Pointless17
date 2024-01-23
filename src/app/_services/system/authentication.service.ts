@@ -71,7 +71,7 @@ export class AuthenticationService {
     _deviceInfo: IDeviceInfo;
 
 
-    updatePinPad(value: boolean) { 
+    updatePinPad(value: boolean) {
       this._setPinPad.next(value)
     }
     get userAuths() {
@@ -170,7 +170,7 @@ export class AuthenticationService {
 
     public overRideUser(user) {
       this._userTemp.next(user);
-      // if (!user) { this.userValue } 
+      // if (!user) { this.userValue }
     }
 
     decodeAuth(data) {
@@ -299,7 +299,7 @@ export class AuthenticationService {
       console.log('cleared user settings go to login.isapp:', this.platFormservice.isApp())
       if (!this.platFormservice.isApp()) {
 
-        if (this.appInitService?.useAppGate) { 
+        if (this.appInitService?.useAppGate) {
           this.router.navigate(['/login']);
           this.setPinPadLogIn(pinPadDefaultOnApp);
           return;
@@ -314,20 +314,20 @@ export class AuthenticationService {
           return
         }
       }
-  
+
       try {
         this.router.navigate(['/login']);
         this.setPinPadLogIn(pinPadDefaultOnApp)
       } catch (error) {
         console.log('log out error', error)
       }
-  
+
       this.clearSubscriptions()
     }
 
     setPinPadLogIn(pinPadDefaultOnApp: boolean) {
       if (this.platFormservice.isApp()) {
-        if (pinPadDefaultOnApp) { 
+        if (pinPadDefaultOnApp) {
           this._setPinPad.next(true)
         }
       }

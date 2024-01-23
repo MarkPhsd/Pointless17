@@ -1,6 +1,6 @@
 {
   "name": "pointlesspos",
-  "version": "2.18.9",
+  "version": "2.20.1",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless POS",

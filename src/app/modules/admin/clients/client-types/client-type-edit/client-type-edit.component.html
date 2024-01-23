@@ -257,6 +257,20 @@
 
               <div class="toggle-fields">
                 <mat-slide-toggle
+                          formControlName="allowNegativeTransaction" >
+                  <mat-label>Allow Negative Value Order </mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="allowZeroTransaction" >
+                  <mat-label>Allow Zero Value Order </mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
                           formControlName="allowBuy" >
                   <mat-label>Allow Buy From Customer</mat-label>
                 </mat-slide-toggle>
@@ -268,11 +282,11 @@
                   <mat-label>Allow Move Split Items</mat-label>
                 </mat-slide-toggle>
               </div>
-              
-                <div class="toggle-fields">
+
+              <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="voidOrder" >
-                  <mat-label>Void Order</mat-label>
+                          formControlName="allowTransferOrder" >
+                  <mat-label>Allow Transfer Order</mat-label>
                 </mat-slide-toggle>
               </div>
 
@@ -287,6 +301,13 @@
                 <mat-slide-toggle
                           formControlName="disableVoidClosedItem" >
                   <mat-label>Disable Void Item on Closed Orders</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="voidOrder" >
+                  <mat-label>Void Order</mat-label>
                 </mat-slide-toggle>
               </div>
 
@@ -346,24 +367,55 @@
                 </mat-slide-toggle>
               </div>
 
+            </div>
+
+            <div>
+              <h3>End of Day Printing</h3>
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="allowNegativeTransaction" >
-                  <mat-label>Allow Negative Value Order </mat-label>
+                          formControlName="closeDay" >
+                  <mat-label>Allow Close Day</mat-label>
                 </mat-slide-toggle>
               </div>
 
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="allowZeroTransaction" >
-                  <mat-label>Allow Zero Value Order </mat-label>
+                          formControlName="blindClose" >
+                  <mat-label>Blind Close (hide sales totals)</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="disableGiftCards" >
+                  <mat-label >Disable Gift Cards</mat-label>
+                </mat-slide-toggle>
+              </div>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="disableItemSales" >
+                  <mat-label>Disable Item Sales</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="disableDeviceSales" >
+                  <mat-label>Disable Sales by Device</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="disableBalanceEndOfDay" >
+                  <mat-label>Disable Balance Sheet Summary</mat-label>
                 </mat-slide-toggle>
               </div>
 
             </div>
 
             <div>
-              <h3>Balance Sheets</h3>
+              <h3>Balance Sheets Printing</h3>
 
               <div class="toggle-fields">
                 <mat-slide-toggle
@@ -381,31 +433,36 @@
 
               <div class="toggle-fields">
                 <mat-slide-toggle
+                          formControlName="balanceSheetTransactionTypes" >
+                  <mat-label>Transaction Type Summary</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
                           formControlName="balanceSheetDetails" >
                   <mat-label>Show all Payments</mat-label>
                 </mat-slide-toggle>
               </div>
 
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="balanceSheetDisableBank" >
+                  <mat-label>Disable Bank</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="balanceSheetDisableCashDrops" >
+                  <mat-label>Disable Cash Drops</mat-label>
+                </mat-slide-toggle>
+              </div>
+
           </div>
-            
-            <div>
-              <h3>End of Day</h3>
 
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="blindClose" >
-                  <mat-label>Blind Close (hide sales totals)</mat-label>
-                </mat-slide-toggle>
-              </div>
 
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="closeDay" >
-                  <mat-label>Close Day</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-            </div>
 
             <div>
                 <h4>Marketing</h4>
@@ -576,7 +633,6 @@
                   <mat-label>User Defined Balance Sheets</mat-label>
                 </mat-slide-toggle>
               </div>
-
             </div>
           </div>
         </mat-tab>

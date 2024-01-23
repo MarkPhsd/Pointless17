@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Observable, of, Subject, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService, IReportItemSaleSummary, POSItemSearchModel } from 'src/app/_services/reporting/reporting-items-sales.service';
+import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService, IReportItemSaleSummary, POSItemSearchModel, TaxSalesReportResults } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 // https://stackoverflow.com/questions/51487689/angular-5-how-to-export-data-to-csv-file
@@ -34,19 +34,20 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
   @Input() autoPrint : boolean;
   printReadyList = []
   @Output() renderComplete = new EventEmitter<any>();
- 
+
   adjustments$:  Observable<unknown>;
   adjustments: IReportItemSaleSummary;
   action$ :  Observable<unknown>;
   sales$:  Observable<unknown>;
   showAll: boolean;
-  sales: IReportItemSaleSummary
+  sales: IReportItemSaleSummary | TaxSalesReportResults
   hideList = false;
 
   constructor(
     private reportingItemsSalesService: ReportingItemsSalesService,
     private orderMethodsService: OrderMethodsService,
     private popOutService: ProductEditButtonService,
+    private cdr: ChangeDetectorRef,
     private siteSerivce: SitesService,)
      { }
 
@@ -73,31 +74,21 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
       return;
     }
 
-    const searchModel = {} as IReportingSearchModel
+    const searchModel = {} as IReportingSearchModel;
+    if (this.groupBy === 'transactionType') {
+      searchModel.getServiceFees = true
+      searchModel.pendingTransactions = false
+    }
     if (this.groupBy === 'serviceFees') {
       searchModel.groupByProduct = true;
       searchModel.getServiceFees = true
     }
-    if (this.groupBy === 'items') {
-      searchModel.groupByProduct = true;
-    }
-    if (this.groupBy === 'category') {
-      searchModel.groupByCategory = true;
-    }
-    if (this.groupBy === 'department') {
-      searchModel.groupByDepartment = true;
-    }
-    if (this.groupBy === 'type') {
-      searchModel.groupByType = true;
-    }
-
-    if (this.removeGiftCard) {
-
-    }
-
-    if (this.groupBy === 'void') {
-      searchModel.groupByType = false;
-    }
+    if (this.groupBy === 'items') {   searchModel.groupByProduct = true; }
+    if (this.groupBy === 'category') {   searchModel.groupByCategory = true;  }
+    if (this.groupBy === 'department') {   searchModel.groupByDepartment = true;  }
+    if (this.groupBy === 'type') {   searchModel.groupByType = true;  }
+    if (this.removeGiftCard) {  }
+    if (this.groupBy === 'void') {   searchModel.groupByType = false; }
 
     searchModel.removeGiftCards   = this.removeGiftCard
     searchModel.startDate         = this.dateFrom;
@@ -107,9 +98,28 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     searchModel.scheduleDateEnd   = this.scheduleDateEnd;
     searchModel.taxFilter         = this.taxFilter;
     searchModel.reportRunID       = this.reportRunID;
+
+    if (this.site) {
+      if (this.groupBy === 'transactionType') {
+        searchModel.groupBy = this.groupBy
+        this.sales$ = this.reportingItemsSalesService.getTransactionTypeSalesReport(this.site, searchModel).pipe(switchMap(data => {
+          this.sales = data;
+          this.cdr.detectChanges()
+          return of(data)
+        })).pipe(switchMap(data => {
+          setTimeout(data => {
+            this.renderComplete.emit(true)
+          },500);
+          return of(data)
+        }))
+        return;
+      }
+    }
+
     if (this.site) {
       this.sales$ = this.reportingItemsSalesService.groupItemSales(this.site, searchModel).pipe(switchMap(data => {
         this.sales = data;
+        this.cdr.detectChanges()
         this.renderComplete.emit(true)
         return of(data)
       }))
@@ -143,6 +153,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
 
     this.sales$ = this.reportingItemsSalesService.listAdjustedItems(this.site, searchModel).pipe(switchMap(data => {
        this.adjustments = data as IReportItemSaleSummary;
+       this.cdr.detectChanges()
        this.renderComplete.emit(true)
       return of(data)
     }))
@@ -171,14 +182,16 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     const site = this.siteSerivce.getAssignedSite();
 
     if (id &&   this.scheduleDateStart && this.scheduleDateEnd) {
+
+      const sales = this.sales as  IReportItemSaleSummary
       const action$ =  this.orderMethodsService.setItemGroupAsPrepped(site, id,
                                                                   this.scheduleDateStart,
                                                                   this.scheduleDateEnd,
-                                                                  this.sales)
+                                                                  sales)
       return action$.pipe(switchMap(data => {
         if (data) {
           this.renderComplete.emit(true)
-          this.sales.results.filter(item => {
+          sales.results.filter(item => {
             return !item.ID
           })
         }
@@ -210,8 +223,8 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     }
   }
 
-  setPrintReady() { 
-    
+  setPrintReady() {
+
   }
 
 }

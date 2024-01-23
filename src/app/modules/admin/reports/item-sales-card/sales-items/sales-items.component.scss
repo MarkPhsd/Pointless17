@@ -1,7 +1,7 @@
-// ?? grid-template-columns: 135px 90px 50px 85px; 
+// ?? grid-template-columns: 135px 90px 50px 85px;
 .info-width {
   width: 350px;
-  @media print { 
+  @media print {
     width: 350px;
   }
 }
@@ -10,7 +10,7 @@
   grid-column: 2/3;
   text-align: end;
   justify-content: end;
-  align-items: end; 
+  align-items: end;
 }
 
 .item-sales-grid-body {
@@ -18,18 +18,24 @@
   grid-template-columns:  125px 70px 50px 75px;
   grid-template-rows   : auto;
   grid-gap             : 5px;
-  // justify-content      : space-between;
+
   margin-left          : 5px;
   max-width            : 350px;
   font-size            : 1em;
 
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
+  overflow-wrap: break-word;
+
   @media print {
-    display: grid; 
+    display: grid;
     gap: 5px;
-    grid-template-columns: 135px 90px 50px 85px; 
+    grid-template-columns: 135px 90px 50px 85px;
     font-size: 12pt;
     font-weight: bold;
-    width: 350px; 
+    width: 350px;
   }
 }
 
@@ -44,7 +50,7 @@
   @media print {
     display: grid;
     gap:  5px;
-    grid-template-columns: 135px 90px 50px 85px; 
+    grid-template-columns: 135px 90px 50px 85px;
     font-size: 12pt;
     font-weight: bold;
     width: 305px;
@@ -67,17 +73,11 @@
   float         : left;
   align-items   : flex-start;
   text-align    : left;
-  overflow      : clip;
+
   text-overflow : ellipsis;
-  white-space   : nowrap;
+  white-space   : pre-wrap;
 
-  @media print {
-    font-size: 12pt;
-    font-weight: bold;
-  }
 }
-
-
 
 .grid-body-departments {
   display              : grid;
@@ -128,13 +128,22 @@
   text-align    : left;
 }
 
+// .product-name  {
+//   float         : left;
+//   align-items   : flex-start;
+//   text-align    : left;
+//   overflow      : clip;
+//   text-overflow : ellipsis;
+//   white-space   : nowrap;
+// }
 .product-name  {
   float         : left;
   align-items   : flex-start;
   text-align    : left;
-  overflow      : clip;
+
   text-overflow : ellipsis;
-  white-space   : nowrap;
+  white-space   : pre-wrap;
+
 }
 
 .headers {

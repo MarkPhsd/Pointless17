@@ -1,3 +1,4 @@
+<!-- <div *ngIf="_itemTypes$ | async"></div> -->
 
 <mat-card>
   <mat-accordion class="example-headers-align" multi="false" >
@@ -31,6 +32,11 @@
                   <mat-icon>initialize</mat-icon>Init List</button>
                 </div>
                 <div class="grid-item">
+                  <button mat-button color="primary"
+                      (click)="refreshData()">
+                  <mat-icon>refresh</mat-icon>Refresh List</button>
+              </div>
+                <div class="grid-item">
                     <button mat-button color="primary"
                         (click)="delete()">
                     <mat-icon>delete</mat-icon>Delete Selected</button>
@@ -57,8 +63,7 @@
                   [rowData]="itemTypes$ | async "
                   [frameworkComponents]="frameworkComponents"
                   (gridReady)="onGridReady($event)"
-                  (selectionChanged)="onSelectionChanged($event)"
-              >
+                  (selectionChanged)="onSelectionChanged($event)" >
             </ag-grid-angular>
           </div>
 

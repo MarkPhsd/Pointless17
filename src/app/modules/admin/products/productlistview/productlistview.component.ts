@@ -786,7 +786,7 @@ constructor(  private _snackBar              : MatSnackBar,
   //ag-grid standard method
   async onGridReady(params: any) {
     if (params == undefined) { return }
-    
+
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
@@ -906,19 +906,40 @@ constructor(  private _snackBar              : MatSnackBar,
     let item = {} as IReconcilePayload;
 
     const value = this.searchForm.value ;
-    item.categoryID = value?.categoryID?.id
+    item.categoryID =  this.categoryID
+
     //we have to get the id because departmentiD is an object in the form
-    item.departmentID = value?.departmentID?.id
-    item.itemTypeID = value?.productTypeSearch?.id
-    item.bayName = value?.bayName
+    item.departmentID = this.departmentID;
+    item.itemTypeID = value?.productTypeSearch?.id;
+    item.bayName = value?.bayName;
+    console.log('search', this.productTypeSearch)
+    console.log('id', this.productTypeID)
+    console.log('item', item)
 
-
-    this.action$ = this.orderMethodsService.publishReconciliation('Reconcile', item)
+    return;
+    this.action$ = this.orderMethodsService.publishReconciliation('Reconcile', item).pipe(switchMap(data => {
+      this.siteService.notify('Inventory Monitoring enabled', 'close', 5000, 'green');
+      return of(data)
+    }))
   }
 
   inventoryMonitor() {
     let item = {} as IReconcilePayload;
-    this.action$ = this.orderMethodsService.publishReconciliation('Inventory Monitor', item)
+
+    const value = this.searchForm.value ;
+    item.categoryID =  this.categoryID
+    //we have to get the id because departmentiD is an object in the form
+    item.departmentID = this.departmentID;
+    item.itemTypeID = this.productTypeID
+    item.bayName = value?.bayName;
+    console.log('search', this.productTypeSearch)
+    console.log('id', this.productTypeID)
+    console.log('item', item)
+
+    this.action$ = this.orderMethodsService.publishReconciliation('Inventory Monitor', item).pipe(switchMap(data => {
+      this.siteService.notify('Inventory Monitoring enabled', 'close', 5000, 'green');
+      return of(data)
+    }))
   }
 
   getLabel(rowData)

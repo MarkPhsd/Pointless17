@@ -58,6 +58,7 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
         this.uiHome = data;
       }
     });
+
   }
 
   userAuthSubscriber() {
@@ -165,7 +166,6 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   }
 
   setLocation(selection) {
-
     if (this.locations){
       const item = this.locations.filter( data => { return data.id === selection?.value } )
       console.log(item[0], item)
@@ -173,6 +173,18 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
         this.inputForm.patchValue({location: item[0].name })
       }
     }
+  }
+
+  setLocationByItem(item) {
+    console.log(item)
+    this.inputForm.patchValue({locationID: item?.id, locationName: item[0].name })
+    // if (this.locations){
+    //   const item = this.locations.filter( data => { return data.id === selection?.value } )
+    //   console.log(item[0], item)
+    //   if (item && item[0]) {
+    //     this.inputForm.patchValue({location: item[0].name })
+    //   }
+    // }
   }
 
   getItem(event) {

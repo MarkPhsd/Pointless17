@@ -7,53 +7,43 @@
 
   <mat-card class="strain-card">
 
+
     <mat-card-title style="margin:5px;">
-      <div><h3>Item: {{item.productName}} </h3></div>
-      <div><h3>Label: {{item.label}} </h3></div>
-      <div><h3>Type: {{itemTypeDescription}}       </h3></div>
+      <div class="grid-container" >
+        <div style="width:250px;">
+          <div><h3>Item: {{item.productName}} </h3></div>
+          <div><h3>Label: {{item.label}} </h3></div>
+          <div><h3>Type: {{itemTypeDescription}}       </h3></div>
+        </div>
+        <div>
+          <app-edit-buttons-standard
+              (outputeupdateItem)     ="updateItem($event)"
+              (outputupdateItemExit)  ="updateItemExit($event)"
+              (outputupdatedeleteItem)="deleteItem($event)"
+              (outputupdateonCancel)  ="onCancel('false')"
+            ></app-edit-buttons-standard>
+        </div>
+      </div>
     </mat-card-title>
 
     <mat-card-subtitle>
 
       <div class="grid-container" >
-        <div class=" sub-container">
+        <div class="sub-85px" style="width:235px;">
           <div class="item-label">Sku</div>
           <div class="item-info"> {{item.sku}} </div>
-
           <div class="item-label">Type</div>
           <div class="item-info"> {{item.packageType}} </div>
-
           <div class="item-label">Intake Category </div>
           <div class="item-info"> {{item.productCategoryName}} </div>
-
           <div class="item-label">Facility Code</div>
           <div class="item-info"> {{item.facilityLicenseNumber}} </div>
 
-          <div>
-            <app-product-search-selector
-                class         = "fields"
-                [productName] = "item.productName"
-                [itemType]    = 1
-                [searchForm]  = "inputForm"
-                (itemSelect)  = "getItem($event)">
-              Change Item
-            </app-product-search-selector>
-          </div>
         </div>
-
-        <div>
+      <div>
 
           <div>
             <div class="flex-end button-margins">
-              <div>
-                <app-edit-buttons-standard
-                    (outputeupdateItem)     ="updateItem($event)"
-                    (outputupdateItemExit)  ="updateItemExit($event)"
-                    (outputupdatedeleteItem)="deleteItem($event)"
-                    (outputupdateonCancel)  ="onCancel('false')"
-                  ></app-edit-buttons-standard>
-              </div>
-
               <div class="margin-5" *ngIf="userAuths &&
                                            userAuths.allowBuy &&
                                            uiHome &&
@@ -65,9 +55,7 @@
             </div>
           </div>
 
-
-          <div class="toggle-items" *ngIf="inputForm"
-               [formGroup]="inputForm">
+          <div class="toggle-items" *ngIf="inputForm" [formGroup]="inputForm">
             <div >
               <mat-slide-toggle
                       formControlName="notAvalibleForSale">
@@ -90,7 +78,7 @@
             </div>
 
             <div *ngIf="(locations$ | async) as locations">
-              <mat-form-field appearance="outline">
+              <!-- <mat-form-field appearance="outline">
                 <mat-label>Locations</mat-label>
                 <mat-select
                             type="text"
@@ -102,7 +90,33 @@
                       {{ item.name }}
                     </mat-option>
                 </mat-select>
-              </mat-form-field>
+              </mat-form-field> -->
+
+              <div class="span-col-all" style="width:350px;">
+                <h4>Inventory Location</h4>
+                <mat-button-toggle-group name="type"
+                          aria-label="item Type"
+                          appearance="outline"
+                          formControlName="locationID">
+                  <mat-button-toggle class="discount-type-button"
+                          [value]="item.id"
+                          (click)="setLocation(item)"
+                          *ngFor="let item of locations" >
+                    {{item?.name}} (active: {{item?.activeLocation}})
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+            </div>
+
+            <div>
+              <app-product-search-selector
+                  class         = "fields"
+                  [productName] = "item.productName"
+                  [itemType]    = 1
+                  [searchForm]  = "inputForm"
+                  (itemSelect)  = "getItem($event)">
+                Change Item
+              </app-product-search-selector>
             </div>
           </div>
         </div>
@@ -115,96 +129,72 @@
     <mat-card-content >
       <div class="grid-container">
 
-        <div class="subtitle grid-container">
+        <div class="grid-195px">
           <div>
             <app-inventory-header-values
               [item]="item">
             </app-inventory-header-values>
           </div>
 
-          <!-- <div *ngIf="menuItem && menuItem.itemType && menuItem.itemType.labelTypeID">
-            <app-label-view-selector
-                [labelID]="menuItem?.itemType?.labelTypeID"
-                (outputLabelSetting)="getLabelSetting($event)"
-                [setInventoryAssignment]="item"
-                [labelImageHeight]="250">
-            </app-label-view-selector>
-          </div> -->
-
-          <div class="grid-spanner">
+          <div>
+            <ng-container [ngTemplateOutlet]="intakeInvoice"></ng-container>
           </div>
         </div>
 
         <div>
 
+          <div>
+            <mat-hint>Changing the sku will require re-labeling.</mat-hint>
+            <app-value-fields
+                [fieldType]="'text'"
+                [inputForm]="inputForm"
+                [fieldName]="'sku'"
+              >Change Sku
+            </app-value-fields>
+          </div>
+
           <div class="ps-flex-group-content-start"
                 [formGroup]="inputForm">
 
-            <div>
-              <app-price-category-select
-                    [isInventory]     ="true"
-                    [priceCategoryID] ="item.priceCategoryID"
-                    [inputForm]       ="inputForm" >
-                <div  class="header-column">Price</div>
-              </app-price-category-select>
-
-              <div>
-                <mat-hint>Changing the sku will require re-labeling.</mat-hint>
-                <app-value-fields
-                    [fieldType]="'text'"
-                    [inputForm]="inputForm"
-                    [fieldName]="'sku'"
-                  >Change Sku
-                </app-value-fields>
-              </div>
-            </div>
-
             <div *ngIf="isCannabis" >
-
               <mat-tab-group>
-                <mat-tab label="Values">
-                  <app-facility-search-selector
-                      [item]="facility"
-                      [searchForm]="inputForm"
-                      (itemSelect)="getVendor($event)">
-                  </app-facility-search-selector>
+                <mat-tab label="prices">
 
-                  <mat-form-field appearance="outline" >
-                    <mat-label>Test Date</mat-label>
-                    <input  matInput
-                            type="text"
-                            formControlName="testDate"
-                            name="testDate"
-                            [matDatepicker]="picker">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
+                  <app-price-category-select
+                        *ngIf="!menuItem?.itemType.disablePriceCategory"
+                        [isInventory]     ="true"
+                        [showAdditionalCost]="false"
+                        [priceCategoryID] ="item.priceCategoryID"
+                        [itemType]        ="menuItem?.itemType"
+                        [inputForm]       ="inputForm" >
+                    <div  class="header-column">Price</div>
+                  </app-price-category-select>
 
-                  <mat-form-field appearance="outline" >
-                    <mat-label>Expiration</mat-label>
-                    <input  matInput
-                            type="text"
-                            formControlName="expiration"
-                            name="expiration"
-                            [matDatepicker]="picker">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
+                  <div *ngIf="!menuItem?.itemType?.disableSimplePrice">
+                    <app-value-fields
+                          [inputForm]="inputForm"
+                          [fieldName]="'price'">
+                          Price
+                    </app-value-fields>
+                  </div>
 
-                  <app-value-fields
-                        [inputForm]="inputForm"
-                        [fieldName]="'testedBy'">
-                    Tested By
-                  </app-value-fields>
+                  <div>
+                    <app-value-fields
+                          [inputForm]="inputForm"
+                          [fieldName]="'cost'">
+                      Cost
+                    </app-value-fields>
+                  </div>
 
-                  <app-value-fields
-                      [inputForm]="inputForm"
-                      [fieldName]="'testLotNumber'">
-                    Test Lot #
-                  </app-value-fields>
+                  <div>
+                    <app-value-fields
+                          [inputForm]="inputForm"
+                          [fieldName]="'unitOfMeasureName'">
+                      Unit of Measure
+                    </app-value-fields>
+                  </div>
 
                 </mat-tab>
-
                 <mat-tab label="Chemicals">
                   <app-chemical-values
                     [inputForm]="inputForm"
@@ -212,7 +202,6 @@
                   </app-chemical-values>
                 </mat-tab>
               </mat-tab-group>
-
             </div>
 
             <div *ngIf="!isCannabis"
@@ -261,29 +250,13 @@
 
             </div>
 
-            <ng-container [ngTemplateOutlet]="metaTags"></ng-container>
-            <ng-container [ngTemplateOutlet]="additionalFeatures"></ng-container>
-
           </div>
         </div>
       </div>
+      <ng-container [ngTemplateOutlet]="userDisplayInfoView"></ng-container>
     </mat-card-content>
   </mat-card>
 </div>
-
-
-<ng-template #metaTags>
-  <div class="meta-tags"
-        *ngIf="item && menuItem">
-      <app-meta-tag-chips
-        (outPutItemTags) ="setItemTags($event)"
-        [inventory]      ="item"
-        [product]          = "menuItem"
-        [metaTagList]    ="item?.metaTags"
-        [inputForm]      ="inputForm">
-      </app-meta-tag-chips>
-  </div>
-</ng-template>
 
 <ng-template #additionalFeatures>
   <div  class="grid-container"  *ngIf="menuItem && !fbProductsService.isCannabis(menuItem.itemType)">
@@ -323,33 +296,117 @@
       </app-value-fields>
     </div>
 
-    <div class="grid-item">
-      <mat-card *ngIf="item" >
-        <app-widget-uploader
-            [(fileNames)]="images"
-            (messageOut) ="received_Image($event)"
-            >
-            Upload Image
-        </app-widget-uploader>
-      </mat-card>
-    </div>
-
-    <!-- <div *ngIf="inputForm">
-      form images {{inputForm.controls['images'].value}}
-      <br>
-      item.images {{item?.images}}
-    </div> -->
   </div>
 
-  <div [formGroup]="inputForm" class="grid-fields">
-    <div class="instructions">
-      <mat-label><h4>Item description.</h4></mat-label><br>
-      <simple-tinymce cols="50"
-                      rows="20"
-                      style="height: 200px;"
-                      name="description"
-                      formControlName="description"  >
-      </simple-tinymce>
+</ng-template>
+
+<ng-template #intakeInvoice>
+  <div  style="width:195px" *ngIf="inputForm" [formGroup]="inputForm">
+
+    <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'packageQuantity'">
+      Package Quantity
+    </app-value-fields>
+
+    <div>
+      <app-facility-search-selector
+        [item]="facility"
+        [searchForm]="inputForm"
+        (itemSelect)="getVendor($event)">
+      </app-facility-search-selector>
+    </div>
+
+    <div style="width:150px">
+      <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'invoiceCode'">
+            Vendor Invoice #
+      </app-value-fields>
+    </div>
+
+    <div >
+      <mat-form-field appearance="outline" style="width:150px">
+        <mat-label>Test Date</mat-label>
+        <input  matInput
+                type="text"
+                formControlName="testDate"
+                name="testDate"
+                [matDatepicker]="picker">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div >
+    <mat-form-field appearance="outline" style="width:150px">
+      <mat-label>Expiration</mat-label>
+      <input  matInput
+              type="text"
+              formControlName="expiration"
+              name="expiration"
+              [matDatepicker]="picker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    </div>
+    <div style="width:150px">
+      <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'testedBy'">
+        Tested By
+      </app-value-fields>
+    </div>
+    <div style="width:150px">
+      <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'testLotNumber'">
+        Test Lot #
+      </app-value-fields>
     </div>
   </div>
+</ng-template>
+
+<ng-template #userDisplayInfoView>
+  <mat-card>
+    <mat-card>
+      Info for Customers
+    </mat-card>
+    <div class="sub-115W">
+
+      <div class="meta-tags"  *ngIf="item && menuItem">
+        <app-meta-tag-chips
+          (outPutItemTags) ="setItemTags($event)"
+          [inventory]      ="item"
+          [product]          = "menuItem"
+          [metaTagList]    ="item?.metaTags"
+          [inputForm]      ="inputForm">
+        </app-meta-tag-chips>
+      </div>
+
+      <div class="grid-item" *ngIf="item">
+        <mat-card >
+          <app-widget-uploader
+              [(fileNames)]="images"
+              (messageOut) ="received_Image($event)">
+              Upload Image
+          </app-widget-uploader>
+        </mat-card>
+      </div>
+
+    </div>
+
+    <div [formGroup]="inputForm" class="grid-fields">
+      <div class="instructions">
+        <mat-label><h4>Item description.</h4></mat-label><br>
+        <simple-tinymce cols="50"
+                        rows="20"
+                        style="height: 200px;"
+                        name="description"
+                        formControlName="description"  >
+        </simple-tinymce>
+      </div>
+    </div>
+  </mat-card>
+
 </ng-template>

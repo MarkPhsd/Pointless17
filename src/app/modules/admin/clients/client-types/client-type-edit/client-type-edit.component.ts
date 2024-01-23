@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FbClientTypesService } from 'src/app/_form-builder/fb-client-types.service';
 import { Observable, switchMap , of, catchError} from 'rxjs';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-client-type-edit',
@@ -155,7 +155,7 @@ export class ClientTypeEditComponent implements OnInit {
     if (!item.addEmployee) {item.addEmployee = false}
     if (!item.adjustInventory) {item.adjustInventory = false}
     if (!item.adjustProductCount) {item.adjustProductCount = false}
-    if (!item.blindBalanceSheet) {item.blindBalanceSheet = false}
+
     if (!item.blindClose) {item.blindClose = false}
     if (!item.changeAuths) {item.changeAuths = false}
     if (!item.changeClientType) {item.changeClientType = false}
@@ -180,7 +180,21 @@ export class ClientTypeEditComponent implements OnInit {
     if (!item.deleteProduct) { item.deleteProduct = false}
     if (!item.allowReconciliation) { item.allowReconciliation = false}
     if (!item.allowSeeItemCost) { item.allowSeeItemCost = false}
+
+
+    if (!item.blindBalanceSheet) {item.blindBalanceSheet = false}
     if (!item.balanceSheetDetails) [ item.balanceSheetDetails = false ]
+    if (!item.balanceSheetViewTypeSales) [ item.balanceSheetViewTypeSales = false ]
+    if (!item.balanceSheetTransactionTypes) [ item.balanceSheetTransactionTypes = false ]
+    if (!item.balanceSheetDisableBank) [ item.balanceSheetDisableBank = false ]
+    if (!item.balanceSheetDisableCashDrops) [ item.balanceSheetDisableCashDrops = false ]
+
+
+    if (!item.disableBalanceEndOfDay) [ item.disableBalanceEndOfDay = false ]
+    if (!item.disableItemSales)       [ item.disableItemSales = false ]
+    if (!item.disableDeviceSales)     [ item.disableDeviceSales = false ]
+    if (!item.disableGiftCards)       [ item.disableGiftCards = false ]
+
     return item;
   }
 

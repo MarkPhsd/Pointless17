@@ -337,7 +337,7 @@
 </ng-template>
 
 <ng-template #cashDepositView>
-  <button mat-raised-button class="button"
+  <button *ngIf="!userAuths?.balanceSheetDisableCashDrops" mat-raised-button class="button"
     color="primary"
     (click)="drawerDropAction(1)">
     <span>
@@ -347,7 +347,7 @@
 </ng-template>
 
 <ng-template #cashDropView>
-  <button mat-raised-button class="button"
+  <button *ngIf="!userAuths?.balanceSheetDisableCashDrops" mat-raised-button class="button"
     color="primary"
     (click)="drawerDropAction(1)">
     <span>

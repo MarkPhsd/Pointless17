@@ -833,14 +833,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   ///move to inventoryAssignemtnService
   openInventoryDialog(id: number) {
-    const dialogRef = this.dialog.open(NewInventoryItemComponent,
-      { width:        '800px',
-        minWidth:     '800px',
-        height:       '750px',
-        minHeight:    '750px',
-        data : {id: id}
-      },
-    )
+    const dialogRef = this.inventoryAssignmentService.openInventoryItem(id)
 
     if (dialogRef) {
     dialogRef.afterClosed().subscribe(result => {
@@ -1119,7 +1112,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       }
     })
 
-    const assignMent$ =    this.inventoryAssignmentService.postInventoryAssignmentList(destination, originatorID, selected);
+    const assignMent$ = this.inventoryAssignmentService.postInventoryAssignmentList(destination, originatorID, selected);
 
     this.action$ = assignMent$.pipe(
       switchMap( data => {

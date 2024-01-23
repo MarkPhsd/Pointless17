@@ -151,19 +151,25 @@
               </mat-card-content>
             </mat-card>
           </div>
-          <ng-container [ngTemplateOutlet]="taxReport"></ng-container>
-          <ng-container [ngTemplateOutlet]="balanceSheetView"></ng-container>
+          <ng-container [ngTemplateOutlet]="taxReport "></ng-container>
+          <span *ngIf="!auths.disableBalanceEndOfDay  || !printing">
+            <ng-container [ngTemplateOutlet]="balanceSheetView"></ng-container>
+          </span>
         </div>
 
         <div>
-          <ng-container [ngTemplateOutlet]="paymentReport"></ng-container>
+          <ng-container [ngTemplateOutlet]="paymentReport  || !printing"></ng-container>
           <ng-container [ngTemplateOutlet]="salesType"></ng-container>
-          <ng-container [ngTemplateOutlet]="salesByDevice"></ng-container>
+          <span *ngIf="!auths.disableDeviceSales  || !printing">
+            <ng-container [ngTemplateOutlet]="salesByDevice"></ng-container>
+          </span>
           <ng-container [ngTemplateOutlet]="employeeReport"></ng-container>
-          <ng-container [ngTemplateOutlet]="giftCardReport"></ng-container>
+          <span *ngIf="!auths.disableGiftCards  || !printing">
+            <ng-container [ngTemplateOutlet]="giftCardReport"></ng-container>
+          </span>
         </div>
 
-        <div *ngIf="!printing">
+        <div *ngIf="!auths?.disableItemSales || !printing">
           <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>
           <ng-container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container>
         </div>
@@ -199,10 +205,9 @@
       [site]    ="site"
       [zrunID]    ="iBalanceSheet.id"
       [notifier]="childNotifier">
-    <div header>
-    <mat-icon >summarize</mat-icon>  Sale Type - {{site.name}}
-    </div>
-    <mat-icon>credit_card</mat-icon> Sale Type - {{site.name}}
+    <!-- <div header> -->
+      <mat-icon>list</mat-icon>Sale Type
+    <!-- </div> -->
   </payment-report>
 </ng-template>
 
@@ -231,19 +236,17 @@
 </ng-template>
 
 <ng-template #pendingTransactions>
-  <!-- <div class="summary" > -->
     <sales-tax-report
-          [site]="localSite"
-          [dateFrom]="dateFrom"
-          [dateTo]="dateTo"
+          [site]       ="localSite"
+          [dateFrom]   ="dateFrom"
+          [dateTo]      ="dateTo"
           [pendingTransactions]="true"
           [summaryOnly]="true"
           [zrunID]="iBalanceSheet.id" >
       <div summary>
-          <mat-icon >receipt</mat-icon>  Pending Transactions
+          <mat-icon >receipt</mat-icon>Pending Transactions
       </div>
     </sales-tax-report>
-  <!-- </div> -->
 </ng-template>
 
 <ng-template #futureTransactions>
@@ -264,12 +267,15 @@
 <ng-template #taxReport>
   <div>
     <sales-tax-report
-          [site]="localSite"
-          [dateFrom]="dateFrom"
-          [dateTo]="dateTo"
-          [zrunID]="iBalanceSheet.id" >
-        <mat-icon>receipt</mat-icon>  Sales
+          [printerName]="printerName"
+          [site]       ="localSite"
+          [dateFrom]   ="dateFrom"
+          [dateTo]     ="dateTo"
+          [zrunID]     ="iBalanceSheet.id" >
+      <div header>
+        <mat-icon>receipt</mat-icon>Sales
         <mat-divider></mat-divider>
+      </div>
     </sales-tax-report>
   </div>
 </ng-template>
@@ -282,7 +288,7 @@
       [zrunID]  ="iBalanceSheet.id"
       [type]    ="'metrcSummary'">
     <div summary>
-      <mat-icon >receipt</mat-icon> METRC:
+      <mat-icon >receipt</mat-icon>METRC:
     </div>
   </app-metrc-summary>
 </ng-template>
@@ -296,10 +302,9 @@
       [groupBy] ="'paymentMethod'"
       [autoPrint]="autoPrint"
       [type]    ="'sales'">
-    <div class="header">
+    <h4>
       <mat-icon>credit_card</mat-icon>Payment Methods
-      <mat-divider></mat-divider>
-    </div>
+    </h4>
   </payment-report>
 </ng-template>
 
@@ -314,7 +319,7 @@
     [dateTo]  ="dateTo"
     [zrunID]  ="iBalanceSheet.id"
     [autoPrint]="autoPrint" >
-  <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
+  <mat-icon>credit_card</mat-icon>Devices
   </payment-report>
 </ng-template>
 
@@ -326,7 +331,7 @@
     [zrunID]  ="iBalanceSheet.id"
     [autoPrint]="autoPrint"
     [groupBy]="'orderEmployeeCount'">
-    <mat-icon>people_alt</mat-icon> Employee Orders By Hour
+    <mat-icon>people_alt</mat-icon>Employee Orders By Hour
   </payment-report>
 </ng-template>
 
@@ -338,7 +343,7 @@
       [zrunID]  ="iBalanceSheet.id"
       [groupBy] ="'employee'"
       [autoPrint]="autoPrint" >
-    <mat-icon>people</mat-icon>  Employee Sales
+    <mat-icon>people</mat-icon>Employee Sales
     <mat-divider></mat-divider>
   </payment-report>
 </ng-template>

@@ -7,27 +7,14 @@
   background-color: white;
   color: black;
 }
-// @media print {
-//   .grid-body-departments {
-//     display              : grid;
-//     grid-template-columns:  135px 90px 50px 75px; //90px;
-//     grid-template-rows   : auto;
-//     font-size: 12pt;
-//     font-weight: bold;
-//   }
-//   .grid-body  {
-//     display              : grid;
-//     grid-template-columns: 125px 90px 50px 85px; //90px;
-//     grid-template-rows   : auto;
-//     font-size: 12pt;
-//     font-weight: bold;
-//   }
-//   .product-name, .totalslabel {
-//     font-size: 12pt;
-//     font-weight: bold;
-//   }
-// }
 
+.header-grid {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  margin: 3px;
+}
 
 
 

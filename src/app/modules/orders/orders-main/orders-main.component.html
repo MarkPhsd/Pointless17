@@ -53,8 +53,8 @@
       <ng-container [ngTemplateOutlet]="mergeViewEnabled"></ng-container>
     </span>
 
+    <ng-container [ngTemplateOutlet]="transferOrderView"></ng-container>
     <ng-container [ngTemplateOutlet]="filterMyOrdersView"></ng-container>
-
     <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
 
   </div>
@@ -78,6 +78,13 @@
 
 </div>
 
+<ng-template #transferOrderView>
+  <button #coachingTransferOrder class="dark-theme-green " mat-button (click)="transferOrder()"
+          *ngIf="auths &&  auths.allowTransferOrder">
+        <mat-icon>accounts</mat-icon><span>Transfer</span>
+  </button>
+</ng-template>
+
 <ng-template #houseAccountView>
   <button #coachingHouseAccount class="dark-theme-green " mat-button (click)="setHouseAccountsOn()"
           *ngIf="auths &&  auths.allowSuspendTransaction">
@@ -86,25 +93,20 @@
 </ng-template>
 
 <ng-template #freshOrders>
-
-    <button class="button"
-        mat-button
-        *ngIf="filterIsSet"
-        color="accent"
-        (click)="refreshSearch()">
-
-      <div *ngIf="!filterIsSet">
-        <mat-icon  color="accent">refresh</mat-icon>
-        <span>Refresh</span>
-      </div>
-
-      <div *ngIf="filterIsSet" >
-        <mat-icon style="top:5px;" color="warn">filter_alt</mat-icon>
-        <mat-label  color="warn">Filter On</mat-label>
-      </div>
-
-    </button>
-
+  <button class="button"
+      mat-button
+      *ngIf="filterIsSet"
+      color="accent"
+      (click)="refreshSearch()">
+    <div *ngIf="!filterIsSet">
+      <mat-icon  color="accent">refresh</mat-icon>
+      <span>Refresh</span>
+    </div>
+    <div *ngIf="filterIsSet" >
+      <mat-icon style="top:5px;" color="warn">filter_alt</mat-icon>
+      <mat-label  color="warn">Filter On</mat-label>
+    </div>
+  </button>
 </ng-template>
 
 <ng-template #allOrders>
@@ -240,7 +242,6 @@
 <ng-template #orderItemPanel>
   <div *ngIf="(orderItemHistory$ | async) as orderItems">
     <mat-divider></mat-divider>
-
     <h2>Recently Purchased Items</h2>
     <mat-label>For more items, press search to review your order history.</mat-label>
      <mat-divider style="margin:10px;"></mat-divider>

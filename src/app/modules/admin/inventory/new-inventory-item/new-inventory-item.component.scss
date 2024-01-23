@@ -1,6 +1,10 @@
 // body{ overflow-x: hidden;}
 @import "/src/mixins.scss";
 
+mat-button-toggle-group {
+  flex-wrap: wrap;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: 1fr 1fr ;
@@ -40,11 +44,11 @@
   }
 }
 
-.sub-container {
+.grid-195px {
 
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  grid-template-columns: auto auto;
 
   @include for-phone-only  {
     display: flex;
@@ -56,6 +60,36 @@
   }
 }
 
+.sub-175W {
+
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
+.sub-85px {
+
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(85px, 1fr) );
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
 
 
 .grid-spanner {

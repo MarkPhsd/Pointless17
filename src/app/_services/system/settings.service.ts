@@ -7,7 +7,7 @@ import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-c
 import { AdjustmentReason } from './adjustment-reasons.service';
 import { AppInitService } from './app-init.service';
 import { IItemBasic } from '..';
-import { DSIEMVSettings, StripeAPISettings, TransactionUISettings, UIHomePageSettings } from './settings/uisettings.service';
+import { StripeAPISettings, TransactionUISettings, UIHomePageSettings } from './settings/uisettings.service';
 import { EmailModel } from '../twilio/send-grid.service';
 import { UserAuthorizationService } from './user-authorization.service';
 import { ebayoAuthorization } from '../resale/ebay-api.service';
@@ -39,7 +39,30 @@ export interface ITerminalSettings {
   exitOrderOnFire   : boolean;
   enablePrepView: boolean;
   defaultLabel: string;
+  dsiEMVSettings: DSIEMVSettings
 }
+
+export interface DSIEMVSettings {
+  id        : number;
+  HostOrIP  : string;
+  IpPort    : string;
+  MerchantID: string;
+  TerminalID: string;
+  OperatorID: string;
+  POSPackageID: string;
+  TranDeviceID: string;
+  UserTrace : string;
+  TranCode  : string;
+  SecureDevice: string;
+  ComPort   : string;
+  PinPadIpAddress: string;
+  PinPadIpPort: string;
+  SequenceNo: string;
+  DisplayTextHandle: string;
+  enabled: boolean;
+  partialAuth: boolean;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +72,6 @@ export class SettingsService {
   deleteDuplicates(): any {
     throw new Error('Method not implemented.');
   }
-
 
   private _TerminalSettings     = new BehaviorSubject<ITerminalSettings>(null);
   public  terminalSettings$      = this._TerminalSettings.asObservable();

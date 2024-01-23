@@ -93,6 +93,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('coachingpurchaseOrderView', {read: ElementRef}) coachingpurchaseOrderView: ElementRef;
   @ViewChild('coachingpayOptions', {read: ElementRef}) coachingpayOptions: ElementRef;
   @ViewChild('coachingchangeType', {read: ElementRef}) coachingchangeType: ElementRef;
+  @ViewChild('coachingTransferOrder', {read: ElementRef}) coachingTransferOrder: ElementRef;
   @ViewChild('coachingexitButton', {read: ElementRef}) coachingexitButton: ElementRef;
   @ViewChild('coachingSuspend', {read: ElementRef}) coachingSuspend: ElementRef;
   @ViewChild('coachingAdjustment', {read: ElementRef}) coachingAdjustment: ElementRef;
@@ -393,14 +394,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })
   }
 
-  get isInventoryMonitor() { 
-    if (this.order?.customerName == 'Inventory Monitor') { 
+  get isInventoryMonitor() {
+    if (this.order?.customerName == 'Inventory Monitor') {
       return true
     }
     return false
   }
 
-  inventoryMonitorDiscrepencies() { 
+  inventoryMonitorDiscrepencies() {
     const site = this.siteService.getAssignedSite()
     this.processing = true;
     this.action$ = this.orderMethodsService.getInventoryMonitor(site, this.order.id).pipe(switchMap(data => {
@@ -413,7 +414,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
       this.canRemoveClient = true;
-      
+
       if (this.order) {
         // console.log(this.order.id, this.order?.serviceTypeID, this.order?.service?.id);
         this.initPurchaseOrderOption(this.order?.serviceTypeID);
@@ -755,7 +756,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   receiveOrder() {
     if (this.order) {
       this.action$ = this._makeManifest().pipe(switchMap(data => {
-        // const value = {id: data.id, autoReceive: true}
         this.manifestService.openManifestForm(data.id, true)
         return of(data)
       }))
@@ -1179,6 +1179,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.coachMarksService.add(new CoachMarksClass(this.coachingpurchaseOrderView.nativeElement, "Purchase Orders: When in purchase orders you will see the purchase history of items you are buying."));
     this.coachMarksService.add(new CoachMarksClass(this.coachingpayOptions.nativeElement, "Payment Options: Allows to do more than just choose credit or cash. Split check, pay with multiple tenders."));
     this.coachMarksService.add(new CoachMarksClass(this.coachingchangeType.nativeElement, "Sale or Transaction Type:  Change the order name, and behavior of the order, to a different sale type, like Take Out vs. Dine In. Or converts the sale to a Purchase Order."));
+    this.coachMarksService.add(new CoachMarksClass(this.coachingTransferOrder.nativeElement, "When authorized a user can transfer one order to another balance sheet. A notification is sent to management."));
     this.coachMarksService.add(new CoachMarksClass(this.coachingexitButton.nativeElement, " Exit: Leaves the order but does not delete it."));
     this.coachMarksService.add(new CoachMarksClass(this.coachingSuspend.nativeElement, "Suspending Order:  Suspend the order so that it will not be deleted when the day is closed. This holds it for later payment."));
     this.coachMarksService.add(new CoachMarksClass(this.coachingAdjustment.nativeElement, "Adjustment: Void, and Refunds"));

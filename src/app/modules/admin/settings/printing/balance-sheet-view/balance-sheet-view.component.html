@@ -34,30 +34,40 @@
     <mat-divider></mat-divider>
   </ng-template>
 
+
   <div *ngIf="(auths$ | async) as auths">
     <div *ngIf="(zRun$ | async) as zRunData">
       <div *ngIf="printType === 'balanceSheetFinal'">
 
         <ng-container [ngTemplateOutlet]="serviceFeeView"></ng-container>
         <ng-template #serviceFeeView>
-          <div *ngIf="(gratuitySummary$ | async) as serviceFee">
+          <ng-container [ngTemplateOutlet]="divider"></ng-container>
+          <div *ngIf="(gratuitySummary$ | async) as serviceFee" style="margin-bottom:10px">
             <div *ngIf="serviceFee && serviceFee.gratuity != 0">
-              <div class="header-grid info-width">
-                <div class="printFont-14 ">
-                  Net Sales :  {{ sheet?.netSales ?? 0 | currency }}
+              <div class="header-grid printFont-14">
+                <div >
+                  Net Sales:
                 </div>
-             
-                <div class="printFont-14 ">
-                  Service Fee: {{ serviceFee?.gratuity ?? 0 | currency }}
+                <div>
+                  {{ sheet?.netSales ?? 0 | currency }}
+                </div>
+                <div >
+                  Other Charges:
+                </div>
+                <div>
+                  {{ serviceFee?.gratuity ?? 0 | currency }}
                 </div>
               </div>
             </div>
+
           </div>
         </ng-template>
+
         <ng-container [ngTemplateOutlet]="paymentReport"></ng-container>
         <ng-template #paymentReport>
-          <div *ngIf="!auths?.blindBalanceSheet">
-            <payment-report 
+          <ng-container [ngTemplateOutlet]="divider"></ng-container>
+          <div *ngIf="!auths?.blindBalanceSheet"  style="margin-bottom:10px">
+            <payment-report
               [type]        ="'sales'"
               [groupBy]     ="'paymentMethod'"
               [site]        ="site"
@@ -69,8 +79,9 @@
           <mat-divider></mat-divider>
         </ng-template>
 
-        <div *ngIf="auths?.balanceSheetViewTypeSales">
-          <ng-container [ngTemplateOutlet]="itemTypeReport"></ng-container>
+        <div *ngIf="auths?.balanceSheetViewTypeSales"  style="margin-bottom:15px">
+          <ng-container [ngTemplateOutlet]="divider"></ng-container>
+          <ng-container [ngTemplateOutlet]="itemTypeReport" ></ng-container>
           <ng-template #itemTypeReport>
             <item-sales-card
                 [site]          ="site"
@@ -86,9 +97,28 @@
           </ng-template>
         </div>
 
+        <div *ngIf="auths?.balanceSheetTransactionTypes"  style="margin-bottom:15px">
+          <ng-container [ngTemplateOutlet]="TransactionTypesView" ></ng-container>
+          <ng-template #TransactionTypesView>
+            <ng-container [ngTemplateOutlet]="divider"></ng-container>
+            <item-sales-card
+                [site]          ="site"
+                [reportRunID]   ="sheet.id"
+                [removeGiftCard]="true"
+                [viewType]      ="'sales'"
+                [autoPrint]     ="true"
+                (renderComplete)="renderCompleted($event)"
+                [groupBy]       ="'transactionType'">
+              <div class="header"> Sale Types </div>
+            </item-sales-card>
+            <mat-divider></mat-divider>
+          </ng-template>
+        </div>
+
         <ng-container [ngTemplateOutlet]="balanceSheetDetails"></ng-container>
         <ng-template #balanceSheetDetails>
-          <div *ngIf="auths?.balanceSheetDetails">
+          <div *ngIf="auths?.balanceSheetDetails"  style="margin-bottom:10px">
+            <ng-container [ngTemplateOutlet]="divider"></ng-container>
             <h3>Payments:</h3>
             <div *ngIf="(list$ | async) as list">
               <credit-card-payments-print-list
@@ -103,7 +133,8 @@
 
         <ng-container [ngTemplateOutlet]="creditCardPayments"></ng-container>
         <ng-template #creditCardPayments>
-          <div *ngIf="auths?.balanceSheetDetails">
+          <div *ngIf="auths?.balanceSheetDetails"  style="margin-bottom:10px">
+            <ng-container [ngTemplateOutlet]="divider"></ng-container>
             <h3>Payments Groups:</h3>
             <div *ngIf="(paymentGroups$ | async) as list">
               <credit-card-payments-print-list
@@ -122,70 +153,78 @@
 
   <ng-container [ngTemplateOutlet]="balanceSheetValues"></ng-container>
   <ng-template #balanceSheetValues>
-    <div *ngIf="printType === 'balanceSheetValues' || printType === 'balanceSheetFinal'">
-      <h2>Remaining in Drawer</h2>
+    <div *ngIf="(auths$ | async) as auths"  style="margin-bottom:10px">
+      <div *ngIf="(printType === 'balanceSheetValues' || printType === 'balanceSheetFinal') &&  !auths.balanceSheetDisableBank">
+        <h2>Remaining in Drawer</h2>
 
-      <div class="balance-currency">
+        <div class="balance-currency">
 
-        <div class="balance-grid-summary">
-          <div>Dollars ({{sheet?.onesEnd * 1 }})</div>
-          <div>{{sheet?.onesEnd * 1 | currency}}</div>
-    
-          <div>Five ({{sheet?.fivesEnd * 1}})</div>
-          <div>{{sheet?.fivesEnd * 5 | currency}}</div>
-    
-          <div>Ten ({{sheet?.tensEnd * 1}})</div>
-          <div>{{sheet?.tensEnd * 10 | currency}}</div>
-    
-          <div>Twenty ({{sheet?.twentiesEnd * 1}})</div>
-          <div>{{sheet?.twentiesEnd * 20 | currency}}</div>
-    
-          <div>Fifty ({{sheet?.fiftiesEnd * 1 }})</div>
-          <div>{{sheet?.fiftiesEnd * 50 | currency}}</div>
-    
-          <div>Hundreds ({{sheet?.hundredsEnd * 1}})</div>
-          <div>{{sheet?.hundredsEnd * 100 | currency}}</div>
+          <div class="balance-grid-summary">
+            <div>Dollars ({{sheet?.onesEnd * 1 }})</div>
+            <div>{{sheet?.onesEnd * 1 | currency}}</div>
+
+            <div>Five ({{sheet?.fivesEnd * 1}})</div>
+            <div>{{sheet?.fivesEnd * 5 | currency}}</div>
+
+            <div>Ten ({{sheet?.tensEnd * 1}})</div>
+            <div>{{sheet?.tensEnd * 10 | currency}}</div>
+
+            <div>Twenty ({{sheet?.twentiesEnd * 1}})</div>
+            <div>{{sheet?.twentiesEnd * 20 | currency}}</div>
+
+            <div>Fifty ({{sheet?.fiftiesEnd * 1 }})</div>
+            <div>{{sheet?.fiftiesEnd * 50 | currency}}</div>
+
+            <div>Hundreds ({{sheet?.hundredsEnd * 1}})</div>
+            <div>{{sheet?.hundredsEnd * 100 | currency}}</div>
+          </div>
+
+          <div class="balance-grid-summary">
+            <div>Penny ({{sheet?.pennyEnd * 1}})</div>
+            <div>{{sheet?.pennyEnd * .01 | currency}}</div>
+
+            <div>Nickle ({{sheet?.nickelEnd * 1}})</div>
+            <div>{{sheet?.nickelEnd *.05 | currency}}</div>
+
+            <div>Dime  ({{sheet?.dimeEnd * 1 }})</div>
+            <div>{{sheet?.dimeEnd * .1 | currency}}</div>
+
+            <div>Quarter  ({{sheet?.quarterEnd * 1 }})</div>
+            <div>{{sheet?.quarterEnd  * .25  | currency}}</div>
+
+            <div>Half  ({{sheet?.halfDollarEnd  * 1}})</div>
+            <div>{{sheet?.halfDollarEnd * .5 | currency}}</div>
+
+            <div>Coin Dollar ({{sheet?.dollarEnd * 1 }}) </div>
+            <div>{{sheet?.dollarEnd * 1  | currency}}</div>
+          </div>
+
         </div>
-
-        <div class="balance-grid-summary">
-          <div>Penny ({{sheet?.pennyEnd * 1}})</div>
-          <div>{{sheet?.pennyEnd * .01 | currency}}</div>
-    
-          <div>Nickle ({{sheet?.nickelEnd * 1}})</div>
-          <div>{{sheet?.nickelEnd *.05 | currency}}</div>
-    
-          <div>Dime  ({{sheet?.dimeEnd * 1 }})</div>
-          <div>{{sheet?.dimeEnd * .1 | currency}}</div>
-    
-          <div>Quarter  ({{sheet?.quarterEnd * 1 }})</div>
-          <div>{{sheet?.quarterEnd  * .25  | currency}}</div>
-    
-          <div>Half  ({{sheet?.halfDollarEnd  * 1}})</div>
-          <div>{{sheet?.halfDollarEnd * .5 | currency}}</div>
-    
-          <div>Coin Dollar ({{sheet?.dollarEnd * 1 }}) </div>
-          <div>{{sheet?.dollarEnd * 1  | currency}}</div>
-        </div>
-
       </div>
     </div>
   </ng-template>
 
-  <div *ngIf="printType === 'cashDrop'">
-    <h1>Cash Drop</h1>
-    <div class="balance-grid-summary">
-      <div><h3>Sheet ID</h3> </div>
-      <div><h3>{{sheet.id}}</h3></div>
-      <div><h3>DROP ID</h3> </div>
-      <div *ngIf="cashDrop"><h3>{{cashDrop?.id}}</h3></div>
-      <div><h3>Time</h3> </div>
-      <div *ngIf="cashDrop"><h3>{{cashDrop?.dropTime }}</h3></div>
+  <div *ngIf="(auths$ | async) as auths"  style="margin-bottom:10px">
+    <div *ngIf="printType === 'cashDrop' && !auths.balanceSheetDisableCashDrops">
+      <h1>Cash Drop</h1>
+      <div class="balance-grid-summary">
+        <div><h3>Sheet ID</h3> </div>
+        <div><h3>{{sheet.id}}</h3></div>
+        <div><h3>DROP ID</h3> </div>
+        <div *ngIf="cashDrop"><h3>{{cashDrop?.id}}</h3></div>
+        <div><h3>Time</h3> </div>
+        <div *ngIf="cashDrop"><h3>{{cashDrop?.dropTime }}</h3></div>
 
-      <div><h3>Amount</h3> </div>
-      <div *ngIf="cashDrop"><h3>{{cashDrop?.amount }}</h3></div>
+        <div><h3>Amount</h3> </div>
+        <div *ngIf="cashDrop"><h3>{{cashDrop?.amount }}</h3></div>
+      </div>
     </div>
   </div>
 
   <ng-template #loading>
     ...loading
+  </ng-template>
+
+  <ng-template #divider>
+    -----------------------------------------------------------
   </ng-template>

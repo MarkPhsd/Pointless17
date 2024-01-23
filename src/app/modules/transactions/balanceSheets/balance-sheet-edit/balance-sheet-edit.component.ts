@@ -18,6 +18,7 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 
 @Component({
   selector: 'app-balance-sheet-edit',
@@ -102,6 +103,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   balance          = 0;
   newBalance       = 0;
   auths$: Observable<IUserAuth_Properties>;
+  auths: IUserAuth_Properties
   endOptionsDisabled   = false;
   startOptionsDisabled = false;
   ordersCount      = 0;
@@ -110,12 +112,19 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   _openOrders: Subscription;
   _ordersCount : Subscription;
   deposit$: Observable<any>;
+  posDevice : ITerminalSettings;
+  posDevice$: Subscription;
 
   initSubscriptions() {
     this.loading = true
+
+    this.posDevice$ = this.settingsService.terminalSettings$.subscribe(data => {
+      this.posDevice = data;
+    })
+
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe( data => {
       this.sheet = data;
-      // console.log('data', this.sheet)
+      console.log('data', this.sheet)
       if (data) {
         this.getSheetType(data)
       }
@@ -153,15 +162,17 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private sendGridService         :  SendGridService,
                 private printingService         : PrintingService,
                 public platFormService     : PlatformService,
-                public coachMarksService: CoachMarksService,
-                private siteService: SitesService,
+                public coachMarksService  : CoachMarksService,
+                private siteService       : SitesService,
+                private settingsService   : SettingsService,
               )
   {
 
-    this.auths$ = this.authenticationService.userAuths$
-    this.auths$.subscribe(data => {
+    this.auths$ = this.authenticationService.userAuths$.pipe(switchMap(data =>{
+      this.auths = data
+      return of(data)
+    }))
 
-    })
     this.cashDropActive  = +this.route.snapshot.paramMap.get('cashdrop');
     if (this.cashDropActive) {   this.selectedIndex = 1;  }
   }
@@ -198,6 +209,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     if (this._ordersCount) { this._ordersCount.unsubscribe()}
     if (this._searchModel) { this._searchModel.unsubscribe()}
     if (this._user)        { this._user.unsubscribe()}
+    if (this.posDevice$)  { this.posDevice$.unsubscribe()}
     // if (this._sheet)       { this._sheet.unsubscribe()}
   }
 
@@ -323,7 +335,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   closeSheet(navigateUrl: string) {
-    const print$ = this._print(null)
+    const print$ = this._print(true)
     this.action$ = print$.pipe(
       switchMap( data => {
         return this.sendGridService.sendBalanceSheet(this.sheet.id)
@@ -443,6 +455,12 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   _print(autoPrint: boolean): Observable<any> {
+
+    let printerName = ''
+    if (this.posDevice) {
+      printerName = this.posDevice.receiptPrinter;
+    }
+
     this.printingService.updatePrintView(2);
     const sheet = this.inputForm.value as IBalanceSheet
     sheet.overUnderTotal = this.getCurrentBalance()
@@ -461,7 +479,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
           return of(null)
         }
         this.sheetMethodsService.updateBalanceSheet(result)
-        return this.printingService.previewReceipt(autoPrint)
+        return this.printingService.previewReceipt(autoPrint, null, printerName)
     }));
   }
 

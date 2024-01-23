@@ -28,7 +28,7 @@ export class BalanceSheetCalculationsViewComponent implements OnInit,OnDestroy {
       this.sheet = data;
       this.dropTotal = 0
 
-      console.log('sheet data', data)
+      // console.log('sheet data', data)
       try {
         if (this.sheet && this.sheet.cashDrops) {
           this.drops = this.sheet.cashDrops;

@@ -37,26 +37,17 @@ export class ItemTypeMethodsService {
   }
 
   openItemEditor(id: number) {
-    let dialogRef: any;
-    {
-      if (id) {
-        dialogRef = this.dialog.open(ItemTypeEditorComponent,
-          { width:        '800px',
-            minWidth:     '800px',
-            height:       '740px',
-            minHeight:    '740px',
-            data : {id: id}
-          },
-        )
-      }
+    if (id) {
+      return  this.dialog.open(ItemTypeEditorComponent,
+        { width:        '800px',
+          minWidth:     '800px',
+          height:       '740px',
+          minHeight:    '740px',
+          data : {id: id}
+        }
+      )
     }
-
-    return dialogRef
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.refreshData();
-    //   }
-    // });
+    return null
   }
 
 

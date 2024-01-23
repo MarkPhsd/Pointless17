@@ -291,6 +291,20 @@ export class BalanceSheetService {
     return this.http.get<IBalanceSheet>(url);
   }
 
+  getOpenBalanceSheets(site: ISite)   : Observable<ItemBasic[]> {
+    const controller = '/BalanceSheets/'
+
+    const endPoint  = "getOpenBalanceSheets"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<ItemBasic[]>(url);
+  }
+
+
+
   postDrop(site: ISite, id: number, amount: number)  : Observable<IBalanceSheet> {
     const controller = '/BalanceSheets/'
 
@@ -374,7 +388,7 @@ export class BalanceSheetService {
 
   putSheet(site: ISite, balanceSheet: IBalanceSheet)  : Observable<IBalanceSheet> {
 
-    console.log('balance sheet', balanceSheet)
+    // console.log('balance sheet', balanceSheet)
 
     const controller = '/BalanceSheets/'
 

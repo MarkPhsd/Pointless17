@@ -36,13 +36,11 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
       this.showHide ='display:none;'
     }
 
-    this.params = params;
-    this.label = this.params.label || null;
-    this.btnClass = this.params.btnClass || 'btn btn-primary';
-    this.getLabelFunction = this.params.getLabelFunction;
-    this.getIconFunction = this.params.getIconFunction;
-
-      //getIconFunction
+      this.params = params;
+      this.label = this.params.label || null;
+      this.btnClass = this.params.btnClass || 'btn btn-primary';
+      this.getLabelFunction = this.params.getLabelFunction;
+      this.getIconFunction = this.params.getIconFunction;
 
       if (!this.label || this.label === 'null') {
         this.icon = ''
@@ -72,6 +70,11 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         return
       }
 
+      if (this.label?.toLowerCase() ===  'inv' || this.label === 'inv') {
+        this.icon = 'inventory'
+        return
+      }
+
       if (this.label === 'delete' || this.label?.toLowerCase() === 'delete' || this.getLabelFunction == 'delete') {
         this.icon = 'delete'
         this.icon = 'file_copy'
@@ -91,6 +94,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         return
       }
 
+
       if (this.label?.toLowerCase() ===   'add') {
         this.icon = 'add'
         return
@@ -101,7 +105,6 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         this.showHide = "width:55px;"
         this.label = ''
         this.buttonStyle = 'width:55px;'
-        // console.log('icon', this.icon)
         return
       }
 

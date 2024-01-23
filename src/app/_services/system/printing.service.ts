@@ -490,6 +490,7 @@ export class PrintingService {
             console.log('Print Window : printing ', success, failureReason);
             printWindow.close();
             printWindow = null;
+
             return true
           }
         )
@@ -499,13 +500,47 @@ export class PrintingService {
           this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
           printWindow.close();
           printWindow = null;
+
           return false
       }
     )
 
+
     return false;
 
+
   }
+
+    removeAllStyles() {
+      const styleSheets = document.querySelectorAll('link[rel="stylesheet"], style');
+      styleSheets.forEach(sheet => {
+        sheet.parentNode.removeChild(sheet);
+      });
+    }
+
+    reloadStylesheets() {
+      this.removeAllStyles()
+      const stylesheets = [
+        { id: 'global-styles', href: 'src/styles.scss' },
+        { id: 'material-theme', href: './node_modules/@angular/material/prebuilt-themes/indigo-pink.css' }
+      ];
+
+      stylesheets.forEach(sheet => {
+        const existingLinkElement = document.getElementById(sheet.id) as HTMLLinkElement;
+        if (existingLinkElement) {
+          const newLinkElement = document.createElement('link');
+          newLinkElement.id = sheet.id;
+          newLinkElement.rel = 'stylesheet';
+          newLinkElement.href = sheet.href.split('?')[0] + '?reload=' + new Date().getTime();
+
+          // Remove the old link element
+          existingLinkElement.parentNode.removeChild(existingLinkElement);
+
+          // Add the new link element
+          document.head.appendChild(newLinkElement);
+        }
+      });
+    }
 
    async printElectronAsync(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
     if (!this.platFormService.isAppElectron) { return }
@@ -1042,19 +1077,19 @@ export class PrintingService {
     this.previewReceipt()
   }
 
-  previewReceipt(singlePrintReceipt?: boolean, order?: IPOSOrder, ) {
+  previewReceipt(autoPrint?: boolean, order?: IPOSOrder, printerName?: string ) {
 
     if (this.uiSettingsService.posDeviceInfo) {
       if (this.platFormService.androidApp) {
         const device = this.uiSettingsService.posDeviceInfo;
-        if (singlePrintReceipt) {
-          return this.printAuto(device.receiptPrinter, singlePrintReceipt)
-        }
-        this.printSub(device.receiptPrinter, singlePrintReceipt);
+        if (autoPrint) {
+          return this.printAuto(device.receiptPrinter, autoPrint)
+        }autoPrint
+        this.printSub(device.receiptPrinter, autoPrint);
         return of(null)
       }
     }
-    this.printSub(null, singlePrintReceipt);
+    this.printSub(printerName, autoPrint);
     return of(null);
 
   };

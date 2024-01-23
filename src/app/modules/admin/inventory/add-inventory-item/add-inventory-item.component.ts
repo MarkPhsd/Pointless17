@@ -220,7 +220,9 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   }
 
   setFormInventoryData(site: ISite, data) {
-    this.itemType$ = this.itemtypeService.getItemType(site, this.item.itemTypeID);
+
+    console.log('item found data', data)
+    this.itemType$ = this.itemtypeService.getItemType(site, this.item?.itemTypeID);
     this.inputForm = this.fbInventory.initForm(this.inputForm)
     this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
 
@@ -378,12 +380,13 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   }
 
   _getItem(id) {
-    this.menuService.getMenuItemByID(this.site, id).subscribe(data => {
-        console.log('set menu item', data, data.itemType)
-        this.menuItem = data
-        this.setMenuItem(data, this.item)
+    this.action$ =  this.menuService.getMenuItemByID(this.site, id).pipe(
+      switchMap(data => {
+        this.menuItem = data;
+        this.setMenuItem(this.menuItem, this.item)
+        return of(data)
      }
-    )
+    ))
   }
 
   setMenuItem(menuItem: IMenuItem, item: IInventoryAssignment) {

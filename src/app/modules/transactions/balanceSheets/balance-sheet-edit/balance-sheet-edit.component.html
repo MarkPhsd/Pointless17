@@ -1,4 +1,5 @@
 <div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="(auths$ | async) as action"></div>
 
 <div class="container" *ngIf="(balanceSheet$ | async) as balanceSheet; else loading">
   <mat-card *ngIf="sheet">
@@ -127,7 +128,7 @@
 </ng-template>
 
 <ng-template #balanceSheetEdit>
-  <div    *ngIf="inputForm && sheet"
+  <div    *ngIf="inputForm && sheet  && !auths?.balanceSheetDisableBank"
           class="grid-container"
           [formGroup]="inputForm">
 
@@ -381,8 +382,7 @@
 </ng-template>
 
 <ng-template  #cashDrop>
-
-  <div class="cash-drop-container">
+  <div class="cash-drop-container"  *ngIf="!auths?.balanceSheetDisableCashDrops">
     <div *ngIf="(deposit$ | async) as deposit"></div>
 
     <div>

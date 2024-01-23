@@ -320,6 +320,8 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       // const year = today.getFullYear();
       // // today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
       // const tmr =  this.dateHelper.add('d', 1, today)
+      console.log('start',start)
+      console.log('end',end)
 
       this.dateRangeForm =  this.fb.group({
         start:  start, //new Date(year, month, 1),

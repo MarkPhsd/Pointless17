@@ -19,16 +19,21 @@ export class FbClientTypesService {
   initUserAuthForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
       allowBuy             : [],
+      allowTransferOrder   : [],
       voidOrder            : [],
       voidItem             : [],
       voidPayment          : [],
+
       houseAccountPayment  : [],
       changeItemPrice      : [],
       changeInventoryValue : [],
-      blindBalanceSheet    : [],
       blindClose           : [],
-      balanceSheetDetails  : [],
-      balanceSheetViewTypeSales: [],
+
+
+      disableBalanceEndOfDay   : [],
+      disableItemSales         : [],
+      disableDeviceSales       : [],
+      disableGiftCards         : [],
 
       // 'admin section
       closeDay             : [],
@@ -79,7 +84,15 @@ export class FbClientTypesService {
       disableEditOtherUsersOrders: [],
       allowReconciliation: [],
       allowSeeItemCost: [],
- 
+
+      blindBalanceSheet    : [],
+      balanceSheetDetails  : [],
+      balanceSheetViewTypeSales: [],
+      balanceSheetTransactionTypes: [],
+      balanceSheetDisableBank: [],
+      balanceSheetDisableCashDrops: [],
+
+      splitItemOverRide: [],
     })
     return fb
 

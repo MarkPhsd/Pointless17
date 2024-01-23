@@ -389,6 +389,7 @@ import { EbayReturnPolicyComponent } from '../modules/admin/inventory/ebay/ebay-
 import { EbayFulfillmentPolicyComponent } from '../modules/admin/inventory/ebay/ebay-fulfillment-policy/ebay-fulfillment-policy.component';
 import { EbayAspectsComponent } from '../modules/admin/inventory/ebay/ebay-publish-product/ebay-aspects/ebay-aspects.component';
 import { PosSplitOrdersComponent } from '../modules/posorders/pos-payment/possplit-items/pos-split-orders/pos-split-orders.component';
+import { TransferOrderComponent } from '../modules/orders/transfer-order/transfer-order.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -651,6 +652,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     OrdersListComponent,
     OrdersMainComponent,
     OrderPanelComponent,
+    TransferOrderComponent,
 
     PartBuilderMainComponent,
     PartBuilderEditComponent,

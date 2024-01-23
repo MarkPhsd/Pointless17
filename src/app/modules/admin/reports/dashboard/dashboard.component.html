@@ -220,7 +220,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <div header>
               <mat-icon >summarize</mat-icon> Sales - {{site.name}}
             </div>
-            <mat-icon>summarize</mat-icon> Sales - {{site.name}}
+            <!-- <mat-icon>summarize</mat-icon> Sales - {{site.name}} -->
           </sales-tax-report>
 
           <payment-report
@@ -231,7 +231,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <div header>
               <mat-icon >summarize</mat-icon> Payments - {{site.name}}
             </div>
-            <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
+            <!-- <mat-icon>credit_card</mat-icon> Payments - {{site.name}} -->
           </payment-report>
 
           <payment-report
@@ -243,7 +243,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <div header>
               <mat-icon >summarize</mat-icon> Sale Type - {{site.name}}
             </div>
-            <mat-icon>credit_card</mat-icon> Sale Type - {{site.name}}
+            <!-- <mat-icon>credit_card</mat-icon> Sale Type - {{site.name}} -->
           </payment-report>
 
           <div *ngIf="uiHomePage && uiHomePage?.enableInventoryPerItem">
@@ -271,7 +271,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <div header>
               <mat-icon >people</mat-icon> Emplolyee - {{site.name}}
             </div>
-            <mat-icon>people</mat-icon> Emplolyee - {{site.name}}
+            <!-- <mat-icon>people</mat-icon> Emplolyee - {{site.name}} -->
           </payment-report>
 
           <ng-container *ngTemplateOutlet="balanceSheetView,
@@ -286,7 +286,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <div header>
               <mat-icon >summarize</mat-icon> Devices - {{site.name}}
             </div>
-            <mat-icon>credit_card</mat-icon> Devices - {{site.name}}
+            <!-- <mat-icon>credit_card</mat-icon> Devices - {{site.name}} -->
           </payment-report>
 
         </ng-container>
@@ -310,7 +310,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <div header>
               <mat-icon >summarize</mat-icon> Void Payments {{site.name}}
             </div>
-            <mat-icon>credit_card</mat-icon> Void Payments {{site.name}}
+            <!-- <mat-icon>credit_card</mat-icon> Void Payments {{site.name}} -->
           </payment-report>
         </ng-template>
 
@@ -327,9 +327,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [type]="'refunds'"
                   [autoPrint]="autoPrint"
                   >
-            <div header>
+            <!-- <div header>
               <mat-icon >summarize</mat-icon> Refund Payments {{site.name}}
-            </div>
+            </div> -->
             <mat-icon>credit_card</mat-icon> Refund Payments {{site.name}}
           </payment-report>
         </ng-template>

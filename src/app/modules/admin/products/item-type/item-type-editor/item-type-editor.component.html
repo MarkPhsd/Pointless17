@@ -1,3 +1,4 @@
+<div *ngIf="action$ | async"></div>
 <div  *ngIf="itemType; else loading">
   <mat-card>
     <mat-card-title>
@@ -10,6 +11,8 @@
             (outputupdateItemExit)  ="saveExit($event)"
             (outputupdatedeleteItem)="deleteItem($event)"
             (outputupdateonCancel)  ="onCancel($event)"
+            (outputCopy)            ="copyItem($event)"
+            [enableCopy]="true"
           ></app-edit-buttons-standard>
       </div>
     </mat-card-title>

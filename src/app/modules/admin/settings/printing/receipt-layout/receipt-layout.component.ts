@@ -21,6 +21,8 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class ReceiptLayoutComponent implements OnInit, OnDestroy {
 
+  // {item: data, id: this.items[i].id, idRef: this.items[i].idRef}
+  itemsText = [] as any[];
   @Output() outPutPrintReady = new EventEmitter()
   //we use these because it makes formating easier
   //during design process. so don't use saved seettings.
@@ -157,11 +159,13 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
     if (this.items)      { this.items      = this.items.filter( item => item.quantity != 0  );     }
     if ( this.payments)  { this.payments   = this.payments.filter(item => item.amountPaid != 0 ); }
 
+    // const item = order as IPOSOrder;
+    // item.posOrderItems[0].idRef
     const site = this.siteService.getAssignedSite();
     return this.serviceTypeService.getTypeCached(site, order.serviceTypeID).pipe(
       switchMap(data   => {
         if (!data)  {
-          console.log('no data', this.index, order)
+          // console.log('no data', this.index, order)
         }
         this.orderType = data
         this.orderTypes = []
@@ -280,7 +284,13 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
       }
 
       if (this.items && this.itemText) {
+
         this.interpolatedItemTexts      = this.renderingService.refreshStringArrayData(this.itemText, this.items, 'items')
+        let itemTexts = [] as any[]
+        this.interpolatedItemTexts.forEach((data, i) => {
+          itemTexts.push({item: data, id: this.items[i].id, idRef: this.items[i].idRef})
+        })
+        this.itemsText = itemTexts;
       }
 
       if (this.payments && this.paymentsText) {

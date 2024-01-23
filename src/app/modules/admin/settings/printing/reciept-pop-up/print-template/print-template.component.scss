@@ -1,5 +1,5 @@
 
-button { 
+button {
   height     : 50px;
   margin-left: 5px;
   min-width: 100px;
@@ -13,22 +13,22 @@ button {
   padding: 3px 3px 3px 3px;
 }
 
-.buttons-grid {
-  display: flex;
-  flex-direction: row;
-  flex-basis: auto;
-  justify-content: space-between;
-  align-content: space-around;
-  width: 100%;
-}
+// .buttons-grid {
+//   display: flex;
+//   flex-direction: row;
+//   flex-basis: auto;
+//   justify-content: space-between;
+//   align-content: space-around;
+//   width: 100%;
+// }
 
-.mat-card-white {
-  background-color: white;
-  color: black;
-  width: 375px;
-}
+// .mat-card-white {
+//   background-color: white;
+//   color: black;
+//   width: 375px;
+// }
 
-.print-button {
-  width: 150px;
-  height: 65px;
-}
+// .print-button {
+//   width: 150px;
+//   height: 65px;
+// }

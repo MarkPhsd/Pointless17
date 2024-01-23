@@ -1,6 +1,12 @@
+  @page
+{
+    margin: 5mm 5mm 5mm 5mm;
+}
+
+
   @media print {
    .address ,  .companyName,  {
-        font-size: 13px;
+        font-size: 12pt;
         font-weight: 600;
 		align-items: center;
 		position: relative;
@@ -8,14 +14,14 @@
 		font-size: .8em;
     }
   }
-  
+
   @media print {
     .itemName, itemprice, .description, .quantity, .address ,  .companyName, .amountPaid, .total,  .item-price,.name, .method {
-        font-size: 13px;
+        font-size: 12pt;
         font-weight: 600;
     }
   }
-  
+
   .printsection {
     font-size: .8em;
   }
@@ -23,7 +29,7 @@
   .printsection-58 {
     font-size: .8em;
   }
-  
+
   .address ,  .companyName {
     align-items: center;
     font-size: .8em;
@@ -33,7 +39,7 @@
 	font-size: .8em;
   }
 
-  .itemName, itemprice, .quantity, 
+  .itemName, itemprice, .quantity,
     align-items: center;
     font-size: .8em;
   }
@@ -51,7 +57,7 @@
      font-size: .8em;
   }
 
-  
+
   .grid-receipt  {
     display: grid;
     grid-template-columns: 50px auto 80px;

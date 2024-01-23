@@ -756,6 +756,13 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }
     payment.bintype         = response?.binValue;
     payment.transactionIDRef = response?.transactionIDRef
+
+    if (payment.entryMethod === 'ContactIcc') {
+      payment.aid =response?.emv?.applicationIdentifier;
+      payment.applicationLabel = response?.emv?.applicationPreferredName || response?.emv?.applicationLabel;
+      payment.tvr = response?.emv?.cryptogram;
+    }
+
     payment.transactionData = JSON.stringify(response);
 
     return payment;

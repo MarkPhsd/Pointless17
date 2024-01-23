@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { IReportItemSaleSummary, IReportItemSales } from 'src/app/_services/reporting/reporting-items-sales.service';
+import { IReportItemSaleSummary, IReportItemSales, ITaxReport } from 'src/app/_services/reporting/reporting-items-sales.service';
 import * as _ from "lodash";
 @Component({
   selector: 'app-sales-items',
@@ -8,12 +8,14 @@ import * as _ from "lodash";
 })
 export class SalesItemsComponent implements OnInit {
 
-  @Input() sales: IReportItemSales[];
+  @Input() sales: IReportItemSales[] | ITaxReport[];
   @Input() includeDepartments: boolean;
   @Input() showSort = true;
-  @Input() adjustments: IReportItemSaleSummary;
+  @Input() adjustments: IReportItemSaleSummary ;
   @Input() showAll : boolean;
   @Input() autoPrint : boolean;
+  @Input() groupBy: string;
+
   groupedReport: any;
   constructor() { }
 

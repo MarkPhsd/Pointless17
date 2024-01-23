@@ -28,7 +28,7 @@
           <div *ngIf="!toggleVoid">
               Run as Void
           </div>
-          <div *ngIf="toggleVoid">
+          <div *ngIf="toggleVoid && payment?.paymentMethod.isCreditCard">
             Run as Reversal
           </div>
         </button>
@@ -45,7 +45,7 @@
         </div>
       </div>
 
-      <div class="card-content"  *ngIf="payment?.paymentMethod.isCreditCard  && payment.textResponse">
+      <div class="card-content"  >
         <app-mat-toggle-selector
             [toggleButtonClass]="'toggle-buttons-height-short'"
             [toggleStyleHeight] ="'300px'"
@@ -56,7 +56,7 @@
         </app-mat-toggle-selector>
       </div>
 
-      <div class="item-container" >
+      <div class="item-container" *ngIf="payment?.paymentMethod.isCreditCard">
         <app-key-pad
           [inputForm]        ="inputForm"
           [inputTypeValue]   ="'number'"

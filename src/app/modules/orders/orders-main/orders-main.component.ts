@@ -19,6 +19,7 @@ import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IOrderItemSearchModel, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { TransferOrderComponent } from '../transfer-order/transfer-order.component';
 
 @Component({
   selector: 'app-orders-main',
@@ -680,6 +681,17 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   newOrderOptions() {
     this._bottomSheet.open(NewOrderTypeComponent)
   }
+
+  transferOrder() {
+    this._bottomSheet.open(TransferOrderComponent)
+  }
+
+//   <ng-template #transferOrderView>
+//   <button #coachingTransferOrder class="dark-theme-green " mat-button (click)="transferOrder()"
+//           *ngIf="auths &&  auths.allowTransferOrder">
+//         <mat-icon>accounts</mat-icon><span>House Account</span>
+//   </button>
+// </ng-template>
 
   changeView() {
 

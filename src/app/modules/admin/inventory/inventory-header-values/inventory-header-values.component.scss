@@ -31,7 +31,8 @@
   display: grid;
   width: 300px;
   gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(135px, 1fr) );
+  grid-template-columns: 100px 75px; //repeat( auto-fit, minmax(135px, 1fr) );
+  width: 180px;
 }
 
 .grid-spanner {

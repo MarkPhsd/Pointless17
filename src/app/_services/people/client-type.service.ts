@@ -14,6 +14,12 @@ export interface IUserAuth_Properties {
   voidItem             : boolean;
   voidPayment          : boolean;
 
+  // reports:
+  disableBalanceEndOfDay   : boolean;
+  disableItemSales         : boolean;
+  disableDeviceSales       : boolean;
+  disableGiftCards         : boolean;
+
   //payments
   houseAccountPayment  : boolean;
   changeItemPrice      : boolean;
@@ -21,8 +27,11 @@ export interface IUserAuth_Properties {
   blindBalanceSheet    : boolean;
   balanceSheetDetails  : boolean;
   blindClose           : boolean;
-  balanceSheetViewTypeSales: boolean;
-  
+  balanceSheetViewTypeSales: boolean; //item type
+  balanceSheetTransactionTypes: boolean;
+  balanceSheetDisableBank: boolean;
+  balanceSheetDisableCashDrops: boolean;
+
   // 'admin section
   closeDay             : boolean;
   sendTextBlast        : boolean;
@@ -46,6 +55,7 @@ export interface IUserAuth_Properties {
   adjustProductCount  : boolean;
   deleteProduct: boolean;
   // 'add non customer types
+  allowTransferOrder  : boolean;
   addEmployee         : boolean;
   changeClientType    : boolean;
 

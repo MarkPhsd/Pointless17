@@ -11,7 +11,7 @@ import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'sr
 import { IDeviceInfo, MenuService, OrdersService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { IPaymentSalesSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
@@ -142,7 +142,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   uiHomePage : UIHomePageSettings
   _uiHomePage: Subscription;
   autoPrint: boolean = false;
-  
+
   constructor(
               private authentication              : AuthenticationService,
               private reportingService            : ReportingService,

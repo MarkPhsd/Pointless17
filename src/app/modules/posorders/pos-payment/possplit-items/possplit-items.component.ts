@@ -50,7 +50,7 @@ export class POSSplitItemsComponent implements OnInit {
     // {id:0,name: 0},
     values  =
       [
-        
+
         {id:1,name: 1},
         {id:2,name: 2},
         {id:3,name: 3},
@@ -139,7 +139,7 @@ export class POSSplitItemsComponent implements OnInit {
       this.updateItemsPerPage()
       const site = this.siteService.getAssignedSite()
       this.initGroupList();
-      this.applyGroupID(0);
+      this.applyGroupID(1);
       this.setGroupOrderTotal(site, this.order.id, 1)
       this.refreshOrder();
     }
@@ -155,8 +155,12 @@ export class POSSplitItemsComponent implements OnInit {
 
     applyGroupID(event) {
       if (event) {
-        this.currentGroupID = event.id;
-        this.currentGroup   = event.id.toString()
+        let groupID = event?.id;
+        if (!groupID) { groupID = 1}
+        if (groupID == 0) { groupID = 1}
+
+        this.currentGroupID = groupID
+        this.currentGroup   = groupID.toString()
         this.changesOcurred = false;
         this.refreshAssignedItems();
       }
@@ -193,8 +197,8 @@ export class POSSplitItemsComponent implements OnInit {
 
     convertTolistBoxItem(listSource: any[]): IListBoxItem[] {
       return listSource.map(item => (
-        { value: item.id.toString(),
-          text: item.name,
+        { value:   item.id.toString(),
+          text:    item.name,
           groupID: item.splitGroupID
         })
       );
@@ -210,7 +214,7 @@ export class POSSplitItemsComponent implements OnInit {
 
         const site           = this.siteService.getAssignedSite();
         const items$         = this.orderService.applyItemsToGroup(site, this.currentGroupID, selected);
-        const assignedItems$ = this.orderService.applyItemsToGroup(site, 0, this.availableItems)
+        const assignedItems$ = this.orderService.applyItemsToGroup(site, 1, this.availableItems)
 
         this.saveAssignedItems$ = items$.pipe(
           switchMap(data => {
@@ -284,7 +288,7 @@ export class POSSplitItemsComponent implements OnInit {
 
     refreshUnassignedItems() {
       const site = this.siteService.getAssignedSite()
-      this.allitems$ = this.orderService.getSplitItemsList(site, this.order.id, 0).pipe(switchMap(data => {
+      this.allitems$ = this.orderService.getSplitItemsList(site, this.order.id, 1).pipe(switchMap(data => {
         this.availableItems = data
         return of(data)
       }))
@@ -307,6 +311,10 @@ export class POSSplitItemsComponent implements OnInit {
         transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       }
 
+      let groupID = event.currentIndex;
+      if (groupID == 0) {
+        groupID = 1
+      }
       // clear marked available items and emit event
       this.itemsMoved.emit({
         available: this.availableItems,
@@ -316,9 +324,9 @@ export class POSSplitItemsComponent implements OnInit {
         to: 'selected',
       });
 
-      this.availableItems.forEach(data => {  data.groupID = 0; })
+      this.availableItems.forEach(data => {  data.groupID = 1; })
 
-      this.selectedItems.forEach(data => { data.groupID = this.currentGroupID; });
+      this.selectedItems.forEach(data => {   data.groupID = this.currentGroupID; });
       this.changesOcurred = true;
     }
 
@@ -338,7 +346,7 @@ export class POSSplitItemsComponent implements OnInit {
         to: 'selected',
       });
 
-      this.availableItems.forEach(data => {  data.groupID = 0; })
+      this.availableItems.forEach(data => {  data.groupID = 1; })
       this.selectedItems.forEach(data => { data.groupID = this.currentGroupID; });
       this.changesOcurred = true;
     }

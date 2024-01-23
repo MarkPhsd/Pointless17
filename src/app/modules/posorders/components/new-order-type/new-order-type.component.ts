@@ -39,13 +39,12 @@ export class NewOrderTypeComponent  {
               private snackBar                  : MatSnackBar,
               private _bottomSheet              : MatBottomSheet,
               private userAuthorizationService  : UserAuthorizationService,
-              private paymentMethodsProcess: PaymentsMethodsProcessService,
-              private authService: AuthenticationService,
+              private paymentMethodsProcess     : PaymentsMethodsProcessService,
+              private authService               : AuthenticationService,
               @Optional() private dialogRef     : MatDialogRef<ChangeDueComponent>,
               )
   {
     const site = this.siteService.getAssignedSite();
-
     if (authService._userAuths.value) {
       const auth = authService._userAuths.value;
       if (auth.allowReconciliation && auth.adjustInventoryCount) {
@@ -53,14 +52,20 @@ export class NewOrderTypeComponent  {
         return
       }
     }
-
-    // if (userAuthorizationService.user)
     if (this.userAuthorizationService?.isAdmin) {
       this.serviceTypes$ = this.serviceTypeService.getAllServiceTypes(site);
       return;
     }
-
     this.serviceTypes$ = this.serviceTypeService.getSaleTypesCached(site)
+  }
+
+
+  newOrder(){
+    const site = this.siteService.getAssignedSite();
+    const order$ = this.orderMethodsService.newDefaultOrder(site).pipe(switchMap(data => {
+      this.onCancel()
+      return of(data)
+    }))
   }
 
   onCancel() {
@@ -68,27 +73,18 @@ export class NewOrderTypeComponent  {
       this.orderMethodsService.toggleChangeOrderType = false;
       this._bottomSheet.dismiss();
     } catch (error) {
-      console.log(error)
+      console.log('cancel', error)
     }
-  }
-
-  newOrder(){
-    const site = this.siteService.getAssignedSite();
-    const order$ = this.orderMethodsService.newDefaultOrder(site)
-    this.close()
   }
 
   close() {
     try {
       this.orderMethodsService.toggleChangeOrderType = false;
       if (this.dialogRef) {
-
         this.dialogRef.close();
       }
     } catch (error) {
-      // console.log(error)
     }
-
     this.onCancel();
   }
 
@@ -135,26 +131,17 @@ export class NewOrderTypeComponent  {
 
   newOrderWithPayload(serviceType: IServiceType){
     const site = this.siteService.getAssignedSite();
-    // this.action$ = this.orderMethodsService.newOrderWithPayload(site, serviceType).pipe(
-    //   switchMap(data => {
-    //     this.close()
-    //     return of(data)
-    //   }
-    // ))
-
     let sendOrder$ = of('true')
     this.action$ = sendOrder$.pipe(switchMap(data => {
       return this.paymentMethodsProcess.newOrderWithPayloadMethod(site, serviceType)
     })).pipe(
       switchMap(data => {
-          return of(data)
+        this.close()
+        return of(data)
       })
     )
 
   }
-
-
-
 
   notifyEvent(message: string, title: string) {
     this.snackBar.open(message, title, {duration: 2000, verticalPosition: 'bottom'})

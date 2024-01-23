@@ -9,7 +9,6 @@ import { Observable, of, Subject, Subscription } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
-import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { BatchClose, Transaction } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
@@ -80,6 +79,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   scheduleDateStart  = new Date
   scheduleDateEnd = new Date;
   autoPrint: boolean;
+  printStyles: string;
 
   userSubscriber() {
     this._user = this.authenticationService.user$.subscribe(data => {
@@ -125,7 +125,10 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       this.dsiEMVSettings = JSON.parse(item) as Transaction;
     }
     this.printerName = localStorage.getItem('closeDayPrinter')
-    this.printAction$ =  this.setPrintStyles();
+    this.printAction$ =  this.setPrintStyles().pipe(switchMap(data => {
+      this.printStyles = data;
+      return of(data)
+    }))
     this.getUser();
     this.refreshSales();
     this.refreshClosingCheck();
@@ -398,7 +401,6 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     }
     if (this.platFormService.isAppElectron) {
       this.printElectron(styles)
- 
       return
     }
     if (this.platFormService.androidApp) { this.printAndroid();}
@@ -455,6 +457,9 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
 
   printElectron(styles) {
 
+    this.printing = true;
+    this.cdr.detectChanges();
+
     const contents = this.getReceiptContents(styles)
     const options = {
       silent: true,
@@ -475,18 +480,18 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       return
     }
 
-    
     if (contents && this.printerName, options) {
       this.printing = true;
       this.printingService.printElectron( contents, this.printerName, options)
-      this.printing = true;
+      this.printing = false;
     }
 
+    this.cdr.detectChanges();
   }
 
   setPrinter(event) {
     this.printerName = event;
-    localStorage.setItem('closeDayPrinter',event)
+    localStorage.setItem('closeDayPrinter', event)
   }
 
   savePDF() {

@@ -74,11 +74,16 @@ export class PosOrderItemCalcValuesComponent implements OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite();
     this.saveaction$ = this._saveProduct(site).pipe(
       switchMap(data => {
-          this.siteService.notify('Updated.', 'Success', 5000, 'green' );
+        this.siteService.notify('Updated.', 'Success', 5000, 'green' );
+        this.product$ = of(data)
         return of(data)
     }));
-  }
+  };
 
+  refresh() {
+    const site = this.siteService.getAssignedSite();
+    this.product$ = this._saveProduct(site)
+  }
   _saveProduct(site: ISite) {
     const product = this.productForm.value;
     return this.menuService.putProduct(site, product.id, product)

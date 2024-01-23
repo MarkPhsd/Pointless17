@@ -25,8 +25,23 @@ export class InventoryLocationsService {
       private auth: AuthenticationService,
       private siteService: SitesService)
     {
-    }
+  }
 
+  getDefaultLocation(): Observable<IInventoryLocation> {
+
+    const site = this.siteService.getAssignedSite()
+
+    const controller =  `/inventoryLocations/`
+
+    const endPoint = `getDefaultLocation`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IInventoryLocation>(url)
+
+}
 
   getLocations(): Observable<IInventoryLocation[]> {
 

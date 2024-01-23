@@ -1,6 +1,6 @@
 import { Component,   OnInit,} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, Subject  } from 'rxjs';
+import { Observable, Subject, of, switchMap  } from 'rxjs';
 // import "ag-grid-community/dist/styles/ag-grid.css";
 // import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
@@ -56,8 +56,8 @@ export class ItemTypeComponent implements OnInit {
   selected               : any;
   itemTypes              : IItemType[];
 
-  _itemTypes$            : Observable<IItemType[]>;
-  itemTypes$             : Subject<IItemType[]> = new Subject();
+  itemTypes$            : Observable<IItemType[]>;
+  // itemTypes$             : Subject<IItemType[]> = new Subject();
 
   // public modules         : Module[] = AllCommunityModules;
 
@@ -89,7 +89,7 @@ export class ItemTypeComponent implements OnInit {
     categories$.subscribe( data => {
       this.availableItems = data
     })
-
+    this.urlPath     =  await this.awsService.awsBucketURL();
     this.itemTypeBasic            =  await this.itemTypeService.getBasicTypes(site).pipe().toPromise();
     this.selectedItemTypes        =  await this.itemTypeDisplay.getSortedList(site).pipe().toPromise();
     const step = this.route.snapshot.paramMap.get('accordionStep');
@@ -120,24 +120,41 @@ export class ItemTypeComponent implements OnInit {
     }
   }
 
-  async refreshData() {
+ refreshData() {
     const site        = this.siteService.getAssignedSite()
-    this._itemTypes$  = this.itemTypeService.getItemTypes(site);
-    const filePath    = this.urlPath
-    const urlPath     =  await this.awsService.awsBucketURL();
-    this._itemTypes$.subscribe(data => {
-      if (urlPath) {
-        data.forEach( item =>
-          {
-            if (item.imageName) {
-              item.imageName = `${urlPath}${item.imageName}`
+    // this._itemTypes$  = this.itemTypeService.getItemTypes(site);
+    const filePath    = this.urlPath;
+
+    // this._itemTypes$.subscribe(data => {
+    //   if (this.urlPath) {
+    //     data.forEach( item =>
+    //       {
+    //         if (item.imageName) {
+    //           item.imageName = `${this.urlPath}${item.imageName}`
+    //         }
+    //       }
+    //     )
+    //   }
+    //   data = data.sort((a, b) => (a.name > b.name) ? 1 : -1)
+
+    // })
+
+    this.itemTypes$ = this.itemTypeService.getItemTypes(site).pipe(switchMap(data => {
+      if (data) {
+        if (this.urlPath) {
+          data.forEach( item =>
+            {
+              if (item.imageName) {
+                item.imageName = `${this.urlPath}${item.imageName}`
+              }
             }
-          }
-        )
+          )
+        }
+        data = data.sort((a, b) => (a.name > b.name) ? 1 : -1)
+        // this.itemTypes$.next(data)
+        return of(data)
       }
-      data = data.sort((a, b) => (a.name > b.name) ? 1 : -1)
-      this.itemTypes$.next(data);
-    })
+    }))
   }
 
   initGridResults() {
@@ -277,38 +294,38 @@ export class ItemTypeComponent implements OnInit {
     });
   }
 
-  openItemEditorSelected() {
-    let dialogRef: any;
-    let selectedItems = [];
+  // openItemEditorSelected() {
+  //   let dialogRef: any;
+  //   let selectedItems = [];
 
-    if (!this.selected)  {
-      this._snackBar.open('No items selected.', '', {duration: 3000})
-      return
-    }
+  //   if (!this.selected)  {
+  //     this._snackBar.open('No items selected.', '', {duration: 3000})
+  //     return
+  //   }
 
-    this.selected.forEach(data => {
-      const id = data
-      selectedItems.push(id);
-    })
+  //   this.selected.forEach(data => {
+  //     const id = data
+  //     selectedItems.push(id);
+  //   })
 
-    // this.openEditor(selectedItems)
-    {
-      if (selectedItems) {
-        dialogRef = this.dialog.open(ItemTypeEditorComponent,
-          { width:        '700px',
-            minWidth:     '700px',
-            height:       '740px',
-            minHeight:    '740px',
-            data : { selectedItems: selectedItems }
-          },
-        )
-      }
-    }
-    dialogRef.afterClosed().subscribe(result => {
-      this.refreshData();
-    });
+  //   // this.openEditor(selectedItems)
+  //   {
+  //     if (selectedItems) {
+  //       dialogRef = this.dialog.open(ItemTypeEditorComponent,
+  //         { width:        '700px',
+  //           minWidth:     '700px',
+  //           height:       '740px',
+  //           minHeight:    '740px',
+  //           data : { selectedItems: selectedItems }
+  //         },
+  //       )
+  //     }
+  //   }
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     this.refreshData();
+  //   });
 
-  }
+  // }
 
   //not implemented.
   editSelected() {

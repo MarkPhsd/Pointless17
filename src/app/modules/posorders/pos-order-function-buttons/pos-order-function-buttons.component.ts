@@ -308,7 +308,6 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     return null;
   }
 
-
   get islistViewItemView() {
     if (this.userAuthorizationService.isManagement && !this.smallDevice) {
      return this.listViewItemView
@@ -350,11 +349,6 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     }
     return null;
   }
-
-  // @ViewChild('ssmsOptionView')  ssmsOptionView: TemplateRef<any>;
-  // @ViewChild('textOptionView')  textOptionView: TemplateRef<any>;
-  // @ViewChild('emailOptionView')  emailOptionView: TemplateRef<any>;
-
   get isSSMOptionView() {
     if (this.order?.service?.filterType == 2 ) { return null }
     if (this.ssmsOption && !this.isUser) {

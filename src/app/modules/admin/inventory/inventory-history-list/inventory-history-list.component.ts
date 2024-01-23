@@ -269,15 +269,15 @@ export class InventoryHistoryListComponent implements OnInit, OnDestroy {
 
   ///move to inventoryAssignemtnService
   openInventoryDialog(id: number) {
-    const dialogRef = this.dialog.open(NewInventoryItemComponent,
-      { width:        '900px',
-        minWidth:     '900px',
-        height:       '90vh',
-        minHeight:    '900px',
-        data : {id: id}
-      },
-    )
-
+    // const dialogRef = this.dialog.open(NewInventoryItemComponent,
+    //   { width:        '900px',
+    //     minWidth:     '900px',
+    //     height:       '90vh',
+    //     minHeight:    '900px',
+    //     data : {id: id}
+    //   },
+    // )
+    const dialogRef =  this.inventoryAssignmentService.openInventoryItem(id)
     if (dialogRef) {
       dialogRef.afterClosed().subscribe(result => {
       this.outputRefresh.emit('true')

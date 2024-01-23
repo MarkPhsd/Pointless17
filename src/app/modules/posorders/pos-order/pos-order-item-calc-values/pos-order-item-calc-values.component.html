@@ -1,5 +1,8 @@
 <div *ngIf="(saveaction$ | async) as saveProduct"></div>
 
+<div>
+  <button mat-button (click)="refresh()"><mat-icon>refresh</mat-icon></button>
+</div>
 <div  *ngIf="(product$ | async) as item">
   <mat-card [formGroup]="productForm"
             class=" margin-5"
@@ -68,7 +71,7 @@
       [fieldsClass]="'fields-small'"
       [inputForm]="productForm"
       [fieldName]="'caseWholeSale'">
-    Case Cost
+    CS Cost
   </app-value-fields>
 
   <app-value-fields
@@ -76,7 +79,7 @@
       [inputForm]="productForm"
       [fieldsClass]="'fields-small'"
       [fieldName]="'caseRetail'">
-    Case Price
+    CS Price
   </app-value-fields>
 
   <app-value-fields
@@ -84,7 +87,7 @@
     [inputForm]="productForm"
     [fieldsClass]="'fields-small'"
     [fieldName]="'caseQty'">
-    Case QTY
+    CS QTY
   </app-value-fields>
 </div>
 </ng-template>

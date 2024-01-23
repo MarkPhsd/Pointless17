@@ -1,10 +1,10 @@
-import { Component, Inject, OnInit, } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, } from '@angular/core';
 import { FbItemTypeService } from 'src/app/_form-builder/fb-item-type.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
 import { ActivatedRoute,  } from '@angular/router';
 import { MatSnackBar} from '@angular/material/snack-bar';
-import { Observable,  } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, of, switchMap,  } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
@@ -13,15 +13,16 @@ import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/men
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { METRCItemsCategories } from 'src/app/_interfaces/metrcs/items';
 import { IItemBasic, MenuService } from 'src/app/_services';
+import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
 
 @Component({
   selector: 'app-item-type-editor',
   templateUrl: './item-type-editor.component.html',
   styleUrls: ['./item-type-editor.component.scss']
 })
-export class ItemTypeEditorComponent implements OnInit  {
+export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
   searchForm:                UntypedFormGroup;
-
+  action$: Observable<any>;
   wicEBTList        = [{id: 0, name: 'NONE'},{id: 1, name: 'WIC'},{id: 2, name: 'EBT'},{id: 2, name: 'WIC and EBT'}]
   taxesSetting      = [{id: 0, name: 'Never'},{id: 1, name: 'Taxable'},{id: 2, name: 'According To Transaction'}]
   something         : any;
@@ -50,10 +51,14 @@ export class ItemTypeEditorComponent implements OnInit  {
   packageType: string;
   productName: string;
 
-  
   addOnItems = [] as IItemBasic[]
   typeName         : string;
   metrcCategories$ : Observable<METRCItemsCategories[]>;
+
+
+  exitSubscrption: Subscription;
+  private _exitSubscrption     = new BehaviorSubject<boolean>(null);
+  public  exitActions$        = this._exitSubscrption.asObservable();
 
   constructor(
       private fb: UntypedFormBuilder,
@@ -66,6 +71,7 @@ export class ItemTypeEditorComponent implements OnInit  {
       private siteService: SitesService,
       private printerLocationsService: PrinterLocationsService,
       private metrcCategoryService: MetrcItemsCategoriesService,
+      private itemTypeMethodsService: ItemTypeMethodsService,
       private dialogRef: MatDialogRef<ItemTypeEditorComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,
       @Inject(MAT_DIALOG_DATA) public selectedItems: number,
@@ -99,8 +105,23 @@ export class ItemTypeEditorComponent implements OnInit  {
 
   ngOnInit() {
     this.initSearchForm();
+
+    this.exitSubscrption = this.exitActions$.subscribe(data => {
+      console.log('exit subscription', data)
+      if (data && data != null) {
+        console.log('cancel')
+        this.onCancel(true)
+      }
+    })
   }
 
+  ngOnDestroy(): void {
+    try {
+      this.exitSubscrption.unsubscribe();
+    } catch (error) {
+
+    }
+}
   initSearchForm() {
     this.searchForm = this.fb.group( {
       productName: []
@@ -200,6 +221,23 @@ export class ItemTypeEditorComponent implements OnInit  {
     this.update(true);
   }
 
+  copyItem(event) {
+    const site = this.siteService.getAssignedSite();
+    console.log('copy item', event, this.itemType)
+    if (this.itemType) {
+      this.itemType.name = 'Copy' + this.itemType?.name
+      this.itemType.id = 0
+      this.action$ = this.itemTypeService.postItemType(site, this.itemType).pipe(switchMap(data => {
+
+        let dialogRef = this.itemTypeMethodsService.openItemEditor(data.id);
+
+        this._exitSubscrption.next(true)
+        return of(data)
+      }))
+    }
+  }
+
+
   update(optionClose: boolean) {
     let result: boolean;
     const site = this.siteService.getAssignedSite();
@@ -249,7 +287,6 @@ export class ItemTypeEditorComponent implements OnInit  {
         item.type       = this.useType.name;
       }
 
-      console.log('addOnItems', this.addOnItems)
       item.autoAddJSONProductList = JSON.stringify(this.addOnItems);
       const item$ = this.itemTypeService.putItemTypeNoChildren(site, item)
 
@@ -318,16 +355,11 @@ export class ItemTypeEditorComponent implements OnInit  {
 
   remove(item: IItemBasic): void {
     const index = this.addOnItems.indexOf(item);
-
     if (index >= 0) {
       this.addOnItems.splice(index, 1);
     }
   }
 
-  copyItem() {
-    //do confirm of delete some how.
-    //then
-  }
 
   // (outputeupdateItem)     ="save($event)"
   // (outputupdateItemExit)  ="saveExit($event)"
@@ -349,3 +381,7 @@ export class ItemTypeEditorComponent implements OnInit  {
   }
 
 }
+function ofType(LoadUsers: any): any {
+  throw new Error('Function not implemented.');
+}
+

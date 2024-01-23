@@ -1024,7 +1024,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   addItemToOrderObs(order: IPOSOrder, item: IMenuItem, quantity: number, rewardAvailableID: number, passAlongItem: PosOrderItem[],
-                    selectedProductPrice?: ProductPrice) {
+                    selectedProductPrice?: ProductPrice, unitTypeID?: any): Observable<ItemPostResults> {
     this.selectedProductPrice = selectedProductPrice;
 
     let passAlong; // = passAlongItem[0]
@@ -1033,7 +1033,7 @@ export class OrderMethodsService implements OnDestroy {
     }
 
     return this.processItemPOSObservable( order, null, item, quantity, null , 0, 0,
-                                          passAlong, this.assignPOSItems, null, selectedProductPrice )
+                                          passAlong, this.assignPOSItems, unitTypeID, selectedProductPrice )
   }
 
   addItemToOrderFromBarcode(barcode: string, input, assignedItem, inputQuantity?, unitTypeID?, cost?) {
@@ -1098,7 +1098,7 @@ export class OrderMethodsService implements OnDestroy {
   validateItem(item, barcode) {
 
     if (!item && !barcode) {
-      // this.notifyEvent(`Item not found.`, 'Alert');
+      this.notifyEvent(`Item not found.`, 'Alert');
       return false;
     }
 
@@ -1235,14 +1235,18 @@ export class OrderMethodsService implements OnDestroy {
                             productPrice?: ProductPrice,
                             cost?: number) : Observable<ItemPostResults> {
 
+    console.log('processItemPOSObservable order.id', order.id)
     const valid = this.validateUser();
     if (!valid) {
       this.notifyEvent(`Invalid user.`, 'Alert ')
-      return
+      return of(null)
     };
 
     this.initItemProcess();
-    if (!this.validateItem(item, barcode)) {  return of(null)  }
+    if (!this.validateItem(item, barcode)) {
+      // console.log('not valid item')
+      return of(null)
+    }
     if (this.assignedPOSItem && !passAlongItem) { passAlongItem  = this.assignedPOSItem[0]; };
     order = this.validateOrder();
 
@@ -1287,7 +1291,8 @@ export class OrderMethodsService implements OnDestroy {
                               priceColumn : order?.priceColumn,
                               assignedPOSItems: passAlongItems,
                               productPrice: productPrice,
-                              wholesale: cost }
+                              wholesale: cost,
+                              unitTypeID: unitTypeID }
 
           if (order.id == 0 || !order.id) {
             const orderPayload = this.getPayLoadDefaults(null)
@@ -1320,7 +1325,6 @@ export class OrderMethodsService implements OnDestroy {
       } catch (error) {
         this.notifyEvent(error, 'Alert ')
         console.log('error', error)
-
       }
     }
     this.notifyEvent('Nothing added.', 'Alert ')
@@ -2319,7 +2323,7 @@ export class OrderMethodsService implements OnDestroy {
           }
         },
          error:  data => {
-          console.log('error', data.toString)
+            console.log('error', data.toString)
           }
         }
         )

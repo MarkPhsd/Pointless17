@@ -28,8 +28,7 @@ export class PriceCategorySelectComponent implements OnInit {
   priceCategoriesPaged$ :   Observable<IPriceCategoryPaged>;
   searchForm: UntypedFormGroup;
 
-
-  showAdditionalCost: boolean;
+  @Input()  showAdditionalCost: boolean;
 
   constructor(
                private sitesService: SitesService,

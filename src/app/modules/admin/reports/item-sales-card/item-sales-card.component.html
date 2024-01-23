@@ -69,18 +69,29 @@
         </div>
       </div>
     </ng-template>
-     
+
     <ng-template #subTitleView>
-      <div class="grid-body-action width">
+      <div class="header-grid">
         <div >PreTax Total   </div>
-        <div class="span-col">{{summary?.summary?.itemTotal ?? 0 | currency }}  </div>
-        <div *ngIf="!autoPrint"  > Profit</div>
-        <div *ngIf="!autoPrint"  class="span-col">{{(summary?.summary?.itemTotal - summary?.summary?.cost) ?? 0 | currency }}   </div>
+
+        <div *ngIf="groupBy === 'transactionType'"> {{summary?.summary?.netSales | currency }}  </div>
+        <div *ngIf="groupBy != 'transactionType'" class="span-col">{{summary?.summary?.itemTotal ?? 0 | currency }}  </div>
+
+        <div *ngIf="!autoPrint && groupBy != 'transactionType'" > Profit</div>
+
+        <div *ngIf="!autoPrint && groupBy != 'transactionType'"   class="span-col">{{(summary?.summary?.itemTotal - summary?.summary?.cost) ?? 0 | currency }}   </div>
+
+         <div *ngIf="!autoPrint" >Cost :</div>
+
+        <div *ngIf="!autoPrint && groupBy != 'transactionType'" class="span-col">{{summary?.summary?.cost  ?? 0 | currency }}   </div>
+        <div *ngIf="!autoPrint && groupBy == 'transactionType'" class="span-col">{{summary?.summary?.cost  ?? 0 | currency }}   </div>
+      </div>
+
+      <div class="header-grid">
         <div >QTY</div>
         <div class="span-col">{{ summary?.summary?.quantity }} </div>
-        <div *ngIf="!autoPrint" >Cost :</div>
-        <div *ngIf="!autoPrint" class="span-col">{{summary?.summary?.cost  ?? 0 | currency }}   </div>
       </div>
+
     </ng-template>
 
     <ng-template #contentView>
@@ -90,6 +101,7 @@
         [autoPrint]="autoPrint"
         [showSort]="true"
         [includeDepartments]="includeDepartments"
+        [groupBy]="groupBy"
         [showAll]="showAll">
       </app-sales-items>
     </ng-template>
@@ -141,7 +153,7 @@
         </mat-card-subtitle>
 
         <mat-card-content *ngIf="summary.results as sales">
-         
+
           <span *ngIf="!autoPrint">
             <button mat-raised-button color="accent" (click)="sortSales(sales)">Sort By Value</button>
             <button mat-raised-button color="accent" (click)="sortName(sales)">Sort By User</button>
@@ -162,7 +174,7 @@
                 *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
               <div class="sales-product-name product-name">{{ sale?.productName | truncateText : 20   }}      </div>
               <div class="sales-totals totals">      {{ sale?.orderID }}               </div>
-              <div class="sales-totals">      {{ sale?.originalPrice | currency }}   </div>
+              <div class="sales-totals">             {{ sale?.originalPrice | currency }}   </div>
               <div class="sales-product-name product-name">{{ sale?.employee | truncateText: 8 }}   </div>
               <div class="item-span product-name sales-product-name">{{ sale?.voidReason }}   </div>
             </div>

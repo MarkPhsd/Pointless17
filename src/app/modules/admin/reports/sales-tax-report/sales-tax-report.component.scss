@@ -57,11 +57,6 @@ mat-card {
   float: left;
   align-items: baseline;
   line-height: 1em;
-  @media print {
-    font-size: 14pt;
-    font-weight: bold;
-  }
-  // text-align: right;
 }
 
 .totals_label{
@@ -186,12 +181,17 @@ mat-card {
 
 
 .grid-item {
-  align-items: flex-end;
+  align-items    : flex-start;
+  text-align     : left;
+  text-transform : capitalize;
+  margin-bottom  : 2px;
+}
 
-  @media print {
-    font-size: 14pt;
-    font-weight: bold;
-  }
+.grid-item-right {
+  align-items    : flex-end;
+  text-align     : right;
+  text-transform : capitalize;
+  margin-bottom  : 2px;
 }
 
 .grid {

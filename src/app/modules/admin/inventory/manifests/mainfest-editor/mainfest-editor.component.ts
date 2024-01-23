@@ -81,7 +81,7 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
         this.site = data;
       })
     } catch (error) {
-      console.log('subscription error manifest', error)
+      // console.log('subscription error manifest', error)
     }
   }
 
@@ -130,14 +130,13 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
             this.inputForm.controls['destinationURL'].setValue(data.url);
             this.inputForm.controls['destinationSiteName'].setValue(data.name);
           })
-          const manifest         = this.inputForm.value as InventoryManifest;
+          const manifest = this.inputForm.value as InventoryManifest;
         }
       }
     }
   }
 
   applyType(event) {
-    // console.log(event);
     if (event) {
       if (this.currentManifest) {
         this.currentManifest.type = event.value;
@@ -245,7 +244,6 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
     manifest$.subscribe(data => {
       this.dialogRef.close()
     })
-
   }
 
   initForm(){
@@ -253,15 +251,12 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
       id:                 [],
       name:               [],
       originatorID:       [],
-
       sourceSiteID:       [],
       sourceSiteURL:      [],
       sourceSiteName:     [],
-
       destinationID:       [],
       destinationURL:      [],
       destinationSiteName: [],
-
       receiverManifestID: [],
       active:             [],
       status:             [],

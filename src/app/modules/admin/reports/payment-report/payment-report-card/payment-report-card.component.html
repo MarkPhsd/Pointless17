@@ -1,4 +1,3 @@
-
 <div class="mat-card-container"
       *ngIf="payments as summary">
   <ng-container
@@ -11,35 +10,37 @@
   <div *ngFor="let payment of payments" class="printFont-14">
 
     <div *ngIf="groupBy && groupBy.toLowerCase() === 'employee'"
-         class="grid-headerfooter ">
+         class="grid-payment-report-card ">
       <div *ngIf="payment.employeeName"
            class="employeeName" >
-            {{ payment?.employeeName | truncateText: 10 }}
+                {{ payment?.employeeName | truncateText: 8 }}
       </div>
       <div *ngIf="!payment.employeeName" class="employeeName">EMPTY</div>
       <div *ngIf="payment?.hour != 0" class="grid-item">{{ payment?.hour }}</div>
-      <div class="totals"   *ngIf="payment.amountPaid != 0" >{{payment?.amountPaid | currency }}    </div>
-      <div class="totals"  *ngIf="payment?.count != 0"  >{{payment.amountPaid / payment.count | currency }}    </div>
-      <div class="totals" >                 {{payment?.tipAmount | currency }}</div>
-      <div class="totals"    *ngIf="payment?.count != 0"  >  {{ payment?.count }} </div>
+      <div  class='grid-item-right'  >  {{  payment?.amountPaid | currency }}    </div>
+      <div   class='grid-item-right'  >   {{ (payment?.count && payment?.count > 0) ? (payment?.amountPaid / payment?.count).toFixed(2) : 0 | currency }}    </div>
+      <div   class='grid-item-right'   >  {{ payment?.count }} </div>
+      <div   class='grid-item-right'  >    {{payment?.tipAmount | currency }}</div>
     </div>
 
     <div *ngIf="groupBy && groupBy === 'paymentMethod' || groupBy === 'devicename'"
-        class="grid-headerfooter">
+        class="grid-payment-report-card">
       <div class="grid-item" *ngIf="payment.paymentMethod" >{{ payment?.paymentMethod }} </div>
       <div class="grid-item" *ngIf="!payment.paymentMethod" >EMPTY</div>
-      <div  class="totals">    {{payment?.amountPaid | currency }}   </div>
-      <div  class="totals"  *ngIf="payment?.count != 0"  >{{payment.amountPaid / payment.count | currency }}    </div>
-      <div  class="totals"  *ngIf="payment?.count != 0" >  {{ payment.count }} </div>
+      <div  class='grid-item-right'  >   {{payment?.amountPaid | currency }}   </div>
+      <div  class='grid-item-right'   >  {{( payment?.count && payment?.count > 0) ? (payment?.amountPaid / payment?.count).toFixed(2) : 0 | currency}}    </div>
+      <div  class='grid-item-right'  >  {{ payment.count }} </div>
+      <div   class='grid-item-right'  >    {{payment?.tipAmount | currency }}</div>
     </div>
 
     <div *ngIf="groupBy && groupBy === 'service'"
-          class="grid-headerfooter">
+          class="grid-payment-report-card">
         <div class="grid-item" *ngIf="payment.serviceType" >{{ payment?.serviceType }} </div>
         <div class="grid-item" *ngIf="!payment.serviceType" >EMPTY </div>
-        <div  class="totals">    {{payment?.amountPaid | currency }}   </div>
-        <div  class="totals"  *ngIf="payment?.count != 0"  >{{payment.amountPaid / payment.count | currency }}    </div>
-        <div  class="totals"  *ngIf="payment?.count != 0" >  {{ payment.count }} </div>
+        <div  class='grid-item-right' >   {{payment?.amountPaid | currency }}   </div>
+        <div  class='grid-item-right'  >   {{( payment?.count && payment?.count > 0) ? (payment?.amountPaid / payment?.count).toFixed(2) : 0 | currency}}   </div>
+        <div  class='grid-item-right' >   {{payment.count }} </div>
+        <div  class='grid-item-right' >    {{payment?.tipAmount | currency }}</div>
     </div>
 
     <div *ngIf="type === 'voids'"
@@ -52,21 +53,19 @@
       <div class="grid-item" >
         {{ payment?.employeeName  }}
       </div>
-      <div  class="totals">  {{payment?.voidAmount | currency }}   </div>
+      <div  >  {{payment?.voidAmount | currency }}   </div>
     </div>
 
   </div>
 
   <div *ngFor="let payment of payments" >
     <div  *ngIf="groupBy && groupBy === 'OrderEmployeCount'"
-          class="grid-order-employeecount">
+          class="grid-payment-report-card">
       <div  class="grid-item"> {{ payment?.employeeName }}</div>
-      <div  class="totals">   {{ payment?.hour }}</div>
-      <div  *ngIf="payment?.count != 0"
-            class="totals">   {{ payment?.count }} </div>
-      <div  class="totals">   {{payment?.amountPaid | currency }} </div>
-      <div  *ngIf="payment?.count != 0"
-            class="totals">  {{payment?.amountPaid / payment?.count | currency }} </div>
+      <div  class='grid-item-right' >   {{ payment?.hour }}</div>
+      <div  class='grid-item-right' >   {{ payment?.count }} </div>
+      <div  class='grid-item-right' >   {{payment?.amountPaid | currency }} </div>
+      <div  class='grid-item-right' >   {{( payment?.count && payment?.count > 0) ? (payment?.amountPaid / payment?.count).toFixed(2) : 0 | currency}}</div>
     </div>
   </div>
 

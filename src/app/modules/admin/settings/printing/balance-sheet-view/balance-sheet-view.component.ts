@@ -19,6 +19,7 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 export class BalanceSheetViewComponent implements OnInit {
   @Input() disableAuditButton: boolean;
   @Input() printType = 'balanceSheetFinal';
+  @Input() styles: any;
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   @Input() autoPrint : boolean = false;
   sheet : IBalanceSheet;
@@ -40,8 +41,13 @@ export class BalanceSheetViewComponent implements OnInit {
   site = this.siteService.getAssignedSite()
   setPrinterWidthClass = "receipt-width-80"
   //max possible items to render. each necessary feature is removed from check below.
-  maxCount = 6
-  @Input() styles: ISetting;
+  maxCount = 7
+
+  blindBalanceSheetChecked: boolean;
+  balanceSheetDetailsChecked: boolean;
+  balanceSheetViewTypeSalesChecked: boolean;
+  balanceSheetTransactionTypesChecked: boolean;
+
 
   initSubscriptions() {
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe(
@@ -61,8 +67,7 @@ export class BalanceSheetViewComponent implements OnInit {
   }
 
   setStyles() {
-    return;
-    if (this.styles) { 
+    if (this.styles) {
       const styles    = this.renderingService.interporlateFromDB(this.styles?.text)
       const style     = document.createElement('style');
       style.innerHTML = styles;
@@ -126,7 +131,7 @@ export class BalanceSheetViewComponent implements OnInit {
 
   ngOnInit() {
     this.initSubscriptions();
-    this.setStyles()
+    // this.setStyles()
     this.cashDrop = this.sheetMethodsService.cashDrop;
     this.auths$ =  this.userAuth.userAuths$.pipe(switchMap(data => {
       this.auths = data;
@@ -136,35 +141,49 @@ export class BalanceSheetViewComponent implements OnInit {
   }
 
   //determines the number of components to render before sending to print.
-  initMaxCount() { 
-    if (this.auths) { 
-      if (!this.auths.blindBalanceSheet) { 
-        this.maxCount = this.maxCount - 1
+  initMaxCount() {
+    if (this.auths) {
+      if (!this.auths.blindBalanceSheet ) {
+        if (!this.blindBalanceSheetChecked) {
+          this.maxCount = this.maxCount - 1
+          this.blindBalanceSheetChecked = true;
+        }
       }
-      if (!this.auths.balanceSheetDetails) { 
-        this.maxCount = this.maxCount - 1
+      if (!this.auths.balanceSheetDetails) {
+        if (!this.balanceSheetDetailsChecked) {
+          this.maxCount = this.maxCount - 1
+          this.balanceSheetDetailsChecked = true
+        }
       }
-      if (!this.auths.balanceSheetViewTypeSales) { 
-        this.maxCount = this.maxCount - 1
+      if (!this.auths.balanceSheetViewTypeSales) {
+        if (!this.balanceSheetViewTypeSalesChecked) {
+          this.maxCount = this.maxCount - 1
+          this.balanceSheetViewTypeSalesChecked = true;
+        }
+      }
+      if (!this.auths?.balanceSheetTransactionTypes) {
+        if (!this.balanceSheetTransactionTypesChecked) {
+          this.maxCount = this.maxCount - 1
+          this.balanceSheetTransactionTypesChecked = true
+        }
       }
     }
   }
 
   renderCompleted(event) {
-    // console.log('renderCompleted', event)
+    console.log('renderCompleted', event)
     if (!this.printReadList)  {  this.printReadList = []  }
 
     this.printReadList.push(event)
 
-    if (this.printReadList.length>0) {
-    }
+    console.log('status', this.printReadList.length, this.maxCount)
 
     if (this.printReadList.length == this.maxCount) {
-      // console.log('max count reached emiting view render complete for print.')
+      console.log('max count reached emiting view render complete for print.')
       this.renderComplete.emit('true')
       const item = {read: true, balanceSheet: true}
-      if (this.autoPrint) { 
-        // console.log('Attempt auto print')
+      if (this.autoPrint) {
+        console.log('Attempt auto print')
         this.printingService.updatePrintReady(item)
       }
     }

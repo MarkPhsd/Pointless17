@@ -21,6 +21,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 
 @Component({
   selector: 'pos-order-item-list',
@@ -129,6 +130,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         }
         return of([])
     })
+
   }
 
   ngOnChanges() {
@@ -149,6 +151,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                 private posOrderItemMethodsService: PosOrderItemMethodsService,
                 private posOrderItemService    : POSOrderItemService,
                 private productEditButtonService: ProductEditButtonService,
+                private inventoryAssignmentService: InventoryAssignmentService,
                 private orderMethodsService: OrderMethodsService,
               )
   {
@@ -258,7 +261,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
           editable: false,
           singleClickEdit: true
     }
-    if (this.order.customerName != 'Inventory Monitor') { 
+    if (this.order.customerName != 'Inventory Monitor') {
     columnDefs.push(nextColumn);
     }
 
@@ -271,7 +274,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                     editable: true,
                     singleClickEdit: true
     }
-    if (this.order.customerName != 'Inventory Monitor') { 
+    if (this.order.customerName != 'Inventory Monitor') {
       if (!reconcilePass) {
         if (!this.purchaseOrderEnabled || this.showRetail) {
           columnDefs.push(currencyColumn);
@@ -288,14 +291,14 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         editable: true,
         singleClickEdit: true
     }
-    if (this.order.customerName != 'Inventory Monitor') { 
+    if (this.order.customerName != 'Inventory Monitor') {
       if (!reconcilePass) {
         if ((this.purchaseOrderEnabled || this.showCost) || reconcilePass) {
           columnDefs.push(currencyColumn);
         }
       }
     }
-    
+
     let wholeSaleCostTotal = {headerName: 'Cost Total',    field: 'wholeSaleCost', sortable: true,
         cellRenderer: this.agGridService.currencyCellRendererUSD,
         width   : 100,
@@ -305,7 +308,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         editable: true,
         singleClickEdit: true
     }
-    if (this.order.customerName != 'Inventory Monitor') {     
+    if (this.order.customerName != 'Inventory Monitor') {
       if (!reconcilePass) {
         if ((this.purchaseOrderEnabled || this.showCost) || reconcilePass) {
           columnDefs.push(wholeSaleCostTotal);
@@ -320,7 +323,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                 maxWidth: 100,
                 flex: 2,
     }
-    if (this.order?.customerName != 'Inventory Monitor') {      
+    if (this.order?.customerName != 'Inventory Monitor') {
         if (!reconcilePass) {
           if (!this.purchaseOrderEnabled || this.showRetail) {
             columnDefs.push(currencyTotalColumn);
@@ -340,10 +343,17 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       maxWidth: 125,
       flex: 2,
     }
-
     if (this.purchaseOrderEnabled || this.showRetail) {
       columnDefs.push(editButtonColumn);
     }
+
+    const invButton = JSON.parse(JSON.stringify(editButtonColumn));
+    invButton.field = 'id';
+    invButton.headerName = 'INV.'
+    invButton.cellRendererParams.label =  'Intake'
+    invButton.cellRendererParams.onClick = this.editINV.bind(this)
+    columnDefs.push(invButton);
+
 
     let itemDelete =  { headerName: 'Delete', field: "id",
         cellRenderer: "btnCellRenderer",
@@ -358,10 +368,9 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         flex: 2,
     }
 
-    if (this.order?.customerName != 'Inventory Monitor') {                    
+    if (this.order?.customerName != 'Inventory Monitor') {
       columnDefs.push(itemDelete);
     }
-
 
     nextColumn =  {headerName: 'Prior',     field: 'traceProductCount',
           sortable: true,
@@ -384,7 +393,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
           singleClickEdit: false
     }
 
-    if (this.order?.customerName != 'Inventory Monitor') {                  
+    if (this.order?.customerName != 'Inventory Monitor') {
       if (this.purchaseOrderEnabled || reconcilePass) {
         columnDefs.push(nextColumn);
       }
@@ -400,13 +409,13 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                     singleClickEdit: false
                   }
 
-    if (this.order?.customerName != 'Inventory Monitor') {                    
+    if (this.order?.customerName != 'Inventory Monitor') {
       if (reconcilePass) {
         columnDefs.push(nextColumn);
       }
     }
 
-    if (this.order?.customerName === 'Inventory Monitor') {  
+    if (this.order?.customerName === 'Inventory Monitor') {
       nextColumn =  {headerName: 'Sales',     field: 'salesCount',
                   sortable: true,
                   width   : 100,
@@ -451,7 +460,16 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       }
       columnDefs.push(nextColumn);
 
-
+      nextColumn =  {headerName: 'InvID',     field: 'inventoryAssignmentID',
+            sortable: true,
+            width   : 100,
+            minWidth: 100,
+            maxWidth: 100,
+            flex    : 2,
+            editable: false,
+            singleClickEdit: false
+      }
+      columnDefs.push(nextColumn);
     }
 
     this.columnDefs = columnDefs;
@@ -485,11 +503,8 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
   editProductFromGrid(e) {
-    if (!e) {
-      // console.log('edit product from grid no data')
-      return
-    }
-
+    console.log(e, e.rowData?.productID)
+    if (!e) { return }
     if (e.rowData.productID)  {
       this.editItemWithId(e.rowData.productID);
     }
@@ -497,7 +512,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
   editItemWithId(id:number) {
     if(!id) { return }
-    // console.log(id)
     this.productEditButtonService.openProductDialogObs(id).subscribe(
         data => {
           this.openingProduct = false
@@ -505,6 +519,43 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       }
     )
   }
+
+  editINV(e) {
+    if (!e) { return }
+    if (e.rowData.productID)  {
+
+      // console.log('row data ', e.rowData, e.rowData.inventoryAssignmentID)
+      if (e.rowData.inventoryAssignmentID != 0){
+        console.log('open 1')
+        this.inventoryAssignmentService.openInventoryItem(e.rowData.inventoryAssignmentID)
+        return;
+      }
+
+      const site = this.siteService.getAssignedSite()
+      if (e.rowData.history) {
+        this.action$ = this.posOrderItemService.getPOSOrderItembyHistory(site, e.rowData.id, e.rowData.history).pipe(switchMap(data => {
+          console.log('data', data, data.inventoryAssignmentID)
+          if (data.inventoryAssignmentID && data.inventoryAssignmentID != 0) {
+            console.log('open 2')
+            this.inventoryAssignmentService.openInventoryItem(data.inventoryAssignmentID)
+          }
+          return of(data)
+       }))
+       return;
+      }
+      this.action$ =  this.posOrderItemService.getPOSOrderItem(site, e.rowData.id).pipe(switchMap(data => {
+        console.log('data', data, data.inventoryAssignmentID)
+        if (data.inventoryAssignmentID && data.inventoryAssignmentID != 0) {
+          console.log('open 3')
+          this.inventoryAssignmentService.openInventoryItem(data.inventoryAssignmentID)
+        }
+         return of(data)
+      }))
+
+    }
+  }
+
+
 
   refreshSearchAny(event) {
     this.refreshSearch();

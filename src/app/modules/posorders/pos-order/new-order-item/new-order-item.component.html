@@ -15,7 +15,6 @@
           <ng-container [ngTemplateOutlet]="addButtonView"></ng-container>
           <ng-container [ngTemplateOutlet]="productSelector"></ng-container>
           <ng-container [ngTemplateOutlet]="unitSelector"></ng-container>
-         
           <ng-container [ngTemplateOutlet]="quantity"></ng-container>
           <ng-container [ngTemplateOutlet]="deleteButton"></ng-container>
         </div>
@@ -39,18 +38,17 @@
 <ng-template #unitOptionsSelector>
   <div *ngIf="posOrderItem && menuItemSelected">
     <div *ngIf="unitOptions">
-
-      <mat-form-field  style="width:300px" *ngIf="unitOptions" 
+      <mat-form-field  style="width:300px" *ngIf="unitOptions"
                       appearance="fill">
           <mat-label>Add on Items</mat-label>
-          <mat-chip-list 
+          <mat-chip-list
                   [(ngModel)]="unitSelected"
                   selectable="true"
                   multiple="false">
             <span *ngFor="let item of unitOptions">
-              <mat-chip 
+              <mat-chip
                     [value]="item"
-                    (click)="toggleChip(item)"  >  
+                    (click)="toggleChip(item)">
                 {{item?.name}}
               </mat-chip>
             </span>
@@ -61,23 +59,23 @@
 </ng-template>
 
 <ng-template #productSelector>
-  <div   *ngIf="posOrderItem" 
+  <div   *ngIf="posOrderItem"
           style="width:125px">
     <product-selector
       [inputForm]     = 'inputForm'
-      [posOrderItem]  = 'posOrderItem'
-      [name]          = "posOrderItem.productName"
-      [id]            = 'posOrderItem?.productID'
-      [searchForm]    = 'productSearchForm'
+      [searchForm]      = 'productSearchForm'
+      [posOrderItem]    = 'posOrderItem'
+      [name]            = "posOrderItem.productName"
+      [id]              = 'posOrderItem?.productID'
       (clearInputsEmit) = 'clearInputs($event)'
-      (itemSelect)    = 'assignProduct($event)'>
+      (itemSelect)      = 'assignProduct($event)'>
       Select product
     </product-selector>
   </div>
 </ng-template>
 
 <ng-template #unitSelector>
-  <div *ngIf="posOrderItem && menuItemSelected"    
+  <div *ngIf="posOrderItem && menuItemSelected"
         style="width:100px">
     <unit-type-select
       [inputForm]     = 'inputForm'

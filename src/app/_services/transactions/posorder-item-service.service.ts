@@ -321,7 +321,19 @@ export class POSOrderItemService {
     return newItem;
   }
 
+  setInventoryId(site: ISite, item: { id: number; inventoryID: number; }) :  Observable<any> {
 
+    const controller = "/POSOrderItems/"
+
+    const endPoint  = "setInventoryId"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, item );
+
+}
 
   setModifierNote(site: ISite, item: { id: number; modifierNote: string; }) :  Observable<any> {
 
@@ -851,9 +863,9 @@ export class POSOrderItemService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.delete<ItemPostResults>(url).pipe(switchMap(data => { 
+    return  this.http.delete<ItemPostResults>(url).pipe(switchMap(data => {
       return of(data)
-    }),catchError(data => { 
+    }),catchError(data => {
       console.log('error')
       return of(null)
     }))

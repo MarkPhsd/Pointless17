@@ -8,6 +8,9 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { InventoryManifest } from './manifest-inventory.service';
+import { NewInventoryItemComponent } from 'src/app/modules/admin/inventory/new-inventory-item/new-inventory-item.component';
+import { DialogRef } from '@angular/cdk/dialog';
+import { MatDialog } from '@angular/material/dialog';
 export interface InventorySearchResultsPaged {
   results     : IInventoryAssignment[];
   paging      : Paging;
@@ -106,7 +109,7 @@ export interface IInventoryAssignment {
   brandID : number;
   itemSKU : string;
   images  : string;
-
+  productCategoryID: number;
   departmentID: number;
   attribute: string;
   metaTags: string;
@@ -162,6 +165,7 @@ export interface InventoryStatusList {
 
 export class InventoryAssignmentService {
 
+
   inventoryStatusList  = [
     {id: 1, name: 'In Stock - For Sale'},
     {id: 2, name: 'In Stock - Not for Sale'},
@@ -183,11 +187,21 @@ export class InventoryAssignmentService {
     private http: HttpClient,
     private auth: AuthenticationService,
     private fb  : UntypedFormBuilder,
+    private dialog: MatDialog,
     private siteService: SitesService)
   {
   }
 
-
+  openInventoryItem(id: number) {
+    return this.dialog.open(NewInventoryItemComponent,
+      { width:        '90vw',
+        minWidth:     '900px',
+        height:       '90vh',
+        minHeight:    '800px',
+        data : {id: id}
+      },
+    )
+  }
 
   createManifestFromOrder(site: ISite, manifest: InventoryManifest, order: IPOSOrder): Observable<InventoryManifest> {
 
@@ -559,25 +573,23 @@ export class InventoryAssignmentService {
 
     // inventoryAssignment = this.inventoryAssignmentService.setNonConvertingFieldValues( )
     //assign values to inventoryAssignement
-    inventoryAssignment.locationID            = inventoryLocation.id
-    inventoryAssignment.location              = inventoryLocation.name
+    inventoryAssignment.locationID            = inventoryLocation?.id
+    inventoryAssignment.location              = inventoryLocation?.name
 
-    inventoryAssignment.intakeUOM             = intakeConversion.name
-    inventoryAssignment.intakeConversionValue = intakeConversion.value
+    inventoryAssignment.intakeUOM             = intakeConversion?.name
+    inventoryAssignment.intakeConversionValue = intakeConversion?.value
 
-    inventoryAssignment.facilityLicenseNumber = facility.metrcLicense
+    inventoryAssignment.facilityLicenseNumber = facility?.metrcLicense
 
-    inventoryAssignment.productID             = menuItem.id
-    inventoryAssignment.productName           = menuItem.name
-    inventoryAssignment.itemStrainName        = menuItem.name
+    inventoryAssignment.productID             = menuItem?.id
+    inventoryAssignment.productName           = menuItem?.name
+    inventoryAssignment.itemStrainName        = menuItem?.name
 
-    console.log(inventoryAssignment)
-
-    inventoryAssignment.label                 = metrcPackage.label
-    inventoryAssignment.metrcPackageID        = metrcPackage.id
-    inventoryAssignment.packageType           = metrcPackage.packageType
-    inventoryAssignment.unitOfMeasureName     = metrcPackage.unitOfMeasureName
-    inventoryAssignment.productCategoryName   = metrcPackage.productCategoryName
+    inventoryAssignment.label                 = metrcPackage?.label
+    inventoryAssignment.metrcPackageID        = metrcPackage?.id
+    inventoryAssignment.packageType           = metrcPackage?.packageType
+    inventoryAssignment.unitOfMeasureName     = metrcPackage?.unitOfMeasureName
+    inventoryAssignment.productCategoryName   = metrcPackage?.productCategoryName
     // metrcPackage.
 
     inventoryAssignment.notAvalibleForSale  = false
@@ -595,18 +607,19 @@ export class InventoryAssignmentService {
 
 
   assignProductToInventory(menuItem: IMenuItem,  item: IInventoryAssignment) {
-    if (item && menuItem) {
-      item.productName = menuItem.name
-      item.label       = menuItem.sku;
-      item.productID   = menuItem.id;
-      item.cost        = menuItem.wholesale;
-      item.price       = menuItem.retail;
-      item.notAvalibleForSale =  false;
-      if (menuItem.itemType) {
-        item.packageType = menuItem.itemType.name;
-      }
-      return item
-    }
+    if (!item) {item = {} as IInventoryAssignment}
+
+    item.productName = menuItem?.name
+    item.label       = menuItem?.sku;
+    item.productID   = menuItem?.id;
+    item.cost        = menuItem?.wholesale;
+    // item.price       = menuItem?.retail;
+    // item.productCategoryID = menuItem?.categoryID;
+    item.notAvalibleForSale =  false;
+    item.itemTypeID = menuItem?.itemType?.id;
+    item.packageType = menuItem?.itemType?.name;
+    // console.log('assignProductToInventory', item)
+    return item
   }
 
   generateSku(sku: string, index: number): string {
@@ -622,9 +635,9 @@ export class InventoryAssignmentService {
       item.expiration   = controls['expiration'].value;
       item.packageCountRemaining = controls['packageQuantity'].value;
 
-      item.baseQuantityRemaining = item.packageCountRemaining;
-      item.packageQuantity       = item.packageCountRemaining;
-      item.baseQuantity          = item.packageCountRemaining;
+      item.baseQuantityRemaining = item?.packageCountRemaining;
+      item.packageQuantity       = item?.packageCountRemaining;
+      item.baseQuantity          = item?.packageCountRemaining;
       item.jointWeight           = 1;
       item.images                = controls['images'].value;
       item.notAvalibleForSale    = controls['notAvalibleForSale'].value;
@@ -647,15 +660,15 @@ export class InventoryAssignmentService {
 
   assignChemicals(menuItem: IMenuItem, item: IInventoryAssignment) {
     if (!item && !menuItem) {return item}
-    item.thc   = +menuItem.thc
-    item.thc2  = +menuItem.thc2
-    item.thca  = +menuItem.thca
-    item.thca2 = +menuItem.thca2
-    item.cbd   = +menuItem.cbd
-    item.cbd2  = +menuItem.cbd2
-    item.cbn   = +menuItem.cbn
-    item.cbd2  = +menuItem.cbd2
-    item.cbda2 = +menuItem.cbda2
+    item.thc   = +menuItem?.thc
+    item.thc2  = +menuItem?.thc2
+    item.thca  = +menuItem?.thca
+    item.thca2 = +menuItem?.thca2
+    item.cbd   = +menuItem?.cbd
+    item.cbd2  = +menuItem?.cbd2
+    item.cbn   = +menuItem?.cbn
+    item.cbd2  = +menuItem?.cbd2
+    item.cbda2 = +menuItem?.cbda2
     return item
   }
 
