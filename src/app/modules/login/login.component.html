@@ -5,18 +5,22 @@
   <!-- loginAction : {{loginAction}} -->
 </div>
 
+
 <ng-container [ngTemplateOutlet]="loginMethodView"></ng-container>
 
 <ng-template #userEntryView>
   <div class="centered centered-flex">
     <div  class="pin-entry">
       <button  mat-raised-button
-                class="center login"
+                class="center login pin-button"
                 *ngIf="platformService.isApp() && pinToken"
                 (click)="togglePIN = !togglePIN">
           PIN Entry
       </button>
+
     </div>
+
+
 
     <mat-card>
       <mat-card-title>
@@ -51,6 +55,7 @@
       </mat-card-title>
 
       <mat-card-content>
+
         <div  class="center"
               *ngIf="loginForm"
               [formGroup]="loginForm"
@@ -159,6 +164,13 @@
         </div>
       </mat-card-content>
     </mat-card>
+
+    <div>
+      <div  class="pin-entry">
+        <ng-container [ngTemplateOutlet]="enableTimeClockView"></ng-container>
+      </div>
+    </div>
+
   </div>
 </ng-template>
 
@@ -180,8 +192,19 @@
               ></app-fast-user-switch>
             </div>
           </mat-card>
+
+          <div class="">
+            <div  class="pin-entry">
+              <ng-container [ngTemplateOutlet]="enableTimeClockView"></ng-container>
+            </div>
+          </div>
+
       </div>
 
   </div>
+</ng-template>
+
+<ng-template #timeClockView>
+  <button mat-raised-button class="center login pin-button" (click)="openTimeClock()"><mat-icon>hourglass_top</mat-icon>Time Clock</button>
 </ng-template>
 

@@ -30,7 +30,7 @@ import { PaymentMethodsService } from 'src/app/_services/transactions/payment-me
 })
 
 export class LoginComponent implements OnInit, OnDestroy {
-
+  @ViewChild('timeClockView')   timeClockView: TemplateRef<any>;
   @ViewChild('pinEntryView')    pinEntryView: TemplateRef<any>;
   @ViewChild('userEntryView')   userEntryView: TemplateRef<any>;
   @Input() statusMessage: string;
@@ -185,14 +185,25 @@ export class LoginComponent implements OnInit, OnDestroy {
     }));
   }
 
-  setPinPadDefault(uiHome) { 
+  get enableTimeClockView() {
+    if (this.platformService.isApp()) {
+      return this.timeClockView
+    }
+    return null
+  }
+
+  openTimeClock() {
+    this.userSwitchingService.openTimeClock()
+  }
+
+  setPinPadDefault(uiHome) {
     if (this.platformService.isApp()) {
       if (uiHome.pinPadDefaultOnApp) {
         this.togglePIN = true;
         this.authenticationService.updatePinPad(uiHome.pinPadDefaultOnApp)
       }
-    } else { 
-      
+    } else {
+
     }
   }
 
@@ -214,6 +225,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     return this.userEntryView;
   }
+
+
 
   initForm() {
     this.loginForm = this.fb.group({
@@ -416,15 +429,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   submitLogin(userName: string, password: string) {
     this.errorMessage = ''
-    this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
+    this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(
       switchMap(result =>
         {
-
           //if you assign these two lines, detail here why you have done that.
           //for some reason they were here, but they prevented a login,
           //after login it would log out. but reviewing these two lines does not
           //reveal why.
-
           this.orderMethodsService.updateOrder(null)
           this.paymentMethodsservice._sendOrderAndLogOut.next(null)
           this.initForm();

@@ -574,7 +574,7 @@ export class DsiEMVAndroidComponent implements OnInit {
         await  this.checkResponse();
         if (this.textResponse.toLowerCase() === 'approved') {
           await this.paymentsMethodsProcessService.processCreditCardResponse(this.response, this.payment,
-                                                this.orderMethodsService.order);
+                                                this.orderMethodsService.currentOrder);
           if (this.dialogRef) {
             this.dialogRef.close()
           }

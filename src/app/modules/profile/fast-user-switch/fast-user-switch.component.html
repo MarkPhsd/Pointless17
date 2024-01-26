@@ -4,13 +4,14 @@
 
 <div class="item-container header">
   <div>
-    <h3>Enter PIN Code to Change User</h3>
+    <h3>Enter PIN Code</h3>
   </div>
-  <div style="margin:5px">
+
+  <div style="margin:5px" *ngIf="!disableUserStatus">
     <button class="payment-buttons" mat-button (click)="logout()"><mat-icon>lock</mat-icon>Lock</button>
   </div>
 
-  <div>
+  <div *ngIf="!disableUserStatus">
     <ng-container [ngTemplateOutlet]="checkUserStatus"></ng-container>
   </div>
 </div>
@@ -42,8 +43,14 @@
      <h4>Current User:  <mat-icon>lock</mat-icon>    {{ sheet?.name}}</h4>
     </div>
     <div *ngIf="(!sheet || sheet.id == 0 || sheet.name === 'open') || !isLocked">
-      <h4> Drawer Status:  Open</h4>
+      <h4> Shift Status (for device):  Open</h4>
     </div>
   </div>
 
+  <ng-container [ngTemplateOutlet]='timeClockView'></ng-container>
+
+</ng-template>
+
+<ng-template #timeClockView>
+  <button mat-raised-button class="center login pin-button" (click)="openTimeClock()"><mat-icon>hourglass_top</mat-icon>Time Clock</button>
 </ng-template>

@@ -1,6 +1,9 @@
 <div *ngIf="(break$ | async) as break"></div>
 <div class="container">
   <ng-container [ngTemplateOutlet]="displayResults"></ng-container>
+  <div *ngIf="displayPrintView">
+    <ng-container [ngTemplateOutlet]="clockView"></ng-container>
+  </div>
 </div>
 
 <ng-template #onDisplayOnly>
@@ -17,19 +20,30 @@
       </div>
     </div>
   </div>
+</ng-template>
 
-  <!-- <div class="label" *ngIf="displayOnly && !isOnClock">
-    <mat-label color="warn">
-      Off Clock
-    </mat-label> -->
-  <!-- </div> -->
+<ng-template #clockView>
+  <mat-card *ngIf="clock">
+    <mat-card-title>
+      {{user?.userName}}
+    </mat-card-title>
+    <mat-card-content>
+      <div #printSection>
+        <clock-print-view [clock]="clock"></clock-print-view>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="print(clock)"><mat-icon>print</mat-icon> Print</button>
+    </mat-card-actions>
+  </mat-card>
 </ng-template>
 
 <ng-template #clockInOutEditor>
   <div *ngIf="(clock$ | async) as result; else clockInButton">
-    <div *ngIf="result">
+
+    <div *ngIf="!result.logOutDate">
       <div>
-        <button mat-raised-button (click)="clockOut()">
+        <button mat-raised-button color="warn" (click)="clockOut()">
           <mat-icon>timer</mat-icon>
           Clock Out
         </button>
@@ -57,7 +71,10 @@
 </ng-template>
 
 <ng-template #clockInButton>
-  <button mat-raised-button (click)="clockIn()">
+  <button mat-raised-button
+          color="primary"
+          *ngIf="user && user.id != 0 && !isOnClock"
+          (click)="clockIn()">
     <mat-icon>more_time</mat-icon>
     Clock In
   </button>

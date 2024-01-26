@@ -18,6 +18,8 @@
     </button>
   </div>
 
+  <!-- dark mode: {{this.userAuthorizationService?.user?.userPreferences?.darkMode}} -->
+
   <div *ngIf="userAuthorizationService.user && userAuthorizationService.user.roles && userAuthorizationService.user.roles != 'user'">
     <button aria-label="theme"
             mat-button

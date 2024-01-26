@@ -46,7 +46,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   @ViewChild('processingPayment') processingPayment: TemplateRef<any>;
   @ViewChild('giftCardPayButton') giftCardPayButton: TemplateRef<any>;
   @ViewChild('splitItemorders') splitItemorders: TemplateRef<any>;
-  
+
   //coaching
   @ViewChild('coachingPaymentsMade', {read: ElementRef}) coachingPaymentsMade: ElementRef;
   @ViewChild('coachingAuthorization', {read: ElementRef}) coachingAuthorization: ElementRef;
@@ -155,7 +155,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       switchMap( data => {
       if (data) {
         this.order = data
-        
+
         this.refreshIsOrderPaid();
       }
       if (data && data.serviceTypeID) {
@@ -254,24 +254,24 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   }
 
-  get giftCardPayButtonView() { 
+  get giftCardPayButtonView() {
     let pass = false;
-    this.paymentMethods.forEach(data => { 
-        if (data.name.toLowerCase() === 'gift card') { 
+    this.paymentMethods.forEach(data => {
+        if (data.name.toLowerCase() === 'gift card') {
           pass = true
         }
       }
     )
-    if (pass) { 
+    if (pass) {
       return this.giftCardPayButton
     }
     return null
   }
 
-  setGroupID(event) { 
+  setGroupID(event) {
     console.log('setgroupd', event);
     //then apply it to the split section, so it updates and shows the appropriate group for this current split
-    
+
   }
 
   enterRewardsAmount(amount) {
@@ -305,7 +305,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   exitOrder() {
-    this.orderMethodsService.exitOrder();
+    this.orderMethodsService.clearOrder();
   }
 
   initAuthorization() {
@@ -315,7 +315,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this.isUser) {
 
     }
-   
+
   }
 
   houseAccountPayment() {
@@ -407,7 +407,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  get splitItemordersView() { 
+  get splitItemordersView() {
     if (this.splitByItem) {
       return this.splitItemorders
     }
@@ -417,8 +417,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   get splitItemsTemplate() {
     if (this.splitByItem) {
       const limiter = this.order && (this.order?.productOrderRef == this.order?.id || this.order?.productOrderRef == 0 || !this.order?.productOrderRef)
-      
-      if (limiter || this.userAuths.splitItemOverRide){ 
+
+      if (limiter || this.userAuths.splitItemOverRide){
         return this.splitItemsView
       }
     }
@@ -584,7 +584,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     // this.groupPaymentAmount = event.amount;
     // this.groupPaymentGroupID = event.groupID as number;
 
-    this.action$ = this.orderMethodsService.splitOrderFromGroup(this.order.id, event.groupID, this.order).pipe(switchMap(data => { 
+    this.action$ = this.orderMethodsService.splitOrderFromGroup(this.order.id, event.groupID, this.order).pipe(switchMap(data => {
       //set tj
       // then we want to refresh the screen, but it might just happen automatically when the order is refreshed.
       return of(data)

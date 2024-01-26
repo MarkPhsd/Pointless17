@@ -70,7 +70,6 @@ export class AuthenticationService {
 
     _deviceInfo: IDeviceInfo;
 
-
     updatePinPad(value: boolean) {
       this._setPinPad.next(value)
     }
@@ -296,7 +295,7 @@ export class AuthenticationService {
       this.clearUserSettings();
       this.toolbarUIService.updateOrderBar(false)
       this.toolbarUIService.updateToolBarSideBar(false)
-      console.log('cleared user settings go to login.isapp:', this.platFormservice.isApp())
+      // console.log('cleared user settings go to login.isapp:', this.platFormservice.isApp())
       if (!this.platFormservice.isApp()) {
 
         if (this.appInitService?.useAppGate) {
@@ -367,7 +366,7 @@ export class AuthenticationService {
       const api = this.siteSerivce.getAssignedSite().url
       const url = `${api}/users/RequestUserSetupToken`
 
-      console.log(url)
+      // console.log(url)
       return  this.http.post<any>(url, {userName: userName})
     };
 

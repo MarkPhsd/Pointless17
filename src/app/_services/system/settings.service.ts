@@ -37,9 +37,10 @@ export interface ITerminalSettings {
   ignoreTimer         : boolean;
   defaultOrderTypeID: number;
   exitOrderOnFire   : boolean;
-  enablePrepView: boolean;
-  defaultLabel: string;
-  dsiEMVSettings: DSIEMVSettings
+  enablePrepView    : boolean;
+  defaultLabel      : string;
+  printServer       : number;
+  dsiEMVSettings    : DSIEMVSettings
 }
 
 export interface DSIEMVSettings {

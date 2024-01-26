@@ -1105,6 +1105,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
         this.paymentService.updatePaymentSubscription(null)
         this.orderMethodsService.updateOrderSubscription(null)
         this.toolbarUIService.updateOrderBar(false)
+        this.orderMethodsService.setActiveOrder(site, null)
         return of(data)
       })).pipe(switchMap(data => {
       this.router.navigateByUrl('/pos-orders')

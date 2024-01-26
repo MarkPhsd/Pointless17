@@ -15,6 +15,7 @@ import { ITerminalSettings,  DSIEMVSettings, SettingsService } from 'src/app/_se
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
+import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 
 @Component({
   selector: 'app-pos-edit-settings',
@@ -24,7 +25,7 @@ import { LabelingService } from 'src/app/_labeling/labeling.service';
 export class PosEditSettingsComponent implements OnInit {
 
   triPOSMarkets = [{name: 'FoodRestaurant', id:7},{name: 'Retail', id:4}]
-
+  action$ : Observable<any>;
   @ViewChild('androidPrintingTemplate') androidPrintingTemplate: TemplateRef<any>;
   inputForm: UntypedFormGroup;
   dsiEMVSettings: FormGroup;
@@ -55,6 +56,7 @@ export class PosEditSettingsComponent implements OnInit {
     private settingsService     : SettingsService,
     public  deviceService       : DeviceDetectorService,
     private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
+    private dcapService         : DcapService,
     private platFormService     : PlatformService,
     private btPrinterService    : BtPrintingService,
     private printingService     : PrintingService,
@@ -76,8 +78,6 @@ export class PosEditSettingsComponent implements OnInit {
       }
       return of(data)
     }))
-
-
 
     if (data) {
       this.setting = data
@@ -214,6 +214,18 @@ export class PosEditSettingsComponent implements OnInit {
     if (this.terminal) {
       this.dsiEMVSettings.patchValue(this.terminal?.dsiEMVSettings)
     }
+
+  }
+
+  get isDSIEnabled() {
+    if (this.uiSettings) {
+     if (this.uiSettings.dsiEMVNeteEpayEnabled ||
+      this.uiSettings.dsiEMVIP ||
+      this.uiSettings.dsiEMVAndroidEnabled ||
+      this.uiSettings.dCapEnabled)
+      return true
+    }
+    return false
   }
 
   get  isAndroidPrintingTemplate() {
@@ -221,6 +233,18 @@ export class PosEditSettingsComponent implements OnInit {
       return this.androidPrintingTemplate
     }
     return null
+  }
+
+  dCapReset() {
+    const dsi = this.dsiEMVSettings.value as DSIEMVSettings
+    console.log('this.inputForm.value?.posDevice', this.terminal)
+    if (this.terminal.name) {
+      const name = this.terminal.name
+      this.action$ = this.dcapService.resetDevice(name).pipe(switchMap(data => {
+        this.sitesService.notify(`Response: ${JSON.stringify(data)}`, 'Close', 100000)
+        return of(data)
+      }))
+    }
   }
 
   saveTerminalSetting(close: boolean) {
@@ -232,10 +256,8 @@ export class PosEditSettingsComponent implements OnInit {
     this.setting.text   = text;
     this.setting.filter = 421
     const id = this.setting.id;
-
     const setting = this.setting;
 
-    // console.log(id, setting)
     this.saving$ = this.settingsService.putSetting(site, id, setting).pipe(
       switchMap( data => {
       if (close) {

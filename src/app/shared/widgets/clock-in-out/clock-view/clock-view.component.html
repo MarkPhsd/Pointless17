@@ -1,0 +1,32 @@
+<mat-card  *ngIf="clock" >
+  <mat-card-content *ngIf="clock">
+    <div class="grid-summary">
+      <div>Name</div>
+      <div>{{clock?.employeeName}}</div>
+      <div>Position ID</div>
+      <div>{{clock?.employeePosition}}</div>
+      <div>Time ID</div>
+      <div>{{clock?.id}}</div>
+      <div>Time In</div>
+      <div>{{clock?.logInTime | date: 'short'}}</div>
+      <div>Time Out </div>
+      <div>{{clock?.logOutTime | date: 'short' }}</div>
+      <div>Reg Hours </div>
+      <div *ngIf="clock?.regHours">{{clock?.regHours.toFixed(2)}}</div>
+      <div>O.T. Hours </div>
+      <div *ngIf="clock?.otHours">{{clock?.otHours.toFixed(2)}}</div>
+    </div>
+
+    <div *ngIf="clock.breaks">
+      <div *ngFor="let item of clock.breaks">
+        <div class="grid-summary" >
+          <div>Start</div>
+          <div>{{item?.timeStart | date: 'short'}}</div>
+          <div>{{item?.timeEnd | date: 'short'}}</div>
+          <div>Type:</div>
+          <div>{{item?.breakIdentifierID}}</div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

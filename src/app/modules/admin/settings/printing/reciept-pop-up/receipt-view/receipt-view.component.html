@@ -124,6 +124,14 @@
   </balance-sheet-view>
 </ng-template>
 
+<ng-template #clockView>
+  <div id="printsection" *ngIf="employeeClockMethodsService.clock">
+    <clock-print-view [clock]="employeeClockMethodsService.clock"
+                      (renderComplete)="printViewCompleted('clock')"
+    ></clock-print-view>
+  </div>
+</ng-template>
+
 <ng-template #helpButton>
   <!-- <div style="margin:5px">
     <coach-marks-button

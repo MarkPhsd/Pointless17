@@ -296,6 +296,10 @@
       <span (mouseleave)="menuTrigger.closeMenu()">
 
         <div>
+          <ng-container [ngTemplateOutlet]="refireOrder"></ng-container>
+        </div>
+
+        <div>
           <ng-container [ngTemplateOutlet]="refundOrderButton"></ng-container>
         </div>
 
@@ -313,6 +317,21 @@
 </div>
 </ng-template>
 
+<ng-template #refireOrder>
+  <span #coachingFire >
+    <div  class="button-margin" *ngIf="(locations$ | async) as locations">
+      <div *ngIf="locations.length>0">
+        <div *ngIf="isStaff">
+          <button   class="button" color="warn" mat-raised-button
+            (click)="reSendOrder()">
+            <mat-icon>local_fire_department</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </span>
+</ng-template>
+
 <ng-template #cancelButton>
   <button mat-raised-button class="button"
           color="warn"
@@ -323,7 +342,7 @@
   <span>
       Cancel
       </span>
-    </button>
+  </button>
 </ng-template>
 
 <ng-template #refundItem>

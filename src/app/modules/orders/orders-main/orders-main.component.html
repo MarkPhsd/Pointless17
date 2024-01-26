@@ -81,7 +81,7 @@
 <ng-template #transferOrderView>
   <button #coachingTransferOrder class="dark-theme-green " mat-button (click)="transferOrder()"
           *ngIf="auths &&  auths.allowTransferOrder">
-        <mat-icon>accounts</mat-icon><span>Transfer</span>
+        <mat-icon>move_up</mat-icon><span>Transfer</span>
   </button>
 </ng-template>
 
@@ -178,6 +178,7 @@
     </span>
 
     <app-order-cards
+      [prepOnExit]="uiTransactions?.prepOrderOnExit"
       [site]= 'site'
       [cardStyle]="'prep'">
     </app-order-cards>

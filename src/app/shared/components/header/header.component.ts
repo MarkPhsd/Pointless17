@@ -144,6 +144,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   terminalSetting : any;
 
   mailCount  = 0;
+  headerBackColor: string;
 
   _site: Subscription;
   initSiteSubscriber() {
@@ -163,9 +164,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       this.openOrderBar = data;
     })
   }
+
   initUserSubscriber() {
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user  = data
+      this.setHeaderBackColor(this.user?.userPreferences?.headerColor)
       this.getUserInfo()
     })
   }
@@ -194,10 +197,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   getUITransactionsSettings() {
     this._transactionUI = this.uiSettings.transactionUISettings$.subscribe( data => {
-      if (data) {
-        this.uiTransactionSetting = data;
-      }
+      if (data) { this.uiTransactionSetting = data; }
     });
+  }
+
+  setHeaderBackColor(color) {
+    this.headerBackColor = ''
+    if (color) {  this.headerBackColor = `back-color:${color};` }
   }
 
   initSubscriptions() {
@@ -234,8 +240,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
               private paymentMethodsService: PaymentsMethodsProcessService,
               private fb                    : UntypedFormBuilder ) {
   }
-
-
 
   ngOnChanges() {
     const user = this.getUserInfo();
@@ -283,22 +287,24 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     if (devicename && this.isApp) {
       this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {
-          //  console.log('pos device 1', data)
+
           if (data.text) {
             try {
-              const posDevice = JSON.parse(data.text) as ITerminalSettings;
+              const posDevice = JSON.parse(data?.text) as ITerminalSettings;
               this.uiSettings.updatePOSDevice(posDevice)
 
               this.terminalSetting = data;
               if (this.platformService.isAppElectron) {
-                if (posDevice && posDevice.electronZoom && posDevice.electronZoom != '0') {
+                if (posDevice && posDevice?.electronZoom && posDevice?.electronZoom != '0') {
                   this.uiSettings.electronZoom(posDevice.electronZoom)
                 }
               }
               return of(posDevice)
+
             } catch (error) {
-              this.siteService.notify('Error setting device info.' + error, 'Close', 10000, 'yellow')
+              this.siteService.notify('Error setting device info.' + JSON.stringify(error), 'Close', 10000, 'yellow')
             }
+
           }
           return of(null)
         }
@@ -500,9 +506,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     if (!user) {  return null }
     this.userName     = user.username;
 
-    if (!user.roles) {
-      return
-    }
+    if (!user.roles) { return  }
 
     this.userRoles    = user?.roles.toLowerCase();
     if (user.firstName) {
@@ -605,6 +609,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     })
   }
 
+  openPreferences() {
+    if (this.user) {
+      const dialog = this.uiSettings.openUserPreferences()
+    }
+  }
+
   goHome() {
     this.smallDeviceLimiter();
     this.navigationService.navHome();
@@ -613,6 +623,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   navPOSOrders() {
     this.smallDeviceLimiter();
     this.navigationService.navPOSOrders()
+    this.orderMethodsService.refreshAllOrders()
   }
 
   navTableService() {
@@ -630,7 +641,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       this.userSave$ = this.userAuthService.setUserObs(this.user)
     }
   }
-
 
   toggleSideBar() {
     if (this.userSwitchingService.swapMenuWithOrderBoolean) {
@@ -673,8 +683,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   logout() {
     if (this.uiTransactionSetting && this.uiTransactionSetting.prepOrderOnExit) {
-      const order = this.orderMethodsService.order
+      //switch order to current order
+      const order = this.orderMethodsService.currentOrder
+      if (!order) {return }
       this.action$ = this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
+        console.log('logout send data sendOrderOnExit', data)
+        if (data) {
+
+        }
         this.postLogout()
         return of(data)
       }))
@@ -684,7 +700,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   postLogout() {
-    console.log('post logout')
+    // console.log('post logout')
+    console.trace("pos logout")
     this.userSwitchingService.clearLoggedInUser();
     this.smallDeviceLimiter();
   }
@@ -719,7 +736,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   switchUser() {
-    const order = this.orderMethodsService.order;
+    const order = this.orderMethodsService.currentOrder;
     this.paymentMethodsService.sendOrderAndLogOut( order , true )
   }
 

@@ -21,6 +21,7 @@ import { ClientTypeService, IUserAuth_Properties } from '../people/client-type.s
 import { OrderMethodsService } from '../transactions/order-methods.service';
 import { UserIdleService } from 'angular-user-idle';
 import { ClientTableService } from '../people/client-table.service';
+import { ClockInPanelComponent } from 'src/app/modules/admin/clients/clock-in-panel/clock-in-panel.component';
 
 export interface ElectronDimensions {
   height: string;
@@ -100,6 +101,19 @@ export class UserSwitchingService implements  OnDestroy {
     if (this._user) { this._user.unsubscribe()}
   }
 
+
+  openTimeClock() {
+    let dialogRef: any;
+    dialogRef = this.dialog.open(ClockInPanelComponent,
+      { width    : '90vw',
+        minWidth : '600px',
+        height   : '90vh',
+        minHeight: '650px',
+      },
+    )
+    return dialogRef
+  }
+
   initializeAppUser() {
     const temp = JSON.parse(localStorage.getItem('appUser')) as ElectronDimensions;
     if (temp) { return }
@@ -161,7 +175,7 @@ export class UserSwitchingService implements  OnDestroy {
     //find employee
     const token =  localStorage.getItem('posToken')
     const site = this.siteService.getAssignedSite()
-    return this.login(token, pin)
+    return this.login(token, pin, false)
   }
 
   authenticate(userLogin: userLogin): Observable<any> {
@@ -170,7 +184,19 @@ export class UserSwitchingService implements  OnDestroy {
     return this.http.post<any>(url, userLogin )
   }
 
-  login(userName: string, password: string): Observable<any> {
+  userAutFailed(user) {
+    const message = user?.errorMessage;
+    this.snackBar.open(message, 'Failed Login', {duration: 1500})
+    const item = {message: 'failed', errorMessage: 'failed'}
+    return item
+  }
+
+  processTimeClockLogin(user: string, password: string): Observable<any>  {
+    return this.login(user,password, true)
+  }
+  login(userName: string, password: string, clockInOnly: boolean): Observable<any> {
+
+    // console.log('clockInOnly', clockInOnly);
 
     this.clearSubscriptions();
     this.authenticationService.clearUserSettings();
@@ -182,16 +208,13 @@ export class UserSwitchingService implements  OnDestroy {
         switchMap(
           user => {
             if (user && user.errorMessage) {
-              const message = user?.errorMessage;
-              this.snackBar.open(message, 'Failed Login', {duration: 1500})
-              const item = {message: 'failed'}
-              return of(item)
+              return of(this.userAutFailed(user))
             }
 
+            console.log('login', user)
             if (user) {
               if (user?.message.toLowerCase() === 'failed') {
-                const user = {message: 'failed', errorMessage: 'failed'}
-                return of(user)
+                return of(this.userAutFailed(user))
               }
               user.message = 'success'
               const currentUser = this.setUserInfo(user, password)
@@ -209,7 +232,7 @@ export class UserSwitchingService implements  OnDestroy {
 
       let userAuth$ =  auth$.pipe(switchMap(data => {
         // console.log('Sending user getting contact', data)
-
+        console.log('userAuth clockInOnly', clockInOnly)
         if (data?.message === 'failed') { return of(data)}
         return this.contactsService.getContact(site, data?.id)
       }), catchError(data => {
@@ -217,11 +240,9 @@ export class UserSwitchingService implements  OnDestroy {
         return of(data)
       }))
 
-
       let updateAuth$ = userAuth$.pipe(switchMap(data => {
 
             if ( !data || (data && (data?.message == 'failed'))) {
-              // console.log( ' failed')
               const user = {} as IUser
               user.message = 'failed';
               user.errorMessage = 'failed'
@@ -249,7 +270,12 @@ export class UserSwitchingService implements  OnDestroy {
       }))
 
       let balanceSheet$ = updateAuth$.pipe(switchMap(user =>
-         {
+
+        {
+            if (clockInOnly) {
+              return of(user)
+            }
+
             if (!user || (user && user.message == 'failed')) {
               return of(user)
             }
@@ -335,8 +361,6 @@ export class UserSwitchingService implements  OnDestroy {
     this.authenticationService.updateUser(currentUser)
     return currentUser
   }
-
-
 
   clearSubscriptions() {
     this.orderMethodService.updateOrderSubscription(null);
@@ -507,6 +531,7 @@ export class UserSwitchingService implements  OnDestroy {
     const currentUser   = user.user
     const sheet         = user.sheet
 
+    console.log(user)
     if (sheet) {
       if (sheet.message) {
         this.siteService.notify(`Message ${sheet.message}`, `Error`, 20000)
@@ -516,6 +541,7 @@ export class UserSwitchingService implements  OnDestroy {
         }
       }
 
+      console.log('sheet.shiftStarted', sheet.shiftStarted)
       //router
       if (!sheet.shiftStarted || sheet.shiftStarted == 0 ||  (sheet.shiftStarted == 1 && sheet.endTime)) {
         this.router.navigate(['/balance-sheet-edit', {id:sheet.id}]);

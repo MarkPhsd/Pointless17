@@ -38,7 +38,6 @@
           <div class="item-info"> {{item.productCategoryName}} </div>
           <div class="item-label">Facility Code</div>
           <div class="item-info"> {{item.facilityLicenseNumber}} </div>
-
         </div>
       <div>
 
@@ -184,6 +183,17 @@
                           [fieldName]="'cost'">
                       Cost
                     </app-value-fields>
+                  </div>
+
+                  <div>
+                    <!-- (ngModelChange)="updateCost()" -->
+                    <mat-form-field appearance="outline">
+                      <mat-label> Cost Total</mat-label>
+                      <input matInput
+                        type="number"
+                        [(ngModel)]="costTotal"
+                        (change)="updateCost($event)" >
+                    </mat-form-field>
                   </div>
 
                   <div>

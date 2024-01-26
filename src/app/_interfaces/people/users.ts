@@ -24,7 +24,6 @@ export interface IUser {
   sortMenu: string;
   preferences: string;
   userPreferences: UserPreferences;
-
 }
 
 export interface UserPreferences {
@@ -39,5 +38,6 @@ export interface UserPreferences {
   contactPreference: number;
   orderID: number;
   ebayItemJSONHidden: boolean;
+  headerColor: string;
 }
 

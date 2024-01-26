@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, catchError, forkJoin, Observable, of, Subscription, switchMap, } from 'rxjs';
-import { IPaymentResponse, IPOSOrder,  IPOSPayment,   ISite, PosPayment }   from 'src/app/_interfaces';
+import { BehaviorSubject, catchError, combineLatest, concatMap,  Observable, of, Subscription, switchMap, } from 'rxjs';
+import { IPaymentResponse, IPOSOrder,  IPOSPayment,   ISite,  }   from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from '../reporting/sites.service';
 import { IPaymentMethod, PaymentMethodsService } from './payment-methods.service';
@@ -11,7 +11,6 @@ import { OrderMethodsService } from './order-methods.service';
 import { OrdersService } from './orders.service';
 import { DSIEMVSettings, TransactionUISettings, UISettingsService } from '../system/settings/uisettings.service';
 import { PrintingService } from '../system/printing.service';
-import { BalanceSheetService } from './balance-sheet.service';
 import { PrepPrintingServiceService } from '../system/prep-printing-service.service';
 import { BalanceSheetMethodsService } from './balance-sheet-methods.service';
 import { PlatformService } from '../system/platform.service';
@@ -79,8 +78,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     if (this.orderMethodsService.currentOrder) {
        sendOrder$ = this.sendOrderOnExit(this.orderMethodsService.currentOrder)
     }
-    // this.paymentMethodsProcess.updateSendOrderOnExit(this.order);
-    // let sendOrder$ = of('true')
     return sendOrder$.pipe(switchMap(data => {
       return this.orderMethodsService.newOrderWithPayloadMethod(site, serviceType)
     })).pipe(
@@ -88,7 +85,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           return of(data)
       })
     )
-
   }
 
   sendOrderAndLogOut(order: IPOSOrder, logOut: boolean) {
@@ -116,19 +112,17 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   processPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,
                  amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
 
+
     let response: IPaymentResponse;
     const balance$ =  this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet();
-
     if (posPayment.tipAmount) {  amount = (amount - posPayment.tipAmount)  }
 
-    // console.log('process payment')
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod);
 
     return balance$.pipe(
-        switchMap(data => {
+      concatMap(data => {
           return payment$
-      })).pipe(switchMap(data => {
-        // console.log('process payment Data', data)
+      })).pipe(concatMap(data => {
         if (!data) {
           return this.sitesService.notifyObs('Payment not succeeded.', 'close', 5000, 'red')
         }
@@ -138,21 +132,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
             ( data?.responseMessage && data?.responseMessage.toLowerCase() != 'success')) {
           return  this.sitesService.notifyObs(`Payment failed because: ${data?.responseMessage}`, 'Close.', 15000)
         }
-
         return this.finalizeOrderProcesses(order);
-      })).pipe(switchMap( data => {
-        // console.log('udpdate order subscription')
-        this.orderMethodsService.updateOrderSubscription( order );
-        if (response.orderCompleted) {
-          this.printingService.printJoinedLabels() ;
+      })).pipe(concatMap( data => {
+        if (data.balanceRemaining == 0) {
           this.finalizeOrder(response, paymentMethod, order);
           this._initTransactionComplete.next(true)
         }
         return of(response);
-      }), catchError(err => {
-        this.sitesService.notify('Error in processing payment' + err, 'Error', 5000, 'red')
-        return of(err)
-    }));
+      }));
   }
 
   updateSendOrderOnExit(order: IPOSOrder) {
@@ -166,9 +153,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     let sendOrder$ : Observable<any>;
     if (!order) {  return of(null)  }
     if (this.isApp) {
-      // console.log('isapp', this.isApp)
       return  sendOrder$ = this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
-        // console.log('prepOrderOnExit',  data?.prepOrderOnExit)
         if (data) {
           if (data.prepOrderOnExit) {
             return this.sendToPrep (order, true, data, true  )
@@ -176,7 +161,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         }
         return of(null)
       }),catchError(data => {
-        // console.log('Send order on exit error', data.toString())
+        console.log('Send order on exit error', data.toString())
         return of(data)
       }))
     }
@@ -188,90 +173,116 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return true;
   }
 
-  finalizeOrderProcesses(order: IPOSOrder) {
-    this.printingService.updatePrintingFinalizer(true)
+  getLabelsPrintOut(ui:TransactionUISettings,order: IPOSOrder) {
     let printLabels$ : Observable<any>;
-    let sendOrder$   : Observable<any>;
-    if (!this.platFormService.isApp || !this.platFormService.isAppElectron) return of(null);
-
-    return this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
-      printLabels$ = of(null);
-      sendOrder$  = of(null);
-      if (data.prepOrderOnClose) {
-        this.sendToPrep(order, true, data)
-      }
-      if (data.printLabelsOnclose) {
-        return this.printingService.printLabels(order, true)
-      }
-      return forkJoin([printLabels$, sendOrder$])
-    }))
+    if (ui?.printLabelsOnclose) {
+      printLabels$ = this.printingService.printLabels(order, true)
+    } else {
+      printLabels$ = of(false)
+    }
+    return printLabels$;
   }
 
+  getPrintPrep(ui:TransactionUISettings,order: IPOSOrder) {
+    const site = this.sitesService.getAssignedSite()
+    let sendOrder$   : Observable<any>;
+    if (ui?.prepOrderOnClose) {
+      sendOrder$ = this.sendToPrep(order, true, ui)
+        .pipe( concatMap ( data => {
+          this.orderMethodsService.updateOrderSubscription(data)
+
+          return of(data)
+      }))
+    }else {
+      sendOrder$ = of(false)
+    }
+    return sendOrder$
+  }
+
+  finalizeOrderProcesses(order: IPOSOrder): Observable<any> {
+    this.printingService.updatePrintingFinalizer(true)
+    if (!this.platFormService.isApp || !this.platFormService.isAppElectron) {
+      this.notify('Items may need to be prepared to complete this order.', 'Close', 10000)
+      return of(null);
+    }
+
+    let ui = {} as TransactionUISettings
+    return this.uiSettingService.transactionUISettings$.pipe(concatMap(data => {
+      ui = data;
+      return  this.getLabelsPrintOut(ui, order)
+    })).pipe(concatMap ( data => {
+      return this.getPrintPrep(ui, order)
+    }))
+  }
 
   finalizeOrder(paymentResponse: IPaymentResponse,
                 paymentMethod: IPaymentMethod,
                 order: IPOSOrder): number {
+    this.orderMethodsService.setLastOrder(order)
 
-  this.orderMethodsService.setLastOrder(order)
-
-  if (!paymentResponse ) {
-    this.sitesService.notify(`No payment response `, 'close', 3000, 'red');
-    return 0
-  }
-
-  if (!paymentResponse || !paymentResponse.payment) {
-    this.sitesService.notify('No payment in payment response', 'close', 3000, 'red');
-    return 0
-  }
-
-  const payment = paymentResponse.payment;
-  if (order && !order.balanceRemaining) { order.balanceRemaining = 0}
-
-  if (payment && paymentMethod) {
-
-  if (paymentMethod.isCreditCard) {
-    if (this.platFormService.isApp()) {
-      this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+    if (!paymentResponse ) {
+      this.sitesService.notify(`No payment response `, 'close', 3000, 'red');
+      return 0
     }
-    return 1
-  }
 
-  if (paymentMethod.isCash) {
-      this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet()
-  }
+    if (!paymentResponse || !paymentResponse.payment) {
+      this.sitesService.notify('No payment in payment response', 'close', 3000, 'red');
+      return 0
+    }
 
-  if (payment.amountReceived >= payment.amountPaid || order.balanceRemaining == 0) {
-    if (this.platFormService.isApp()) {
+    const payment = paymentResponse.payment;
+    if (order && !order.balanceRemaining) { order.balanceRemaining = 0}
+
+    const ui = this.uiSettingService._transactionUISettings?.value;
+
+    // if (ui.autoPrintReceiptOnClose) {
+    //   this.printingService.previewReceipt(this.uiSettingService._transactionUISettings?.value?.singlePrintReceipt, order  );
+    // }
+
+    if (payment && paymentMethod) {
+
+    if (paymentMethod.isCreditCard && order.balanceRemaining == 0) {
+      if (this.platFormService.isApp()) {
         this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
-  }
-  return 1
-  }
-
-  return 0
-  }
-}
-
- sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean, uiTransactions: TransactionUISettings, cancelUpdateSubscription?: boolean): Observable<any> {
-    if (!this.userAuthorizationService?.user) {
-      return of(null)
+      }
+      return 1
     }
 
+    if (paymentMethod.isCash) {
+      this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet()
+    }
+
+    if (payment.amountReceived >= payment.amountPaid || order.balanceRemaining == 0) {
+      if (this.platFormService.isApp()) {
+          this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+      }
+      return 1
+    }
+
+    return 0
+    }
+  }
+
+  sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean, uiTransactions: TransactionUISettings,
+            cancelUpdateSubscription?: boolean): Observable<any> {
+    if (!this.userAuthorizationService?.user) {   return of(null)  }
+
+    if (!uiTransactions) {this.uiSettingService._transactionUISettings.value}
     if (order) {
-      const site = this.sitesService.getAssignedSite()
       const expoPrinter = uiTransactions?.expoPrinter
-      const templateID = uiTransactions?.expoTemplateID;
+      const templateID  = uiTransactions?.expoTemplateID;
       const prep$ = this.prepPrintingService.printLocations(order,
                                                             printUnPrintedOnly,
                                                             expoPrinter,
                                                             templateID);
       let item$ =  prep$.pipe(
-        switchMap( data => {
-          return  this.prepPrintUnPrintedItems(order.id, cancelUpdateSubscription)
+        concatMap( data => {
+          return  this.prepPrintUnPrintedItems(order?.id, cancelUpdateSubscription)
       })
       ,catchError( data => {
-          console.log('error in send to prep', data)
-          this.sitesService.notify('Error printing templates' + data.toString(), 'close', 5000, 'red')
-          return of(data)
+        console.log('error in send to prep', data)
+        this.sitesService.notify('Error printing templates' + JSON.stringify(data).toString(), 'close', 5000, 'red')
+        return of(data)
       }))
 
       return item$;
@@ -285,14 +296,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     if (id) {
       const site = this.sitesService.getAssignedSite()
       return  this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
-        switchMap(data => {
+        concatMap(data => {
           return this.orderService.getOrder(site, id.toString(), false)
-        })).pipe(
-          switchMap( order => {
+        })).pipe(concatMap( order => {
+          // console.log('prepPrintUnPrintedItems order', order.posOrderItems)
+
           if (order) {
-            if (!cancelUpdateSubscription) {
-              this.orderMethodsService.updateOrderSubscription(order)
-            }
+            // console.log('update order')
+            this.orderMethodsService.updateOrderSubscription(order)
             return of(order)
           }
           return of(null)
@@ -631,6 +642,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   processCreditCardResponse(rStream: RStream,  payment: IPOSPayment, order: IPOSOrder) {
 
+    let posOrder = order;
     const site = this.sitesService.getAssignedSite();
     if (!rStream) {
       this.sitesService.notify('No RStream resposne', 'close', 3000, 'red');
@@ -640,7 +652,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     if (rStream) {
       const validate = this.validateResponse( rStream, payment)
       if (!validate) {
-
         return of(null)
       }
 
@@ -650,9 +661,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       const cmdStatus    = cmdResponse?.CmdStatus;
 
       payment   = this.applyEMVResponseToPayment(trans, payment)
-
       if (this.isApproved(cmdStatus)) {
-
         let cardType       = trans?.CardType;
 
         if (!cardType || cardType === '0') {  cardType = 'credit'};
@@ -666,14 +675,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         return  payment$.pipe(
           switchMap(data => {
             this.orderMethodsService.updateOrderSubscription(data.order);
-            this.printingService.previewReceipt();
             response = data;
-            return this.finalizeOrderProcesses(order )
-          })).pipe(switchMap(data => {
-            this.finalizeOrder(response,  paymentMethod, data.order);
+            return this.finalizeOrderProcesses(order);
+          })).pipe(concatMap(data => {
+            this.finalizeOrder(response, paymentMethod, data);
             return of(cmdResponse);
-          })
-        )
+        }))
       }
 
     }

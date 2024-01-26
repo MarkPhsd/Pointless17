@@ -11,6 +11,7 @@ import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { Router } from '@angular/router';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { EmployeeClockMethodsService } from 'src/app/_services/employeeClock/employee-clock-methods.service';
 @Component({
   selector: 'app-receipt-view',
   templateUrl: './receipt-view.component.html',
@@ -24,6 +25,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   @ViewChild('balanceSheetTemplate',{static: false})  balanceSheetTemplate: TemplateRef<any>;
   @ViewChild('balanceSheetValues',{static: false})    balanceSheetValues: TemplateRef<any>;
   @ViewChild('cashDropView',{static: false})          cashDropView:   TemplateRef<any>;
+  @ViewChild('clockView',{static: false})             clockView:   TemplateRef<any>;
 
   @ViewChild('coachingReceiptView', {read: ElementRef}) coachingReceiptView: ElementRef;
   @ViewChild('coachingPDF', {read: ElementRef}) coachingPDF: ElementRef;
@@ -165,6 +167,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   constructor(
     public orderService           : OrdersService,
     public orderMethodsService    : OrderMethodsService,
+    public employeeClockMethodsService: EmployeeClockMethodsService,
     private settingService        : SettingsService,
     private siteService           : SitesService,
     public platFormService        : PlatformService,
@@ -241,7 +244,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   getStylesForPrintOut() {
     let ob$ : Observable<any>
     if (this.printingService.printView  == 2 || this.printingService.printView  == 3 ||
-        this.printingService.printView  == 4) {
+        this.printingService.printView  == 4 ||  this.printingService.printView  == 5 ) {
       ob$ = this.initBalanceSheetDefaultLayoutsObservable()
     }
     if (this.printingService.printView  == 1 || !this.printingService.printView) {
@@ -383,6 +386,9 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   get currentView() {
+    if (this.printView == 5) {
+      return this.clockView
+    }
     if (this.printView == 4) {
       return this.cashDropView
     }
@@ -459,7 +465,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   async printElectron() {
     let styles
-    // console.log('styles', this.receiptStyles)
+
     if (!this.receiptStyles) {
       this.siteService.notify('No Print Styles, please contact admin', 'close', 3000, 'red' )
     }
@@ -468,29 +474,29 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       styles = this.receiptStyles.text;
 
       const contents = this.getReceiptContents(styles)
-      if (!contents) { return false}
+      if (!contents) {
+        this.siteService.notify('No content determined for receipt.', 'close', 3000, 'red' )
+        return;
+      }
+
       const options  = {
         silent: true,
         printBackground: false,
         deviceName: this.printerName
       } as printOptions;
 
-      if (!contents) {
-        this.siteService.notify('No content determined for receipt.', 'close', 3000, 'red' )
-        return;
-      }
-
       if (!options) {
+        this.siteService.notify('No Options!.', 'close', 3000, 'red' )
          return;
       }
 
       if (!this.printerName) {
         this.siteService.notify('No Printer name set for this terminal.', 'close', 3000, 'red' )
-        // console.log('no printerName in print electron');
         return;
       }
 
       if (contents && this.printerName, options) {
+        // console.log('printing', contents)
         const printResult = await this.printingService.printElectronAsync( contents, this.printerName, options)
         return printResult
       }
@@ -553,6 +559,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       this.order$ = this.getOrder();
     }
   }
+
+
 
   getOrder() {
      let printOrder$  = of(this.printingService.printOrder);

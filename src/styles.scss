@@ -27,20 +27,20 @@ mat-button mat-raised-button {
   }
 }
 
-mat-icon { 
-  @media print { 
+mat-icon {
+  @media print {
     visibility: hidden;
   }
 }
 
-mat-button { 
-  @media print { 
+mat-button {
+  @media print {
     visibility: hidden;
   }
 }
 
-button { 
-  @media print { 
+button {
+  @media print {
     visibility: hidden;
   }
 }
@@ -486,6 +486,11 @@ mat-dialog-container {
   grid-row: 1 / span 2;
 }
 
+.row-span-all {
+  grid-column: 1 / -1;
+}
+
+
 .row-span-1 {
   grid-row: 1 / span 2;
 }
@@ -716,6 +721,15 @@ mat-dialog-container {
   grid-column: 1 / span 2;
 }
 
+.grid-summary {
+  font-size: 12pt;
+  font-weight: bold ;
+  --gap: 3px;
+  display: grid;
+  gap:3px;
+  grid-template-columns: 100px 100px;
+}
+
 // Reporting
 .ps-general-padding {
   margin: 5px;
@@ -745,6 +759,29 @@ mat-dialog-container {
   gap: 5px;
   // margin: 5px;
   padding:2px
+}
+
+.grid-items {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
+  width:  100%;
+  font-size: 12pt;
+
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
+  width:  100%;
+  font-size: 12pt;
+
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
 }
 
 .ps-grid-items {
@@ -837,6 +874,14 @@ mat-dialog-container {
   gap: 20px;
 }
 
+.flex-grid-row-space-around {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:space-around;
+  gap: 20px;
+}
+
 .flex-grid-column {
   display: flex;
   flex-direction: column;
@@ -922,7 +967,7 @@ mat-dialog-container {
   margin: 5px;
 }
 
-.filter-panel-content { 
+.filter-panel-content {
   overflow-y: auto;
   width: 320px;
   max-height: calc(100vh - 165px)

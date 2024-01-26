@@ -22,7 +22,7 @@ export class PaypalCardPayBtnComponent implements OnInit {
 
   ngOnInit(): void {
     const i = 0
-    console.log(this.uiTransactions)
+    // console.log(this.uiTransactions)
   }
 
   applyPayPalPayment(manual: boolean) {

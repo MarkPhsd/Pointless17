@@ -198,22 +198,18 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite()
     if (!site) { return }
     this.searchModel = {} as BalanceSheetSearchModel
-
-    this.sheetMethodsService.updateBalanceSearchModel(this.searchModel)
-
     this.toggleOpenClosedAll     = "1"
     this.toggleEmployeeDeviceAll = "0"
-
     this.searchModel.employeeID  = 0
     this.searchModel.type        = parseInt(this.toggleEmployeeDeviceAll)
     this.searchModel.balanceSheetStatus =  parseInt(this.toggleOpenClosedAll)
-
     this.searchModel.pageNumber = 1;
     this.searchModel.pageSize   = 25;
     this.employees$      = this.employeeService.getAllActiveEmployees(site)
-
     this.initSearchForm();
     this.initDateForm()
+
+    this.sheetMethodsService.updateBalanceSearchModel(this.searchModel)
   }
 
   resetSearch() {

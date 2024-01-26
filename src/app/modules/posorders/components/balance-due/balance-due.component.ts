@@ -156,18 +156,22 @@ export class ChangeDueComponent implements OnInit  {
       const site = this.siteService.getAssignedSite();
        this.printing$ = this.orderService.getPOSOrderGroupTotal(site, this.payment.orderID, this.payment.groupID).pipe(switchMap(data => {
         this.printingService.printOrder = data;
-        this.printingService.previewReceipt(null, data);
+
+        this.printingService.previewReceipt(       this.uiTransactions?.singlePrintReceipt, data);
         return of(data)
       }))
       return;
     }
-    this.printingService.previewReceipt()
+    this.printingService.previewReceipt(this.uiTransactions?.singlePrintReceipt)
   }
 
   close() {
     // this.clearSubscriptions()
     // this.router.navigateByUrl('/')
+    this.paymentMethodProcessService._sendOrderOnExit.next(null)
+    this.paymentMethodProcessService._sendOrderAndLogOut.next(null)
     this.orderMethodService.clearOrder();
+
     this.dialogRef.close()
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input,EventEmitter, HostListener, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable,  Subscription } from 'rxjs';
+import { Observable,  Subscription, of, switchMap } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -11,6 +11,8 @@ import { ITerminalSettings} from 'src/app/_services/system/settings.service';
 import { AuthenticationService } from 'src/app/_services';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { IRequestMessage, RequestMessageService } from 'src/app/_services/system/request-message.service';
+import { PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 @Component({
   selector: 'pos-order-function-buttons',
   templateUrl: './pos-order-function-buttons.component.html',
@@ -38,6 +40,8 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @ViewChild('adjustmentOptionsView')  adjustmentOptionsView: TemplateRef<any>;
   @ViewChild('balanceSheetMenuView')  balanceSheetMenuView: TemplateRef<any>;
   @ViewChild('communicationsView')  communicationsView: TemplateRef<any>;
+  @ViewChild('reFireOrder')  reFireOrder: TemplateRef<any>;
+
 
   @ViewChild('cancelButton') cancelButton: TemplateRef<any>;
   @Input() devicename: string;
@@ -103,6 +107,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   action$ : Observable<any>;
   messagesNotZero$ = this.requestMessageService.getTemplateBalanceIsNotZeroMessages()  // Observable<IRequestMessage[]>;
   messagesZero$ = this.requestMessageService.getTemplateBalanceIsZeroMessages() //   Observable<IRequestMessage[]>;
+  locations$ = this.locationsService.getLocationsCached();
 
   transactionUISettingsSubscriber() {
     this._transactionUI = this.uiSettingsService.transactionUISettings$.subscribe( data => {
@@ -110,6 +115,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
         this.uiTransactionSetting = data;
       }
     });
+
   }
 
   posDeviceSubscriber() {
@@ -133,7 +139,9 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
               private authenticationService: AuthenticationService,
               public orderMethodsService: OrderMethodsService,
               private router: Router,
+              private locationsService: PrinterLocationsService,
               private requestMessageService: RequestMessageService,
+              private paymentsMethodsProcessService: PaymentsMethodsProcessService,
               private uiSettingsService: UISettingsService,
               private balanceSheetMethods: BalanceSheetMethodsService ) { }
 
@@ -467,4 +475,17 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     this.action$ = this.orderMethodsService.sendOrderForMessageService(item, order)
   }
 
+  reSendOrder() {
+    let extiOnFire : boolean
+    if (this.posDevice) {
+      if (this.posDevice.exitOrderOnFire) {
+        extiOnFire = this.posDevice.exitOrderOnFire
+      }
+    }
+    this.action$ = this.paymentsMethodsProcessService.sendToPrep(this.order, false, this.uiTransactionSetting).pipe(
+      switchMap(data => {
+        return of(data)
+      })
+    )
+  }
 }

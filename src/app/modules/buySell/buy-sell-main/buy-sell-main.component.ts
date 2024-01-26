@@ -545,7 +545,8 @@ export class BuySellMainComponent implements OnInit {
           return of(null)
         }
         const buyFeatures = {departmentID: this.departmentID, brandID: this.brandID, attribute: this.attribute}
-        return   this.productEditButtonService.openBuyInventoryItemDialogObs(data, this.orderMethodsService.order, null, buyFeatures)
+        //switch order to current order
+        return   this.productEditButtonService.openBuyInventoryItemDialogObs(data, this.orderMethodsService.currentOrder, null, buyFeatures)
 
       }
     ))

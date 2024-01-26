@@ -1,0 +1,62 @@
+<div *ngIf="(action$ | async) as action"></div>
+<mat-card *ngIf="inputForm" [formGroup]="inputForm">
+  <mat-card-title>
+    Preferences (auto saves)
+  </mat-card-title>
+  <mat-card-subtitle>
+    {{user?.roles}}
+  </mat-card-subtitle>
+  <mat-card-content>
+
+    <div  class="mat-label">
+      <mat-slide-toggle
+          [disabled]="true"
+          class="mat-label"
+          formControlName="darkMode">
+        <mat-label class="mat-label">Enable Dark Mode</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div  class="mat-label">
+      <mat-slide-toggle
+          [disabled]="true"
+          class="mat-label"
+          formControlName="swapMenuOrderPlacement">
+        <mat-label class="mat-label">Menu left/right</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <app-toggle-theme></app-toggle-theme>
+
+    <!-- <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container> -->
+
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="warn" (click)="close()">
+      <mat-icon>exit_to_app</mat-icon>Close
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<ng-template #buttonColorPicker>
+  <div >
+    <h3>Header color</h3>
+    <ngx-colors ngx-colors-trigger [(ngModel)]="headerColor"></ngx-colors>
+    <mat-form-field>
+      <input matInput [(ngModel)]="headerColor">
+    </mat-form-field>
+  </div>
+</ng-template>
+
+<!-- darkMode: [], //
+swapMenuOrderPlacement:  [], //boolean;
+orderFilter:  [], //IPOSOrderSearchModel
+product:  [], //ProductSearchModel;
+showAllOrders:  [], //boolean;
+firstTime_notifyShowAllOrders: [], // boolean;
+firstTime_FilterOrderInstruction:  [], //boolean;
+enableCoachMarks: [], // boolean;
+contactPreference:  [], //number;
+orderID:  [], //number;
+ebayItemJSONHidden:  [], //boolean;
+headerColor:  [], //string; -->

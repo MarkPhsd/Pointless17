@@ -124,7 +124,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe( data => {
       this.sheet = data;
-      console.log('data', this.sheet)
+      // console.log('data', this.sheet)
       if (data) {
         this.getSheetType(data)
       }

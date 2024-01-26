@@ -63,25 +63,25 @@
           </div>
         </ng-template>
 
-        <ng-container [ngTemplateOutlet]="paymentReport"></ng-container>
+        <ng-container [ngTemplateOutlet]="paymentReportView"></ng-container>
         <ng-template #paymentReport>
-          <ng-container [ngTemplateOutlet]="divider"></ng-container>
-          <div *ngIf="!auths?.blindBalanceSheet"  style="margin-bottom:10px">
-            <payment-report
-              [type]        ="'sales'"
-              [groupBy]     ="'paymentMethod'"
-              [site]        ="site"
-              [reportRunID] ="sheet.id"
-              [autoPrint]   ="true"
-              (renderComplete)="renderCompleted($event)">
-            </payment-report>
-          </div>
-          <mat-divider></mat-divider>
+            <ng-container [ngTemplateOutlet]="divider"></ng-container>
+            <div style="margin-bottom:10px">
+              <payment-report
+                [type]        ="'sales'"
+                [groupBy]     ="'paymentMethod'"
+                [site]        ="site"
+                [reportRunID] ="sheet.id"
+                [autoPrint]   ="true"
+                (renderComplete)="renderCompleted($event)">
+              </payment-report>
+            </div>
+            <mat-divider></mat-divider>
         </ng-template>
 
-        <div *ngIf="auths?.balanceSheetViewTypeSales"  style="margin-bottom:15px">
+        <div style="margin-bottom:15px">
           <ng-container [ngTemplateOutlet]="divider"></ng-container>
-          <ng-container [ngTemplateOutlet]="itemTypeReport" ></ng-container>
+          <ng-container [ngTemplateOutlet]="itemTypeReportView" ></ng-container>
           <ng-template #itemTypeReport>
             <item-sales-card
                 [site]          ="site"
@@ -97,9 +97,9 @@
           </ng-template>
         </div>
 
-        <div *ngIf="auths?.balanceSheetTransactionTypes"  style="margin-bottom:15px">
-          <ng-container [ngTemplateOutlet]="TransactionTypesView" ></ng-container>
-          <ng-template #TransactionTypesView>
+        <div style="margin-bottom:15px">
+          <ng-container [ngTemplateOutlet]="transactionTypesView" ></ng-container>
+          <ng-template #transactionTypes>
             <ng-container [ngTemplateOutlet]="divider"></ng-container>
             <item-sales-card
                 [site]          ="site"
@@ -115,15 +115,15 @@
           </ng-template>
         </div>
 
-        <ng-container [ngTemplateOutlet]="balanceSheetDetails"></ng-container>
+        <ng-container [ngTemplateOutlet]="balanceSheetDetailsView"></ng-container>
         <ng-template #balanceSheetDetails>
-          <div *ngIf="auths?.balanceSheetDetails"  style="margin-bottom:10px">
+          <div style="margin-bottom:10px">
             <ng-container [ngTemplateOutlet]="divider"></ng-container>
             <h3>Payments:</h3>
             <div *ngIf="(list$ | async) as list">
               <credit-card-payments-print-list
                 [autoPrint]     ="autoPrint"
-                (renderComplete)="renderCompleted($event)"
+                (renderComplete)="renderCreditCardPayments($event)"
                 [list]          ="list">
               </credit-card-payments-print-list>
             </div>
@@ -131,16 +131,16 @@
           </div>
         </ng-template>
 
-        <ng-container [ngTemplateOutlet]="creditCardPayments"></ng-container>
+        <ng-container [ngTemplateOutlet]="creditCardPaymentsView"></ng-container>
         <ng-template #creditCardPayments>
-          <div *ngIf="auths?.balanceSheetDetails"  style="margin-bottom:10px">
+          <div  style="margin-bottom:10px">
             <ng-container [ngTemplateOutlet]="divider"></ng-container>
             <h3>Payments Groups:</h3>
             <div *ngIf="(paymentGroups$ | async) as list">
               <credit-card-payments-print-list
                 [groupType]="true"
                 [autoPrint]="autoPrint"
-                (renderComplete)="renderCompleted($event)"
+                (renderComplete)="renderCardSummary($event)"
                 [list]="list">
               </credit-card-payments-print-list>
               <mat-divider></mat-divider>
@@ -226,5 +226,5 @@
   </ng-template>
 
   <ng-template #divider>
-    -----------------------------------------------------------
+    ----------------------------------------------------------
   </ng-template>

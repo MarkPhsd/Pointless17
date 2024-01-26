@@ -528,7 +528,8 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   assignClientID(client) {
-    let order = this.orderMethodsService.order
+    //switch order to current order
+    let order = this.orderMethodsService.currentOrder
     if (!order || !client) {
       this.siteService. notify('No Order in use.', 'close', 4000, 'red')
       return

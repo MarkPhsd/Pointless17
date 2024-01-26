@@ -9,9 +9,9 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ISite, IUser } from 'src/app/_interfaces';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
-import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { SettingsService } from 'src/app/_services/system/settings.service';
 
 // import { share } from 'rxjs/operators';
 
@@ -24,6 +24,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
 
   action$: Observable<any>;
 
+  @Input() prepOnExit : boolean;
 
   @ViewChild('orderPrepRefresh') orderPrepRefresh : TemplateRef<any>;
   @ViewChild('ordersRefresh')    ordersRefresh : TemplateRef<any>;
@@ -172,6 +173,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     private toolbarServiceUI : ToolBarUIService,
     private authenticationService: AuthenticationService,
     private platformService: PlatformService,
+    private settingService: SettingsService,
     )
   {
   }
@@ -320,11 +322,14 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
 
   setActiveOrderObs(order) {
     const site  = this.siteService.getAssignedSite();
-    let sendOrder$ = of(null)
-    if (this.orderMethodsService?.order) {
-      if (!this.orderMethodsService.order.history) {
-        let sendOrder$ = this.paymentMethodsProcess.updateSendOrderOnExit(this.orderMethodsService.order)
+    let sendOrder$ : Observable<any>;
+    if (this.orderMethodsService?.currentOrder && this.prepOnExit) {
+      if (!this.orderMethodsService.currentOrder.history) {
+        // this.paymentMethodsProcess.updateSendOrderOnExit(this.orderMethodsService.currentOrder)
+        sendOrder$ = this.paymentMethodsProcess.sendToPrep(order, true, null, false)
       }
+    } else {
+      sendOrder$ = of(null)
     }
 
     let order$  =   this.orderService.getOrder(site, order.id, order.history )

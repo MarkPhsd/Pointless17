@@ -561,9 +561,9 @@ export class PrintingService {
           }
         )
         }).catch( err => {
-          console.log('Print window Load URL error:', err, options)
+          console.log('Print window Load URL error:',printerName , err, options)
           // console.trace('Trace of Printing Error')
-          this.siteService.notify(`Error occured: Check your printer. options: ${options}`,  'Close', 25000, 'red' )
+          this.siteService.notify(`Error occured: Check your printer. options: printer: ${printerName} - Error: ${JSON.stringify(options)}`,  'Close', 25000, 'red' )
           printWindow.close();
           printWindow = null;
           result = false
@@ -1082,10 +1082,7 @@ export class PrintingService {
     if (this.uiSettingsService.posDeviceInfo) {
       if (this.platFormService.androidApp) {
         const device = this.uiSettingsService.posDeviceInfo;
-        if (autoPrint) {
-          return this.printAuto(device.receiptPrinter, autoPrint)
-        }autoPrint
-        this.printSub(device.receiptPrinter, autoPrint);
+        this.printSub(device?.receiptPrinter, autoPrint);
         return of(null)
       }
     }

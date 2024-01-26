@@ -147,6 +147,17 @@
     grid-template-columns: 20px 55px 70px 50px 65px 55px;
   }
 
+  .grid-items-payments {
+    display: grid;
+    gap: var(--gap);
+    font-size: 12pt;
+    font-weight: bold ;
+    --gap: 3px;
+    display: grid;
+    gap: 3px;
+    grid-template-columns: 20px 55px 70px 50px 65px 55px;
+  }
+
   .item-value {
     justify-content: right;
     text-align: right;
@@ -194,10 +205,11 @@
   .item-sales-grid-body {
     display: grid;
     gap: 5px;
-    grid-template-columns: 135px 90px 50px 85px;
+    grid-template-columns: 115px 90px 60px 55px 55px;
     font-size: 12pt;
     font-weight: bold;
     width: 350px;
+    text-align: right
   }
 
   .grid-body-action {
@@ -319,13 +331,20 @@
     font-weight: bold;
   }
 
- .totals {
-    font-size     : 1em;
+  .totals {
+    font-size      : 1em;
 	  white-space    : nowrap;
 	  text-transform : capitalize;
 	  text-align     : right;
-    font-size: 12pt;
-    font-weight: bold;
+    font-size  :     12pt;
+    font-weight    : bold;
+  }
+
+  .totalslabel {
+    font-size     : 1em;
+    float         : right;
+    align-items   : flex-end;
+    text-align    : right;
   }
 
   .no-print {

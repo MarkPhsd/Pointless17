@@ -1,9 +1,7 @@
 import { Component, OnInit, Input , OnDestroy, ChangeDetectorRef} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { timeStamp } from 'node:console';
 import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
-import { itemsAnimation } from 'src/app/_animations/list-animations';
 import { IPOSOrder, IPOSPayment, ISite, PosPayment } from 'src/app/_interfaces';
 import { AuthenticationService, IDeviceInfo, OrdersService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -156,6 +154,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
           // console.log(data?.tranType && data.amountPaid)
           if (data?.tranType === 'incrementalAuthorizationResponse' && data?.amountPaid != 0) {
             this.incrementalAuth = data;
+
             return
           }
         })
@@ -187,10 +186,10 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       // console.log('processIncrementalReversal result', data)
       return of(data)
     })).pipe( switchMap( data => {
-      console.log('payment', data)
+      // console.log('payment', data)
       return this.orderMethodsService.refreshOrderOBS(item.orderID, false)
     })).pipe(switchMap( data => {
-      console.log('order', data)
+      // console.log('order', data)
       return of(data)
     })),
     catchError(err => {
@@ -262,7 +261,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     })).pipe(switchMap(data => {
 
       if (!data) {return of(null)}
-      console.log(data)
+      // console.log(data)
       if (data && !data._hasErrors && data.isApproved) {
         item.amountPaid = amount;
         item.amountReceived = 0;
@@ -291,7 +290,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   gettriPOSTotalPayments() {
     let amount = 0
     this.totalAuthTriPOSPayments = 0;
-    console.log('totalAuthTriPOSPayments', this.totalAuthTriPOSPayments)
+    // console.log('totalAuthTriPOSPayments', this.totalAuthTriPOSPayments)
 
     if (!this.order || !this.order.posPayments) {return}
 
@@ -300,7 +299,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     }
 
 
-    console.log('amount', amount, this.order.posPayments)
+    // console.log('amount', amount, this.order.posPayments)
     this.totalAuthTriPOSPayments = amount;
     return amount;
   }
@@ -393,7 +392,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.orderMethodsService.selectedPayment = item;
 
     if (item && (item.groupID && item.groupID != 0)) {
-        console.log('prinint item group total')
+        // console.log('prinint item group total')
         const site = this.siteService.getAssignedSite();
         this.printing$ = this.orderService.getPOSOrderGroupTotal(site, item.orderID, item.groupID).pipe(switchMap(data => {
         this.printingService.printOrder = data;

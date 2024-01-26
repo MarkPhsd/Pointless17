@@ -19,7 +19,7 @@ export class CreditCardPaymentsPrintListComponent implements OnInit {
   summary:      Summary;
   errorMessage: null;
   styles$: Observable<any>;
-
+  rendered:boolean;
   constructor(private httpClient: HttpClient) { }
 
    ngOnInit() {
@@ -30,13 +30,24 @@ export class CreditCardPaymentsPrintListComponent implements OnInit {
       document.head.appendChild(style);
       return of(data)
     })).pipe(switchMap(data => {
-      this.renderComplete.emit(true);
+      // this.renderComplete.emit(true);
+      setTimeout(() => {
+        this.renderComplete.emit('credit-card-payments')
+      }, 1000);
       return of(data)
     }))
   }
 
   ngAfterViewInit() {
-    this.renderComplete.emit('credit-card-payments')
+
+      // setTimeout(() => {
+      //   this.renderComplete.emit('credit-card-payments')
+      // }, 1000);
+
+  }
+
+  renderCompleted() {
+
   }
 }
 

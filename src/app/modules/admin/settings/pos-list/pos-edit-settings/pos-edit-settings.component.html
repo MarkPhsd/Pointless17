@@ -1,5 +1,5 @@
 <div *ngIf="(saving$ | async) as saving"></div>
-
+<div *ngIf="(action$ | async) as action"></div>
 <ng-template #saving>
   ...saving
 </ng-template>
@@ -330,7 +330,7 @@
 </ng-template>
 
 <ng-template #dsiEMVSettingsView>
-  <mat-card  *ngIf="dsiEMVSettings  && terminal" [formGroup]="dsiEMVSettings">
+  <mat-card  *ngIf="isDSIEnabled && dsiEMVSettings  && terminal" [formGroup]="dsiEMVSettings">
     <mat-card-subtitle>
      <h4>DSI DCAP Processing</h4>
     </mat-card-subtitle>
@@ -418,7 +418,7 @@
         <div class="grid-item">
           <app-value-fields
               [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'test'"
+              [fieldType]     ="'text'"
               [inputForm]     ="dsiEMVSettings"
               [fieldName]     ="'PinPadIpPort'">
               PinPadIpPort
@@ -427,7 +427,7 @@
         <div class="grid-item">
           <app-value-fields
               [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'test'"
+              [fieldType]     ="'text'"
               [inputForm]     ="dsiEMVSettings"
               [fieldName]     ="'HostOrIP'">
               Host Or IP
@@ -452,6 +452,11 @@
             </mat-slide-toggle>
           </div>
           <div>Enabled on each device.</div>
+        </div>
+
+        <div>
+          <!-- <button  mat-button  (click)="dCapReset()">Device Reset</button> -->
+          <button  mat-button (click)="dCapReset()">Device Reset</button>
         </div>
     </div>
   </mat-card>

@@ -225,8 +225,6 @@ import { PosOrderBoardComponent } from '../modules/posorders/pos-order/pos-order
 import { MenuItemCardDashboardComponent } from '../modules/menu/menu-item-card/menu-item-card.component';
 import { DashBoardRoutingModule } from '../dash-board-routing.module';
 import { OrderPrepComponent } from '../modules/orders/order-prep/order-prep.component';
-import { AgGridImageFormatterComponent } from '../_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
-import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatter/ag-icon-formatter.component';
 import { POSSplitItemsComponent } from '../modules/posorders/pos-payment/possplit-items/possplit-items.component';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
 // import { ExportDataComponent } from '../modules/admin/settings/database/export-data/export-data.component';
@@ -345,7 +343,6 @@ import { PointlessMETRCSalesComponent } from '../modules/admin/metrc/pointless-m
 import { MetrcSalesFilterComponent } from '../modules/admin/metrc/pointless-metrcsales/metrc-sales-filter/metrc-sales-filter.component';
 import { PosSplitGroupsComponent } from '../modules/posorders/pos-payment/possplit-items/pos-split-groups/pos-split-groups.component';
 import { PrintGroupReceiptComponent } from '../modules/posorders/pos-payment/possplit-items/print-group-receipt/print-group-receipt.component';
-import { PrepPrintingServiceService } from '../_services/system/prep-printing-service.service';
 import { TriposSettingsComponent } from '../modules/payment-processing/tri-pos-transactions/tripos-settings/tripos-settings.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { LinkedPriceSelectorComponent } from '../modules/admin/products/pricing/price-categories-edit/linked-price-selector/linked-price-selector.component';

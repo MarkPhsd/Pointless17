@@ -241,7 +241,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
           // console.log('void / Reversal result 2');
           if (paymentMethod.name.toLowerCase( )== 'rewards points') {
             this.voidPayment.voidReason = this.resultAction.voidReason
-            this.resultAction.order = this.orderMethodsService.order;
+            this.resultAction.order = this.orderMethodsService.currentOrder;
             response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)
             this.action$ = this.updateVoidPaymentResponse(response$);
             return;

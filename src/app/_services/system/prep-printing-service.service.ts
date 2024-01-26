@@ -1,15 +1,13 @@
 import { E } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { catchError, Observable, of, switchMap } from 'rxjs';
+import { catchError, concatMap, Observable, of, switchMap } from 'rxjs';
 import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
 import { IPOSOrder, ISetting, ISite, PosOrderItem } from 'src/app/_interfaces';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { IPrinterLocation, PrinterLocationsService } from '../menu/printer-locations.service';
 import { SitesService } from '../reporting/sites.service';
 import { SettingsService } from './settings.service';
-import { PrinterLocations } from '../menu/item-type.service';
-import { template } from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -33,12 +31,15 @@ export class PrepPrintingServiceService {
     const printOrders = [] as IPrintOrders[]
 
     const posItems  = order.posOrderItems;
+    if (!posItems) { return of(null)}
 
-    const result$ = locations$.pipe(switchMap(data => {
+    const result$ = locations$.pipe(concatMap(data => {
       return of(data);
-    })).pipe(switchMap(data => {
+    })).pipe( concatMap (data => {
         data.forEach(location => {
           const newItems = [] as PosOrderItem[];
+
+
           if (posItems.length != 0) {
             posItems.forEach(data => {
               if (printUnPrintedOnly) {
@@ -70,7 +71,6 @@ export class PrepPrintingServiceService {
         const printOrder = {} as IPrintOrders;
         printOrder.order = order;
         printOrder.location = location;
-
         const list = posItems.filter(data => {
           return !data.printed
         })
@@ -81,11 +81,11 @@ export class PrepPrintingServiceService {
       }
 
       return of(printOrders)
-    })).pipe(switchMap(printOrders => {
+    })).pipe( concatMap (printOrders => {
       if (!printOrders || printOrders.length == 0) { return of(null)}
       return this.printElectronTemplateOrder(printOrders)
-    }),catchError(data => {
-
+    })
+    ,catchError(data => {
       this.siteService.notify('Error in printing' + data.toString(), 'Close', 5000, 'red')
       return of(data)
     }))
@@ -96,7 +96,7 @@ export class PrepPrintingServiceService {
     try {
       const site = this.siteService.getAssignedSite()
       const styles$ = this.appyStylesCachedObservable(site)
-      return styles$.pipe(switchMap(data => {
+      return styles$.pipe(concatMap(data => {
         return this.dialog.open(PrintTemplatePopUpComponent,
           { width:        '450px',
             minWidth:     '450px',

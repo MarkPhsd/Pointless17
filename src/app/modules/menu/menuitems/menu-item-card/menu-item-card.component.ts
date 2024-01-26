@@ -154,7 +154,8 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite()
     const item$ = this.menuService.getMenuItemByID(site, this.menuItem.id)
     this.buyItem$ = item$.pipe(switchMap(data => {
-        return   this.productEditButtonService.openBuyInventoryItemDialogObs(data,  this.orderMethodsService.order)
+        //switch order to current order
+        return   this.productEditButtonService.openBuyInventoryItemDialogObs(data,  this.orderMethodsService.currentOrder)
 
       }
     ))

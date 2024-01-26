@@ -144,7 +144,11 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   addNewOrder() {
     const site = this.siteService.getAssignedSite();
-    this.paymentMethodsService.sendOrderProcessLockMethod(this.orderMethodsService.order)
+    const order = localStorage.getItem('orderSubscription')
+    // console.log('order', order)
+    if (order && order != null) {
+      this.paymentMethodsService.sendOrderProcessLockMethod(this.orderMethodsService.currentOrder)
+    }
 
     if (this.posDevice) {
       if (this.posDevice.defaultOrderTypeID  && this.posDevice.defaultOrderTypeID != 0) {
@@ -162,27 +166,9 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   getNewOrder(site, serviceType) {
-    // let sendOrder$ = this.paymentMethodsProcess.sendOrderOnExit(this.order)
-    // // this.paymentMethodsProcess.updateSendOrderOnExit(this.order);
-    // // let sendOrder$ = of('true')
-    // return sendOrder$.pipe(switchMap(data => {
-    //   return this.orderMethodsService.newOrderWithPayloadMethod(site, serviceType)
-    // })).pipe(
-    //   switchMap(data => {
-    //       return of(data)
-    //   })
-    // )
 
-    // let sendOrder$ = this.paymentMethodsProcess.sendOrderOnExit(this.order)
-    // this.paymentMethodsProcess.updateSendOrderOnExit(this.order);
-    let sendOrder$ = of('true')
-    return sendOrder$.pipe(switchMap(data => {
-      return this.paymentMethodsProcess.newOrderWithPayloadMethod(site, serviceType)
-    })).pipe(
-      switchMap(data => {
-          return of(data)
-      })
-    )
+    return this.paymentMethodsProcess.newOrderWithPayloadMethod(site, serviceType)
+
   }
 
   initOrderBarSubscription() {

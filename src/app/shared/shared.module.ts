@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FilterComponent } from './widgets/filter/filter.component';
@@ -230,10 +231,13 @@ import { QRCodeModule } from 'angularx-qrcode'
 import { UnitTypeSelectorComponent } from './widgets/unit-type-selector/unit-type-selector.component';
 import { ItemassociationsComponent } from '../modules/admin/products/productedit/_product-edit-parts/itemassociations/itemassociations.component';
 import { SearchFieldsComponent } from './widgets/search-fields/search-fields.component';
-import { Lightbox, LightboxModule } from 'ng-gallery/lightbox';
+import { LightboxModule } from 'ng-gallery/lightbox';
 import { ImageGalleryComponent } from './widgets/image-gallery/image-gallery.component';
-import { Gallery, GalleryModule } from 'ng-gallery';
+import { GalleryModule } from 'ng-gallery';
 import { ImageLightHouseComponent } from './widgets/image-light-house/image-light-house.component';
+import { ClockInPanelComponent } from '../modules/admin/clients/clock-in-panel/clock-in-panel.component';
+import { UserPreferencesComponent } from '../modules/admin/clients/user-preferences/user-preferences.component';
+import { ClockViewComponent } from './widgets/clock-in-out/clock-view/clock-view.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -291,6 +295,9 @@ import { ImageLightHouseComponent } from './widgets/image-light-house/image-ligh
     ClientTypesLookupComponent,
     ClientSearchSelectorComponent,
     ClockInOutComponent,
+    ClockViewComponent,
+    ClockInPanelComponent,
+    UserPreferencesComponent,
     DepartmentSelectComponent,
     DeviceInfoComponent,
     DSIEMVElectronComponent,
@@ -477,6 +484,7 @@ import { ImageLightHouseComponent } from './widgets/image-light-house/image-ligh
     SearchFieldsComponent,
     ImageGalleryComponent,
     ImageLightHouseComponent,
+    ClockViewComponent,
 
   ],
 
@@ -552,7 +560,7 @@ import { ImageLightHouseComponent } from './widgets/image-light-house/image-ligh
     ChemicalValuesComponent,
     ChipsDisplayComponent,
     ClientTypesLookupComponent,
-    ClockInOutComponent,
+    ClockViewComponent,
     CompanyInfoHeaderComponent,
     EmailSettingsComponent,
     ElectronZoomControlComponent,
@@ -639,7 +647,6 @@ import { ImageLightHouseComponent } from './widgets/image-light-house/image-ligh
     PriceScheduleMenuListComponent,
 
     POSOrderScheduleCardComponent,
-
     //ProductFilterComponent
     ProductFilterComponent,
     CategorySelectListFilterComponent,
@@ -669,6 +676,7 @@ import { ImageLightHouseComponent } from './widgets/image-light-house/image-ligh
     RequestMessagesComponent,
     QuantiySelectorComponent,
     UnitTypeSelectorComponent,
+    UserPreferencesComponent,
 
     SearchFieldsComponent,
     SaveChangesButtonComponent,

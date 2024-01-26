@@ -1,5 +1,6 @@
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { TemplateLiteral } from '@angular/compiler';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, Subscription, switchMap,of } from 'rxjs';
 import { IPaymentSearchModel, IPOSOrder, IPOSPaymentsOptimzed, ISetting } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
@@ -17,6 +18,13 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
   styleUrls: ['./balance-sheet-view.component.scss']
 })
 export class BalanceSheetViewComponent implements OnInit {
+
+  @ViewChild('creditCardPayments') creditCardPayments: TemplateRef<any>;
+  @ViewChild('balanceSheetDetails') balanceSheetDetails: TemplateRef<any>;
+  @ViewChild('paymentReport') paymentReport:  TemplateRef<any>;
+  @ViewChild('itemTypeReport') itemTypeReport: TemplateRef<any>;
+  @ViewChild('transactionTypes') transactionTypes: TemplateRef<any>;
+
   @Input() disableAuditButton: boolean;
   @Input() printType = 'balanceSheetFinal';
   @Input() styles: any;
@@ -47,7 +55,7 @@ export class BalanceSheetViewComponent implements OnInit {
   balanceSheetDetailsChecked: boolean;
   balanceSheetViewTypeSalesChecked: boolean;
   balanceSheetTransactionTypesChecked: boolean;
-
+  balanceSheetCreditCardPaymentsChecked: boolean;
 
   initSubscriptions() {
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe(
@@ -76,6 +84,7 @@ export class BalanceSheetViewComponent implements OnInit {
     }
   }
 
+
   getBalanceCalculations(sheetID : number) {
     const site  = this.siteService.getAssignedSite();
     this.zRun$ = this.balanceSheetService.getZRUNBalanceSheet(site).pipe(switchMap(zRun => {
@@ -98,7 +107,7 @@ export class BalanceSheetViewComponent implements OnInit {
           }
         ))
 
-        this. paymentGroups$ = this.paymentService.getPaymentSummaryByGroups(site, sheetID, history).pipe(
+        this.paymentGroups$ = this.paymentService.getPaymentSummaryByGroups(site, sheetID, history).pipe(
           switchMap(data => {
             return of(data)
           }
@@ -140,15 +149,54 @@ export class BalanceSheetViewComponent implements OnInit {
     }))
   }
 
+  get paymentReportView() {
+    if (this.auths.blindBalanceSheet) {
+      return this.paymentReport
+    }
+    return null;
+  }
+
+  get itemTypeReportView() {
+    if (this.auths?.balanceSheetViewTypeSales) {
+      return this.itemTypeReport;
+    }
+    return null
+  }
+
+  get transactionTypesView() {
+    if (this.auths?.balanceSheetTransactionTypes) {
+      return this.transactionTypes;
+    }
+    return null
+  }
+
+  get balanceSheetDetailsView() {
+    if (this.auths.balanceSheetDetails) {
+      return this.balanceSheetDetails
+    }
+    return null;
+  }
+
+  get creditCardPaymentsView() {
+    if (this.auths.balanceSheetCreditCardPayments) {
+      return this.creditCardPayments
+    }
+    return null;
+  }
+
+
   //determines the number of components to render before sending to print.
   initMaxCount() {
+
     if (this.auths) {
+
       if (!this.auths.blindBalanceSheet ) {
         if (!this.blindBalanceSheetChecked) {
           this.maxCount = this.maxCount - 1
           this.blindBalanceSheetChecked = true;
         }
       }
+
       if (!this.auths.balanceSheetDetails) {
         if (!this.balanceSheetDetailsChecked) {
           this.maxCount = this.maxCount - 1
@@ -167,16 +215,57 @@ export class BalanceSheetViewComponent implements OnInit {
           this.balanceSheetTransactionTypesChecked = true
         }
       }
+
+      if (!this.auths.balanceSheetCreditCardPayments) {
+        if (!this.balanceSheetCreditCardPaymentsChecked) {
+          this.maxCount = this.maxCount - 1
+          this.balanceSheetCreditCardPaymentsChecked = true
+        }
+      }
+    }
+  }
+
+  renderCardSummary(event)   {
+    console.log('renderCardSummary', event)
+    console.log('renderCardSummary', this.maxCount)
+    if (!this.printReadList)  {  this.printReadList = []  }
+
+    this.printReadList.push(event)
+
+    if (this.printReadList.length == this.maxCount) {
+
+      this.renderComplete.emit('true')
+      const item = {read: true, balanceSheet: true}
+      if (this.autoPrint) {
+        console.log('Attempt auto print')
+        this.printingService.updatePrintReady(item)
+      }
+    }
+  }
+  renderCreditCardPayments(event)   {
+    console.log('renderCreditCardPayments', event)
+    console.log('renderCreditCardPayments', this.maxCount)
+    if (!this.printReadList)  {  this.printReadList = []  }
+
+    this.printReadList.push(event)
+
+    if (this.printReadList.length == this.maxCount) {
+
+      this.renderComplete.emit('true')
+      const item = {read: true, balanceSheet: true}
+      if (this.autoPrint) {
+        console.log('Attempt auto print')
+        this.printingService.updatePrintReady(item)
+      }
     }
   }
 
   renderCompleted(event) {
     console.log('renderCompleted', event)
+    console.log('max count', this.maxCount)
     if (!this.printReadList)  {  this.printReadList = []  }
 
     this.printReadList.push(event)
-
-    console.log('status', this.printReadList.length, this.maxCount)
 
     if (this.printReadList.length == this.maxCount) {
       console.log('max count reached emiting view render complete for print.')

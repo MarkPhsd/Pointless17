@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnInit, Optional, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -7,13 +7,11 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { AuthenticationService, } from 'src/app/_services';
 import { Router } from '@angular/router';
-import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { ClientTableService } from 'src/app/_services/people/client-table.service';
-import { ISite, IUserProfile } from 'src/app/_interfaces';
+import { IUserProfile } from 'src/app/_interfaces';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
-import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
-import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { UIHomePageSettings,  } from 'src/app/_services/system/settings/uisettings.service';
 import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 
@@ -33,11 +31,11 @@ export class FastUserSwitchComponent implements OnInit {
   request  : string;
   requestData: any;
   loginAction: any;
-  loginAction$: Observable<string>;
+  loginAction$: Observable<any>;
   spinnerLoading: boolean;
   dialogRefOption: any;
   @Output() outPutLogin = new EventEmitter();
-
+  @Input() disableUserStatus: boolean;
 
   uiHomePage: UIHomePageSettings;
   uiHome$: Observable<UIHomePageSettings>;
@@ -130,6 +128,11 @@ export class FastUserSwitchComponent implements OnInit {
     const userName = localStorage.getItem('pinToken')
     const login    = {username: userName, password: event }
     this.initForm();
+
+    if (this.disableUserStatus) {
+      this.outPutLogin.emit(login);
+      return;
+    }
 
     if (this.request && this.request === 'checkAuth') {
       this.performTempUserAction(event)
@@ -237,9 +240,34 @@ export class FastUserSwitchComponent implements OnInit {
     }
   }
 
+  checkBalanceSheet(user: IUserProfile) {
+    //the reason we aren't using the user is because
+    //we are using the basic auth to identify the user
+    // itwill check both the device and the user in this api call.
+    // if (user?.id) {
+      const site = this.siteService.getAssignedSite()
+      const device = localStorage.getItem('devicename')
+      return  this.balanceSheetService.getCurrentUserBalanceSheet(site, device ).pipe(switchMap(data => {
+        // console.log('checkBalanceSheet', data)
+        if (data) {
+          // console.log('data.shiftStarted', data.shiftStarted)
+          if (!data.shiftStarted  || data.shiftStarted == 0) {
+            // balance-sheet-edit
+            this.router.navigate(['/balance-sheet-edit']);
+          } else  {
+            this.router.navigate(['/app-main-menu']);
+          }
+          this.onCancel();
+        }
+        return of(data)
+      }))
+    // }
+    return of(null)
+  }
+
   submitLogin(userName: string, password: string, employeeIDAllowed?: number) {
 
-    this.loginAction$ = this.userSwitchingService.login(userName, password).pipe(
+    this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(
       switchMap(data =>
         {
           if (!data) {
@@ -254,7 +282,7 @@ export class FastUserSwitchComponent implements OnInit {
             return of('failed')
           }
           if (user.roles.toLowerCase() != 'admin' || user.roles.toLowerCase() != 'manager') {
-            if (employeeIDAllowed) {
+            if (employeeIDAllowed && employeeIDAllowed != 0) {
               if (user.id != employeeIDAllowed) {
                   this.siteService.notify(`${user.errorMessage}, You are not allowed to use this terminal until the shift is closed.`, "close", 6000 , 'red'  );
                 return of('failed')
@@ -262,6 +290,7 @@ export class FastUserSwitchComponent implements OnInit {
             }
           }
           if (user) {
+            // console.log('user exists')
             this.spinnerLoading = false;
             if (user.message && user.message === 'failed' ||
                 (user.errorMessage )) {
@@ -270,11 +299,16 @@ export class FastUserSwitchComponent implements OnInit {
               return of('failed')
             }
             if (this.platformService.isApp()) {
-              if (this.loginApp(user)) {
-              } else {
-                this.router.navigate(['/app-main-menu']);
-              }
-              this.onCancel();
+              // console.log('log in app function next')
+              this.loginApp(user)
+              // if (this.loginApp(user)) {
+                //then return getting the balance sheet. if the balance sheet is not started we'll take the user to the sheet
+              // console.log('check balance sheet')
+              return this.checkBalanceSheet(user)
+              // } else {
+              //   this.router.navigate(['/app-main-menu']);
+              // }
+              // this.onCancel();
               return of('success')
             }
             if (user.message && user.message.toLowerCase() === 'success') {
@@ -305,6 +339,10 @@ export class FastUserSwitchComponent implements OnInit {
       this.spinnerLoading = false
       return this.userSwitchingService.loginApp(user)
     }
+  }
+
+  openTimeClock() {
+    this.userSwitchingService.openTimeClock()
   }
 
   notifyEvent(message: string, action: string) {

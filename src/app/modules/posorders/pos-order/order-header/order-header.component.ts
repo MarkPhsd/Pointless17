@@ -32,6 +32,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   @Input() order: IPOSOrder
   @Input() isUserStaff = false
 
+
   @ViewChild('coachingSplit', {read: ElementRef}) coachingSplit: ElementRef;
   @ViewChild('coachingFire', {read: ElementRef}) coachingFire: ElementRef;
   @ViewChild('coachingLabel', {read: ElementRef}) coachingLabel: ElementRef;
@@ -39,6 +40,10 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   @ViewChild('qrCodeToggle') qrCodeToggle: TemplateRef<any>;
   qrCode$ : Observable<any>;
+
+  _order: Subscription;
+
+
 
   _posDevice: Subscription;
   _uiTransactionSettings: Subscription;
@@ -58,6 +63,12 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   site = this.siteService.getAssignedSite();
   locations$ = this.locationsService.getLocationsCached();
+
+  currentOrderSusbcriber() {
+    this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
+      this.order = data
+    })
+  }
 
   userSubscriber() {
     this._user = this.authenticationService.user$.subscribe(data => {
@@ -107,7 +118,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     })
     this.transactionUISettingsSubscriber();
     this.userSubscriber()
-
+    this.currentOrderSusbcriber()
   }
 
   ngOnInit() {
@@ -119,6 +130,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     if (this._uiTransactionSettings) { this._uiTransactionSettings.unsubscribe()}
     if (this._posDevice) { this._posDevice.unsubscribe()}
     if (this._user) { this._user.unsubscribe()}
+    if (this._order) { this._order.unsubscribe()}
   }
 
   ngOnChanges() {

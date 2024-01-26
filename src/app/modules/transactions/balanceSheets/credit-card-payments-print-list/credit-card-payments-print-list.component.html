@@ -22,7 +22,7 @@
   </div>
 
   <div *ngIf="!groupType && list && list.results.length >0">
-    <div class="grid-items">
+    <div class="grid-items-payments">
       <div>#</div>
       <div>Order </div>
       <div>Date</div>
@@ -30,7 +30,8 @@
       <div class="item-value">Paid</div>
       <div class="item-value">Grat</div>
     </div>
-    <div *ngFor="let item of list.results; let i = index"  class="grid-items">
+    <div *ngFor="let item of list.results; let i = index"
+          class="grid-items-payments">
       <div>{{i+1}}</div>
       <div *ngIf="item.orderID">{{item?.orderID.toString().substr(-5)}}</div>
       <div>{{item?.completionDate | date: 'shortDate' }} {{item?.completionDate | date: 'shortTime' }}</div>

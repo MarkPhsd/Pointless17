@@ -473,9 +473,10 @@ export class OrdersService {
   getOrder(site: ISite, id: string, history: boolean):  Observable<IPOSOrder>  {
 
     const user = this.userAuthorizationService.user;
-
-    // console.log('user', user)
-    if (!user) { return of(null) }
+    if (!user) {
+      console.log('user is null')
+      return of(null)
+    }
     if (history === undefined) {history = false};
 
     const deviceName = localStorage.getItem('devicename')
@@ -488,9 +489,7 @@ export class OrdersService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.get<IPOSOrder>(url).pipe(switchMap(data => {
-      return of(data)
-    }));
+    return this.http.get<IPOSOrder>(url)
 
   }
 

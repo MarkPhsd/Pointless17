@@ -52,6 +52,9 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
 
   uiHome: UIHomePageSettings;
   _uiHome: Subscription;
+
+  costTotal: number;
+
   getUITransactionsSettings() {
     this._uiHome = this.uiSettingsService.homePageSetting$.subscribe( data => {
       if (data) {
@@ -69,6 +72,7 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
       }
     })
   }
+
   constructor(
     private _snackBar    : MatSnackBar,
     private siteService  : SitesService,
@@ -129,6 +133,7 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     if (this._uiHome) { this._uiHome.unsubscribe()}
     if (this._userAuths) { this._userAuths.unsubscribe()}
   }
+
   ngOnInit() {
     this.locations$ = this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
       this.locations = data;
@@ -146,9 +151,12 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
       switchMap( data => {
         this.item = data;
         this.setFormInventoryData(this.item)
+        console.log(data.productID)
+        if (!data.productID) { return of(null)}
         return  this.menuService.getMenuItemByID(this.site, data.productID)
       }
     )).subscribe(data => {
+      // console.log('menu item', data)
       this.menuItem = data;
     })
 
@@ -157,18 +165,36 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
 
   }
 
+  updateCost(event) {
+    console.log('cost total',event, this.costTotal, this.item);
+    if (this.costTotal) {
+      if (this.item.packageCountRemaining && this.item.packageCountRemaining != 0){
+        const value = this.costTotal / this.item.packageCountRemaining
+        this.inputForm.controls['cost'].setValue(value)
+      }
+    }
+  }
+
   setFormInventoryData(data) {
     this.item      = data
     this.images    = data?.images;
     this.itemTags  = data.metaTags;
     this.inputForm = this.fbInventory.initForm(this.inputForm)
     this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
+
+    this.inputForm.valueChanges.subscribe(data => {
+
+      console.log(data, data.cost);
+
+      const cost = this.inputForm.controls['cost'].value;
+      this.costTotal = this.item.packageQuantity * cost
+
+    })
   }
 
   setLocation(selection) {
     if (this.locations){
       const item = this.locations.filter( data => { return data.id === selection?.value } )
-      console.log(item[0], item)
       if (item && item[0]) {
         this.inputForm.patchValue({location: item[0].name })
       }
@@ -176,15 +202,7 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   }
 
   setLocationByItem(item) {
-    console.log(item)
     this.inputForm.patchValue({locationID: item?.id, locationName: item[0].name })
-    // if (this.locations){
-    //   const item = this.locations.filter( data => { return data.id === selection?.value } )
-    //   console.log(item[0], item)
-    //   if (item && item[0]) {
-    //     this.inputForm.patchValue({location: item[0].name })
-    //   }
-    // }
   }
 
   getItem(event) {
@@ -287,7 +305,6 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   };
 
   getLabelSetting(labelSetting: ISetting)  {
-    // this.labelSetting = labelSetting;
     const id = this.menuItem.itemType.labelTypeID
     this.setLastlabelUsed(id)
   }
@@ -297,15 +314,6 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   }
 
   publishItem(item: IInventoryAssignment) {
-    // if (item) {
-    //   const site = this.siteService.getAssignedSite()
-    //   item.ebayPublished = true;
-    //   this.inputForm.patchValue({ebayPublished: true})
-    //   this.action$ = this.updateWithoutNotification().pipe(switchMap(data => {
-    //     this.siteService.notify('Item Published to Ebay', 'Close', 30000, 'green')
-    //     return of(data)
-    //   }))
-    // }
     if (this.item.id) {
       this.router.navigate(['ebay-publish-product', {id:this.item.id}])
       try {

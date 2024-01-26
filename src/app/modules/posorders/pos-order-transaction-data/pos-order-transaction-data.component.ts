@@ -25,7 +25,6 @@ export class PosOrderTransactionDataComponent{
 
   onResizedOrderPanel(event: ResizedEvent) {
     this.orderPanelHeight = `height:${event.newRect.height}px`
-    console.log(this.orderPanelHeight)
   }
 
   constructor(

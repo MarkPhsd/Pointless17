@@ -19,8 +19,11 @@
         <div class="totalslabel">{{sale?.productCount | number: '1.0-0' }}             </div>
 
         <div  *ngIf="!autoPrint" class="totalslabel">{{sale?.cost | currency }}   </div>
+
       </div>
+
     </div>
+
   </div>
 
 </div>
@@ -30,26 +33,33 @@
   <div  class="item-sales-grid-body"  *ngFor="let sale of (showAll ? sales : sales?.slice(0,10))" >
     <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
 
-    <div *ngIf="groupBy === 'transactionType'"> {{sale?.netSales | currency }}  </div>
+    <div *ngIf="groupBy === 'transactionType'" class="totals"> {{sale?.netSales | currency }}  </div>
 
-    <div  *ngIf="groupBy != 'transactionType'" class="totalslabel"> {{sale?.itemTotal | currency }}</div>
+    <div  *ngIf="groupBy != 'transactionType'" class="totals"> {{sale?.itemTotal | currency }}</div>
 
     <div class="totals">{{sale?.quantity }} </div>
 
     <div *ngIf="!autoPrint && groupBy != 'transactionType'" class="totals">{{sale?.cost | currency }}   </div>
 
+    <div *ngIf="!autoPrint && groupBy != 'transactionType'" class="totals">{{sale?.productCount | currency }}   </div>
+
+    <div class="row-span-all">
+      <mat-divider style="width:300px"></mat-divider>
+    </div>
   </div>
+
 </div>
 
 <div   *ngIf="!autoPrint" class="margin-divider">  <mat-divider></mat-divider>  </div>
 
 <ng-template #headers>
+
  <div class="item-sales-grid-body">
-    <div class="totalslabel">Item :    </div>
-    <div class="totals"> Pre Tax :</div>
-    <div class="totals"> # </div>
-    <div class="totals"> Left </div>
-    <div *ngIf="!autoPrint" class="totals">     Cost :</div>
+    <div class="product-name">Item :    </div>
+    <div class="totalslabel">Pre Tax :</div>
+    <div class="totalslabel"> # </div>
+    <div *ngIf="groupBy == 'items'" class="totalslabel"> Stock </div>
+    <div *ngIf="!autoPrint && (groupBy == 'items' || groupBy == 'departments' || groupBy == 'category') " class="totalslabel">Cost :</div>
   </div>
   <div  *ngIf="!autoPrint" class="margin-divider">  <mat-divider></mat-divider> </div>
 </ng-template>

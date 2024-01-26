@@ -470,8 +470,8 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     //
     // set up discount that can add more value to order if they convert to store credit.
     // make note that store credit is not equal to cash since they do use a conversion principal.
-
-    const order = this.orderMethodsService.order;
+    //switch order to current order
+    const order = this.orderMethodsService.currentOrder;
     if (!order) { return };
 
     const inventoryUpdate$ = this._updateItem();
@@ -566,7 +566,8 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   }
 
   _printLabel() {
-    const order = this.orderMethodsService.order;
+    //switch order to current order
+    const order = this.orderMethodsService.currentOrder;
     if (!order) { return of(null) };
     return this.printingService.printBuyLabel(this.item, this.menuItem,
                                                           order).pipe(switchMap(data => {

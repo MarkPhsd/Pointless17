@@ -68,7 +68,6 @@ export class DateValidators {
 export class OrderMethodsService implements OnDestroy {
 
 
-
   emailSubjects = [
     {name: 'Please Complete', subject: 'Please review this order for prep. I would like it completed. I agree to pay when it the order is completed.', id: 1},
     {name: 'Please Review for Prep', subject: 'Please review this order for prep. I would like it confirmed and then please contact me.', id: 2},
@@ -115,16 +114,15 @@ export class OrderMethodsService implements OnDestroy {
 
   ////////////
 
+  lastOrder : IPOSOrder;
+  subscriptionInitialized         : boolean;
+
   private _currentOrder       = new BehaviorSubject<IPOSOrder>(null);
   public currentOrder$        = this._currentOrder.asObservable();
   public currentOrder         = {} as IPOSOrder
 
-  lastOrder : IPOSOrder;
-
-  public order                    : IPOSOrder;
-  _order                          : Subscription;
-  subscriptionInitialized         : boolean;
-
+  public order                : IPOSOrder;
+  _order                      : Subscription;
   private _posOrders          = new BehaviorSubject<IPOSOrder[]>(null);
   public posOrders$           = this._posOrders.asObservable();
 
@@ -259,6 +257,7 @@ export class OrderMethodsService implements OnDestroy {
   updateOrder(order: IPOSOrder) {
     try {
       if (!order) {
+        this._currentOrder.next(null);
         this.setStateOrder(null)
         return
       }
@@ -292,7 +291,7 @@ export class OrderMethodsService implements OnDestroy {
     ))
   }
 
-  updateOrderSubscription(order: IPOSOrder) {
+  setOrderCostInfo(order) {
     if (order && order.posOrderItems) {
       order.posOrderItems.forEach(data => {
         data.traceProductCalc = +data.quantity -  +data.traceProductCount   ;
@@ -300,10 +299,6 @@ export class OrderMethodsService implements OnDestroy {
       order.wholeSaleTraceCalcSum = 0
       let currentValue : number = 0
       let newValue: number = 0
-
-      // console.log('new val 1',newValue)
-      // console.log('currentValue 2',currentValue)
-
       order.posOrderItems.forEach(data => {
         if (data.wholeSale) {
           if (+data.quantity) {
@@ -314,16 +309,18 @@ export class OrderMethodsService implements OnDestroy {
           }
         }
       })
-
       order.wholeSaleTraceCalcSum = newValue
       order.wholeSaleCostTotal    = currentValue;
-
     }
+  }
+
+  updateOrderSubscription(order: IPOSOrder) {
 
     this.storeCreditMethodService.updateSearchModel(null);
 
     this.updateOrder(order);
-    if (order == null) {
+    this.setOrderCostInfo(order)
+    if (!order || order == null) {
       order = this.getStateOrder();
       if (order) {
         this.toolbarServiceUI.updateOrderBar(false)
@@ -340,8 +337,12 @@ export class OrderMethodsService implements OnDestroy {
 
     const site = this.siteService.getAssignedSite();
     const devicename = localStorage.getItem('devicename');
-
     if (order?.deviceName === devicename) { return };
+    this.claimOrder(site, order)
+
+  }
+
+  claimOrder(site, order) {
     this.orderClaimed = false;
     if (order && order.id ) {
       const order$ = this.orderService.claimOrder(site, order.id.toString(), order.history)
@@ -357,6 +358,7 @@ export class OrderMethodsService implements OnDestroy {
 
   setStateOrder(order) {
     if (!order) {
+      console.log('remove order subscription')
       localStorage.removeItem('orderSubscription')
       return;
     }
@@ -443,6 +445,25 @@ export class OrderMethodsService implements OnDestroy {
 
     const id = employeeID;
     return id;
+  }
+
+  refreshAllOrders() {
+    const searchModel = {} as IPOSOrderSearchModel
+    searchModel.closedOpenAllOrders = 1
+    searchModel.completionDate_From = null;
+    searchModel.completionDate_To = null;
+    searchModel.orderID = null;
+    searchModel.employeeID = 0;
+    searchModel.pageSize = 25;
+    searchModel.pageNumber = 1;
+    searchModel.searchOrderHistory = false
+    searchModel.prepStatus  = null;
+    searchModel.onlineOrders = null;
+    searchModel.serviceTypeID = null;
+    searchModel.suspendedOrder  = 0;
+    searchModel.routeDetailID  = null;
+    searchModel.greaterThanZero = 0;
+    this.updateOrderSearchModel(searchModel)
   }
 
   updateSplitGroup(data: IPOSOrder) {
@@ -1235,7 +1256,7 @@ export class OrderMethodsService implements OnDestroy {
                             productPrice?: ProductPrice,
                             cost?: number) : Observable<ItemPostResults> {
 
-    console.log('processItemPOSObservable order.id', order.id)
+    // console.log('processItemPOSObservable order.id', order)
     const valid = this.validateUser();
     if (!valid) {
       this.notifyEvent(`Invalid user.`, 'Alert ')
@@ -1243,10 +1264,7 @@ export class OrderMethodsService implements OnDestroy {
     };
 
     this.initItemProcess();
-    if (!this.validateItem(item, barcode)) {
-      // console.log('not valid item')
-      return of(null)
-    }
+    if (!this.validateItem(item, barcode)) {  return of(null) }
     if (this.assignedPOSItem && !passAlongItem) { passAlongItem  = this.assignedPOSItem[0]; };
     order = this.validateOrder();
 
@@ -1953,18 +1971,16 @@ export class OrderMethodsService implements OnDestroy {
      return of(null)
   }
 
-  exitOrder() {
-    this.clearOrder();
-  }
-
   clearOrder() {
-
-    // localStorage.setItem('orderSubscription', null);
+    this.currentOrder = null;
+    this.order = null;
     localStorage.removeItem('orderSubscription')
-    // console.log('clear order')
     this.updateOrderSubscription(null);
     this.splitEntryValue = 0;
+    this.navAfterClearOrder()
+  }
 
+  navAfterClearOrder() {
     if (this.userAuthorization?.user?.roles == 'user') {
       this.router.navigate(['/app-main-menu']);
       return;
@@ -1980,9 +1996,6 @@ export class OrderMethodsService implements OnDestroy {
     if (url === '/pos-orders') {
       // this.router.navigate(['app-main-menu'])
     }
-
-    //then close the order bar.
-
   }
 
   closeOrder(site: ISite, order: IPOSOrder) {

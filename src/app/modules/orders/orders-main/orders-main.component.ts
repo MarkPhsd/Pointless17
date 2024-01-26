@@ -102,6 +102,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     //   return;
     // }
     // clearInterval(this.interval)
+
   }
 
 
@@ -485,21 +486,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   showAllOpenOrders() {
-    this.searchModel.closedOpenAllOrders = 1
-    this.searchModel.completionDate_From = null;
-    this.searchModel.completionDate_To = null;
-    this.searchModel.orderID = null;
-    this.searchModel.employeeID = 0;
-    this.searchModel.pageSize = 25;
-    this.searchModel.pageNumber = 1;
-    this.searchModel.searchOrderHistory = false
-    this.searchModel.prepStatus  = null;
-    this.searchModel.onlineOrders = null;
-    this.searchModel.serviceTypeID = null;
-    this.searchModel.suspendedOrder  = 0;
-    this.searchModel.routeDetailID  = null;
-    this.searchModel.greaterThanZero = 0;
-    this.orderMethodsService.updateOrderSearchModel(this.searchModel)
+
+
+    this.orderMethodsService.refreshAllOrders()
   }
 
   refreshPrep() {

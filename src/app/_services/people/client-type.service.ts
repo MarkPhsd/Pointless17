@@ -7,6 +7,8 @@ import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-c
 
 export interface IUserAuth_Properties {
 
+  viewPaymentItemSalesReports: boolean;
+  viewPaymentReports: boolean;
 
   // 'pos section
   voidOrder            : boolean;
@@ -24,6 +26,7 @@ export interface IUserAuth_Properties {
   houseAccountPayment  : boolean;
   changeItemPrice      : boolean;
   changeInventoryValue : boolean;
+
   blindBalanceSheet    : boolean;
   balanceSheetDetails  : boolean;
   blindClose           : boolean;
@@ -31,6 +34,7 @@ export interface IUserAuth_Properties {
   balanceSheetTransactionTypes: boolean;
   balanceSheetDisableBank: boolean;
   balanceSheetDisableCashDrops: boolean;
+  balanceSheetCreditCardPayments: boolean;
 
   // 'admin section
   closeDay             : boolean;

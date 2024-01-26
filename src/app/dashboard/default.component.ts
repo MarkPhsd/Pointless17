@@ -6,7 +6,7 @@ import { Component, HostBinding, OnInit, AfterViewInit,
          TemplateRef} from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { catchError, filter, Observable, of, Subscription,switchMap } from 'rxjs';
+import { catchError, concatMap, delay, filter, Observable, of, repeatWhen, Subscription,switchMap, throwError } from 'rxjs';
 import { fader } from 'src/app/_animations/route-animations';
 import { ToolBarUIService } from '../_services/system/tool-bar-ui.service';
 import { Capacitor } from '@capacitor/core';
@@ -25,6 +25,7 @@ import { UserIdleService } from 'angular-user-idle';
 import { PaymentsMethodsProcessService } from '../_services/transactions/payments-methods-process.service';
 import { OrderMethodsService } from '../_services/transactions/order-methods.service';
 import { MatDialog } from '@angular/material/dialog';
+import { PrintQueService } from '../_services/transactions/print-que.service';
 
 @Component({
   selector: 'app-default',
@@ -43,6 +44,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('appSiteFooter')  appSiteFooter: TemplateRef<any>;
   @ViewChild("footer") footer: ElementRef;
+
+  printOrders$: Observable<IPOSOrder[]>;
   departmentID     =0
   get platForm() {  return Capacitor.getPlatform(); }
   toggleControl     = new UntypedFormControl(false);
@@ -161,9 +164,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this._sendOrderOnExit = this.paymentMethodsProcessService.sendOrderOnExit$.pipe(switchMap(
 
       send => {
-        // console.log('send', send)
+        if (!send) { return of('false')}
+        console.log('subscribSendOrder', send)
         if (!send?.order || send?.order == null) {
-          // console.log('send on order exit')
+          console.log('send on order exit dont do anything')
           return of('false')  ;
         }
         return this.paymentMethodsService.sendOrderOnExit(send?.order)
@@ -175,6 +179,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this._sendAndLogOut  = this.paymentMethodsService.sendOrderAndLogOut$.pipe(switchMap(
         send => {
+          console.log('send and log out')
           if (!send || send == null) {
             // console.log('send and log out no data')
             return of('false')  ;
@@ -226,8 +231,18 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   initDeviceSubscriber() {
     if (this.platFormService.isApp()) {
-      const device = localStorage.getItem('devicename')
+      const device = localStorage.getItem('devicename');
+      const site = this.siteService.getAssignedSite()
+
+      this.posDevice$ = this.settingService.getPOSDeviceBYName(site, device).pipe(switchMap(data => {
+        if (!data || data.text) { return of(null)}
+        const device = JSON.parse(data?.text) as ITerminalSettings;
+        this.initPrintServer(device)
+        return of(device)
+      }))
+
       if (!device) { return }
+
       this.uiSettingsService.homePageSetting$.pipe(switchMap(data => {
         this.uiSettings = data;
         return this.posDevice$
@@ -242,6 +257,28 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         return of(data)
       }))
+    }
+  }
+
+  initPrintServer(device:ITerminalSettings) {
+    if (!this.platFormService.isAppElectron) {return }
+    if (device.printServer || device.printServer != 0) {
+      const site = this.siteService.getAssignedSite();
+      const time = 1000 * 60 * device.printServer
+      const orders$  = this.printQueService.getQue().pipe(concatMap(data => {
+          return of(data)
+        }
+      ))
+
+      this.printOrders$  = orders$.pipe(
+        repeatWhen(notifications =>
+          notifications.pipe(
+            delay(time)),
+        ),
+        catchError((err: any) => {
+          return throwError(err);
+        })
+      )
     }
   }
 
@@ -488,6 +525,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private paymentMethodsService   : PaymentsMethodsProcessService,
                private paymentMethodsProcessService: PaymentsMethodsProcessService,
                private dialog                  : MatDialog,
+               private printQueService         : PrintQueService,
     ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     if (!this.platFormService.isApp()) {

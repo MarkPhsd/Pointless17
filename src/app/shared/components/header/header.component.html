@@ -2,8 +2,10 @@
 <span *ngIf="(uiHomePageSetting$ | async) as item"></span>
 <span *ngIf="( userSave$  | async) as pref"></span>
 <span *ngIf="(action$ | async) as action"></span>
+
 <mat-toolbar [class]="mattoolbar"
-             [color]="matToolbarColor">
+             [color]="matToolbarColor"
+             [style]="headerBackColor">
   <mat-toolbar-row>
 
       <ng-container [ngTemplateOutlet]="backButtonView"></ng-container>
@@ -365,6 +367,7 @@
         </div>
 
         <ng-container [ngTemplateOutlet]="posDevice"></ng-container>
+        <ng-container [ngTemplateOutlet]="preferencesView"></ng-container>
         <ng-container [ngTemplateOutlet]="coachMarks"></ng-container>
       </div>
     </span>
@@ -389,6 +392,17 @@
       <button   class='ps-button-150'
                 mat-raised-button (click)="deviceInfo()">
         Device {{device?.name}}  <mat-icon>device_hub</mat-icon>
+      </button>
+    </div>
+  </span>
+</ng-template>
+<ng-template #preferencesView>
+  <span  *ngIf="(posDevice$ | async) as device; else loadingDevice">
+    <mat-divider></mat-divider>
+    <div  class="margin-5">
+      <button   class='ps-button-150'
+                mat-raised-button (click)="openPreferences()">
+        Preferences <mat-icon>settings_accessibility</mat-icon>
       </button>
     </div>
   </span>

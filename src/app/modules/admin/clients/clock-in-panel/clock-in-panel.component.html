@@ -1,0 +1,50 @@
+<mat-card>
+  <mat-card-title>
+
+    <mat-icon>hourglass_top</mat-icon>Time Clock
+
+  </mat-card-title>
+
+  <mat-card-subtitle>
+    <div>
+      {{errorMessage}}
+    </div>
+    <div>
+      <h4>{{message}}</h4>
+    </div>
+  </mat-card-subtitle>
+
+
+  <mat-card-content>
+
+    <div class="flex-grid-row-space-around">
+      <div style="width:450px" *ngIf="!user">
+        <app-fast-user-switch
+          [disableUserStatus]="true"
+          (outPutLogin)="pinLogin($event)" >
+          Enter code for time clock.
+        </app-fast-user-switch>
+      </div>
+      <div style="width:450px"  *ngIf="user">
+        <button class="payment-buttons" mat-raised-button color="warn" (click)="user = null">Clear</button>
+      </div>
+      <div>
+        <ng-container [ngTemplateOutlet]="clockViewEnabled"></ng-container>
+      </div>
+    </div>
+
+</mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="close()"><mat-icon>close</mat-icon>Close</button>
+  </mat-card-actions>
+
+</mat-card>
+<div *ngIf="loginAction$ | async"></div>
+
+<ng-template #clockView>
+  <clock-in-out
+    [displayPrintView]="true"
+    [user]="user"
+  ></clock-in-out>
+</ng-template>

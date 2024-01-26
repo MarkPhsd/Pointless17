@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PosEditSettingsComponent } from 'src/app/modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
 import { ElectronService } from 'ngx-electron';
 import { PlatformService } from '../platform.service';
+import { UserPreferencesComponent } from 'src/app/modules/admin/clients/user-preferences/user-preferences.component';
 
 export interface ContactFieldOptions {
   id: number;
@@ -20,6 +21,7 @@ export interface ContactFieldOptions {
 }
 
 export interface TransactionUISettings {
+
   id                     : number;
   displayNotes           : boolean;
   displayView            : boolean;
@@ -56,6 +58,7 @@ export interface TransactionUISettings {
   dsiEMVAndroidEnabled   : boolean;
   dsiEMVNeteEpayEnabled  : boolean;
   dsiEMVIP               : boolean;
+  dCapEnabled            : boolean;
   dsiTipPrompt: boolean;
   payPalEnabled          : boolean;
   payPalClientID        : string;
@@ -105,6 +108,7 @@ export interface TransactionUISettings {
   resaleCostRatio: number;
   rewardPointValue: number;
   enableOnScreenKeyboard: boolean;
+  employeeClockNotifier: number;
 }
 
 export interface StripeAPISettings {
@@ -514,6 +518,20 @@ export class UISettingsService {
     return dialogRef;
   }
 
+  openUserPreferences(): any {
+    let dialogRef: any;
+    // console.log('open device')
+    dialogRef = this.dialog.open(UserPreferencesComponent,
+      { width:        '800px',
+        minWidth:     '800px',
+        height:       '650px',
+        minHeight:    '650px',
+      },
+    )
+    return dialogRef;
+  }
+
+
   getDSSIEmvSettings() {
     if (!this.userAuthorizationService.user) { return }
     if (!this.electronService.isElectronApp) { return }
@@ -821,6 +839,7 @@ export class UISettingsService {
       dsiEMVNeteEpayEnabled  : [''],
       dsiEMVIP               : [''],
       dsiTipPrompt           : [''],
+      dCapEnabled            : [],
       payPalEnabled          : [ ],
       payPalClientID         : [''],
       payPalCurrency         : [ ],
@@ -868,6 +887,7 @@ export class UISettingsService {
       resaleCostRatio: [],
       rewardPointValue: [],
       enableOnScreenKeyboard:[],
+      employeeClockNotifier: [],
      })
   }
 

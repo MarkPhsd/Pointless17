@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserPreferences } from 'src/app/_interfaces';
-import { ContactsService, ThemesService } from 'src/app/_services';
+import { AuthenticationService, ContactsService, ThemesService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
@@ -21,32 +21,78 @@ export class ToggleThemeComponent{
 
   constructor(
     public  userAuthorizationService: UserAuthorizationService,
-    private userSwitchingService : UserSwitchingService,
+    public  userSwitchingService : UserSwitchingService,
     private toolbarUIService    : ToolBarUIService,
     private clientTableService: ClientTableService,
     private siteService: SitesService,
+    private authenticationService: AuthenticationService,
     private _renderer: Renderer2) {
     this.renderTheme();
   }
 
   switchTheme() {
-    if (this.toggleTheme === 'dark-theme' ) {
-      localStorage.setItem('angularTheme', 'light-theme')
-    } else {
-      localStorage.setItem('angularTheme', 'dark-theme')
+
+
+    // console.log(this.userAuthorizationService.user)
+    // console.log(this.userAuthorizationService.user.userPreferences, this.userAuthorizationService.user.userPreferences.darkMode)
+
+    if (this.userAuthorizationService.user ){
+      const darkMode =  this.userAuthorizationService?.user?.userPreferences?.darkMode;
+      if ( darkMode ) {
+        let pref =  JSON.parse(JSON.stringify(this.userAuthorizationService.user.userPreferences))
+        pref.darkMode = false
+        console.log('setfalse', this.userAuthorizationService.user.userPreferences.darkMode )
+        localStorage.setItem('angularTheme', 'light-theme')
+        this.action$ =  this.savePreferences(pref, this.userAuthorizationService.user.id)
+        this.renderTheme();
+        return;
+      }
+      if (!darkMode) {
+        let pref =  JSON.parse(JSON.stringify(this.userAuthorizationService.user.userPreferences))
+        pref.darkMode = true
+        console.log('settrue', this.userAuthorizationService.user.userPreferences.darkMode )
+        localStorage.setItem('angularTheme', 'dark-theme')
+        this.action$ =  this.savePreferences(pref, this.userAuthorizationService.user.id)
+        this.renderTheme();
+        return;
+      }
     }
-    this.renderTheme();
+
+    if (!this.userAuthorizationService.user) {
+      if (this.toggleTheme === 'dark-theme' ) {
+        localStorage.setItem('angularTheme', 'light-theme')
+      } else {
+        localStorage.setItem('angularTheme', 'dark-theme')
+      }
+      this.renderTheme();
+    }
+
   }
 
   renderTheme() {
-    this.toggleTheme = localStorage.getItem('angularTheme')
-    if (this.toggleTheme === 'dark-theme' ) {
-      this._renderer.addClass(document.body, 'dark-theme');
-      this._renderer.removeClass(document.body, 'light-theme');
-    } else {
-      this._renderer.addClass(document.body, 'light-theme');
-      this._renderer.removeClass(document.body, 'dark-theme');
+
+    if (this.userAuthorizationService.user ){
+      if (this.userAuthorizationService?.user?.userPreferences?.darkMode) {
+          this._renderer.addClass(document.body, 'dark-theme');
+          this._renderer.removeClass(document.body, 'light-theme');
+      } else {
+          this._renderer.addClass(document.body, 'light-theme');
+          this._renderer.removeClass(document.body, 'dark-theme');
+      }
+      return;
     }
+
+    if (!this.userAuthorizationService.user) {
+      this.toggleTheme = localStorage.getItem('angularTheme')
+      if (this.toggleTheme === 'dark-theme' ) {
+        this._renderer.addClass(document.body, 'dark-theme');
+        this._renderer.removeClass(document.body, 'light-theme');
+      } else {
+        this._renderer.addClass(document.body, 'light-theme');
+        this._renderer.removeClass(document.body, 'dark-theme');
+      }
+    }
+
   }
 
   get orderBarPref() {
@@ -84,6 +130,10 @@ export class ToggleThemeComponent{
     // this.client
     const item = JSON.stringify(userPreferences)
     const site = this.siteService.getAssignedSite()
+    let user = JSON.parse(JSON.stringify(this.userAuthorizationService.user));
+    user.userPreferences = userPreferences
+    localStorage.setItem('user', JSON.stringify(user))
+    this.authenticationService._user.next(user)
     return this.clientTableService.savePreferences(site, item, +id);
   }
 
