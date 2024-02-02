@@ -107,12 +107,10 @@
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 75px 65px 65px 55px 45px;
-  // margin-left: 15px;
+  grid-template-columns: 75px 75px 65px 55px 45px;
   font-size: 1em;
   @include for-phone-only {
     grid-template-columns:  75px 65px 65px 55px 45px;
-
   }
 
   @media print {

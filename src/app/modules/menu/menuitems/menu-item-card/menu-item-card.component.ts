@@ -255,6 +255,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     try {
       this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
+        console.log('menu item card order update', data?.id)
         this.order = data
       })
     } catch (error) {
@@ -315,12 +316,12 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
     if (this.displayType == 'header-category') {
       if (!menuItem || !menuItem?.id) { return }
-      this.outPutUpdateCategory.emit(menuItem.id);
+      this.outPutUpdateCategory.emit(menuItem?.id);
       return;
     }
 
     if (this.promptModifier) {
-      this.addItem.emit(this.menuItem.id);
+      this.addItem.emit(this.menuItem?.id);
       return;
     }
 
@@ -330,13 +331,14 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     }
 
     if (this.isCategory) {
-      this.listItems(this.menuItem.id, this.menuItem.itemType.id);
+      this.listItems(this.menuItem?.id, this.menuItem?.itemType?.id);
       add = false;
       return;
     }
 
     if (plusOne) { add = true; }
-    const action$ = this.orderMethodsService.menuItemActionObs(this.order,this.menuItem, add,
+
+    const action$ = this.orderMethodsService.menuItemActionObs(this.order, this.menuItem, add,
                                               this.orderMethodsService.assignPOSItems);
     this.action$ = action$.pipe(switchMap(data => {
       return of(data)

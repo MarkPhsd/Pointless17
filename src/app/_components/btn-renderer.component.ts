@@ -8,9 +8,11 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 @Component({
   selector: 'app-button-renderer',
   template:     `<div [style]="showHide"  >
-                  <button   [style]="buttonStyle"
+                  <button   mat-button
+                            [style]="buttonStyle"
                             class="mat-raised-button"
                             type="button"
+                            [color]="color"
                             (click)="onClick($event)">
                     <mat-icon *ngIf="icon"> {{icon}} </mat-icon>
                     {{label}}
@@ -18,6 +20,8 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
                 </div>
                 `
 })
+
+//
 // i class="material-icons"
 export class ButtonRendererComponent implements ICellRendererAngularComp {
 
@@ -29,7 +33,15 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
   @Input() icon = 'edit';
   showHide = ''
   buttonStyle: string;
+  color="primary"
+   warn    = 'back-color:red;';
+   accent  = 'back-color:blue;';
+   primary = 'back-color:dark-blue;';
 
+  colorTheme   = 'primary'
+  themeWarn    = 'warn'
+  themeAccent  = 'accent'
+  themePrimary = 'primary'
   agInit(params: any): void {
 
     if (!params.value) {
@@ -49,29 +61,41 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
 
       if (this.label && (this.label === 'delete' || this.label === 'Delete')) {
         this.icon = 'delete'
+        this.color = this.themeWarn
+        this.buttonStyle = `${this.buttonStyle}`
         return
       }
 
       if (this.label && (this.label === 'warehouse' || this.label === 'Warehouse')) {
         this.icon = 'warehouse'
+        this.color = this.themeAccent
+        this.buttonStyle = `${this.buttonStyle}`
         return
       }
 
       if (this.label === 'null') {
         this.icon = ''
+        this.color = this.themeAccent
+        this.buttonStyle = `${this.buttonStyle}`
         return
       }
       if (this.label ==='Intake' || this.label ==='intake') {
         this.icon = 'inventory'
+        this.color = this.themeAccent
+        this.buttonStyle = `${this.buttonStyle}`
         return
       }
       if ( this.getLabelFunction == 'open' || this.label?.toLowerCase() === 'open') {
         this.icon = 'expand'
+        this.color = this.themeAccent
+        this.buttonStyle = `${this.buttonStyle}`
         return
       }
 
       if (this.label?.toLowerCase() ===  'inv' || this.label === 'inv') {
         this.icon = 'inventory'
+        this.color = this.themeAccent
+        this.buttonStyle = `${this.buttonStyle}`
         return
       }
 
@@ -81,22 +105,30 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         this.showHide = "width:55px;"
         this.label = ''
         this.buttonStyle = 'width:55px;'
+        this.color = this.themeAccent
+        this.buttonStyle = `${this.buttonStyle}`
+        this.color = 'warn'
         return
       }
 
       if (this.label?.substring(0,4).toLowerCase() ===  'view') {
         this.icon = 'open_in_new'
+        this.color = this.themeAccent
+        this.buttonStyle = `${this.buttonStyle}`
         return
       }
 
       if (this.label?.toLowerCase() ===  'edit' || this.label === 'Edit') {
         this.icon = 'edit'
+        this.color = this.themePrimary
+        this.buttonStyle = `${this.buttonStyle}`
         return
       }
 
-
       if (this.label?.toLowerCase() ===   'add') {
         this.icon = 'add'
+        this.color = this.themePrimary
+        this.buttonStyle = `${this.buttonStyle}`
         return
       }
 
@@ -105,11 +137,15 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         this.showHide = "width:55px;"
         this.label = ''
         this.buttonStyle = 'width:55px;'
+        this.color = this.themePrimary
+        this.buttonStyle = `${this.buttonStyle}`
         return
       }
 
       if (this.label?.toLowerCase() ===   'view') {
         this.icon = 'view'
+        this.color = this.themePrimary
+        this.buttonStyle = `${this.buttonStyle}`
         return
       }
       if (this.label?.toLowerCase() ===   'check Iin') {
@@ -118,6 +154,8 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
       }
       if (this.label === 'METRC') {
         this.icon = 'qr_code'
+        this.color = this.themePrimary
+        this.buttonStyle = `${this.buttonStyle}`
         return
       }
 

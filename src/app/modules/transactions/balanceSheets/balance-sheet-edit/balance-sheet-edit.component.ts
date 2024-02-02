@@ -124,7 +124,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe( data => {
       this.sheet = data;
-      // console.log('data', this.sheet)
       if (data) {
         this.getSheetType(data)
       }
@@ -210,12 +209,12 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     if (this._searchModel) { this._searchModel.unsubscribe()}
     if (this._user)        { this._user.unsubscribe()}
     if (this.posDevice$)  { this.posDevice$.unsubscribe()}
-    // if (this._sheet)       { this._sheet.unsubscribe()}
+
   }
 
+  //we have to initialize the balance sheet.
+  //we should just be sending maybe the device, and the user.
   newBalanceSheet() {
-    //we have to initialize the balance sheet.
-    //we should just be sending maybe the device, and the user.
     this.balanceSheet$ = this.sheetMethodsService.getCurrentBalanceSheet().pipe(
       switchMap(data => {
         this.getSheetType(data)
@@ -236,7 +235,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   _updateItem() {
     let sheet = this.inputForm.value as IBalanceSheet;
-    sheet.overUnderTotal = this.getCurrentBalance()
+    sheet.overUnderTotal = this.getCurrentBalance();
     return this.sheetMethodsService.updateSheet(sheet, this.startShiftInt).pipe(switchMap(data => {
       this.sheet = data;
       return of(data)
@@ -317,7 +316,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   updateItem(event) {
     this.balanceSheet$ = this._updateItem().pipe(switchMap(data => {
       // this.router.navigate(['app-main-menu'])
-
       return of(data)
     }))
   }
@@ -335,15 +333,21 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   closeSheet(navigateUrl: string) {
+    this.balanceSheet$ = this._updateItem()
     const print$ = this._print(true)
-    this.action$ = print$.pipe(
-      switchMap( data => {
-        return this.sendGridService.sendBalanceSheet(this.sheet.id)
+    let sheet = {} as IBalanceSheet
+    this.action$ = this.balanceSheet$.pipe(switchMap(data => {
+      sheet = data;
+      return print$
     })).pipe(
       switchMap( data => {
-        return  this.sheetMethodsService.closeSheet(this.sheet, navigateUrl)
+        return this.sendGridService.sendBalanceSheet(sheet.id)
     })).pipe(
       switchMap( data => {
+        return  this.sheetMethodsService.closeSheet(sheet, navigateUrl)
+    })).pipe(
+      switchMap( data => {
+        // this.sheetMethodsService.updateBalanceSheet(sheet)
         return of (data)
     }))
   }
@@ -352,26 +356,26 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     let allowUpdate = false;
     allowUpdate = this.isAuthorized
     if (allowUpdate) {
-      this.setStartEnabled()
-      this.setCloseEnabled()
+      // this.setStartEnabled()
+      // this.setCloseEnabled()
       return
     }
     if (!allowUpdate) { allowUpdate = this.isStaff }
     if (this.sheet) {
       if (this.isStaff ) {
         if (this.sheet.shiftStarted != 1 ) {
-          this.setStartEnabled()
-          this.setCloseDisabled()
+          // this.setStartEnabled()
+          // this.setCloseDisabled()
           return
         }
         if (this.sheet.shiftStarted == 1 && !this.sheet.endTime ) {
-          this.setStartDisabled()
-          this.setCloseEnabled()
+          // this.setStartDisabled()
+          // this.setCloseEnabled()
           return
         }
         if (this.sheet.endTime) {
-          this.setStartDisabled()
-          this.setCloseDisabled()
+          // this.setStartDisabled()
+          // this.setCloseDisabled()
           return
         }
       }

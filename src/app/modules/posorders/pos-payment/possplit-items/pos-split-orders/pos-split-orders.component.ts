@@ -24,25 +24,25 @@ export class PosSplitOrdersComponent implements OnInit,OnChanges {
     this.getRefOrders()
   }
 
-  ngOnChanges() { 
+  ngOnChanges() {
     this.getRefOrders()
   }
-  getRefOrders() { 
-    if (this.order) { 
+  getRefOrders() {
+    if (this.order) {
       const site = this.sitesService.getAssignedSite()
-      if (this.order.productOrderRef) { 
+      if (this.order.productOrderRef) {
         this.posRefOrders$  = this.orderService.getRelatedSplitOrders(site, this.order.productOrderRef)
-      } else { 
+      } else {
         this.posRefOrders$ = null;
       }
     }
   }
 
-   setActiveOrder(order: IPOSOrder) { 
+   setActiveOrder(order: IPOSOrder) {
     const site = this.sitesService.getAssignedSite()
     const id = order?.id.toString()
-    this.action$ = this.orderService.getOrder(site, id, order.history).pipe(switchMap(data => { 
-      this.orderMethodsService.setActiveOrder(site, data)
+    this.action$ = this.orderService.getOrder(site, id, order.history).pipe(switchMap(data => {
+      this.orderMethodsService.setActiveOrder(data)
       return of(data)
     }));
   }

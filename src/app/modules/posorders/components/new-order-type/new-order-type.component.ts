@@ -90,7 +90,7 @@ export class NewOrderTypeComponent  {
 
   setActiveOrder(order) {
     const site  = this.siteService.getAssignedSite();
-    this.orderMethodsService.setActiveOrder(site,order)
+    this.orderMethodsService.setActiveOrder(order)
   }
 
   orderByType(event) {

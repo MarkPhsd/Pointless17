@@ -168,6 +168,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   initUserSubscriber() {
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user  = data
+      // console.log('update?', data)
       this.setHeaderBackColor(this.user?.userPreferences?.headerColor)
       this.getUserInfo()
     })
@@ -202,8 +203,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   setHeaderBackColor(color) {
-    this.headerBackColor = ''
-    if (color) {  this.headerBackColor = `back-color:${color};` }
+    if (color) {  this.headerBackColor = `background-color:${color};` }
+    if (color) {
+      this.matToolbarColor = ''
+    }
   }
 
   initSubscriptions() {
@@ -682,12 +685,15 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   logout() {
-    if (this.uiTransactionSetting && this.uiTransactionSetting.prepOrderOnExit) {
+    if (this.uiTransactionSetting?.prepOrderOnExit) {
       //switch order to current order
       const order = this.orderMethodsService.currentOrder
-      if (!order) {return }
+      if (!order) {
+        this.postLogout()
+        return
+      }
       this.action$ = this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
-        console.log('logout send data sendOrderOnExit', data)
+        // console.log('logout send data sendOrderOnExit', data)
         if (data) {
 
         }
@@ -701,7 +707,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   postLogout() {
     // console.log('post logout')
-    console.trace("pos logout")
+    // console.trace("pos logout")
     this.userSwitchingService.clearLoggedInUser();
     this.smallDeviceLimiter();
   }
@@ -731,7 +737,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   setLastOrder() {
     if (!this.orderMethodsService.lastOrder) { return }
-    this.orderMethodsService.setActiveOrder(null, this.orderMethodsService.lastOrder)
+    this.orderMethodsService.setActiveOrder( this.orderMethodsService.lastOrder)
     this.orderMethodsService.updateOrder(this.orderMethodsService.lastOrder)
   }
 

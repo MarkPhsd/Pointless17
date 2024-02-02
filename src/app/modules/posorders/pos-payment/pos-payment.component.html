@@ -1,7 +1,7 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(orderAction$ | async)"></div>
 <div *ngIf="(process$ | async) as process"></div>
-
+<div *ngIf="(paymentGiftCardsList$ | async) as giftcard"></div>
 
 <div *ngIf="(paymentMethods$ | async) as methods">
   <div [class]="orderLayout" *ngIf="order  && uiTransactions">
@@ -66,17 +66,23 @@
         </div>
 
         <div class="action-center">
+          <!-- || order?.balanceRemaining != order.total -->
+          <!-- isNegativePaymentAllowed{{isNegativePaymentAllowed}}
+          isZeroPaymentAllowed {{ isZeroPaymentAllowed }} -->
+          <div class="action-center" *ngIf="!order.completionDate && order?.balanceRemaining != 0
+                                            && platFormService.isApp()
+                                            && isCreditProcessingEnabled
+                                            ">
 
-          <div class="action-center" *ngIf="!order.completionDate &&
-                                            ((order?.balanceRemaining != 0 || isZeroPaymentAllowed) &&
-                                            ( order?.balanceRemaining < 0 || isNegativePaymentAllowed )) ||
-                                              order?.balanceRemaining != order.total">
+                                         <!--    ((order?.balanceRemaining != 0 || isZeroPaymentAllowed) &&
+                                            ( order?.balanceRemaining < 0 ||  isNegativePaymentAllowed ))  -->
+            <!--  && !paymentsEqualTotal -->
 
-            <div *ngIf="!splitByItem && !paymentsEqualTotal">
+            <div *ngIf="!splitByItem">
               <h4>Payment Amount: {{paymentAmount | currency}}</h4>
             </div>
-
-            <div style="margin-left: 5px" *ngIf="!splitByItem  && !paymentsEqualTotal">
+            <!-- && !paymentsEqualTotal -->
+            <div style="margin-left: 5px" *ngIf="!splitByItem  ">
               <button class="splitbutton"
                       mat-raised-button
                       color="primary"
@@ -84,8 +90,6 @@
                 <mat-icon>edit</mat-icon>Change <br>Amount
               </button>
             </div>
-
-
           </div>
 
           <div  *ngIf="!paymentsEqualTotal && (uiTransactions && uiTransactions.splitEntry)">
@@ -136,6 +140,7 @@
 
                       <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
                       <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
+                      <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
                       <ng-container [ngTemplateOutlet]="paypalButton"></ng-container>
                       <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
                       <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container>
@@ -305,7 +310,7 @@
 
       <div  class="order-completed">
         <ng-container [ngTemplateOutlet]="splitItemsTemplate"></ng-container>
-   
+
       </div>
 
       <div *ngIf="!splitByItem && !paymentsEqualTotal &&
@@ -519,6 +524,7 @@
 
 <ng-template #triposPayButton>
   <app-tri-poscard-pay-btn
+
     [order]="order"
     [devicename]="devicename"
     [uiTransactions]="uiTransactions"
@@ -548,16 +554,34 @@
 
 <ng-template #disEMVCardButton>
   <dsi-emvcard-pay-btn
-    [order]="order"
-    [devicename]="devicename"
-    [uiTransactions]="uiTransactions"
-    [platForm]="platForm"
-    [creditBalanceRemaining]="creditPaymentAmount"
-    [stripeTipValue]="stripeTipValue"
-    [paymentAmount]="paymentAmount"
-    (setStep) ="setStep(1)">
+      [autoPay]="true"
+      [preAuth]="false"
+      [order]="order"
+      [devicename]="devicename"
+      [uiTransactions]="uiTransactions"
+      [platForm]="platForm"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [stripeTipValue]="stripeTipValue"
+      [paymentAmount]="paymentAmount"
+      (setStep) ="setStep(1)">
     <mat-icon color="warn">credit_card</mat-icon>
     <br> Credit / Debit
+  </dsi-emvcard-pay-btn>
+</ng-template>
+
+<ng-template #dCApPreAuthButton>
+  <dsi-emvcard-pay-btn
+      [preAuth]="true"
+      [order]="order"
+      [devicename]="devicename"
+      [uiTransactions]="uiTransactions"
+      [platForm]="platForm"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [stripeTipValue]="stripeTipValue"
+      [paymentAmount]="paymentAmount"
+      (setStep) ="setStep(1)">
+    <mat-icon color="warn">credit_card</mat-icon>
+    <br> Pre Auth
   </dsi-emvcard-pay-btn>
 </ng-template>
 

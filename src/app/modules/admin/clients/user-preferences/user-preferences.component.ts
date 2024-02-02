@@ -1,7 +1,7 @@
 import { Component, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Observable, Subscription, of } from 'rxjs';
+import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { IUser, UserPreferences } from 'src/app/_interfaces';
 import { AuthenticationService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
@@ -21,7 +21,7 @@ export class UserPreferencesComponent implements OnInit {
 
   _user = this.authenticationService.user$.subscribe(user => {
     this.user = user;
-    console.log('user', user.userPreferences)
+    // console.log('user', user.userPreferences)
     this.initForm()
   })
 
@@ -58,6 +58,7 @@ export class UserPreferencesComponent implements OnInit {
       orderID:  [], //number;
       ebayItemJSONHidden:  [], //boolean;
       headerColor:  [], //string;
+
     })
 
 
@@ -71,12 +72,25 @@ export class UserPreferencesComponent implements OnInit {
   }
 
   savePreferences(userPreferences: UserPreferences, id: Number) {
-    const item = JSON.stringify(userPreferences)
+    userPreferences.headerColor = this.headerColor;
+    let item = JSON.stringify(userPreferences)
     const site = this.siteService.getAssignedSite()
     return this.clientTableService.savePreferences(site, item, +id);
   }
 
   close() {
+    let data = this.inputForm.value as UserPreferences
+    data.headerColor  = this.headerColor;
+    this.action$ = this.savePreferences(data, this.userAuthorizationService.user.id).pipe(switchMap(data => {
+      this.authenticationService.updatePreferences(data)
+      setTimeout(() => {
+          this._close()
+      }, 10);
+      return of(data)
+    }))
+  }
+
+  _close() {
     if (this.dialogRef) {
       try {
         this.dialogRef.close();

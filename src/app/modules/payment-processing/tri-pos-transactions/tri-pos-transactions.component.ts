@@ -289,9 +289,6 @@ export class TriPosTransactionsComponent implements OnInit {
         if (!this.posPayment.transactionIDRef) {
           this.posPayment.transactionIDRef = item.ticketNumber;
         }
-
-
-
         return this.paymentMethodsService.processAuthTriPOSResponse(data ,this.posPayment, this.order, +this.tipValue)
       })).pipe(switchMap(data => {
         this.reset()
@@ -318,7 +315,6 @@ export class TriPosTransactionsComponent implements OnInit {
   }
 
   setConfig(item: authorizationPOST ):authorizationPOST {
-
     item.configuration= {allowDebit: true, marketCode : this.MarketCode};
     return item;
   }
@@ -438,10 +434,6 @@ export class TriPosTransactionsComponent implements OnInit {
 
       this.processing$ =  this.methodsService.refund(site, item ).pipe(
         switchMap(data => {
-          // console.log('Complete Auth', data.transactionId )
-          // console.log('Auth Data', data)
-          // console.log('Has Errors / Approved ', data._hasErrors, data.isApproved )
-
           this.errorMessage = ''
           if ((data._hasErrors && data._errors.length>0) || !data.isApproved) {
             this.displayErrors(data)
@@ -451,13 +443,9 @@ export class TriPosTransactionsComponent implements OnInit {
         })).pipe(switchMap(data => {
           // return this.orderService.getOrder(site, this.order.id.toString(), false)
           // return the current order. Error messsage should have been
-          if (!data || !data.payment) {
-            return of(this.order)
-          }
+          if (!data || !data.payment) { return of(this.order)  }
 
-          const payment = data.payment
           const trans = data.trans
-          const order = data.order;
 
           if (!data || !data.order) {
             this.siteService.notify('Unknown error occurred.', 'close', 4000, 'red');

@@ -13,6 +13,20 @@ import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-form
 import { DiscountInfo, IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 
+
+function myComparator(value1, value2) {
+  if (value1 === null && value2 === null) {
+    return 0;
+  }
+  if (value1 === null) {
+    return -1;
+  }
+  if (value2 === null) {
+    return 1;
+  }
+  return value1 - value2;
+}
+
 @Component({
   selector: 'app-type-results-selector',
   templateUrl: './type-results-selector.component.html',
@@ -159,8 +173,15 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   }
 
   initColumnDefs() {
-    return  [
-      {headerName: 'Name', field: 'name', sortable: true, width: 300, minWidth: 300},
+
+   this.columnDefs =   [
+        {headerName: 'Name', field: 'name', sortable: true,
+        width: 300, minWidth: 300,
+        cellRenderer: 'showMultiline',
+        wrapText: true,
+        cellStyle: {'white-space': 'normal', 'line-height': '1em'},
+        autoHeight: true,
+      },
       {
         field: "id",
         cellRenderer: "btnCellRenderer",
@@ -174,7 +195,37 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
         width: 65
       },
     ]
+    // this.columnDefs.push(this.getValueField('department', 'Department', null, false,))
+    // this.columnDefs.push(this.getValueField('category', 'Category', null, false,))
+    return    this.columnDefs ;
   }
+
+  getValueField(name: string, header? : string, width?: number, disabled?: boolean, hide?: boolean) {
+    if (!header) {
+      header = name
+    }
+    if (!width) {
+      width = 125
+    }
+    let edit = true;
+    if (disabled) {
+      edit = false
+    }
+    let visible = true;
+    if (hide) {
+      visible = false
+    }
+    return   {headerName: header.toUpperCase(),    field: name,
+        sortable: true,
+        width: 76,
+        minWidth:width,
+        hide: !visible,
+        editable: edit,
+        singleClickEdit: edit,
+        comparator: myComparator,
+    }
+  }
+
 
   //the category in this component comes from input
   getCategoryID(): number  {

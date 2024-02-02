@@ -15,6 +15,8 @@ import { IPaymentMethod } from './payment-methods.service';
 export class POSPaymentService {
 
 
+
+
   private _searchModel          = new BehaviorSubject<IPaymentSearchModel>(null);
   public searchModel$           = this._searchModel.asObservable();
 
@@ -45,6 +47,33 @@ export class POSPaymentService {
     private _fb: UntypedFormBuilder,
             )
   {
+
+  }
+  processDCAPPreAuthResponse(site: ISite, paymentID: number, response, deviceName): Observable<IPaymentResponse> {
+
+    const controller = "/POSPayments/";
+
+    const endPoint = "processDCAPResponse";
+
+    const parameters = `?id=${paymentID}&deviceName=${deviceName}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<any>( url , response )
+
+  }
+
+  processDCAPResponse(site: ISite, paymentID: number, response, deviceName): Observable<IPaymentResponse> {
+
+    const controller = "/POSPayments/";
+
+    const endPoint = "processDCAPResponse";
+
+    const parameters = `?id=${paymentID}&deviceName=${deviceName}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<any>( url , response )
 
   }
 

@@ -92,6 +92,8 @@
         <ng-container *ngTemplateOutlet="editPaymentView,  context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="cardPointCaptureView,  context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="triPOSCaptureView,  context: {$implicit: item}"></ng-container>
+        <ng-container *ngTemplateOutlet="dCapCaptureView,  context: {$implicit: item}"></ng-container>
+
         <ng-container *ngTemplateOutlet="cardInfoView,  context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="tipView,  context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="printButtonView,  context:  {$implicit: item}"></ng-container>
@@ -133,6 +135,32 @@
   </div>
 </ng-template>
 
+<ng-template #dCapCaptureView  let-item>
+  <div *ngIf="!qrOrder && (
+    (item?.paymentMethod?.isCreditCard &&
+      (uiTransactions && uiTransactions?.dCapEnabled && !item.completionDate)) ||
+      (item?.account && !item.completionDate &&
+      (uiTransactions && uiTransactions.dCapEnabled)
+    ) && item.tranCode === 'emvPreAuth')  " >
+
+    <div *ngIf="order.creditBalanceRemaining !=  0 && totalAuthPayments > 0">
+      <button class="payment-buttons-sm" mat-raised-button color='primary' (click)="captureTriPOS(item)">
+          <mat-label>Complete Auth <br> {{ totalAuthPayments | currency }}</mat-label>
+      </button>
+    </div>
+
+    <div  *ngIf="order.creditBalanceRemaining > totalAuthPayments ">
+      <button   class="payment-buttons-sm"
+                *ngIf="order.creditBalanceRemaining > totalAuthPayments"
+                 mat-raised-button color='primary'
+                (click)="incrementTriPOS(item)">
+        <mat-label>Add <br> {{ order.creditBalanceRemaining - totalAuthPayments | currency }}</mat-label>
+      </button>
+    </div>
+
+  </div>
+</ng-template>
+
 <ng-template #triPOSCaptureView let-item>
   <div *ngIf="!qrOrder && (
     (item?.paymentMethod?.isCreditCard &&
@@ -141,18 +169,18 @@
       (uiTransactions && uiTransactions.triposEnabled)
     ) && item.tranType === 'authorizationResponse')  " >
 
-    <div *ngIf="order.creditBalanceRemaining !=  0 && totalAuthTriPOSPayments > 0">
+    <div *ngIf="order.creditBalanceRemaining !=  0 && totalAuthPayments > 0">
       <button class="payment-buttons-sm" mat-raised-button color='primary' (click)="captureTriPOS(item)">
-          <mat-label>Complete Auth <br> {{ totalAuthTriPOSPayments | currency }}</mat-label>
+          <mat-label>Complete Auth <br> {{ totalAuthPayments | currency }}</mat-label>
       </button>
     </div>
 
-    <div  *ngIf="order.creditBalanceRemaining > totalAuthTriPOSPayments ">
+    <div  *ngIf="order.creditBalanceRemaining > totalAuthPayments ">
       <button   class="payment-buttons-sm"
-                *ngIf="order.creditBalanceRemaining > totalAuthTriPOSPayments"
+                *ngIf="order.creditBalanceRemaining > totalAuthPayments"
                  mat-raised-button color='primary'
                 (click)="incrementTriPOS(item)">
-        <mat-label>Add <br> {{ order.creditBalanceRemaining - totalAuthTriPOSPayments | currency }}</mat-label>
+        <mat-label>Add <br> {{ order.creditBalanceRemaining - totalAuthPayments | currency }}</mat-label>
       </button>
     </div>
 
@@ -204,7 +232,7 @@
 <ng-template #tipView let-item>
   <div class="amount-paid">
     <span *ngIf="item.tranType === 'authorizationResponse'">
-      {{totalAuthTriPOSPayments + +item.addedPercentageFee | currency}}
+      {{totalAuthPayments + +item.addedPercentageFee | currency}}
     </span>
     <span *ngIf="item.tranType != 'authorizationResponse'">
       {{item.amountPaid + +item.addedPercentageFee | currency}}
@@ -219,8 +247,9 @@
             {{  (item.amountReceived + +item.addedPercentageFee - item.amountPaid)  | currency }}
       </span>
     </div>
-
   </div>
+
+
 </ng-template>
 
 <ng-template #voidActionView let-item>

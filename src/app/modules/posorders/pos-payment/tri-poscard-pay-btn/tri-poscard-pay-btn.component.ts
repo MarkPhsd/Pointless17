@@ -45,8 +45,8 @@ export class TriPOSCardPayBtnComponent implements OnInit {
     const order = this.order;
     if (order) {
       let amount = this.creditBalanceRemaining
-      if (this.paymentAmount && this.paymentAmount !=0) { 
-        amount =this.paymentAmount
+      if (this.paymentAmount && this.paymentAmount !=0) {
+        amount = this.paymentAmount
       }
       this.action$ = this.triposMethod.openDialogCreditPayment(order, amount, false, this.uiTransactions)
     }

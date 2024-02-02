@@ -7,7 +7,7 @@ import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-c
 import { AdjustmentReason } from './adjustment-reasons.service';
 import { AppInitService } from './app-init.service';
 import { IItemBasic } from '..';
-import { StripeAPISettings, TransactionUISettings, UIHomePageSettings } from './settings/uisettings.service';
+import { DSIEMVSettings, StripeAPISettings, TransactionUISettings, UIHomePageSettings } from './settings/uisettings.service';
 import { EmailModel } from '../twilio/send-grid.service';
 import { UserAuthorizationService } from './user-authorization.service';
 import { ebayoAuthorization } from '../resale/ebay-api.service';
@@ -15,7 +15,6 @@ import { ebayoAuthorization } from '../resale/ebay-api.service';
 interface IIsOnline {
   result: string;
 }
-
 export interface ITerminalSettings {
   medicalRecSales : number;
   receiptPrinter  : string;
@@ -41,27 +40,6 @@ export interface ITerminalSettings {
   defaultLabel      : string;
   printServer       : number;
   dsiEMVSettings    : DSIEMVSettings
-}
-
-export interface DSIEMVSettings {
-  id        : number;
-  HostOrIP  : string;
-  IpPort    : string;
-  MerchantID: string;
-  TerminalID: string;
-  OperatorID: string;
-  POSPackageID: string;
-  TranDeviceID: string;
-  UserTrace : string;
-  TranCode  : string;
-  SecureDevice: string;
-  ComPort   : string;
-  PinPadIpAddress: string;
-  PinPadIpPort: string;
-  SequenceNo: string;
-  DisplayTextHandle: string;
-  enabled: boolean;
-  partialAuth: boolean;
 }
 
 
@@ -296,6 +274,27 @@ export class SettingsService {
 
   }
 
+  getPOSDeviceSettings(site: ISite, name: String):  Observable<ITerminalSettings> {
+
+    const user =  JSON.parse(localStorage.getItem('user')) as IUser
+    if (!user) { return of(null)}
+    if (!name) { return of(null)};
+
+    const controller = "/settings/"
+
+    const endPoint = 'getPOSDeviceBYName';
+
+    const parameters = `?name=${name}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<ISetting>(url).pipe(switchMap(data => {
+      const item = JSON.parse(data?.text) as ITerminalSettings
+      return of(item)
+    }))
+
+  }
+
   getSettingByName(site: ISite, name: String):  Observable<ISetting> {
 
     if (!name) { return }
@@ -479,7 +478,10 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.getAppCahcURI(url) as Observable<TransactionUISettings>;
+    return this.getAppCahcURI(url).pipe(switchMap(data => {
+      // this.tra
+      return of(data)
+    })) as Observable<TransactionUISettings>
 
   }
 

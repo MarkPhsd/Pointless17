@@ -8,6 +8,7 @@
   width: 175px;
   height: 45px;
   font-size: 1.1em;
+  text-align: left;
   border-radius: 3px;
 }
 
@@ -37,9 +38,10 @@
 
 .itemtype-buttons-container {
   display: grid;
-  grid-template-columns: 175px auto;
+  grid-template-columns: auto auto;
   gap: 2px;
   overflow: hidden;
+  text-align: left;
 }
 
 .toggle-buttons-margins{
@@ -49,7 +51,7 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr 600px;
+  grid-template-columns: auto 1fr;
   row-gap: 5px;
   gap: 10px;
   height: 100%;

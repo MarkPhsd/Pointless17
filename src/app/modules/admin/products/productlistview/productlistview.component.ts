@@ -616,9 +616,9 @@ constructor(  private _snackBar              : MatSnackBar,
           }
       },
 
-     {      headerName: 'Delete', field: "id",
-            cellRenderer: "btnCellRenderer",
-            cellRendererParams: {
+      {      headerName: 'Delete', field: "id",
+             cellRenderer: "btnCellRenderer",
+              cellRendererParams: {
               onClick: this.deleteItem.bind(this),
               label: 'delete',
               getLabelFunction: this.getLabelCopy.bind(this),

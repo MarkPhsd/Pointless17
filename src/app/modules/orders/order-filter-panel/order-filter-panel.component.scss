@@ -1,4 +1,4 @@
-.panel { 
+.panel {
   // height: calc(80vh - 135px);
 }
 .refresh {
@@ -89,6 +89,7 @@ mat-card {
   width: 275px;
   overflow-y: auto;
   overflow-x: hidden;
+  min-height: 300px;
 }
 
 .toggle-view {

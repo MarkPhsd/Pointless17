@@ -1,10 +1,10 @@
-<span *ngIf="devicename && (uiTransactions &&
-             uiTransactions?.dsiEMVNeteEpayEnabled)
-      && order && order?.balanceRemaining != 0">
+<span *ngIf="devicename && (uiTransactions?.dsiEMVNeteEpayEnabled || uiTransactions?.dCapEnabled)
+             && order && order?.balanceRemaining != 0">
   <button class="payment-buttons"
       mat-raised-button
       color="primary"
-      (click)="processDSICreditCardPayment(false)">
-      <ng-content></ng-content>
+      (click)="processPayment(false)">
+    <ng-content></ng-content>
   </button>
 </span>
+

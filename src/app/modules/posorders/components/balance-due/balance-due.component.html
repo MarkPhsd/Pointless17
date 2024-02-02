@@ -1,4 +1,5 @@
 <div *ngIf="(action$ | async) as newOrder"></div>
+<div *ngIf="(dCapReset$ | async) as reset"></div>
 
 <div  class="grid-items"
       *ngIf=" (uiTransactions$ | async) as uiTransactions" >

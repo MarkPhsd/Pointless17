@@ -19,6 +19,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 
 @Component({
   selector: 'app-balance-due',
@@ -28,7 +29,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 export class ChangeDueComponent implements OnInit  {
   uiTransactions: TransactionUISettings
   uiTransactions$ : Observable<TransactionUISettings>;
-
+  dCapReset$ : Observable<any>;
   printing$ : Observable<any>;
   action$   : Observable<any>;
   inputForm             : UntypedFormGroup;
@@ -57,12 +58,14 @@ export class ChangeDueComponent implements OnInit  {
               private methodsService: CardPointMethodsService,
               private orderMethodService: OrderMethodsService,
               private changeDetect : ChangeDetectorRef,
+              private dCapService : DcapService,
               private dialogRef: MatDialogRef<ChangeDueComponent>,
               @Inject(MAT_DIALOG_DATA) public data: IBalanceDuePayload
             )
   {
 
     if (data) {
+
       this.order = data.order
       this.payment = data.payment
       this.paymentMethod = data.paymentMethod;
@@ -71,10 +74,11 @@ export class ChangeDueComponent implements OnInit  {
       if (!this.paymentMethod?.isCreditCard && !this.payment.account) {
         this.step = 2
       }
+      this.orderMethodsService.setLastOrder(data.order)
     }
-
     this.initForm();
     this.orderMethodsService.setScanner( )
+
   }
 
   printingCheck() {
@@ -123,10 +127,12 @@ export class ChangeDueComponent implements OnInit  {
       switchMap(data => {
         if (data) {
           this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+          this.initDevice(this.uiTransactions)
           return of(this.uiTransactions)
         }
         if (!data) {
           this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+          this.initDevice(this.uiTransactions)
           return of(this.uiTransactions)
         }
     })).pipe(switchMap(data => {
@@ -140,9 +146,16 @@ export class ChangeDueComponent implements OnInit  {
     }))
   }
 
+  initDevice(ui: TransactionUISettings) {
+    if (ui.dCapEnabled) {
+      const site = this.siteService.getAssignedSite();
+      this.dCapReset$ = this.dCapService.resetDevice(localStorage.getItem('devicename'))
+    }
+  }
+
   initForm() {
     this.inputForm   = this.fb.group( {
-      itemName          : [''],
+      itemName       : [''],
     })
   }
 
@@ -166,12 +179,9 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   close() {
-    // this.clearSubscriptions()
-    // this.router.navigateByUrl('/')
     this.paymentMethodProcessService._sendOrderOnExit.next(null)
     this.paymentMethodProcessService._sendOrderAndLogOut.next(null)
     this.orderMethodService.clearOrder();
-
     this.dialogRef.close()
   }
 
@@ -196,7 +206,6 @@ export class ChangeDueComponent implements OnInit  {
     const payment = this.payment
     if (payment) {
       payment.tipAmount = amount;
-
       const payment$ =  this.paymentService.putPOSPayment(site, payment);
       //process tip via credit card service.
       payment$.pipe(

@@ -218,7 +218,7 @@ export class RequestMessagesComponent implements OnInit {
       return this.orderMethodsService.getOrderFromItem(+value).pipe(
         switchMap(data => {
             // console.log('data', data)
-            this.orderMethodsService.setActiveOrder(site, data)
+            this.orderMethodsService.setActiveOrder( data)
             return of(data)
           }
         ),catchError(data => {
@@ -252,7 +252,7 @@ export class RequestMessagesComponent implements OnInit {
       return this.orderService.getOrder(site, value.toString(), false).pipe(
         switchMap(data => {
             // console.log('data', data)
-            this.orderMethodsService.setActiveOrder(site, data)
+            this.orderMethodsService.setActiveOrder(data)
             return of(data)
           }
         ),catchError(data => {
@@ -296,7 +296,7 @@ export class RequestMessagesComponent implements OnInit {
       const site = this.siteService.getAssignedSite()
       this.order$ =  this.orderService.getOrder(site, event.method, false).pipe(
         switchMap(data => {
-          this.orderMethodsService.setActiveOrder(site, data)
+          this.orderMethodsService.setActiveOrder( data)
           this.router.navigate(['pos-payment'])
           return of(data)
         })
@@ -309,7 +309,7 @@ export class RequestMessagesComponent implements OnInit {
       const site = this.siteService.getAssignedSite()
       this.order$ =  this.orderService.getOrder(site, event.method, false).pipe(
         switchMap(data => {
-          this.orderMethodsService.setActiveOrder(site, data)
+          this.orderMethodsService.setActiveOrder( data)
           return of(data)
         })
       )

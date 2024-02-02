@@ -238,6 +238,8 @@ import { ImageLightHouseComponent } from './widgets/image-light-house/image-ligh
 import { ClockInPanelComponent } from '../modules/admin/clients/clock-in-panel/clock-in-panel.component';
 import { UserPreferencesComponent } from '../modules/admin/clients/user-preferences/user-preferences.component';
 import { ClockViewComponent } from './widgets/clock-in-out/clock-view/clock-view.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { NgxColorsModule } from 'ngx-colors';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -509,10 +511,12 @@ import { ClockViewComponent } from './widgets/clock-in-out/clock-view/clock-view
     ReactiveFormsModule,
     SwiperModule,
     YouTubePlayerModule,
+    NgxJsonViewerModule,
+    NgxColorsModule,
   ],
 
   exports: [
-
+    NgxJsonViewerModule,
     AgGridModule,
     DragDropModule,
     SafeHtmlPipe,
@@ -560,6 +564,7 @@ import { ClockViewComponent } from './widgets/clock-in-out/clock-view/clock-view
     ChemicalValuesComponent,
     ChipsDisplayComponent,
     ClientTypesLookupComponent,
+
     ClockViewComponent,
     CompanyInfoHeaderComponent,
     EmailSettingsComponent,

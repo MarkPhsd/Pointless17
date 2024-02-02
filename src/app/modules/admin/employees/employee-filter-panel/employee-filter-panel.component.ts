@@ -130,7 +130,7 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
       const search = this.searchModel;
       if (!search.jobTypeID) { search.jobTypeID = 0}
       this.selectedjobTypeID   = search.jobTypeID;
-      if (!search.terminated) {  search.terminated  = "1";  }
+      if (!search.terminated) {  search.terminated  = 1;  }
       this.toggleTerminated   = search.terminated.toString();
     }
   }
@@ -168,7 +168,7 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
     this.initSearchForm();
     this.searchModel.name = ''
 
-    this.searchModel.terminated  = this.toggleTerminated
+    this.searchModel.terminated  = +this.toggleTerminated
     this.searchModel.jobTypeID   = this.selectedjobTypeID;
 
     return this.searchModel

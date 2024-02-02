@@ -58,7 +58,7 @@ export class ItemsMainComponent implements OnInit {
   _searchItems$ = this.searchPhrase.pipe(
     debounceTime(250),
       distinctUntilChanged(),
-      switchMap(searchPhrase => 
+      switchMap(searchPhrase =>
         this.refreshSearch()
     )
   )
@@ -416,16 +416,16 @@ export class ItemsMainComponent implements OnInit {
     }
     this.processing = true
     const dataSource = this.getDataSource(params)
- 
+
     this.setDataSource(dataSource)
   }
 
-  getDataSource(params) { 
+  getDataSource(params) {
     return  {
       getRows: (params: IGetRowsParams) => {
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
       items$.subscribe(data =>
-        { 
+        {
             this.processing  = false;
             const paging         =  data.paging
             this.setPaging(paging)
@@ -440,21 +440,21 @@ export class ItemsMainComponent implements OnInit {
 
   }
 
-  setDataSource(dataSource) { 
+  setDataSource(dataSource) {
     if (!dataSource)   { return }
     if (!this.gridApi) { return }
     this.gridApi.setDatasource(dataSource);
     this.autoSizeAll(true)
   }
 
-  setPaging(paging: IPagedList) { 
+  setPaging(paging: IPagedList) {
     if (paging) {
       this.isfirstpage   = paging.isFirstPage
       this.islastpage    = paging.isFirstPage
       this.currentPage   = paging.currentPage
       this.numberOfPages = paging.pageCount
       this.recordCount   = paging.recordCount
-     
+
       if (this.numberOfPages !=0 && this.numberOfPages) {
         this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
       }
@@ -551,7 +551,7 @@ export class ItemsMainComponent implements OnInit {
     const order$ =  this.orderService.getOrder(site, order.id, order.history )
     order$.subscribe(data =>
       {
-        this.orderMethodsService.setActiveOrder(site, data)
+        this.orderMethodsService.setActiveOrder( data)
       }
     )
   }

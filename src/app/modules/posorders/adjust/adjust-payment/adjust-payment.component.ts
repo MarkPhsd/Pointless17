@@ -291,6 +291,14 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
               }
             }
 
+            if (this.settings.dCapEnabled) {
+
+              if (this.voidPayment) {
+                this.voidDCapPayment();
+                return ;
+              }
+            }
+
             if (this.settings.triposEnabled) {
 
               // console.log('void / Reversal result 5');
@@ -577,6 +585,21 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       if (voidPayment) {
         this.paymentsMethodsService.processDSIEMVCreditVoid(voidPayment)
         this.closeDialog(null, null);
+      }
+    }
+  }
+
+  //const device = localStorage.getItem('devicename')
+  voidDCapPayment() {
+    if (this.voidPayment) {
+      const voidPayment = this.voidPayment;
+      if (voidPayment) {
+        this.action$ =  this.paymentsMethodsService.processDcapCreditVoid(voidPayment).pipe(switchMap(data => {
+          setTimeout(() => {
+            this.closeDialog(null, null);
+          }, 50)
+          return of(data)
+        }))
       }
     }
   }

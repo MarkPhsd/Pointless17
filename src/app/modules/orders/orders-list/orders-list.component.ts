@@ -518,7 +518,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     const order$ =  this.orderService.getOrder(site, order.id, order.history )
     order$.subscribe(data =>
       {
-        this.orderMethodsService.setActiveOrder(site, data)
+        this.orderMethodsService.setActiveOrder(data)
       }
     )
   }

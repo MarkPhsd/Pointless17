@@ -19,21 +19,31 @@
 </div>
 
 <ng-template #noItemList>
-  <div></div>
+  <div>No Item Types</div>
 </ng-template>
 
 <ng-template #itemTypeView>
-  <div *ngIf="(itemTypes$ | async) as list"
+  <ng-template #loading>
+    ...Item Types..
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </ng-template>
+
+  <div *ngIf="(itemTypes$ | async) as list; else loading"
        class="type-list">
+    <h4>Item Types</h4>
+
+    <!-- {{toggledItem | json}} -->
     <div class="" [@listAnimation]="list.length">
     <div class="toggle-buttons-margins categories"
         *ngFor="let item of list">
 
         <div class="itemtype-buttons-container">
+
           <button mat-button-stroked
                   class="itemTypes slidein"
                   (click)="toggleItemTypeSelected(item)"
                   value="{{ item.id }}" >
+
             <div *ngIf="isItemToggled(item)">
               <mat-icon>expand_more</mat-icon>
               {{ item.name }}
@@ -52,15 +62,15 @@
 
         </div>
 
-      <div *ngIf="isItemToggled(item)">
+      <div *ngIf="isItemToggled(toggledItem)">
 
-        <div *ngIf="item.itemType_Categories_List">
+        <div *ngIf="toggledItem?.itemType_Categories_List">
           <div class="sub-headers">Categories</div>
           <mat-divider></mat-divider>
         </div>
 
-        <div  [@listAnimation]=" item.itemType_Categories_List.length">
-          <div *ngFor="let sub of item.itemType_Categories_List"
+        <div  [@listAnimation]="toggledItem?.itemType_Categories_List.length">
+          <div *ngFor="let sub of toggledItem.itemType_Categories_List"
                 >
             <div *ngIf="sub.name != '' && sub.name != undefined" >
               <div class="buttons-container">
@@ -89,11 +99,11 @@
           </div>
         </div>
 
-        <div *ngIf="item.brandItemCount">
-          <div *ngIf="item.brandItemCount.length>0">
+        <div *ngIf="toggledItem?.brandItemCount">
+          <div *ngIf="toggledItem.brandItemCount.length>0">
             <div class="sub-headers">Brands</div>
             <mat-divider></mat-divider>
-            <div  [@listAnimation]="item.brandItemCount.length">
+            <div  [@listAnimation]="toggledItem.brandItemCount.length">
               <div *ngFor="let brand of item.brandItemCount"
                   >
                 <div *ngIf="brand.name != '' && brand.name != undefined"

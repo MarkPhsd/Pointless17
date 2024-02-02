@@ -26,6 +26,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { EmployeeSearchModel, EmployeeService } from 'src/app/_services/people/employee-service.service';
 const { Keyboard } = Plugins;
 
 @Component({
@@ -66,7 +67,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   scheduleDateTo    : any;
 
   // searchModel   = {} as IPOSOrderSearchModel;
-  employees$       :   Observable<IItemBasic[]>;
+  employees$       :   Observable<any[]>;
   serviceTypes$    :   Observable<IServiceType[]>;
   orderServiceType = {} as IServiceType;
 
@@ -138,11 +139,11 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     )
   )
 
-  initAuthSubscriber() { 
-    this._auth = this.authService.userAuths$.subscribe(data => { 
+  initAuthSubscriber() {
+    this._auth = this.authService.userAuths$.subscribe(data => {
       this.auth = data;
       this.resetSearch()
-      
+
     })
   }
 
@@ -243,6 +244,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   constructor(
       private orderService    : OrdersService,
+      private employeeService: EmployeeService,
       private router          : Router,
       public  route           : ActivatedRoute,
       private printingService : PrintingService,
@@ -271,7 +273,9 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   ngOnInit() {
     const site           = this.siteService.getAssignedSite();
-    this.employees$      = this.orderService.getActiveEmployees(site);
+    if (this.isAuthorized) {
+      this.employees$      = this.orderService.getActiveEmployees(site);
+    }
     this.initAuthSubscriber();
     this.initAuthorization();
     this.initCompletionDateForm();
@@ -296,18 +300,18 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.updateItemsPerPage();
     this.subscribeToScheduledDatePicker();
 
-    if (this.selectorEmpDiv) { 
+    if (this.selectorEmpDiv) {
       this.selectorEmpDiv.nativeElement.style.maxHeight  = '275px';
     }
-    if (this.selectorDiv) { 
+    if (this.selectorDiv) {
       this.selectorDiv.nativeElement.style.maxHeight = '275px';
     }
   }
   changeToggleTypeEmployee() {
     this.getSelectorDiv()
   }
-  getSelectorDiv() { 
-    if (!this.toggleGroup) { 
+  getSelectorDiv() {
+    if (!this.toggleGroup) {
       return
     }
     const divTop = this.toggleGroup.nativeElement.getBoundingClientRect().top + 60 ;
@@ -421,7 +425,64 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   refreshEmployees(){
     const site           = this.siteService.getAssignedSite()
     if (!site) { return}
-    this.employees$      = this.orderService.getActiveEmployees(site)
+    if (!this.isStaff) { return }
+    this.employees$      = this.employeeService.getAllActiveEmployees(site)
+  }
+
+  refreshAllEmployees(){
+    const site           = this.siteService.getAssignedSite()
+    if (!site) { return}
+    if (!this.isAuthorized) { return }
+    this.employees$      = this.employeeService.getEmployeeBySearchListOnly(site)
+  }
+
+  refreshOnClockEmployees(){
+    const site           = this.siteService.getAssignedSite()
+    if (!site) { return}
+    if (!this.isAuthorized) { return }
+    this.employees$      = this.employeeService.listEmployeesOnClock(site)
+  }
+
+  refreshTerminatedEmployees(){
+    const site           = this.siteService.getAssignedSite()
+    if (!site) { return}
+    if (!this.isAuthorized) { return }
+
+    let search = {}  as EmployeeSearchModel;
+    search.terminated = 2
+    this.employees$      = this.employeeService.getEmployeeBySearch(site, search).pipe(switchMap(data => {
+      const item = data.results
+      let list = item
+      if (list.length > 0) {
+        list.forEach(data => {
+          data.name = `${data.lastName}, ${data.firstName}`
+        })
+        list = list.sort((a, b) => {
+          if (a.name < b.name) {
+              return -1;
+          }
+          if (a.name > b.name) {
+              return 1;
+          }
+          return 0;
+      });
+
+      }
+      return of(list)
+    }))
+  }
+
+  listEmployees(value) {
+    if (value == 1) {
+      this.refreshEmployees()
+      return;
+    }
+    if (value == 2) {
+      this.refreshOnClockEmployees()
+    }
+    if (value == 3) {
+      this.refreshTerminatedEmployees()
+    }
   }
 
   updateOrderSearch(searchModel: IPOSOrderSearchModel) {
@@ -468,7 +529,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     if (! this.searchModel) {   this.searchModel = {} as IPOSOrderSearchModel  }
 
     let search                 = this.searchModel;
-    
+
     let item =  JSON.parse(JSON.stringify(search));
 
     if (this.toggleOpenClosedAll == "1") {  this.initCompletionDateForm()  }
@@ -487,7 +548,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.orderMethodsService.orderSearchEmployeeID = this.employeeID
     item.employeeID = this.employeeID;
     item.employeeID = this.serviceTypeID;
-   
+
     this.updateOrderSearch( JSON.parse(JSON.stringify(item)));
     return of('')
   }
@@ -552,7 +613,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
         this.searchModel.searchOrderHistory = false;
       }
     }
-    // console.log(this.isUser, this.showDateFilter,this.searchModel.searchOrderHistory)
     this.initCompletionDateForm()
   }
 
@@ -585,20 +645,33 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   initScheduledDateForm() {
+    // if (!this.showScheduleFilter || !this.scheduleDateForm) {
+    //   console.log('init form')
+    //   if (this.searchModel) {
+    //     this.searchModel.scheduleDate_From = null;
+    //     this.searchModel.scheduleDate_To = null;
+    //   }
+    //   this.scheduleDateForm = this.fb.group({
+    //     start: [],
+    //     end: [],
+    //   })
+
+    //   console.log('schedule value', this.scheduleDateForm.value)
+    //   return
+    // }
+
     if (!this.showScheduleFilter) {
-      if (this.searchModel) {
-        this.searchModel.scheduleDate_From = null;
-        this.searchModel.scheduleDate_To = null;
-      }
-      this.scheduleDateForm = this.fb.group({
-        start: [],
-        end: [],
-      })
-      return
+       this.searchModel.scheduleDate_From = null;
+      this.searchModel.scheduleDate_To = null;
+      this.scheduleDateForm = null;
+      return;
     }
+
     this.scheduleDateForm = this.getFormRangeInitial(this.scheduleDateForm)
+    console.log('schedule value', this.scheduleDateForm.value)
     this.searchModel.scheduleDate_From = this.scheduleDateForm.get("start").value;
     this.searchModel.scheduleDate_To   = this.scheduleDateForm.get("end").value;
+    this.subscribeToScheduledDatePicker()
   }
 
   getFormRangeInitial(inputForm: UntypedFormGroup) {

@@ -3,7 +3,7 @@
   <mat-spinner diameter="50"></mat-spinner>
 </div>
 
-Ref {{[posPayment?.transactionIDRef]}}
+<mat-label>Ref {{[posPayment?.transactionIDRef]}}</mat-label>
 
 <div *ngIf="(!terminalSettings || (!terminalSettings?.triposLaneID || terminalSettings?.triposLaneID === '')) || !posPayment">
 
@@ -62,15 +62,15 @@ Ref {{[posPayment?.transactionIDRef]}}
     <div class="button-grid">
 
       <!-- {{posPayment.tranType}} -->
-      <div *ngIf="posPayment.amountPaid > 0 && posPayment.tranType === 'authorizationResponse'">
+      <div *ngIf="uiTransaction?.allowPreAuth && posPayment.amountPaid > 0 && posPayment.tranType === 'authorizationResponse'">
         <button color="primary" mat-raised-button (click)="completeAuthorization()">Complete Payment</button>
       </div>
 
-      <div *ngIf="posPayment.amountPaid > 0 && posPayment.tranType === 'authorizationResponse'">
+      <div *ngIf="uiTransaction?.allowPreAuth && posPayment.amountPaid > 0 && posPayment.tranType === 'authorizationResponse'">
         <button color="primary" mat-raised-button (click)="reverseAuthorization()">Reverse Authorization</button>
       </div>
 
-      <div *ngIf="posPayment.amountPaid > 0 && posPayment.tranType != 'authorizationResponse'">
+      <div *ngIf="uiTransaction?.allowPreAuth && posPayment.amountPaid > 0 && posPayment.tranType != 'authorizationResponse'">
         <button color="primary" mat-raised-button (click)="authorizeAmount()">Authorize</button>
       </div>
 

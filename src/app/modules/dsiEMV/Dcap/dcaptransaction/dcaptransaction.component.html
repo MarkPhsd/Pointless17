@@ -1,0 +1,190 @@
+<!-- <div *ngIf="isDev">Dev On</div> -->
+<div *ngIf=" (action$ | async) as action"></div>
+<div *ngIf="(uiSettings$  | async) as ui">
+
+  <div *ngIf="(terminalSettings$  | async) as terminalSettings; else loading">
+
+    <!-- enure validated -->
+    <div *ngIf="(!dsiEmv || (!dsiEmv?.TranDeviceID || dsiEmv?.TranDeviceID === '')) || !posPayment">
+
+      <div *ngIf="!posPayment">
+        <mat-icon>alert</mat-icon> No Payment Found
+      </div>
+
+      <div *ngIf="(!dsiEmv || (!dsiEmv?.TranDeviceID || dsiEmv?.TranDeviceID === ''))">
+        <mat-icon>alert</mat-icon> No ID found for Device. {{terminalSettings?.TranDeviceID}}
+      </div>
+
+      <button mat-raised-button (click)="close()">Close</button>
+    </div>
+
+    <!--  -->
+    <mat-card *ngIf="dsiEmv">
+
+      <mat-card-title>
+        # {{posPayment.id}}
+        <h3>
+        Total  {{posPayment?.amountPaid | currency}}
+        </h3>
+      </mat-card-title>
+
+      <mat-card-subtitle style="font-size:1.1em;font-weight:400">
+        <div *ngIf="resultMessage">
+          {{resultMessage}}
+        </div>
+        <div *ngIf="message">
+          {{message}}
+        </div>
+        <div *ngIf="errorMessage">
+          <h3><mat-icon color="warn">warning</mat-icon>  {{errorMessage}}</h3>
+        </div>
+      </mat-card-subtitle>
+
+      <mat-card-content>
+        <mat-card>
+          <div *ngIf="processing">
+            <h4>Check Device</h4>
+            <mat-spinner [diameter]="50"></mat-spinner>
+          </div>
+          <!--<h4 *ngIf="tipValue">Tip Amount: {{tipValue | currency}}</h4>
+           <div class="grid-tip-buttons button-grid">
+            <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(15)">15 % Tip</button></div>
+            <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(18)">18 % Tip</button></div>
+            <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(20)">20 % Tip</button></div>
+            <div>
+
+              <app-key-pad
+                [inputForm]        ="inputForm"
+                [fieldName]        ="'itemName'"
+                [inputTypeValue]   ="'decimal'"
+                [numberbuttons]    ="'number-buttons button-sized-scaled'"
+                [alternateClass]   ="'grid-keypad-alternate'"
+                (outputOnChange)   ="applyTipAmount($event)">
+                Other Tip Amount
+              </app-key-pad>
+            </div>
+            <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(0)">No Tip</button></div>
+          </div> -->
+        </mat-card>
+
+        <div class="button-grid">
+
+          <!-- {{posPayment.tranType}} -->
+          <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
+            <button color="primary" mat-raised-button (click)="completeAuthorization()">Complete Payment</button>
+          </div>
+
+          <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
+            <button color="primary" mat-raised-button (click)="reverseAuthorization()">Reverse Authorization</button>
+          </div>
+
+          <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
+            <button color="primary" mat-raised-button (click)="authorizeAmount()">Authorize</button>
+          </div>
+
+          <div *ngIf="posPayment.amountPaid > 0 ">
+            <!-- Show if Authorization or if Amount>0 -->
+            <button  color="primary"   mat-raised-button (click)="payAmount()">Pay Amount</button>
+          </div>
+
+          <div *ngIf="posPayment.amountPaid < 0 ">
+            <!-- Show if Authorization Value Exists (or don't use here at all.) -->
+            <button  color="warn"  mat-raised-button (click)="refundAmount()">Refund</button>
+          </div>
+
+
+          <div *ngIf="posPayment.tranType">
+            <!-- Always show -->
+            <button  color="warn"  mat-raised-button (click)="close()">Close</button>
+          </div>
+          <div *ngIf="!posPayment.tranType">
+            <!-- Always show -->
+            <button  color="warn"  mat-raised-button (click)="close()">Cancel</button>
+          </div>
+
+          <div *ngIf="!posPayment.tranType">
+            <!-- Always show -->
+            <button  color="warn"  mat-raised-button (click)="paramDownload()">Param Download</button>
+          </div>
+        </div>
+
+        <div *ngIf="(processing$ | async) as result">
+          <button mat-button (click)="jsonView = !jsonView"><mat-icon>list</mat-icon>
+            <span *ngIf="!jsonView">View Data</span>   <span *ngIf="jsonView">Hide Data</span>
+          </button>
+        </div>
+
+      </mat-card-content>
+
+      <mat-card-actions>
+
+        <div  class="button-grid">
+          <div>
+            <mat-button-toggle-group
+                  name         = "type"
+                  [(ngModel)]  = "manual"
+                  (change)     = "manual = !manual" >
+                <mat-button-toggle
+                    [value]="true"
+                    class="manual-toggle"
+                    color="accent">
+                    Manaul
+                </mat-button-toggle>
+                <mat-button-toggle
+                    [value]="false"
+                    class="manual-toggle"
+                    color="warn">
+                    Card
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+          <div class="button-grid">
+            <button  color="warn" mat-raised-button (click)="reset()">Reset</button>
+          </div>
+        </div>
+      </mat-card-actions>
+
+    </mat-card>
+
+    <ng-template #loading>
+      <mat-spinner diameter="50"></mat-spinner>
+    </ng-template>
+
+    <div *ngIf="data">
+      <!-- <div >
+        uiTransaction  {{uiTransaction | json}}
+      </div> -->
+      <div >
+        <!-- posPayment  {{posPayment | json}} -->
+      </div>
+      <!-- <div >
+        order {{order | json}}
+      </div> -->
+    </div>
+
+  </div>
+
+</div>
+
+<div *ngIf="isDev"  class="button-grid">
+  <div>
+    <h3>Transaction</h3>
+    <mat-card *ngIf="result && (jsonView || isDev)">
+      <ngx-json-viewer [json]="result"></ngx-json-viewer>
+    </mat-card>
+  </div>
+  <div>
+    <h3>UI</h3>
+    <ngx-json-viewer *ngIf="ui" [json]="ui"></ngx-json-viewer>
+  </div>
+  <div>
+    <h3>Terminal</h3>
+    <ngx-json-viewer *ngIf="terminalSettings" [json]="terminalSettings"></ngx-json-viewer>
+  </div>
+</div>
+
+<ng-template #loading>
+  <button mat-raised-button (click)="close()">Close</button>
+  <mat-spinner diameter="50"></mat-spinner>
+</ng-template>

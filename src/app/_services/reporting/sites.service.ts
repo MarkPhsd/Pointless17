@@ -7,7 +7,7 @@ import { InterceptorSkipHeader } from 'src/app/_http-interceptors/basic-auth.int
 import { AppInitService, IAppConfig } from '../system/app-init.service';
 import { PlatformService } from '../system/platform.service';
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-
+import { isDevMode } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
@@ -37,6 +37,14 @@ export class SitesService {
 
   updateSiteSubscriber(site: ISite) {
     this._site.next(site)
+  }
+
+  get isDev() {
+    const site = this.getAssignedSite();
+    if (site.url === 'https://localhost:44309/api') {
+      return true;
+    }
+    return false;
   }
 
   constructor( private http            : HttpClient,
@@ -333,7 +341,7 @@ export class SitesService {
 
     this.verticalPosition = vPOS as MatSnackBarVerticalPosition ;
 
-    if (!time) { 
+    if (!time) {
       time = 10000
     }
     this.snackBar.open(

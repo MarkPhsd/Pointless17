@@ -69,7 +69,7 @@ export class ClockInOutComponent implements OnInit {
     if (!user) { return }
     this.clock$  = this.employeeClockMethodsService.getUserOnClock(site, user).pipe(
       switchMap(data => {
-        console.log('getUserOnClock', data)
+        // console.log('getUserOnClock', data)
         if (!data) {
           this.isOnBreak = false;
           this.clock = null;

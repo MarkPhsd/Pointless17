@@ -125,10 +125,20 @@ export class BalanceSheetMethodsService {
     const site = this.sitesService.getAssignedSite()
     return   this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
       switchMap(sheet => {
-        return  this.sheetService.getSheetCalculations(site, sheet)
+        return  this.getSheetCalc(site, sheet)
     })).pipe(switchMap(data => {
       this.updateBalanceSheet(data)
       return of(data)
+    }))
+  }
+
+  getSheetCalc(site, sheet: IBalanceSheet): Observable<IBalanceSheet> {
+    return this.sheetService.getSheetCalculations(site, sheet).pipe(switchMap(data => {
+      return of (data)
+    }),catchError(data => {
+      console.log('error ', JSON.stringify(data))
+      this.siteService.notify('Sheet calc error', 'close', 5000, 'red')
+      return of (sheet)
     }))
   }
 
@@ -173,7 +183,7 @@ export class BalanceSheetMethodsService {
     return deviceName;
   }
 
-  updateSheet(sheet: IBalanceSheet, startShiftInt: number): Observable<any> {
+  updateSheet(sheet: IBalanceSheet, startShiftInt: number): Observable<IBalanceSheet> {
     const site = this.sitesService.getAssignedSite();
     if (sheet.shiftStarted  != 1) {
       sheet.shiftStarted = startShiftInt;
@@ -187,7 +197,7 @@ export class BalanceSheetMethodsService {
         }),
         catchError(err => {
           this.siteService.notify('Sheet not saved.' + err, 'Failure', 5000, 'red')
-          return of(err)
+          return of({} as IBalanceSheet)
         }
       )
     )

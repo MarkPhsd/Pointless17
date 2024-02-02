@@ -128,9 +128,7 @@ export class NewOrderItemComponent implements OnInit {
       const site = this.siteService.getAssignedSite()
       this.action$ = this.menuService.getMenuItemByID(site, event.id).pipe(switchMap(data => {
         this.menuItemSelected = data;
-
         console.log(this.menuItemSelected)
-
         this.posOrderItem.productID = event.id;
         this.posOrderItem.unitPrice = event.retail;
         this.posOrderItem.wholeSale = event.wholeSale;
@@ -207,12 +205,7 @@ export class NewOrderItemComponent implements OnInit {
       this.posOrderItem.unitMultiplier = data.unitMultiplyer;
       this.posOrderItem.unitType = data?.id;
 
-      console.log('data.unitMultiplyer', data.unitMultiplyer)
-
       this.posOrderItem.wholeSale = (this.menuItemSelected.wholesale *  data.unitMultiplyer);
-      // console.log('new calc', (this.menuItemSelected.wholesale *  data.unitMultiplyer))
-      // console.log('wholesale', this.posOrderItem.wholeSale)
-
       this.inputForm.patchValue({wholeSale: this.posOrderItem.wholeSale})
       this.unitSearchForm.patchValue({unitName: chip?.name, unitTypeID: chip?.id})
       this.setChange = true;
@@ -339,12 +332,20 @@ export class NewOrderItemComponent implements OnInit {
         newItem.menuItem.unitTypeID = unitTypeID;
         newItem.unitTypeID = unitTypeID;
 
+        let inv: IInventoryAssignment;
         return this.postNewInventoryItem(site, newItem?.menuItem, item,  newItem.quantity).pipe(switchMap(data => {
-          item.inventoryAssignmentID = data.id;
-          this.clearProduct();
-          this.clearUnit()
-          return of(data)
-        }))
+            item.inventoryAssignmentID = data.id;
+            this.clearProduct();
+            this.clearUnit();
+            return of(data)
+           }
+        ))
+        //   inv = data;
+        //   return this.posOrderItemSerivce.putItem(site, item)
+        // })).pipe(switchMap(data => {
+        //   //then save
+        //   return of(inv)
+        // }))
       }
 
       this.clearProduct();
@@ -395,9 +396,7 @@ export class NewOrderItemComponent implements OnInit {
       const invItem =  {id: item.id, inventoryID: data.id};
       const dialogRef = this.inventoryAssignmentService.openInventoryItem(data.id)
       return  this.posOrderItemSerivce.setInventoryId(site, invItem)
-    })).pipe(switchMap(data => {
-      return of(data)
-    }))
+    }));
   }
 
   replaceObject(newObj: any, list: any[]): any[] {

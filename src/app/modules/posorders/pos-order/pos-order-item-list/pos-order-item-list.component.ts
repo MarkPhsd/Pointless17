@@ -555,8 +555,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
   }
 
-
-
   refreshSearchAny(event) {
     this.refreshSearch();
   }

@@ -1,24 +1,22 @@
 import { Component,   OnInit,
-  ViewChild ,ElementRef, AfterViewInit, HostListener, OnDestroy, Input } from '@angular/core';
+  ViewChild ,ElementRef,  HostListener, OnDestroy, Input } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subject, Subscription  } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 // import "ag-grid-community/dist/styles/ag-grid.css";
 // import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+
 import { EmployeeClockService,EmployeeClockResults,EmployeeClockSearchModel } from 'src/app/_services/employeeClock/employee-clock.service';
 import {  EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
 import { Capacitor,  } from '@capacitor/core';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
-
+import {Clipboard} from '@angular/cdk/clipboard';
 export interface rowItem {
   field: string,
   cellRenderer: string,
@@ -40,10 +38,12 @@ export class EmployeeClockListComponent implements OnInit {
 
   @ViewChild('input', {static: true}) input: ElementRef;
   searchPhrase:         Subject<any> = new Subject();
+  message: string;
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
   dateRange        : UntypedFormGroup;
-
+  jsonView: boolean;
+  jsonData: EmployeeClock[]
   @Input() reportOnly: boolean;
   @Input() notifier   : Subject<boolean>
   @Input() startDate: string;
@@ -79,7 +79,8 @@ export class EmployeeClockListComponent implements OnInit {
    selected        : any[];
    selectedRows    : any;
    agtheme         = 'ag-theme-material';
-   gridDimensions  = "width: 100%; height: 100%;"
+   gridDimensions  = "width: 100%; height: 100%; min-height: calc(90vh - 125px);max-height: calc(90vh - 125px);"
+   JSONDimensions  = "width: 100%; height: calc(90vh - 150px);max-height: calc(90vh - 125px);overFlow-y:auto"
    urlPath:        string;
 
    id              :   number;
@@ -103,6 +104,7 @@ export class EmployeeClockListComponent implements OnInit {
     private _snackBar               : MatSnackBar,
     private employeeClockService    : EmployeeClockService,
     private productEditButtonService: ProductEditButtonService,
+    private clipboard               : Clipboard,
     private siteService             : SitesService,
     private dateHelper              : DateHelperService,
     private agGridFormatingService  : AgGridFormatingService,
@@ -130,16 +132,17 @@ export class EmployeeClockListComponent implements OnInit {
       search.endDate = this.endDate;
       search.startDate = this.startDate;
       this.searchModel = search;
+
       this.refreshSearch(search);
     })
   }
 
   initClasses()  {
     const platForm      = this.platForm;
-    this.gridDimensions = 'width: 100%; height: 100%;'
+    // this.gridDimensions = 'width: 100%; height: 100%;'
     this.agtheme        = 'ag-theme-material';
-    if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
-    if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
+    // if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
+    // if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
   }
 
   initAgGrid(pageSize: number) {
@@ -323,8 +326,19 @@ export class EmployeeClockListComponent implements OnInit {
     this.refreshSearch(data)
   }
 
+  //this doesn't change the page, but updates the properties for getting data from the server.
+  setCurrentPage(startRow: number, endRow: number): number {
+    const tempStartRow = this.startRow
+    this.startRow      = startRow
+    this.endRow        = endRow;
+    if (tempStartRow > startRow) { return this.currentPage - 1 }
+    if (tempStartRow < startRow) { return this.currentPage + 1 }
+    return this.currentPage
+  }
+
   refreshSearch(data) {
     const search = {} as EmployeeClockSearchModel
+    this.message = ''
     if (search) {
       search.pageNumber = this.pageNumber;
       if (data) {
@@ -336,9 +350,7 @@ export class EmployeeClockListComponent implements OnInit {
           this.pageSize = data?.pageSize
         }
       }
-      if (this.pageNumber) {
-        this.pageNumber = 1;
-      }
+      if (!this.pageNumber) {  this.pageNumber = 1; }
       search.pageNumber = this.pageNumber;
       search.summary    = data?.summary;
       search.pageSize   = this.pageSize;
@@ -396,7 +408,7 @@ export class EmployeeClockListComponent implements OnInit {
         {
             const resp           =  data.paging
             this.summary         = data?.summary
-            // console.log('data', data, data.summary)
+
             if (resp) {
               this.isfirstpage   = resp.isFirstPage
               this.islastpage    = resp.isFirstPage
@@ -406,8 +418,17 @@ export class EmployeeClockListComponent implements OnInit {
               if (this.numberOfPages !=0 && this.numberOfPages) {
                 this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
               }
+
             }
             if (data.results) {
+              if (this.isfirstpage) {
+                // console.log('add first page', data.results)
+                this.jsonData = data.results
+              } else {
+                // console.log('add more page', data.results)
+                this.jsonData = [...this.jsonData, ...data.results]
+              }
+              console.log('jsonData', this.jsonData)
               let results  =  this.refreshImages(data.results)
               params.successCallback(results)
               this.rowData = results
@@ -426,15 +447,15 @@ export class EmployeeClockListComponent implements OnInit {
   //ag-grid standard method
   getRowData(params, startRow: number, endRow: number):  Observable<EmployeeClockResults>  {
     const site                = this.siteService.getAssignedSite()
-    // console.log(this.searchModel)
+
     let search = {} as EmployeeClockSearchModel
     search = this.searchModel;
-    if (!this.searchModel) {
-      search = {} as EmployeeClockSearchModel
-    }
+    if (!this.searchModel) {  search = {} as EmployeeClockSearchModel }
+
+    this.currentPage          = this.setCurrentPage(startRow, endRow)
 
     if (search) {
-      search.pageNumber = this.pageNumber;
+      search.pageNumber = this.currentPage;
       search.pageSize =   this.pageSize;
       this.currentPage =  this.currentPage;
       search.startDate =  this.startDate;
@@ -507,7 +528,7 @@ export class EmployeeClockListComponent implements OnInit {
     this.smallDevice = false
     if (window.innerWidth < 768) {
       this.smallDevice = true
-      this.gridDimensions = 'width: 100%; height: 85%;'
+      // this.gridDimensions = 'width: 100%; height: 85%;'
     }
   }
 
@@ -529,6 +550,22 @@ export class EmployeeClockListComponent implements OnInit {
     duration: 2000,
     verticalPosition: 'top'
     });
+  }
+
+  copyJSONToClipBoard() {
+    const pending = this.clipboard.beginCopy(JSON.stringify(this.jsonData));
+    let remainingAttempts = 3;
+    const attempt = () => {
+      const result = pending.copy();
+      if (!result && --remainingAttempts) {
+        setTimeout(attempt);
+      } else {
+        // Remember to destroy when you're done!
+        this.message = 'Copied to clipboard'
+        pending.destroy();
+      }
+    };
+    attempt();
   }
 
   filterBottomSheet() {

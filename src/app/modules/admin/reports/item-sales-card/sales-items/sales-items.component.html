@@ -37,14 +37,15 @@
 
     <div  *ngIf="groupBy != 'transactionType'" class="totals"> {{sale?.itemTotal | currency }}</div>
 
-    <div class="totals">{{sale?.quantity }} </div>
+    <div class="totals">{{sale?.quantity  | number: '1.0-0' }} </div>
+
+    <div *ngIf="!autoPrint && groupBy == 'items' " class="totals">{{sale?.productCount  | number: '1.0-0' }}   </div>
 
     <div *ngIf="!autoPrint && groupBy != 'transactionType'" class="totals">{{sale?.cost | currency }}   </div>
 
-    <div *ngIf="!autoPrint && groupBy != 'transactionType'" class="totals">{{sale?.productCount | currency }}   </div>
 
     <div class="row-span-all">
-      <mat-divider style="width:300px"></mat-divider>
+      <mat-divider style="width:325px"></mat-divider>
     </div>
   </div>
 
@@ -58,7 +59,7 @@
     <div class="product-name">Item :    </div>
     <div class="totalslabel">Pre Tax :</div>
     <div class="totalslabel"> # </div>
-    <div *ngIf="groupBy == 'items'" class="totalslabel"> Stock </div>
+    <div class="totalslabel" *ngIf="groupBy == 'items'"> Stock </div>
     <div *ngIf="!autoPrint && (groupBy == 'items' || groupBy == 'departments' || groupBy == 'category') " class="totalslabel">Cost :</div>
   </div>
   <div  *ngIf="!autoPrint" class="margin-divider">  <mat-divider></mat-divider> </div>

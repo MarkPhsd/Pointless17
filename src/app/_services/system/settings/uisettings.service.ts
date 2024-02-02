@@ -59,7 +59,11 @@ export interface TransactionUISettings {
   dsiEMVNeteEpayEnabled  : boolean;
   dsiEMVIP               : boolean;
   dCapEnabled            : boolean;
+  dCapSurcharge          : boolean;
+  dCapSurchargeValue     : string;
   dsiTipPrompt: boolean;
+  dsiTipPromptValues    : string;
+  allowPreAuth          : boolean;
   payPalEnabled          : boolean;
   payPalClientID        : string;
   payPalCurrency        : string;
@@ -128,10 +132,8 @@ export interface DSIEMVSettings {
   OperatorID: string;
   POSPackageID: string;
   TranDeviceID: string;
-
   UserTrace : string;
   TranCode  : string;
-
   SecureDevice: string;
   ComPort   : string;
   PinPadIpAddress: string;
@@ -141,6 +143,7 @@ export interface DSIEMVSettings {
   enabled: boolean;
   partialAuth: boolean;
 }
+
 
 export interface DSIEMVAndroidSettings {
 
@@ -840,6 +843,8 @@ export class UISettingsService {
       dsiEMVIP               : [''],
       dsiTipPrompt           : [''],
       dCapEnabled            : [],
+      dCapSurcharge          : [],
+      dCapSurchargeValue     : [],
       payPalEnabled          : [ ],
       payPalClientID         : [''],
       payPalCurrency         : [ ],
@@ -888,6 +893,8 @@ export class UISettingsService {
       rewardPointValue: [],
       enableOnScreenKeyboard:[],
       employeeClockNotifier: [],
+      dsiTipPromptValues: [],
+
      })
   }
 

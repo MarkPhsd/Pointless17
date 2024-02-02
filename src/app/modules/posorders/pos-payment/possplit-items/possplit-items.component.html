@@ -1,7 +1,7 @@
 <div class="grid-container">
    <div class="toggle-group" *ngIf="!smallDevice &&  values && !savingChanges">
       <mat-button-toggle-group
-            name         = "type"
+            name          = "type"
             vertical>
         <mat-button-toggle
               *ngFor      ="let item of values"
@@ -76,17 +76,13 @@
           </div>
         </mat-card-subtitle>
         <mat-card-content >
-
           <ng-template #savingChangesOn>
             ...saving
           </ng-template>
 
-     
           <div class="span-column" *ngIf="!savingChanges; else savingChangesOn">
             <div class="grid-dual-list">
-
               <div class="col-md-6 col-lg-6 col-sm-12 dualListLeft">
-           
                 <div class="primary-container drag-drop-container">
                   Group 1
                   <div
@@ -111,10 +107,7 @@
               </div>
 
               <div class="col-md-6 col-lg-6 col-sm-12 dualListRight" [hidden]="currentGroup == '1'">
-                <div class="primary-container drag-drop-container" 
-                   
-                    >  
-                    <!-- *ngIf="currentGroup != '1'" -->
+                <div class="primary-container drag-drop-container">
                   Items in group {{currentGroup}}
                   <div
                     id="selectedItemsList"
@@ -149,4 +142,4 @@
 <div *ngIf="(selectedItems$ | async) as selectedItems"></div>
 <div *ngIf="(allitems$ | async) as allitems"></div>
 <div *ngIf="(saveAssignedItems$ | async) as savedItems"></div>
-<div *ngIf="order$ && (order$ | async) as order;else calculating"></div>
+<div *ngIf="order$ && (order$ | async) as order; else calculating"></div>

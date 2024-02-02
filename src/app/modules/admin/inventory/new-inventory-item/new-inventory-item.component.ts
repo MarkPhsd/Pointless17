@@ -7,17 +7,18 @@ import { ISite } from 'src/app/_interfaces/site';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { catchError, switchMap } from 'rxjs/operators';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
-import { ISetting, IUser } from 'src/app/_interfaces';
+import { ISetting, IUser, PosOrderItem } from 'src/app/_interfaces';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { AuthenticationService } from 'src/app/_services';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 
 @Component({
   selector: 'app-new-inventory-item',
@@ -26,7 +27,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 })
 
 export class NewInventoryItemComponent implements OnInit , OnDestroy{
-
+  saving                    : boolean;
   inputForm:                 UntypedFormGroup;
   id:                        any;
   site:                      ISite;
@@ -52,9 +53,9 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
 
   uiHome: UIHomePageSettings;
   _uiHome: Subscription;
-
+  updatingForm: boolean;
   costTotal: number;
-
+  formCostTotal: UntypedFormGroup;
   getUITransactionsSettings() {
     this._uiHome = this.uiSettingsService.homePageSetting$.subscribe( data => {
       if (data) {
@@ -85,6 +86,7 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     public fbProductsService    : FbProductsService,
     public printingService: PrintingService,
     private menuService  : MenuService,
+    private posOrderItemService: POSOrderItemService,
     private router: Router,
     private inventoryLocationsService: InventoryLocationsService,
     private dialogRef    : MatDialogRef<NewInventoryItemComponent>,
@@ -145,13 +147,12 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
       this.setFormInventoryData(this.item)
       return;
     }
-
+    this.initFormCost()
     this.inventoryAssignment$ = this.inventoryAssignmentService.getInventoryAssignment(this.site, this.id)
     this.inventoryAssignment$.pipe(
       switchMap( data => {
         this.item = data;
         this.setFormInventoryData(this.item)
-        console.log(data.productID)
         if (!data.productID) { return of(null)}
         return  this.menuService.getMenuItemByID(this.site, data.productID)
       }
@@ -164,13 +165,18 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     this.getUITransactionsSettings()
 
   }
+  initFormCost() {
+    this.formCostTotal = this.fb.group({
+      costTotal: []
+    })
+  }
 
   updateCost(event) {
-    console.log('cost total',event, this.costTotal, this.item);
+    // console.log('cost total', this.costTotal, this.item);
     if (this.costTotal) {
       if (this.item.packageCountRemaining && this.item.packageCountRemaining != 0){
         const value = this.costTotal / this.item.packageCountRemaining
-        this.inputForm.controls['cost'].setValue(value)
+        this.inputForm.patchValue({cost: value})
       }
     }
   }
@@ -182,15 +188,85 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     this.inputForm = this.fbInventory.initForm(this.inputForm)
     this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
 
-    this.inputForm.valueChanges.subscribe(data => {
-
-      console.log(data, data.cost);
-
-      const cost = this.inputForm.controls['cost'].value;
-      this.costTotal = this.item.packageQuantity * cost
-
-    })
+    this.subscribeToFormChanges()
   }
+
+  subscribeToFormChanges() {
+    // Subscribe to changes on formCostTotal
+    if (this.formCostTotal) {
+      // console.log('subscribe cost total')
+      this.formCostTotal.valueChanges.subscribe(data => {
+        if (!this.updatingForm) {
+          this.updatingForm = true; // Set flag to true to indicate programmatic update
+          this.setCost();
+          this.updatingForm = false; // Reset flag after update
+        }
+      });
+    }
+
+    if (this.inputForm) {
+      // Subscribe to changes on inputForm
+      // console.log('subscribe input form')
+      this.inputForm.valueChanges.subscribe(data => {
+        if (!this.updatingForm) {
+          this.updatingForm = true; // Set flag to true to indicate programmatic update
+          this.getTotalCost();
+          this.updatingForm = false; // Reset flag after update
+        }
+      });
+    }
+  }
+
+  setCost() {
+    if (this.formCostTotal.value.costTotal && this.item.packageQuantity) {
+      const value = this.formCostTotal.value.costTotal / this.item.packageQuantity;
+      this.inputForm.patchValue({ cost: value });
+    }
+  }
+
+  getTotalCost() {
+    if (this.inputForm.value.cost && this.item.packageQuantity) {
+      const value = this.inputForm.value.cost * this.item.packageQuantity;
+      this.formCostTotal.patchValue({ costTotal: value });
+    }
+  }
+
+
+  // setCost() {
+  //   if (this.formCostTotal.value && this.item.packageQuantity) {
+  //     const value = this.formCostTotal.value.costTotal / this.item.packageQuantity;
+  //     this.inputForm.patchValue({cost: value})
+  //   }
+  // }
+  // getTotalCost() {
+  //   if (this.inputForm.value.cost && this.item.packageQuantity) {
+  //     const value = this.inputForm.value.cost * this.item.packageQuantity;
+  //     this.formCostTotal.patchValue({costTotal: value})
+  //   }
+  // }
+
+
+    // this.formCostTotal.valueChanges.subscribe(data => {
+    //   console.log('data',this.formCostTotal.value.costTotal , value)
+    //   if (value && this.formCostTotal.value.costTotal == this.costTotal) {
+    //     console.log('value', value)
+    //     return;
+    //   }
+    //   if (this.costTotal == this.formCostTotal.value.costTotal ) {
+    //     console.log( 'same values', this.costTotal, this.formCostTotal.value.costTotal, )
+    //     const value = this.formCostTotal.value.costTotal / this.item.packageQuantity;
+    //     this.inputForm.patchValue({cost: value})
+    //     return ;
+    //   }
+    //   this.costTotal =  this.formCostTotal.value.costTotal
+    //   if (this.formCostTotal.value && this.item.packageQuantity) {
+    //     const value = this.formCostTotal.value.costTotal / this.item.packageQuantity;
+    //     this.inputForm.patchValue({cost: value})
+    //   }
+    // })
+
+
+
 
   setLocation(selection) {
     if (this.locations){
@@ -243,11 +319,33 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   }
 
   _updateWithoutNotification(item: IInventoryAssignment) {
+    this.saving = true;
+
     if (!item) {
       this.notifyEvent('error no item', 'result')
       return of(null)
     }
-    return this.inventoryAssignmentService.editInventory(this.site, item.id, item)
+
+    let poItem$ = of({} as PosOrderItem )
+    const site = this.siteService.getAssignedSite()
+    if (this.item.poDetailID && this.item.poDetailID != 0) {
+      poItem$ = this.posOrderItemService.getPOSOrderItem(site, this.item.poDetailID)
+    }
+
+    return this.inventoryAssignmentService.editInventory(this.site, item.id, item).pipe(switchMap(data => {
+      return poItem$
+    })).pipe(switchMap(data => {
+      if (data) {
+        data.wholeSale = this.item.cost;
+        data.wholeSaleCost = this.item.cost
+        return this.posOrderItemService.changeItemCost(site, data )
+      }
+      return of(data)
+    })).pipe(switchMap(data => {
+      this.saving = false
+      return of(this.item)
+    }))
+
   }
 
   updateItemExit(event) {

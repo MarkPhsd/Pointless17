@@ -342,7 +342,10 @@ export class FastUserSwitchComponent implements OnInit {
   }
 
   openTimeClock() {
-    this.userSwitchingService.openTimeClock()
+    const dialog = this.userSwitchingService.openTimeClock()
+    dialog.afterclosed(data => {
+      this.userSwitchingService.clearLoggedInUser()
+    })
   }
 
   notifyEvent(message: string, action: string) {

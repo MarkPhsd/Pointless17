@@ -158,8 +158,7 @@ img {
 .container {
   display: grid;
   gap: 10px;
-  grid-template-columns: 825px 350px;
-
+  grid-template-columns: calc(100vw - 350px) 350px;
 }
 
 .floating-info {
@@ -176,7 +175,7 @@ img {
 
 .schedule-info {
   min-width: 825px;
-  width: 825px;
+  width: calc(100vw - 375px) ;;
 }
 
 

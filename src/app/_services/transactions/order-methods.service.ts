@@ -233,14 +233,20 @@ export class OrderMethodsService implements OnDestroy {
   getCost(order: IPOSOrder) {
     if (order ) {
       if (order.toString() == 'not found') { return; }
-      order.cost = 0
-      if (order.posOrderItems && order.posOrderItems.length>0) {
-        order.posOrderItems.forEach(data => {
-          if (data.wholeSaleCost) {
-            order.cost = data.wholeSaleCost + order.cost
-          }
-        })
+
+      try {
+        order.cost = 0
+        if (order.posOrderItems && order.posOrderItems.length>0) {
+          order.posOrderItems.forEach(data => {
+            if (data.wholeSaleCost) {
+              order.cost = data.wholeSaleCost + +order?.cost
+            }
+          })
+        }
+      } catch (error) {
+
       }
+
     }
     return order
   }
@@ -255,10 +261,14 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   updateOrder(order: IPOSOrder) {
+    // console.log('update order ', order)
     try {
       if (!order) {
+        // console.log('clear order')
+        this.currentOrder = null;
         this._currentOrder.next(null);
         this.setStateOrder(null)
+        this.setActiveOrder(null)
         return
       }
       this.preSwitchOrder(order)
@@ -358,7 +368,7 @@ export class OrderMethodsService implements OnDestroy {
 
   setStateOrder(order) {
     if (!order) {
-      console.log('remove order subscription')
+      // console.log('remove order subscription')/
       localStorage.removeItem('orderSubscription')
       return;
     }
@@ -431,14 +441,14 @@ export class OrderMethodsService implements OnDestroy {
     const auth = this.authenticationService._userAuths.value
     if (this.showAllOrders) {
       if (user && user.employeeID && user.employeeID != null) {
-        console.log('process' , this.userAuthorization.isStaff)
+        // console.log('process' , this.userAuthorization.isStaff)
         return 0;
       }
     }
 
     if (this.showAllOrders && this.userAuthorization.isStaff ) {
       if (user && user.employeeID  && user.employeeID != null) {
-        console.log('process')
+        // console.log('process')
         return 0
       }
     }
@@ -1434,8 +1444,10 @@ export class OrderMethodsService implements OnDestroy {
             return;
           }
 
-          if (order && order.posOrderItems.length == 1 ) {
+          console.log((order?.posOrderItems?.length , order.posOrderItems))
+          if ((order && order.posOrderItems.length == 1) || this.authenticationService.isStaff) {
             this.toolbarServiceUI.updateOrderBar(true);
+            return;
           }
 
           this.notifyItemAdded(data);
@@ -1453,7 +1465,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   notifyItemAdded(data) {
-    if (!this.toolbarServiceUI.orderBar || !this.isApp) {
+    if (!this.toolbarServiceUI.orderBar || !this.platFormService.isApp) {
       this.siteService.notify(`Item added ${data?.posItemMenuItem?.name}`, 'close', 1000, 'green')
     }
   }
@@ -1627,7 +1639,7 @@ export class OrderMethodsService implements OnDestroy {
       this.siteService.notify(`Error submitting Order ${order.resultMessage}`, "Close", 2000)
       return
     }
-    this.setActiveOrder(site, order)
+    this.setActiveOrder(order)
 
     // console.log('resaleType', resaleType)
     if (resaleType) {
@@ -1663,7 +1675,7 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-  setActiveOrder(site, order: IPOSOrder) {
+  setActiveOrder(order: IPOSOrder) {
     if (order) {
       if (!this.authenticationService?.deviceInfo?.phoneDevice) {
         this.toolbarServiceUI.updateOrderBar(true)
@@ -2597,7 +2609,7 @@ export class OrderMethodsService implements OnDestroy {
       item.id = data.id;
       return this.orderService.addReconciliationSection(site, item)
     })).pipe(switchMap(order => {
-     this.setActiveOrder(site, order)
+     this.setActiveOrder(order)
      return of(order)
     }))
   }

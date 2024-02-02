@@ -252,7 +252,7 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
       {
         if (data) {
           // this.orderOutPut.emit(data)
-          this.orderMethodsService.setActiveOrder(site, data)
+          this.orderMethodsService.setActiveOrder(data)
         }
         return of(data)
       }

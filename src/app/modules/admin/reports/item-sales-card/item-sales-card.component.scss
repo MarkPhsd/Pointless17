@@ -28,7 +28,8 @@ mat-card-title {
   grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
   margin: 3px;
   width: 305px;
-
+  font-size: 1.2em;
+  font-weight: 400;
   @media print {
     --gap: 5px;
     display: grid;
@@ -112,7 +113,7 @@ button {
     --gap: 5px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns: 125px 90px 75px 75px; ; 
+    grid-template-columns: 125px 90px 75px 75px; ;
     font-size: 12pt;
     font-weight: bold !important;
     justify-content: right;
@@ -160,7 +161,7 @@ button {
     --gap: 5px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns: 125px 90px 50px 75px; 
+    grid-template-columns: 125px 90px 50px 75px;
     font-size: 12pt;
     font-weight: bold !important;
     justify-content: right;
@@ -175,7 +176,7 @@ button {
 
 .grid-subbody-header {
   display              : grid;
-  grid-template-columns: 125px 125px ; 
+  grid-template-columns: 125px 125px ;
   grid-template-rows   : auto;
   grid-gap             : 2px;
   justify-content      : space-between;
@@ -188,7 +189,7 @@ button {
     --gap: 5px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns: 125px 125px ; 
+    grid-template-columns: 125px 125px ;
     font-size: 12pt;
     font-weight: bold !important;
     justify-content: right;
@@ -237,7 +238,7 @@ button {
     --gap: 5px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns: 125px 90px 50px 75px; 
+    grid-template-columns: 125px 90px 50px 75px;
     font-size: 12pt;
     font-weight: bold !important;
     justify-content: right;

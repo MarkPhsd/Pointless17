@@ -43,18 +43,30 @@
         <ng-template #serviceFeeView>
           <ng-container [ngTemplateOutlet]="divider"></ng-container>
           <div *ngIf="(gratuitySummary$ | async) as serviceFee" style="margin-bottom:10px">
-            <div *ngIf="serviceFee && serviceFee.gratuity != 0">
+            <div *ngIf="serviceFee && !this.auths.blindBalanceSheet ">
               <div class="header-grid printFont-14">
+                <!-- <div *ngIf="zRunData.id">
+                  Day ID
+                </div>
+                <div *ngIf="zRunData.id">
+                  {{zRunData.id}}
+                </div>
+                <div *ngIf="zRunData.endTime">
+                  End Time
+                </div>
+                <div *ngIf="zRunData.endTime">
+                  {{zRunData.endTime | date: 'short'}}
+                </div> -->
                 <div >
                   Net Sales:
                 </div>
                 <div>
                   {{ sheet?.netSales ?? 0 | currency }}
                 </div>
-                <div >
+                <div *ngIf="serviceFee.gratuity != 0">
                   Other Charges:
                 </div>
-                <div>
+                <div  *ngIf="serviceFee.gratuity != 0">
                   {{ serviceFee?.gratuity ?? 0 | currency }}
                 </div>
               </div>

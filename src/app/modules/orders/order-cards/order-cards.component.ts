@@ -314,7 +314,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
       {
         if (data) {
           this.orderOutPut.emit(data)
-          this.orderMethodsService.setActiveOrder(site, data)
+          this.orderMethodsService.setActiveOrder(data)
         }
       }
     )
@@ -343,7 +343,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
         {
           if (data) {
             this.orderOutPut.emit(data)
-            this.orderMethodsService.setActiveOrder(site, data)
+            this.orderMethodsService.setActiveOrder(data)
           }
         }
         return of(data)

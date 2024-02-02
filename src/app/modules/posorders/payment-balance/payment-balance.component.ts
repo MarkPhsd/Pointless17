@@ -18,6 +18,8 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { CardPointMethodsService } from '../../payment-processing/services';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { DcapService } from '../../payment-processing/services/dcap.service';
+import { DcapMethodsService } from '../../payment-processing/services/dcap-methods.service';
 
 @Component({
   selector: 'app-payment-balance',
@@ -43,7 +45,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   isUser: boolean;
   hidePrint:      boolean;
   href          : string;
-  totalAuthTriPOSPayments : number;
+  totalAuthPayments : number;
   incrementalAuth: PosPayment;
   authData: IUserAuth_Properties;
   authData$: Observable<IUserAuth_Properties>;
@@ -53,14 +55,13 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
-      this.gettriPOSTotalPayments();
+      this.getAuthTotalPayments();
       this.lastIncrementalAuth();
-
     })
 
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
       this.posPayment = data
-      this.gettriPOSTotalPayments();
+      this.getAuthTotalPayments();
     })
   }
 
@@ -81,6 +82,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               public  printingService: PrintingService,
               private settingsService: SettingsService,
               private toolbarUIService  : ToolBarUIService,
+              private dcapService: DcapService,
+              private dcapMethodsService: DcapMethodsService,
               private router: Router) {
    }
 
@@ -125,7 +128,6 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.orderMethodsService.setScanner()
   }
 
-
   capture(item: IPOSPayment) {
     const site = this.siteService.getAssignedSite();
     if (this.order && this.uiTransactions.cardPointPreAuth && this.uiTransactions.cardPointBoltEnabled) {
@@ -136,6 +138,19 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
                                                       return of(payment)
       }))
     }
+  }
+
+  captureDCap(item: IPOSPayment) {
+    //PreAuthCaptureByRecordNo
+    const device = localStorage.getItem('devicename')
+    this.action$ = this.dcapService.preAuthCaptureByRecordNo(device, item).pipe(switchMap(data => {
+      return this.paymentMethodsProessService.processDCAPPreauthResponse(data, item, this.order, device)
+      return of(null)
+    }))
+  }
+
+  incrementalDCap(item: IPOSPayment) {
+
   }
 
   lastIncrementalAuth() {
@@ -162,7 +177,6 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
         console.log('lastIncrementalAuth error ', error)
       }
   }
-
 
   reverseIncrementalAuth(item: any) {
     const site = this.siteService.getAssignedSite()
@@ -200,7 +214,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
   incrementTriPOS(item: IPOSPayment) {
-    const amount =   this.order.creditBalanceRemaining - this.totalAuthTriPOSPayments;
+    const amount =   this.order.creditBalanceRemaining - this.totalAuthPayments;
     const site = this.siteService.getAssignedSite()
     let transactionId
     let tranData
@@ -228,12 +242,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       }
     )).pipe(switchMap(data => {
 
-
       if (!data) {return of(null)}
-
-      // console.log('tran data', tranData,  tranData?.ticketNumber);
-
-      // return of(null)
       if (tranData && tranData.transactionId) {
         transactionId = tranData.transactionId
 
@@ -253,7 +262,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
           }
           ticketNumber = refNumber
         }
-        let increment =  this.order.creditBalanceRemaining - this.totalAuthTriPOSPayments;
+        let increment =  this.order.creditBalanceRemaining - this.totalAuthPayments;
 
         return this.triposMethodService.processIncrement( site, tranData.transactionId, amount.toString(), data.triposLaneID, ticketNumber)
       }
@@ -287,20 +296,18 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     }))
   }
 
-  gettriPOSTotalPayments() {
+  getAuthTotalPayments() {
     let amount = 0
-    this.totalAuthTriPOSPayments = 0;
-    // console.log('totalAuthTriPOSPayments', this.totalAuthTriPOSPayments)
+    this.totalAuthPayments = 0;
 
     if (!this.order || !this.order.posPayments) {return}
 
     if (this.uiTransactions && this.uiTransactions?.triposEnabled) {
-      amount = this.triposMethodService.getAuthTotal(this.order.posPayments)
+      amount = this.paymentMethodsProessService.getAuthTotal(this.order.posPayments)
     }
 
-
     // console.log('amount', amount, this.order.posPayments)
-    this.totalAuthTriPOSPayments = amount;
+    this.totalAuthPayments = amount;
     return amount;
   }
 
@@ -310,8 +317,21 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     const payment$ =  this.paymentService.getPOSPayment(site, item.id, false)
     this.action$ = payment$.pipe(switchMap(payment => {
 
-      let amount = this.totalAuthTriPOSPayments; // this.order.creditBalanceRemaining;
-      return this.triposMethodService.openDialogCompleteCreditPayment(this.order, amount,
+    let amount = this.totalAuthPayments; // this.order.creditBalanceRemaining;
+    return this.triposMethodService.openDialogCompleteCreditPayment(this.order, amount,
+                                                                payment, this.uiTransactions)
+    }))
+  }
+
+  //need to open for tip? maybe.
+  captureDCapPOS(item: IPOSPayment) {
+
+    const site = this.siteService.getAssignedSite();
+    const payment$ =  this.paymentService.getPOSPayment(site, item.id, false)
+    this.action$ = payment$.pipe(switchMap(payment => {
+
+    let amount = this.totalAuthPayments; // this.order.creditBalanceRemaining;
+    return this.triposMethodService.openDialogCompleteCreditPayment(this.order, amount,
                                                                 payment, this.uiTransactions)
     }))
   }

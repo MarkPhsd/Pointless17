@@ -26,19 +26,22 @@
     <div  *ngIf="payments && autoPrint">
       <ng-container [ngTemplateOutlet]="headerView"></ng-container>
       <ng-container [ngTemplateOutlet]="contentView"></ng-container>
-      <ng-container [ngTemplateOutlet]="footerView"></ng-container>
+      <!-- <ng-container [ngTemplateOutlet]="footerView"></ng-container> -->
     </div>
 
     <mat-card  *ngIf="payments && !autoPrint">
       <mat-card-title>
         <h4> <ng-container [ngTemplateOutlet]="headerView"></ng-container> </h4>
       </mat-card-title>
+      <mat-card-subtitle >
+        <ng-container [ngTemplateOutlet]="totalsView"></ng-container>
+      </mat-card-subtitle>
       <mat-card-content>
         <ng-container [ngTemplateOutlet]="contentView"></ng-container>
         <mat-divider></mat-divider>
       </mat-card-content>
       <mat-card-footer>
-        <ng-container [ngTemplateOutlet]="footerView"></ng-container>
+        <!-- <ng-container [ngTemplateOutlet]="footerView"></ng-container> -->
       </mat-card-footer>
     </mat-card>
 
@@ -138,30 +141,44 @@
 
       </ng-template>
 
-      <ng-template #footerView>
+      <ng-template #totalsView>
 
         <div class="grid-footer-payments" *ngIf="groupBy && (groupBy === 'paymentMethod')">
-          <div>---</div>
-          <div class="grid-items" style="width: 175px;margin-top:10px">
+
+        </div>
+
+        <div class="header-grid"  *ngIf="payments">
+          <div >Total</div>
+          <div >
+            {{sales.total | currency }}
+          </div>
+
+          <div >Avg</div>
+          <div *ngIf=" sales.count != 0">
+            {{sales.total / sales.count | currency }}
+          </div>
+
+          <div >#</div>
+          <div >
+            {{sales.count }}
+          </div>
+
+          <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
             Credit Total
           </div>
-          <div class="totals"  style="margin-top:10px">
+          <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
             {{sales.creditTotal | currency }}
           </div>
         </div>
 
-        <div class="grid-footer-payments" *ngIf="groupBy && (groupBy === 'service')">
+      </ng-template>
 
-          <!-- <div class="grid-items">
-            Total
-          </div>
-          <div>---</div>
-          <div class="totals">
-            {{sales.creditTotal | currency }}
-          </div> -->
-        </div>
+    </div>
+  </div>
 
-        <div class="grid-footer-payments"   *ngIf="payments">
+</div>
+
+        <!-- <div class="grid-footer-payments"   *ngIf="payments">
           <div class="grid-item">-----</div>
           <div class="totals">Total</div>
           <div class="totals">Avg</div>
@@ -181,10 +198,4 @@
           <div class="totals">
             {{sales.count }}
           </div>
-        </div>
-      </ng-template>
-
-    </div>
-  </div>
-
-</div>
+        </div> -->

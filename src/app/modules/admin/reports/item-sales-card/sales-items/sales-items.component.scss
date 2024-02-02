@@ -15,12 +15,12 @@
 
 .item-sales-grid-body {
   display              : grid;
-  grid-template-columns:  125px 70px 50px 75px;
+  grid-template-columns:  125px 70px 45px 55px 70px;
   grid-template-rows   : auto;
   grid-gap             : 5px;
 
   margin-left          : 5px;
-  max-width            : 350px;
+  max-width            : 375px;
   font-size            : 1em;
 
   white-space   : nowrap;
@@ -32,10 +32,10 @@
   @media print {
     display: grid;
     gap: 5px;
-    grid-template-columns: 135px 90px 50px 85px;
+    grid-template-columns:  125px 70px 45px 55px 70px;
     font-size: 12pt;
     font-weight: bold;
-    width: 350px;
+    width: 375px;
   }
 }
 

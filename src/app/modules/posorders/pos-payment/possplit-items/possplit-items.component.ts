@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output, HostListener } from '@a
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
-import { map, Observable, of, switchMap} from 'rxjs';
+import { concatMap, map, Observable, of, switchMap} from 'rxjs';
 import { IItemBasic, IItemBasicB } from 'src/app/_services/menu/menu.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrdersService } from 'src/app/_services';
@@ -217,10 +217,10 @@ export class POSSplitItemsComponent implements OnInit {
         const assignedItems$ = this.orderService.applyItemsToGroup(site, 1, this.availableItems)
 
         this.saveAssignedItems$ = items$.pipe(
-          switchMap(data => {
+          concatMap(data => {
             return assignedItems$
           })).pipe(
-            switchMap(data => {
+            concatMap(data => {
             if (data) {
               this.setGroupOrderTotal(site, this.order.id, this.currentGroupID)
               this.changesOcurred = false;
@@ -228,17 +228,19 @@ export class POSSplitItemsComponent implements OnInit {
             }
             return  this.orderService.getOrder(site, this.order.id.toString() , false)
         })).pipe(
-          switchMap(data => {
+          concatMap(data => {
           this.orderMethodsService.updateOrder(data);
+          //then update the split groups in the pos-payment. we can trigger this from the order update option?
+          // setTimeout(data => {console.log('refresh')}, 500)
           return of(data)
         }));
 
-      console.log('selected', selected)
+      // console.log('selected', selected)
     }
 
     setGroupOrderTotal(site, orderID, groupID) {
       this.orderGroupTotal$ = this.orderService.getPOSOrderGroupTotal(site, orderID, groupID).pipe(
-        switchMap(data => {
+        concatMap(data => {
           return of(data)
         })
       )
@@ -247,7 +249,7 @@ export class POSSplitItemsComponent implements OnInit {
     refreshOrder() {
       const site = this.siteService.getAssignedSite()
       this.order$ = this.orderService.getOrder(site, this.order.id.toString() , false).pipe(
-        switchMap(data => {
+        concatMap(data => {
           this.orderMethodsService.updateOrder(data);
           return of(data)
       }))
@@ -304,10 +306,10 @@ export class POSSplitItemsComponent implements OnInit {
 
     drop(event: CdkDragDrop<IListBoxItem[]>) {
       if (event.previousContainer === event.container) {
-        console.log('moveItemInArray')
+        // console.log('moveItemInArray')
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       } else {
-        console.log('transferArrayItem')
+        // console.log('transferArrayItem')
         transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
       }
 

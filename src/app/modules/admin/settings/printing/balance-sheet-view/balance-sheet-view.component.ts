@@ -80,14 +80,16 @@ export class BalanceSheetViewComponent implements OnInit {
       const style     = document.createElement('style');
       style.innerHTML = styles;
       document.head.appendChild(style);
-      console.log('set styles', this.styles.text)
+      // console.log('set styles', this.styles.text)
     }
   }
 
-
   getBalanceCalculations(sheetID : number) {
     const site  = this.siteService.getAssignedSite();
-    this.zRun$ = this.balanceSheetService.getZRUNBalanceSheet(site).pipe(switchMap(zRun => {
+
+    const zRun$ = this.balanceSheetService.getSheet(site, this.sheet.reportRunMasterID);
+    //this.balanceSheetService.getZRUNBalanceSheet(site)
+    this.zRun$ = zRun$.pipe(switchMap(zRun => {
       const site  = this.siteService.getAssignedSite();
 
       if (zRun) {

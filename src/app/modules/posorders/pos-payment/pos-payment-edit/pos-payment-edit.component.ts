@@ -106,7 +106,7 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     const id      = this.payment.orderID;
     const site    = this.siteService.getAssignedSite();
     const order$  =  this.orderService.getOrder(site, id.toString(), history )
-    order$.subscribe(data =>  { this.orderMethodsService.setActiveOrder(site, data)
+    order$.subscribe(data =>  { this.orderMethodsService.setActiveOrder( data)
       this._bottomSheet.dismiss();
     })
   }

@@ -52,6 +52,7 @@ export interface OrderActionResult {
 export class OrdersService {
 
 
+
   get platForm() {  return Capacitor.getPlatform(); }
 
   constructor(
@@ -63,6 +64,7 @@ export class OrdersService {
   {
 
   }
+
 
   applyReconciliation(site: ISite,id: number) :  Observable<any>  {
     const controller = "/POSOrderItems/"
@@ -274,6 +276,7 @@ export class OrdersService {
   // GetActiveEmployees(Name As String, StartDate As String, EndDate As String)
 
   getActiveEmployees(site: ISite):  Observable<IItemBasic[]>  {
+
     const controller = "/POSOrders/"
 
     const endPoint  = "getActiveEmployees"
@@ -857,6 +860,7 @@ export class OrdersService {
     return  this.http.get<any>( url )
 
   }
+
 
 
 

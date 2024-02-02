@@ -6,6 +6,12 @@
   </div>
 
   <button mat-button (click)="onExportToCsv()"><mat-icon>download</mat-icon>CSV</button>
+  <button mat-button (click)="jsonView = !jsonView"><mat-icon>list</mat-icon>
+    <span *ngIf="!jsonView">JSON</span>
+    <span *ngIf="jsonView">List</span>
+  </button>
+
+
   <div *ngIf="smallDevice">
     <mat-divider></mat-divider>
   </div>
@@ -13,7 +19,8 @@
   <div class="grid-list">
     <div>
       <div *ngIf="value" class="loader">
-        <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+        <!-- <span>Page: {{pageNumber}}</span> -->
+          <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
       </div>
 
       <div *ngIf="summary"  class="grid-headers">
@@ -35,18 +42,34 @@
       </div>
 
       <ag-grid-angular
-            #agGrid
-            [style]              ="gridDimensions"
-            id                   ="myGrid"
-            [class]              ="agtheme"
-            [columnDefs]         ="columnDefs"
-            [defaultColDef]      ="defaultColDef"
-            [gridOptions]        ="gridOptions"
-            [rowSelection]       ="rowSelection"
-            [frameworkComponents]="frameworkComponents"
-            (selectionChanged)   ="onSelectionChanged($event)"
-            (gridReady)          ="onGridReady($event)">
+          *ngIf="!jsonView"
+          #agGrid
+          [style]              ="gridDimensions"
+          id                   ="myGrid"
+          [class]              ="agtheme"
+          [columnDefs]         ="columnDefs"
+          [defaultColDef]      ="defaultColDef"
+          [gridOptions]        ="gridOptions"
+          [rowSelection]       ="rowSelection"
+          [frameworkComponents]="frameworkComponents"
+          (selectionChanged)   ="onSelectionChanged($event)"
+          (gridReady)          ="onGridReady($event)">
       </ag-grid-angular>
+
+      <mat-card *ngIf="jsonView" [style] ="JSONDimensions">
+        <mat-card-title>
+          <h4>Data</h4>
+          <mat-label>To retrieve all day, make sure you page through go to the last page in the list view.</mat-label>
+          <button mat-button *ngIf="jsonView" (click)="copyJSONToClipBoard()"><mat-icon>file_copy</mat-icon>Copy JSON</button>
+        </mat-card-title>
+        <mat-card-content>
+          <ngx-json-viewer [json]="jsonData"></ngx-json-viewer>
+        </mat-card-content>
+        <mat-card-actions>
+        </mat-card-actions>
+      </mat-card>
+
+
     </div>
 
     <div class="filter-panel" *ngIf="!reportOnly">
@@ -54,4 +77,6 @@
           (outputRefreshSearch)="refreshSearchAny($event)">
       </employee-clock-filter>
     </div>
+  </div>
+
 </div>

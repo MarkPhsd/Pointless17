@@ -167,7 +167,6 @@ export class UserSwitchingService implements  OnDestroy {
     this.orderMethodService.updateOrderSearchModel(null);
     this.toolbarUIService.updateDepartmentMenu(0);
     this._clearloginStatus.next(true)
-    // console.log(' Log out ')
     this.authenticationService.logout(this.uiSettingService.homePageSetting?.pinPadDefaultOnApp);
   }
 
@@ -211,7 +210,7 @@ export class UserSwitchingService implements  OnDestroy {
               return of(this.userAutFailed(user))
             }
 
-            console.log('login', user)
+            // console.log('login', user)
             if (user) {
               if (user?.message.toLowerCase() === 'failed') {
                 return of(this.userAutFailed(user))
@@ -232,7 +231,7 @@ export class UserSwitchingService implements  OnDestroy {
 
       let userAuth$ =  auth$.pipe(switchMap(data => {
         // console.log('Sending user getting contact', data)
-        console.log('userAuth clockInOnly', clockInOnly)
+        // console.log('userAuth clockInOnly', clockInOnly)
         if (data?.message === 'failed') { return of(data)}
         return this.contactsService.getContact(site, data?.id)
       }), catchError(data => {
@@ -531,7 +530,7 @@ export class UserSwitchingService implements  OnDestroy {
     const currentUser   = user.user
     const sheet         = user.sheet
 
-    console.log(user)
+    // console.log(user)
     if (sheet) {
       if (sheet.message) {
         this.siteService.notify(`Message ${sheet.message}`, `Error`, 20000)

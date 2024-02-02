@@ -1,6 +1,6 @@
 <div [id]="scrollStyle">
   <mat-card *ngIf="uiTransactions"  class="panel" >
-    <mat-card-content 
+    <mat-card-content
               [id]="scrollStyle"
               style="overflow-y: auto;
                     width: 300px;
@@ -115,7 +115,7 @@
         </button>
       </div>
 
-      <div *ngIf="auth?.accessHistoryReports && showScheduleFilter && scheduleDateForm">
+      <div *ngIf="(auth?.accessHistoryReports && (showScheduleFilter && scheduleDateForm)) ">
         <div  style="width:185px">
           <mat-date-range
               [inputForm] = "scheduleDateForm" >
@@ -174,18 +174,25 @@
               <mat-icon>receipt</mat-icon> </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
-      <div *ngIf="isStaff" 
+      <div *ngIf="isStaff"
             [hidden]="toggleTypeEmployee  === '0' && searchModel"
             #selectorEmpDiv
-            class="toggle-selector"  > 
-        <app-mat-toggle-selector
-                [id]      ="searchModel.employeeID"
-                [list$]   ="employees$"
-                [toggleDimensions]="''"
-                [toggleStyleHeight]="''"
-                (outPutID)="setEmployee($event)">
-                Employee
-        </app-mat-toggle-selector>
+            class="toggle-selector"  >
+        <h4>Employees</h4>
+        <button mat-button (click)="listEmployees(1)">All</button>
+        <button [disabled]="!isAuthorized" mat-button (click)="listEmployees(2)">On Clock</button>
+        <button [disabled]="!isAuthorized" mat-button (click)="listEmployees(3)">Inactive</button><br>
+        <mat-label>Auth: {{isAuthorized}} </mat-label>
+        <div *ngIf="(employees$ | async) as list">
+          <app-mat-toggle-selector
+                  [id]      ="searchModel.employeeID"
+                  [list]   ="list"
+                  [toggleDimensions]="''"
+                  [toggleStyleHeight]="''"
+                  (outPutID)="setEmployee($event)">
+                  Employee
+          </app-mat-toggle-selector>
+        </div>
       </div>
       <div *ngIf="isStaff"
           [hidden]="toggleTypeEmployee === '1' && searchModel"

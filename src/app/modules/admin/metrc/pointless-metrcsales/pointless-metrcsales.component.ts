@@ -634,7 +634,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     this.order$  = order$.pipe(
       switchMap(data =>
       {
-        this.orderMethodsService.setActiveOrder(site, data)
+        this.orderMethodsService.setActiveOrder( data)
         return of(data)
       }
     ))
@@ -800,7 +800,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
     assignSerials() {
       const site = this.siteService.getAssignedSite()
-      this.action$ = this.pointlessMetrcSalesReport.assignSerialNumbersWhereSerialISNull(site).pipe(switchMap(data => { 
+      this.action$ = this.pointlessMetrcSalesReport.assignSerialNumbersWhereSerialISNull(site).pipe(switchMap(data => {
         this.siteService.notify('Serials Assigned to null values', 'Close', 4000, 'green')
         return of(null)
       }))

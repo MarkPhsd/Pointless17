@@ -189,7 +189,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
           if (!this.searchModel) {
             const searchModel       = {} as EmployeeSearchModel;
             this.currentPage        = 1
-            searchModel.terminated  = "1"
+            searchModel.terminated  = 1
             searchModel.pageNumber  = 1
             searchModel.pageSize    = 25;
             this.searchModel        = searchModel
@@ -313,7 +313,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     searchModel.jobTypeID  = 0
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
-    searchModel.terminated = "1"
+    searchModel.terminated = 1
     if (this.jobTypeID && this.jobTypeID !=0 ) {
       searchModel.jobTypeID  = this.jobTypeID;
     }

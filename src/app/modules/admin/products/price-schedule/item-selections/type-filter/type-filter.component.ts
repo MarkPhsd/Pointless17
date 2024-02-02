@@ -140,7 +140,6 @@ export class TypeFilterComponent implements OnInit {
   }
 
   addItemType(item) {
-    console.log(this.requiredItemTypes, item)
 
     if (!this.requiredItemTypes) {
       this.requiredItemTypes = []

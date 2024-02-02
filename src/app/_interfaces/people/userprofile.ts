@@ -118,6 +118,7 @@ export interface clientType {
 
 export interface employee {
   id:                        number;
+  name: string;//for lists.
   firstName:                 string;
   lastName:                  string;
   address:                   string;

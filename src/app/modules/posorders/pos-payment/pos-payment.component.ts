@@ -29,10 +29,7 @@ import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-c
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
-import { DateAdapter } from '@angular/material/core';
-import { PrintingService } from 'src/app/_services/system/printing.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
-import { IPositionElements } from 'ngx-infinite-scroll';
 
 @Component({
   selector: 'app-pos-payment',
@@ -40,6 +37,7 @@ import { IPositionElements } from 'ngx-infinite-scroll';
   styleUrls: ['./pos-payment.component.scss']
 })
 export class PosPaymentComponent implements OnInit, OnDestroy {
+
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('receiptView') receiptView: TemplateRef<any>;
   @ViewChild('splitItemsView') splitItemsView: TemplateRef<any>;
@@ -71,6 +69,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   action$        :   Observable<any>;
   employees$      :   Observable<IItemBasic[]>;
   paymentMethods$ :   Observable<IPaymentMethod[]>;
+  paymentGiftCardsList$:   Observable<IPaymentMethod[]>;
+  paymentGiftCardsList: IPaymentMethod[]
   paymentMethod   =   {} as IPaymentMethod;
   serviceTypes$   :   Observable<IServiceType[]>;
   serviceType     :   IServiceType;
@@ -194,6 +194,15 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     })
   }
 
+  get isCreditProcessingEnabled() {
+    if (this.uiTransactions?.dCapEnabled ||  this.uiTransactions?.triposEnabled || this.uiTransactions?.dsiEMVNeteEpayEnabled ||
+        this.uiTransactions?.cardPointAndroidEnabled || this.uiTransactions?.cardPointBoltEnabled || this.uiTransactions?.dsiEMVAndroidEnabled) {
+          return true
+        }
+    return false;
+  }
+
+
   constructor(private paymentService  : POSPaymentService,
               public orderMethodsService: OrderMethodsService,
               private sitesService    : SitesService,
@@ -252,11 +261,15 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
     this.initStepSelectionSubscription();
 
+    this.paymentGiftCardsList$ =  this.paymentMethodService.getCacheList(site).pipe(switchMap(data => {
+       this.paymentGiftCardsList = data.filter(data => { return data.name.toLowerCase() === 'gift card' })
+       return of(data)
+    }))
   }
 
   get giftCardPayButtonView() {
     let pass = false;
-    this.paymentMethods.forEach(data => {
+    this.paymentGiftCardsList.forEach(data => {
         if (data.name.toLowerCase() === 'gift card') {
           pass = true
         }
@@ -504,7 +517,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   checkCurrentBalance(event) {
     //show remaining balance after entry.
-    console.log('event', event)
+    // console.log('event', event)
     if (!event) {
       this.changeDueComing = null;
       return;
@@ -515,13 +528,19 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   applyPaymentAmount(event) {
 
+    console.log('applyPaymentAmount event', event)
     if (!event && this.groupPaymentAmount != 0) {
       this.initPaymentForm();
       return
     }
 
+    let amount;
+    if (event) {
+      amount = event
+    }
+
+
     if (this.order &&  this.paymentMethod) {
-        let amount;
         if (event) {
           amount = event
         }  else {
@@ -555,8 +574,25 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
           return
         }
 
-        this.process$ = this._processPayment(amount, this.posPayment)
+      this.process$ = this._processPayment(amount, this.posPayment)
     }
+    console.log('no payment method')
+
+    const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
+      this.paymentMethod,
+      this.order.balanceRemaining,
+      this.order.creditBalanceRemaining );
+    console.log('no payment method isValidAmount', isValidAmount)
+
+
+    if (this.enterCustomAmount) {
+      this.enterCustomAmount = false
+      this._paymentAmount    = amount;
+      this._creditPaymentAmount = amount;
+      this.stepSelection     = 1;
+      return
+    }
+
     this.initPaymentForm();
   }
 

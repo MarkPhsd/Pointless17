@@ -211,6 +211,7 @@ export interface BalanceSheetSearchModel {
 
 export class BalanceSheetService {
 
+
   constructor(
 
     private platFormService: PlatformService,
@@ -221,6 +222,17 @@ export class BalanceSheetService {
   {
   }
 
+  validateDaysSales(site: any) :  Observable<any>  {
+    const controller = "/BalanceSheets/"
+
+    const endPoint  = "validateDaysSales"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+  }
 
   getSheetType(sheet: IBalanceSheet) {
 

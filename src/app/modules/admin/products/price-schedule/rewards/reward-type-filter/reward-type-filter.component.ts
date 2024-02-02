@@ -3,7 +3,7 @@ import { CheckboxRequiredValidator, FormArray, FormBuilder, UntypedFormGroup } f
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule,  DiscountInfo } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
+import { Observable, Subject ,fromEvent, Subscription, of, switchMap } from 'rxjs';
 import { IItemType, ItemTypeService, ItemType_Categories_Reference, IItemTypesList} from 'src/app/_services/menu/item-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
@@ -60,6 +60,7 @@ export class RewardTypeFilterComponent  implements OnInit {
   @Input() inputForm : UntypedFormGroup;
   @Input() item      : IPriceSchedule;
 
+  priceSchedule: IPriceSchedule;
   itemTypes$         : Observable<IItemTypesList[]>;
   itemTypes          : IItemType[];
   iItemTypeID        : number;
@@ -81,6 +82,7 @@ export class RewardTypeFilterComponent  implements OnInit {
 
   _priceSchedule              : Subscription;
   priceScheduleTracking       : IPriceSchedule;
+  toggledItem: any;
 
   initSubscriptions() {
       this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
@@ -100,9 +102,13 @@ export class RewardTypeFilterComponent  implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.priceSchedule = this.item;
     // console.log('ngOnInit reward type')
     const site = this.siteService.getAssignedSite();
-    this.itemTypes$ = this.itemTypeService.getItemTypeCategoriesReadOnlyList(site);
+    this.itemTypes$ = this.itemTypeService.getItemTypeCategoriesReadOnlyList(site).pipe(switchMap(data => {
+      // console.log('item types', data)
+      return of(data)
+    }))
      this.initSubscriptions();
   }
 
@@ -113,13 +119,14 @@ export class RewardTypeFilterComponent  implements OnInit {
   }
 
   get itemTypeViewList() {
-    if (this.priceScheduleTracking && this.priceScheduleTracking.type != 'Menu List') {
+    if (this.priceScheduleTracking || this.priceScheduleTracking.type == 'Menu List') {
       return this.itemTypeView
     }
     return null
   }
 
   get noItemListView() {
+    if (this.itemTypeViewList) { return null }
     if (this.priceScheduleTracking && this.priceScheduleTracking.type != 'Menu List') {
       return null
     }
@@ -138,7 +145,7 @@ export class RewardTypeFilterComponent  implements OnInit {
 
   isItemToggled(item) {
 
-    if (item.id == undefined || !this.lastSelectedItemType)  { return false}
+    if (!item?.id  || !this.lastSelectedItemType)  { return false}
 
     if (this.lastSelectedBrand) {
       if (this.lastSelectedBrand.itemID == undefined )  {
@@ -148,21 +155,30 @@ export class RewardTypeFilterComponent  implements OnInit {
 
     if (this.lastSelectedItem) {
       if (this.lastSelectedItem.itemID != item.id) {
+        // console.log('last Selected Item')
         return false
       }
     }
 
     if (this.lastSelectedCategory) {
       if (this.lastSelectedCategory.itemID  == item.id) {
+        // console.log('last Selected Cateogry')
         return true
       }
     }
 
     if (this.lastSelectedItemType) {
       if (this.lastSelectedItemType.itemID == item.id) {
+        this.toggledItem = item;
+        if (this.priceSchedule.type == 'Menu List') {
+          this.toggledItem = item;
+        }
+        // console.log('last Selected Item Type')
         return true
       }
     }
+
+    this.toggledItem = item;
 
   }
 
@@ -177,12 +193,10 @@ export class RewardTypeFilterComponent  implements OnInit {
   addItemType(item) {
     // console.log(item)
     if (!item) { return }
-
-    // console.log('this happened')
-    const index = this.getIndex(item)
-    // console.log(item , index)
-
     if (!this.itemTypeDiscounts) { this.itemTypeDiscounts = [] }
+
+    const index = this.getIndex(item)
+
     if (index == -1){
       const mainType            = {} as DiscountInfo;
       mainType.itemID           =  item.id;
@@ -276,15 +290,32 @@ export class RewardTypeFilterComponent  implements OnInit {
 
   toggleItemTypeSelected(item: IItemType) {
 
-    // console.log('toggleItemTypeSelected')
+    if (this.priceSchedule.type === 'Menu List') {
+      this.addItemType(item)
+      return;
+    }
+
+    //initialize selection
     this.lastSelectedItemType = null
 
-    if (!item) {return}
-    if (item.id == undefined)  { return }
+    if (this.item.type === 'Menu List') {
+      this.toggledItem = item
+      return;
+    }
+
+    if (!item || !item?.id) {return}
 
     // //check the array of the form.
-    const array = this.itemTypeDiscounts;
-    const index = array.findIndex( data => data.itemID == item.id );
+    const array = JSON.parse(JSON.stringify(this.itemTypeDiscounts));
+
+    let index = -1;
+    if (array) {
+       index = array.findIndex( data => data.itemID == item.id );
+    }
+
+    if (!this.itemTypeDiscounts) {
+      this.itemTypeDiscounts = []
+    }
 
     if (index == -1){
       const item       = {} as DiscountInfo;
@@ -296,7 +327,6 @@ export class RewardTypeFilterComponent  implements OnInit {
       this.lastSelectedItemType = item;
     } else {
       this.lastSelectedItemType = null
-      // this.requiredItemTypes.splice(index, 1);
     }
 
     //make sure only unique items are being added. no dupes.

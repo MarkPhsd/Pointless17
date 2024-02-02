@@ -56,29 +56,29 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
     this.action$ = null;
   }
 
-  ngOnDestroy() { 
+  ngOnDestroy() {
     this.action$ = null;
   }
 
-  navigateToLogin(){ 
+  navigateToLogin(){
     localStorage.removeItem('user')
-    this.uiHomePageSetting$.subscribe(data => { 
+    this.uiHomePageSetting$.subscribe(data => {
       this.authenticationService.logout(data.pinPadDefaultOnApp)
       this.setLoginActions()
     })
   }
 
-  setLoginActions() { 
+  setLoginActions() {
     const loginAction = {name: 'setActiveOrder', id: this.order.id}
     localStorage.setItem('loginAction', JSON.stringify(loginAction))
   }
 
-  cancelMessage() { 
+  cancelMessage() {
     this.message$ = null;
     this.sendingMessage = false;
   }
 
-  requestService() { 
+  requestService() {
     this.sendingMessage = true
     this.message$ = this.requestMessageMethods.requestService(this.order).pipe(
       switchMap(data => {
@@ -107,7 +107,7 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
     })
   }
 
-  requestCheck() { 
+  requestCheck() {
     this.sendingMessage = true
     this.message$ = this.requestMessageMethods.requestCheck(this.order).pipe(
       switchMap(data => {
@@ -117,54 +117,54 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
     )
   }
 
-  payOrder() { 
+  payOrder() {
 
-    if (!this.userAuth.user || this.userAuth.user.username.toLowerCase() === 'temp') { 
+    if (!this.userAuth.user || this.userAuth.user.username.toLowerCase() === 'temp') {
       this.setLoginActions()
       const ref = this.authenticationService.openLoginDialog()
       return;
     }
 
-    if (this.userAuth.user) { 
+    if (this.userAuth.user) {
       this.action$ =  this.goPay();
     }
 
   }
 
-  getOrder(): Observable<IPOSOrder> { 
+  getOrder(): Observable<IPOSOrder> {
     let item$: Observable<IPOSOrder>;
     const id = this.route.snapshot.paramMap.get('id');
     const orderCode = this.route.snapshot.paramMap.get('orderCode');
     const site = this.siteService.getAssignedSite();
-    if (id) { 
+    if (id) {
       item$ = this.orderService.getQRCodeOrder(site, id);
     }
-    if (orderCode) { 
+    if (orderCode) {
       item$ = this.orderService.getQROrder(site, orderCode);
     }
     return item$;
   }
 
-  navigateToOrder() { 
+  navigateToOrder() {
     const site = this.siteService.getAssignedSite();
     const item$ = this.getOrder()
     return item$.pipe(
-      switchMap(data => { 
+      switchMap(data => {
         this.order = data;
-        this.orderMethodsService.setActiveOrder(site, data)
+        this.orderMethodsService.setActiveOrder(data)
         return of(data)
       })
     )
   }
 
-  goPay() { 
+  goPay() {
      const site = this.siteService.getAssignedSite();
      this.goingToPay = true
      const item$ = this.getOrder()
      return item$.pipe(
-        switchMap(data => { 
+        switchMap(data => {
           this.order = data;
-          this.orderMethodsService.setActiveOrder(site, data)
+          this.orderMethodsService.setActiveOrder( data)
           this.goingToPay = false
           this.router.navigate(['pos-payment'])
           return of(data)
@@ -172,9 +172,9 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
      )
   }
 
-  getUser() { 
+  getUser() {
     let user = this.userAuth.currentUser();
-    if (!user) { 
+    if (!user) {
       user = {} as IUser;
       user.username = 'Temp'
       user.password = 'Temp';

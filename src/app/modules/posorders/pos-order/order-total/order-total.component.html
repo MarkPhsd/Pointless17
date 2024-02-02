@@ -2,7 +2,7 @@
 <div [class]="transactionDataClass" *ngIf="order" >
 
   <div class="total-headers foreground-color" *ngIf="!purchaseOrderEnabled">Sub   </div>
-  <div class="totals foreground-color" *ngIf="!purchaseOrderEnabled"> {{ order.subTotal | currency }}</div>
+  <div class="totals foreground-color" *ngIf="!purchaseOrderEnabled"> {{ order?.subTotal | currency }}</div>
 
   <div class="total-headers foreground-color" *ngIf="purchaseOrderEnabled  && order?.service?.filterType != 2">Cost</div>
   <div class="totals foreground-color"        *ngIf="purchaseOrderEnabled  && order?.service?.filterType != 2"> {{ order.cost | currency }}</div>

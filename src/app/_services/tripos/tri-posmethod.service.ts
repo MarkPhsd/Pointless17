@@ -291,22 +291,7 @@ export class TriPOSMethodService {
 
   }
 
-  getAuthTotal(posPayments: PosPayment[]) : any {
 
-    if (!posPayments ) {return }
-    let amount = 0;
-    posPayments.forEach(data => {
-      amount += this.getTriPOSTotalAuthorizations(data)
-    })
-    return amount
-  }
-
-  getTriPOSTotalAuthorizations(data: PosPayment) {
-    if (data.tranType === 'authorizationResponse' || data.tranType === 'incrementalAuthorizationResponse') {
-      return  data.amountPaid
-    }
-    return 0
-  }
     // /Observable<import("../system/settings.service").ITerminalSettings>,
   processIncrementalReversal( auth: authorizationPOST, item: IPOSPayment): Observable<IPOSPayment> {
       const site = this.siteService.getAssignedSite()

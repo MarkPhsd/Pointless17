@@ -206,7 +206,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     if (id) {
       const site = this.siteService.getAssignedSite();
       this.orderService.getOrder(site, id.toString(), true).subscribe(data => {
-        this.orderMethodsService.setActiveOrder(site, data)
+        this.orderMethodsService.setActiveOrder(data)
         }
       )
     }

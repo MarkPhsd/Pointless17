@@ -1,13 +1,13 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
 import { IClientTable, IProduct, IUser } from 'src/app/_interfaces';
-import { AWSBucketService, AuthenticationService, MenuService, ThemesService } from 'src/app/_services';
+import { AWSBucketService, AuthenticationService, MenuService } from 'src/app/_services';
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { AvailabilityTypeEnum, ConditionEnum, Dimensions, EbayAPIService, FulfillmentTime, PackageTypeEnum, PackageWeightAndSize, PickupAtLocationAvailability, ProductData, TimeDurationUnitEnum, Weight, WeightUnitOfMeasureEnum, Product, ConditionDescriptor, EbayOfferRequest, EbayOfferresponse, EbayInventoryJson, ShipToLocationAvailability, condition, CategorySuggestionsResponse, CategorySuggestion } from 'src/app/_services/resale/ebay-api.service';
+import { AvailabilityTypeEnum, Dimensions, EbayAPIService, FulfillmentTime,PackageWeightAndSize, PickupAtLocationAvailability, ProductData, TimeDurationUnitEnum, Weight, WeightUnitOfMeasureEnum, Product, ConditionDescriptor, EbayOfferRequest, EbayOfferresponse, EbayInventoryJson, ShipToLocationAvailability, condition, CategorySuggestionsResponse, CategorySuggestion } from 'src/app/_services/resale/ebay-api.service';
 import { EbayConditions } from 'src/app/_services/resale/ebayConditions';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { MatSelect } from '@angular/material/select';
@@ -92,7 +92,7 @@ export class EbayPublishProductComponent implements OnInit {
 
   async ngOnInit() {
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
-    if (this.id) { 
+    if (this.id) {
       this.product$ =  this._refresh(this.id)
     }
     this.getUserInfo()
@@ -100,7 +100,7 @@ export class EbayPublishProductComponent implements OnInit {
     this.setStep(0)
   }
 
-  setStep(index) { 
+  setStep(index) {
     this.accordionStep = index;
   }
 
@@ -128,7 +128,7 @@ export class EbayPublishProductComponent implements OnInit {
     return user
   }
 
-    refresh(id) { 
+    refresh(id) {
       this.action$ = this._refresh(id)
     }
 
@@ -173,7 +173,7 @@ export class EbayPublishProductComponent implements OnInit {
   }
 
   getConditions(){
-    if ( this.ebayCategoryForm.controls['categoryId'].value) { 
+    if ( this.ebayCategoryForm.controls['categoryId'].value) {
       const id = this.ebayCategoryForm.controls['categoryId'].value
       const value = id //required format for ebay
       const url = `/sell/metadata/v1/marketplace/EBAY_US/get_item_condition_policies?filterr=categoryIds`
@@ -187,43 +187,43 @@ export class EbayPublishProductComponent implements OnInit {
       this.conditionDescriptors.push(condition)
 
       let condDescription = this.itemJSON?.inventory?.condition;
-      if (condDescription != 'LIKE_NEW' && condDescription != 'NEW') { 
+      if (condDescription != 'LIKE_NEW' && condDescription != 'NEW') {
         condition = {conditionDescription: this.itemJSON?.inventory?.condition, conditionId: 10}
         this.conditionDescriptors.push(condition)
       }
 
-      this.conditions$ = this.ebayService.getConditions(site, url, id).pipe(switchMap(data => { 
+      this.conditions$ = this.ebayService.getConditions(site, url, id).pipe(switchMap(data => {
 
-        if (!data) { 
+        if (!data) {
           this.siteSerivce.notify('No data returned', 'Close', 6000)
-          return of(data) 
+          return of(data)
         }
-        if (data.errorMessage) { 
+        if (data.errorMessage) {
           this.siteSerivce.notify('Error ' + data.errorMessage.toString() + ' ' + data.errorCode.toString(), 'Close', 60000, 'red')
           return of(data)
         }
-        if (data.success) { 
+        if (data.success) {
           try {
             const item = JSON.parse(data.responseMessage) as EbayConditions;
-           
-            item.itemConditionPolicies.forEach(category => { 
-              if (category && category.itemConditions) { 
-                category.itemConditions.forEach(value => { 
-                  if (value && value.conditionDescription) { 
+
+            item.itemConditionPolicies.forEach(category => {
+              if (category && category.itemConditions) {
+                category.itemConditions.forEach(value => {
+                  if (value && value.conditionDescription) {
                     value.conditionDescription = value.conditionDescription.toUpperCase().replace(" ", "_").replace("-", "_").replace(" ", "_")
                     this.conditionDescriptors.push(value)
                   }
                 })
               }
             })
-          
+
             this.conditionSelector.open();
           } catch (error) {
             console.log('Error', error)
           }
         }
-  
-    
+
+
         return of(data)
       }))
     }
@@ -468,7 +468,7 @@ export class EbayPublishProductComponent implements OnInit {
       if (!this.itemJSON.inventory.product.title) {
         this.itemJSON.inventory.product.description = this.inventoryItem?.product?.name;
       }
-    
+
       item.condition = this.itemJSON?.inventory?.condition;
       if (!item.packageWeightAndSize) {
         item.packageWeightAndSize = pckWeightSize;
@@ -476,7 +476,7 @@ export class EbayPublishProductComponent implements OnInit {
       if (!this.itemJSON?.inventory?.packageType) {
         this.itemJSON.inventory.packageType = 'MAILING_BOX'
       }
-  
+
       item.packageWeightAndSize.weight = weight;
       item.packageWeightAndSize.dimensions = dimensions
 
@@ -511,7 +511,7 @@ export class EbayPublishProductComponent implements OnInit {
     return product;
   }
 
-  setCategoryName(event) { 
+  setCategoryName(event) {
     const item = event.value;
     const catID = this.ebayCategoryForm.controls['categoryId'].value;
     this.ebayOfferForm.patchValue({categoryId: catID})
@@ -523,7 +523,7 @@ export class EbayPublishProductComponent implements OnInit {
     const prod = this.product;
     const inv = this.inventoryItem;
 
-    this.ebayCategoryForm = this.formBuilder.group ( { 
+    this.ebayCategoryForm = this.formBuilder.group ( {
       categoryId: [],
       categoryName: [],
     })
@@ -543,7 +543,7 @@ export class EbayPublishProductComponent implements OnInit {
       this.productForm.patchValue(this.itemJSON?.inventory?.product)
     }
 
- 
+
     this.ebayOfferForm = this.formBuilder.group({
       sku                   : [this.inventoryItem.sku,  ],
       listingDescription    : [this.product.name, , ],
@@ -554,14 +554,14 @@ export class EbayPublishProductComponent implements OnInit {
     })
 
     this.ebayOfferForm.patchValue(this.itemJSON?.offerRequest)
-    if (this.itemJSON?.offerRequest?.categoryId) { 
+    if (this.itemJSON?.offerRequest?.categoryId) {
       this.ebayCategoryForm.patchValue({categoryId: this.itemJSON?.offerRequest?.categoryId})
-    } else { 
-      if (this.itemJSON?.ebayCategory?.category?.categoryId) { 
+    } else {
+      if (this.itemJSON?.ebayCategory?.category?.categoryId) {
         this.ebayCategoryForm.patchValue({categoryId: this.itemJSON?.ebayCategory?.category?.categoryId})
       }
     }
-    
+
 
     if (this.itemJSON?.offerRequest?.pricingSummary?.price?.value != '0') {
       let price = this.itemJSON?.offerRequest?.pricingSummary?.price?.value;
@@ -673,11 +673,11 @@ export class EbayPublishProductComponent implements OnInit {
   }
 
   get publishOfferDisabled() {
-    if (!this.itemJSON?.offerResponse?.offerId) { 
-      return true 
+    if (!this.itemJSON?.offerResponse?.offerId) {
+      return true
     }
-    if (!this.itemJSON?.inventoryPublished) { 
-      return true 
+    if (!this.itemJSON?.inventoryPublished) {
+      return true
     }
     // if (!this.isOfferCreated) {
     //   return true
@@ -717,11 +717,11 @@ export class EbayPublishProductComponent implements OnInit {
     }
   }
   // EbayResponse
-  getCategories() { 
+  getCategories() {
     const site = this.siteSerivce.getAssignedSite()
     if (!this.ebayOfferForm) { return }
     const productDescription = this.ebayOfferForm.controls['listingDescription'].value;
-    if (productDescription) { 
+    if (productDescription) {
       this.ebayCategories$  = this.ebayService.getCateogries(site, 'EBAY_US', productDescription ).pipe(switchMap(data => {
         return of(this.getflattenCategories(data.categorySuggestions))
         }
@@ -729,19 +729,19 @@ export class EbayPublishProductComponent implements OnInit {
     }
   }
 
-  getItemAspects() { 
+  getItemAspects() {
     const id = this.ebayOfferForm.controls['categoryId'].value;
     //https://api.ebay.com/commerce/taxonomy/v1/category_tree/0/get_item_aspects_for_category?category_id=260988
     const url = `/commerce/taxonomy/v1/category_tree/0/get_item_aspects_for_category?category_id=${id}`
     const site = this.siteSerivce.getAssignedSite()
-    this.ebayAspects$ = this.ebayService.getAsync(site, url).pipe(switchMap(data => { 
+    this.ebayAspects$ = this.ebayService.getAsync(site, url).pipe(switchMap(data => {
       // this.inventoryCheck = data;
       this.ebayAspectArray = JSON.parse(data.responseMessage);
       return of(data)
     }))
   }
 
-  setAspects(event) { 
+  setAspects(event) {
     console.log('aspects', event)
     this.aspectValues = event;
     this.save()
@@ -757,7 +757,7 @@ export class EbayPublishProductComponent implements OnInit {
         categoryId: suggestion.category.categoryId,
         categoryName: suggestion.category.categoryName
       });
-   
+
       suggestion.categoryTreeNodeAncestors.forEach(ancestor => {
         console.log('ancestor', ancestor)
         this.flattenedCategories.push({

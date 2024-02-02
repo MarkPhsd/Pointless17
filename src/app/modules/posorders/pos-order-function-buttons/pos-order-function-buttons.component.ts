@@ -164,12 +164,11 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     return false
   }
 
- get creditCardPaymentsMade() {
+  get creditCardPaymentsMade() {
     if (this.order && this.order.posPayments) {
       const items =  this.order.posPayments.filter(data => {
-          return data.paymentMethod.isCreditCard
-        } )
-        // console.log('credit card payments ', items)
+          return data.paymentMethod?.isCreditCard
+      })
       if (items && items.length>0) {
         return true
       }

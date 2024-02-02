@@ -75,7 +75,7 @@ export class CloseDayValidationComponent implements OnInit {
     if (id) {
       const site = this.siteService.getAssignedSite();
       this.orderService.getOrder(site, id.toString(), false).subscribe(data => {
-        this.orderMethodsService.setActiveOrder(site, data)
+        this.orderMethodsService.setActiveOrder(data)
         }
       )
     }

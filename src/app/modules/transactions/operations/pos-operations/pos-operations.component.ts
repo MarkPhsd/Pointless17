@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, Tem
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransferDataService } from 'src/app/_services/transactions/transfer-data.service';
 import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
-import { switchMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ITaxReport} from 'src/app/_services/reporting/reporting-items-sales.service';
 import { Observable, of, Subject, Subscription } from 'rxjs';
@@ -80,6 +80,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   scheduleDateEnd = new Date;
   autoPrint: boolean;
   printStyles: string;
+  validateSales$: Observable<any>;
 
   userSubscriber() {
     this._user = this.authenticationService.user$.subscribe(data => {
@@ -129,13 +130,25 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       this.printStyles = data;
       return of(data)
     }))
+    const site = this.siteService
+    this.validateSales$ = this.balanceSheetService.validateDaysSales(this.site).pipe(switchMap(data => {
+      this.refreshInit()
+      return of(data)
+    }),catchError(data => {
+      this.refreshInit()
+      return of(data)
+    }))
+
+  }
+
+  refreshInit() {
     this.getUser();
-    this.refreshSales();
-    this.refreshClosingCheck();
-    this.initTransactionUISettings();
-    this.setSchedulePeriod();
-    this.initAuthentication();
-    this.notifyChild();
+      this.refreshSales();
+      this.refreshClosingCheck();
+      this.initTransactionUISettings();
+      this.setSchedulePeriod();
+      this.initAuthentication();
+      this.notifyChild();
   }
 
   refreshAudit(zrunID: number) {
@@ -233,7 +246,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     if (id) {
       const site = this.siteService.getAssignedSite();
       this.orderService.getOrder(site, id.toString(), false).subscribe(data => {
-        this.orderMethodsService.setActiveOrder(site, data)
+        this.orderMethodsService.setActiveOrder( data)
         }
       )
     }

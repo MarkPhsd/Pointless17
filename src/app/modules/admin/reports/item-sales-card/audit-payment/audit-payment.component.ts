@@ -60,7 +60,7 @@ export class AuditPaymentComponent implements OnInit {
         history = true;
       }
       this.orderService.getOrder(this.site, id.toString(), history).subscribe(data => {
-        this.orderMethodsService.setActiveOrder(this.site, data)
+        this.orderMethodsService.setActiveOrder( data)
         }
       )
     }

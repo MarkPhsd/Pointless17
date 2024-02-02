@@ -52,6 +52,7 @@ import { MessageEditorComponent } from 'src/app/modules/admin/message-editor-lis
 import { PosOrderItemEditComponent } from 'src/app/modules/posorders/pos-order-item/pos-order-item-edit/pos-order-item-edit.component';
 import { IInventoryAssignment, InventoryAssignmentService } from '../inventory/inventory-assignment.service';
 import { AddInventoryItemComponent } from 'src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component';
+import { DCAPTransactionComponent } from 'src/app/modules/dsiEMV/Dcap/dcaptransaction/dcaptransaction.component';
 
 @Injectable({
   providedIn: 'root'
@@ -758,7 +759,7 @@ export class ProductEditButtonService {
       })
     }
   }
-  
+
   openSaleAuthDialog(order: IPOSOrder, item: IMenuItem, quantity: number ) {
     let dialogRef: any;
     // const site = this.siteService.getAssignedSite();
@@ -891,6 +892,25 @@ export class ProductEditButtonService {
     //   this.openProductEditor(id, productTypeID)
     if (options) {
       dialogRef = this.dialog.open(TriPosTransactionsComponent,
+        { width:        '100%',
+          minWidth:     '100%',
+          maxWidth:     'max-width: 100vw !important',
+          height:       '100vh',
+          minHeight:    '100vh',
+          data : options
+      })
+      return dialogRef
+    }
+  }
+
+  openDCAPTransaction(options: any ) {
+    let dialogRef: any;
+    // const site = this.siteService.getAssignedSite();
+    // this.menuService.getProduct(site, id).subscribe( data=> {
+    //   const productTypeID = data.prodModifierType
+    //   this.openProductEditor(id, productTypeID)
+    if (options) {
+      dialogRef = this.dialog.open(DCAPTransactionComponent,
         { width:        '100%',
           minWidth:     '100%',
           maxWidth:     'max-width: 100vw !important',

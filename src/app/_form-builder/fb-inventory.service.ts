@@ -11,6 +11,7 @@ export class FbInventoryService {
     fb = this._fb.group({
       id:                    [],
       manifestID            :[],
+      poDetailID            :[],
       packageType:           [],
       productName:           [],
       productCategoryName:   [],
@@ -74,7 +75,6 @@ export class FbInventoryService {
       caseQuantity: [],
       casePrice: [],
       itemSku: [],
-
       originID : [],
       vendor : [],
       createdAtTime : [],
@@ -90,7 +90,6 @@ export class FbInventoryService {
       brandID      : [],
       itemSKU      : [],
       bay          : [],
-
       quality      : [],
       images       : [],
       rareValue    : [],

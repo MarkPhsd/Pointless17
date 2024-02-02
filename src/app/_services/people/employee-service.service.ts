@@ -1,11 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,   } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { BehaviorSubject, Observable, } from 'rxjs';
-import { employee, IClientTable, ISite, IUserProfile } from 'src/app/_interfaces';
+import { BehaviorSubject, Observable, of, switchMap, } from 'rxjs';
+import { employee, employeeJobs, IClientTable, ISite, IUserProfile } from 'src/app/_interfaces';
 import { IItemBasic } from '../menu/menu.service';
 import { IPagedList } from '../system/paging.service';
 import { UntypedFormBuilder, UntypedFormGroup, } from '@angular/forms';
+import { Pagination } from 'swiper';
+
+
+export interface EmployeeClockView {
+    id:number;
+    employeeID: number;
+    employeeName: string;
+    logInTime: string;
+    logOuttime: string;
+    breakMinutes:number;
+    breakViews: any[];
+    name: string;
+}
 
 export interface EmployeeSearchResults {
  results: employee[];
@@ -22,6 +35,17 @@ export interface EmployeePinResults {
   client:   IUserProfile;
   employee: employee;
  }
+//  export interface  EmployeeBasic {
+//  id : number;
+//  firstName  : string;
+//  lastName  : string;
+//  dob  : string;
+//  email  : string;
+//  phone  : string;
+//  terminationDate  : string;
+// }
+
+
 
 export interface EmployeeSearchModel {
   dOB: string;
@@ -38,7 +62,7 @@ export interface EmployeeSearchModel {
   useNameInAllFieldsForSearch: boolean;
   id: number;
   jobTypeID: number;
-  terminated: string;
+  terminated: number;
 }
 
 @Injectable({
@@ -108,6 +132,39 @@ export class EmployeeService {
 
   }
 
+  listEmployeesOnClock(site:ISite):  Observable<EmployeeClockView[]> {
+
+    const controller = "/EmployeeClocks/";
+
+    const endPoint = 'ListEmployeesOnClockView';
+
+    const parameters = '';
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<EmployeeClockView[]>(url).pipe(switchMap(data => {
+      const item = data
+      let list = item
+      if (list.length > 0) {
+        list.forEach(data => {
+          data.name = `${data.employeeName}`
+          data.id = data.employeeID;
+        })
+        list = list.sort((a, b) => {
+          if (a.name < b.name) {
+              return -1;
+          }
+          if (a.name > b.name) {
+              return 1;
+          }
+          return 0;
+      });
+
+      }
+      return of(list)
+    }))
+
+  }
 
   getAllActiveEmployees(site: ISite):  Observable<IItemBasic[]> {
 
@@ -132,6 +189,52 @@ export class EmployeeService {
     const url = `${site.url}${endPoint}${parameters}`
 
     return this.http.get<employee>(url);
+
+  }
+
+  getEmployees(site: ISite):  Observable<employee[]> {
+
+    const endPoint = "/employees/"
+
+    const parameters = `getEmployees`;
+
+    const url = `${site.url}${endPoint}${parameters}`
+
+    return this.http.get<employee[]>(url);
+
+  }
+
+   getEmployeeBySearchListOnly(site):  Observable<employee[]> {
+
+    const endPoint = "/employees/"
+
+    const parameters = `getEmployees`;
+
+    const url = `${site.url}${endPoint}${parameters}`
+
+    let  search = {} as EmployeeSearchModel;
+    search.pageSize = 50;
+
+    return this.http.post<EmployeeSearchResults>(url, search).pipe(switchMap(data => {
+      const item = data as  unknown as EmployeeSearchResults;
+      let list = data.results;
+      if (list.length > 0) {
+        list.forEach(data => {
+          data.name = `${data.lastName}, ${data.firstName}`
+        })
+        list = list.sort((a, b) => {
+          if (a.name < b.name) {
+              return -1;
+          }
+          if (a.name > b.name) {
+              return 1;
+          }
+          return 0;
+      });
+
+      }
+      return of(list)
+    }))
 
   }
 

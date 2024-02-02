@@ -298,7 +298,7 @@ export class AuthenticationService {
       // console.log('cleared user settings go to login.isapp:', this.platFormservice.isApp())
       if (!this.platFormservice.isApp()) {
 
-        if (this.appInitService?.useAppGate) {
+        if (!this.appInitService?.useAppGate) {
           this.router.navigate(['/login']);
           this.setPinPadLogIn(pinPadDefaultOnApp);
           return;
@@ -312,6 +312,7 @@ export class AuthenticationService {
           }
           return
         }
+
       }
 
       try {

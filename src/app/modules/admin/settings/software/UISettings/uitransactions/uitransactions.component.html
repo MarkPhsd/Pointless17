@@ -385,10 +385,24 @@
           </div>
           </div>
 
+
+
+
+
         </div>
 
         <div class="grid-views">
           <h4><mat-icon color="primary" style="margin-top:5px">credit_card</mat-icon>Credit Card Processing</h4>
+
+          <div class="toggle-fields">
+            <mat-label>TriPOS/DCAP/CardPoint Only</mat-label>
+            <mat-slide-toggle
+                      formControlName="allowPreAuth"
+                      >
+              <mat-label>Allow Pre Auth</mat-label>
+            </mat-slide-toggle>
+          </div>
+
           <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="payPalEnabled"
@@ -419,8 +433,6 @@
               </app-value-fields>
             </div>
           </div>
-
-
 
           <mat-card>
             <div class="toggle-fields">
@@ -468,6 +480,19 @@
             </div>
             <div class="toggle-fields">
               <mat-slide-toggle
+                        formControlName="dCapSurcharge" >
+                <mat-label>DCAP Surcharge</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="dCapSurchargeValue" >
+                <mat-label>DCAP Surcharge Value</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
                         formControlName="dsiEMVAndroidEnabled">
                 <mat-label>Data Cap EMV Android</mat-label>
               </mat-slide-toggle>
@@ -493,6 +518,15 @@
                       formControlName="dsiTipPrompt" >
               <mat-label>Data Cap Prompt Tip</mat-label>
             </mat-slide-toggle>
+          </div>
+
+          <div>
+            <mat-label>Enter Values with commas, E.g. 10,15,20.</mat-label>
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'dsiTipPromptValues'">
+              Prompt Tip Values
+            </app-value-fields>
           </div>
 
           <mat-card>

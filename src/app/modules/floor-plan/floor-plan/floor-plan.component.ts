@@ -311,7 +311,7 @@ export class FloorPlanComponent implements OnInit {
       }
     )).pipe(
       switchMap(data => {
-      this.orderMethodsService.setActiveOrder(site, data)
+      this.orderMethodsService.setActiveOrder(data)
       if (this.orderInfo) {
         const item = {orderID: data.id, status: 'active'};
       }
