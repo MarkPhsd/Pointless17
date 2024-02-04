@@ -202,6 +202,7 @@ export class UserSwitchingService implements  OnDestroy {
     const site = this.siteService.getAssignedSite()
     const userLogin = { userName, password } as userLogin;
     const timeOut   = 3 * 1000;
+
     let auth$ =  this.authenticate(userLogin)
       .pipe(
         switchMap(
@@ -210,7 +211,6 @@ export class UserSwitchingService implements  OnDestroy {
               return of(this.userAutFailed(user))
             }
 
-            // console.log('login', user)
             if (user) {
               if (user?.message.toLowerCase() === 'failed') {
                 return of(this.userAutFailed(user))
@@ -230,8 +230,6 @@ export class UserSwitchingService implements  OnDestroy {
       }))
 
       let userAuth$ =  auth$.pipe(switchMap(data => {
-        // console.log('Sending user getting contact', data)
-        // console.log('userAuth clockInOnly', clockInOnly)
         if (data?.message === 'failed') { return of(data)}
         return this.contactsService.getContact(site, data?.id)
       }), catchError(data => {
@@ -240,7 +238,6 @@ export class UserSwitchingService implements  OnDestroy {
       }))
 
       let updateAuth$ = userAuth$.pipe(switchMap(data => {
-
             if ( !data || (data && (data?.message == 'failed'))) {
               const user = {} as IUser
               user.message = 'failed';
@@ -251,7 +248,6 @@ export class UserSwitchingService implements  OnDestroy {
             const item = localStorage.getItem('user')
             const user = JSON.parse(item) as IUser;
 
-            // console.log('Sending user getting contact - getting auths', user)
             if (!data.auths)
 
             if (data.clientType && data.clientType.jsonObject) {
@@ -271,13 +267,9 @@ export class UserSwitchingService implements  OnDestroy {
       let balanceSheet$ = updateAuth$.pipe(switchMap(user =>
 
         {
-            if (clockInOnly) {
-              return of(user)
-            }
+            if (clockInOnly) {   return of(user)  }
 
-            if (!user || (user && user.message == 'failed')) {
-              return of(user)
-            }
+            if (!user || (user && user.message == 'failed')) {   return of(user)  }
 
             if (user) {
               ///this is where we prompt the balance sheet
@@ -540,8 +532,6 @@ export class UserSwitchingService implements  OnDestroy {
         }
       }
 
-      console.log('sheet.shiftStarted', sheet.shiftStarted)
-      //router
       if (!sheet.shiftStarted || sheet.shiftStarted == 0 ||  (sheet.shiftStarted == 1 && sheet.endTime)) {
         this.router.navigate(['/balance-sheet-edit', {id:sheet.id}]);
         return true

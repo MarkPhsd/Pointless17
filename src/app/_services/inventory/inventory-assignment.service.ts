@@ -498,13 +498,13 @@ export class InventoryAssignmentService {
 
   }
 
-  postInventoryAssignment(site: ISite,item: IInventoryAssignment): Observable<IInventoryAssignment> {
+  postInventoryAssignment(site: ISite,item: IInventoryAssignment, updateInventory: boolean): Observable<IInventoryAssignment> {
 
     const controller =  `/InventoryAssignments/`
 
     const endPoint = `PostInventoryAssignment`
 
-    const parameters = ``
+    const parameters = `?updateInventory=${updateInventory}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 

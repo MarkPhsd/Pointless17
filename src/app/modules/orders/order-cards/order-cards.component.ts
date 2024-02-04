@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit, OnDestroy,
-  ViewChild, ElementRef, QueryList, ViewChildren, Input, Output,EventEmitter, TemplateRef, OnChanges, SimpleChanges}  from '@angular/core';
+  ViewChild, ElementRef, QueryList, ViewChildren, Input, Output,EventEmitter, TemplateRef, OnChanges, SimpleChanges, Renderer2}  from '@angular/core';
 import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
 import { AuthenticationService, OrdersService, POSOrdersPaged } from 'src/app/_services';
 import { ActivatedRoute} from '@angular/router';
@@ -110,6 +110,12 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   _user: Subscription;
   user : IUser;
 
+  //user style
+  private styleTag: HTMLStyleElement;
+
+  private customStyleEl: HTMLStyleElement | null = null;
+  @ViewChild('scrollDiv') scrollDiv: ElementRef;
+
   seconds = 30000;
   orderResults$ = of([]) as  Observable<IPOSOrder[]>
   // orderSubscription$: Observable<IPOSOrder[]>;
@@ -146,14 +152,68 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     })
   }
 
+
+
   initUserAuth() {
-    this._user = this.authenticationService.user$.subscribe(data => {  this.user = data; })
+    this._user = this.authenticationService.user$.subscribe(data => {
+      this.user = data;
+      // console.log('order cards', this.user?.userPreferences?.headerColor)
+      this.setScrollBarColor((this.user?.userPreferences?.headerColor))
+    })
     this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
       this.userAuths = data;
       if (!data) {
         this.userAuths = {} as IUserAuth_Properties
       }
     })
+  }
+
+  setScrollBarColor(color) {
+    if (color) {
+      this.applyCustomScrollColor2(color)
+      return;
+    }
+    if (this.styleTag) {
+      this._scrollStyle = 'scrollstyle_1'
+      document.head.removeChild(this.styleTag);
+    }
+  }
+  applyCustomScrollColor(color: string) {
+    console.log('applyCustomScrollColor', color)
+    const styleContent = `
+      #${this.scrollStyle}::-webkit-scrollbar { width: 45px; background-color: #c0c3ca; overflow-x: hidden; overflow-y: auto; }
+      #${this.scrollStyle}::-webkit-scrollbar-track { -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); background-color: #F5F5F5; border-radius: 10px; }
+      #${this.scrollStyle}::-webkit-scrollbar-thumb { border-radius: 10px; background-color: ${color}; }
+    `;
+
+    console.log('styleContent', styleContent)
+    this.styleTag = document.createElement('style');
+    this.styleTag.type = 'text/css';
+    this.styleTag.innerHTML = styleContent;
+    document.head.appendChild(this.styleTag);
+  }
+
+  applyCustomScrollColor2(color: string) {
+    console.log('applyCustomScrollColor', color)
+    const styleId = 'scrollstyle_1'; // A unique ID for the style tag
+    let existingStyleTag = document.getElementById(styleId) as HTMLStyleElement;
+
+    if (!existingStyleTag) {
+      this.styleTag = document.createElement('style');
+      this.styleTag.id = styleId; // Assign the unique ID
+      document.head.appendChild(this.styleTag);
+    } else {
+      this.styleTag = existingStyleTag;
+    }
+
+    const styleContent = `styleId
+      #${this.scrollStyle}::-webkit-scrollbar { width: 45px; background-color: #c0c3ca;  overflow-x: hidden; overflow-y: auto; }
+      #${this.scrollStyle}::-webkit-scrollbar-track { -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); background-color: #F5F5F5; border-radius: 10px; }
+      #${this.scrollStyle}::-webkit-scrollbar-thumb { border-radius: 10px; background-color: ${color}; /* Ensure this matches your dynamic needs */ }
+    `;
+    console.log('styleContent', styleContent)
+    this.styleTag.innerHTML = styleContent;
+    this._scrollStyle = styleId
   }
 
   destroySubscriptions() {
@@ -174,6 +234,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     private authenticationService: AuthenticationService,
     private platformService: PlatformService,
     private settingService: SettingsService,
+    private renderer: Renderer2, private el: ElementRef
     )
   {
   }

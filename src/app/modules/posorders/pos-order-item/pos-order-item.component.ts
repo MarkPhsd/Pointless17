@@ -564,8 +564,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
         }
 
         if (editField == 'modifierNote') {
-          height  = '100vh';
-          width   = '100vw'
+          height  = '100vh !important';
+          width   = '100vw !important'
         }
 
         if (editField == 'price' || editField == 'subTotal') {
@@ -600,10 +600,10 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   editDialog(item, width, height) {
     let dialogRef: any;
 
-    if (!this.platFormService.isApp()){
-      height =  "550px";
-    }
-
+    // if (!this.platFormService.isApp()){
+    //   height =  '500px';
+    // }
+    // console.log(width, height)
     dialogRef = this.dialog.open(PosOrderItemEditComponent,
       { width     : width,
         minWidth  : '300px',

@@ -436,6 +436,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           //for some reason they were here, but they prevented a login,
           //after login it would log out. but reviewing these two lines does not
           //reveal why.
+          this.spinnerLoading = false;
           this.orderMethodsService.updateOrder(null)
           this.paymentMethodsservice._sendOrderAndLogOut.next(null)
           this.initForm();
@@ -451,14 +452,12 @@ export class LoginComponent implements OnInit, OnDestroy {
           let user = result?.user ;
           let sheet = result?.sheet as IBalanceSheet;
 
-          // if (user) {  console.log('user success')  }
           //if there is a sheet we login here with the user to prompt the sheet if needed.
           if (sheet) {  if (this.loginApp(result)) {  return of('success') } }
-
           if (result && result.username != undefined) { user = result }
 
           if (user) {
-            this.spinnerLoading = false;
+
             if (user && user?.errorMessage === 'failed') {
               this.clearUserSettings()
               this.authenticationService.updateUser(null);
@@ -467,22 +466,22 @@ export class LoginComponent implements OnInit, OnDestroy {
 
             if (user && user?.message && user?.message.toLowerCase() === 'success') {
               let pass = false
-
               if (!this.loginAction) {  this.userSwitchingService.assignCurrentOrder(user) }
-
               if (this.loginAction?.name === 'setActiveOrder') {
                 this.userSwitchingService.processLogin(user, '/pos-payment')
                 pass = true
               }
-
               if (!pass) { this.userSwitchingService.processLogin(user, '')  }
-
               this.closeDialog();
               return of('success')
             }
           }
         }
     ))
+  }
+
+  processUserLogin(user) {
+
   }
 
   closeDialog() {

@@ -359,7 +359,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         cellRenderer: "btnCellRenderer",
         cellRendererParams: {
           onClick: this.deleteItem.bind(this),
-          label: 'Del.',
+          label: 'Delete',
           getLabelFunction: this.getLabel.bind(this),
           btnClass: 'btn btn-primary btn-sm'
       },
@@ -526,7 +526,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
       // console.log('row data ', e.rowData, e.rowData.inventoryAssignmentID)
       if (e.rowData.inventoryAssignmentID != 0){
-        console.log('open 1')
         this.inventoryAssignmentService.openInventoryItem(e.rowData.inventoryAssignmentID)
         return;
       }
@@ -639,6 +638,10 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
     const item = event.data as PosOrderItem
 
+    if (item.inventoryAssignmentID != 0) {
+      this.siteService.notify('Item values must be changed from inventory window', 'Close', 10000, 'green')
+      return;
+    }
     if (colName === 'unitPrice') {
       item.unitPrice = event.value;
     }
@@ -655,6 +658,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       item.wholeSale = event.value
     }
     if (colName === 'wholeSaleCost') {
+
       item.wholeSaleCost = event.value
     }
 

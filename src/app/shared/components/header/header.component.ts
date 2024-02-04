@@ -203,9 +203,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   setHeaderBackColor(color) {
+    this.headerBackColor = ''
     if (color) {  this.headerBackColor = `background-color:${color};` }
     if (color) {
       this.matToolbarColor = ''
+    } else {
+      this.matToolbarColor = 'primary'
     }
   }
 

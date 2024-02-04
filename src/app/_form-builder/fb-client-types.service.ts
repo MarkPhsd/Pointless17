@@ -23,6 +23,7 @@ export class FbClientTypesService {
       voidOrder            : [],
       voidItem             : [],
       voidPayment          : [],
+      allowCashPaymentForOtherServer: [],
 
       houseAccountPayment  : [],
       changeItemPrice      : [],

@@ -361,7 +361,6 @@ export class NewOrderItemComponent implements OnInit {
   //move to service
   postNewInventoryItem(site, menuItem: IMenuItem, item: IPurchaseOrderItem, quantity: number) {
     //when posting then also call back and save to the item detail itself.
-    // console.log(item)
     let inv = {} as IInventoryAssignment;
     inv.poDetailID = item.id;
     inv.employeeID = item.employeeID;
@@ -373,19 +372,19 @@ export class NewOrderItemComponent implements OnInit {
     inv.packageCountRemaining = inv?.packageQuantity;
     inv.baseQuantity          = inv?.packageQuantity;
 
-    inv.unitOfMeasureName =     menuItem.unitDescription //= unitName;
-    inv.intakeUOM         =     menuItem.unitDescription //= unitTypeID;
-    inv.unitMulitplier    = 1;
+    inv.unitOfMeasureName     = menuItem.unitDescription //= unitName;
+    inv.intakeUOM             = menuItem.unitDescription //= unitTypeID;
+    inv.unitMulitplier        = 1;
 
     const defaultInventory$   = this.inventoryLocationsService.getDefaultLocation().pipe(switchMap(data => {
       if (data) {
-        inv.location = data?.name;
+        inv.location   = data?.name;
         inv.locationID = data?.id
       }
       return of(data);
     }))
 
-    const postItem$ = this.inventoryAssignmentService.postInventoryAssignment(site, inv)
+    const postItem$ = this.inventoryAssignmentService.postInventoryAssignment(site, inv, false)
 
     const item$ = defaultInventory$.pipe(switchMap(data => {
         return postItem$

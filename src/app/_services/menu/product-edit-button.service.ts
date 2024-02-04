@@ -237,7 +237,7 @@ export class ProductEditButtonService {
     item.testedBy = order.employeeName;
     item.invoice = order.orderCode;
 
-    return  this.inventoryService.postInventoryAssignment(site, item)
+    return  this.inventoryService.postInventoryAssignment(site, item, false)
   }
 
   getProduct(id,site, product) {
@@ -321,9 +321,9 @@ export class ProductEditButtonService {
     let dialogRef: any;
 
     dialogRef = this.dialog.open(PosOrderItemEditComponent,
-      { width     : width,
+      { width     : '100vw',
         minWidth  : '300px',
-        height    : height,
+        height    : '100vh',
         minHeight : height,
         data      : item
       },

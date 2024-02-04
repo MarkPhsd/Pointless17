@@ -657,8 +657,16 @@ constructor(  private _snackBar              : MatSnackBar,
   cellValueChanged(event) {
     const colName = event?.column?.colId.toString() as string;
     const item = event.data as IProduct
-    console.log(item)
-    this.action$ = this.updateValues(event.data?.id , event.value, colName)
+
+    this.action$ = this.updateValues(event.data?.id , event.value, colName).pipe(switchMap(data => {
+      console.log('data', data)
+      if (data) {
+        if (data.errorMessage) {
+          this.siteService.notify(data.errorMessage, 'Close', 10000, 'red')
+        }
+      }
+      return of(data)
+    }))
   }
 
   //initialize filter each time before getting data.
@@ -932,9 +940,6 @@ constructor(  private _snackBar              : MatSnackBar,
     item.departmentID = this.departmentID;
     item.itemTypeID = this.productTypeID
     item.bayName = value?.bayName;
-    console.log('search', this.productTypeSearch)
-    console.log('id', this.productTypeID)
-    console.log('item', item)
 
     this.action$ = this.orderMethodsService.publishReconciliation('Inventory Monitor', item).pipe(switchMap(data => {
       this.siteService.notify('Inventory Monitoring enabled', 'close', 5000, 'green');

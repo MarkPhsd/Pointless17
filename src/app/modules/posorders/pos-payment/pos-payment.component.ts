@@ -30,6 +30,7 @@ import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
+import { ReadableStreamDefaultController } from 'node:stream/web';
 
 @Component({
   selector: 'app-pos-payment',
@@ -269,17 +270,41 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   get giftCardPayButtonView() {
     let pass = false;
-    this.paymentGiftCardsList.forEach(data => {
-        if (data.name.toLowerCase() === 'gift card') {
-          pass = true
-        }
-      }
-    )
-    if (pass) {
+
+    if (this.uiTransactions?.enableGiftCards) {
       return this.giftCardPayButton
     }
+    // this.paymentGiftCardsList.forEach(data => {
+    //     if (data.name.toLowerCase() === 'gift card') {
+    //       pass = true
+    //     }
+    //   }
+    // )
+    // if (pass) {
+    //   return this.giftCardPayButton
+    // }
     return null
   }
+
+
+    //Allow Cash Payments For Other Servers
+    get isCashAuthorizedPayment() {
+      if (this.user?.roles === 'user' || this.user?.roles == 'guest') { return false }
+      if (this.userAuths?.allowCashPaymentForOtherServer) {
+        return true;
+      }
+
+      if (!this.userAuths?.userAssignedBalanceSheet) { return true }
+
+      //if this user is not the user who started the order, we have to make sure they are allowed.
+      if (!this.userAuths?.allowCashPaymentForOtherServer) {
+        if (this.user?.employeeID != this.order?.employeeID) {
+          return false
+        }
+      }
+
+      return true;
+    }
 
   setGroupID(event) {
     console.log('setgroupd', event);
@@ -356,13 +381,15 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   getPaymentMethods(site: ISite) {
     const paymentMethods$ = this.paymentMethodService.getCacheList(site);
     if (this.userAuthorization?.user?.roles === 'user') {
+      let list  = [] as IPaymentMethod[]
       return paymentMethods$.pipe(
         switchMap(data => {
           // let list = data.filter( item => !item.isCreditCard)
           // list = list.filter( item => !item.isCash)
           // list = list.filter( item => !item.wic)
           // list = list.filter( item => !item.ebt)
-          let list = data.filter( item => item.enabledOnline)
+
+          list = data.filter( item => item.enabledOnline)
           // list = list.filter( item => item.name != 'Gift Card')
         return  of(list)
       })
@@ -376,6 +403,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
           list = list.filter( item => !item.wic)
           list = list.filter( item => !item.ebt)
           list = list.filter( item => item.name != 'Gift Card')
+
+          if (!this.isCashAuthorizedPayment) {
+              list = data.filter( item => !item.isCash)
+          }
           return  of(list)
       }))
     }
@@ -385,6 +416,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       const list = data.filter( item => item.enabledOnline)
       let list2 = list.filter( item => !item.isCreditCard)
       list2 = list2.filter( item => item.name != 'Gift Card')
+
+      if (!this.isCashAuthorizedPayment) {
+        list2 = list2.filter( item => !item.isCash)
+      }
       return  of(list2)
     }))
 

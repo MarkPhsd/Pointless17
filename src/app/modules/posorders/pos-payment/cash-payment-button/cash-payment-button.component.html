@@ -1,4 +1,4 @@
-<div *ngIf="isApp && order">
+<div *ngIf="isApp && order && isAuthorizedPayment">
     <button
             [ngClass]="themeClass"
             class="buttons payment-buttons"
@@ -11,7 +11,5 @@
     </button>
 </div>
 
-<span *ngIf="(action$ | async) as action">
-
-</span>
+<span *ngIf="(action$ | async) as action"></span>
 
