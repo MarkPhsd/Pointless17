@@ -99,12 +99,15 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   overFlow    = 'overflow-y:auto'
   apiUrl      : any;
 
+  user$: Observable<IUser>;
   _user       : Subscription;
   user        : IUser;
   scrollStyle = this.platformService.scrollStyleWide;
+  private styleTag: HTMLStyleElement;
+  private customStyleEl: HTMLStyleElement | null = null;
+  @ViewChild('scrollDiv') scrollDiv: ElementRef;
 
   _sendOrderFromOrderService: Subscription;
-
   style       = "width:195px"
   _ping       : Subscription;
   _uiSettings : Subscription;
@@ -179,9 +182,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this._sendAndLogOut  = this.paymentMethodsService.sendOrderAndLogOut$.pipe(switchMap(
         send => {
-          console.log('send and log out')
           if (!send || send == null) {
-            // console.log('send and log out no data')
             return of('false')  ;
           }
           const noOrder = (!send.order || send.order == undefined)
@@ -192,7 +193,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           if (this.platFormService.isApp()) {
             if (send && send.order) {
               if (!this.user) {  return of(true)  }
-              // this.printAction$
               const send$ = this.sendOrderOnExitAndClearOrder(send.order).pipe(switchMap(data => {
                 this.orderMethodsSevice.updateOrder(null)
                 this.processLogOut()
@@ -311,14 +311,12 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   userSubscriber() {
-    try {
-      this._user =     this.authorizationService.user$.subscribe(data => {
-        // console.log('user', data)
-        this.user = data;
-      })
-    } catch (error) {
-      console.log('userSubscriber', error)
-    }
+    this.user$ =   this.authorizationService.user$.pipe(
+      switchMap(data => {
+      this.setScrollBarColor(data?.userPreferences?.headerColor)
+      this.user = data;
+      return of(data)
+    }))
   }
 
   orderBarSubscriber() {
@@ -526,6 +524,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private paymentMethodsProcessService: PaymentsMethodsProcessService,
                private dialog                  : MatDialog,
                private printQueService         : PrintQueService,
+               private authService             : AuthenticationService,
+               private renderer                 : Renderer2,
     ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     if (!this.platFormService.isApp()) {
@@ -832,5 +832,16 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   startWatching() {  this.userIdle.startWatching(); }
 
   restart()       {  this.userIdle.resetTimer();    }
+
+  setScrollBarColor(color: string) {
+    console.log('default', color)
+    if (!color) {    color = '#6475ac' }
+    const css = this.authService.getAppToolBarStyle(color, 25)
+    this.styleTag = this.renderer.createElement('style');
+    this.styleTag.type = 'text/css';
+    this.styleTag.textContent = css;
+    this.renderer.appendChild(document.head, this.styleTag);
+  }
+
 
 }

@@ -79,14 +79,15 @@
 
   <mat-card-content *ngIf="order.posPayments">
     <div  *ngFor="let item of order.posPayments">
-        <div class="payment-grid"
-              *ngIf="((item.account && !item.completionDate) ||
-                     (item.completionDate && item.amountPaid != 0) ||
-                     (item && item.voidReason) ||
-                     (item.tranType  && item?.tranType.toLowerCase()  === 'authorizationresponse'.toLowerCase() ) ||
-                     (item.tranType  && item?.tranType.toLowerCase() === 'VoidSaleByRecordNo'.toLowerCase() )) &&
-                     item?.tranType != 'incrementalAuthorizationResponse'
-                     ">
+
+      <div class="payment-grid"
+            *ngIf="((item.account && !item.completionDate) ||
+                    (item.completionDate && item.amountPaid != 0) ||
+                    (item && item.voidReason) ||
+                    (item.tranType  && item?.tranType.toLowerCase()  === 'authorizationresponse'.toLowerCase() ) ||
+                    (item.tranType  && item?.tranType.toLowerCase() === 'VoidSaleByRecordNo'.toLowerCase() )) &&
+                    item?.tranType != 'incrementalAuthorizationResponse'
+                    ">
 
         <ng-container *ngTemplateOutlet="tranTypeInfoView, context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="editPaymentView,  context: {$implicit: item}"></ng-container>
@@ -136,12 +137,13 @@
 </ng-template>
 
 <ng-template #dCapCaptureView  let-item>
+  {{item?.tranCode}}
   <div *ngIf="!qrOrder && (
     (item?.paymentMethod?.isCreditCard &&
       (uiTransactions && uiTransactions?.dCapEnabled && !item.completionDate)) ||
       (item?.account && !item.completionDate &&
       (uiTransactions && uiTransactions.dCapEnabled)
-    ) && item.tranCode === 'emvPreAuth')  " >
+    ) && item?.tranCode.toLowerCase() === 'emvpreauth')  " >
 
     <div *ngIf="order.creditBalanceRemaining !=  0 && totalAuthPayments > 0">
       <button class="payment-buttons-sm" mat-raised-button color='primary' (click)="captureTriPOS(item)">

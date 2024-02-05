@@ -1,10 +1,8 @@
 ﻿<div *ngIf="(terminalSettings$ | async) as terminal"></div>
 <div *ngIf="(loginAction$ | async) as loginAction"></div>
 <div *ngIf="(uiHome$ | async) as uiHome"></div>
-<div *ngIf="(setPinPad$ | async) as loginAction">
-  <!-- loginAction : {{loginAction}} -->
-</div>
-
+<div *ngIf="(setPinPad$ | async) as loginAction"></div>
+<div *ngIf="(device$ | async) as device"> </div>
 
 <ng-container [ngTemplateOutlet]="loginMethodView"></ng-container>
 

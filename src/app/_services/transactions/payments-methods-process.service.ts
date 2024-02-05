@@ -182,11 +182,10 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   getLabelsPrintOut(ui:TransactionUISettings,order: IPOSOrder) {
     let printLabels$ : Observable<any>;
     if (ui?.printLabelsOnclose) {
-      printLabels$ = this.printingService.printLabels(order, true)
+      return this.printingService.printLabels(order, true)
     } else {
-      printLabels$ = of(false)
+      return of(false)
     }
-    return printLabels$;
   }
 
   getPrintPrep(ui:TransactionUISettings,order: IPOSOrder) {
@@ -219,22 +218,21 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     })).pipe(concatMap ( data => {
       return this.getPrintPrep(ui, order)
     }))
-
-
   }
 
   finalizeOrder(paymentResponse: IPaymentResponse,
                 paymentMethod: IPaymentMethod,
                 order: IPOSOrder): number {
 
+    console.log('finalize order', order.completionDate, order.balanceRemaining )
     if (!paymentResponse ) {
-      console.log('no payment response', order, paymentMethod)
+      // console.log('no payment response', order, paymentMethod)
       this.sitesService.notify(`No payment response `, 'close', 20000, 'red');
       return 0
     }
 
     if (!paymentResponse.payment) {
-      console.log('no payment in response', order, paymentMethod)
+      // console.log('no payment in response', order, paymentMethod)
       this.sitesService.notify('No payment in payment response', 'close', 20000, 'red');
       return 0
     }
@@ -244,7 +242,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     const ui = this.uiSettingService._transactionUISettings?.value;
 
-    console.log('finalize order', order.balanceRemaining, paymentMethod)
+    // console.log('finalize order', order.balanceRemaining, paymentMethod)
     if (payment && paymentMethod) {
 
       if (paymentMethod.isCash) {
@@ -258,7 +256,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         return 1
       }
 
-      if (payment.amountReceived >= payment.amountPaid || order.balanceRemaining == 0) {
+      if ((payment.amountReceived >= payment.amountPaid && order.completionDate) || order.balanceRemaining == 0) {
         if (this.platFormService.isApp()) {
             this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
         }
@@ -798,7 +796,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     const payment$ =   this.paymentService.processDCAPResponse(site, payment.id, rStream, deviceName)
     return  payment$.pipe(
       concatMap(data => {
-        console.log('processDCAPResponse data:', data)
+        console.log('response processed', data)
         return this.finalizeTransaction(data)
       }
     ));
@@ -806,14 +804,13 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   finalizeTransaction(paymentResponse: IPaymentResponse) : Observable<IPOSOrder> {
     if (!paymentResponse?.order) {
-      console.log('finalizeTransaction no order in response')
       this.notify('No order in payment response!', 'Alert', 10000)
       return (null)
     }
     this.orderMethodsService.updateOrderSubscription(paymentResponse?.order)
     return  this.finalizeOrderProcesses(paymentResponse?.order).pipe(concatMap(data => {
-      // console.log('finalize transaction', paymentResponse)
       paymentResponse.order = data;
+      console.log('finalizeOrderProcesses', data)
       this.finalizeOrder(paymentResponse, paymentResponse?.payment?.paymentMethod, paymentResponse.order);
       return of(data);
     }))

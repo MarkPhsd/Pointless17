@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { IUserAuth_Properties } from '../people/client-type.service';
 import { ThemesService } from './themes.service';
 import { UIHomePageSettings } from './settings/uisettings.service';
+import { color } from 'highcharts';
 
 export interface IUserExists {
   id:           number;
@@ -43,6 +44,11 @@ export interface IDeviceInfo {
 @Injectable({ providedIn: 'root' })
 
 export class AuthenticationService {
+
+    baseColor = '#F5F5F5'; // Starting color
+    gradient: string;
+
+
     //used for ebay oAuth.
     ebayHeader: any;
 
@@ -52,20 +58,20 @@ export class AuthenticationService {
     private _setPinPad        = new BehaviorSubject<boolean>(null);
     public  setPinPad$        = this._setPinPad.asObservable();
 
-    public _userTemp               = new BehaviorSubject<IUser>(null);
-    public  userTemp$               = this._userTemp.asObservable();
+    public _userTemp          = new BehaviorSubject<IUser>(null);
+    public  userTemp$         = this._userTemp.asObservable();
 
-    public _user               = new BehaviorSubject<IUser>(null);
-    public  user$               = this._user.asObservable();
+    public _user              = new BehaviorSubject<IUser>(null);
+    public  user$             = this._user.asObservable();
 
-    private _userx              = new BehaviorSubject<IUser>(null);
-    public  userx$              = this._userx.asObservable();
+    private _userx            = new BehaviorSubject<IUser>(null);
+    public  userx$            = this._userx.asObservable();
 
     // userAuths            : IUserAuth_Properties;
-    _userAuths           = new BehaviorSubject<IUserAuth_Properties>(null);
-    public  userAuths$   = this._userAuths.asObservable();
+    _userAuths                = new BehaviorSubject<IUserAuth_Properties>(null);
+    public  userAuths$        = this._userAuths.asObservable();
 
-    _userAuthstemp           = new BehaviorSubject<IUserAuth_Properties>(null);
+    _userAuthstemp            = new BehaviorSubject<IUserAuth_Properties>(null);
     public  _userAuthstemp$   = this._userAuthstemp.asObservable();
 
     _deviceInfo: IDeviceInfo;
@@ -406,4 +412,131 @@ export class AuthenticationService {
       return  this.http.post<any>(url, user)
     }
 
+
+    //get app toolbar
+    getAppToolBarStyle(color: string, width: number) {
+
+      const list = this.generateGradient(color)
+      return  `
+        #scrollstyle_1::-webkit-scrollbar {
+          width: 35px;
+          background-color: #F5F5F5;
+          overflow-x: hidden;
+          overflow-y: auto;
+        }
+
+        #scrollstyle_1::-webkit-scrollbar-track {
+          -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+          background-color: #F5F5F5;
+          border-radius: 10px;
+        }
+
+        #scrollstyle_1::-webkit-scrollbar-thumb {
+          border-radius: 10px;
+          background-color: #6475ac;
+          background-image: -webkit-gradient(linear,
+                                             left bottom,
+                                             left top,
+                                             color-stop(0.44, ${list[0]}),
+                                             color-stop(0.72, ${list[1]}),
+                                             color-stop(0.86, ${list[2]}));
+        }
+      `;
+
+    }
+
+
+    private generateGradient(baseHex: string): any[] {
+    // Convert base color to HSL
+    let [h, s, l] = this.hexToHSL(baseHex);
+
+    // Calculate the new lightness for the "less dark" color.
+    // Ensure that the lightness does not exceed 100%
+    let lighterL = Math.min(l + 10, 100); // Increase lightness for the lighter color
+    let lessDarkL = Math.min(lighterL * 1.31, 100); // Make the last color 20% less dark than the lighter color
+
+    // Generate three color stops from the base color
+    let colors = [
+      this.hslToHex(h, s, Math.max(l - 20, 0)), // Darker
+      this.hslToHex(h, Math.max(s - 20, 0), l), // Less saturated
+      this.hslToHex(h, s, lessDarkL) // 20% less dark than what would have been the lighter color
+    ];
+
+      let list = []
+      list.push(colors[0])
+      list.push(colors[1])
+      list.push(colors[2])
+      return  list
+      // Create a CSS gradient string
+      // return `linear-gradient(to right, ${colors[0]}, ${colors[1]}, ${colors[2]})`;
+    }
+
+    private hexToHSL(H: string): [number, number, number] {
+      // Convert hex to RGB first
+      let r = 0, g = 0, b = 0;
+      if (H.length == 4) {
+        r = parseInt(H[1] + H[1], 16);
+        g = parseInt(H[2] + H[2], 16);
+        b = parseInt(H[3] + H[3], 16);
+      } else if (H.length == 7) {
+        r = parseInt(H[1] + H[2], 16);
+        g = parseInt(H[3] + H[4], 16);
+        b = parseInt(H[5] + H[6], 16);
+      }
+
+      // Then convert RGB to HSL
+      r /= 255;
+      g /= 255;
+      b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+
+      if (max == min) {
+        h = s = 0; // achromatic
+      } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+      }
+
+      return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
+    }
+
+    hslToHex(h: number, s: number, l: number): string {
+      s /= 100;
+      l /= 100;
+
+      let c = (1 - Math.abs(2 * l - 1)) * s,
+          x = c * (1 - Math.abs((h / 60) % 2 - 1)),
+          m = l - c / 2,
+          r = 0,
+          g = 0,
+          b = 0;
+
+      if (0 <= h && h < 60) {
+          r = c; g = x; b = 0;
+      } else if (60 <= h && h < 120) {
+          r = x; g = c; b = 0;
+      } else if (120 <= h && h < 180) {
+          r = 0; g = c; b = x;
+      } else if (180 <= h && h < 240) {
+          r = 0; g = x; b = c;
+      } else if (240 <= h && h < 300) {
+          r = x; g = 0; b = c;
+      } else if (300 <= h && h < 360) {
+          r = c; g = 0; b = x;
+      }
+
+      // Convert to Hex and ensure 2 digits by padding
+      let rs = Math.round((r + m) * 255).toString(16).padStart(2, '0');
+      let gs = Math.round((g + m) * 255).toString(16).padStart(2, '0');
+      let bs = Math.round((b + m) * 255).toString(16).padStart(2, '0');
+
+      return `#${rs}${gs}${bs}`;
+    }
 }

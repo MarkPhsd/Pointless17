@@ -255,7 +255,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     try {
       this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
-        console.log('menu item card order update', data?.id)
+        // console.log('menu item card order update', data?.id)
         this.order = data
       })
     } catch (error) {

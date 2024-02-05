@@ -1,10 +1,17 @@
 @import "/src/mixins.scss";
 
 .parent-container {
-  overflow: auto;
-  height: 100%;
+  overflow: hidden;
+  height: calc(100vh - 50px);
   // display: flex;
   // flex-direction: row;
+  @include for-tablet-landscape-up {
+    height: calc(100vh - 125px);
+  }
+
+  @include for-phone-only {
+    height: calc(100vh - 125px);
+  }
 }
 
 .card-container {
@@ -24,7 +31,7 @@
   max-height: calc(70vh - 125px);
 }
 
-.grid-max-height { 
+.grid-max-height {
 
 }
 
@@ -129,9 +136,10 @@ div.mat-chip-list-wrapper {
 
 .orders-container {
   overflow-x   : hidden;
-  overflow-y   : hidden;
+  overflow-y   : auto;
   padding-right: 5px;
   margin       : 5px;
+  padding-bottom: 10px;
 }
 
 .orders-list {
@@ -139,7 +147,7 @@ div.mat-chip-list-wrapper {
   overflow-y: auto;
   height: 85vh;
   padding: 3px;
-  padding-right: 5px;
+  padding-right: 10px;
   @include  for-desktop-up {
     overflow-x: hidden;
     overflow-y: auto;
@@ -165,30 +173,30 @@ div.mat-chip-list-wrapper {
   }
 }
 
-#scrollstyle_1::-webkit-scrollbar {
-	width: 25px;
-	background-color: #F5F5F5;
-  margin-left: 5px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+// #scrollstyle_1::-webkit-scrollbar {
+// 	width: 25px;
+// 	background-color: #F5F5F5;
+//   margin-left: 5px;
+//   overflow-y: auto;
+//   overflow-x: hidden;
+// }
 
-/** STYLE 7 */
-#scrollstyle_1::-webkit-scrollbar-track {
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	background-color: #F5F5F5;
-	border-radius: 10px;
-}
+// /** STYLE 7 */
+// #scrollstyle_1::-webkit-scrollbar-track {
+// 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+// 	background-color: #F5F5F5;
+// 	border-radius: 10px;
+// }
 
-#scrollstyle_1::-webkit-scrollbar-thumb {
-	border-radius: 10px;
-	background-image: -webkit-gradient(linear,
-									   left bottom,
-									   left top,
-									   color-stop(0.44, rgb(122,153,217)),
-									   color-stop(0.72, rgb(73,125,189)),
-									   color-stop(0.86, rgb(28,58,148)));
-}
+// #scrollstyle_1::-webkit-scrollbar-thumb {
+// 	border-radius: 10px;
+// 	background-image: -webkit-gradient(linear,
+// 									   left bottom,
+// 									   left top,
+// 									   color-stop(0.44, rgb(122,153,217)),
+// 									   color-stop(0.72, rgb(73,125,189)),
+// 									   color-stop(0.86, rgb(28,58,148)));
+// }
 
 .mat-dialog-actions {
   justify-content: center;

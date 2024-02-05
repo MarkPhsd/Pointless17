@@ -1,4 +1,4 @@
-import {Component,  HostListener, OnInit, AfterViewInit,OnDestroy,
+import {Component,  HostListener, OnInit,Renderer2,OnDestroy,
         ViewChild, ElementRef, QueryList, ViewChildren, Input, TemplateRef, ChangeDetectorRef, ChangeDetectionStrategy}  from '@angular/core';
 import {IMenuItem} from 'src/app/_interfaces/menu/menu-products';
 import {AWSBucketService, AuthenticationService, IMenuItemsResultsPaged, IProductSearchResults, MenuService} from 'src/app/_services';
@@ -15,7 +15,6 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ISite } from 'src/app/_interfaces';
-import { T } from '@angular/cdk/keycodes';
 @Component({
   selector: 'menu-items-infinite',
   templateUrl: './menu-items-infinite.component.html',
@@ -110,7 +109,11 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   subCategories$: Observable<any[]>;
   categoriesList
   subCategoriesList: any[];
+
   scrollStyle = this.platformService.scrollStyleWide;
+  private styleTag: HTMLStyleElement;
+  private customStyleEl: HTMLStyleElement | null = null;
+  @ViewChild('scrollDiv') scrollDiv: ElementRef;
 
   userAuths$   = this.authService.userAuths$.pipe(
     switchMap(data =>
@@ -120,10 +123,24 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     )
   )
 
+  user$ = this.authService.user$.pipe(switchMap(data => {
+    this.setScrollBarColor(data?.userPreferences?.headerColor)
+    return of(data)
+  }))
+
   ordersListClass   = 'grid-flow scroller '
   infiniteClassList = 'grid-flow scroller '
   infiniteItemClass = 'grid-item';
   isStaff= this.userAuthorizationService.isStaff;
+
+  setScrollBarColor(color: string) {
+    if (!color) {    color = '#6475ac' }
+    const css = this.authService.getAppToolBarStyle(color, 35)
+    this.styleTag = this.renderer.createElement('style');
+    this.styleTag.type = 'text/css';
+    this.styleTag.textContent = css;
+    this.renderer.appendChild(document.head, this.styleTag);
+  }
 
   initSubscriptions() {
     this.initToolbarSubscription();
@@ -152,15 +169,17 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   }
 
 
-  getItemHeight() { 
-    if (!this.menuItemsDiv) { 
+  getItemHeight() {
+    if (!this.menuItemsDiv) {
       return
     }
     const divTop = this.menuItemsDiv.nativeElement.getBoundingClientRect().top;
     const viewportBottom = window.innerHeight;
     const remainingHeight = viewportBottom - divTop;
-    this.menuItemsDiv.nativeElement.style.maxHeight  = `${remainingHeight + 10}px`;
-    // this.menuItemsDiv.nativeElement.style.height  = `${remainingHeight}px`;
+
+    // must use max height becuase of of how height spacing works with the grid
+    this.menuItemsDiv.nativeElement.style.maxHeight  = `${(remainingHeight - 75).toFixed(0)}px`;
+    // this.menuItemsDiv.nativeElement.style.padding  = `${5}px`;
   }
 
   get departmentsFilter(){
@@ -199,6 +218,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
               private fb: UntypedFormBuilder,
               private platformService: PlatformService,
               private cd: ChangeDetectorRef,
+              private renderer: Renderer2
       )
   {
     this.isApp = this.platFormService.isApp();
@@ -977,15 +997,15 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
               this.value = 100;
             }
 
-            // console.log('records', this.totalRecords, this.value )
-            if ( this.value != 100 && this.value !=0 && !this.endOfRecords) {
+            this.menuItems = this.removeDuplicates( this.menuItems )
+            this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
+
+            if ( !this.endOfRecords) {
               const lastItem = this.getNextMenuItem();
               this.loading = false;
               this.menuItems.push(lastItem)
             }
 
-            this.menuItems = this.removeDuplicates( this.menuItems )
-            this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
             this.loading   = false
             return of(this.menuItems)
           }

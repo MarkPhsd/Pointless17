@@ -386,7 +386,6 @@
 
 <ng-template #posDevice>
   <span  *ngIf="(posDevice$ | async) as device; else loadingDevice">
-
     <mat-divider></mat-divider>
     <div  class="margin-5">
       <button   class='ps-button-150'
@@ -397,7 +396,7 @@
   </span>
 </ng-template>
 <ng-template #preferencesView>
-  <span  *ngIf="(posDevice$ | async) as device; else loadingDevice">
+  <span  *ngIf="user?.userPreferences; else loadingPref">
     <mat-divider></mat-divider>
     <div  class="margin-5">
       <button   class='ps-button-150'
@@ -440,6 +439,11 @@
 <ng-template #loadingDevice>
   <div *ngIf="isApp">
     ...loading device.
+  </div>
+</ng-template>
+<ng-template #loadingPref>
+  <div *ngIf="isApp">
+    ...loading Preferences.
   </div>
 </ng-template>
 

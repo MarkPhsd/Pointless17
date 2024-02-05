@@ -290,31 +290,31 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   getDeviceInfo() {
     const devicename = localStorage.getItem('devicename')
-    if (devicename && this.isApp) {
-      this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
-        switchMap(data => {
+    this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
+      switchMap(data => {
 
-          if (data.text) {
-            try {
-              const posDevice = JSON.parse(data?.text) as ITerminalSettings;
-              this.uiSettings.updatePOSDevice(posDevice)
+        if (data.text) {
+          try {
+            const posDevice = JSON.parse(data?.text) as ITerminalSettings;
+            this.uiSettings.updatePOSDevice(posDevice)
+            this.terminalSetting = data;
+            this.zoom(posDevice)
+            return of(posDevice)
 
-              this.terminalSetting = data;
-              if (this.platformService.isAppElectron) {
-                if (posDevice && posDevice?.electronZoom && posDevice?.electronZoom != '0') {
-                  this.uiSettings.electronZoom(posDevice.electronZoom)
-                }
-              }
-              return of(posDevice)
-
-            } catch (error) {
-              this.siteService.notify('Error setting device info.' + JSON.stringify(error), 'Close', 10000, 'yellow')
-            }
-
+          } catch (error) {
+            this.siteService.notify('Error setting device info.' + JSON.stringify(error), 'Close', 10000, 'yellow')
           }
-          return of(null)
+
         }
-      ))
+        return of(null)
+      }
+    ))
+
+  }
+
+  zoom(posDevice: ITerminalSettings)  {
+    if (posDevice && posDevice?.electronZoom && posDevice?.electronZoom != '0') {
+      this.uiSettings.electronZoom(posDevice.electronZoom)
     }
   }
 

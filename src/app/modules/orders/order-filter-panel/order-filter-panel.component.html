@@ -1,3 +1,4 @@
+<div *ngIf="(user$ | async) as user"></div>
 <div [id]="scrollStyle">
   <mat-card *ngIf="uiTransactions"  class="panel" >
     <mat-card-content

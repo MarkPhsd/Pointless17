@@ -1,10 +1,9 @@
 // import { Route } from '@angular/router';
-import { Observable, Subscription, } from 'rxjs';
-import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter, OnDestroy, TemplateRef } from '@angular/core';
+import { Observable, Subscription, of, switchMap, } from 'rxjs';
+import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter, OnDestroy, TemplateRef, Renderer2 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
-import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -12,8 +11,8 @@ import { ISite } from 'src/app/_interfaces';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
-import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { AuthenticationService } from 'src/app/_services';
 
 @Component({
   selector: 'pos-order-items',
@@ -65,7 +64,16 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   nopadd = `nopadd`
 
+  _scrollStyle = this.platformService.scrollStyleWide;
+  private styleTag: HTMLStyleElement;
+  private customStyleEl: HTMLStyleElement | null = null;
+  @ViewChild('scrollDiv') scrollDiv: ElementRef;
+
   scrollStyle = this.platformService.scrollStyleWide;
+  user$ = this.authService.user$.pipe(switchMap(data => {
+    this.setScrollBarColor(data?.userPreferences?.headerColor)
+    return of(data)
+  }))
 
   get posItemsView() {
     if (this.prepScreen) {
@@ -118,6 +126,15 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   }
 
+  setScrollBarColor(color: string) {
+    if (!color) {    color = '#6475ac' }
+    const css = this.authService.getAppToolBarStyle(color, 25)
+    this.styleTag = this.renderer.createElement('style');
+    this.styleTag.type = 'text/css';
+    this.styleTag.textContent = css;
+    this.renderer.appendChild(document.head, this.styleTag);
+  }
+
   sortPOSItems(orderItems: PosOrderItem[]) {
     this.posOrderItems = this.sortItems(orderItems)
     setTimeout(() => {
@@ -150,7 +167,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                 private orderMethodService: OrderMethodsService,
                 private uiSettingService   : UISettingsService,
                 private settingService: SettingsService,
-                private router: Router,
+                private authService : AuthenticationService,
+                private renderer: Renderer2,
               )
   {
     this.orderItemsPanel = 'item-list';

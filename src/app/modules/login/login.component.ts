@@ -80,6 +80,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   rememberMe: boolean;
   uiHome$: Observable<UIHomePageSettings>;
 
+  device$ : Observable<ITerminalSettings>; //this.settingService.getDeviceSettings()
+
   initSubscriptions() {
     this._user = this.authenticationService.user$.subscribe( user => {
       if (user)  { this.loggedInUser = user }
@@ -131,6 +133,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private _renderer            : Renderer2,
         private authenticationService: AuthenticationService,
         private userSwitchingService : UserSwitchingService,
+
         private _snackBar            : MatSnackBar,
         private companyService       : CompanyService,
         private siteService          : SitesService,
@@ -167,6 +170,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.statusMessage = ''
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.refreshUIHomePageSettings();
+    this.initDevice()
+  }
+
+  initDevice() {
+    const device = localStorage.getItem('devicename');
+    if (device) {
+      this.device$ = this.uiSettingService.getPOSDevice(device).pipe(switchMap(data => {
+        this.zoom(data)
+        return of(data)
+      }))
+    }
+  }
+
+  zoom(posDevice: ITerminalSettings)  {
+    if (posDevice && posDevice?.electronZoom && posDevice?.electronZoom != '0') {
+      this.uiSettingService.electronZoom(posDevice.electronZoom)
+    }
   }
 
   async  openDrawerOne() {

@@ -15,10 +15,11 @@
         <mat-icon>alert</mat-icon> No ID found for Device. {{terminalSettings?.TranDeviceID}}
       </div>
 
-      <button mat-raised-button (click)="close()">Close</button>
+      <button mat-raised-button (click)="_close()">Close</button>
     </div>
 
     <!--  -->
+
     <mat-card *ngIf="dsiEmv">
 
       <mat-card-title>
@@ -95,7 +96,7 @@
 
           <div *ngIf="posPayment.tranType">
             <!-- Always show -->
-            <button  color="warn"  mat-raised-button (click)="close()">Close</button>
+            <button  color="warn"  mat-raised-button (click)="_close()">Close</button>
           </div>
           <div *ngIf="!posPayment.tranType">
             <!-- Always show -->
@@ -182,9 +183,13 @@
     <h3>Terminal</h3>
     <ngx-json-viewer *ngIf="terminalSettings" [json]="terminalSettings"></ngx-json-viewer>
   </div>
+  <div>
+    <h3>DSIEMV</h3>
+    <ngx-json-viewer *ngIf="dsiEmv" [json]="dsiEmv"></ngx-json-viewer>
+  </div>
 </div>
 
 <ng-template #loading>
-  <button mat-raised-button (click)="close()">Close</button>
+  <button mat-raised-button (click)="_close()">Close</button>
   <mat-spinner diameter="50"></mat-spinner>
 </ng-template>

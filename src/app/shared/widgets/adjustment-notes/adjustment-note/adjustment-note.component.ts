@@ -62,7 +62,7 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
 
   getAdjustmentType(event) {
     this.adjustmentType = event.value
-    console.log('adjustment', this.adjustmentType )
+
   }
 
   applyChanges() {

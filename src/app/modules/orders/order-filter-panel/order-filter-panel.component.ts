@@ -1,7 +1,7 @@
 import {Component, OnDestroy,
   HostListener, OnInit, AfterViewInit,
   EventEmitter, Output,
-  ViewChild, ElementRef,
+  ViewChild, ElementRef,Renderer2
   }  from '@angular/core';
 import { IServiceType, ISetting, IUser,  } from 'src/app/_interfaces';
 import { IPOSOrder, IPOSOrderSearchModel,  } from 'src/app/_interfaces/transactions/posorder';
@@ -35,6 +35,7 @@ const { Keyboard } = Plugins;
   styleUrls: ['./order-filter-panel.component.scss']
 })
 export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewInit {
+
   @ViewChild('selectorDiv') selectorDiv: ElementRef;
   @ViewChild('selectorEmpDiv') selectorEmpDiv: ElementRef;
   @ViewChild('toggleGroup') toggleGroup: ElementRef
@@ -110,7 +111,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     switchMap(searchPhrase =>
       this.refreshSearch()
     )
-
   )
 
   uiTransactions  = {} as TransactionUISettings;
@@ -118,8 +118,18 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   _UITransaction: Subscription;
 
   _scrollStyle = this.platformService.scrollStyleWide;
+  private styleTag: HTMLStyleElement;
+  private customStyleEl: HTMLStyleElement | null = null;
+  @ViewChild('scrollDiv') scrollDiv: ElementRef;
+
   searchDates:      Subject<any> = new Subject();
   searchDate$  : Subject<IPOSOrderSearchModel[]> = new Subject();
+
+  user$ = this.authService.user$.pipe(switchMap(data => {
+    this.setScrollBarColor(data?.userPreferences?.headerColor)
+    return of(data)
+  }))
+
 
   get scrollStyle() {
     if (this.viewType == 3) {
@@ -138,12 +148,19 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       }
     )
   )
+  setScrollBarColor(color: string) {
+    if (!color) {    color = '#6475ac' }
+    const css = this.authService.getAppToolBarStyle(color, 25)
+    this.styleTag = this.renderer.createElement('style');
+    this.styleTag.type = 'text/css';
+    this.styleTag.textContent = css;
+    this.renderer.appendChild(document.head, this.styleTag);
+  }
 
   initAuthSubscriber() {
     this._auth = this.authService.userAuths$.subscribe(data => {
       this.auth = data;
       this.resetSearch()
-
     })
   }
 
@@ -239,12 +256,10 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     if (this._auth) { this._auth.unsubscribe()}
   }
 
-
-
-
   constructor(
+      private renderer        : Renderer2,
       private orderService    : OrdersService,
-      private employeeService: EmployeeService,
+      private employeeService : EmployeeService,
       private router          : Router,
       public  route           : ActivatedRoute,
       private printingService : PrintingService,
@@ -254,11 +269,11 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       private matSnack        : MatSnackBar,
       private fb              : UntypedFormBuilder,
       private userAuthorization  : UserAuthorizationService,
-      private authService: AuthenticationService,
-      private dateHelper: DateHelperService,
+      private authService     : AuthenticationService,
+      private dateHelper      : DateHelperService,
       private _bottomSheet    : MatBottomSheet,
       private uISettingsService: UISettingsService,
-      public orderMethodsService: OrderMethodsService,
+      public  orderMethodsService: OrderMethodsService,
       private platformService: PlatformService,
   )
   {

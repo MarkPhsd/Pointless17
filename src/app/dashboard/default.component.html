@@ -2,13 +2,9 @@
 <div *ngIf="(printAction$ | async) as printAction"></div>
 <div *ngIf="(posDevice$ | async) as posDevice"></div>
 <div *ngIf="(printOrders$ | async) as printOrders"></div>
-<!-- <div *ngIf="(sendAndLogOut$ | async) as sendOrder"></div> -->
-<!-- logout -->
 <div *ngIf="(action$ | async) as action"></div>
-
-<div *ngIf="!hideAppHeader">
-  <app-header> </app-header>
-</div>
+<div *ngIf="( user$ | async) as user"></div>
+<div *ngIf="!hideAppHeader">  <app-header> </app-header> </div>
 
 <div *ngIf="(posDevice$ | async) as device"></div>
 
@@ -35,10 +31,9 @@
     </div>
 
     <ng-container #chatURL></ng-container>
-
   </mat-drawer>
 
-  <mat-drawer-content [style]='overFlow' [class]="scrollStyle">
+  <mat-drawer-content [style]='overFlow'  [id]="scrollStyle">
 
     <div *ngIf="departmentID && departmentID !=0"
         class="overlay">

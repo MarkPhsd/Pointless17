@@ -1,5 +1,4 @@
 <ng-container [ngTemplateOutlet]="orderPrepRefreshView" ></ng-container>
-
 <div *ngIf="value" class="loader">
   <ng-content></ng-content>
   <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>

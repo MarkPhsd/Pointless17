@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Observable, catchError, of, switchMap } from 'rxjs';
+import { Observable, catchError, concatMap, of, switchMap } from 'rxjs';
 import { IPOSPayment, IPOSOrder } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -9,7 +9,6 @@ import { ITerminalSettings, SettingsService } from 'src/app/_services/system/set
 import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
@@ -48,27 +47,10 @@ export class DCAPTransactionComponent implements OnInit {
   jsonData: any;
   uiSettings$: Observable<TransactionUISettings>;
   autoActionData: any;
-
+  terminalSettings$: Observable<ITerminalSettings>;
   result: any;
 
-  terminalSettings$ = this.settingsService.terminalSettings$.pipe(switchMap(data => {
-    this.terminalSettings = data;
-    this.dsiEmv = data?.dsiEMVSettings;
-    if (!data) {
-      const site = this.siteService.getAssignedSite();
-      const device = localStorage.getItem('devicename');
-      return this.settingsService.getPOSDeviceSettings(site, device).pipe(switchMap(data => {
-        this.settingsService.updateTerminalSetting(data)
-        this.dsiEmv = data.dsiEMVSettings;
-        return of(data)
-      }))
-    }
-    return of(data)
-  })).pipe(switchMap(data => {
-    console.log('autoActions')
-    this.autoActions(this.autoActionData)
-    return of(data)
-  }))
+
 
   constructor(
     public  userAuthService       : UserAuthorizationService,
@@ -84,7 +66,8 @@ export class DCAPTransactionComponent implements OnInit {
     private dcapMethodsService : DcapMethodsService,
     private orderService          : OrdersService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    @Optional() private dialogRef  : MatDialogRef<DCAPTransactionComponent>,){
+    @Optional() private dialogRef  : MatDialogRef<DCAPTransactionComponent>)
+    {
       if (!data) {
         this.message = "No Payment or Order Assigned."
         return;
@@ -111,13 +94,12 @@ export class DCAPTransactionComponent implements OnInit {
     }
 
     autoActions(data) {
+      // data.autoPay = false;
       if (data?.autoPay) {
-        if (data?.value>0) {
-          console.log('autoPay', data.value )
+        if (data?.value> 0 ) {
           this.payAmount();
           return;
         }
-
         if (data?.value<0) {
           console.log('auto Refund', data.value )
           this.refundAmount();
@@ -143,7 +125,37 @@ export class DCAPTransactionComponent implements OnInit {
     ngOnInit(): void {
       this.initForm()
       const i = 0;
+      this.initTerminalSettings()
     }
+
+    initTerminalSettings() {
+      this.terminalSettings$ = this.settingsService.terminalSettings$.pipe(concatMap(data => {
+        this.terminalSettings = data;
+        this.dsiEmv = data?.dsiEMVSettings;
+        if (!data) {
+          const site = this.siteService.getAssignedSite();
+          const device = localStorage.getItem('devicename');
+          return this.getPOSDeviceSettings(site, device)
+        }
+        return of(data)
+      })).pipe(concatMap(data => {
+        // console.log('data', data)
+        // return of(data)
+        if (this.autoActionData) {
+          this.autoActions(this.autoActionData)
+          return of(data)
+        }
+      }))
+    }
+
+
+  getPOSDeviceSettings(site, device) {
+    return this.settingsService.getPOSDeviceSettings(site, device).pipe(concatMap(data => {
+      this.settingsService.updateTerminalSetting(data)
+      this.dsiEmv = data?.dsiEMVSettings;
+      return of(data)
+    }))
+  }
 
     refundAmount() {
       if (!this.validateTransactionData()) { return }

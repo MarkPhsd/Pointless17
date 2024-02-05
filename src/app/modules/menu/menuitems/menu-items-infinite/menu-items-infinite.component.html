@@ -1,3 +1,4 @@
+
 <div *ngIf="(bucket$ | async) as bucket">
   <div  class="parent-container"
         *ngIf="(uiHomePage$ | async) as uiHomePage">
@@ -5,11 +6,9 @@
     <div  class="flex-row">
       <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
       <ng-container [ngTemplateOutlet]='departmentsFilter'></ng-container>
-
       <div>
         <ng-container [ngTemplateOutlet]="isgridFlowOptionOn"></ng-container>
       </div>
-
       <ng-container  *ngIf="enableFilter" [ngTemplateOutlet]="filter"></ng-container>
     </div>
 

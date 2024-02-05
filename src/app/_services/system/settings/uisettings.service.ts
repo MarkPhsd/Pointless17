@@ -502,6 +502,23 @@ export class UISettingsService {
     return this.settingsService.getDeviceSettings(deviceName)
   }
 
+  getPOSDevice(deviceName: string) {
+
+    return this.getPOSDeviceSettings(deviceName).pipe(
+      switchMap(data => {
+
+        if (data.text) {
+          try {
+            const posDevice = JSON.parse(data?.text) as ITerminalSettings;
+            return of(posDevice)
+          } catch (error) {
+
+          }
+        }
+        return of(null)
+      }));
+  }
+
   updatePOSDevice(data: ITerminalSettings) {
     this.posDeviceInfo = data;
     this._posDevice.next(data)
@@ -968,6 +985,7 @@ export class UISettingsService {
       if (!electron) {
         // console.log('electron is undefined')
       }
+      console.log('value', value)
       electron.electronZoomControl(value)
     }
   }
