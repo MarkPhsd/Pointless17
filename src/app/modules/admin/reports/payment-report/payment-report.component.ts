@@ -12,15 +12,16 @@ import { IPaymentSalesSearchModel, IPaymentSalesSummary, PaymentSummary, SalesPa
 })
 export class PaymentReportComponent implements OnInit, OnChanges {
 
-  @Input() type    : string;
-  @Input() site    : ISite;
-  @Input() dateTo  : string;
-  @Input() dateFrom: string;
-  @Input() notifier: Subject<boolean>
-  @Input() groupBy = "paymentMethod"
-  @Input() zrunID  : string;
-  @Input() reportRunID: number;
+  @Input()  type    : string;
+  @Input()  site    : ISite;
+  @Input()  dateTo  : string;
+  @Input()  dateFrom: string;
+  @Input()  notifier: Subject<boolean>
+  @Input()  groupBy = "paymentMethod"
+  @Input()  zrunID  : string;
+  @Input()  reportRunID: number;
   @Output() renderComplete = new EventEmitter<any>()
+  @Input()  surCharge: boolean;
   refreshList = []
   @Input() autoPrint: boolean; 
   refunds$           : Observable<IPaymentSalesSummary>;
@@ -29,7 +30,7 @@ export class PaymentReportComponent implements OnInit, OnChanges {
   sales              : PaymentSummary[];
   paymentSalesSummary: IPaymentSalesSummary;
   message            : string;
-  styles$: Observable<any>;
+  styles$            : Observable<any>;
   
   constructor(
     private httpClient: HttpClient,

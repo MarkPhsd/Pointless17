@@ -258,7 +258,10 @@
             (click)="voidOrder()">
       <mat-icon>delete</mat-icon>
       <span>
-        Void
+        <span *ngIf="!creditCardPaymentsMade">Void</span>
+        <span *ngIf="creditCardPaymentsMade">
+          Void Credit Required
+        </span>
       </span>
     </button>
   </div>

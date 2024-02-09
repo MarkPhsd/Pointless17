@@ -43,8 +43,9 @@
       </div>
 
       <div class="field-height-2" >
-        <div style="padding-top:5px">
+        <div >
           <span *ngIf="order.customerName" style="height: 25px" class="font-1-4em"> {{ order?.customerName.trim() | truncateText : orderNameLength}}</span>
+          <br>
           <span *ngIf="order.tableName" style="height: 25px"  [class]="tableFont">{{order?.tableName.trim()}}</span>
         </div>
       </div>

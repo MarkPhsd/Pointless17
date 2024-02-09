@@ -31,7 +31,7 @@ export class PaymentReportDataComponent implements OnInit {
   @Input() sales   : IPaymentSalesSummary;
   @Input() reportRunID: number;
   @Input() autoPrint: boolean;
-
+  @Input() surCharge: boolean
 
   constructor(
     private popOutService: ProductEditButtonService,

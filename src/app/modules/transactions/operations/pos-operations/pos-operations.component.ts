@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, Tem
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransferDataService } from 'src/app/_services/transactions/transfer-data.service';
 import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, concatMap, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ITaxReport} from 'src/app/_services/reporting/reporting-items-sales.service';
 import { Observable, of, Subject, Subscription } from 'rxjs';
@@ -15,12 +15,14 @@ import { BatchClose, Transaction } from 'src/app/_services/dsiEMV/dsiemvtransact
 import { ICanCloseOrder } from 'src/app/_interfaces/transactions/transferData';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { AuthenticationService, OrdersService, ReportingService } from 'src/app/_services';
 import { HttpClient } from '@angular/common/http';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 import { IPaymentSalesSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
+import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 
 @Component({
   selector: 'pos-operations',
@@ -81,7 +83,10 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   autoPrint: boolean;
   printStyles: string;
   validateSales$: Observable<any>;
-
+  batchSummary$: Observable<any>;
+  terminalSettings$: Observable<ITerminalSettings>;
+  terminalSettings: ITerminalSettings
+  dsiEmv: DSIEMVSettings
   userSubscriber() {
     this._user = this.authenticationService.user$.subscribe(data => {
       this.user = data;
@@ -104,9 +109,11 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     private sendGridService    : SendGridService,
     private matSnack           : MatSnackBar,
     private uISettingsService  : UISettingsService,
+    private settingsService: SettingsService,
     private httpClient: HttpClient,
     private coachMarksService: CoachMarksService,
     private authenticationService: AuthenticationService,
+    private dcapService: DcapService,
     private paymentReportService: SalesPaymentsService,
     private cdr: ChangeDetectorRef
   ) {
@@ -138,9 +145,30 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       this.refreshInit()
       return of(data)
     }))
-
+    this.initTerminalSettings()
   }
 
+
+  initTerminalSettings() {
+    this.terminalSettings$ = this.settingsService.terminalSettings$.pipe(concatMap(data => {
+      this.terminalSettings = data;
+      this.dsiEmv = data?.dsiEMVSettings;
+      if (!data) {
+        const site = this.siteService.getAssignedSite();
+        const device = localStorage.getItem('devicename');
+        return this.getPOSDeviceSettings(site, device)
+      }
+      return of(data)
+    }))
+  }
+
+  getPOSDeviceSettings(site, device) {
+    return this.settingsService.getPOSDeviceSettings(site, device).pipe(concatMap(data => {
+      this.settingsService.updateTerminalSetting(data)
+      this.dsiEmv = data?.dsiEMVSettings;
+      return of(data)
+    }))
+  }
   refreshInit() {
     this.getUser();
       this.refreshSales();
@@ -280,14 +308,6 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
         console.log('balance Sheet', data)
         return of(data)
     }))
-
-    // .pipe(switchMap(data => {
-    //    return this.refreshAudit(data.id)
-    // })).pipe(switchMap(data => {
-    //   // console.log('audit data', data)
-    //   this.auditPayment = data;
-    //   return of(data)
-    // }))
   }
 
   getUser() {
@@ -296,6 +316,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
 
   async emvDatacapBatchCards(): Promise<boolean> {
     try {
+      
       if (this.uiTransactions && this.uiTransactions.dsiEMVNeteEpayEnabled) {
         this.batchSummary  = null;
         const response =  await this.dsiProcess.emvBatch()
@@ -314,6 +335,38 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     }
   }
 
+  viewdcapBatchSummary() {
+    this.batchSummary$ = this.dcapBatchSummary
+  }
+  forcedcapBatchClose() {
+    this.batchSummary$ = this.dcapbatchClose
+  }
+
+  get dcapBatchSummary() {
+    if (this.uiTransactions?.dCapEnabled) {
+      const device = localStorage.getItem('devicename')
+      return this.dcapService.batchSummary(device)
+    }
+    return of(null)
+  }
+  get dcapbatchClose() {
+    if (this.uiTransactions?.dCapEnabled) {
+      const device = localStorage.getItem('devicename')
+      return this.dcapService.batchClose(device)
+    }
+    return of(null)
+  }
+
+  printEndOfDay() { 
+    if (this.printStyles) { 
+      if (this.platFormService.isAppElectron) {
+        this.printElectron(this.printStyles)
+        return
+      }
+    }
+    return of(null)
+  }
+
   async closeDay() {
     const result = window.confirm('Are you sure you want to close the day.');
     if (!result) {return}
@@ -321,6 +374,12 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     this.runningClose = true;
     //run through checks. do all the closing checks on theWebapi.
     //return a can or not and reason why.
+
+    if (this.uiTransactions?.dCapEnabled && !this.terminalSettings && !this.dsiEmv) {
+      this.siteService.notify('To close the day, you must use a device attached to a credit card terminal', 'Close', 5000, 'red')
+      return;
+    }
+
     try {
       if (this.isElectronApp) {
         if (this.uiTransactions && this.uiTransactions.dsiEMVNeteEpayEnabled) {
@@ -335,14 +394,18 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       if (!answer) { return }
     }
 
+    const dcapBatch$ = this.dcapbatchClose
     const email$ = this._email()
     const closingCheck$ = this.transferDataService.canCloseDay(site);
 
     this.orderMethodsService.clearOrderSubscription();
     this.balanceSheetsClosed = ''
-
+    this.printEndOfDay() ;
+    
     this.closingProcedure$ =
-       email$.pipe(switchMap(data => {
+        dcapBatch$.pipe(switchMap(data => {
+          return  email$
+      })).pipe(switchMap(data => {
         return closingCheck$
         }
       )).pipe(switchMap( data => {
@@ -493,13 +556,15 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       return
     }
 
+    let result : boolean
     if (contents && this.printerName, options) {
       this.printing = true;
-      this.printingService.printElectron( contents, this.printerName, options)
+      let result = this.printingService.printElectron( contents, this.printerName, options)
       this.printing = false;
     }
 
     this.cdr.detectChanges();
+    return result
   }
 
   setPrinter(event) {

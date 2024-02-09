@@ -40,9 +40,22 @@ mat-card-subtitle {
   padding: 4px;
 }
 
+.grid-action  { 
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  grid-gap: 5px;
+  max-height: 75px;
+  padding: 5px;
+
+  @include for-phone-only  {
+    visibility: hidden;
+  }
+}
+
 .grid-orderproperties {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
   grid-gap: 5px;
   max-height: 75px;
@@ -75,6 +88,11 @@ mat-card-subtitle {
   }
 }
 
+.flex-row { 
+  display: flex;
+  flex-direction: row;
+}
+
 .mat-card {
   min-height: 155px;
   max-height: 165px;
@@ -90,12 +108,16 @@ mat-card-subtitle {
   }
 }
 
-.date-header, .orderType, .employee-name, .time {
-  @include for-phone-only  {
-    visibility:  hidden;
-  }
+.date-header, .employee-name, .time {
+  // @include for-phone-only  {
+  //   visibility:  hidden;
+  // }
 }
 
+.orderType { 
+  font-size: 1.1em;
+  
+}
 .orderID {
   font-size: 1.2em;
   font-weight: 600;

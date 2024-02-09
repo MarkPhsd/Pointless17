@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, catchError, combineLatest, concatMap,  Observable, of, Subscription, switchMap, } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, concatMap,  iif,  Observable, of, Subscription, switchMap, } from 'rxjs';
 import { IPaymentResponse, IPOSOrder,  IPOSPayment,   ISite, OperationWithAction, PosPayment,  }   from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from '../reporting/sites.service';
@@ -509,6 +509,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   validateDCAPResponse(rStream: DcapRStream, payment: IPOSPayment) {
 
+    console.log('rstream', rStream)
     if (!rStream) {
       console.log('no rstream')
       this.sitesService.notify('No RStream resposne', 'close', 3000, 'red');
@@ -517,7 +518,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     if (!this.isApproved(rStream?.CmdStatus)) {
       console.log('no rstream CmdStatus')
-      this.sitesService.notify(rStream?.CmdStatus, 'close', 3000, 'red');
+      this.sitesService.notify(`${rStream?.CmdStatus}  - ${rStream?.TextResponse}`, 'close', 3000, 'red');
       return of(null)
     }
 
@@ -1158,9 +1159,24 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     if (!posPayments ) {return }
     let amount = 0;
-    posPayments.forEach(data => {
-      amount += this.getTotalAuthorizations(data)
+    posPayments.sort((a, b) => a.id - b.id);
+    posPayments.forEach((data, index) => {
+
+      // console.log(posPayments.length, index)
+
+      if (index == posPayments.length -1,  data?.tranCode) {
+        // console.log('i', data?.tranCode, data?.amountPaid, index, posPayments.length -1)
+        if ( data?.tranCode.toLowerCase() === 'IncrementalAuth'.toLowerCase()) {
+          amount = data?.amountPaid;
+          return data?.amountPaid
+        } else {
+          amount += this.getTotalAuthorizations(data)
+        }
+      } else  {
+        amount += this.getTotalAuthorizations(data)
+      }
     })
+    // console.log('getauthtotal', amount)
     return amount
   }
 
@@ -1168,7 +1184,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     if (data?.tranType === 'authorizationResponse' || data?.tranType === 'incrementalAuthorizationResponse') {
       return  data.amountPaid
     }
-    if (data?.tranCode == 'EmvPreAuth') {
+
+    if (data?.tranCode.toLowerCase() === 'EmvPreAuth'.toLowerCase() || data?.tranCode.toLowerCase() === 'IncrementalAuth'.toLowerCase()) {
       return  data.amountPaid
     }
     return 0

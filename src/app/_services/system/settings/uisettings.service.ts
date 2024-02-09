@@ -911,7 +911,7 @@ export class UISettingsService {
       enableOnScreenKeyboard:[],
       employeeClockNotifier: [],
       dsiTipPromptValues: [],
-
+      allowPreAuth: [],
      })
   }
 

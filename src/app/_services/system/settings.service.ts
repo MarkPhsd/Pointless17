@@ -289,8 +289,11 @@ export class SettingsService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<ISetting>(url).pipe(switchMap(data => {
-      const item = JSON.parse(data?.text) as ITerminalSettings
-      return of(item)
+      if (data?.text) { 
+        const item = JSON.parse(data?.text) as ITerminalSettings
+        return of(item)
+      }
+      return of(null)
     }))
 
   }

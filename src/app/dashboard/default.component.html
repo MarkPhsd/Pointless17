@@ -3,8 +3,13 @@
 <div *ngIf="(posDevice$ | async) as posDevice"></div>
 <div *ngIf="(printOrders$ | async) as printOrders"></div>
 <div *ngIf="(action$ | async) as action"></div>
-<div *ngIf="( user$ | async) as user"></div>
-<div *ngIf="!hideAppHeader">  <app-header> </app-header> </div>
+<div *ngIf="(user$ | async) as user"></div>
+<div *ngIf="(viewType$ | async) as viewPrep"></div>
+
+<div *ngIf="!hideAppHeader && !viewPrep" >  
+  <app-header> </app-header>
+</div>
+
 
 <div *ngIf="(posDevice$ | async) as device"></div>
 
@@ -78,12 +83,12 @@
   </div>
 </ng-template>
 
-
 <ng-template #userBarView>
   <user-bar></user-bar>
 </ng-template>
 
 <ng-template #menuBarView>
+
   <div  [hidden]="toolbarTiny">
     <app-menu-minimal>
     </app-menu-minimal>

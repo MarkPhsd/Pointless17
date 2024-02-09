@@ -26,7 +26,6 @@ import { PaymentsMethodsProcessService } from '../_services/transactions/payment
 import { OrderMethodsService } from '../_services/transactions/order-methods.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PrintQueService } from '../_services/transactions/print-que.service';
-
 @Component({
   selector: 'app-default',
   templateUrl: './default.component.html',
@@ -41,7 +40,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('appOrderBar')        appOrderBar: TemplateRef<any>;
   @ViewChild('menuBarView')        menuBarView: TemplateRef<any>;
   @ViewChild('userBarView')  userBarView: TemplateRef<any>;
-
   @ViewChild('appSiteFooter')  appSiteFooter: TemplateRef<any>;
   @ViewChild("footer") footer: ElementRef;
 
@@ -78,21 +76,21 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   _rightSideBarToggle: Subscription;
 
-  _searchSideBar    : Subscription;
-  searchSideBar     : boolean;
-  searchBarWidth    : number;
+  _searchSideBar      : Subscription;
+  searchSideBar       : boolean;
+  searchBarWidth      : number;
 
-  _barSize        : Subscription;
-  barSize         : boolean;
-  smallMenu        = false;
+  _barSize            : Subscription;
+  barSize             : boolean;
+  smallMenu           = false;
 
   _swapMenuWithOrder : Subscription;
   swapMenuWithOrder  : boolean;
 
   _orderBar       : Subscription;
   orderBar        : boolean;
-  _department : Subscription;
-  department  : IDepartmentList;
+  _department     : Subscription;
+  department      : IDepartmentList;
 
   matorderBar = 'mat-orderBar-wide';
   barType     = 'mat-drawer-toolbar';
@@ -128,6 +126,15 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   action$ : Observable<any>;
   _sendAndLogOut: Subscription;
   _sendOrderOnExit: Subscription;
+  viewPrep: boolean;
+
+  viewType$ = this.orderMethodsSevice.viewOrderType$.pipe(switchMap(data => {
+    this.viewPrep = false
+    if (data && data === 3) {
+      this.viewPrep = true 
+    }
+    return of(data)
+  }))
 
 
   initLoginStatus() {
@@ -152,6 +159,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       return of(null)
     }))
   }
+  
 
   processLogOut() {
     // console.log('processLogOut')

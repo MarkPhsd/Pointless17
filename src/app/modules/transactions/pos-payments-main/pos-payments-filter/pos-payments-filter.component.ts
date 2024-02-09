@@ -315,28 +315,15 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
         end = this.dateHelper.add('d', 1, start)
       }
 
-      // let today = new Date();
-      // const month = today.getMonth();
-      // const year = today.getFullYear();
-      // // today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
-      // const tmr =  this.dateHelper.add('d', 1, today)
-      console.log('start',start)
-      console.log('end',end)
 
       this.dateRangeForm =  this.fb.group({
         start:  start, //new Date(year, month, 1),
         end: end // new Date()
       })
-
-      // this.dateRangeForm = this.fb.group({
-      //   start:  [this.datePipe.transform(start, 'yyyy/dd/MM',this.locale)],
-      //   end: [this.datePipe.transform(end, 'yyyy/dd/MM',this.locale)]
-      // });
-
       this.subscribeToDatePicker();
     }
 
-    async initDateForm() {
+    initDateForm() {
       this.dateRangeForm = new UntypedFormGroup({
         start: new UntypedFormControl(),
         end: new UntypedFormControl()
@@ -345,7 +332,7 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       let today = new Date();
       const month = today.getMonth();
       const year = today.getFullYear();
-      // today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+   
       const tmr =  this.dateHelper.add('d', 1, today)
 
       this.dateRangeForm =  this.fb.group({
@@ -356,7 +343,6 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
       this.searchModel.completionDate_To   = this.dateRangeForm.get("end").value;
       this.subscribeToDatePicker();
-
     }
 
     subscribeToDatePicker()

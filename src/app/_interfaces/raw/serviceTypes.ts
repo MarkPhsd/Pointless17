@@ -45,6 +45,7 @@ export interface IServiceType {
   menuItem1   : IMenuItem;
   menuItem2   : IMenuItem;
   resaleType  : boolean;
+  headerOrder: boolean;
 }
 
 

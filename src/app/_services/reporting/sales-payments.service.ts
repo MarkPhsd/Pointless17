@@ -36,7 +36,7 @@ export interface IPaymentSalesSummary {
   tipAmount     : number;
   count         : number;
   creditTotal   : number;
-
+  surChargeAmount: number;
 }
 
 export interface PaymentSummary {

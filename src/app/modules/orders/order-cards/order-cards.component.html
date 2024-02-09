@@ -5,17 +5,19 @@
 </div>
 
 <ng-template #orderPrepRefresh>
-  <div *ngIf="(orderSubscription$ | async) as orders">
-    <!-- Count {{orders.length}} -->
+  <div *ngIf="(orderSubscription$ | async) as orders;else loadingPrep">
+  
   </div>
+  <ng-template #loadingPrep>..loading</ng-template>
 </ng-template>
 
 <ng-template #ordersRefresh>
-  <div *ngIf="(results$ | async) as results"></div>
+  <div *ngIf="(results$ | async) as results">
+  
+  </div>
 </ng-template>
 
 <div *ngIf="(action$ | async) as action"></div>
-
 
 <div>
   <div class="orders-container" >

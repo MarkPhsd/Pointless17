@@ -3,6 +3,9 @@ mat-card{
   height: 100%;
 }
 
+mat-hint { 
+  margin-left: 5px;
+}
 .buttons {
   display:flex;
   flex-direction: row;
@@ -10,7 +13,7 @@ mat-card{
 }
 .grid-headers {
   display: grid;
-  grid-template-columns: 200px 200px;
+  grid-template-columns: 200px auto;
   gap: 5px;
 }
 

@@ -129,8 +129,8 @@
           </div>
         </div>
 
-        <div class="grid-item-span" *ngIf="!prepScreen && !isModifier">
-          <span *ngIf="orderItem?.printed">
+        <div class="grid-item-span" *ngIf="!isModifier">
+          <span *ngIf="!prepScreen && orderItem?.printed ">
             <mat-icon color="warn" >print</mat-icon>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.printed | date: 'shortTime'}} </span>
           </span>
@@ -145,7 +145,7 @@
           </div>
         </div>
 
-        <div  class="grid-item-span" *ngIf="purchaseOrderEnabled && inputForm">
+        <div  class="grid-item-span" *ngIf="!prepScreen && purchaseOrderEnabled && inputForm">
           <div class="field-grid">
 
             <div class="field-values">
@@ -204,7 +204,7 @@
           <ng-container [ngTemplateOutlet]="isDisplayMenuItemOn"></ng-container>
       </div>
 
-      <div *ngIf="disableActions && enableItemReOrder">
+      <div *ngIf="!prepScreen && disableActions && enableItemReOrder">
         <button aria-label="add "
                 color="accent"
                 [disabled]="!menuItem?.active && !menuItem?.webEnabled"
@@ -228,7 +228,8 @@
             <mat-icon>more_vert</mat-icon>
         </button>
 
-        <mat-menu class="mat-menu-panel"
+        <mat-menu 
+                  class="mat-menu-panel"
                   [overlapTrigger]="false"
                   #menu="matMenu">
           <span (mouseleave)="menuTrigger.closeMenu()">
@@ -362,15 +363,12 @@
 </mat-card>
 
 <ng-template #imageDisplay>
-
-
   <button mat-button (click)="openDialog()"
           class='displayimage'
           *ngIf="(basicItem$ | async) as item">
     <ng-container [ngTemplateOutlet]="productImage"
                   [ngTemplateOutletContext]="{$implicit: item}"
-                  ></ng-container>
-    <!-- <img [class]="imageBaseCCS" *ngIf="imagePath" [src]="imagePath" /> -->
+    ></ng-container>
   </button>
 </ng-template>
 

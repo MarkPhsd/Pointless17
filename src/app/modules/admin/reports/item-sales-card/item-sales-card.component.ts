@@ -88,7 +88,12 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     if (this.groupBy === 'department') {   searchModel.groupByDepartment = true;  }
     if (this.groupBy === 'type') {   searchModel.groupByType = true;  }
     if (this.removeGiftCard) {  }
-    if (this.groupBy === 'void') {   searchModel.groupByType = false; }
+
+    if (this.groupBy === 'void') {   
+      searchModel.groupBy = 'void'
+      searchModel.groupByType = false; 
+    }
+
 
     searchModel.removeGiftCards   = this.removeGiftCard
     searchModel.startDate         = this.dateFrom;
@@ -175,6 +180,9 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     }
     if (this.viewType === 'adjustment') {
       return this.adjustmentView;
+    }
+    if (this.viewType === 'voids') {
+      return this.salesView;
     }
   }
 

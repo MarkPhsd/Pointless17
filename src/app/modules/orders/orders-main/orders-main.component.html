@@ -1,7 +1,7 @@
 <div *ngIf="(action$ | async) as action"></div>
-
+<div *ngIf="(viewType$ | async) as viewPrep"></div>
 <div class="parent-container">
-  <div>
+  <div *ngIf="!viewPrep">
     <span>
       <span>
         <button *ngIf="smallDevice"  color="accent" mat-button (click)="filterBottomSheet()">
@@ -155,6 +155,8 @@
           </mat-button-toggle-group>
 
           <ng-content [ngTemplateOutlet]="orderPrepRefresh"></ng-content>
+
+       
       </span>
 
       <span class="toggle-sections">
@@ -175,6 +177,12 @@
               </mat-button-toggle>
           </mat-button-toggle-group>
       </span>
+
+      <span>
+        <button mat-raised-button color='accent' (click)="refreshPrep()"><mat-icon>refresh</mat-icon>Refresh</button>
+      </span>
+      <ng-container [ngTemplateOutlet]="styleView"></ng-container>
+
     </span>
 
     <app-order-cards

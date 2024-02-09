@@ -310,6 +310,7 @@ export class POSPaymentService {
             tranType:            [], //string
             beginDate:           [], //string
             endDate:             [], //string
+            surchargeAmount     :[],
             orderID:              [],
           }
         )

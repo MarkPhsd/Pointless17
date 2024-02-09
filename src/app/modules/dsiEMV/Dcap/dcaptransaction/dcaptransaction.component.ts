@@ -139,8 +139,6 @@ export class DCAPTransactionComponent implements OnInit {
         }
         return of(data)
       })).pipe(concatMap(data => {
-        // console.log('data', data)
-        // return of(data)
         if (this.autoActionData) {
           this.autoActions(this.autoActionData)
           return of(data)
@@ -163,12 +161,15 @@ export class DCAPTransactionComponent implements OnInit {
         const device = this.terminalSettings.name;
         const site = this.siteService.getAssignedSite()
         this.initMessaging()
+        this.processing = true;
         const sale$ = this.dCapService.returnAmount(this.terminalSettings?.name , this.posPayment, this.manual);
         this.processing$ = sale$.pipe(switchMap(data => {
           data.Authorize = (-(+data.Authorize)).toString()
           this.result = data;
+          this.processing = false;
           return this.processResults(data)
         })),catchError(data => {
+          this.processing = false;
           this.siteService.notify(JSON.stringify(data), 'Close', 10000, 'red')
           return of(data)
         })
@@ -187,6 +188,7 @@ export class DCAPTransactionComponent implements OnInit {
           this.result = data;
           return this.processResults(data)
         })),catchError(data => {
+          this.processing = false;
           this.siteService.notify(JSON.stringify(data), 'Close', 10000, 'red')
           return of(data)
         })
@@ -214,6 +216,7 @@ export class DCAPTransactionComponent implements OnInit {
 
     processResults(response: DcapRStream): Observable<any> {
       if (!response) {
+        this.processing = false;
         this.message = 'Processing failed, reason unknown.'
         return of(null)
       }

@@ -5,7 +5,7 @@ import { catchError, delay, delayWhen, finalize,  repeatWhen, retryWhen, switchM
 import { Observable, of, Subject , Subscription, throwError, timer } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
-import { IUser } from 'src/app/_interfaces';
+import { IServiceType, IUser } from 'src/app/_interfaces';
 import { Router } from '@angular/router';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -42,7 +42,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   isUserStaff          : boolean;
 
-  user$               : Observable<IUser>;
+  user$               : Observable<any>;
   _user               : Subscription;
   user                : IUser;
 
@@ -53,7 +53,14 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   href                : string;
   deviceInfo          : IDeviceInfo;
 
+  quickServiceTypes$: Observable<IServiceType[]>;
+  quickServiceTypes: IServiceType[];
+  
+ 
   initSubscriptions() {
+
+    const site = this.siteService.getAssignedSite();
+    // this.quickServiceTypes$ = this.serviceTypeService.getSaleTypes(site)
 
     this.orderMethodsService.updateOrderSubscription(this.order);
 
@@ -65,7 +72,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
       this.order = null;
     })
 
-    this._user = this.authenticationService.user$.subscribe(user => {
+    this.user$ = this.authenticationService.user$.pipe(
+      switchMap(user => {
       this.user = user;
       this.isUserStaff = false;
       if (user) {
@@ -73,7 +81,23 @@ export class CartButtonComponent implements OnInit, OnDestroy {
           this.isUserStaff      = true
         }
       }
-    })
+      return this.serviceTypeService.getSaleTypes(site)
+    })).pipe(switchMap(data => { 
+      this.quickServiceTypes = null;
+      if (data) { 
+        if (this.user.roles == 'admin' || this.user.roles == 'manager') { 
+          this.quickServiceTypes = data.filter(data => { 
+            return data.headerOrder 
+          })
+        } 
+        if (this.user.roles == 'employee') {
+          this.quickServiceTypes = data.filter(data => { 
+            return data.headerOrder && (data.filterType == 0 || !data.filterType)
+          })
+        }
+      }
+      return of(data)
+    }))
 
     this._posDevice = this.uiSettings.posDevice$.subscribe(data => {
        this.posDevice = data;

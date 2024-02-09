@@ -79,7 +79,7 @@ mat-label {
 .transaction-data {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  width: 300px;
+  width: 240px;
   border-radius: 3px;
   margin: 5px 5px ;
   row-gap: 5px;
@@ -133,8 +133,21 @@ body {
 .reverse-label {
   max-width: 85px;
 }
+
+.payment-button-balance { 
+  height: 65px;
+  width: 125px;
+  margin: 5px;
+  line-height: 0.9em;
+  padding: 1px;
+
+  @include for-phone-only  {
+    width: 115px;
+  }
+}
+
 .payment-grid {
-  --gap: 5px;
+  column-gap: 10px;
 
   display: flex;
   flex-direction: row;
@@ -145,10 +158,8 @@ body {
 
 
   @include for-phone-only  {
-    --gap: 5px;
     display: grid;
-    gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
+    grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
     font-size: 1em;
     overflow-y: auto;
     overflow-x: auto;
@@ -159,7 +170,10 @@ body {
 mat-card-content {
   max-height: 200px;
   overflow-y: auto;
-
+  @include for-phone-only  {
+    max-height: 100%;
+    overflow-y: auto;
+  }
 }
 
 .void-info {

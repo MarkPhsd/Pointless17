@@ -7,6 +7,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { OrdersService } from 'src/app/_services';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { Transaction } from 'electron/main';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +21,10 @@ export class DcapMethodsService {
     private orderMethodService: OrderMethodsService,
   ) { }
 
+ 
+
   readResult(cmdResponse: DcapRStream) {
-    console.log('readresult', cmdResponse?.TextResponse, cmdResponse)
+    // console.log('readresult', cmdResponse?.TextResponse, cmdResponse)
     let message: string;
     let resultMessage: string;
     let processing: boolean;
@@ -75,7 +78,7 @@ export class DcapMethodsService {
     let success: boolean;
     success = false;
     try {
-      console.log('processVoidResults RStream', response.CmdResponse)
+      // console.log('processVoidResults RStream', response.CmdResponse)
       const cmdResponse = response?.CmdResponse;
       const result =  this.readResult(cmdResponse);
       if (!result) {

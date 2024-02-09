@@ -93,6 +93,7 @@
             <div *ngIf="groupBy === 'paymentMethod'" class="totals">Avg</div>
             <div *ngIf="groupBy === 'paymentMethod'" class="totals">#</div>
             <div *ngIf="groupBy === 'paymentMethod'" class="totals">Tip</div>
+            <div *ngIf="surCharge && groupBy === 'paymentMethod'" class="totals">SCharge</div>
           </div>
 
           <div  class="grid-payment-report-card-header"
@@ -142,15 +143,18 @@
       </ng-template>
 
       <ng-template #totalsView>
-
         <div class="grid-footer-payments" *ngIf="groupBy && (groupBy === 'paymentMethod')">
-
         </div>
 
         <div class="header-grid"  *ngIf="payments">
           <div >Total</div>
           <div >
             {{sales.total | currency }}
+          </div>
+
+          <div *ngIf="surCharge">Avg</div>
+          <div *ngIf="surCharge && sales.count != 0">
+            {{sales?.surChargeAmount | currency }}
           </div>
 
           <div >Avg</div>
@@ -178,24 +182,4 @@
 
 </div>
 
-        <!-- <div class="grid-footer-payments"   *ngIf="payments">
-          <div class="grid-item">-----</div>
-          <div class="totals">Total</div>
-          <div class="totals">Avg</div>
-          <div class="totals">#</div>
-        </div>
 
-        <div class="grid-footer-payments">
-          <div class="grid-item">
-            Total
-          </div>
-          <div class="totals">
-            {{sales.total | currency }}
-          </div>
-          <div class="totals" *ngIf=" sales.count != 0">
-            {{sales.total / sales.count | currency }}
-          </div>
-          <div class="totals">
-            {{sales.count }}
-          </div>
-        </div> -->

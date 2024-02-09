@@ -93,6 +93,15 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // this.uiSettingService.updatePOSDevice(item)
   terminalSettings: ITerminalSettings;
+  viewPrep: boolean;
+
+  viewType$ = this.orderMethodsService.viewOrderType$.pipe(switchMap(data => {
+    this.viewPrep = false
+    if (data && data === 3) {
+      this.viewPrep = true 
+    }
+    return of(data)
+  }))
 
   setPrepInterval() {
     // if (this.viewType == 3) {
@@ -191,16 +200,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.setViewType(0)
 
     return;
-    this.viewHouseAccountListOn = !this.viewHouseAccountListOn;
-    // if (!this.viewHouseAccountListOn) {
-    //   this.viewHouseAccountListOn = true
-    // }
-
-    if (this.viewHouseAccountListOn) {
-      this.setViewType(1)
-    } else {
-      this.setViewType(0)
-    }
 
   }
   get viewHouseAccountList() {
@@ -702,6 +701,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
       return
     }
   }
+
+
+
 
   setViewType(value) {
     this.viewType = value;

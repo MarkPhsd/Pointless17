@@ -1,21 +1,36 @@
   <div *ngIf="(actionOrder$ | async) as actionOrder"></div>
-
+  <div *ngIf="(user$ | async) as user"></div>
   <div [class]="gridflow">
 
     <div  *ngIf="(order && order.history == true || (order && order.completionDate))
                 || isUserStaff " >
-      <button
-          mat-raised-button
-          color="primary"
-          (click)="addNewOrder()" >
-      <span *ngIf="!isUserStaff">
-        New Order
-      </span>
-      <mat-icon>
-        add
-      </mat-icon>
 
+      <div *ngIf="isUserStaff && quickServiceTypes" class="flex-grid-row-5px">
+        <!-- {{quickServiceTypes | json}} -->
+        <div  *ngFor="let item of quickServiceTypes">
+          <button style="margin-left:5px;width:75px"
+                  mat-raised-button
+                  color="primary"
+                  (click)="addNewOrder()" >
+            <mat-icon>
+               {{item?.name |truncateText:1}}
+            </mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <button *ngIf="!quickServiceTypes"
+              mat-raised-button
+              color="primary"
+              (click)="addNewOrder()" >
+        <span *ngIf="!isUserStaff">
+          New Order
+        </span>
+        <mat-icon>
+          add
+        </mat-icon>
       </button>
+
     </div>
 
     <div *ngIf="(deviceInfo && !deviceInfo.phoneDevice)">

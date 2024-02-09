@@ -24,7 +24,7 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
   @Input() order: IPOSOrder;
   @Input() index: number;
   itemCount: number;
-
+  tableFont = 'font-dark-green font-1-2em font-weight-500';
   ordersInvisible = []
   orderItems    : IPOSOrder;
   smallDevice   : boolean;
@@ -125,50 +125,52 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
         this.order = data
         const items = data.posOrderItems
         let count = 0;
-        data.posOrderItems = items.filter(item => {
-            let display = false;
-            let printLocation = false;
-
-            this.setColor(data.serviceTypeID)
-
-            if (this.prepStatus == 0) {
-              if (!item.itemPrepped && !item.printed) {
-                display = true;
+        if (items && items.length>0) { 
+          data.posOrderItems = items.filter(item => {
+              let display = false;
+              let printLocation = false;
+              this.setColor(data.serviceTypeID)
+  
+              if (this.prepStatus == 0) {
+                if (!item.itemPrepped && !item.printed) {
+                  display = true;
+                }
+              }
+  
+              if (this.prepStatus == 1) {
+                if (!item.itemPrepped && item.printed) {
+                  display = true;
+                }
+              }
+  
+              if (this.prepStatus == 2) {
+                if (item.itemPrepped &&  item.printed) {
+                  display = true;
+                }
+              }
+  
+              if (printerLocation == item.printLocation )  {
+                printLocation = true;
+              }
+  
+              if (printerLocation == 0) {
+                printLocation = true;
+              }
+  
+              if (printLocation && display) {
+                if (item.id == item.idRef) {
+                  count = item.quantity + count
+                  this.itemCount = count;
+                }
+                return item;
               }
             }
-
-            if (this.prepStatus == 1) {
-              if (!item.itemPrepped && item.printed) {
-                display = true;
-              }
-            }
-            if (this.prepStatus == 2) {
-              if (item.itemPrepped &&  item.printed) {
-                display = true;
-              }
-            }
-
-            if (printerLocation == item.printLocation )  {
-              printLocation = true;
-            }
-
-            if (printerLocation == 0) {
-              printLocation = true;
-            }
-
-            if (printLocation && display) {
-              if (item.id == item.idRef) {
-                count = item.quantity + count
-                this.itemCount = count;
-              }
-              return item;
-            }
+          )
+  
+          if (data.posOrderItems.length == 0) {
+            const item = { index: this.index, count: count}
+            this.outPutSetVisibility.emit(item);
           }
-        )
-
-        if (data.posOrderItems.length == 0) {
-          const item = { index: this.index, count: count}
-          this.outPutSetVisibility.emit(item);
         }
 
         this.orderItems = data;

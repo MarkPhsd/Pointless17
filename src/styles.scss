@@ -143,8 +143,6 @@ button {
      flex-direction: column;
   }
 
-
-
   svg.material-icons {
     height: 24px;
     width: auto;
@@ -872,6 +870,14 @@ mat-dialog-container {
   flex-wrap: wrap;
   justify-content:flex-start;
   gap: 20px;
+}
+
+.flex-grid-row-5px {
+  display: flex;
+  flex-direction: row;
+  // flex-wrap: wrap;
+  justify-content:flex-start;
+  gap: 5px;
 }
 
 .flex-grid-row-space-around {

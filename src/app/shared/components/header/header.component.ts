@@ -290,10 +290,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   getDeviceInfo() {
     const devicename = localStorage.getItem('devicename')
+    if (!devicename) { return of(null)}
     this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
       switchMap(data => {
 
-        if (data.text) {
+        if (data && data.text) {
           try {
             const posDevice = JSON.parse(data?.text) as ITerminalSettings;
             this.uiSettings.updatePOSDevice(posDevice)

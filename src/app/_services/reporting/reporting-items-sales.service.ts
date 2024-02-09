@@ -35,6 +35,7 @@ export interface  ReportItemSalesOptimized {
   completionDateShort:     string;
   department: string;
   category: string
+  voidAmount: number;
 }
 
 export interface IReportItemSales {

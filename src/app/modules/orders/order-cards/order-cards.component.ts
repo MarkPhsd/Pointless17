@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit, OnDestroy,
-  ViewChild, ElementRef, QueryList, ViewChildren, Input, Output,EventEmitter, TemplateRef, OnChanges, SimpleChanges, Renderer2}  from '@angular/core';
+  ViewChild, ElementRef, QueryList, ViewChildren, Input, Output,EventEmitter, TemplateRef, OnChanges, SimpleChanges, Renderer2, ChangeDetectorRef}  from '@angular/core';
 import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
 import { AuthenticationService, OrdersService, POSOrdersPaged } from 'src/app/_services';
 import { ActivatedRoute} from '@angular/router';
@@ -152,8 +152,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     })
   }
 
-
-
   initUserAuth() {
     this._user = this.authenticationService.user$.subscribe(data => {
       this.user = data;
@@ -194,14 +192,13 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     private toolbarServiceUI : ToolBarUIService,
     private authenticationService: AuthenticationService,
     private platformService: PlatformService,
-    private settingService: SettingsService,
-    private renderer: Renderer2, private el: ElementRef
+    private renderer: Renderer2, private el: ElementRef,
+    private cd: ChangeDetectorRef,
     )
   {
   }
 
   ngOnInit()  {
-
     this.stateValue = this.route.snapshot.paramMap.get('value');
     this.initOrderBarSubscription();
     this.initUserAuth();
@@ -243,7 +240,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
           data.employeeID = this.orderMethodsService.orderSearchEmployeeID;
         }
         this.searchModel = data
-
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
         this.nextPage(true)
@@ -347,7 +343,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     let sendOrder$ : Observable<any>;
     if (this.orderMethodsService?.currentOrder && this.prepOnExit) {
       if (!this.orderMethodsService.currentOrder.history) {
-        // this.paymentMethodsProcess.updateSendOrderOnExit(this.orderMethodsService.currentOrder)
         sendOrder$ = this.paymentMethodsProcess.sendToPrep(order, true, null, false)
       }
     } else {
@@ -371,10 +366,8 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
         return of(data)
       })
     )
-
     this.action$ = newOrder$
   }
-
 
   getPrepOrders() {
     const seconds = 1000 * 5;
@@ -384,18 +377,16 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     model.pageNumber = 1;
     model.pageSize = 25;
     return this.orderService.getOrdersPrepBySearchPaged(site,model).pipe(switchMap(data => {
-      // console.log('refresh items')
+      
       const newLocal = this;
-      newLocal.orders = data.results;
+      newLocal.orders = [...newLocal.orders, ...data.results];
       return of (data.results)
     }))
   }
 
-
   addToList(pageSize: number, pageNumber: number, reset : boolean)  {
     this.results$ = this._addToListOBS(pageSize,pageNumber, reset)
   };
-
 
   _addToListOBS(pageSize: number, pageNumber: number, reset : boolean)  {
     let model         = {} as IPOSOrderSearchModel
@@ -411,16 +402,18 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     if (this.viewType == 3) {
       model.pageNumber    = pageNumber
       model.pageSize      = pageSize
-      results$            = this.orderService.getOrdersPrepBySearchPaged(site, model) //.pipe(share());
+      results$            = this.orderService.getOrdersPrepBySearchPaged(site, model).pipe(switchMap(data => { 
+        console.log('data', data)
+        return of(data)
+      }))
     }
 
-    // console.log('search add to list', model.employeeID)
     if (this.viewType != 3) {
       results$    = this.orderService.getOrderBySearchPaged(site, model) //.pipe(share());
     }
 
-      this.loading      = true
-      this.endOfRecords = false;
+    this.loading      = true
+    this.endOfRecords = false;
 
     return results$.pipe(switchMap(data => {
         if (!this.orders)  {
@@ -447,14 +440,18 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
         }
         if (data.results) {
           this.loading      = false
-          this.orders = this.orders.concat(data.results)
+          // this.orders = this.orders.concat(data.results)
+          this.orders = this.mergeAndDeduplicate(this.orders, data.results)
+          // this.orders = [...this.orders, ...data.results];
+          console.log('orders', this.orders.length, this.orders)
+
+          if (this.viewType != 3) {
+            this.cd.detectChanges()
+          }
+          const newLocal = this;
           this.orders.sort
           this.orders = this.getUniqueItems(this.orders)
-
-
-          // console.log('refreshing prep', this.orders.length)
-
-
+    
           this.totalRecords = data.paging.totalRecordCount;
           if ( this.orders.length == this.totalRecords ) {
             this.endOfRecords = true;
@@ -463,15 +460,14 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
           }
           this.value = ((this.orders.length / this.totalRecords ) * 100).toFixed(0)
           this.loading      = false
-
           return of(data)
         }
         this.loading = false
         this.pagingInfo = data.paging
         if (data) {
-            this.endOfRecords = true;
-            this.loading      = false
-            this.value        = 100;
+          this.endOfRecords = true;
+          this.loading      = false
+          this.value        = 100;
         }
         return of(data)
       }
@@ -480,6 +476,38 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
       item.results = null;
       return of(item)
     }))
+  }
+
+  mergeAndDeduplicate(items1: IPOSOrder[], items2: IPOSOrder[]): IPOSOrder[] {
+    const merged: IPOSOrder[] = [...items1, ...items2];
+    const result: IPOSOrder[] = [];
+  
+    const itemMap: Map<number, IPOSOrder> = new Map();
+  
+    for (const item of merged) {
+      // Check if we already have an item with the same id
+
+      if (item.itemCount === 0) {
+        continue;
+      }
+
+      if (itemMap.has(item.id)) {
+        const existingItem = itemMap.get(item.id);
+        // Keep the item with the higher itemCount
+        if (existingItem && item.itemCount > existingItem.itemCount) {
+          itemMap.set(item.id, item);
+        }
+      } else {
+        itemMap.set(item.id, item);
+      }
+    }
+  
+    // Convert the map back to an array
+    itemMap.forEach((value) => {
+      result.push(value);
+    });
+  
+    return result;
   }
 
   get isPrepViewEnabled() {
@@ -497,22 +525,17 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
 
   isOrderVisible(i, order: IPOSOrder) {
 
-
     if (order && order.posOrderItems && order.posOrderItems.length === 0) {
       return false
     }
 
-    if (!i) {
-      return true
-    }
+    if (!i) {  return true }
 
     const items = this.invisibleOrders.filter(p => {
       if  (p == i) { return p }
     })
 
-    if ( items.length == 0 ) {
-      return true
-    }
+    if ( items.length == 0 ) { return true }
   }
 
 

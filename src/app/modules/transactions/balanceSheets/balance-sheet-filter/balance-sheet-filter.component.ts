@@ -228,27 +228,48 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
     }
   }
 
+  // initDateForm() {
+  //   this.dateRangeForm = new UntypedFormGroup({
+  //     start: new UntypedFormControl(),
+  //     end  : new UntypedFormControl()
+  //   });
+
+  //   let today = new Date();
+  //   const month = today.getMonth();
+  //   const year = today.getFullYear();
+
+  //   // today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+  //   let endDate = this.dateHelper.add('day', 1 ,today)
+  //   //// new Date(year, month, 1),
+  //   this.dateRangeForm =  this.fb.group({
+  //     start: today,
+  //     end  : endDate // new Date()
+  //   })
+
+
+  //   this.subscribeToDatePicker();
+  // }
+
+
   initDateForm() {
     this.dateRangeForm = new UntypedFormGroup({
       start: new UntypedFormControl(),
-      end  : new UntypedFormControl()
+      end: new UntypedFormControl()
     });
 
     let today = new Date();
     const month = today.getMonth();
     const year = today.getFullYear();
+ 
+    const tmr =  this.dateHelper.add('d', 1, today)
 
-    // today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
-    let endDate = this.dateHelper.add('day', 1 ,today)
-    //// new Date(year, month, 1),
     this.dateRangeForm =  this.fb.group({
-      start: today,
-      end  : endDate // new Date()
+      start:  today, //new Date(year, month, 1),
+      end: tmr // new Date()
     })
 
-    // this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
-    // this.searchModel.completionDate_To   = this.dateRangeForm.get("end").value;
-
+    this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
+    this.searchModel.completionDate_To   = this.dateRangeForm.get("end").value;
     this.subscribeToDatePicker();
   }
 

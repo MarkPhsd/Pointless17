@@ -49,8 +49,9 @@ export class FbServiceTypeService {
             scheduleInstructions  : [''],
             shippingInstructions  : [''],
             filterType            : [],
-            allowRequestPrep        : [],
+            allowRequestPrep      : [],
             resaleType            : [],
+            headerOrder           : [],
           }
         )
         return fb

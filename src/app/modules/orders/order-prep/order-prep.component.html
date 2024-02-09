@@ -11,9 +11,9 @@
           {{order?.orderDate |  date: 'shortDate'}}
         </div>
 
-        <div class="orderType">
+        <div [class]="tableFont" >
             {{order?.serviceType | truncateText : 15}}
-            <span style="margin-left: 5px;" *ngIf="order.tableName">{{order?.tableName}}</span>
+            <span  *ngIf="order.tableName">{{order?.tableName}}</span>
         </div>
 
         <div class="employee-name">
@@ -31,53 +31,57 @@
       </div>
 
       <div class="center">
+        <div class="flex-row">
 
-        <div class="grid-totals">
           <div class="field-center">
-            <div class="orderID grid-orderproperties">
-              {{order?.id}}
-              <span *ngIf="prepScreen && (prepStatus == 1)">
+            {{order?.id}}
+            <div class="orderID grid-action">
+              
+              <div *ngIf="prepScreen && (prepStatus == 1)">
                 <button
                         mat-raised-button color='primary'
                       (click)="setItemsAsPrepped()">
                       <mat-icon>done</mat-icon>
                 </button>
-              </span>
-              <span *ngIf="prepScreen && (prepStatus == 2)">
+              </div>
+              
+              <div *ngIf="prepScreen && (prepStatus == 2)">
                 <button
                       mat-raised-button color='primary'
                       (click)="printOrder()">
                       <mat-icon>print</mat-icon>
                 </button>
-              </span>
+              </div>
 
-              <span *ngIf="prepScreen">
+              <div *ngIf="prepScreen">
                 <button
                         mat-raised-button color='primary'
                         (click)="openOrder()">
                         <mat-icon>open_in_new</mat-icon>
                 </button>
-              </span>
+              </div>
 
             </div>
           </div>
 
-          <div class="field-center">
-            <div class="order-name" >
-              <div *ngIf="smallDevice">
-                {{ order?.customerName | truncateText : 15}}
-              </div>
-              <div *ngIf="!smallDevice">
-                {{ order?.customerName | truncateText : 12}}
+          <div>
+            <div class="field-center">
+              <div class="order-name" >
+                <div *ngIf="smallDevice">
+                  {{ order?.customerName | truncateText : 15}}
+                </div>
+                <div *ngIf="!smallDevice">
+                  {{ order?.customerName | truncateText : 12}}
+                </div>
               </div>
             </div>
+<!--   
+            <div *ngIf="!prepScreen" class="items">Items</div>
+            <div *ngIf="!prepScreen" class="itemcount">{{order?.itemCount}} </div> -->
+  
+            <div *ngIf="prepScreen" class="items">Items  </div>
+            <div *ngIf="prepScreen" class="itemcount">{{itemCount}} </div>
           </div>
-
-          <div *ngIf="!prepScreen" class="items">Items</div>
-          <div *ngIf="!prepScreen" class="itemcount">{{order?.itemCount}} </div>
-
-          <div *ngIf="prepScreen" class="items">Prep  </div>
-          <div *ngIf="prepScreen" class="itemcount">{{itemCount}} </div>
 
         </div>
       </div>

@@ -188,8 +188,8 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
       if (this.itemWithAction) {
         switch (this.itemWithAction.action) {
           case 1: //void
-              response$ = this.orderService.voidOrder(site, this.itemWithAction)
-              break;
+            response$ = this.orderService.voidOrder(site, this.itemWithAction)
+            break;
           case 2: //priceAdjust
             return of(null)
             break;

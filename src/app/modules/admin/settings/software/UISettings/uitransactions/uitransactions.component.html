@@ -394,47 +394,56 @@
         <div class="grid-views">
           <h4><mat-icon color="primary" style="margin-top:5px">credit_card</mat-icon>Credit Card Processing</h4>
 
-          <div class="toggle-fields">
-            <mat-label>TriPOS/DCAP/CardPoint Only</mat-label>
+          <div class="toggle-fields" [formGroup]="inputForm">
             <mat-slide-toggle
-                      formControlName="allowPreAuth"
-                      >
+                      formControlName="allowPreAuth"  >
               <mat-label>Allow Pre Auth</mat-label>
             </mat-slide-toggle>
+            <mat-label>TriPOS/DCAP/CardPoint Only</mat-label>
           </div>
 
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="payPalEnabled"
-                      [(ngModel)]="payPalEnabled"
-                      >
-              <mat-label>PayPal Enabled</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div *ngIf="payPalEnabled">
-            <div>
-              <mat-label>Currency Code.</mat-label>
-              <app-value-fields
-                  [inputForm]="inputForm"
-                  [fieldName]="'payPalCurrency'">
-                PayPal Currency Code
-              </app-value-fields>
-            </div>
-          </div>
-
-          <div *ngIf="payPalEnabled">
-            <div>
-              <mat-label>PayPal ClientID</mat-label>
-              <app-value-fields
-                  [inputForm]="inputForm"
-                  [fieldName]="'payPalClientID'">
-                Pay Pay ClientID
-              </app-value-fields>
-            </div>
-          </div>
+          <mat-divider></mat-divider>
 
           <mat-card>
+            <h4>Stripe</h4>
+            <mat-label style="font-size:1.1em">To setup stripe, go to the panel for Credit Card integration below in the other accordion expansion panel.</mat-label>
+          </mat-card>
+          <mat-card>
+            <h4>Paypal </h4>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="payPalEnabled"
+                        [(ngModel)]="payPalEnabled" >
+                <mat-label>PayPal Enabled</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div *ngIf="payPalEnabled">
+              <div>
+                <mat-label>Currency Code.</mat-label>
+                <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'payPalCurrency'">
+                  PayPal Currency Code
+                </app-value-fields>
+              </div>
+            </div>
+
+            <div *ngIf="payPalEnabled">
+
+              <div>
+                <mat-label>PayPal ClientID</mat-label>
+                <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'payPalClientID'">
+                  Pay Pay ClientID
+                </app-value-fields>
+              </div>
+            </div>
+          </mat-card>
+
+          <mat-card>
+            <h4>Cardpointe </h4>
             <div class="toggle-fields">
               <mat-icon class="mat-label-info"
                           color="accent"
@@ -471,7 +480,7 @@
           </mat-card>
 
           <mat-card>
-
+            <h4>Datacap </h4>
             <div class="toggle-fields">
               <mat-slide-toggle
                         formControlName="dCapEnabled" >
@@ -484,11 +493,15 @@
                 <mat-label>DCAP Surcharge</mat-label>
               </mat-slide-toggle>
             </div>
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="dCapSurchargeValue" >
-                <mat-label>DCAP Surcharge Value</mat-label>
-              </mat-slide-toggle>
+            <div class="toggle-fields" >
+                <app-value-fields
+                    style="width:100px"
+                    [inputForm]="inputForm"
+                    [fieldName]="'dCapSurchargeValue'">
+                  Surcharge Value
+                </app-value-fields>
+                <mat-label>Enter value .035 is 3.5%</mat-label>
+                <mat-divider></mat-divider>
             </div>
 
             <div class="toggle-fields">
@@ -511,25 +524,28 @@
                 <mat-label>Datacap EMV IP</mat-label>
               </mat-slide-toggle>
             </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="dsiTipPrompt" >
+                <mat-label>Data Cap Prompt Tip</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div>
+              <mat-label>Enter Values with commas, E.g. 10,15,20.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'dsiTipPromptValues'">
+                Prompt Tip Values
+              </app-value-fields>
+            </div>
+
           </mat-card>
 
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="dsiTipPrompt" >
-              <mat-label>Data Cap Prompt Tip</mat-label>
-            </mat-slide-toggle>
-          </div>
-
-          <div>
-            <mat-label>Enter Values with commas, E.g. 10,15,20.</mat-label>
-            <app-value-fields
-                [inputForm]="inputForm"
-                [fieldName]="'dsiTipPromptValues'">
-              Prompt Tip Values
-            </app-value-fields>
-          </div>
-
+          <mat-divider></mat-divider>
           <mat-card>
+            <h4>TRIPOS </h4>
             <div class="toggle-fields">
               <mat-slide-toggle
                         formControlName="triposEnabled" >
@@ -538,35 +554,38 @@
             </div>
           </mat-card>
 
-          <h4>Gift Card Store Credit</h4>
-          <mat-label>Pointless can handle multiple locations for gift cards. Please see documentation.</mat-label>
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="enableGiftCards"  >
-              <mat-label>Enable gift cards</mat-label>
-            </mat-slide-toggle>
-          </div>
-
+          <mat-card>
+            <h4>Gift Card Store Credit</h4>
+            <mat-label>Pointless can handle multiple locations for gift cards. Please see documentation.</mat-label>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="enableGiftCards"  >
+                <mat-label>Enable gift cards</mat-label>
+              </mat-slide-toggle>
+            </div>
+          </mat-card>
         </div>
 
         <div class="grid-views">
-          <h3>API Connectors</h3>
-          <div>
-            <mat-label  class="mat-label-design">Contact API.</mat-label>
-            <app-value-fields
-                [inputForm]="inputForm"
-                [fieldName]="'contactAPI'">
-              Contact API
-            </app-value-fields>
-          </div>
-          <div>
-            <mat-label  class="mat-label-design">Store Credit API.</mat-label>
-            <app-value-fields
-                [inputForm]="inputForm"
-                [fieldName]="'storeCreditAPI'">
-              Store credit API
-            </app-value-fields>
-          </div>
+          <mat-card>
+            <h3>API Connectors</h3>
+            <div>
+              <mat-label  class="mat-label-design">Contact API.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'contactAPI'">
+                Contact API
+              </app-value-fields>
+            </div>
+            <div>
+              <mat-label  class="mat-label-design">Store Credit API.</mat-label>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'storeCreditAPI'">
+                Store credit API
+              </app-value-fields>
+            </div>
+          </mat-card>
         </div>
       </div>
 

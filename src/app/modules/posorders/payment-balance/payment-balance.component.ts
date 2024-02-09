@@ -140,13 +140,44 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     }
   }
 
-  captureDCap(item: IPOSPayment) {
-    //PreAuthCaptureByRecordNo
-    const device = localStorage.getItem('devicename')
-    this.action$ = this.dcapService.preAuthCaptureByRecordNo(device, item).pipe(switchMap(data => {
-      return this.paymentMethodsProessService.processDCAPPreauthResponse(data, item, this.order, device)
-      return of(null)
-    }))
+  getPaymentViewA(item: IPOSPayment) {
+   
+    if ( 
+        (item.account && !item.completionDate) ||
+        (item.completionDate && item.amountPaid != 0) ||
+        (item && item.voidReason) ||
+        (item.tranType  && item?.tranType?.toLowerCase()  === 'authorizationresponse'.toLowerCase() ) ||
+        (item.tranType  && item?.tranType.toLowerCase()   === 'VoidSaleByRecordNo'.toLowerCase() ) &&
+                          item?.tranType != 'incrementalAuthorizationResponse') { 
+      return true
+                          }
+      return false
+     
+  }
+
+  getPaymentViewB(item) { 
+    const order = this.order;
+    if (
+      ( item?.tranCode != 'EMVPreAuth'      && order.balanceRemaining == 0 ||
+        item?.tranCode != 'IncrementalAuth' && order.balanceRemaining == 0 ) || 
+      ( item?.tranCode == 'EMVPreAuth'      && order.balanceRemaining != 0 ||
+        item?.tranCode == 'IncrementalAuth' && order.balanceRemaining != 0)
+    ) { 
+      return true
+    }
+    return false
+  }
+
+  dCapViewEnabled(item) { 
+    const uiTransactions = this.uiTransactions;
+    if (!this.qrOrder) {
+      if (item.completionDate) { return true }
+      if ((uiTransactions && uiTransactions?.dCapEnabled && !item.completionDate) &&
+          (item?.tranCode.toLowerCase() === 'emvpreauth' || item?.tranCode.toLowerCase() === 'IncrementalAuth'.toLowerCase()) ) {
+            return true
+          }
+    }
+    return false
   }
 
   incrementalDCap(item: IPOSPayment) {
@@ -224,14 +255,12 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     let payment:IPOSPayment;
     this.action$ =   payment$.pipe(switchMap(data => {
 
-        // console.log('og payment?',  item)
         item = data;
         payment = data;
         try {
           tranData = JSON.parse(item.transactionData);
         } catch (error) {
           this.siteService.notify('Error no transaction data found.', 'close', 5000, 'red')
-          // console.log(item.transactionData, error)
           return  of(null)
         }
         return of(data)
@@ -302,11 +331,10 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
     if (!this.order || !this.order.posPayments) {return}
 
-    if (this.uiTransactions && this.uiTransactions?.triposEnabled) {
+    if (this.uiTransactions && (this.uiTransactions?.triposEnabled ||  this.uiTransactions.cardPointBoltEnabled || this.uiTransactions.dCapEnabled) ) {
       amount = this.paymentMethodsProessService.getAuthTotal(this.order.posPayments)
     }
 
-    // console.log('amount', amount, this.order.posPayments)
     this.totalAuthPayments = amount;
     return amount;
   }
@@ -323,16 +351,22 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     }))
   }
 
-  //need to open for tip? maybe.
-  captureDCapPOS(item: IPOSPayment) {
+  captureDCap(item: IPOSPayment, amount: number) {
+    const device = localStorage.getItem('devicename')
 
-    const site = this.siteService.getAssignedSite();
-    const payment$ =  this.paymentService.getPOSPayment(site, item.id, false)
-    this.action$ = payment$.pipe(switchMap(payment => {
+    item.amountPaid  = amount;
+    item.amountReceived = amount;
+    this.action$ = this.dcapService.preAuthCaptureByRecordNo(device, item).pipe(switchMap(data => {
+      return this.paymentMethodsProessService.processDCAPPreauthResponse(data, item, this.order, device)
+    }))
+  }
 
-    let amount = this.totalAuthPayments; // this.order.creditBalanceRemaining;
-    return this.triposMethodService.openDialogCompleteCreditPayment(this.order, amount,
-                                                                payment, this.uiTransactions)
+  incrementalAuthByRecordNo(item: IPOSPayment, amount: number) {
+    const device = localStorage.getItem('devicename')
+    item.amountPaid  = amount;
+    item.amountReceived = amount;
+    this.action$ = this.dcapService.incrementalAuthByRecordNo(device, item).pipe(switchMap(data => {
+      return this.paymentMethodsProessService.processDCAPPreauthResponse(data, item, this.order, device)
     }))
   }
 

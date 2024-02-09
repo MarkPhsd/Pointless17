@@ -12,16 +12,11 @@
     <div  *ngFor="let sale of item | keyvalue">
       <div class="item-sales-grid-body" *ngFor="let sale of sale.value | derp">
         <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
-
         <div class="totalslabel">{{sale?.itemTotal | currency }}   </div>
-
         <div class="totalslabel">{{sale?.quantity | number: '1.0-0' }}             </div>
         <div class="totalslabel">{{sale?.productCount | number: '1.0-0' }}             </div>
-
         <div  *ngIf="!autoPrint" class="totalslabel">{{sale?.cost | currency }}   </div>
-
       </div>
-
     </div>
 
   </div>
@@ -31,22 +26,14 @@
 <div *ngIf="!includeDepartments">
   <ng-container [ngTemplateOutlet]="headers"></ng-container>
   <div  class="item-sales-grid-body"  *ngFor="let sale of (showAll ? sales : sales?.slice(0,10))" >
+    <div class="product-name" *ngIf="groupBy == 'void'">{{sale?.employeeName | truncateText : 20}}</div>
     <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
-
-    <div *ngIf="groupBy === 'transactionType'" class="totals"> {{sale?.netSales | currency }}  </div>
-
-    <div  *ngIf="groupBy != 'transactionType'" class="totals"> {{sale?.itemTotal | currency }}</div>
-
+    <div *ngIf="groupBy === 'transactionType' " class="totals"> {{sale?.netSales | currency }}  </div>
+    <div  *ngIf="groupBy != 'transactionType'  " class="totals"> {{sale?.itemTotal | currency }}</div>
     <div class="totals">{{sale?.quantity  | number: '1.0-0' }} </div>
-
     <div *ngIf="!autoPrint && groupBy == 'items' " class="totals">{{sale?.productCount  | number: '1.0-0' }}   </div>
-
-    <div *ngIf="!autoPrint && groupBy != 'transactionType'" class="totals">{{sale?.cost | currency }}   </div>
-
-
-    <div class="row-span-all">
-      <mat-divider style="width:325px"></mat-divider>
-    </div>
+    <div *ngIf="!autoPrint && groupBy != 'transactionType'  && groupBy != 'void'" class="totals">{{sale?.cost | currency }}   </div>
+    <div class="row-span-all"> <mat-divider style="width:325px"></mat-divider></div>
   </div>
 
 </div>
@@ -56,11 +43,12 @@
 <ng-template #headers>
 
  <div class="item-sales-grid-body">
+    <div class="product-name" *ngIf="groupBy == 'void'">Staff :    </div>
     <div class="product-name">Item :    </div>
-    <div class="totalslabel">Pre Tax :</div>
-    <div class="totalslabel"> # </div>
+    <div class="totalslabel" *ngIf="groupBy != 'void'">Pre Tax :</div>
+    <div class="totalslabel" > # </div>
     <div class="totalslabel" *ngIf="groupBy == 'items'"> Stock </div>
-    <div *ngIf="!autoPrint && (groupBy == 'items' || groupBy == 'departments' || groupBy == 'category') " class="totalslabel">Cost :</div>
+    <div *ngIf="!autoPrint && (groupBy != 'void' && groupBy == 'items' || groupBy == 'departments' || groupBy == 'category') " class="totalslabel">Cost :</div>
   </div>
   <div  *ngIf="!autoPrint" class="margin-divider">  <mat-divider></mat-divider> </div>
 </ng-template>

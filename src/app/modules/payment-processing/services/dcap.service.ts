@@ -51,17 +51,43 @@ export interface   DcapRStream {
   ReceiptLanguage?: string;
   CustomerReceiptLanguage?: string;
   ISORespCode?: string;
+  TranType?: string;
 }
 @Injectable({
   providedIn: 'root'
 })
 export class DcapService {
 
-
   site = this.siteService.getAssignedSite()
   constructor(private http: HttpClient,
               private siteService: SitesService
               ) { }
+
+  batchClose(device: string) : Observable<any> {
+
+    const controller = '/dCap/'
+
+    const endPoint = "batchClose"
+
+    const parameters = `?deviceName=${device}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url)
+  }
+
+  batchSummary(device: string) : Observable<any> {
+
+    const controller = '/dCap/'
+
+    const endPoint = "batchSummary"
+
+    const parameters = `?deviceName=${device}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url)
+  }
 
   resetDevice(deviceName: string): Observable<any> {
 
@@ -174,7 +200,7 @@ export class DcapService {
 
     const controller = '/dCap/'
 
-    const endPoint = "preAuthCapture"
+    const endPoint = "incrementalAuthByRecordNo"
 
     const parameters = `?deviceName=${deviceName}`
 

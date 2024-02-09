@@ -71,35 +71,33 @@
         <div class="button-grid">
 
           <!-- {{posPayment.tranType}} -->
+          <!-- <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
+            <button [disabled]="processing" color="primary" mat-raised-button (click)="completeAuthorization()">Complete Payment</button>
+          </div> -->
+
           <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
-            <button color="primary" mat-raised-button (click)="completeAuthorization()">Complete Payment</button>
+            <button [disabled]="processing" color="primary" mat-raised-button (click)="reverseAuthorization()">Reverse Authorization</button>
           </div>
 
           <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
-            <button color="primary" mat-raised-button (click)="reverseAuthorization()">Reverse Authorization</button>
-          </div>
-
-          <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
-            <button color="primary" mat-raised-button (click)="authorizeAmount()">Authorize</button>
+            <button [disabled]="processing" color="primary" mat-raised-button (click)="authorizeAmount()">Authorize</button>
           </div>
 
           <div *ngIf="posPayment.amountPaid > 0 ">
             <!-- Show if Authorization or if Amount>0 -->
-            <button  color="primary"   mat-raised-button (click)="payAmount()">Pay Amount</button>
+            <button  [disabled]="processing" color="primary"   mat-raised-button (click)="payAmount()">Pay Amount</button>
           </div>
 
           <div *ngIf="posPayment.amountPaid < 0 ">
             <!-- Show if Authorization Value Exists (or don't use here at all.) -->
-            <button  color="warn"  mat-raised-button (click)="refundAmount()">Refund</button>
+            <button [disabled]="processing"  color="warn"  mat-raised-button (click)="refundAmount()">Refund</button>
           </div>
-
 
           <div *ngIf="posPayment.tranType">
             <!-- Always show -->
-            <button  color="warn"  mat-raised-button (click)="_close()">Close</button>
+            <button  color="warn"  mat-raised-button (click)="_close()">Reset & Close</button>
           </div>
           <div *ngIf="!posPayment.tranType">
-            <!-- Always show -->
             <button  color="warn"  mat-raised-button (click)="close()">Cancel</button>
           </div>
 
@@ -118,6 +116,9 @@
       </mat-card-content>
 
       <mat-card-actions>
+        <div>
+          <button  color="warn"  mat-raised-button (click)="close()">Exit</button>
+        </div>
 
         <div  class="button-grid">
           <div>

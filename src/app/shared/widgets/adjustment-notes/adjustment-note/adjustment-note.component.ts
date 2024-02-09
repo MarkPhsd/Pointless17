@@ -10,6 +10,7 @@ import { AdjustmentReason, AdjustmentReasonsService } from 'src/app/_services/sy
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { CurrencyPipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { AuthenticationService } from 'src/app/_services';
 
 @Component({
   selector: 'app-adjustment-note',
@@ -29,6 +30,7 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
   inputForm:                UntypedFormGroup;
   get f():                  UntypedFormGroup  { return this.inputForm as UntypedFormGroup};
   id: any;
+  user = this.authenticationService._user.value;
 
   constructor(
                 private _snackBar: MatSnackBar,
@@ -36,6 +38,7 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
                 public route: ActivatedRoute,
                 private adjustmentReasonsService: AdjustmentReasonsService,
                 private siteService: SitesService,
+                private authenticationService: AuthenticationService,
                 private inventoryAssignmentService: InventoryAssignmentService,
                 private dialogRef: MatDialogRef<InventoryAdjustmentNoteComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: any,
@@ -70,18 +73,24 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
     const inv = this.inventoryAssignment
     if (inv) {
       'get the item then update the item'
-      inv.adjustmentNote        =  this.f.get('adjustmentNotes').value
-      inv.adjustmentType        =  this.adjustmentType //f.get('adjustmentType').value
-      inv.employeeName          =  localStorage.getItem('username')
+
+      const note =  `${this.f.get('adjustmentNotes').value}. Previous value;${inv.packageCountRemaining}`
+      inv.adjustmentNote        =  note 
+      inv.adjustmentType        =  this.adjustmentType
+      // console.log('user', this.user)
+      if (this.user) { 
+        inv.employeeName  = this.user.username
+        inv.employeeID    = this.user.id;
+      } 
+      
       inv.packageCountRemaining =  this.f.get('packageCountRemaining').value
       if (inv.unitMulitplier == 0) { inv.unitMulitplier = 1}
       inv.baseQuantityRemaining = inv.packageCountRemaining * inv.unitMulitplier;
-      inv.packageQuantity = inv.packageCountRemaining;
+      // inv.packageQuantity = inv.packageCountRemaining;
       const d = new Date();
       inv.adjustmentDate = d.toISOString()
 
       if (this.inventoryAssignment) {
-
         this.inventoryAssignmentService.reconcileInventory(site, this.id, inv).subscribe(data => {
           this.notifyEvent(`updated`, `Success` )
           this.onCancel();

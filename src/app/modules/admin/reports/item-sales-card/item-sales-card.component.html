@@ -2,6 +2,7 @@
 
 <div class="mat-card-container"
       *ngIf="site && (sales$ | async) as summary; else loading">
+      
   <ng-container
                 [ngTemplateOutlet]="reportView"
                 [ngTemplateOutletContext]="{$implicit: summary}">
@@ -53,7 +54,7 @@
 </ng-template>
 
 <ng-template #salesView let-summary>
-
+  {{sales | json}}
   <div *ngIf="sales.results as sales">
     <ng-template #headerTemplate>
       <div class="header-grid info-width">
@@ -127,6 +128,7 @@
 </ng-template>
 
 <ng-template #adjustmentView let-summary>
+  'adjustments'
   <div  *ngIf="adjustments as summary">
       <mat-card >
        <mat-card-title>
@@ -173,8 +175,8 @@
           <div  class="grid-adjustment info-width"
                 *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
               <div class="sales-product-name product-name">{{ sale?.productName | truncateText : 20   }}      </div>
-              <div class="sales-totals totals">      {{ sale?.orderID }}               </div>
-              <div class="sales-totals">             {{ sale?.originalPrice | currency }}   </div>
+              <div class="sales-totals totals">            {{ sale?.orderID }}               </div>
+              <div class="sales-totals">                   {{ sale?.originalPrice | currency }}   </div>
               <div class="sales-product-name product-name">{{ sale?.employee | truncateText: 8 }}   </div>
               <div class="item-span product-name sales-product-name">{{ sale?.voidReason }}   </div>
             </div>
