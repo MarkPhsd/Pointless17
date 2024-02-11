@@ -7,6 +7,9 @@
 {
     margin: 5mm 5mm 5mm 5mm;
 }
+.span-columns {
+  grid-column: 1/-1;
+}
 
 @media print {
   .no-print  {
@@ -202,15 +205,23 @@
     max-width: 330px;
   }
 
-  .item-sales-grid-body {
+
+
+ .item-sales-grid-body {
     display: grid;
     gap: 5px;
-    grid-template-columns: 115px 90px 60px 55px 55px;
+    grid-template-columns: 125px 90px 30px 55px;
     font-size: 12pt;
     font-weight: bold;
     width: 350px;
-    text-align: right
+    white-space: pre-wrap;
+    white-space   : nowrap;
+    overflow      : hidden;
+    text-overflow : ellipsis;
+    text-transform: capitalize;
+    overflow-wrap: break-word;
   }
+
 
   .grid-body-action {
     --gap: 5px;

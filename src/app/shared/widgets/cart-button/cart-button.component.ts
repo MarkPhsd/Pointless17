@@ -55,8 +55,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   quickServiceTypes$: Observable<IServiceType[]>;
   quickServiceTypes: IServiceType[];
-  
- 
+
+
   initSubscriptions() {
 
     const site = this.siteService.getAssignedSite();
@@ -77,21 +77,21 @@ export class CartButtonComponent implements OnInit, OnDestroy {
       this.user = user;
       this.isUserStaff = false;
       if (user) {
-        if (user.roles == 'admin' || user.roles == 'manager' || user.roles == 'employee') {
+        if (user?.roles == 'admin' || user?.roles == 'manager' || user?.roles == 'employee') {
           this.isUserStaff      = true
         }
       }
       return this.serviceTypeService.getSaleTypes(site)
-    })).pipe(switchMap(data => { 
+    })).pipe(switchMap(data => {
       this.quickServiceTypes = null;
-      if (data) { 
-        if (this.user.roles == 'admin' || this.user.roles == 'manager') { 
-          this.quickServiceTypes = data.filter(data => { 
-            return data.headerOrder 
+      if (data) {
+        if (this.user?.roles == 'admin' || this.user?.roles == 'manager') {
+          this.quickServiceTypes = data.filter(data => {
+            return data.headerOrder
           })
-        } 
-        if (this.user.roles == 'employee') {
-          this.quickServiceTypes = data.filter(data => { 
+        }
+        if (this.user?.roles == 'employee') {
+          this.quickServiceTypes = data.filter(data => {
             return data.headerOrder && (data.filterType == 0 || !data.filterType)
           })
         }

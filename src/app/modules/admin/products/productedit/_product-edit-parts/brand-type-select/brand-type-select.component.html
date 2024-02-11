@@ -23,16 +23,22 @@
           </mat-option>
         </mat-autocomplete>
 
+        <button *ngIf="searchValueAssigned"
+                matSuffix
+                mat-icon-button aria-label="Clear"
+                (click)="clearInput()">
+          <mat-icon>close</mat-icon>
+        </button>
       </mat-form-field>
     </div>
 
-    <div class="margin-5">
-      <button *ngIf="!disableDelete" 
-              mat-button color="warn" 
+    <!-- <div class="margin-5">
+      <button *ngIf="!disableDelete"
+              mat-button color="warn"
               (click)="deleteValue()">
         <mat-icon>delete</mat-icon>
       </button>
-    </div>
+    </div> -->
 
   </div>
 

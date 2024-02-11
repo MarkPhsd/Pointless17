@@ -18,14 +18,14 @@ mat-card-title {
 }
 
 .info-width {
-  width: 350px;
+  // width: 350px;
 }
 
 .header-grid {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
+  grid-template-columns: auto auto; // repeat( auto-fit, minmax(105px, 1fr) );
   margin: 3px;
   width: 305px;
   font-size: 1.2em;

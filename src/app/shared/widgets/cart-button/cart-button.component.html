@@ -6,7 +6,7 @@
                 || isUserStaff " >
 
       <div *ngIf="isUserStaff && quickServiceTypes" class="flex-grid-row-5px">
-        <!-- {{quickServiceTypes | json}} -->
+
         <div  *ngFor="let item of quickServiceTypes">
           <button style="margin-left:5px;width:75px"
                   mat-raised-button
@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <button *ngIf="!quickServiceTypes"
+      <button *ngIf="!quickServiceTypes || quickServiceTypes.length == 0"
               mat-raised-button
               color="primary"
               (click)="addNewOrder()" >

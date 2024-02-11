@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, Input, OnChanges, OnInit,ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit,Output,ViewChild } from '@angular/core';
 import { catchError, Observable, of, Subject, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
@@ -43,6 +43,8 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   printAction$: Observable<any>;
   printing: boolean;
 
+  @Output() outputComplete = new EventEmitter<any>()
+
   constructor(
     private popOutService: ProductEditButtonService,
     private employeeClockService: EmployeeClockService,
@@ -64,7 +66,6 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.refreshSales();
   }
-
 
   refreshSales() {
 
@@ -105,6 +106,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       })).pipe(switchMap(data => {
           this.sales = data;
           this.processing = false;
+          this.outputComplete.emit('SalesTaxReport')
           return of(data)
         }))
       return
@@ -116,6 +118,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
     })).pipe(switchMap(data => {
         this.sales = data;
         this.processing = false;
+        this.outputComplete.emit('SalesTaxReport')
         return of(data)
     }))
   }

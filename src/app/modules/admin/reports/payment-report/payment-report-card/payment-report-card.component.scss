@@ -18,6 +18,9 @@
     font-weight: bold;
   }
 }
+.span-columns {
+  grid-column: 1/-1;
+}
 
 .grid-item {
   text-align     : left;

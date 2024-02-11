@@ -249,6 +249,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet()
       }
 
+      if (order.balanceRemaining == 0) {
+        if (!this.platFormService.isApp()) {
+          // this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+          this.orderMethodsService.updateOrder(order)
+        }
+        return 1
+      }
+
       if (paymentMethod.isCreditCard && order.balanceRemaining == 0) {
         if (this.platFormService.isApp()) {
           this.editDialog.openChangeDueDialog(payment, paymentMethod, order)

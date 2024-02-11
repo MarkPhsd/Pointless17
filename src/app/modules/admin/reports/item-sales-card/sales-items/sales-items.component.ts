@@ -28,20 +28,47 @@ export class SalesItemsComponent implements OnInit {
 
   sortName(list) {
     if (this.sales) {
+
+      if (this.groupBy === 'void') {
+        this.sales = list.sort((a, b) => (a.employee < b.employee ? 1 : -1));
+        return;
+      }
+
       this.sales = list.sort((a, b) => (a.productName < b.productName ? 1 : -1));
     }
     if (this.adjustments) {
       let itemList = list as  IReportItemSales[]
+
+      if (this.groupBy === 'void') {
+        this.adjustments.results = itemList.sort((a, b) => (a.employee < b.employee ? 1 : -1));
+        return;
+      }
+
       this.adjustments.results = itemList.sort((a, b) => (a.productName < b.productName ? 1 : -1));
     }
   }
 
   sortSales(list) {
+
     if (this.sales) {
+
+      if (this.groupBy === 'void') {
+        this.sales = list.sort((a, b) => (a.voidAmount < b.voidAmount ? 1 : -1));
+        return;
+      }
+
       this.sales = list.sort((a, b) => (a.itemTotal < b.itemTotal ? 1 : -1));
+      return;
     }
 
     if (this.adjustments) {
+
+      if (this.groupBy === 'void') {
+        let itemList = list as  IReportItemSales[]
+        this.adjustments.results = itemList.sort((a, b) => (a.voidAmount < b.voidAmount ? 1 : -1));
+        return;
+      }
+
       let itemList = list as  IReportItemSales[]
       this.adjustments.results = itemList.sort((a, b) => (a.originalPrice < b.originalPrice ? 1 : -1));
     }

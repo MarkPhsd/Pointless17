@@ -115,10 +115,6 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
     })
   }
 
-  clearInput() {
-    this.initForm();
-    this.itemSelect.emit({})
-  }
 
 
   ngOnChanges() {
@@ -141,7 +137,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
   onChange(selected: any) {
 
     const item = selected.option.value;
-    console.log('selected item option', item)
+
     if (item) {
 
       this.selectItem(item)
@@ -244,128 +240,62 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
     return model;
   }
 
+  get searchValueAssigned() {
+    let unit = {} as any;
+    let item = {} as UnitType;
+    if (this.searchForm.controls['searchField'].value) {
+      return true
+    }
+    return false;
+  }
+
+  clearInput() {
+    let unit = {} as any;
+    let item = {} as UnitType;
+
+    if (this.product) {
+      if (this.formControlName == 'reOrderUnitTypeID') {
+        unit = { reOrderUnitTypeID : 0}
+      } else {
+        unit = {  unitTypeID : 0 }
+      }
+      this.inputForm.patchValue(  unit  )
+      this.setValue(item);
+    }
+
+    if (!this.product) {
+      if (this.productPrice) {
+        this.productPrice.unitTypeID = 0;
+        this.productPrice.unitType = {} as UnitType;
+      }
+
+      if (this.posOrderItem) {
+        this.posOrderItem.unitType = 0;
+        this.posOrderItem.unitName = '';
+        this.searchForm.patchValue( {searchField: ''} )
+        this.itemSelect.emit(item)
+      }
+
+      if (this.pb_Component) {
+        this.pb_Component.unitTypeID = 0;
+        this.pb_Component.unitName =  '';
+        this.pb_Component.unitType  = item;
+        this.searchForm.patchValue( {searchField: ''} )
+        this.itemSelect.emit(item)
+      }
+
+      if (this.outputType === 'priceLine') {
+        const data = {unitTypeID: 0, index: this.index, unitName: '', unitType: item }
+        this.itemSelect.emit(data)
+        const value =  { searchField: item.name  }
+        this.searchForm.patchValue( value )
+        return
+      }
+    }
+
+    this.initForm();
+    this.itemSelect.emit({})
+  }
+
 }
 
-  // selectItem(item: any){
-  //   if (!item) { return }
-  //   const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
-  //   this.itemSelect.emit(item)
-  // }
-
-
-// assignItem() {
-//   const value =this.searchControl.value
-//   if (this.productPrice && value) {
-//     this.productPrice.unitTypeID = value;
-//     this.itemSelect.emit({productPrice: this.productPrice, index: this.index })
-//   }
-
-//   if (this.product && value) {
-//     this.product.unitTypeID = value;
-//     this.inputForm.patchValue({unitTypeID: value})
-//     this.itemSelect.emit({unitTypeID: value, index: this.index })
-//   }
-// }
-
-  // async  getName(id: number): Promise<any> {
-  //   if (!id) {return null}
-  //   if (id == 0) {return null}
-  //   if (id == undefined) {return null}
-  //   const site  = this.siteService.getAssignedSite();
-  //   if(site) {
-  //     const  item =  await this.unitTypesService.get(site, id).pipe().toPromise();
-  //     return item
-  //   }
-  // }
-// init() {
-  //   if (this.inputForm && this.id) {
-  //     let model = this.initSearchModel(null)
-  //     if (this.product) {
-  //       model = this.initModel(this.id)
-  //     }
-
-  //     console.log(model)
-
-  //     const site     = this.siteService.getAssignedSite();
-  //     this.results$ = this.unitTypesService.getBasicTypes(site, model).pipe(
-  //       switchMap(data => {
-  //         const items  = data.results
-  //         if (items) {
-
-  //           if (this.product) {
-  //             this.searchForm = this.fb.group({
-  //               searchField   : [items[0].name],
-  //             })
-  //           }
-
-  //           if (!this.product) {
-  //             this.searchForm = this.fb.group({
-  //               searchField   : [items[0].name],
-  //             })
-  //           }
-  //           return of(data)
-  //         }
-  //       })
-  //     )
-  //   }
-  // }
-
-  // ngAfterViewInit() {
-
-  //   if (!this.searchForm || !this.input) {
-  //     console.log('not ready')
-  //   }
-  //   if (this.searchForm && this.input) {
-  //     console.log('ready')
-  //     try {
-  //       fromEvent(this.input.nativeElement, 'keyup')
-  //       .pipe(
-  //           filter(Boolean),
-  //           debounceTime(250),
-  //           distinctUntilChanged(),
-  //           tap((event:KeyboardEvent) => {
-  //             const search  = this.input.nativeElement.value
-  //             console.log('after view init refresh search', search)
-  //             this.refreshSearch(search);
-  //           })
-  //       )
-  //       .subscribe();
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }
-  // }
-
-
-  // displayFn(item) {
-  //   if (!item) { return }
-  //   console.log('selection', item)
-  //   // this.searchForm = this.fb.group({
-  //   //   searchField: [item]
-  //   // })
-
-  //   return
-
-  //   this.formfieldValue.patchValue({unitTypeID: item.id})
-
-  //   if (this.productPrice) {
-  //     this.productPrice.unitTypeID = item.id;
-  //     this.productPrice.unitType = item.name;
-  //   }
-
-  //   if (this.outputType === 'priceLine') {
-  //     const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
-  //     this.itemSelect.emit(data)
-  //     return
-  //   }
-
-  //   if (this.product && item) {
-
-  //     this.formfieldValue.patchValue({unitTypeID: item.id})
-  //     this.itemSelect.emit({unitTypeID: item.id})
-  //     return
-  //   }
-
-  //   this.itemSelect.emit(item)
-
-  // }

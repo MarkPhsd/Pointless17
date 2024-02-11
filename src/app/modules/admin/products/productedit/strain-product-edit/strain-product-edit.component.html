@@ -91,7 +91,7 @@
                 </product-type-select>
                 <div>
                   <button mat-button color="accent" class="edit-button" (click)="editType()">
-                    <mat-icon>edit</mat-icon>
+                    <mat-icon  color="accent" >open_in_new</mat-icon>
                   </button>
                 </div>
               </div>
@@ -474,11 +474,11 @@
       </field-value-selector>
     </div>
     <div></div>
-    <div>
+    <!-- <div>
       <button mat-button (click)="clearPB()">
         <mat-icon color="warn">delete</mat-icon>
       </button>
-    </div>
+    </div> -->
   </div>
 </ng-template>
 
@@ -498,15 +498,16 @@
 
       <div style="margin-right:2px;margin-top:5px;">
         <button mat-button (click)="openUnit()">
-          <mat-icon style="font-size:1.5em">open_in_new</mat-icon>
+
+          <mat-icon color="accent" style="font-size:1.5em">open_in_new</mat-icon>
         </button>
       </div>
 
-      <div>
+      <!-- <div>
         <button mat-button (click)="clearUnit()">
           <mat-icon  style="font-size:1.5em" color="warn">delete</mat-icon>
         </button>
-      </div>
+      </div> -->
   </div>
 </ng-template>
 
@@ -530,15 +531,15 @@
 
       <div  style="margin-top:5px;">
         <button mat-button (click)="openReOrderUnit()">
-          <mat-icon style="font-size:1.5em">open_in_new</mat-icon>
+          <mat-icon   color="accent" style="font-size:1.5em">open_in_new</mat-icon>
         </button>
       </div>
 
-      <div>
+      <!-- <div>
         <button mat-button (click)="clearReOrderUnit()">
           <mat-icon  style="font-size:1.5em" color="warn">delete</mat-icon>
         </button>
-      </div>
+      </div> -->
 
   </div>
 </ng-template>

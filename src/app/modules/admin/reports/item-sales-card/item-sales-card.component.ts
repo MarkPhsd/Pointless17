@@ -34,7 +34,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
   @Input() autoPrint : boolean;
   printReadyList = []
   @Output() renderComplete = new EventEmitter<any>();
-
+  @Output() outputComplete = new EventEmitter<any>()
   adjustments$:  Observable<unknown>;
   adjustments: IReportItemSaleSummary;
   action$ :  Observable<unknown>;
@@ -89,9 +89,9 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     if (this.groupBy === 'type') {   searchModel.groupByType = true;  }
     if (this.removeGiftCard) {  }
 
-    if (this.groupBy === 'void') {   
+    if (this.groupBy === 'void') {
       searchModel.groupBy = 'void'
-      searchModel.groupByType = false; 
+      searchModel.groupByType = false;
     }
 
 
@@ -114,6 +114,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
         })).pipe(switchMap(data => {
           setTimeout(data => {
             this.renderComplete.emit(true)
+            this.outputComplete.emit('item sales transactionType')
           },500);
           return of(data)
         }))
@@ -125,6 +126,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
       this.sales$ = this.reportingItemsSalesService.groupItemSales(this.site, searchModel).pipe(switchMap(data => {
         this.sales = data;
         this.cdr.detectChanges()
+        this.outputComplete.emit('item groupItem Sales')
         this.renderComplete.emit(true)
         return of(data)
       }))
@@ -159,6 +161,8 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     this.sales$ = this.reportingItemsSalesService.listAdjustedItems(this.site, searchModel).pipe(switchMap(data => {
        this.adjustments = data as IReportItemSaleSummary;
        this.cdr.detectChanges()
+       this.outputComplete.emit('item getAdustmentReport')
+       console.log('item getAdustmentReport')
        this.renderComplete.emit(true)
       return of(data)
     }))
@@ -199,6 +203,8 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
       return action$.pipe(switchMap(data => {
         if (data) {
           this.renderComplete.emit(true)
+          this.outputComplete.emit('item setItemGroupAsPrepped')
+          console.log('item setItemGroupAsPrepped')
           sales.results.filter(item => {
             return !item.ID
           })

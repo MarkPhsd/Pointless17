@@ -98,7 +98,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   viewType$ = this.orderMethodsService.viewOrderType$.pipe(switchMap(data => {
     this.viewPrep = false
     if (data && data === 3) {
-      this.viewPrep = true 
+      this.viewPrep = true
     }
     return of(data)
   }))
@@ -111,27 +111,17 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     //   return;
     // }
     // clearInterval(this.interval)
-
   }
 
-
   getFilterHeight() {
-
-    if (!this.filterDiv) {
-      return
-    }
+    if (!this.filterDiv) {  return  }
     const divTop = this.filterDiv.nativeElement.getBoundingClientRect().top;
     const viewportBottom = window.innerHeight;
     const remainingHeight = viewportBottom - divTop;
-
-    // console.log('Remaining height in pixels:', remainingHeight);
-    // console.log(remainingHeight)
-    // Optionally, set the height of the div
     this.filterDiv.nativeElement.style.maxHeight  = `${remainingHeight - 10}px`;
     this.filterDivHeight = remainingHeight
-    // this.menuDivHeight =    this.menuItemsDiv.nativeElement.style.height
-
   }
+
   initPopover() {
     if (this.user?.userPreferences && this.user?.userPreferences?.enableCoachMarks ) {
       this.coachMarksService.clear()
@@ -177,10 +167,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this._UITransaction = this.uISettingsService.transactionUISettings$.subscribe( data => {
       if (data) {
         this.uiTransactions = data;
-        // console.log('initUITransactionsSubscriber', this.userAuthorization.user)
-        // if (!this.userAuthorization.user) {
-
-        // }
         if (this.userAuthorization.user) {
           this.displayAllOrFilter(this.userAuthorization.user)
         }
@@ -195,13 +181,11 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setHouseAccountsOn() {
-
     this.viewHouseAccountListOn = true;
     this.setViewType(0)
-
     return;
-
   }
+
   get viewHouseAccountList() {
     if (this.viewHouseAccountListOn) {
       return this.houseAccountsList
@@ -222,15 +206,29 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this._searchModel =  this.orderMethodsService.posSearchModel$.subscribe(data => {
       if (!data) {
         this.searchModel = {} as IPOSOrderSearchModel
+        data =  this.searchModel ;
       }
+
       if (data) {
         this.searchModel = data;
         this.scheduleDateStart= null;
         this.scheduleDateEnd  = null;
+        this.orderMethodsService.orderSearchEmployeeID = 0
 
         if (this.uiTransactions && !this.uiTransactions.toggleUserOrAllOrders) {
           this.searchModel.employeeID = 0;
         }
+
+        if (this.userAuthorization.user) {
+          if (this.userAuthorization.user?.userPreferences?.showAllOrders) {
+            console.log('updated', this.userAuthorization.user.employeeID)
+            this.searchModel.employeeID =  0
+          } else {
+            this.searchModel.employeeID =  this.userAuthorization.user?.employeeID
+          }
+        }
+
+
 
         if (this.searchModel.scheduleDate_From && this.searchModel.scheduleDate_To) {
           this.scheduleDateStart = this.searchModel.scheduleDate_From;
@@ -249,7 +247,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
       let search = {} as IOrderItemSearchModel
       const results$ =  this.posOrderItemService.getItemsHistoryBySearch(site, search);
       this.orderItemHistory$ = results$.pipe(switchMap(data => {
-        console.log('history items', data)
+        // console.log('history items', data)
         return of(data)
       }))
     }
@@ -725,16 +723,30 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   displayAllOrFilter(user) {
+
+    console.log(user?.employeeID, user?.userPreferences?.showAllOrders)
+
     if (user?.userPreferences?.showAllOrders) {
-      if (user?.employeeID) {
-        if (this.orderMethodsService.posSearchModel) {
-          this.orderMethodsService.posSearchModel = {} as IPOSOrderSearchModel
-          this.orderMethodsService.posSearchModel.employeeID = user.employeeID
-        }
+      if (!this.orderMethodsService.posSearchModel) {
+        this.orderMethodsService.posSearchModel = {} as IPOSOrderSearchModel
       }
+      this.orderMethodsService.posSearchModel.employeeID = 0 //user.employeeID
+      this.orderMethodsService.posSearchModel
+    } else {
+      if (!this.orderMethodsService.posSearchModel) {
+        this.orderMethodsService.posSearchModel = {} as IPOSOrderSearchModel
+      }
+      if (user?.employeeID) {
+        console.log('showAllOrders', user?.userPreferences?.showAllOrders)
+        console.log('updated',user?.employeeID, this.userAuthorization.user.employeeID)
+        this.orderMethodsService.posSearchModel.employeeID =  this.userAuthorization.user.employeeID
+      }
+      console.log('model', this.orderMethodsService.posSearchModel)
     }
+
     this.authenticationService.updateUser(user)
     this.userAuthorization.setUser(user)
+    console.log('posSearchModel show All',  user?.userPreferences?.showAllOrders, this.orderMethodsService.posSearchModel)
     this.orderMethodsService.updateOrderSearchModel(this.orderMethodsService.posSearchModel)
   }
 

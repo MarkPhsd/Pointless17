@@ -21,12 +21,14 @@
           {{item?.name}}
       </mat-option>
     </mat-autocomplete>
-    <button   *ngIf="itemNameInput && itemNameInput.length>0"
+
+    <button   *ngIf="searchValueAssigned"
           matSuffix
           mat-icon-button aria-label="Clear"
           (click)="clearInput()">
         <mat-icon>close</mat-icon>
     </button>
+
   </mat-form-field>
 </div>
 

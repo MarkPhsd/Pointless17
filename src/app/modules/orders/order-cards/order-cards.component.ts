@@ -237,7 +237,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
         if (data) {
           const item = JSON.parse(JSON.stringify(data))
           data = item;
-          data.employeeID = this.orderMethodsService.orderSearchEmployeeID;
         }
         this.searchModel = data
         this.orders = [] as  IPOSOrder[];
@@ -377,7 +376,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     model.pageNumber = 1;
     model.pageSize = 25;
     return this.orderService.getOrdersPrepBySearchPaged(site,model).pipe(switchMap(data => {
-      
+
       const newLocal = this;
       newLocal.orders = [...newLocal.orders, ...data.results];
       return of (data.results)
@@ -392,6 +391,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     let model         = {} as IPOSOrderSearchModel
     if (this.searchModel)  {  model = this.searchModel}
 
+    // console.log('model', model)
     if (pageNumber <= 0) { this.pageNumber = 1;  }
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize
@@ -402,8 +402,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     if (this.viewType == 3) {
       model.pageNumber    = pageNumber
       model.pageSize      = pageSize
-      results$            = this.orderService.getOrdersPrepBySearchPaged(site, model).pipe(switchMap(data => { 
-        console.log('data', data)
+      results$            = this.orderService.getOrdersPrepBySearchPaged(site, model).pipe(switchMap(data => {
         return of(data)
       }))
     }
@@ -442,16 +441,13 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
           this.loading      = false
           // this.orders = this.orders.concat(data.results)
           this.orders = this.mergeAndDeduplicate(this.orders, data.results)
-          // this.orders = [...this.orders, ...data.results];
-          console.log('orders', this.orders.length, this.orders)
-
           if (this.viewType != 3) {
             this.cd.detectChanges()
           }
           const newLocal = this;
           this.orders.sort
           this.orders = this.getUniqueItems(this.orders)
-    
+
           this.totalRecords = data.paging.totalRecordCount;
           if ( this.orders.length == this.totalRecords ) {
             this.endOfRecords = true;
@@ -481,9 +477,9 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   mergeAndDeduplicate(items1: IPOSOrder[], items2: IPOSOrder[]): IPOSOrder[] {
     const merged: IPOSOrder[] = [...items1, ...items2];
     const result: IPOSOrder[] = [];
-  
+
     const itemMap: Map<number, IPOSOrder> = new Map();
-  
+
     for (const item of merged) {
       // Check if we already have an item with the same id
 
@@ -501,12 +497,12 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
         itemMap.set(item.id, item);
       }
     }
-  
+
     // Convert the map back to an array
     itemMap.forEach((value) => {
       result.push(value);
     });
-  
+
     return result;
   }
 

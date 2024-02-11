@@ -3,9 +3,9 @@
 <mat-card>
 
   <mat-card-subtitle>
-    <div *ngIf="closeDayValidation.allowClose">Ready to Close</div>
+    <h4 *ngIf="closeDayValidation.allowClose">Ready to Close</h4>
     <mat-label color="warn">
-      <div *ngIf="!closeDayValidation.allowClose">Resolutions required to close.</div>
+      <h4><div *ngIf="!closeDayValidation.allowClose">Resolutions required to close.</div></h4>
     </mat-label>
   </mat-card-subtitle>
 

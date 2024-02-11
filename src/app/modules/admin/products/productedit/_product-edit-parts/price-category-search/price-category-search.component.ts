@@ -113,6 +113,26 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
     }
   }
 
+  clearInput() {
+    let price = {} as any;
+    price = { priceCategory : 0 }
+    this.inputForm.patchValue(  price  )
+    const priceCat =  { priceCategoryLookup: '' }
+    this.searchForm.patchValue( priceCat )
+  }
+
+  //{{priceCategoryLookup}}
+  get searchValueAssigned() {
+    try {
+      if (this.searchForm && this.searchForm.controls['priceCategoryLookup'].value) {
+        return true
+      }
+    } catch (error) {
+
+    }
+    return false
+  }
+
   selectItem(item){
     if (!item) {return}
     this.itemSelect.emit(item)

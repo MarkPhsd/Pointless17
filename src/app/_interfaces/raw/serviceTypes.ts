@@ -35,10 +35,8 @@ export interface IServiceType {
   serviceColor   : string;
   listFontColor  : string;
   buttonColor    : string;
-  // serviceFilterType   : number;
   assignOrderToCloser : boolean;
   assignCloserToOrder : boolean;
-
   onOrderClose: number;
   actionOne   : number;
   actionTwo   : number;
@@ -46,8 +44,25 @@ export interface IServiceType {
   menuItem2   : IMenuItem;
   resaleType  : boolean;
   headerOrder: boolean;
+  json: string; //converts to serviceTypeFeatures
+  serviceTypeFeatues: ServiceTypeFeatues;
 }
 
+export interface ServiceTypeFeatues {
+  weekDays: any[];
+  hoursAndDayID: any[];
+  seatEnabled: boolean;
+}
+
+export interface weekDays {
+  id: number;
+  name: string;
+}
+
+//24 hours
+export interface hoursAndDayID {
+  hours: [];
+}
 
 export interface IServiceTypePOSPut {
   id:                    number;
@@ -78,4 +93,5 @@ export interface IServiceTypePOSPut {
   requireNumOfGuests  : number;
   promptForOrderName  : number;
   filterType          : number;
+  json                : string
 }

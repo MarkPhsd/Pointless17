@@ -114,12 +114,18 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
     }
   }
 
-  deleteValue() {
+  clearInput() {
     const item =  { idLookup: '' }
     this.searchForm.patchValue( item )
     this.setValues(this.inputForm, this.fieldName, '')
   }
 
+  get searchValueAssigned() {
+    if (this.searchForm.controls['idLookup'].value) {
+      return true
+    }
+    return false;
+  }
   refreshSearch(search: any){
     if (search) {
       this.searchPhrase.next( search )

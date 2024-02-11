@@ -23,7 +23,7 @@ export class PaymentReportComponent implements OnInit, OnChanges {
   @Output() renderComplete = new EventEmitter<any>()
   @Input()  surCharge: boolean;
   refreshList = []
-  @Input() autoPrint: boolean; 
+  @Input() autoPrint: boolean;
   refunds$           : Observable<IPaymentSalesSummary>;
   sales$             : Observable<IPaymentSalesSummary>;
   voids$             : Observable<IPaymentSalesSummary>;
@@ -31,7 +31,8 @@ export class PaymentReportComponent implements OnInit, OnChanges {
   paymentSalesSummary: IPaymentSalesSummary;
   message            : string;
   styles$            : Observable<any>;
-  
+  @Output() outputComplete = new EventEmitter<any>()
+
   constructor(
     private httpClient: HttpClient,
     private salesPaymentService: SalesPaymentsService) { }
@@ -41,7 +42,7 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     this.refreshReports()
   }
 
-  initStyle() { 
+  initStyle() {
     this.voids$ = null;
     this.refunds$ = null;
     this.sales$ = null;
@@ -60,14 +61,14 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     this.refreshReports()
   }
 
-  refreshReports() { 
+  refreshReports() {
     this.voids$ = null;
     this.refunds$ = null;
     this.sales$ = null;
 
     // console.log('sales')
     if (this.type === 'service') {
-      this.refreshSales();
+      this.refreshService();
     }
 
     if (this.type == 'sales') {
@@ -92,10 +93,12 @@ export class PaymentReportComponent implements OnInit, OnChanges {
       return;
     }
   }
-  checkList(value) { 
+
+  checkList(value) {
     this.refreshList.push(1)
-    if (this.refreshList.length > 2 ) { 
+    if (this.refreshList.length > 2 ) {
       this.renderComplete.emit(true)
+      this.outputComplete.emit('paymentReport')
     }
   }
 
@@ -106,8 +109,16 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.groupBy   = this.groupBy;
     searchModel.zrunID    = this.zrunID;
     searchModel.reportRunID = this.reportRunID;
-    this.sales$  = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => { 
+    this.sales$  = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => {
       this.checkList(1)
+      // console.log('type', this.type)
+      if (this.type == 'service' || this.groupBy === 'service' ||
+          this.groupBy == 'paymentMethod' ||
+          this.groupBy == 'devicename' ||
+          this.groupBy === 'orderEmployeeCount' ||
+          this.groupBy === 'employee') {
+        this.outputComplete.emit('paymentReport')
+      }
       return of(data)
     }))
   }
@@ -120,8 +131,11 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.zrunID    = this.zrunID;
     searchModel.reportRunID = this.reportRunID;
     searchModel.refunds   = true;
-    this.refunds$          = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => { 
+    this.refunds$          = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => {
       this.checkList(1)
+      if (this.type == 'refunds') {
+        this.outputComplete.emit('paymentReport')
+      }
       return of(data)
     }))
   }
@@ -133,9 +147,12 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.groupBy   = this.groupBy;
     searchModel.zrunID    = this.zrunID;
     searchModel.reportRunID = this.reportRunID;
-    searchModel.voids     = true
-    this.voids$         = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => { 
+    searchModel.voids       = true
+    this.voids$             = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => {
       this.checkList(1)
+      if (this.type == 'voids') {
+        this.outputComplete.emit('paymentReport')
+      }
       return of(data)
     }))
   }
@@ -148,8 +165,11 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.zrunID    = this.zrunID;
     searchModel.reportRunID = this.reportRunID;
     searchModel.voids     = true
-    this.voids$         = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => { 
+    this.voids$         = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => {
       this.checkList(1)
+      if (this.type == 'service') {
+        this.outputComplete.emit('paymentReport')
+      }
       return of(data)
     }))
   }

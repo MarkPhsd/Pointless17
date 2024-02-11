@@ -3,6 +3,11 @@
     margin: 5mm 5mm 5mm 5mm;
 }
 
+.span-columns {
+  grid-column: 1/-1;
+}
+
+
 @media print {
 
   h4 {
@@ -302,7 +307,7 @@
     font-size: 12pt;
     font-weight: bold;
     width: 350px;
-
+    white-space: pre-wrap;
     white-space   : nowrap;
     overflow      : hidden;
     text-overflow : ellipsis;

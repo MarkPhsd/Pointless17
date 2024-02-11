@@ -3,9 +3,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
 import { DisplayMenuService } from 'src/app/_services/menu/display-menu.service';
-import { Observable, switchMap, of, ignoreElements, catchError} from 'rxjs';
+import { Observable, switchMap, of,  catchError} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators,} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators,} from '@angular/forms';
 import { IListBoxItemB } from 'src/app/_interfaces/dual-lists';
 import { Router } from '@angular/router';
 
@@ -51,7 +51,6 @@ export class AdminDisplayMenuComponent  {
           this.displayMenu = data;
           this.logo = data.logo;
           this.backgroundImage = data.backgroundImage;
-          // console.log(data)
           this.ccs = data.css;
         }
         this.initForm(data)

@@ -41,7 +41,7 @@ export class UnitTypeSelectorComponent implements OnInit {
       this.searchModel = {} as SearchModel;
       console.log('searchPhrase', searchPhrase, this.searchModel)
       this.searchModel.name = searchPhrase;
-      return this.menuService.getUnitTypesSearch(this.site,  this.searchModel).pipe(switchMap(data => { 
+      return this.menuService.getUnitTypesSearch(this.site,  this.searchModel).pipe(switchMap(data => {
         return of(data.results)
       }))
      }
@@ -103,6 +103,22 @@ export class UnitTypeSelectorComponent implements OnInit {
         return menuItemName
       }
     }
+  }
+
+  clearInput() {
+    let item = {} as IItemBasic;
+    this.itemSelect.emit(item);
+  }
+
+  get searchValueAssigned() {
+    try {
+      if (this.searchForm.controls['unitTypeSelections'].value) {
+        return true
+      }
+    } catch (error) {
+
+    }
+    return false
   }
 
 }

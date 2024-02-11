@@ -4,7 +4,7 @@
      [formGroup]="inputForm"
      class="grid-container" >
 
-  <div class="grid-container-3col" *ngIf="itemType && !itemType.disablePriceCategory" >
+  <div class="grid-container-2col" *ngIf="itemType && !itemType.disablePriceCategory" >
     <div style="width:250px">
       <app-price-category-search
           [isInventory]="isInventory"
@@ -13,12 +13,13 @@
           [inputForm]  ="inputForm"  >
       </app-price-category-search>
     </div>
+
     <div style="margin-top:5px;">
       <button mat-button
               color="accent"
               (click)="openPriceCategory()">
         <div *ngIf="priceCategoryID != 0">
-          <mat-icon>expand</mat-icon>
+          <mat-icon>open_in_new</mat-icon>
         </div>
         <div *ngIf="priceCategoryID == 0">
           <mat-icon>add</mat-icon>
@@ -27,14 +28,14 @@
     </div>
 
     <!-- (isInventory && (inputForm.controls['priceCategoryID'].value  && inputForm.controls['priceCategoryID'].value != 0)) -->
-    <div style="margin-top:5px;"
+    <!-- <div style="margin-top:5px;"
          *ngIf="(priceCategoryID == 0)">
       <button mat-button
               color="warn"
               (click)="clearPriceCategory()">
         <mat-icon>delete</mat-icon>
       </button>
-    </div>
+    </div> -->
   </div>
 
   <app-value-fields

@@ -28,7 +28,7 @@
   text-overflow : ellipsis;
   text-transform: capitalize;
   overflow-wrap: break-word;
-
+  white-space: pre-wrap;
   @media print {
     display: grid;
     gap: 5px;
@@ -36,6 +36,7 @@
     font-size: 12pt;
     font-weight: bold;
     width: 375px;
+    white-space: pre-wrap;
   }
 }
 
@@ -55,6 +56,10 @@
     font-weight: bold;
     width: 305px;
   }
+}
+
+.span-columns {
+  grid-column: 1/-1;
 }
 
 .totalslabel {

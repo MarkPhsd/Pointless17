@@ -18,6 +18,7 @@ export interface IReportItemSaleSummary {
 
 export interface  ReportItemSalesOptimized {
   productName:             string;
+  employee:                string;
   itemTotal:               number;
   NetSales                : number;
   taxTotal1:               number;
@@ -31,11 +32,11 @@ export interface  ReportItemSalesOptimized {
   itemCashDiscounts: number;
   itemPercentageDiscount: number;
   pointDiscount: number;
-  employee:                string;
   completionDateShort:     string;
   department: string;
   category: string
   voidAmount: number;
+  voidReason: string;
 }
 
 export interface IReportItemSales {
@@ -84,9 +85,11 @@ export interface IReportItemSales {
   itemCost               : number;
   productCount  : number;
   voidReason    : string;
+  voidAmount    : number;
   printed       : string;
   itemPrepped   : string;
   client        : ClientsPOSOrders;
+  history: boolean;
 }
 
 export interface ItemPOMetrics {
@@ -202,7 +205,9 @@ export interface ITaxReport {
   department              : string;
   scheduleDate            : string;
   gratuity                : number;
-  completed               : boolean
+  completed               : boolean;
+  voidReason: string;
+  voidAmount: number;
 }
 
 export interface ITaxReportOptimized {
@@ -221,6 +226,7 @@ export interface ITaxReportOptimized {
   category                : string;
   department              : string;
   gratuity                : number;
+  employee: string;
 }
 
 

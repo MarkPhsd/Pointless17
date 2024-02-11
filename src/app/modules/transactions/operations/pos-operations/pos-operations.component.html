@@ -6,9 +6,14 @@
 
   <mat-card-title></mat-card-title>
   <mat-card-subtitle>
-    POS Operations   <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
+    <h2><mat-spinner *ngIf="completedReportCount<reportCountRequired" [diameter]="20"></mat-spinner>
+        Daily Report.
+        <span *ngIf="completedReportCount<reportCountRequired">Generating {{completedReportCount}} of {{reportCountRequired}}</span>
+        <span *ngIf="completedReportCount >= reportCountRequired">Ready to close</span>
+        <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
+    </h2>
     <div *ngIf="(uiTransactions?.dCapEnabled && !terminalSettings && !dsiEmv)">
-      Use a POS device connected to a credit card terminal to close the day.
+     <h5>Use a POS device connected to a credit card terminal to close the day.</h5>
     </div>
   </mat-card-subtitle>
 
@@ -23,7 +28,7 @@
     </span>
 
     <span *ngIf="(printAction$ | async) as action">
-      <button mat-raised-button (click)="print(action)"> <mat-icon>print</mat-icon>Print</button>
+      <button [disabled]="!printReady" mat-raised-button (click)="print(action)"> <mat-icon>print</mat-icon>Print</button>
     </span>
 
     <span>
@@ -187,16 +192,16 @@
         <div>
           <ng-container [ngTemplateOutlet]="paymentReport  || !printing"></ng-container>
           <ng-container [ngTemplateOutlet]="salesType"></ng-container>
-          <span *ngIf="!auths.disableDeviceSales  || !printing">
+          <span *ngIf="!auths.disableDeviceSales">
             <ng-container [ngTemplateOutlet]="salesByDevice"></ng-container>
           </span>
           <ng-container [ngTemplateOutlet]="employeeReport"></ng-container>
-          <span *ngIf="!auths.disableGiftCards  || !printing">
+          <span *ngIf="!auths.disableGiftCards">
             <ng-container [ngTemplateOutlet]="giftCardReport"></ng-container>
           </span>
         </div>
 
-        <div *ngIf="!auths?.disableItemSales || !printing">
+        <div *ngIf="(!auths?.disableItemSales)">
           <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>
           <ng-container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container>
         </div>
@@ -205,7 +210,7 @@
   </div>
 
   <mat-card *ngIf="iBalanceSheet && iBalanceSheet.startTime &&
-                    (auths && !auths.blindClose)">
+                    (auths && (!auths.blindClose && !auths.disableBalanceEndOfDay))">
 
       <app-widget-card   [dateFrom]  ="iBalanceSheet.startTime"
                           [dateTo]   ="iBalanceSheet.startTime"
@@ -228,13 +233,13 @@
 
 <ng-template #salesType>
   <payment-report
+      (outputComplete)="setOutPutCompleted($event)"
       [groupBy]="'service'"
       [site]    ="site"
       [surCharge]="uiTransactions?.dCapSurcharge"
       [zrunID]    ="iBalanceSheet.id"
       [notifier]="childNotifier">
       <mat-icon>list</mat-icon>Sale Type
-    <!-- </div> -->
   </payment-report>
 </ng-template>
 
@@ -294,6 +299,7 @@
 <ng-template #taxReport>
   <div>
     <sales-tax-report
+          (outputComplete)="setOutPutCompleted($event)"
           [printerName]="printerName"
           [site]       ="localSite"
           [dateFrom]   ="dateFrom"
@@ -322,6 +328,7 @@
 
 <ng-template #paymentReport>
   <payment-report
+      (outputComplete)="setOutPutCompleted($event)"
       [site]    ="localSite"
       [dateFrom]="dateFrom"
       [dateTo]  ="dateTo"
@@ -341,6 +348,7 @@
 
 <ng-template #salesByDevice>
   <payment-report
+    (outputComplete)="setOutPutCompleted($event)"
     [groupBy]="'devicename'"
     [site]    ="site"
     [dateFrom]="dateFrom"
@@ -353,6 +361,7 @@
 
 <ng-template #employeeOrdersByHourReport>
   <payment-report
+    (outputComplete)="setOutPutCompleted($event)"
     [site]    ="localSite"
     [dateFrom]="dateFrom"
     [dateTo]  ="dateTo"
@@ -365,6 +374,7 @@
 
 <ng-template #employeeReport>
   <payment-report
+      (outputComplete)="setOutPutCompleted($event)"
       [site]    ="localSite"
       [dateFrom]="dateFrom"
       [dateTo]  ="dateTo"
@@ -378,6 +388,8 @@
 
 <ng-template #giftCardReport>
   <item-sales-card
+      style="margin:10px"
+      (outputComplete)="setOutPutCompleted($event)"
       [site]="localSite"
       [dateFrom]="dateFrom"
       [dateTo]="dateTo"
@@ -393,8 +405,8 @@
 </ng-template>
 
 <ng-template #itemSalesReport>
-
   <item-sales-card
+      (outputComplete)="setOutPutCompleted('itemSalesReport')"
       [site]          ="localSite"
       [zrunID]        ="iBalanceSheet.id"
       [removeGiftCard]="true"
@@ -410,11 +422,13 @@
 <ng-template #itemAdjustmentVoids>
   <div>
     <item-sales-card
+          (outputComplete)="setOutPutCompleted('void')"
           [site]    ="site"
           [dateFrom]="dateFrom"
           [dateTo]  ="dateTo"
           [removeGiftCard]="true"
           [groupBy]  = "'void'"
+          [viewType]="'voids'"
           [zrunID]="iBalanceSheet.id">
       <div class="header">
         <mat-icon>menu</mat-icon> Item Voids
@@ -427,6 +441,7 @@
 <ng-template #itemAdjustments>
   <div>
     <item-sales-card
+          (outputComplete)="setOutPutCompleted('adjustment')"
           [site]    ="site"
           [dateFrom]="dateFrom"
           [dateTo]  ="dateTo"

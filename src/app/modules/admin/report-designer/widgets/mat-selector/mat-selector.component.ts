@@ -45,4 +45,17 @@ export class MatSelectorComponent implements OnInit {
       // console.log('setItem', item)
       this.selectItem.emit(item)
     }
+
+    clearInput() {
+      this.selectItem.emit({})
+    }
+
+    get searchValueAssigned() {
+
+      if (this.inputForm.controls[this.fieldName].value) {
+        return true
+      }
+      return false;
+    }
+
   }

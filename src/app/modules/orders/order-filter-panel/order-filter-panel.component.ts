@@ -563,7 +563,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.orderMethodsService.orderSearchEmployeeID = this.employeeID
     item.employeeID = this.employeeID;
     item.employeeID = this.serviceTypeID;
-
     this.updateOrderSearch( JSON.parse(JSON.stringify(item)));
     return of('')
   }

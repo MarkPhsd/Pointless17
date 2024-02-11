@@ -563,7 +563,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   applyPaymentAmount(event) {
 
-    console.log('applyPaymentAmount event', event)
+    // console.log('applyPaymentAmount event', event)
     if (!event && this.groupPaymentAmount != 0) {
       this.initPaymentForm();
       return
@@ -574,50 +574,49 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       amount = event
     }
 
+      if (this.order &&  this.paymentMethod) {
+          if (event) {
+            amount = event
+          }  else {
+            amount = this.groupPaymentAmount;
+          }
 
-    if (this.order &&  this.paymentMethod) {
-        if (event) {
-          amount = event
-        }  else {
-          amount = this.groupPaymentAmount;
-        }
+          this.posPayment.groupID = this.groupPaymentGroupID;
+          if (!amount || amount == 0) {
+            amount   = this.formatValueEntered(event)
+          }
+          if (amount && amount === 0) {
+            this.notify('Error getting values for payment. ' + amount, 'Alert', 2000);
+            return;
+          }
 
-        this.posPayment.groupID = this.groupPaymentGroupID;
-        if (!amount || amount == 0) {
-          amount   = this.formatValueEntered(event)
-        }
-        if (amount && amount === 0) {
-          this.notify('Error getting values for payment. ' + amount, 'Alert', 2000);
-          return;
-        }
+          const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
+                                this.paymentMethod,
+                                this.order.balanceRemaining,
+                                this.order.creditBalanceRemaining );
 
-        const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
-                              this.paymentMethod,
-                              this.order.balanceRemaining,
-                              this.order.creditBalanceRemaining );
+          if (!isValidAmount) {
+            this.paymentAmountForm  = this.fb.group({fieldname: []})
+            return;
+          }
 
-        if (!isValidAmount) {
-          this.paymentAmountForm  = this.fb.group({fieldname: []})
-          return;
-        }
+          if (this.enterCustomAmount) {
+            this.enterCustomAmount = false
+            this._paymentAmount    = amount;
+            this._creditPaymentAmount = amount;
+            this.stepSelection     = 1;
+            return
+          }
 
-        if (this.enterCustomAmount) {
-          this.enterCustomAmount = false
-          this._paymentAmount    = amount;
-          this._creditPaymentAmount = amount;
-          this.stepSelection     = 1;
-          return
-        }
+        this.process$ = this._processPayment(amount, this.posPayment)
+      }
+      console.log('no payment method')
 
-      this.process$ = this._processPayment(amount, this.posPayment)
-    }
-    console.log('no payment method')
-
-    const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
+      const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
       this.paymentMethod,
       this.order.balanceRemaining,
       this.order.creditBalanceRemaining );
-    console.log('no payment method isValidAmount', isValidAmount)
+      console.log('no payment method isValidAmount', isValidAmount)
 
 
     if (this.enterCustomAmount) {
@@ -768,7 +767,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   processGetResults(amount, posPayment: IPOSPayment): Observable<IPaymentResponse> {
     if (!posPayment) {
-      console.log('posPayment null')
+      // console.log('posPayment null')
       this.sitesService.notify('No Payment info provided.', 'Close', 50000, 'red')
       return of(null)
     }

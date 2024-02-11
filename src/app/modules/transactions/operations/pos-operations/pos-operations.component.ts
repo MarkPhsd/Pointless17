@@ -87,6 +87,10 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   terminalSettings$: Observable<ITerminalSettings>;
   terminalSettings: ITerminalSettings
   dsiEmv: DSIEMVSettings
+
+  completedReportCount: number = 0;
+  printReady: boolean;
+
   userSubscriber() {
     this._user = this.authenticationService.user$.subscribe(data => {
       this.user = data;
@@ -169,8 +173,11 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       return of(data)
     }))
   }
+
   refreshInit() {
-    this.getUser();
+      this.getUser();
+      this.completedReportCount = 0
+      this.cdr.detectChanges()
       this.refreshSales();
       this.refreshClosingCheck();
       this.initTransactionUISettings();
@@ -263,6 +270,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
 
   refreshInfo(){
     this.localSite = {} as ISite;
+    this.completedReportCount = 0
     this.getUser();
     this.refreshSales();
     this.refreshClosingCheck();
@@ -316,7 +324,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
 
   async emvDatacapBatchCards(): Promise<boolean> {
     try {
-      
+
       if (this.uiTransactions && this.uiTransactions.dsiEMVNeteEpayEnabled) {
         this.batchSummary  = null;
         const response =  await this.dsiProcess.emvBatch()
@@ -357,8 +365,8 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     return of(null)
   }
 
-  printEndOfDay() { 
-    if (this.printStyles) { 
+  printEndOfDay() {
+    if (this.printStyles) {
       if (this.platFormService.isAppElectron) {
         this.printElectron(this.printStyles)
         return
@@ -400,8 +408,11 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
 
     this.orderMethodsService.clearOrderSubscription();
     this.balanceSheetsClosed = ''
-    this.printEndOfDay() ;
-    
+
+    if (!this.auths.blindClose) {
+      this.printEndOfDay() ;
+    }
+
     this.closingProcedure$ =
         dcapBatch$.pipe(switchMap(data => {
           return  email$
@@ -599,6 +610,35 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     this.coachMarksService.add(new CoachMarksClass(this.coachingCloseDay.nativeElement, "Close Day - Submits sales to Credit Card Batch, emails data. Clears Sales."));
     this.coachMarksService.add(new CoachMarksClass(this.coachingUnClosedBalanceSheets.nativeElement, "Balance Sheets Open - If cashiers or servers haven't closed their balance sheets, buttons will appear that require they be closed before closing the day. The buttons will take you directly to the balance sheet to close."));
     this.coachMarksService.add(new CoachMarksClass(this.coachingUnpaidOrders.nativeElement, "Orders with Unpaid Items: If orders have been submitted with items unpaid on them, you will need to delete, void or remove those orders before you may close the day."));
+  }
+
+  setOutPutCompleted(event) {
+    // console.log('Report Completed', event)
+    if (event) {
+      this.completedReportCount += 1
+    }
+    // console.log('total Reports', this.completedReportCount)
+    if (this.completedReportCount >= this.reportCountRequired) {
+      this.printReady = true
+    }
+  }
+
+  get reportCountRequired() {
+    let total = 9
+    if (this.auths.blindClose) { return 0}
+    if (this.auths.disableBalanceEndOfDay ) {
+      total = total -1
+    }
+    if (this.auths.disableItemSales ) {
+      total = total -2
+    }
+    if (this.auths.disableDeviceSales ) {
+      total = total -1
+    }
+    if (this.auths.disableGiftCards ) {
+      total = total -1
+    }
+    return total
   }
 
 }
