@@ -5,13 +5,12 @@
   }
 
   .container {
-    overflow-x: hidden;
-    // overflow-y: hidden;
     height: calc(100vh - 75px);
     overflow-y: hidden;
 
     @include for-phone-only  {
-      overflow-y: auto;
+      // overflow-y: scroll;
+      overflow-x: hidden;
     }
 
     @media (max-height: 625px)  {
@@ -101,7 +100,8 @@
 
   @include for-phone-only  {
     // max-height: 250px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   @media (max-height: 625px)  {
@@ -271,7 +271,8 @@
   @include for-phone-only  {
     margin: 5px;
     width: 100%;
-    height:  calc(100vh - 150px);
+    max-width: 400px;
+    // height:  calc(100vh - 150px);
   }
 
   //1024 x768
@@ -293,7 +294,15 @@
   margin-bottom: 25px;
   margin-top   : 2px;
   margin-left  : 2px;
+
+  @include for-phone-only  {
+    margin: 5px;
+    width: 80vw;
+    max-width: 400px;
+  }
 }
+
+
 
 .order-layout div {
   // min-height: 50px;

@@ -6,7 +6,7 @@ import { CompanyService,AuthenticationService, OrdersService, MessageService, } 
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { ICompany, IPOSOrder, ISite, IUser, IUserProfile,  }  from 'src/app/_interfaces';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { Observable, of, Subject, Subscription,switchMap   } from 'rxjs';
+import { catchError, Observable, of, Subject, Subscription,switchMap   } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SiteSelectorComponent } from '../../widgets/site-selector/site-selector.component';
 import { Location} from '@angular/common';
@@ -25,6 +25,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { CoachMarksService,CoachMarksClass } from '../../widgets/coach-marks/coach-marks.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { ClientTableService } from 'src/app/_services/people/client-table.service';
 
 interface IIsOnline {
   result: string;
@@ -118,6 +119,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   _openOrderBar       : Subscription;
 
+  userInitCheck$: Observable<any>;
   user                : IUser;
   _user               : Subscription;
 
@@ -142,6 +144,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   floorPlans$     : Observable<IFloorPlan[]>;
   posDevice$      : Observable<ITerminalSettings>;
   terminalSetting : any;
+  signOut: boolean;
 
   mailCount  = 0;
   headerBackColor: string;
@@ -170,7 +173,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       this.user  = data
       // console.log('update?', data)
       this.setHeaderBackColor(this.user?.userPreferences?.headerColor)
-      this.getUserInfo()
+      // this.getUserInfo()
     })
   }
 
@@ -244,12 +247,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
               public  uiSettings             : UISettingsService,
               public  coachMarksService      : CoachMarksService,
               private paymentMethodsService: PaymentsMethodsProcessService,
+              private clientService         : ClientTableService,
               private fb                    : UntypedFormBuilder ) {
   }
 
   ngOnChanges() {
     const user = this.getUserInfo();
   }
+
   ngAfterViewInit() {
   }
 
@@ -293,7 +298,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     if (!devicename) { return of(null)}
     this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
       switchMap(data => {
-
         if (data && data.text) {
           try {
             const posDevice = JSON.parse(data?.text) as ITerminalSettings;
@@ -305,12 +309,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
           } catch (error) {
             this.siteService.notify('Error setting device info.' + JSON.stringify(error), 'Close', 10000, 'yellow')
           }
-
         }
         return of(null)
       }
     ))
-
   }
 
   zoom(posDevice: ITerminalSettings)  {
@@ -385,7 +387,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     this.scannerEnabled = false
     if (this.platFormService.isApp()) {
       this.scannerEnabled = true;
-
     }
   }
 
@@ -426,6 +427,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   get userInfoScreen() {
     // console.log('user info screen', this.smallDevice, this.phoneDevice)
+    if (this.signOut) {
+      return this.userActions
+    }
     if (this.phoneDevice || this.smallDevice)  {return  null}
     return this.userActions
   }
@@ -492,7 +496,21 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       return this.userActions
     }
     return this.menuButtonContainer
+  }
 
+  getUserSubscriber(user:IUser) {
+    if (!user) { return of(null)}
+    const site = this.siteService.getAssignedSite()
+    return this.clientService.getClient(site, user.id, true).pipe(switchMap(data => {
+      if (!data) {
+        this.user = null;
+        this.authenticationService.updateUser(null)
+      }
+      return of(data)
+    }),catchError(data =>{
+      console.log('error getting user', data)
+      return of(null)
+    }))
   }
 
   getUserInfo() {
@@ -500,14 +518,49 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     let user: IUser;
 
     if (this.user) { user = this.user  }
-    if (!this.user) {
-       user = JSON.parse(localStorage.getItem('user')) as IUser;
+    if (!user) {
+      user = JSON.parse(localStorage.getItem('user')) as IUser;
     }
+    //even if someone injects an id or user info, it will validate them against the api.
+    this.signOut = true;
+    //then we validate the user.
 
-    this.refreshUserBar(user)
-    this.isAdmin      = false;
+    this.userInitCheck$ = this.getUserSubscriber(user).pipe(switchMap(data => {
+      //or is guest if is guest then override this.
+      if (!data) {
+        // this.userSwitchingService.clearLoggedInUser()
+        return of(null)
+      }
 
-    this.isManager    = false
+      this.signOut = false;
+      user.id = data?.id
+      user.roles = data.roles;
+      user.username = data?.apiUserName;
+      this.userSwitchingService.setUserInfo(user, user.password)
+      this.refreshUserBar(user)
+      this.setUIFeaturesForUser(user)
+      return of(data)
+    }),catchError(data => {
+      this.userSwitchingService.clearLoggedInUser()
+      console.log('userInitCheck error', data)
+      return of(data)
+    }));
+    return user
+  }
+
+  initUserInfo() {
+    this.userName         = '';
+    this.userRoles        = '';
+    this.showPOSFunctions = false;
+    this.isAdmin          = false;
+    this.isUserStaff      = false;
+    this.employeeName     = '';
+  }
+
+
+  setUIFeaturesForUser(user) {
+    this.isAdmin          = false;
+    this.isManager        = false;
     this.showPOSFunctions = false;
 
     if (!user) {  return null }
@@ -527,39 +580,28 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
     if (user?.roles === 'admin') {
       this.showPOSFunctions = true;
-      this.isAdmin          = true
-      this.isUserStaff      = true
+      this.isAdmin          = true;
+      this.isUserStaff      = true;
     }
 
     if (user?.roles === 'employee') {
-      this.isUserStaff      = true
+      this.isUserStaff      = true;
       this.showPOSFunctions = true;
     }
 
     if (user?.roles === 'manager') {
-      this.isManager        = true
+      this.isManager        = true;
       this.showPOSFunctions = true;
-      this.isUserStaff      = true
+      this.isUserStaff      = true;
     }
 
     if (this.isUserStaff) {
-      this.gridlayout = this.gridlayout
+      this.gridlayout = this.gridlayout;
     }
 
     if (!this.isUserStaff) {
-      this.gridlayout = this.gridlayoutNoStaff
+      this.gridlayout = this.gridlayoutNoStaff;
     }
-
-    return user
-  }
-
-  initUserInfo() {
-    this.userName         = '';
-    this.userRoles        = '';
-    this.showPOSFunctions = false;
-    this.isAdmin          = false;
-    this.isUserStaff      = false;
-    this.employeeName     = '';
   }
 
   initSite() {

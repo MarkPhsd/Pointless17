@@ -26,11 +26,11 @@
               color="accent"
               class="button"
               (click)="makePayment()">
-          <div *ngIf="order && (order.balanceRemaining == 0 || order.history)">
+          <div *ngIf="order && ( (order.balanceRemaining == 0 && order.completionDate) || order.history)">
             <mat-icon color="primary">credit_card</mat-icon>
             View Payment
           </div>
-          <div *ngIf="order && ( order.balanceRemaining != 0 && !order.history)">
+          <div *ngIf="order && ( (order.balanceRemaining != 0 || !order.completionDate) && !order.history)">
             <mat-icon color="primary">credit_card</mat-icon>
             Check Out
           </div>

@@ -196,7 +196,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
                 private productEditButtonService : ProductEditButtonService,
                 public  authenticationService    : AuthenticationService ,
                 private toolbarUIService         : ToolBarUIService,
-                public uiSettings                : UISettingsService,
+                public  uiSettings                : UISettingsService,
                 private userAuth                : UserAuthorizationService,
    )
   {
@@ -306,7 +306,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
         return of(data)
       })
     )
-
   }
 
   refreshMouseMove(pageX: any) {
@@ -320,6 +319,10 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   showAll() {
     const type = {typeID: this.itemTypeID};
     this.router.navigate(["/categories/", type]);
+  }
+
+  _listItems(event) {
+    this.listItems(event?.value)
   }
 
   listItems(id:number) {
@@ -361,6 +364,9 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
   }
 
+  _getItemSrc(event) {
+    this._getItemSrc(event?.value)
+  }
 
   getItemSrc(nameArray: string) {
     return this.awsBucket.getImageURLFromNameArray(this.bucket, nameArray)
@@ -389,6 +395,10 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     let searchModel       = {} as ProductSearchModel;
     searchModel           = this.applyBrandSearchModel(searchModel)
     return searchModel
+  }
+
+  _nextPage(event) {
+    this.nextPage()
   }
 
   async nextPage() {
@@ -497,6 +507,10 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     searchModel.pageSize        = 25
     searchModel.pageNumber      = 1
     return searchModel;
+  }
+
+  _editItem(event) {
+    this.editItem(event?.value)
   }
 
   editItem(menuItem) {

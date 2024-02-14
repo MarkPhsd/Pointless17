@@ -107,7 +107,7 @@ ul li{
     display: grid;
     margin-top: 0px;
     gap: 5px;
-    grid-template-columns: repeat(6, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
+    grid-template-columns: repeat(8, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
     margin-left: -5px;
     margin-right: 5px;
 
@@ -115,7 +115,7 @@ ul li{
       gap: 5px;
       display: grid;
       gap: 5px;
-      grid-template-columns: repeat(6, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
+      grid-template-columns: repeat(8, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
       margin-left: -15px;
       left: -10px;
     }
@@ -162,7 +162,7 @@ ul li{
   margin-left: 8px;
 }
 
-.spacer { 
+.spacer {
   width: 50px;
   margin-left: 10px;
   margin-right: 10px;

@@ -7,3 +7,9 @@
 
 }
 
+.mat-panel {
+
+  @include for-phone-only {
+    width: 95vw;
+  }
+}

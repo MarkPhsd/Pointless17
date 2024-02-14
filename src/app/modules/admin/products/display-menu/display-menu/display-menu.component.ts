@@ -47,6 +47,9 @@ export class AdminDisplayMenuComponent  {
 
     this.action$ = this.displayMenuService.getMenu(site, data.id).pipe(
       switchMap(data => {
+        if (data?.errorMessage) {
+          this.siteService.notify(`Error ${data?.errorMessage}`, 'Close', 10000, 'red')
+        }
         if (data) {
           this.displayMenu = data;
           this.logo = data.logo;
@@ -134,6 +137,10 @@ export class AdminDisplayMenuComponent  {
       const item$ = this.displayMenuService.save(site, this.displayMenu);
       return item$.pipe(switchMap(
           data => {
+            if (data?.errorMessage) {
+              this.siteService.notify(`Error ${data?.errorMessage}`, 'Close', 10000, 'red')
+            }
+
             if (data) {
               this.displayMenu = data;
               this.notifyEvent('Item Updated', 'Success');
@@ -213,7 +220,6 @@ export class AdminDisplayMenuComponent  {
       this.onCancel(event)
     })
   }
-
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

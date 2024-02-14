@@ -11,7 +11,7 @@
           <button style="margin-left:5px;width:75px"
                   mat-raised-button
                   color="primary"
-                  (click)="addNewOrder()" >
+                  (click)="setOrderType(item)" >
             <mat-icon>
                {{item?.name |truncateText:1}}
             </mat-icon>

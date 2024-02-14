@@ -203,6 +203,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     PagerService,
     StatusBar,
     AppInitService,
+    ErrorInterceptor,
     {
       provide: APP_INITIALIZER,
       useFactory: init_app,

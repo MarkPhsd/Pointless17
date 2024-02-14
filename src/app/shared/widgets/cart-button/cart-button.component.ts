@@ -180,19 +180,22 @@ export class CartButtonComponent implements OnInit, OnDestroy {
         this.actionOrder$ = serviceType$.pipe(switchMap(data => {
             return of(data)
         })).pipe(switchMap(data => {
-            const order$ = this.getNewOrder(site, data)
+            const order$ = this.addNewOrderByType(data)
             return order$
         }))
         return ;
       }
     }
-    this.actionOrder$  = this.getNewOrder(site, null)
+    this.actionOrder$  = this.addNewOrderByType(null)
   }
 
-  getNewOrder(site, serviceType) {
-
+  addNewOrderByType(serviceType) {
+    const site = this.siteService.getAssignedSite();
     return this.paymentMethodsProcess.newOrderWithPayloadMethod(site, serviceType)
+  }
 
+  setOrderType(serviceType) {
+    this.actionOrder$  = this.addNewOrderByType(serviceType)
   }
 
   initOrderBarSubscription() {

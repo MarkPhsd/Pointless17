@@ -306,6 +306,7 @@ export interface PosOrderItem {
   expectedInventoryCount: number;
   salesCount: number;
   currentProductCount: number;
+  conditionalIndex: number;
 }
 //ItemPrepped,PrintLocation,Splitter as SplitGroupID,Gratuity,ProdSecondLanguage,productSortOrder,PizzaMultiplier, PizzaGroup, PriceTierID
 

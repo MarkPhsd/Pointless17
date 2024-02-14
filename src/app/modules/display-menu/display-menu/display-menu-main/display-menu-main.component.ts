@@ -39,7 +39,9 @@ export class DisplayMenuMainComponent implements OnInit {
       })
     ).pipe(
       switchMap(data => {
-          this.menus = data;
+          if (data) {
+            this.menus = data.filter(data => { return data.enabled })
+          }
           return of(data)
         }
       )

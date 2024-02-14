@@ -1,30 +1,65 @@
 @import "/src/mixins.scss";
 
-mat-action-row {
-  place-content: start;
+.mat-expansion-panel-header {
+  padding: 0px;
 }
 
+.mat-panel-description {
+  @include for-phone-only {
+    width: 95vw;
+  }
+}
+
+.panel-description {
+  font-size: 1.2em;
+  font-weight:400;
+  margin-left:20px;
+  @include for-phone-only {
+    font-size   : 1.1em;
+    font-weight : 400;
+    margin-left:5px;
+  }
+}
 .mat-button-toggle {
   background-color: #d4beba;
   color: #140c0c;
 }
 
-mat-expansion-panel {
-  margin: 3px;
+.mat-action-row {
+  place-content: start;
 }
 
-mat-button-toggle-group {
+
+.mat-button-toggle-group {
   width: 95%;
   margin: 5px;
   border: 0px;
 }
 
-.button-toggle, mat-button-toggle {
+.sub-title  {
+   margin-left:20px;
+   font-size: 1.4em;
+   font-weight:400;
+
+  @include for-phone-only {
+    margin-left : 10px;
+    font-size   : 1.1em;
+    font-weight : 400;
+  }
+}
+
+.button-toggle, .mat-button-toggle {
   width : 85px;
   height: 60px;
   margin: 10px;
   font-size: 1.2em;
   font-weight: 600;
+
+  @include for-phone-only {
+    margin-left : 10px;
+    font-size   : 1.1em;
+    font-weight : 400;
+  }
 }
 
 .grid-items {
@@ -37,8 +72,14 @@ mat-button-toggle-group {
   padding:3px;
 
   @include for-phone-only {
+    // max-height: 400px;
     display: grid;
     grid-auto-flow: row;
+    gap: 5px;
+    overflow-y: auto;
+    grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
+    padding:3px;
+    max-width: 90vw;
   }
 
 }
@@ -52,6 +93,21 @@ mat-button-toggle-group {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 10px;
+
+  @include for-phone-only {
+    // display: grid;
+    // grid-auto-flow: row;
+    // gap: 5px;
+    // overflow-y: auto;
+    // grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
+    // padding:3px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 90vw;
+  }
 }
 
 .option-buttons {

@@ -93,7 +93,7 @@ export class FbPriceScheduleService {
       showGlueten : [],
       showImage   : [],
       showDescription : [],
-      showShortDecription: [],
+      showShortDescription: [],
       showInfo    : [],
       title       : [],
       subTitle    : [],
@@ -101,6 +101,7 @@ export class FbPriceScheduleService {
       autoApplyRewards: [],
       allItems    : [],
       orderTotal  : [],
+
       orderTypes:           this.fb.array([ ]),
       clientTypes:          this.fb.array([ ]),
       weekDays:             this.fb.array([ ]),

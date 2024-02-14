@@ -53,53 +53,10 @@
               (scrolledUp)            ="onScrollUp()"
               [scrollWindow]          ="false">
 
-            <div  class="grid-flow">
+            <div  class="grid-category-flow">
               <div *ngFor="let item of categories; let i = index">
-
-                <ng-template #editButtonView>
-                  <div  class="edit-float-category-button"
-                        *ngIf="this.authenticationService.isAdmin" >
-                    <button
-                        mat-mini-fab
-                        color  ="accent"
-                        (click)="editItem(item)" >
-                      <mat-icon  color="primary">info</mat-icon>
-                    </button>
-                  </div>
-                </ng-template>
-
-                <div  *ngIf="item.id != -1"
-                      class="grid-display-device"
-                      (click)= "listItems(item.id)">
-
-                  <!-- <ng-container [ngTemplateOutlet]="editButtonView"></ng-container> -->
-
-                  <div class="text">{{item.name  | truncateText: textLength  }}</div>
-
-                  <div class="grid-item">
-                    <img
-                        loading   = "lazy"
-                        draggable = "false"
-                        [src]     = "getItemSrc(item?.urlImageMain)"
-                        err-SRC   = "getPlaceHolder()"
-                        onerror   = "this.src='assets/images/placeholderimage.png'"
-                        (click)   = "listItems(item.id)"
-                        class     = 'item-image'
-                        [alt]     = "item?.description">
-                  </div>
-                </div>
-
-                <div *ngIf="item.id == -1">
-                    <div class="text">{{item.name  | truncateText: textLength  }}</div>
-                  <div class="grid-item-button">
-                    <button mat-raised-button
-                          color="warn"
-                        (click)  ="nextPage()">
-                      <div class="text">Load More...</div>
-                    </button>
-                  </div>
-                </div>
-
+                <ng-container [ngTemplateOutlet]="categoryItemView"
+                              [ngTemplateOutletContext]="{$implicit: item}"></ng-container>
               </div>
             </div>
         </div>
@@ -114,5 +71,15 @@
 
 </mat-card>
 
-
-
+<ng-template #categoryItemView let-item>
+  <menu-card-category
+    [item]="item"
+    [imageName]="item?.urlImageMain"
+    [bucket]="bucket"
+    [isAdmin]="authenticationService?.isAdmin"
+    [textLength]="textLength"
+    (outPutEditItem)="_editItem($event)"
+    (outPutNextPage)="_nextPage($event)"
+    (outPutlistItems)="_listItems($event)"
+    ></menu-card-category>
+</ng-template>

@@ -35,11 +35,14 @@ export class UserBarComponent implements OnInit {
     this.user$ = this.authenticationService.user$.pipe(
         switchMap(data => {
           this.user = data
-          return this.clientService.getClient(site, this.user.id)
+          if (!data) {
+            return of (null)
+          }
+          return this.clientService.getClient(site, this.user?.id)
         })).pipe(switchMap(data => {
           this.client = data;
           return of(data)
-        }))
+    }))
     this.getMenuGroup('customer')
   }
 

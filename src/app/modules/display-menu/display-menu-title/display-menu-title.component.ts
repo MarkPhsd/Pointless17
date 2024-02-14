@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable, switchMap } from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
 import { AWSBucketService } from 'src/app/_services';
 @Component({
@@ -25,6 +26,8 @@ export class DisplayMenuTitleComponent implements OnInit {
   @Input() styleMinWidth = '450px'
   @Input() objectfit = 'cover';
 
+  menuCardWidth = '100%'
+  href:           string;
   backGroundStyle: string;
 
 
@@ -37,12 +40,17 @@ export class DisplayMenuTitleComponent implements OnInit {
     return this.awsBucket.getPlaceHolderImage() // this.placeHolderImage
   }
 
-  constructor( private awsBucket : AWSBucketService) { }
+  constructor(
+    private router    : Router,
+    private awsBucket : AWSBucketService) { }
 
   ngOnInit(): void {
     const i = 0
+    this.href = this.router.url;
     this.loadStyles();
     this.applyBackground();
+
+
     if (this.menu) {
       // this.backGroundStyle  = `rgba(0, 0, 0, ${this.menu?.backcolorOpacity})`
     }
@@ -68,6 +76,12 @@ export class DisplayMenuTitleComponent implements OnInit {
   }
 
   loadStyles() {
+    // display-menu
+    this.menuCardWidth = '95%'
+    if (this.href) {
+      this.href.substring(0, '/display-menu'.length ) === '/display-menu'
+      this.menuCardWidth = '85%'
+    }
     // const styles = this.menu.css;
     // if (!this.menu?.css) {return }
     // const style = document.createElement('style');

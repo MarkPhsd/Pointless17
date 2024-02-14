@@ -414,48 +414,31 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     }
 
     this.closingProcedure$ =
-        dcapBatch$.pipe(switchMap(data => {
+        dcapBatch$.pipe(concatMap(data => {
           return  email$
-      })).pipe(switchMap(data => {
+      })).pipe(concatMap(data => {
         return closingCheck$
         }
-      )).pipe(switchMap( data => {
-          //determine if the day can be closed.
-          //if it can't then return what is told from the webapi
-          if (data){
-            if (!data.allowClose) {
-              this.closeResult = `Day not closed.  Open Printed Orders ${data?.openPrintedOrders?.length}.
-                                  Open Paid Orders ${data?.openPaidOrders?.length}.
-                                  Open Balance Sheets ${data?.openBalanceSheets?.length}`
-              const result = this.siteService.notify(`Date not closed.`, 'Close', 3000, 'red', 'top');
-              this.canCloseOrderResults = data
-              this.runningClose = false
-              return of(null)
-            }
-          }
-          if (!data) {
-            this.closeResult = ' Check if can close not successfull.'
+      )).pipe(concatMap( data => {
+          if (!data || (data && !data.allowClose)){
+            this.respondDayNotClosed(data)
             return of(null)
           }
           return this.transferDataService.closeAll(site);
         }
-      )).pipe(switchMap(data => {
+      )).pipe(concatMap(data => {
         if (!data) {
-          this.closeResult = this.closeResult + ' Data service not completed. '
+          this.closeResult = this.closeResult + ' Sales archive service not completed. '
           this.runningClose = false;
           return of(null)
         }
         return of(true)
       })).pipe(
-        switchMap(data => {
-          if (!data) {
-            this.closeResult  =  this.closeResult + '.Email not sent.'
-          }
-          this.closeResult =  this.closeResult  + 'Email sent.'
+        concatMap(data => {
           return this.balanceSheetService.closeAllSheets(site)
         }
       )).pipe(
-        switchMap(data => {
+        concatMap(data => {
           if (!data) {
             this.closeResult  =  this.closeResult + '.All balance sheets not closed.'
             this.runningClose = false;
@@ -468,6 +451,20 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
         }
       )
     )
+  }
+
+  respondDayNotClosed(data) {
+
+    if (!data){
+      this.closeResult = 'Check messages. User may not be authorized to close. Not successfull.'
+      return of(null)
+    }
+    this.closeResult = `Day not closed.  Open Printed Orders ${data?.openPrintedOrders?.length}.
+                        Open Paid Orders ${data?.openPaidOrders?.length}.
+                        Open Balance Sheets ${data?.openBalanceSheets?.length}`
+    const result = this.siteService.notify(`Date not closed.`, 'Close', 3000, 'red', 'top');
+    this.canCloseOrderResults = data
+    this.runningClose = false
   }
 
   notifyChild() {

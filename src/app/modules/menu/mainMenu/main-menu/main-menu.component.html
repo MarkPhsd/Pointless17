@@ -1,11 +1,11 @@
 <div class="canvas">
-
   <div class="overlay-items">
     <div *ngif="connectedToApi; else connected"></div>
     <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
 
     <div *ngIf="(homePage$ | async) as homePageSettings; else loading">
       <ng-container [ngTemplateOutlet]="blogPostMainView"></ng-container>
+      <ng-container [ngTemplateOutlet]="catalogScheduleMenu"></ng-container>
       <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isResaleMenuOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isDepartmentViewOn"></ng-container>
@@ -19,6 +19,12 @@
     </ng-template>
   <div>
 </div>
+
+<ng-template #catalogScheduleMenuView>
+  <price-schedule-menu-list
+    [menuStyle] ="'fancy'"
+  ></price-schedule-menu-list>
+</ng-template>
 
 <ng-template #displayMenu>
   <div>

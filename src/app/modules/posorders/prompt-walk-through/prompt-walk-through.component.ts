@@ -46,7 +46,8 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
   noteForm         : FormGroup;
   saveNotes$: Observable<any>;
   toggleKeyboard: boolean;
-
+  notesDisplayColumns = 40;
+  showNotes: boolean;
 
   setToggleKeyboard() {
     this.toggleKeyboard  = !this.toggleKeyboard;
@@ -79,7 +80,6 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
       this.promptGroupService.promptGroup$.pipe(
         switchMap(data => {
           if (!data) { return this.orderMethodsService.currentOrder$ }
-          // console.log('working with prompt:', data.name);
           this.promptGroup = data;
           return this.orderMethodsService.currentOrder$
       })).subscribe(data => {
@@ -143,6 +143,10 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
     this.updateScreenSize()
     this.initSaveSubscription()
     this.initNoteForm();
+
+    if (!this.phoneDevice) {
+      this.showNotes = true;
+    }
   }
 
   initNoteForm() {
@@ -157,9 +161,11 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
     this.phoneDevice = false;
     if ( window.innerWidth < 811 ) {
       this.smallDevice = true
+      this.notesDisplayColumns = 50
     }
     if ( window.innerWidth < 600 ) {
       this.phoneDevice = true
+      this.notesDisplayColumns = 90
     }
   }
 

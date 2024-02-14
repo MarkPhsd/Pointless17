@@ -1,0 +1,20 @@
+@import "/src/mixins.scss";
+
+.gallery-view {
+  height:clamp(10vh, 15vh, 400px);
+  width: clamp(10vh, 15vw,400px);
+
+  @include for-phone-only  {
+    height: 200px;
+    width : 200px;
+  }
+
+}
+
+
+.image-class {
+
+  @include for-phone-only  {
+    height: 200px;
+  }
+}

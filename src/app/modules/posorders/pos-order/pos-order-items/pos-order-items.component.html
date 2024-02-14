@@ -10,8 +10,37 @@
   </div>
 </ng-template>
 
+<ng-template #phoneDeviceView>
+  <!-- <div class="grid-phone-scroll">
+
+  </div> -->
+  <div class="grid-phone-scroll">
+    <div class="item-span">
+      <button mat-button (click)="dismiss()"><mat-icon>close</mat-icon>Close</button>
+    </div>
+
+    <div  #scrollMe
+        [id]="scrollStyle"
+        *ngIf="posOrderItems && posOrderItems.length>0"
+        [style.width]  = "'85vw'"
+        class="phone-device">
+      <ng-container [ngTemplateOutlet]="posItemsListView"></ng-container>
+    </div>
+    <div class="phone-drag">
+      Drag Here.
+    </div>
+  </div>
+  <!-- <div>
+    <close-floating-button
+          (ouputClose)="dismissItemsView($event)"
+          [position]="'float-bottom-center-relative'">
+    </close-floating-button>
+  </div> -->
+
+</ng-template>
+<!--   [style.width]  = "'width:100vw;'" -->
 <ng-template #posOrderItemsView>
-    <div  #scrollMe 
+    <div  #scrollMe
           [id]="scrollStyle"
           *ngIf="posOrderItems && posOrderItems.length>0"
           [style.width]  = "deviceWidthPercentage"
@@ -22,10 +51,10 @@
 
 <ng-template #posItemsListView>
     <ion-item-sliding
-        [class]="nopadd"
-        *ngFor="let item of posOrderItems;
-                let i = index;trackBy: trackByFN"
-        (ionSwipe)="swipeAction(i)"  >
+                      [class]="nopadd"
+                      *ngFor="let item of posOrderItems;
+                              let i = index;trackBy: trackByFN"
+                      (ionSwipe)="swipeAction(i)"  >
 
       <div *ngIf="uiConfig">
         <ion-item *ngIf="item" >
@@ -59,6 +88,7 @@
                       [displayHistoryInfo]  = "displayHistoryInfo"
                       [enableItemReOrder]   = "enableItemReOrder"
                       [purchaseOrderEnabled]= "purchaseOrderEnabled"
+                      [conditionalIndex]    = 'item?.conditionalIndex'
                       (outputDelete)        = "removeItemFromList($event)"
           ></pos-order-item>
         </ion-item>

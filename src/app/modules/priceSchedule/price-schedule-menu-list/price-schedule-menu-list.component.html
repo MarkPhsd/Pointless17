@@ -1,7 +1,24 @@
 
 
 <div *ngIf="(menus$ | async) as menus" ></div>
-<div *ngIf="menus">
+
+<ng-container [ngTemplateOutlet]="menuList"></ng-container>
+
+<ng-template #fancyMenu>
+  <div *ngIf="(bucket$ | async) as bucket" >
+    <div *ngIf="menus">
+      <div  class="grid-category-flow">
+        <div *ngFor="let item of menus">
+          <ng-container [ngTemplateOutlet]="categoryItemView"
+                        [ngTemplateOutletContext]="{$implicit: item}"></ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #basicMenu>
+  <div *ngIf="menus">
     <div *ngFor="let menu of menus">
       <div>
           <mat-button-toggle
@@ -21,5 +38,19 @@
           </mat-button-toggle>
       </div>
     </div>
-</div>
+  </div>
+</ng-template>
+
+<ng-template #categoryItemView let-item>
+  <menu-card-category
+      [item]="item"
+      [imageName]="item?.image"
+      [bucket]="bucket"
+      [textLength]="15"
+      (outPutEditItem)="_editItem($event)"
+      (outPutNextPage)="_nextPage($event)"
+      (outPutlistItems)="_listItems($event)"
+    ></menu-card-category>
+</ng-template>
+<!-- [isAdmin]="authenticationService?.isAdmin" -->
 

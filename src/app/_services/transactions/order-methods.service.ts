@@ -1284,6 +1284,7 @@ export class OrderMethodsService implements OnDestroy {
       this.overrideClear = true
     }
 
+    console.log('processItemPOSObservable')
     if (order) {
       const site       = this.siteService.getAssignedSite();
       if (barcode)  {
@@ -1514,10 +1515,11 @@ export class OrderMethodsService implements OnDestroy {
                                          passAlongItem);
   }
 
-  newOrderWithPayloadMethod(site: ISite, serviceType: IServiceType): Observable<any> {
+  newOrderWithPayloadMethod(site: ISite, serviceType: IServiceType, overRideNavigation?: boolean): Observable<any> {
       if (!site) { return of(null) }
+
       if (!this.userAuthorization.user) {
-        this.siteService.notify('user required', 'Alert', 1000)
+        this.siteService.notify('Please login, user required', 'Alert', 1000)
         return of(null)
       }
 
@@ -1536,18 +1538,22 @@ export class OrderMethodsService implements OnDestroy {
           if (data.resultMessage) {return of(null)}
           if (!serviceType) {   serviceType = order.service  }
           this.processOrderResult(order, site, serviceType?.retailType, null, serviceType?.resaleType )
+          if (overRideNavigation) {
+            console.log('set active order')
+            this.setActiveOrder(order)
+            return of(null)
+          }
           return this.navToDefaultCategory()
         })).pipe(switchMap( item => {
           if (item) {
-            // console.log('serviceType', serviceType)
             this.processOrderResult(order, site, serviceType?.retailType, item?.id, serviceType?.resaleType)
           }
           return of(order)
-        }),
-          catchError(data => {
-          this.siteService.notify(`Order not started. ${data.toString()}`, 'Alert', 2000, 'red')
-          return of(data)
-        }))
+      }),
+        catchError(data => {
+        this.siteService.notify(`Order not started. ${data.toString()}`, 'Alert', 2000, 'red')
+        return of(data)
+      }))
 
   }
 
@@ -2064,6 +2070,7 @@ export class OrderMethodsService implements OnDestroy {
       return
     }
 
+    if (!this.order) { return }
     if (this.order.service.filterType == 1) {
       if (this.processItem?.item?.itemType?.requiresSerial) {
         if  (!this.promptSerial(this.processItem.item, this.processItem.posItem.id, false, '')) {

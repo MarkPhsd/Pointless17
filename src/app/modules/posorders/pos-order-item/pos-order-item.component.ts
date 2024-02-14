@@ -52,6 +52,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   @Output() outputSelectedItem : EventEmitter<any> = new EventEmitter();
   @Input() uiConfig : TransactionUISettings;
 
+  @Input() conditionalIndex    : number;
   @Input() purchaseOrderEnabled : boolean;
   @Input() index          = 0;
   @Input() orderItem      : PosOrderItem;

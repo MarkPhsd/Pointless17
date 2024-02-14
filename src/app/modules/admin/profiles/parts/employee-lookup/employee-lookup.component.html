@@ -1,12 +1,8 @@
 <!-- uses two forms for lookup and saving to  -->
 
-<div [formGroup]="searchForm"
-     >
-     <!-- fxFlexFill -->
+<div [formGroup]="searchForm"  >
   <mat-form-field [class]="formFieldClass"
-                  appearance="outline"
-                   >
-
+                  appearance="outline"  >
     <mat-label class="form-background">
         <ng-content></ng-content>
     </mat-label>
@@ -33,7 +29,7 @@
   </mat-form-field>
 
 </div>
-<!--  -->
+
 <div  hidden="true" [formGroup]="inputForm">
   <input  formControlName="employeeID">
 </div>

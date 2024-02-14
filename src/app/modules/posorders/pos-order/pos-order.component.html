@@ -130,6 +130,7 @@
                 [refundItemEnabled]   ="refundItemsAvalible"
                 [devicename]          ="devicename"
                 [smallDevice]         ='smallDevice'
+                [userAuths]="userAuths"
           ></pos-order-function-buttons>
         </div>
 
@@ -185,6 +186,9 @@
       </div>
 
     </div>
+
+
+
     <div  [style.height]="orderItemsHeightStyle"
           class="order-items"
           *ngIf="(!smallDevice && mainPanel)
@@ -192,6 +196,9 @@
               || (!mainPanel && !smallDevice)">
       <ng-container [ngTemplateOutlet]="getListViewType"></ng-container>
     </div>
+    <!-- <div *ngIf="phoneDevice"  class="order-items">
+      <ng-container [ngTemplateOutlet]="getListViewType"></ng-container>
+    </div> -->
 </div>
 
 <ng-template #receiveOrderView>
@@ -210,6 +217,7 @@
     [panelHeight]         ="orderItemsHeightStyle"
     [enableExitLabel]     ="enableExitLabel"
     [userAuths]           ='userAuths'
+    [phoneDevice]         ='phoneDevice'
     [order]               ="order">
   </pos-order-items>
 </ng-template>

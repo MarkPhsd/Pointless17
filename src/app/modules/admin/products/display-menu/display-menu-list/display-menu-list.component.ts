@@ -20,6 +20,7 @@ import { DisplayMenuService } from 'src/app/_services/menu/display-menu.service'
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { IDisplayMenu, IDisplayMenuSearchResults } from 'src/app/_interfaces/menu/price-schedule';
 import { Capacitor } from '@capacitor/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-display-menu-list',
@@ -96,6 +97,7 @@ export class AdminDisplayMenuListComponent implements OnInit {
               private displayMenuService     : DisplayMenuService,
               private awsService             : AWSBucketService,
               private productEditButtonService: ProductEditButtonService,
+              private router: Router,
               private priceScheduleService: PriceScheduleService,) { }
 
    ngOnInit() {
@@ -183,6 +185,9 @@ export class AdminDisplayMenuListComponent implements OnInit {
 
   }
 
+  navPriceScheduleGroups() {
+    this.router.navigate(['/price-schedule'])
+  }
   listAll(){
     const control = this.itemName
     control.setValue('')

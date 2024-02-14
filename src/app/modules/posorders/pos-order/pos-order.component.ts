@@ -11,7 +11,7 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import {  trigger, animate, transition,  keyframes } from '@angular/animations';
 import * as kf from '../../../_animations/list-animations';
 import { fadeAnimation } from 'src/app/_animations';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { PosOrderItemsComponent } from './pos-order-items/pos-order-items.component';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
@@ -193,6 +193,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   quantityEntryValue : number = 1;
   reconcileValueForm: FormGroup;
   reconcileEntryValue : number = 1;
+
+   _ItemsSheet : MatBottomSheetRef
+   bottomSheetItemsOpen : boolean;
 
   selectedItem: PosOrderItem;
   lastSelectedItem$: Subscription;
@@ -942,9 +945,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   deleteOrder(event) {
-    this.deleteOrder$ = this.orderMethodsService.deleteOrder(this.order.id, false).pipe(switchMap(data => {
-      return of(data)
-    }))
+    if (!this.userAuths.deleteOrder) {
+      this.siteService.notify("Delete order is not allowed", 'Close', 3000, 'red')
+    }
+    if (this.userAuths.deleteOrder) {
+      this.deleteOrder$ = this.orderMethodsService.deleteOrder(this.order.id, false).pipe(switchMap(data => {
+        return of(data)
+      }))
+    }
   }
 
   ngOnDestroy() {
@@ -1092,9 +1100,20 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   showItems() {
     this.toolbarUIService.updateOrderBar(false)
     if (this.order) {
+      this.bottomSheetItemsOpen = true
       this.orderMethodsService.updateBottomSheetOpen(true)
-      this.bottomSheet.open(PosOrderItemsComponent)
+      this._ItemsSheet = this.bottomSheet.open(PosOrderItemsComponent)
+      // ref.subscribeda
     }
+  }
+
+  dismiss() {
+    this._ItemsSheet.dismiss();
+    this.bottomSheetItemsOpen = false
+  }
+
+  dismissItemsView(event) {
+    this.dismiss();
   }
 
   closeOrder() {

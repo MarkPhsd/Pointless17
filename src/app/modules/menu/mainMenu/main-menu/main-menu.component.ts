@@ -36,6 +36,7 @@ export class MainMenuComponent implements OnInit  {
   @ViewChild('viewOverlay')    viewOverlay: TemplateRef<any>;
   @ViewChild('displayMenu')    displayMenu: TemplateRef<any>;
   @ViewChild('resaleMenu')     resaleMenu: TemplateRef<any>;
+  @ViewChild('catalogScheduleMenuView')  catalogScheduleMenuView: TemplateRef<any>;
 
 
   homePage$: Observable<UIHomePageSettings>;
@@ -121,7 +122,7 @@ export class MainMenuComponent implements OnInit  {
   }
 
   ngOnInit(): void {
-    
+
 
       this.updateItemsPerPage();
       this.initSearchForm();
@@ -131,7 +132,7 @@ export class MainMenuComponent implements OnInit  {
       this.isUser = this.userAuthorizationService.isUser;
       this.isStaff = this.userAuthorizationService.isCurrentUserStaff()
 
-     
+
       this.homePage$ = this.uiSettings.UIHomePageSettings.pipe(switchMap( data => {
         this.homePageSetings  = data as UIHomePageSettings;
         this.setPanelHeight( this.homePageSetings )
@@ -181,9 +182,17 @@ export class MainMenuComponent implements OnInit  {
     this.router.navigate(['/buy-sell'])
   }
 
+  get catalogScheduleMenu() {
+    if ((this.isStaff && this.homePageSetings.staffcatalogScheduleMenuEnabled) ||
+          (!this.isStaff && this.homePageSetings.catalogScheduleMenuEnabled)) {
+        return this.catalogScheduleMenuView;
+    }
+    return null;
+  }
+
   get isDisplayMenuOn() {
     if ((this.isStaff && this.homePageSetings.staffMenuEnabled) ||
-        (this.isStaff == false &&  this.homePageSetings.menuEnabled)) {
+        (!this.isStaff &&   this.homePageSetings.menuEnabled)) {
       return this.displayMenu
     }
     return null;
@@ -191,7 +200,7 @@ export class MainMenuComponent implements OnInit  {
 
   get isResaleMenuOn() {
      if ((this.isStaff && this.homePageSetings.resaleMenu) ||
-         (this.isStaff == false &&  this.homePageSetings.resaleMenu)){
+         (!this.isStaff &&   this.homePageSetings.resaleMenu)){
       return this.resaleMenu
     }
     return null;
@@ -199,7 +208,7 @@ export class MainMenuComponent implements OnInit  {
 
   get isBrandListViewOn() {
     if ((this.isStaff && this.homePageSetings.staffBrandsEnabled) ||
-         (this.isStaff == false &&  this.homePageSetings.brandsEnabled)){
+         (!this.isStaff &&   this.homePageSetings.brandsEnabled)){
       return this.brandView
     }
     return null;
@@ -207,7 +216,7 @@ export class MainMenuComponent implements OnInit  {
 
   get isTierMenuViewOn() {
     if ((this.isStaff && this.homePageSetings.staffTierMenuEnabled) ||
-        (this.isStaff == false &&  this.homePageSetings.tierMenuEnabled)) {
+        (!this.isStaff &&   this.homePageSetings.tierMenuEnabled)) {
       return this.tierMenuView
     }
     return null;
@@ -215,7 +224,7 @@ export class MainMenuComponent implements OnInit  {
 
   get isCategoryViewOn() {
     if ((this.isStaff && this.homePageSetings.staffCategoriesEnabled) ||
-        (!this.isStaff  &&  this.homePageSetings.categoriesEnabled)) {
+        (!this.isStaff &&   this.homePageSetings.categoriesEnabled)) {
       // console.log('category view on')
       return this.categoryView
     }

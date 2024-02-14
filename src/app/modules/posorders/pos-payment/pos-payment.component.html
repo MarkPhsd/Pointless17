@@ -44,7 +44,15 @@
     </div>
 
     <div>
-      <mat-card class="margin-bottom-10">
+
+      <div *ngIf="paymentsEqualTotal && !isStaff" class="button-margin-10">
+        <button class="button-margin-10 button-width-175 button-height-75"
+                color="accent"
+                mat-raised-button
+                (click)="exitOrder()">Leave Order</button>
+      </div>
+
+      <mat-card class="margin-bottom-10" *ngIf="isStaff">
         <ng-container [ngTemplateOutlet]="isProcessingPayment"></ng-container>
         <div *ngIf="paymentsEqualTotal" class="button-margin-10">
           <button class="button-margin-10 button-width-175 button-height-75"
@@ -81,8 +89,8 @@
             <div *ngIf="!splitByItem">
               <h4>Payment Amount: {{paymentAmount | currency}}</h4>
             </div>
-            <!-- && !paymentsEqualTotal -->
-            <div style="margin-left: 5px" *ngIf="!splitByItem  ">
+
+            <div style="margin-left: 5px" *ngIf="!splitByItem">
               <button class="splitbutton"
                       mat-raised-button
                       color="primary"
@@ -92,7 +100,7 @@
             </div>
           </div>
 
-          <div  *ngIf="!paymentsEqualTotal && (uiTransactions && uiTransactions.splitEntry)">
+          <div  *ngIf="!paymentsEqualTotal && (uiTransactions && uiTransactions.splitEntry) && isStaff">
             <button class="splitbutton"
                     mat-raised-button
                     color="primary"

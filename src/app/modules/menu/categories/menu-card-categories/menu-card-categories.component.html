@@ -1,13 +1,43 @@
+<div>
+  <ng-template #editButtonView>
+    <div  class="edit-float-category-button"
+          *ngIf="isAdmin" >
+      <button
+          mat-mini-fab
+          color  ="accent"
+          (click)="editItem(item)" >
+        <mat-icon  color="primary">info</mat-icon>
+      </button>
+    </div>
+  </ng-template>
 
-    <!-- <ol>
-    <li>  1. Make a matt card - will be mostly image </li>
-    <li>     1. include the fields {{category.name}}</li>
-    <li>     3. refrence the picture, wherever it's located img src = "{{category.urlMainPicture}}"</li>
-    <li>     3. Animation For selecting of Image</li>
-    <li>     4. Add @Input for category</li>
-    <li>     5. Add @Output for Emmiter</li>
-    <li>     6. Add function to emitt</li>
-    <li>     7. Add function to route to Category Items from Emitter</li>
-    </ol> -->
+  <div  *ngIf="item.id != -1"
+        class="grid-display-device"
+        (click)= "listItems(item.id)">
 
-<p>menu-card-categories works!</p>
+    <div class="text">{{item.name  | truncateText: textLength  }}</div>
+
+    <div class="grid-item">
+      <img
+          loading   = "lazy"
+          draggable = "false"
+          [src]     = "getItemSrc(item?.urlImageMain)"
+          err-SRC   = "getPlaceHolder()"
+          onerror   = "this.src='assets/images/placeholderimage.png'"
+          (click)   = "listItems(item.id)"
+          class     = 'item-image'
+          [alt]     = "item?.description">
+    </div>
+  </div>
+
+  <div *ngIf="item.id == -1">
+      <div class="text">{{item.name  | truncateText: textLength  }}</div>
+    <div class="grid-item-button">
+      <button mat-raised-button
+            color="warn"
+          (click)  ="nextPage()">
+        <div class="text">Load More...</div>
+      </button>
+    </div>
+  </div>
+</div>

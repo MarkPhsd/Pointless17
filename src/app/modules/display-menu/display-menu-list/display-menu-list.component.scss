@@ -1,4 +1,4 @@
-mat-card {
+.mat-card {
   // opacity: 95%;
   width: calc(89% );
   margin-bottom: 5px;
@@ -8,10 +8,10 @@ mat-card {
   overflow: hidden;
 }
 
-mat-card-content {
-  padding: 5px;
-  padding-bottom: 20px;
-}
+// mat-card-content {
+//   padding: 5px;
+//   padding-bottom: 20px;
+// }
 
 .description {
   text-transform: none;
@@ -102,7 +102,7 @@ img {
   padding-top: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: calc( 90% ) repeat(auto-fit, minmax(70px, 1fr));
+  grid-template-columns: calc( 85% ) repeat(auto-fit, minmax(70px, 1fr));
 }
 
 .grid-container {

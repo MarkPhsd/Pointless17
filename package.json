@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "2.16.75",
+  "version": "2.16.85",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -13,7 +13,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "start with IP": "ng serve --configuration dev --public-host --host=192.168.0.2 --port=4200 ",
+    "start with IP": "ng serve --configuration dev --public-host --host=192.168.0.3 --port=4400 ",
     "startLocal": "ng serve --configuration dev --host=localhost --port=4200",
     "startLocalNode": "ng serve   --configuration dev --host=localhost --port=4200",
     "BuildPointless production": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build  --configuration production",

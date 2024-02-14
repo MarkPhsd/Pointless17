@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { EMPTY, Observable, of, } from 'rxjs';
 import { IClientTable, ISite, IUserProfile,employee, FlowVendor, ImportFlowVendorResults, UserPreferences }   from  'src/app/_interfaces';
 import { IDriversLicense } from 'src/app/_interfaces/people/drivers-license';
 import { IEmployeeClient } from './employee-service.service';
 import { IItemBasic } from '..';
+import { ErrorInterceptor } from 'src/app/_http-interceptors/error.interceptor';
 
 export interface NamesCities {
   names: string[];
@@ -17,14 +18,19 @@ export interface NamesCities {
 export class ClientTableService {
 
 
-  constructor( private http: HttpClient, private auth: AuthenticationService) { }
+  constructor( private ErrorInterCeptor: ErrorInterceptor,
+               private http: HttpClient,
+               private auth: AuthenticationService) { }
 
   pageNumber = 1;
   pageSize  = 50;
 
 
-  getClient(site: ISite, id: any) : Observable<IClientTable> {
-
+  getClient(site: ISite, id: any, overRideError?: boolean) : Observable<IClientTable> {
+    let headers
+    if (overRideError) {
+       headers = new HttpHeaders().set('X-Skip-Error-Handling', 'true');
+    }
     if (id == 0) {return of({} as IClientTable)}
 
     const controller =  "/ClientTable/"
@@ -35,6 +41,9 @@ export class ClientTableService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
+    if (headers) {
+      return  this.http.get<IClientTable>(url, {headers})
+    }
     return  this.http.get<IClientTable>(url)
 
   }

@@ -240,6 +240,8 @@ import { UserPreferencesComponent } from '../modules/admin/clients/user-preferen
 import { ClockViewComponent } from './widgets/clock-in-out/clock-view/clock-view.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { NgxColorsModule } from 'ngx-colors';
+import { CloseFloatingButtonComponent } from './widgets/close-floating-button/close-floating-button.component';
+import { MenuCardCategoriesComponent } from '../modules/menu/categories/menu-card-categories/menu-card-categories.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -399,8 +401,8 @@ import { NgxColorsModule } from 'ngx-colors';
     CategorySelectListFilterComponent,
     OptionsSelectFilterComponent,
     CategoryMenuSelectorComponent,
+    MenuCardCategoriesComponent,
     //*** */
-
     AuditPaymentComponent,
     PriceScheduleMenuListComponent,
     RewardsAvailibleComponent,
@@ -487,6 +489,7 @@ import { NgxColorsModule } from 'ngx-colors';
     ImageGalleryComponent,
     ImageLightHouseComponent,
     ClockViewComponent,
+    CloseFloatingButtonComponent,
 
   ],
 
@@ -557,6 +560,7 @@ import { NgxColorsModule } from 'ngx-colors';
     CoachMarksButtonComponent,
     CategorySelectComponent,
     ClientSearchSelectorComponent,
+    CloseFloatingButtonComponent,
     ExitLabelSelectionComponent,
     CannabisItemEditComponent,
     ChartTableComponent,
@@ -621,6 +625,7 @@ import { NgxColorsModule } from 'ngx-colors';
     MatSpinnerOverlayComponent,
     MetaTagChipsComponent,
     ItemassociationsComponent,
+    MenuCardCategoriesComponent,
     MenuCompactComponent,
     MenuPriceSelectionComponent,
     MenuMinimalComponent,

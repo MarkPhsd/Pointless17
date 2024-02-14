@@ -131,7 +131,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   viewType$ = this.orderMethodsSevice.viewOrderType$.pipe(switchMap(data => {
     this.viewPrep = false
     if (data && data === 3) {
-      this.viewPrep = true 
+      this.viewPrep = true
     }
     return of(data)
   }))
@@ -159,7 +159,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       return of(null)
     }))
   }
-  
+
 
   processLogOut() {
     // console.log('processLogOut')
@@ -622,7 +622,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
         return this.appOrderBar
       }
 
-      if (this.user && this.user.roles.toLowerCase() === 'user') {
+      if (this.user &&  this.user.roles && this.user?.roles.toLowerCase() === 'user') {
         return this.userBarView
       }
       return this.menuBarView
@@ -642,7 +642,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.swapMenuWithOrder) {
       return
     }
-    if (this.user && this.user.roles.toLowerCase() === 'user') {
+    if (this.user &&  this.user.roles && this.user?.roles.toLowerCase() === 'user') {
       return this.userBarView;
     }
     return this.menuBarView;
@@ -842,7 +842,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   restart()       {  this.userIdle.resetTimer();    }
 
   setScrollBarColor(color: string) {
-    console.log('default', color)
+    // console.log('default', color)
     if (!color) {    color = '#6475ac' }
     const css = this.authService.getAppToolBarStyle(color, 25)
     this.styleTag = this.renderer.createElement('style');

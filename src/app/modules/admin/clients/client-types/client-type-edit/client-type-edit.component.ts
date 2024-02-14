@@ -90,7 +90,6 @@ export class ClientTypeEditComponent implements OnInit {
         }
       ))
     }
-
   };
 
   initEmptyClientType() {

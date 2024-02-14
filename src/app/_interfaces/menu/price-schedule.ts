@@ -89,6 +89,7 @@ export interface IDisplayMenu {
   timeFrames: any;
   dateFrames: any;
   weekDays  : any;
+  errorMessage: string;
 }
 
 export interface IDisplayMenuSearchModel {

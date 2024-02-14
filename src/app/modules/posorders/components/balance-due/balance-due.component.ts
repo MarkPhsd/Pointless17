@@ -2,24 +2,22 @@ import { Component, OnInit,Input, Inject, ChangeDetectorRef } from '@angular/cor
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { Observable, of, Subscribable, Subscription } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { Observable, of,Subscription } from 'rxjs';
+import {  switchMap } from 'rxjs/operators';
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder, IPOSPayment, IServiceType, ServiceType } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { IBalanceDuePayload } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { TransactionUISettings,  UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
-import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
+import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 
 @Component({
   selector: 'app-balance-due',
@@ -27,11 +25,13 @@ import { DcapService } from 'src/app/modules/payment-processing/services/dcap.se
   styleUrls: ['./balance-due.component.scss']
 })
 export class ChangeDueComponent implements OnInit  {
+
   uiTransactions: TransactionUISettings
   uiTransactions$ : Observable<TransactionUISettings>;
   dCapReset$ : Observable<any>;
   printing$ : Observable<any>;
   action$   : Observable<any>;
+
   inputForm             : UntypedFormGroup;
   @Input() paymentMethod: IPaymentMethod;
   @Input() order        : IPOSOrder;
@@ -42,7 +42,6 @@ export class ChangeDueComponent implements OnInit  {
   step                  = 1;
   changeDue             : any;
   serviceType           : IServiceType;
-
 
   constructor(
               private paymentService: POSPaymentService,
@@ -83,7 +82,6 @@ export class ChangeDueComponent implements OnInit  {
 
   printingCheck() {
     this._finalizer = this.printingService.printingFinalizer$.subscribe(data => {
-      // console.log('finalizer for balance due', data)
       this.changeDetect.detectChanges()
       this.finalizer = data;
       this.changeDetect.detectChanges()

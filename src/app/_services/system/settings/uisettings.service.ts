@@ -257,6 +257,8 @@ export interface UIHomePageSettings {
   enableShippingInfo: boolean;
   resaleMenu: boolean;
   disableSearchFieldInMenu: boolean;
+  catalogScheduleMenuEnabled: boolean;
+  staffcatalogScheduleMenuEnabled: boolean;
 }
 
 @Injectable({
@@ -723,6 +725,8 @@ export class UISettingsService {
       enableSimliarItems : [],
       enableShippingInfo: [],
       resaleMenu: [],
+      staffcatalogScheduleMenuEnabled: [],
+      catalogScheduleMenuEnabled: [],
      })
     return fb
   }

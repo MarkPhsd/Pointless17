@@ -2,7 +2,7 @@
 <span *ngIf="(uiHomePageSetting$ | async) as item"></span>
 <span *ngIf="( userSave$  | async) as pref"></span>
 <span *ngIf="(action$ | async) as action"></span>
-
+<span *ngIf="(userInitCheck$ | async) as user"></span>
 <mat-toolbar [class]="mattoolbar"
              [color]="matToolbarColor"
              [style]="headerBackColor">
@@ -219,6 +219,7 @@
 </ng-template>
 
 <ng-template #userActions>
+
   <div *ngIf="!user">
     <button color="warn"
             mat-button

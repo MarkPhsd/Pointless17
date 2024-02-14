@@ -144,6 +144,16 @@
 
               <div class="toggle-fields">
                 <mat-slide-toggle
+                          formControlName="catalogScheduleMenuEnabled"
+                        >
+                  <mat-label>Catalog Schules - Menu List </mat-label>
+                </mat-slide-toggle>
+              </div>
+
+
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
                           formControlName="scheduleSubMenu"
                         >
                   <mat-label>Sub Menus On Side Bar</mat-label>
@@ -255,6 +265,14 @@
                 <mat-slide-toggle
                           formControlName="staffMenuEnabled"  >
                   <mat-label>Full Print/TV Menu</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="staffcatalogScheduleMenuEnabled"
+                        >
+                  <mat-label>Catalog Schules - Menu List </mat-label>
                 </mat-slide-toggle>
               </div>
 
@@ -470,7 +488,7 @@
               <mat-hint>Login Shows PIN Pad Entry Default.</mat-hint>
             </mat-slide-toggle>
           </div>
-          
+
           <div>
             <mat-slide-toggle
                       formControlName="timeOut"  >
@@ -479,7 +497,7 @@
             </mat-slide-toggle>
           </div>
 
-          
+
 
           <div class="toggle-fields" style="width:200px">
             <app-value-fields

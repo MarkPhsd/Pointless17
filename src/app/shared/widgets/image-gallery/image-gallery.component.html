@@ -1,5 +1,5 @@
-<div [style]="styleValue">
-
+<div  >
+<!-- class="gallery-view" -->
   <div  class="margin-5" >
     <div>
       <button mat-raised-button color="accent" (click)="openLightBoxView()">
@@ -8,14 +8,7 @@
     </div>
   </div>
 
-  <gallery  [id]="galleryID"  imageSize="cover" thumbPosition="left" [items]="items"></gallery>
+  <gallery  [id]="galleryID" class="image-class"  imageSize="cover" thumbPosition="left" [items]="items"></gallery>
 
-  <div *ngIf="galleryView">
-    <div class="gallerize-example">
-      <p class="container" gallerize>
-        <img *ngFor="let img of imageData" [src]="img.srcUrl">
-      </p>
-    </div>
-  </div>
 
 </div>

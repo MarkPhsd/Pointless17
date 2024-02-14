@@ -2,26 +2,31 @@
   <mat-expansion-panel  [expanded] = "accordionStep === index"
                         (opened)   = "setStep(index)"
                         hideToggle>
-    <mat-expansion-panel-header (click)="setAccordionStep(index)">
+
+    <mat-expansion-panel-header class="mat-expansion-panel-header" (click)="setAccordionStep(index)">
       <mat-panel-title>
           <span *ngIf="accordionStep != index">
             <mat-icon>unfold_more</mat-icon>
           </span>
           <h4>
-            <div class="margin-left-20px" style="font-size: 1.4em;font-weight:400">{{subGroup?.name}}</div>
+            <div class="sub-title">{{subGroup?.name}}</div>
           </h4>
-
       </mat-panel-title>
 
-      <mat-panel-description>
+      <mat-panel-description class="mat-panel-description">
 
         <div class="flex-grid-column">
-          <div  style="font-size: 1.2em;font-weight:400" class="margin-left-20px" [innerHTML]="subGroup?.instructions"></div>
-          <div  style="font-size: 1.2em;font-weight:400" class="margin-left-20px" class="margin-left-20px" *ngIf="subGroup.minQuantity && subGroup.minQuantity> 0">
-            You must select at least this many: {{subGroup?.minQuantity}}
+          <div  class="panel-description" [innerHTML]="subGroup?.instructions"></div>
+
+          <!-- item{{subGroup?.maxQuantity > 1 ? 's' : ''}}. -->
+          <div  class="panel-description"  *ngIf="subGroup.minQuantity && subGroup.minQuantity> 0">
+             Select at least  {{subGroup?.minQuantity}} item{{subGroup?.maxQuantity > 1 ? 's' : ''}}.
+            <span *ngIf="subGroup.maxQuantity && subGroup.maxQuantity> 1"> {{subGroup?.maxQuantity}} max.  </span>
           </div>
-          <div style="font-size: 1.2em;font-weight:400" class="margin-left-20px" class="margin-left-20px" *ngIf="subGroup.maxQuantity && subGroup.maxQuantity> 0">
-            You can chose up to  {{subGroup?.maxQuantity}} item{{subGroup?.maxQuantity > 1 ? 's' : ''}} for this section.
+
+          <div class="panel-description" class="margin-left-20px" class="margin-left-20px" *ngIf="
+            subGroup.minQuantity && subGroup.minQuantity == 0 && subGroup.maxQuantity && subGroup.maxQuantity> 0">
+            Select up to  {{subGroup?.maxQuantity}} item{{subGroup?.maxQuantity > 1 ? 's' : ''}}.
           </div>
 
           <div *ngIf ="imageURL" class="image">
@@ -33,7 +38,7 @@
 
     </mat-expansion-panel-header>
 
-    <mat-action-row>
+    <mat-action-row  class="mat-action-row">
       <button mat-button
               color="primary"
               (click)="prevStep('true')">Previous</button>
@@ -42,17 +47,15 @@
               (click)="nextStep('true')">Next</button>
     </mat-action-row>
 
-    <!--
-    minQuantity:       number;
-    maxQuantity:       number;
-    moveOnQuantity:    number; -->
 
     <div class='grid'>
       <div>
         <mat-button-toggle-group
+                class="mat-button-toggle-group"
                 name="type"
                 [(ngModel)]="itemOption">
           <mat-button-toggle
+                class="mat-button-toggle"
                 *ngFor="let item of itemOptions"
                 [value]="item.id">
              {{ item?.name }}

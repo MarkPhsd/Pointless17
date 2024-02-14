@@ -1,0 +1,138 @@
+@import "/src/mixins.scss";
+
+$gray: #555;
+$yellow: #f2e968;
+$white: #efefef;
+
+.parent-container {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  height: 95%;
+  // padding: 15px;
+}
+
+.parent-container-single-page {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  height: calc(100vh - 100px);
+  // padding: 15px;
+}
+
+.orders-list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: calc(100% - 135px);;
+  padding: 15px;
+}
+
+
+.text {
+  // text-align: center;
+  // text-overflow: ellipsis;
+  // margin: .25em;
+  // font-size: 1.4em;
+
+  text-align: center;
+  text-overflow: ellipsis;
+  margin: 0.25em;
+  // font-size: 1.2em;
+  // max-height: 1em;
+  font-size: 1.3em;
+  height: 2em;
+  font-weight: 500;
+  z-index: 99;
+  position: relative;
+
+  @include for-phone-only  {
+    font-weight: 500;
+    font-size: 1.75em;
+    margin: 0;
+    position: inherit;
+    -ms-transform: translateY(-20%);
+    transform: translateY(20%);
+  }
+
+
+}
+
+.button {
+  width: 150px;
+  margin: 5px
+}
+
+
+.items.active {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+  transform: scale(1);
+}
+
+.grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.grid-item-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 75px;
+}
+
+.grid-display-device {
+  @include for-phone-only  {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 10px;
+  }
+  z-index: 100;
+}
+
+img:hover {
+  transform: scale(1.02);
+}
+
+img:active:hover {
+  // box-shadow: 1px 1px 2px rgb(158, 82, 82), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
+  transform: scale(1.07);
+}
+
+.circle-dome {
+  position: relative;
+  top: 0;
+  left: 0;
+  display: block;
+  background: black;
+  border-radius: 50%;
+  margin: 0;
+  background: radial-gradient(circle at 100px 100px, #5cabff, #000);
+  z-index: 99;
+  width: 15vh;
+  height: 15vh;
+  opacity: .25;
+  @include for-phone-only  {
+    min-width: 12vh;
+    min-height: 12vh;
+  }
+}
+
+img {
+  width: 15vh;
+  height: 15vh;
+  border-radius: 50%;
+  margin-top: 3px;
+  z-index: 99;
+  @include for-phone-only  {
+    min-width: 12vh;
+    min-height: 12vh;
+    // border-radius: 50%;
+  }
+}
+
+.item-image {
+  position: relative;
+  top: 0;
+  left: 0;
+}

@@ -49,10 +49,10 @@ mat-card {
 
   @include for-phone-only  {
     margin       : 4px;
-    padding      : 15px;
-    padding-left : 15px;
+    // padding      : 5px;
+    // padding-left : 15px;
     left         : 25px;
-    width        : 95%;
+    width        : 90%;
   }
 }
 

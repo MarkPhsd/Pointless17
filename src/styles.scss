@@ -593,6 +593,45 @@ mat-dialog-container {
   z-index: 100;
 }
 
+.float-upper-right-50 {
+  position: fixed;
+  top: -50px;
+  right: 50px;
+  z-index: 1000;
+}
+
+.float-upper-right {
+  position: fixed;
+  top: 50px;
+  right: 50px;
+  z-index: 1000;
+}
+
+.float-lower-right {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  z-index: 100;
+}
+
+.float-bottom-center {
+  z-index: 1000;
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+}
+.float-bottom-center-relative {
+  z-index: 1000;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 50%;
+  bottom: 20px;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+
+}
 .button-margins .button-margin {
   margin: 5px;
 }
@@ -717,6 +756,20 @@ mat-dialog-container {
 
 .item-span {
   grid-column: 1 / span 2;
+}
+
+.grid-category-flow {
+  --gap: 15px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 1fr;
+  }
 }
 
 .grid-summary {

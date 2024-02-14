@@ -11,9 +11,9 @@
           </h2>
         </div>
 
-        <div>
+        <!-- <div>
           <ng-container [ngTemplateOutlet]="largeScreenButtons"></ng-container>
-        </div>
+        </div> -->
 
       </div>
     </mat-card-subtitle>
@@ -35,13 +35,16 @@
 
     <ng-container [ngTemplateOutlet]="largeScreenButtons"></ng-container>
 
-    <mat-card-actions *ngIf="noteForm">
+    <div *ngIf="phoneDevice && !showNotes">
+      <button mat-raised-button (click)="showNotes = !showNotes"><mat-icon>note</mat-icon>Enter Notes</button>
+    </div>
+    <mat-card-actions *ngIf="noteForm && showNotes">
       <div  [formGroup]="noteForm">
         <mat-form-field  class="notes" appearance="outline">
           <mat-label>Notes</mat-label>
             <textarea matInput
                       rows="4"
-                      columns="40"
+                      columns="notesDisplayColumns"
                       formControlName="modifierNote"
             ></textarea>
         </mat-form-field>
@@ -58,7 +61,7 @@
 </div>
 
 <ng-template #buttonDisplay>
-  <div class="grid-list">
+  <div class="grid-list save-close">
     <button class="item-button" mat-raised-button (click)="cancel()">
        <h5>
           <mat-icon>cancel</mat-icon>Cancel <br>

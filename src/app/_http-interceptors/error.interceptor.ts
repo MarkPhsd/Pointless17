@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
@@ -22,7 +21,15 @@ export class ErrorInterceptor implements HttpInterceptor {
       return false;
     }
 
+
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+        if (request.headers.get('X-Skip-Error-Handling')) {
+            // Clone the request to remove the custom header before sending it to the server
+            console.log('error handling ignored')
+            const newRequest = request.clone({ headers: request.headers.delete('X-Skip-Error-Handling') });
+            return next.handle(newRequest);
+        }
         return next.handle(request)
         .pipe(
             retry(3),

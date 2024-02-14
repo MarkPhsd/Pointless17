@@ -251,7 +251,6 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
           return false;
         }
 
-
         if (type === 'patient') {
           if (!client.insTertiaryNum) {
             this.errorMessages.push('No OOMP value - Patient')

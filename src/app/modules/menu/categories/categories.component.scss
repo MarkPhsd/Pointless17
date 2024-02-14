@@ -86,19 +86,6 @@ $white: #efefef;
   }
 }
 
-.grid-flow {
-  --gap: 15px;
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-
-  @include for-phone-only  {
-    --gap: 10px;
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: 1fr;
-  }
-}
 
 
 .button {

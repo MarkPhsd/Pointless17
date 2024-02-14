@@ -65,7 +65,9 @@ export class ItemSortComponent  {
 
   deleteSelected(item, index) {
 
+    console.log('item.id', item.id)
     if (!item  && item.id) {
+      this.siteService.notify('ID not found', 'Close', 3000, 'red')
       console.log('id not provided')
       return
     }
@@ -74,21 +76,21 @@ export class ItemSortComponent  {
       this.discountInfos.splice( index , 1);
       return;
     }
+
     const site = this.siteService.getAssignedSite();
     this.action$ = this.priceScheduleService.deleteItemDiscountSelected(site, item.id).pipe(
       switchMap( data=> {
         this.discountInfos.splice( index , 1);
         this.priceSchedule.itemDiscounts = this.discountInfos;
+        this.priceScheduleDataService.updatePriceSchedule(this.priceSchedule)
+        this.inputForm.patchValue(this.priceSchedule)
         return of(null)
       }),
       catchError( err => {
-        // this.discountInfos.splice( index , 1);
         this.notifyEvent('Oh no ' + err, 'failured')
         return of(null)
       })
     )
-
-    this.discountInfo = {} as DiscountInfo
 
   }
 

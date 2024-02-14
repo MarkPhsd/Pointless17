@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { tap } from 'rxjs/operators';
-
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from '../_services/reporting/sites.service';
 
@@ -24,7 +23,7 @@ export class FbClientTypesService {
       voidItem             : [],
       voidPayment          : [],
       allowCashPaymentForOtherServer: [],
-
+      deleteOrder          : [],
       houseAccountPayment  : [],
       changeItemPrice      : [],
       changeInventoryValue : [],
@@ -74,6 +73,7 @@ export class FbClientTypesService {
       uploadPictures: [],
       priceColumnOption: [],
 
+      allowChangeOrderType: [],
       allowNegativeTransaction: [],
       allowZeroTransaction: [],
       allowSuspendTransaction:[],

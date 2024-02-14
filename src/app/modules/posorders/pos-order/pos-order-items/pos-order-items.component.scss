@@ -7,6 +7,7 @@ ion-item-sliding {
   // height: 125px;
 }
 
+
 ion-item {
   width: 110%;
   left: -15px;
@@ -26,6 +27,11 @@ pos-order-item {
   padding-right: 5px;
 }
 
+.phone-drag {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
 .item-list {
   margin-bottom: 25px;
   overflow-y: auto;
@@ -43,13 +49,11 @@ pos-order-item {
 }
 
 .item-list-side-panel {
-
   margin-bottom: 25px;
   overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
   height: 99%;
-
   @include for-phone-only  {
     margin-bottom: 30px;
     overflow-y: auto;
@@ -57,12 +61,49 @@ pos-order-item {
   }
 }
 
-.main-panel {
-  overflow-y: auto;
-  overflow-x: hidden;
+.phone-panel {
+  @include for-phone-only  {
+    width: 95vw;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-right: 15px;
+  }
 }
 
 
+.flex-row {
+  width: 200px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+}
+
+.close-button {
+  // position: relative;
+  // left: -70px;
+  top: 0;
+  right: 0;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.grid-phone-scroll {
+  display: grid;
+  grid-template-columns: 1fr 25px;
+  margin-bottom: 40px;
+}
+
+.main-panel {
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  @include for-phone-only  {
+    max-width: 95vw;
+    overflow-y: visible;
+    overflow-x: visible;
+  }
+}
 
 .side-panel {
   overflow-y: auto;

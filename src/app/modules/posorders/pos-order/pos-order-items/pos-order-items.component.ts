@@ -13,6 +13,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { AuthenticationService } from 'src/app/_services';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'pos-order-items',
@@ -24,6 +25,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   action$: Observable<any>;
   @ViewChild('posOrderItemsPrepView') posOrderItemsPrepView: TemplateRef<any>;
   @ViewChild('posOrderItemsView') posOrderItemsView: TemplateRef<any>;
+  @ViewChild('phoneDeviceView') phoneDeviceView: TemplateRef<any>;
+
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   @Input()  order          : IPOSOrder;
   @Input()  posOrderItems  : PosOrderItem[]
@@ -41,6 +44,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input() userAuths       :   IUserAuth_Properties;
   @Input() displayHistoryInfo: boolean;
   @Input() enableItemReOrder  : boolean = false;
+  @Input() phoneDevice: boolean;
 
   qrCodeStyle = ''
   mainStyle   =  ``
@@ -63,6 +67,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   posName: string;
 
   nopadd = `nopadd`
+  conditionalIndex: number;
 
   _scrollStyle = this.platformService.scrollStyleWide;
   private styleTag: HTMLStyleElement;
@@ -71,6 +76,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   scrollStyle = this.platformService.scrollStyleWide;
   user$ = this.authService.user$.pipe(switchMap(data => {
+    if (this.phoneDevice) {
+      this._scrollStyle = 'scrollstyle_1'
+      this.setScrollBarColor(data?.userPreferences?.headerColor)
+    }
     this.setScrollBarColor(data?.userPreferences?.headerColor)
     return of(data)
   }))
@@ -78,6 +87,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   get posItemsView() {
     if (this.prepScreen) {
       return this.posOrderItemsPrepView
+    }
+
+    if (this.phoneDevice) {
+      return this.phoneDeviceView
     }
     return this.posOrderItemsView
   }
@@ -112,7 +125,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
           this._order = this.orderMethodService.currentOrder$.subscribe( order => {
             this.order = order
             if (this.order && this.order.posOrderItems)  {
-              this.sortPOSItems(this.order.posOrderItems)
+              this.sortPOSItems(this.order.posOrderItems);
             }
           })
         }
@@ -126,7 +139,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   }
 
-  setScrollBarColor(color: string) {
+  setScrollBarColor(color: string, width?:number) {
+    if (!width) { width = 25}
     if (!color) {    color = '#6475ac' }
     const css = this.authService.getAppToolBarStyle(color, 25)
     this.styleTag = this.renderer.createElement('style');
@@ -137,6 +151,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   sortPOSItems(orderItems: PosOrderItem[]) {
     this.posOrderItems = this.sortItems(orderItems)
+    // console.log(this.posOrderItems)
     setTimeout(() => {
       this.scrollToBottom();
     }, 200);
@@ -148,8 +163,15 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     // list.forEach(data => {
     //   // console.log(data.productName, data.productSortOrder)
     // })
-
-    return items
+    if (!this.conditionalIndex) { this.conditionalIndex = 1}
+    items.forEach((item, index) => {
+      if (item.id == item.idRef) {
+        item.conditionalIndex = this.conditionalIndex++;
+      } else {
+          item.conditionalIndex = null; // or keep the previous value, depending on your needs
+      }
+    });
+    return items;
   }
 
   ngOnDestroy(): void {
@@ -169,12 +191,23 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                 private settingService: SettingsService,
                 private authService : AuthenticationService,
                 private renderer: Renderer2,
+                private _bottomSheetService  : MatBottomSheet,
               )
   {
     this.orderItemsPanel = 'item-list';
   }
 
+  dismiss() {
+    this._bottomSheetService.dismiss();
+  }
+
+  dismissItemsView(event) {
+    this.dismiss();
+  }
+
   ngOnInit() {
+
+    if (window.innerWidth < 599) {   this.phoneDevice = true  }
     let uiHomePage = this.uiSettingService.homePageSetting;
     this.wideBar   = true;
 
@@ -234,7 +267,11 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       }
     }
 
-
+    if (this.phoneDevice) {
+      this.mainStyle = `phone-panel ${this.orderItemsPanel}`
+      // this.deviceWidthPercentage = '345px'
+      this.panelHeight = ''
+    }
   }
 
   getTransactionUI() {
@@ -276,7 +313,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   removeItemFromList(payload: any) {
 
-    console.log('payload remove', payload)
+    // console.log('payload remove', payload)
     if (this.order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
       this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
       return
@@ -319,7 +356,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   logItem(item) {
-    console.log(item)
+    // console.log(item)
   }
 
   resetAnimationState() {

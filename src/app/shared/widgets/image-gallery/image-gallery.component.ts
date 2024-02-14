@@ -22,30 +22,30 @@ export class ImageGalleryComponent implements OnInit {
 
   @Input() fullScreenLightbox : boolean
   @Input() galleryView : boolean ;
-  @Input() styleValue = "height:clamp(10vh 15vh 400px);width: clamp(10vh 15vw 400px)"
+  @Input() styleValue = "height:clamp(10vh, 10vh, 200px);width: clamp(10vh, 15vw, 300px);"
   @Input() imageList: string;
-
   @Input() imagesIncludeUrl: boolean;
-
   @Input() imageData = [];
   items: GalleryItem[] = [];
   awsBucketURL: string;
-  // @ViewChild('lightHouseView') lightHouseView :TemplateRef<any>;
+
   lightBoxIndex: string;
   galleryID: string;
   enableLightHouse: boolean;
+  phoneDevice: boolean;
 
   constructor(
     private awsBucket: AWSBucketService,
     public gallery: Gallery,
     public lightbox: Lightbox) {}
 
-// image list {{imageList}} <br>
-// image data {{imageData | json}} <br>
-// items {{items | json}}
-// imagesIncludeUrl{{imagesIncludeUrl}}
 
   async ngOnInit() {
+
+    if (window.innerWidth < 599) {
+      this.phoneDevice = true
+    }
+
 
     this.galleryID = `gallery${UUID.UUID()}`
     this.awsBucketURL = await this.awsBucket.awsBucketURL();

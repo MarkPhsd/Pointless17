@@ -15,8 +15,8 @@
 
           <div [class]="productnameClass" >
 
-            <span  class="index" *ngIf="!isModifier && !prepScreen">
-              {{ index +1 }}:
+            <span  class="index" *ngIf="!isModifier && !prepScreen && orderItem.conditionalIndex">
+              {{orderItem.conditionalIndex }}
             </span>
 
             {{ orderItem?.productName | truncateText: 30  }}
@@ -228,7 +228,7 @@
             <mat-icon>more_vert</mat-icon>
         </button>
 
-        <mat-menu 
+        <mat-menu
                   class="mat-menu-panel"
                   [overlapTrigger]="false"
                   #menu="matMenu">

@@ -4,7 +4,7 @@
 <div *ngIf="clientTable && inputForm && transactionUISettings; else loading" >
 
   <span #coachingAlertMessages></span>
-  
+
   <div *ngIf="inputForm">
     <div *ngIf="inputForm.controls?.firstName.errors?.required && inputForm.controls?.firstName.touched" class="error">
       <mat-icon color="warn">warning</mat-icon> Full Name required in basic tab.
@@ -218,25 +218,29 @@
                      label="Settings"
                      (swipeleft)="swipe(1, $event.type)"
                      (swiperight)="swipe(1, $event.type)">
-              <div  class="grid-flow">
+              <div  class="grid-flow" [formGroup]="inputForm">
+                <!--
+                apiPassword {{inputForm.controls['apiPassword'].value}} -->
+                <!-- apiUserName  {{inputForm.controls['apiUserName'].value}} -->
+                <!-- {{inputForm.controls['apiPassword'].value}} -->
 
                 <div>
-                  <mat-form-field appearance="outline">
-                  <mat-label >User Login</mat-label>
-                  <input  matInput
-                          type="text"
-                          id="title"
-                          formControlName="apiUserName"
-                          class="form-control" >
-                  </mat-form-field>
+                  <div style="width:350px">
+                    <app-value-fields
+
+                                  [inputForm]="inputForm"
+                                  [fieldName]="'apiUserName'">
+                                  User Login
+                    </app-value-fields>
+                  </div>
 
                   <div *ngIf="inputForm.controls['apiPassword'].value == ''">
                     Input username and press save to set user password.
                   </div>
 
                   <app-password-validation
-                    *ngIf="inputForm.controls['apiPassword'].value != ''"
-                    [client]="clientTable">
+                      *ngIf="inputForm.controls['apiPassword'].value != ''"
+                      [client]="clientTable">
                   </app-password-validation>
 
                   <mat-divider></mat-divider>

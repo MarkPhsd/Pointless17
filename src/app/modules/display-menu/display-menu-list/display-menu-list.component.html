@@ -1,3 +1,5 @@
+<div *ngIf="(addMenuItem$ | async) as menuItemAdd"></div>
+
 <ng-template #loading>
   <div>
     ...getting menu.
@@ -26,9 +28,7 @@
   <!-- [style.background]="backgroundURL" -->
   <!-- {{items | json}} -->
   <div *ngFor="let category of items" class="categories-grid" >
-
     <ng-container *ngTemplateOutlet="categoryView,context: {$implicit: category}"></ng-container>
-
   </div>
 
   <!-- backgroundURL {{backgroundURL }}
@@ -45,13 +45,9 @@
       {{ menu?.footer }}
     </div>
   </div>
-
 </div>
 
-<div *ngIf="(addMenuItem$ | async) as menuItemAdd"></div>
-
 <ng-template #categoryView let-category>
-
 
   <div class="category-view"
        [style.background-color]="backGroundStyle"
@@ -99,7 +95,9 @@
         <div class="grid-container">
 
           <div>
-            <button mat-fab color="primary" (click)="menuItemActionObs(item?.menuItem)"> <mat-icon>add</mat-icon></button>
+            <button mat-fab color="primary" (click)="menuItemActionObs(item?.menuItem)">
+                <mat-icon>add</mat-icon>
+            </button>
             <button mat-button (click)="menuItemActionObs(item?.menuItem)">
               <div class="item-price">
                 {{ item?.menuItem?.name }}
@@ -144,14 +142,17 @@
               class="example-margin"
               color="primary"
               [checked]="item?.menuItem?.gluetenFree"
-              [disabled]="true"
-            >
+              [disabled]="true" >
             </mat-slide-toggle>
           </div>
         </div>
 
-        <div class="item-price">{{ item?.menuItem?.retail | currency }}</div>
+        <div class="item-price">
+          <button mat-button>{{ item?.menuItem?.retail | currency }}</button>
+        </div>
+
       </div>
+
 
       <div *ngIf="item?.menuItem?.description" class="item-description-row">
         {{  item?.description | slice: 0:200 }}

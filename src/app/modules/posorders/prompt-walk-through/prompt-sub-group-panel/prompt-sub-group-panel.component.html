@@ -1,8 +1,7 @@
 <div  *ngIf="promptGroup">
   <mat-accordion
-      class="example-headers-align"
       multi="false" >
-      <div *ngFor="let item of subGroups; let i = index">
+      <div    class="mat-panel" *ngFor="let item of subGroups; let i = index">
         <prompt-panel-menu-items
               [subGroup]         ="item.promptSubGroups"
               [selectedSubGroup] ="item"

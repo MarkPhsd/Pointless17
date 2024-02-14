@@ -10,13 +10,13 @@ export interface IUserAuth_Properties {
 
   viewPaymentItemSalesReports: boolean;
   viewPaymentReports: boolean;
-
+   allowChangeOrderType : boolean;
   // 'pos section
   voidOrder            : boolean;
   splitItemOverRide    : boolean;
   voidItem             : boolean;
   voidPayment          : boolean;
-
+  deleteOrder          : boolean;
   // reports:
   disableBalanceEndOfDay   : boolean;
   disableItemSales         : boolean;

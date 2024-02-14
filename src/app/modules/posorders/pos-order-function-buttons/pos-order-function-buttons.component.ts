@@ -100,7 +100,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @Input() purchasOrderEnabled: boolean;
   @Input() prepOrderOnClose: boolean;
   listView: Boolean;
-  userAuths       :   IUserAuth_Properties;
+  @Input() userAuths       :   IUserAuth_Properties;
   _userAuths      : Subscription;
   assignedItems   : Subscription;
   refundItems     : boolean;
