@@ -3,7 +3,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { clientType, ClientType, IClientTable, IUserProfile } from 'src/app/_interfaces';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
-import { ClientTypeService } from 'src/app/_services/people/client-type.service';
+import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
@@ -17,12 +17,13 @@ export class ProfileDemographicsComponent implements OnInit, OnDestroy {
   _uiTransactionSettings: Subscription;
   uiTransactionSettings : TransactionUISettings;
 
-  @Input() clientType : ClientType;
+  @Input() clientType   : ClientType;
   @Input() inputForm    : UntypedFormGroup;
   @Input() isAuthorized : boolean;
   @Input() isStaff      : boolean;
   @Input() client       : IClientTable;
   @Input() enableMEDClients: boolean;
+  @Input() auths: IUserAuth_Properties;
 
   clientTypes$: Observable<clientType[]>;
 

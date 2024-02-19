@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AWSBucketService } from 'src/app/_services';
-
 @Component({
   selector: 'menu-card-category',
   templateUrl: './menu-card-categories.component.html',
@@ -8,15 +7,15 @@ import { AWSBucketService } from 'src/app/_services';
 })
 export class MenuCardCategoriesComponent implements OnInit {
 
-  @Input() item: any;
+  @Input()  item: any;
   @Output() outPutEditItem = new EventEmitter<any>();
   @Output() outPutlistItems = new EventEmitter<any>();
   @Output() outPutgetItemSrc = new EventEmitter<any>();
   @Output() outPutNextPage = new EventEmitter<any>();
-  @Input() bucket: string;
-  @Input() imageName: string;
-  @Input() isAdmin: boolean;
-  @Input() textLength: number = 15;
+  @Input()  bucket: string;
+  @Input()  imageName: string;
+  @Input()  isAdmin: boolean;
+  @Input()  textLength: number = 15;
 
   constructor(private awsBucket: AWSBucketService) { }
 

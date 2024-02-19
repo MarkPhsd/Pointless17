@@ -289,7 +289,7 @@ export class SettingsService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<ISetting>(url).pipe(switchMap(data => {
-      if (data?.text) { 
+      if (data?.text) {
         const item = JSON.parse(data?.text) as ITerminalSettings
         return of(item)
       }
@@ -300,11 +300,12 @@ export class SettingsService {
 
   getSettingByName(site: ISite, name: String):  Observable<ISetting> {
 
-    if (!name) { return }
+    if (!name) { return of(null) }
     const user =  JSON.parse(localStorage.getItem('user')) as IUser
     if (!user || !user.roles ||  !user.username ) {
       return this.getSettingByNameNoRoles(site, name)
     }
+
 
     const controller = "/settings/"
 

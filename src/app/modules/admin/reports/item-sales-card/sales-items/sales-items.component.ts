@@ -21,9 +21,7 @@ export class SalesItemsComponent implements OnInit {
 
   ngOnInit(): void {
     //then we group by
-    if (this.includeDepartments) {
-      this.groupedReport =  _.groupBy(this.sales, 'department');
-    }
+    if (this.includeDepartments) {  this.groupedReport =  _.groupBy(this.sales, 'department');  }
   }
 
   sortName(list) {

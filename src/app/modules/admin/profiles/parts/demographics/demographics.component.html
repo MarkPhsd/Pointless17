@@ -32,7 +32,7 @@
 
       <div class="name-fields">
 
-        <div >
+        <div>
           <app-value-fields
                         [inputForm]="inputForm"
                         [fieldName]="'phone'">
@@ -40,18 +40,17 @@
           </app-value-fields>
         </div>
 
-        <div
-              *ngIf="isStaff" >
+        <div  *ngIf="isStaff">
           <app-value-fields
                           [inputForm]="inputForm"
                           [fieldName]="'dlNumber'">
-                      ID #
+              ID #
           </app-value-fields>
         </div>
 
-        <div  >
+        <div>
           <app-value-fields
-                    [enabled]="!isStaff"
+                    [enabled]="isStaff || auths?.editEmail"
                     [inputForm]="inputForm"
                     [fieldName]="'email'">
               Email

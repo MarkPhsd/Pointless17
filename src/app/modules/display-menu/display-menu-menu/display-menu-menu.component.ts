@@ -10,6 +10,10 @@ import { Router } from '@angular/router';
 })
 export class DisplayMenuMenuComponent implements OnInit {
 
+
+  //this is not being used at all right now, it's not in the router
+  //it's only in the shared module.
+
   id: number;
   phoneSize: boolean;
   menu$: Observable<any>;

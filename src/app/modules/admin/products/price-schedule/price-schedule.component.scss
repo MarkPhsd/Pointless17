@@ -158,7 +158,7 @@ img {
 .container {
   display: grid;
   gap: 10px;
-  grid-template-columns: calc(100vw - 350px) 350px;
+  grid-template-columns: calc(100vw - 425px) 1fr;
 }
 
 .floating-info {
@@ -169,13 +169,13 @@ img {
   position:fixed;
   // top: 0px;
   right: 15px;
-  max-width: 350px;
-  width: 350px;
+
+  width: 375px;
 }
 
 .schedule-info {
   min-width: 825px;
-  width: calc(100vw - 375px) ;;
+  width: calc(100vw - 425px) ;;
 }
 
 

@@ -585,22 +585,18 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   searchBtn(event) {
-
     this.updateFilterInstruction();
     this.hideInstruction(0)
-
     if (this.viewType === 4) {
       this.viewType = 2
       this.displayPanel(event);
       this.hideFilterPanel(true)
       return;
     }
-
     this.displayPanel(event)
   }
 
   displayPanel(event)  {
-
     const show =  localStorage.getItem('OrderFilterPanelVisible')
     if (show === 'false') {
       this.hidePanel = true
@@ -700,9 +696,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-
-
-
   setViewType(value) {
     this.viewType = value;
     this.orderMethodsService.updateViewOrderType(value);
@@ -737,16 +730,16 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
         this.orderMethodsService.posSearchModel = {} as IPOSOrderSearchModel
       }
       if (user?.employeeID) {
-        console.log('showAllOrders', user?.userPreferences?.showAllOrders)
-        console.log('updated',user?.employeeID, this.userAuthorization.user.employeeID)
+        // console.log('showAllOrders', user?.userPreferences?.showAllOrders)
+        // console.log('updated',user?.employeeID, this.userAuthorization.user.employeeID)
         this.orderMethodsService.posSearchModel.employeeID =  this.userAuthorization.user.employeeID
       }
-      console.log('model', this.orderMethodsService.posSearchModel)
+      // console.log('model', this.orderMethodsService.posSearchModel)
     }
 
     this.authenticationService.updateUser(user)
     this.userAuthorization.setUser(user)
-    console.log('posSearchModel show All',  user?.userPreferences?.showAllOrders, this.orderMethodsService.posSearchModel)
+    // console.log('posSearchModel show All',  user?.userPreferences?.showAllOrders, this.orderMethodsService.posSearchModel)
     this.orderMethodsService.updateOrderSearchModel(this.orderMethodsService.posSearchModel)
   }
 

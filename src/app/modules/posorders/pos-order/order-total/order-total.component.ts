@@ -1,9 +1,9 @@
 import { Component, OnInit,Input, HostListener, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
-import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
@@ -21,7 +21,8 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   @Input() mainPanel = false;
   @Input() disableActions: boolean;
   @Input() refreshTime = 1;
-
+  @Input() ui : TransactionUISettings;
+  ui$: Observable<TransactionUISettings>;
   _uiSettings : Subscription;
   uiSettings  : UIHomePageSettings;
   transactionDataClass ="transaction-data"
@@ -58,8 +59,8 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
     }
   }
 
-  get isInventoryView() { 
-    if (this.order && this.order.service && this.order.service.filterType == 2) { 
+  get isInventoryView() {
+    if (this.order && this.order.service && this.order.service.filterType == 2) {
       return this.inventoryView
     }
     return null;
@@ -70,6 +71,7 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
       this.cost = 0;
       if (data) {
         this.order = data;
+        this.cashDiscount
         this.purchaseOrderEnabled = false;
         if (this.order.serviceType && (this.order.serviceType.toLowerCase() == 'purchase order' || this.order.serviceType.toLowerCase() === 'conversion')) {
           this.purchaseOrderEnabled = true;
@@ -78,9 +80,18 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
     })
   }
 
+  get cashDiscount() {
+    if (this.ui && this.ui?.dcapDualPriceValue != 0) {
+      return this.order.total * (1 + +this.ui.dcapDualPriceValue) // * (1 + this.uiConfig.dcapDualPriceValue)
+    }
+    return null
+  }
+
+
   constructor(
       private uiSettingsService   : UISettingsService,
       private orderMethodsService : OrderMethodsService,
+      private uISettingsService: UISettingsService,
       public  route               : ActivatedRoute) {
     const outPut = this.route.snapshot.paramMap.get('mainPanel');
     if (outPut) {
@@ -89,9 +100,21 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.initTransactionUISettings();
     this.updateScreenSize();
     this.homePageSubscriber();
     this.orderSubscriber();
+  }
+
+  initTransactionUISettings() {
+    this.ui$ = this.uISettingsService.transactionUISettings$.pipe(switchMap(data => {
+        this.ui = data
+        if (!data) {
+          return this.uiSettingsService.getUITransactionSetting().pipe(switchMap(data => {return of(data)}))
+        }
+        return of(data)
+      }
+    ));
   }
 
   ngOnDestroy() {

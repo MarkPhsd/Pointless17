@@ -386,9 +386,6 @@
           </div>
 
 
-
-
-
         </div>
 
         <div class="grid-views">
@@ -493,6 +490,25 @@
                 <mat-label>DCAP Surcharge</mat-label>
               </mat-slide-toggle>
             </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="dcapMultiPrice" >
+                <mat-label>Data Cap Multi Price</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields" >
+              <app-value-fields
+                    style="width:100px"
+                    [inputForm]="inputForm"
+                    [fieldName]="'dcapDualPriceValue'">
+                  Dual Price / Cash Discount
+                </app-value-fields>
+                <mat-label>Enter value .035 is 3.5%</mat-label>
+              <mat-divider></mat-divider>
+            </div>
+
             <div class="toggle-fields" >
                 <app-value-fields
                     style="width:100px"
@@ -531,6 +547,9 @@
                 <mat-label>Data Cap Prompt Tip</mat-label>
               </mat-slide-toggle>
             </div>
+
+
+
 
             <div>
               <mat-label>Enter Values with commas, E.g. 10,15,20.</mat-label>

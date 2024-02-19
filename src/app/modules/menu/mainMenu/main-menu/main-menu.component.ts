@@ -225,11 +225,44 @@ export class MainMenuComponent implements OnInit  {
   get isCategoryViewOn() {
     if ((this.isStaff && this.homePageSetings.staffCategoriesEnabled) ||
         (!this.isStaff &&   this.homePageSetings.categoriesEnabled)) {
-      // console.log('category view on')
+      this.isOnlyCategoryView
       return this.categoryView
     }
-    // console.log('category view null')
+    
     return null;
+  }
+
+  get isOnlyCategoryView() { 
+    if (this.isStaff) { 
+      // if (this.homePageSetings.staffCategoriesEnabled) { 
+      //   return false
+      // }
+      if (this.homePageSetings.staffcatalogScheduleMenuEnabled) { 
+        return false
+      }
+      if (this.homePageSetings.staffDepartmentsEnabled) { 
+        return false
+      }
+      if (this.homePageSetings.staffTierMenuEnabled) { 
+        return false
+      }
+    }
+    if (!this.isStaff) { 
+      // if (this.homePageSetings.categoriesEnabled) { 
+      //   return false
+      // }
+      if (this.homePageSetings.departmentsEnabled) { 
+        return false
+      }
+      if (this.homePageSetings.catalogScheduleMenuEnabled) { 
+        return false
+      }
+      if (this.homePageSetings.tierMenuEnabled) { 
+        return false
+      }
+    }
+    this.router.navigate(['/categories/', {id:4}])
+    return true
   }
 
   get isDepartmentViewOn() {

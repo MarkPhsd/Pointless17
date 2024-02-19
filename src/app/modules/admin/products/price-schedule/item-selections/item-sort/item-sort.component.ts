@@ -8,6 +8,7 @@ import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.serv
 import { UntypedFormGroup } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 @Component({
   selector: 'app-item-sort',
@@ -21,7 +22,7 @@ export class ItemSortComponent  {
   @Input() inputForm       : UntypedFormGroup;
   discountInfos            : DiscountInfo[];
   discountInfo             : DiscountInfo;
-
+  openingProduct: boolean;
   index                    : number;
 
   _priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
@@ -41,6 +42,7 @@ export class ItemSortComponent  {
     private siteService               : SitesService,
     private fbPriceScheduleService    : FbPriceScheduleService,
     private _snackBar                 : MatSnackBar,
+    private productEditButtonService: ProductEditButtonService,
   ) {
   }
 
@@ -61,6 +63,20 @@ export class ItemSortComponent  {
       this.discountInfo = item
       this.index = index
     }
+  }
+
+  editSelected(item: DiscountInfo, index) { 
+    this.editItemWithId(item.itemID)
+  }
+
+  editItemWithId(id:number) {
+    if(!id) { return }
+    this.productEditButtonService.openProductDialogObs(id).subscribe(
+      data => {
+      this.openingProduct = false
+      return of(data)
+    })
+
   }
 
   deleteSelected(item, index) {

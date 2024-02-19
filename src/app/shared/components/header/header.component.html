@@ -1,13 +1,16 @@
+
+<span *ngIf="(userInitCheck$ | async) as user">
+</span>
 <span *ngIf="(uiTransactionSetting$ | async) as item"></span>
 <span *ngIf="(uiHomePageSetting$ | async) as item"></span>
-<span *ngIf="( userSave$  | async) as pref"></span>
+<span *ngIf="(userSave$  | async) as pref"></span>
 <span *ngIf="(action$ | async) as action"></span>
-<span *ngIf="(userInitCheck$ | async) as user"></span>
 <mat-toolbar [class]="mattoolbar"
-             [color]="matToolbarColor"
-             [style]="headerBackColor">
-  <mat-toolbar-row>
+            [color]="matToolbarColor"
+            [style]="headerBackColor">
+  <mat-toolbar-row class="mat-toolbar-spacing">
 
+  
       <ng-container [ngTemplateOutlet]="backButtonView"></ng-container>
 
       <ng-container *ngIf="logoViewEnabled"
@@ -19,11 +22,6 @@
       <ng-container [ngTemplateOutlet]="currentSite"></ng-container>
       <ng-container [ngTemplateOutlet]="networkStatus"></ng-container>
       <ng-container [ngTemplateOutlet]="siteSelectorView"></ng-container>
-
-      <div *ngIf="!isUserStaff || phoneDevice">
-        <ng-container [ngTemplateOutlet]="userActionsPhoneDevice"></ng-container>
-      </div>
-
       <ng-container [ngTemplateOutlet]="posPanel"></ng-container>
       <ng-container *ngIf="!phoneDevice && !isUserStaff" [ngTemplateOutlet]="userSpacer"></ng-container>
       <ng-container [ngTemplateOutlet]="wizard"></ng-container>
@@ -33,6 +31,9 @@
       <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
       <ng-container [ngTemplateOutlet]="appCart"></ng-container>
       <ng-container [ngTemplateOutlet]="userInfoScreen"></ng-container>
+      <div *ngIf="!isUserStaff || phoneDevice">
+        <ng-container [ngTemplateOutlet]="userActionsPhoneDevice"></ng-container>
+      </div>
 
     <!-- </div> -->
   </mat-toolbar-row>
@@ -61,7 +62,7 @@
 </ng-template>
 
 <ng-template #menuBarView>
-  <div *ngIf="user ">
+  <div *ngIf="user && !signOut">
     <button aria-label="menu"
             mat-button
             (click)="toggleSideBar()">
@@ -86,11 +87,11 @@
 </ng-template>
 
 <ng-template #posPanel>
+
   <div class="grid-flow"
        *ngIf="!phoneDevice">
     <mat-card class='panel-card'
-            *ngIf="( (isUserStaff && platFormService.platForm !='web' )
-                  || (isUserStaff) )">
+            *ngIf="isUserStaff">
       <ul class="ul-pos-panel fx-row" >
 
         <li *ngIf="employeeName && !smallDevice">
@@ -220,7 +221,7 @@
 
 <ng-template #userActions>
 
-  <div *ngIf="!user">
+  <div *ngIf="!user || signOut">
     <button color="warn"
             mat-button
             aria-label="logout"

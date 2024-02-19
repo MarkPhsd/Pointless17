@@ -106,6 +106,7 @@ export interface OrderItemHistory {
     departmentId?: number | null;
     itemTypeId?: number | null;
     traceOrderDate: string | null;
+    cashDiscountValue: number | null;
 }
 
 export interface OrderItemHistorySearch  {
@@ -255,8 +256,7 @@ export interface ItemWithAction {
 
 export class POSOrderItemService {
 
-
-  get platForm() {  return Capacitor.getPlatform(); }
+  get platForm()              {  return Capacitor.getPlatform(); }
 
   private _posOrderItem       = new BehaviorSubject<PosOrderItem>(null);
   public posOrderItem$        = this._posOrderItem.asObservable();
@@ -271,12 +271,10 @@ export class POSOrderItemService {
   private _searchModel          = new BehaviorSubject<IOrderItemSearchModel>(null);
   public searchModel$           = this._searchModel.asObservable();
 
-
   updateSearchModel(searchModel: IOrderItemSearchModel) {
     console.log('searchmode', searchModel)
     this._searchModel.next(searchModel);
   }
-
 
   updateItemWithAction(item: ItemWithAction ) {
     this._itemWithActions.next(item);

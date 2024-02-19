@@ -1,11 +1,10 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { concat } from 'lodash';
-import { combineLatestAll, concatMap, forkJoin, Observable, of, Subscription, switchMap } from 'rxjs';
+import { concatMap, forkJoin, Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
-import { AWSBucketService, OrdersService } from 'src/app/_services';
+import { AWSBucketService } from 'src/app/_services';
 import { DisplayMenuService } from 'src/app/_services/menu/display-menu.service';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -63,9 +62,7 @@ export class DisplayMenuListComponent implements OnInit {
       private priceScheduleService: PriceScheduleService,
       private siteService: SitesService,
       private orderMethodService: OrderMethodsService,
-      private orderService: OrdersService,
       private awsBucket         : AWSBucketService,
-      private renderer : Renderer2,
       private displayMenuService: DisplayMenuService, ) {
 
     this.id = +this.route.snapshot.paramMap.get('id');
@@ -129,16 +126,8 @@ export class DisplayMenuListComponent implements OnInit {
       // order$ = this.orderMethodService.newOrderWithPayloadMethod(site, null, true);
       this.order = {} as IPOSOrder
     }
-
-    // this.addMenuItem$ = order$.pipe(concatMap(data => {
-    //   if (!data) {
-    //     this.siteService.notify('No order started', 'Alert', 1000)
-    //     return of(null)
-    //   }
-
    this.addMenuItem$ =   this.orderMethodService.menuItemActionObs( this.order, menuItem, true,
                                                       this.orderMethodService.assignPOSItems).pipe(concatMap(data => {
-      console.log('menu item', data)
       return of(data)
     }))
   }

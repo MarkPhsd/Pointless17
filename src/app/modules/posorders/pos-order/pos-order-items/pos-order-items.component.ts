@@ -92,6 +92,11 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     if (this.phoneDevice) {
       return this.phoneDeviceView
     }
+
+    if (this.qrOrder) { 
+      return this.posOrderItemsView
+    }
+
     return this.posOrderItemsView
   }
 

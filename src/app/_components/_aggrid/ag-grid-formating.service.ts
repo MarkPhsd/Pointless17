@@ -159,10 +159,14 @@ initGridOptionsFormated(pageSize: number, columnDefs: any) {
 // }
 
   initProductSearchModel(categoryID: number, search: string, pageSize: number,
-                         currentPage: number, itemTypeID: number, brandID: number): ProductSearchModel {
+                         currentPage: number, itemTypeID: number, brandID: number, subCategoryID?: number): ProductSearchModel {
     let productSearchModel = {} as ProductSearchModel;
     productSearchModel.name = search
     productSearchModel.barcode = search
+
+    if (subCategoryID) { 
+      productSearchModel.subCategoryID = subCategoryID;
+    }
 
     if (categoryID && categoryID != 0) {
       productSearchModel.categoryID  = categoryID;

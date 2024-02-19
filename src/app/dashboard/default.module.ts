@@ -388,6 +388,7 @@ import { EbayAspectsComponent } from '../modules/admin/inventory/ebay/ebay-publi
 import { PosSplitOrdersComponent } from '../modules/posorders/pos-payment/possplit-items/pos-split-orders/pos-split-orders.component';
 import { TransferOrderComponent } from '../modules/orders/transfer-order/transfer-order.component';
 import { DCAPTransactionComponent } from '../modules/dsiEMV/Dcap/dcaptransaction/dcaptransaction.component';
+import { MenuSectionComponent } from '../modules/display-menu/display-menu-list/menu-section/menu-section.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -549,6 +550,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DisplayMenuListComponent,
     DisplayMenuTitleComponent,
     DisplayMenuSortComponent,
+    MenuSectionComponent,
     // DisplayMenuComponent,
 
     DefaultComponent,

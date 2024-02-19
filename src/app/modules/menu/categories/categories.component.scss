@@ -68,6 +68,10 @@ $white: #efefef;
   flex-wrap     : wrap;
   flex-basis    : auto;
   margin-left   : 40px;
+
+  @include for-phone-only  {
+    display: none;
+  }
 }
 
 .header-title {

@@ -11,7 +11,6 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { SettingsService } from 'src/app/_services/system/settings.service';
 
 // import { share } from 'rxjs/operators';
 
@@ -120,6 +119,8 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   orderResults$ = of([]) as  Observable<IPOSOrder[]>
   // orderSubscription$: Observable<IPOSOrder[]>;
   orderPrepRefresh$: Observable<any[]>;
+  orderSubscription$: Observable<POSOrdersPaged>
+  _orderSubscription: Subscription;
   _scrollStyle = this.platformService.scrollStyleWide;
   get scrollStyle() {
     if (this.viewType == 3) {
@@ -127,19 +128,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     }
     return this._scrollStyle
   }
-
-  orderSubscription$ = this._addToListOBS(this.pageSize, 1, false).pipe(
-    repeatWhen(notifications =>
-      notifications.pipe(
-        tap(() =>
-        console.log('')
-        ),
-        delay(this.seconds))
-    ),
-    catchError((err: any) => {
-      return throwError(err);
-    })
-  )
 
   get orderPrepRefreshView() {
     if (this.viewType == 3) {  return this.orderPrepRefresh; }
@@ -153,17 +141,36 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   }
 
   initUserAuth() {
-    this._user = this.authenticationService.user$.subscribe(data => {
+    this._user = this.authenticationService.user$.pipe(switchMap(data => {
       this.user = data;
       this.setScrollBarColor((this.user?.userPreferences?.headerColor))
-    })
-    this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
+      return this.authenticationService.userAuths$
+    })).subscribe(data => {
       this.userAuths = data;
+      this.setOrderSubscriber()
       if (!data) {
         this.userAuths = {} as IUserAuth_Properties
       }
     })
+  };
+
+  setOrderSubscriber() {
+    if (this.user) {
+      this.orderSubscription$ = this._addToListOBS(this.pageSize, 1, false).pipe(
+        repeatWhen(notifications =>
+          notifications.pipe(
+            tap(() =>
+            console.log('')
+            ),
+            delay(this.seconds))
+        ),
+        catchError((err: any) => {
+          return throwError(err);
+        })
+      )
+    }
   }
+
 
   setScrollBarColor(color: string) {
     if (!color) {    color = '#6475ac' }
@@ -384,8 +391,17 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   }
 
   addToList(pageSize: number, pageNumber: number, reset : boolean)  {
+    if (!this.user) { return }
     this.results$ = this._addToListOBS(pageSize,pageNumber, reset)
   };
+
+  get isUser() {
+    // console.log('this.user', this.user, this.userAuths)
+    if (this.user?.roles == 'user' || this.user?.roles == 'guest') {
+      return true;
+    }
+    return false
+  }
 
   _addToListOBS(pageSize: number, pageNumber: number, reset : boolean)  {
     let model         = {} as IPOSOrderSearchModel
@@ -398,6 +414,10 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     const site        = this.siteService.getAssignedSite();
     let results$      : Observable<POSOrdersPaged>;
     this.invisibleOrders = [];
+
+    if (this.isUser || !this.user) {
+      model.greaterThanZero = 0;
+    }
 
     if (this.viewType == 3) {
       model.pageNumber    = pageNumber

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
-import { Subscription, switchMap, Observable, of  } from 'rxjs';
+import { Subscription, switchMap, Observable, of, catchError  } from 'rxjs';
 import { AuthenticationService } from 'src/app/_services';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -42,6 +42,9 @@ export class UserBarComponent implements OnInit {
         })).pipe(switchMap(data => {
           this.client = data;
           return of(data)
+    }),catchError(data => { 
+      console.log('error getting client', data)
+      return of(data)
     }))
     this.getMenuGroup('customer')
   }
@@ -57,6 +60,8 @@ export class UserBarComponent implements OnInit {
   logOut() {
     this.userSwitchingService.clearLoggedInUser();
   }
+
+
 
   emailMailCount(event) {
     this.mailCount = event

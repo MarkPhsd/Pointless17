@@ -30,7 +30,7 @@ interface itemOption {
 export class PromptPanelMenuItemComponent implements OnInit {
   @ViewChild('promptMenuItemView')     promptMenuItemView: TemplateRef<any>;
   menuItem                  : IMenuItem;
-
+  @Input() phoneDevice: boolean;
   @Input() promptMenuItem   : PromptMenuItem;
   @Input() subGroupInfo     : PromptSubGroups;
   @Input() index            : number; //this is not the index of the menu item, but of it's parent.
@@ -249,7 +249,11 @@ export class PromptPanelMenuItemComponent implements OnInit {
         //do check again after item has been added.
         orderPromptGroup = this.validateAddingItem();
 
-        if (!orderPromptGroup) { return };
+        if (!orderPromptGroup) { return };  
+
+        if (this.phoneDevice) { 
+          this.siteService.notify(item?.menuItem?.name + ' added. See below.', '', 1000, 'green')
+        }
 
         const moveOnQuantity = currentSubPrompt.moveOnQuantity;
         const quantityMet  = currentSubPrompt.quantityMet;

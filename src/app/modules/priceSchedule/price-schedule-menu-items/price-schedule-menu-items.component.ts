@@ -62,7 +62,6 @@ export class PriceScheduleMenuItemsComponent implements OnInit,OnChanges {
 
   ngOnInit(): void {
     const i = 0;
-    console.log('ngOnInit id', this.id)
     if (this.id) {
       const site   = this.siteService.getAssignedSite();
       this.menus$  = this.priceScheduleService.getScheduleMenuItems(site, +this.id).pipe(switchMap(data => {

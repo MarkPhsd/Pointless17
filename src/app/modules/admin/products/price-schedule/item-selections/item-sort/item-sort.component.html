@@ -25,10 +25,19 @@
               <div>
                 <button  mat-button
                   (click)="deleteSelected(item, index)">
-                      Remove {{discountInfo?.name | truncateText: 8}}
+                      Remove
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
+
+              <div>
+                <button  mat-button
+                  (click)="editSelected(item, index)">
+                      Edit 
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </div>
+
             </div>
           </div>
 

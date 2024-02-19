@@ -3,6 +3,7 @@
   <div  class="parent-container"
         *ngIf="(uiHomePage$ | async) as uiHomePage">
 
+     
     <div  class="flex-row">
       <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
       <ng-container [ngTemplateOutlet]='departmentsFilter'></ng-container>
@@ -151,11 +152,12 @@
 </ng-template>
 
 <ng-template #menuItemCard let-item let-type="type">
+
     <app-menu-item-card
         *ngIf             ="item"
         [displayType]     ="type"
         [allowEdit]       ="userAuths?.editProduct"
-        [allowBuy]       ="userAuths?.allowBuy"
+        [allowBuy]        ="userAuths?.allowBuy"
         [id]              ="item?.id"
         [retail]          ="item?.retail"
         [name]            ="item?.name"

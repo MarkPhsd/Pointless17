@@ -27,7 +27,7 @@ export class NewOrderTypeComponent  {
   @Input() payment: IPOSPayment;
   @Input() showCancel = true;
 
-  updateItems = false;
+  updateItems: boolean = true;
   serviceType  : IServiceType;
   serviceTypes$: Observable<IServiceType[]>;
   action$: Observable<any>;
@@ -107,7 +107,11 @@ export class NewOrderTypeComponent  {
     if (event && event.filterType && event.filterType != 0 ) {
       this.updateItems = true;
     }
-    const item$ = this.orderService.changeOrderType(site, this.orderMethodsService.currentOrder.id, event.id, this.updateItems)
+
+    const order = this.orderMethodsService.currentOrder;
+
+    const item$ = this.orderService.changeOrderType(site, order.id, 
+                                                    event.id, this.updateItems, order.history)
     this.process$ = item$.pipe(
       switchMap(data => {
         this.message = 'Processed';

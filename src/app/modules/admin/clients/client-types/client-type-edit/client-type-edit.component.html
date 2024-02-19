@@ -10,9 +10,7 @@
     <mat-card-title>
       <div class="header-container" >
         <div>
-          <h4>
-           Client Type Edit: {{ clientType.name }}
-           </h4>
+          <h4>  Client Type Edit: {{ clientType?.name }}  </h4>
         </div>
 
         <div>
@@ -632,6 +630,12 @@
                   </mat-slide-toggle>
                 </div>
 
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="editEmail" >
+                    <mat-label>Edit Email</mat-label>
+                  </mat-slide-toggle>
+                </div>
               </div>
           </div>
 

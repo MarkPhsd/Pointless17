@@ -108,7 +108,7 @@
                           formControlName="isRegisterTransaction" >
                 </mat-slide-toggle>
               </mat-label>
-              <mat-hint>This should be marked for all transactions used in sales.</mat-hint>  
+              <mat-hint>This should be marked for all transactions used in sales.</mat-hint>
           </div>
 
           <div>
@@ -120,7 +120,7 @@
                         formControlName="resaleType" >
               </mat-slide-toggle>
             </mat-label>
-            <mat-hint>Clothes, Music, Tools, Misc.</mat-hint> 
+            <mat-hint>Clothes, Music, Tools, Misc.</mat-hint>
           </div>
 
           <div>
@@ -166,7 +166,7 @@
             <mat-label>
               <mat-slide-toggle
                         formControlName="apiOrder" >
-              </mat-slide-toggle> 
+              </mat-slide-toggle>
               <mat-hint> This order type can be used by third party API's.</mat-hint>
             </mat-label>
           </div>
@@ -196,40 +196,49 @@
 
           </div>
 
-          <div *ngIf="serviceType">
+          <div *ngIf="serviceType"  class="grid-items">
             <product-search-selector2
               [productLookupField] = "'defaultProductID1'"
               [id]                 = "serviceType.defaultProductID1"
               [inputForm]          = "inputForm"
-              [description]        = "'Default Item 1'"
-              >
+              (deleteProductSelection)="_deleteDefaultProductID1($event)"
+              [description]        = "'Default Item 1'"  >
             </product-search-selector2>
 
-            <div><button color="warn" mat-raised-button (click)="deleteDefaultProductID1()"> <mat-icon>delete</mat-icon> </button></div>
+            <!-- <div><button color="warn" mat-raised-button (click)="deleteDefaultProductID1()"> <mat-icon>delete</mat-icon> </button></div> -->
           </div>
 
+          <div style="width:50px"></div>
           <div *ngIf="serviceType" class="grid-items">
             <product-search-selector2
               [productLookupField] = "'defaultProductID2'"
               [id]                 = "serviceType.defaultProductID2"
               [inputForm]          = "inputForm"
               [description]        = "'Default Item 2'"
-              >
+              (deleteProductSelection)="_deleteDefaultProductID2($event)">
             </product-search-selector2>
-
-            <div><button color="warn"  mat-raised-button (click)="deleteDefaultProductID2()"> <mat-icon>delete</mat-icon> </button></div>
+<!--
+            <div><button color="warn"  mat-raised-button (click)="deleteDefaultProductID2()"> <mat-icon>delete</mat-icon> </button></div> -->
           </div>
 
-          <div>
-            <mat-form-field appearance="outline">
-              <mat-label >Minimum Order Value </mat-label>
-              <input matInput
-                    type             ="number"
-                    formControlName  ="orderMinimumTotal"
-                    class="form-control" >
+          <div style="width:50px"></div>
+
+          <div class="margin-5" class="grid-items">
+            <div>
+              <mat-form-field appearance="outline" style="width:155px">
+                <mat-label >Minimum Order Value </mat-label>
+                <input matInput
+                      type             ="number"
+                      formControlName  ="orderMinimumTotal"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+            <div>
               <mat-hint>Uses pre-tax sub total.</mat-hint>
-            </mat-form-field>
+            </div>
           </div>
+
+          <div style="width:50px"></div>
 
           <div>
             <ng-container [ngTemplateOutlet]="serviceColorPicker"></ng-container>
@@ -259,8 +268,7 @@
                             rows="20"
                             style="height: 200px;"
                             name="description"
-                            formControlName="description"
-                            >
+                            formControlName="description"  >
             </simple-tinymce>
           </div>
         </div>
@@ -273,8 +281,7 @@
                             rows="20"
                             style="height: 200px;"
                             name="instructions"
-                            formControlName="instructions"
-                          >
+                            formControlName="instructions" >
             </simple-tinymce>
           </div>
         </div>
@@ -286,8 +293,7 @@
                             rows="20"
                             style="height: 200px;"
                             name="shippingInstructions"
-                            formControlName="shippingInstructions"
-                            >
+                            formControlName="shippingInstructions"  >
             </simple-tinymce>
           </div>
         </div>
@@ -300,17 +306,14 @@
                             rows="20"
                             style="height: 200px;"
                             name="scheduleInstructions"
-                            formControlName="scheduleInstructions"
-                          >
+                            formControlName="scheduleInstructions">
             </simple-tinymce>
           </div>
         </div>
       </div>
     </mat-card-content>
   </mat-card>
-
 </div>
-
 
 <ng-template #serviceColorPicker>
   <div *ngIf="serviceType">

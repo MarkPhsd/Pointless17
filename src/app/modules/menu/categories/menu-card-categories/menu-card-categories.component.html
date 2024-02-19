@@ -21,7 +21,7 @@
       <img
           loading   = "lazy"
           draggable = "false"
-          [src]     = "getItemSrc(item?.urlImageMain)"
+          [src]     = "getItemSrc(imageName)"
           err-SRC   = "getPlaceHolder()"
           onerror   = "this.src='assets/images/placeholderimage.png'"
           (click)   = "listItems(item.id)"

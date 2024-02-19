@@ -13,7 +13,7 @@ import { IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces/transaction
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { AWSBucketService, AuthenticationService, ContactsService, OrdersService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
-import { ClientTypeService } from 'src/app/_services/people/client-type.service';
+import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { IStatuses} from 'src/app/_services/people/status-type.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -93,6 +93,14 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   password2
   _user: Subscription;
   user: IUser;
+  userAuths: IUserAuth_Properties
+
+  // get isStaff() {
+  //   if (this.user?.roles =='user' || this.user?.roles == 'guest') {
+  //     return true
+  //   }
+  //   return false
+  // }
 
   initSubscriptions() {
     this._currentOrder = this.orderMethodsService.currentOrder$.subscribe(data=> {
@@ -105,11 +113,17 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   }
 
   initUserSubscriber() {
-    this._user = this.authenticationService.user$.subscribe( data => {
-      this.user  = data
+    this._user = this.authenticationService.user$.pipe(switchMap(data => {
+      this.user = data;
       this.getUserInfo()
+      return this.authenticationService.userAuths$
+    })).subscribe(data => {
+      this.userAuths = data;
+      if (!data) {
+        this.userAuths = {} as IUserAuth_Properties
+      }
     })
-  }
+  };
 
   getUserInfo() {
     let user: IUser;

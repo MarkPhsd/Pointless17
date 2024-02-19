@@ -52,7 +52,27 @@ export class CashPaymentButtonComponent implements OnInit {
 
   ngOnInit(): void {
     const i = 0
+    this.setPaymentAmount()
   }
+
+  setPaymentAmount() {
+    if (this.uiTransactions.dcapMultiPrice) { 
+      if (this.paymentAmount == this.creditBalanceRemaining) { 
+            this.paymentAmount = this.cashDiscount
+            console.log('cash discount', this.cashDiscount)
+      }
+    }
+  }
+
+  get cashDiscount() {
+    if (this.uiTransactions.dcapMultiPrice) { 
+      if (this.uiTransactions && this.uiTransactions?.dcapDualPriceValue != 0) {
+        return this.order.balanceRemaining * (1 + +this.uiTransactions.dcapDualPriceValue) // * (1 + this.uiConfig.dcapDualPriceValue)
+      }
+    }
+    return this.order.balanceRemaining
+  }
+
 
   //Allow Cash Payments For Other Servers
   get isAuthorizedPayment() {

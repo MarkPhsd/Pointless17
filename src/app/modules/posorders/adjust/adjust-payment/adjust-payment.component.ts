@@ -218,7 +218,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   voidPaymentFromSelection(setting) {
 
-
     if (setting) {
       const site = this.siteService.getAssignedSite();
       this.resultAction.voidReason = setting.name

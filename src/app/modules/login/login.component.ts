@@ -14,13 +14,9 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { SplashScreenStateService } from 'src/app/_services/system/splash-screen-state.service';
 import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
-import { ScaleService } from '../../_services/system/scale-service.service';
 import { ElectronService } from 'ngx-electron';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
-import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
-// import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY } from '@angular/cdk/overlay/overlay-directives';
 
 @Component({
     selector   : 'login-dashboard',
@@ -326,6 +322,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   browseMenu() {
     this.initForm();
+    this.userSwitchingService.clearLoggedInUser()
     this.userSwitchingService.browseMenu();
     this.statusMessage = ''
   }

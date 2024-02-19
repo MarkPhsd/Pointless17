@@ -16,7 +16,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class PromptSubGroupPanelComponent implements OnInit, OnDestroy {
   subGroups        : SelectedPromptSubGroup[]
-
+  @Input() phoneDevice: boolean;
   _promptGroup     : Subscription;
   promptGroup      : IPromptGroup
 

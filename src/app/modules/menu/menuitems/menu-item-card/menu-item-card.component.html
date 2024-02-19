@@ -2,6 +2,7 @@
 
  <mat-card  *ngIf="menuItem"
              [style]="buttonColor"
+             
              [class]="matCardClass">
 
     <ng-container [ngTemplateOutlet]="enableViewItem"></ng-container>
@@ -111,12 +112,12 @@
 </ng-template>
 
 <ng-template #buyItemView>
-  <div class="buy-float-button">
+  <div class="view-float-button" *ngIf="isStaff">
     <button
         mat-mini-fab
         color="accent"
         (click)="buyItem()" >
-      <mat-icon  color="primary">class</mat-icon>
+       <mat-icon  color="primary">class</mat-icon>
     </button>
   </div>
 </ng-template>
@@ -131,12 +132,14 @@
 </ng-template>
 
 <ng-template #viewItemView>
-  <div class="view-float-button">
+  <div class="buy-float-button">
     <button
         mat-mini-fab
         color="accent"
         (click)="viewItem()" >
-      <mat-icon  color="primary">open_in_new</mat-icon>
+
+      <mat-icon *ngIf="isStaff" color="primary">open_in_new</mat-icon>
+      <mat-icon *ngIf="!isStaff" color="primary">info</mat-icon>
     </button>
   </div>
 </ng-template>
@@ -218,11 +221,11 @@
           (click)="menuItemActionObs(true, true)" >
 
         <div *ngIf="!isProduct">
-          <mat-icon>open_in_new</mat-icon>
+           <mat-icon>open_in_new</mat-icon>
         </div>
 
         <div *ngIf="isProduct">
-          <mat-icon>plus_one</mat-icon>
+           <mat-icon>plus_one</mat-icon>
         </div>
       </button>
   </div>
@@ -244,7 +247,7 @@
 <ng-template #seeMoreInCategory>
   <div class="category-open">
     <button mat-button (click)="menuItemActionObs(false)">
-      <mat-icon >open_in_new</mat-icon>
+       <mat-icon >open_in_new</mat-icon>
     </button>
   </div>
 </ng-template>

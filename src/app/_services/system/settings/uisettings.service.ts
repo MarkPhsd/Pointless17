@@ -61,18 +61,20 @@ export interface TransactionUISettings {
   dCapEnabled            : boolean;
   dCapSurcharge          : boolean;
   dCapSurchargeValue     : string;
-  dsiTipPrompt: boolean;
-  dsiTipPromptValues    : string;
-  allowPreAuth          : boolean;
+  dcapMultiPrice         : boolean
+  dcapDualPriceValue     : number;
+  dsiTipPrompt           : boolean;
+  dsiTipPromptValues     : string;
+  allowPreAuth           : boolean;
   payPalEnabled          : boolean;
-  payPalClientID        : string;
-  payPalCurrency        : string;
-  creditCardFee         : string;
-  updateInventoryOnScan : boolean;
-  giftCardLength        : number;
-  vipCustomerID         : number;
-  enableGiftCards       : boolean;
-  triposEnabled: boolean;
+  payPalClientID         : string;
+  payPalCurrency         : string;
+  creditCardFee          : string;
+  updateInventoryOnScan  : boolean;
+  giftCardLength         : number;
+  vipCustomerID          : number;
+  enableGiftCards        : boolean;
+  triposEnabled          : boolean;
   displayEditCardOnHeader: boolean;
   showCustomerOption: boolean;
   splitEntry: boolean;
@@ -866,6 +868,8 @@ export class UISettingsService {
       dCapEnabled            : [],
       dCapSurcharge          : [],
       dCapSurchargeValue     : [],
+      dcapMultiPrice         : [],
+      dcapDualPriceValue     : [],
       payPalEnabled          : [ ],
       payPalClientID         : [''],
       payPalCurrency         : [ ],

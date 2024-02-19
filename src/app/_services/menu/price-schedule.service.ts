@@ -1,7 +1,7 @@
 import { Injectable, Input } from '@angular/core';
 import { AuthenticationService } from '../system/authentication.service';
 import { BehaviorSubject, Observable  } from 'rxjs';
-import { ISite }  from 'src/app/_interfaces';
+import { ISite, IUser }  from 'src/app/_interfaces';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
@@ -179,10 +179,14 @@ export class PriceScheduleService {
   };
 
   getPriceScheduleFull(site: ISite, id: number): Observable<IPriceSchedule> {
+    let endPoint = "getPriceScheduleFull"
+    let user =  JSON.parse(localStorage.getItem('user')) as IUser
+    console.log('getPriceScheduleFull', user)
+    if (!user || (user && !user.id)) {
+       endPoint = "getPublicPriceScheduleFull"
+    }
 
     const controller = "/PriceSchedules/"
-
-    const endPoint = "getPriceScheduleFull"
 
     const parameters = `?id=${id}`
 

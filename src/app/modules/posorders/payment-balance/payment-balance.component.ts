@@ -42,7 +42,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   _currentPayment: Subscription;
   posPayment     : IPOSPayment;
   isAuthorized   = false;
-  isUser: boolean;
+  isUser          : boolean;
   hidePrint:      boolean;
   href          : string;
   totalAuthPayments : number;
@@ -141,39 +141,39 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
   getPaymentViewA(item: IPOSPayment) {
-   
-    if ( 
+
+    if (
         (item.account && !item.completionDate) ||
         (item.completionDate && item.amountPaid != 0) ||
         (item && item.voidReason) ||
         (item.tranType  && item?.tranType?.toLowerCase()  === 'authorizationresponse'.toLowerCase() ) ||
         (item.tranType  && item?.tranType.toLowerCase()   === 'VoidSaleByRecordNo'.toLowerCase() ) &&
-                          item?.tranType != 'incrementalAuthorizationResponse') { 
+                          item?.tranType != 'incrementalAuthorizationResponse') {
       return true
                           }
       return false
-     
+
   }
 
-  getPaymentViewB(item) { 
+  getPaymentViewB(item) {
     const order = this.order;
     if (
       ( item?.tranCode != 'EMVPreAuth'      && order.balanceRemaining == 0 ||
-        item?.tranCode != 'IncrementalAuth' && order.balanceRemaining == 0 ) || 
+        item?.tranCode != 'IncrementalAuth' && order.balanceRemaining == 0 ) ||
       ( item?.tranCode == 'EMVPreAuth'      && order.balanceRemaining != 0 ||
         item?.tranCode == 'IncrementalAuth' && order.balanceRemaining != 0)
-    ) { 
+    ) {
       return true
     }
     return false
   }
 
-  dCapViewEnabled(item) { 
+  dCapViewEnabled(item) {
     const uiTransactions = this.uiTransactions;
     if (!this.qrOrder) {
       if (item.completionDate) { return true }
       if ((uiTransactions && uiTransactions?.dCapEnabled && !item.completionDate) &&
-          (item?.tranCode.toLowerCase() === 'emvpreauth' || item?.tranCode.toLowerCase() === 'IncrementalAuth'.toLowerCase()) ) {
+          ((item.tranCode && item?.tranCode.toLowerCase() === 'emvpreauth') ||  (item?.tranCode && item?.tranCode.toLowerCase() === 'IncrementalAuth'.toLowerCase())) ) {
             return true
           }
     }

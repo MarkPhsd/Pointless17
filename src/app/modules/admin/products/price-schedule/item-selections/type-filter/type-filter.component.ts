@@ -1,9 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CheckboxRequiredValidator, FormArray, FormBuilder, UntypedFormGroup } from '@angular/forms';
+import {  UntypedFormGroup } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule,  DiscountInfo} from 'src/app/_interfaces/menu/price-schedule';
-import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { IItemType, ItemTypeService, ItemType_Categories_Reference, IItemTypesList} from 'src/app/_services/menu/item-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';

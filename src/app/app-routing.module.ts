@@ -148,6 +148,8 @@ import { ItemsMainComponent } from './modules/transactions/itemTransactions/item
 import { EbayAuthRedirectComponent } from './modules/admin/settings/software/ebay-settings/ebay-auth-redirect/ebay-auth-redirect.component';
 import { EbayFulfillmentPolicyComponent } from './modules/admin/inventory/ebay/ebay-fulfillment-policy/ebay-fulfillment-policy.component';
 import { EbayReturnPolicyComponent } from './modules/admin/inventory/ebay/ebay-return-policy/ebay-return-policy.component';
+import { DisplayMenuMenuComponent } from './modules/display-menu/display-menu-menu/display-menu-menu.component';
+import { MenuSectionComponent } from './modules/display-menu/display-menu-list/menu-section/menu-section.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
@@ -265,8 +267,11 @@ const routes: Routes = [
 
         { path: 'price-schedule-menu-items',      component: PriceScheduleMenuItemsComponent , data: { title: 'Menu Items', animation: 'isLeft'}},
 
-        { path: 'display-menu-main',      component: DisplayMenuMainComponent , data: { title: 'Display Menu', animation: 'isLeft'}},
-        { path: 'display-menu',      component: DisplayMenuListComponent ,   data: { title: 'Display Menu', animation: 'isLeft'}},
+        { path: 'display-menu-main',    component: DisplayMenuMainComponent , data: { title: 'Display Menu', animation: 'isLeft'}},
+        { path: 'display-menu',         component: DisplayMenuListComponent ,   data: { title: 'Display Menu', animation: 'isLeft'}},
+        { path: 'app-menu-section',         component: MenuSectionComponent ,   data: { title: 'Display Menu', animation: 'isLeft'}},
+        { path: 'display-section',      component: DisplayMenuMenuComponent ,   data: { title: 'Display Menu', animation: 'isLeft'}},
+
         { path: 'admin-display-menu',      component: AdminDisplayMenuListComponent ,canActivate: [AuthGuard], data: { title: 'Display Menu', animation: 'isLeft'}},
         //DisplayMenuListComponent
 

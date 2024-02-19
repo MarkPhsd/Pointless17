@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 // import { IFloorPlan } from 'pointless-room-layout/src/app/app.component';
 import { FloorPlanService, IFloorPlan } from 'src/app/_services/floor-plan.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { CoachMarksService,CoachMarksClass } from '../../widgets/coach-marks/coach-marks.service';
@@ -38,19 +38,17 @@ interface IIsOnline {
 })
 
 export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewInit {
-  @ViewChild('clockInOut')      clockInOut: TemplateRef<any>;
-  @ViewChild('userActions')       userActions: TemplateRef<any>;
+  @ViewChild('clockInOut')           clockInOut: TemplateRef<any>;
+  @ViewChild('userActions')          userActions: TemplateRef<any>;
   @ViewChild('searchMenuView')       searchMenuView: TemplateRef<any>;
-  @ViewChild('floorPlanTemplate') floorPlanTemplate: TemplateRef<any>;
-  @ViewChild('menuButtonContainer') menuButtonContainer: TemplateRef<any>;
-
+  @ViewChild('floorPlanTemplate')    floorPlanTemplate: TemplateRef<any>;
+  @ViewChild('menuButtonContainer')  menuButtonContainer: TemplateRef<any>;
   @ViewChild('coachingTableLayout', {read: ElementRef}) coachingTableLayout: ElementRef;
   @ViewChild('coachingLogin', {read: ElementRef}) coachingLogin: ElementRef;
   @ViewChild('coachingPosTerminalIcon', {read: ElementRef}) coachingPosTerminalIcon: ElementRef;
   @ViewChild('coachingIDScanner', {read: ElementRef}) coachingIDScanner: ElementRef;
 
   // @ViewChildren('coachingPosTerminalIcon', {read: ElementRef}) coaching: QueryList<ElementRef>;
-
   action$: Observable<any>;
 
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
@@ -64,9 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   company                    = {} as ICompany;
   compName:                  string;
-  userName:                  string;
-  userRoles:                 string;
-  employeeName  :            string;
+
   source:                    MatSlideToggle
   orderBarSource:            MatSlideToggle
   checked:                   boolean;
@@ -76,9 +72,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   id:                        any;
   company$:                  Observable<ICompany>;
 
-  userSave$                 : Observable<any>;
 
-  subscription              :   Subscription;
+  _messages              :   Subscription;
   messages:       any[] = [];
   showSearchForm: boolean;
   showContainer:  boolean;
@@ -103,12 +98,26 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   isUser              =   false;
 
   _transactionUI      :   Subscription;
-  _order              :   Subscription;
-  order               :   IPOSOrder;
+
+  userSave$                 : Observable<any>;
+  userInitCheck$: Observable<any>;
+  user                : IUser;
+  _user               : Subscription;
+  signOut: boolean;
+
+  userName:                  string;
+  userRoles:                 string;
+  employeeName  :            string;
+  homePageSetings       : UIHomePageSettings;
+  uiTransactionSetting  : TransactionUISettings;
+  uiTransactionSetting$ : Observable<TransactionUISettings>;
+  uiHomePageSetting$    : Observable<UIHomePageSettings>;
 
   _orderBar           : Subscription;
   orderBar            : boolean;
 
+  _order              : Subscription;
+  order               : IPOSOrder;
   _order$             : Observable<IPOSOrder>;
   order$              : Subject<Observable<IPOSOrder>> = new Subject();
 
@@ -118,11 +127,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   displayWeight       : string;
 
   _openOrderBar       : Subscription;
-
-  userInitCheck$: Observable<any>;
-  user                : IUser;
-  _user               : Subscription;
-
   searchSideBar       : any;
   _searchSideBar      : Subscription;
 
@@ -137,19 +141,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   siteName        : string;
   bucket          = '';
-  homePageSetings : UIHomePageSettings;
-  uiTransactionSetting  : TransactionUISettings;
-  uiTransactionSetting$ : Observable<TransactionUISettings>;
-  uiHomePageSetting$    : Observable<UIHomePageSettings>;
   floorPlans$     : Observable<IFloorPlan[]>;
   posDevice$      : Observable<ITerminalSettings>;
   terminalSetting : any;
-  signOut: boolean;
-
   mailCount  = 0;
   headerBackColor: string;
-
+  userChecked: boolean;
   _site: Subscription;
+
   initSiteSubscriber() {
     this._site = this.siteService.site$.subscribe( data => {
       this.site = data
@@ -170,10 +169,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   initUserSubscriber() {
     this._user = this.authenticationService.user$.subscribe( data => {
-      this.user  = data
-      // console.log('update?', data)
+      if (this.user && (data && data.id)) {
+        if (this.user.id == data.id) {    this.userChecked = true; }
+      }
+      this.user = data
+      this.setInterFace(data)
       this.setHeaderBackColor(this.user?.userPreferences?.headerColor)
-      // this.getUserInfo()
     })
   }
 
@@ -190,12 +191,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   initMainToolbarUI() {
     this._mainMenuSideBar = this.toolbarUIService.mainMenuSideBar$.subscribe( data => {
-      if (data) {
-        this.menuBar = 'menu_open'
-      }
-      if (!data) {
-        this.menuBar = 'menu'
-      }
+      if (data) {   this.menuBar = 'menu_open' }
+      if (!data) {   this.menuBar = 'menu'  }
     })
   }
 
@@ -248,10 +245,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
               public  coachMarksService      : CoachMarksService,
               private paymentMethodsService: PaymentsMethodsProcessService,
               private clientService         : ClientTableService,
+              private settingsService: SettingsService,
               private fb                    : UntypedFormBuilder ) {
   }
 
   ngOnChanges() {
+
+    this.userChecked = false;
     const user = this.getUserInfo();
   }
 
@@ -259,6 +259,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   ngOnInit() {
+
+    this.userChecked = false
     this.site =  this.siteService.getAssignedSite();
     this.getDeviceInfo();
     this.getUITransactionsSettings();
@@ -267,6 +269,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     this.messageService.sendMessage('show');
     this.platFormService.getPlatForm();
     this.initSubscriptions();
+
     this.getUserInfo();
     this.refreshScannerOption()
     this.searchForm = this.fb.group( {  searchProducts: '' });
@@ -278,6 +281,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     this.updateScreenSize();
     this.pollingService.poll();
     this.initUserOrder();
+
     this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(this.site);
   }
 
@@ -329,10 +333,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   initUIService() {
-    this.uiHomePageSetting$ =  this.uiSettings.getSetting('UIHomePageSettings').pipe(
+    this.uiHomePageSetting$ =  this.settingsService.getUIHomePageSettings().pipe(
       switchMap( data => {
         if (data) {
-          this.homePageSetings  = JSON.parse(data.text) as UIHomePageSettings;
+          this.homePageSetings  = data // JSON.parse(data.text) as UIHomePageSettings;
           this.uiSettings.updateHomePageSetting(this.homePageSetings)
           return of(this.homePageSetings)
         }
@@ -349,6 +353,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   ngOnDestroy() {
+    this.userChecked = false
     if (this._searchSideBar) { this._searchSideBar.unsubscribe()}
     if (this._openOrderBar) {  this._openOrderBar.unsubscribe(); }
     if (this._scaleInfo) {this._scaleInfo.unsubscribe(); }
@@ -356,6 +361,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     if (this._user) {this._user.unsubscribe();}
     if ( this._mainMenuSideBar) { this._mainMenuSideBar.unsubscribe()}
     if (this._site) {this._site.unsubscribe()}
+    this.setInterFace(null)
   }
 
   refreshUserBar(user: IUser) {
@@ -426,17 +432,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   get userInfoScreen() {
-    // console.log('user info screen', this.smallDevice, this.phoneDevice)
+    if (this.phoneDevice || this.smallDevice)  {return  null}
     if (this.signOut) {
       return this.userActions
     }
-    if (this.phoneDevice || this.smallDevice)  {return  null}
     return this.userActions
   }
 
-
   get userActionsPhoneDevice() {
-    // console.log('userActionsPhoneDevice', this.smallDevice, this.phoneDevice)
     if (this.phoneDevice || this.smallDevice) {
       return this.userActions
     }
@@ -514,38 +517,76 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   getUserInfo() {
+    //this verifies both the user as well as a refresh as well as a
+    //api switch. If a user switches from one api to another
+    //it will verify this user is also correctly logged into to other api
+    // and it will update the id of that user if they have the same user/pass
+    this.signOut = true;
     this.initUserInfo();
     let user: IUser;
-
     if (this.user) { user = this.user  }
-    if (!user) {
-      user = JSON.parse(localStorage.getItem('user')) as IUser;
-    }
-    //even if someone injects an id or user info, it will validate them against the api.
-    this.signOut = true;
-    //then we validate the user.
 
+    if (!user) {  user = JSON.parse(localStorage.getItem('user')) as IUser;  }
+    if (!user || !user.id) {
+      this.signOut = true;
+      this.userChecked = false;
+    }
+    this.setUserInfo(this.user)
+
+    console.log('get User info', this.user)
+    this.setUserInitCheck(this.user)
+    
+    if (this.userChecked) {
+      this.signOut = false;
+      return
+    }
+
+
+    console.log('user info check')
+    return user
+  }
+
+  setUserInitCheck(user) { 
     this.userInitCheck$ = this.getUserSubscriber(user).pipe(switchMap(data => {
       //or is guest if is guest then override this.
       if (!data) {
-        // this.userSwitchingService.clearLoggedInUser()
         return of(null)
       }
-
-      this.signOut = false;
-      user.id = data?.id
-      user.roles = data.roles;
-      user.username = data?.apiUserName;
-      this.userSwitchingService.setUserInfo(user, user.password)
-      this.refreshUserBar(user)
-      this.setUIFeaturesForUser(user)
+      if (!this.user) { 
+        return of(null)
+      }
+      
+      console.log('is user valid', data.id == user.id);
+      if (data.apiUserName  === user.username) { 
+        console.log('User names match');
+      } else { 
+        this.userSwitchingService.clearLoggedInUser()
+        console.log('User names match');
+      }
       return of(data)
     }),catchError(data => {
-      this.userSwitchingService.clearLoggedInUser()
       console.log('userInitCheck error', data)
+      this.userSwitchingService.clearLoggedInUser()
       return of(data)
     }));
-    return user
+  }
+
+  setUserInfo(data) { 
+    this.setInterFace(data)
+    if (!this.user || !this.user.password) { return}
+  }
+
+  setInterFace(data) { 
+    this.signOut = false;
+    this.userChecked = true
+
+    if (this.user) { 
+      this.user.id = data?.id
+      this.user.roles = data?.roles;
+    }
+ 
+    this.refreshUserBar(this.user)
+    this.setUIFeaturesForUser(data);
   }
 
   initUserInfo() {
@@ -557,11 +598,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     this.employeeName     = '';
   }
 
-
   setUIFeaturesForUser(user) {
+    // console.log('setui features ', user)
     this.isAdmin          = false;
     this.isManager        = false;
     this.showPOSFunctions = false;
+    this.isUserStaff = false;
 
     if (!user) {  return null }
     this.userName     = user.username;
@@ -641,7 +683,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   initSearchObservable() {
-    this.subscription = this.messageService.getMessage().subscribe(data => {
+    this._messages = this.messageService.getMessage().subscribe(data => {
       if (data) {
         this.messages.push(data);
       } else {
@@ -752,8 +794,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   postLogout() {
-    // console.log('post logout')
-    // console.trace("pos logout")
     this.userSwitchingService.clearLoggedInUser();
     this.smallDeviceLimiter();
   }
@@ -790,6 +830,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   switchUser() {
     const order = this.orderMethodsService.currentOrder;
     this.paymentMethodsService.sendOrderAndLogOut( order , true )
+    this.setInterFace(null)
   }
 
   assingBackGround(image: string) {

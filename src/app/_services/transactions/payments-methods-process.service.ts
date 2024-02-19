@@ -226,13 +226,13 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     console.log('finalize order', order.completionDate, order.balanceRemaining )
     if (!paymentResponse ) {
-      // console.log('no payment response', order, paymentMethod)
+      console.log('no payment response', order, paymentMethod)
       this.sitesService.notify(`No payment response `, 'close', 20000, 'red');
       return 0
     }
 
     if (!paymentResponse.payment) {
-      // console.log('no payment in response', order, paymentMethod)
+      console.log('no payment in response', order, paymentMethod)
       this.sitesService.notify('No payment in payment response', 'close', 20000, 'red');
       return 0
     }
@@ -242,33 +242,29 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     const ui = this.uiSettingService._transactionUISettings?.value;
 
-    // console.log('finalize order', order.balanceRemaining, paymentMethod)
     if (payment && paymentMethod) {
 
+      console.log('finalize order', order.balanceRemaining, paymentMethod , payment)
+      console.log('open change', ((payment.amountReceived >= payment.amountPaid && order.completionDate) || order.balanceRemaining == 0))
       if (paymentMethod.isCash) {
-        this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet()
+        if (this.platFormService.isApp()) {
+          this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet()
+        }
       }
 
-      if (order.balanceRemaining == 0) {
-        if (!this.platFormService.isApp()) {
-          // this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+      if (!this.platFormService.isApp()) {
+        if (order.balanceRemaining == 0) {
           this.orderMethodsService.updateOrder(order)
         }
         return 1
       }
 
-      if (paymentMethod.isCreditCard && order.balanceRemaining == 0) {
-        if (this.platFormService.isApp()) {
+      if (this.platFormService.isApp()) {
+        if ((payment.amountReceived >= payment.amountPaid && order.completionDate) || order.balanceRemaining == 0) {
+          this.orderMethodsService.updateOrder(order)
           this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+          return 1
         }
-        return 1
-      }
-
-      if ((payment.amountReceived >= payment.amountPaid && order.completionDate) || order.balanceRemaining == 0) {
-        if (this.platFormService.isApp()) {
-            this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
-        }
-        return 1
       }
 
     }
@@ -458,7 +454,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           return this.paymentService.voidPayment(site, item)
         }
         return of(null)
-
       }
 
       if (!data) {
@@ -471,7 +466,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       return this.orderService.getOrder(site, payment.orderID.toString(), false)
     })).pipe(switchMap(data => {
       if (!data) {
-        this.sitesService.notify('Payment not voided. Please contact Admin.', 'Result', 10000, 'red' )
+        // this.sitesService.notify('Payment not voided. Please contact Admin.', 'Result', 10000, 'red' )
         return of(data)
       }
       this.orderMethodsService.updateOrder(data)
@@ -521,13 +516,13 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     if (!rStream) {
       console.log('no rstream')
       this.sitesService.notify('No RStream resposne', 'close', 3000, 'red');
-      return of(null)
+      return false
     }
 
+    console.log('rStream?.CmdStatus', rStream?.CmdStatus)
     if (!this.isApproved(rStream?.CmdStatus)) {
-      console.log('no rstream CmdStatus')
       this.sitesService.notify(`${rStream?.CmdStatus}  - ${rStream?.TextResponse}`, 'close', 3000, 'red');
-      return of(null)
+      return false
     }
 
     if (!rStream?.CmdStatus) {
@@ -1189,11 +1184,11 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   getTotalAuthorizations(data: PosPayment) {
-    if (data?.tranType === 'authorizationResponse' || data?.tranType === 'incrementalAuthorizationResponse') {
+    if ( data?.tranType && data?.tranType === 'authorizationResponse' || data?.tranType &&  data?.tranType === 'incrementalAuthorizationResponse') {
       return  data.amountPaid
     }
 
-    if (data?.tranCode.toLowerCase() === 'EmvPreAuth'.toLowerCase() || data?.tranCode.toLowerCase() === 'IncrementalAuth'.toLowerCase()) {
+    if (data?.tranCode && data?.tranCode.toLowerCase() === 'EmvPreAuth'.toLowerCase() || data?.tranCode &&  data?.tranCode.toLowerCase() === 'IncrementalAuth'.toLowerCase()) {
       return  data.amountPaid
     }
     return 0

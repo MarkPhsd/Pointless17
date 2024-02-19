@@ -322,13 +322,12 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   _listItems(event) {
-    this.listItems(event?.value)
+    this.listItems(event)
   }
 
   listItems(id:number) {
     this.initProductSearchModel(id)
     this.searchModel = this.menuService.initSearchModel()
-
 
     if (this.itemTypeID == 4) {
       this.searchModel.categoryID = id;

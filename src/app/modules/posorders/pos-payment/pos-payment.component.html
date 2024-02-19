@@ -90,7 +90,7 @@
               <h4>Payment Amount: {{paymentAmount | currency}}</h4>
             </div>
 
-            <div style="margin-left: 5px" *ngIf="!splitByItem">
+            <div style="margin-left: 5px" *ngIf="!splitByItem && !uiTransactions.dcapDualPriceValue">
               <button class="splitbutton"
                       mat-raised-button
                       color="primary"
@@ -142,7 +142,7 @@
                                                       (
                                                         (order?.balanceRemaining != 0 || isNegativePaymentAllowed ||
                                                         isZeroPaymentAllowed )
-                                                    || (order?.balanceRemaining < 0 || isNegativePaymentAllowed )
+                                                        || (order?.balanceRemaining < 0 || isNegativePaymentAllowed )
                                                         ) &&
                                                       !splitByItem)">
 
@@ -207,7 +207,8 @@
                 <div class="item-container item-buttons-container">
                   <div>
                     <button mat-raised-button
-                    class="payment-buttons"  (click)="goToPaymentMethod()" >
+                            class="payment-buttons"  
+                            (click)="goToPaymentMethod()" >
                       Start Over
                       <mat-icon>back</mat-icon>
                     </button>
@@ -237,7 +238,7 @@
                     </h4>
                     <h5>
                       <div *ngIf="order && order.clients_POSOrders">
-                        Point Cash Value {{order.clients_POSOrders.loyaltyPointValue | currency}}
+                        Point Cash Value {{order.clients_POSOrders?.loyaltyPointValue | currency}}
                       </div>
                     </h5>
                   </div>
@@ -389,8 +390,8 @@
         [platForm]="platForm"
         [creditBalanceRemaining]="creditPaymentAmount"
         [paymentAmount] ="order.balanceRemaining"
-        [isApp]         ="platFormService.isApp" >
-      <div>Total</div>
+        [isApp]         ="isApp" >
+      <div>Total</div> 
     </cash-payment-buttons>
   </ng-container>
 </ng-template>
@@ -406,7 +407,7 @@
         [platForm]="platForm"
         [creditBalanceRemaining]="creditPaymentAmount"
         [paymentAmount] ="5"
-        [isApp]         ="platFormService.isApp" >
+        [isApp]         ="isApp" >
         <div>&nbsp;</div>
     </cash-payment-buttons>
   </ng-container>
@@ -423,7 +424,7 @@
         [platForm]="platForm"
         [creditBalanceRemaining]="creditPaymentAmount"
         [paymentAmount] ="10"
-        [isApp]         ="platFormService.isApp" >
+        [isApp]         ="isApp" >
         <div>&nbsp;</div>
     </cash-payment-buttons>
   </ng-container>
@@ -440,7 +441,7 @@
         [platForm]="platForm"
         [creditBalanceRemaining]="creditPaymentAmount"
         [paymentAmount] ="20"
-        [isApp]         ="platFormService.isApp" >
+        [isApp]         ="isApp" >
         <div>&nbsp;</div>
     </cash-payment-buttons>
   </ng-container>
@@ -450,14 +451,14 @@
   <ng-container class="pay-buttons"
                 *ngIf="!smallDevice && isApp">
     <cash-payment-buttons
-        [order]="order"
-        [userAuths]="userAuths"
-        [order]="order"
-        [uiTransactions]="uiTransactions"
-        [platForm]="platForm"
-        [creditBalanceRemaining]="creditPaymentAmount"
-        [paymentAmount] ="50"
-        [isApp]         ="platFormService.isApp" >
+          [order]="order"
+          [user]="user"
+          [userAuths]="userAuths"
+          [uiTransactions]="uiTransactions"
+          [platForm]="platForm"
+          [creditBalanceRemaining]="creditPaymentAmount"
+          [paymentAmount] ="50"
+          [isApp]         ="isApp" >
         <div>&nbsp;</div>
     </cash-payment-buttons>
   </ng-container>
@@ -474,7 +475,7 @@
         [platForm]="platForm"
         [creditBalanceRemaining]="creditPaymentAmount"
         [paymentAmount] ="100"
-        [isApp]         ="platFormService.isApp" >
+        [isApp]         ="isApp" >
         <div>&nbsp;</div>
     </cash-payment-buttons>
   </ng-container>

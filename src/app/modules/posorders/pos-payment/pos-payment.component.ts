@@ -30,7 +30,6 @@ import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
-import { ReadableStreamDefaultController } from 'node:stream/web';
 
 @Component({
   selector: 'app-pos-payment',
@@ -59,7 +58,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   @Input() order  :   IPOSOrder;
   isApp = this.platFormService.isApp();
   userAuths       :   IUserAuth_Properties;
-  _userAuths      : Subscription;
+  _userAuths      :  Subscription;
   changeDueComing :   any;
   loginAction     :   any;
   id              :   number;
@@ -181,11 +180,19 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       this.posPayment = data
     })
 
-    this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
+    this._userAuths = this.authenticationService.userAuths$.pipe(
+      switchMap(data => {
       if (data) {
         this.userAuths = data;
-        // data.allowBuy
+        return of(data)
       }
+      this.userAuths = JSON.parse(localStorage.getItem('userAuth')) as IUserAuth_Properties
+      if (this.userAuths) {
+        this.authenticationService.updateUserAuths(this.userAuths)
+      }
+      return of(this.userAuths)
+    })).subscribe(data => {
+
     })
   }
 

@@ -93,6 +93,7 @@ export interface IUserAuth_Properties {
 
   allowReconciliation: boolean;
   allowSeeItemCost: boolean;
+  editEmail: boolean;
 }
 
 @Injectable({

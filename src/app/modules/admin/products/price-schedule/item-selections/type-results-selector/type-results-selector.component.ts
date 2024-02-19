@@ -3,8 +3,8 @@ import { Component,  Inject,  Input, Output,OnChanges, OnInit, Optional, ViewChi
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
-import { IProductSearchResults, IProductSearchResultsPaged, MenuService } from 'src/app/_services';
+import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
+import { IItemBasicB, IProductSearchResults, IProductSearchResultsPaged, MenuService } from 'src/app/_services';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
@@ -12,6 +12,7 @@ import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { DiscountInfo, IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 
 
 function myComparator(value1, value2) {
@@ -41,6 +42,18 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   searchPhrase:         Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
+
+  categories: IMenuItem[];
+  subCategories: IMenuItem[];
+  subCategories$ : Observable<IMenuItem[]>;
+  subCategoriesList: IMenuItem[];
+  categoriesList: IMenuItem[];
+  departmentsList: IMenuItem[];
+  categories$      : Observable<IMenuItem[]>;
+  departments$     : Observable<IMenuItem[]>;
+  productTypes$    : Observable<IItemBasicB[]>;
+  categoryID: number;
+  subCategoryID: number;
 
   searchItems$              : Subject<IProductSearchResults[]> = new Subject();
   _searchItems$ = this.searchPhrase.pipe(
@@ -122,13 +135,18 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     private priceScheduleDataService: PriceScheduleDataService,
   )
   {
-    this.searchForm = this.fb.group( { itemName: ''});
+    this.searchForm = this.fb.group( {
+       itemName: '',
+       categoryID: [],
+       subCategoryID: [],
+    });
     this.initGridOptions();
   }
 
   ngOnInit() {
     this.rowSelection   = 'multiple'
     this.initSubscriptions();
+    this.refreshGroupingDataOnly()
   }
 
   ngDestroy() {
@@ -175,7 +193,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   initColumnDefs() {
 
    this.columnDefs =   [
-        {headerName: 'Name', field: 'name', sortable: true,
+      {headerName: 'Name', field: 'name', sortable: true,
         width: 300, minWidth: 300,
         cellRenderer: 'showMultiline',
         wrapText: true,
@@ -196,7 +214,8 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
       },
     ]
     // this.columnDefs.push(this.getValueField('department', 'Department', null, false,))
-    // this.columnDefs.push(this.getValueField('category', 'Category', null, false,))
+    this.columnDefs.push(this.getValueField('category', 'Category', null, false,))
+    this.columnDefs.push(this.getValueField('subCategory', 'Sub Category', null, false,))
     return    this.columnDefs ;
   }
 
@@ -226,9 +245,19 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     }
   }
 
-
+  getSubCategory() { 
+    if (this.subCategoryID) { 
+      return this.subCategoryID
+    }
+    return null;
+  }
   //the category in this component comes from input
   getCategoryID(): number  {
+
+    if (this.categoryID) { 
+      return this.categoryID;
+    }
+
     if (!this.selectedCategory) { return }
 
     if (this.selectedCategory) {
@@ -239,6 +268,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
         return this.selectedCategory.itemID;
       }
     }
+
     return 0
   }
 
@@ -375,6 +405,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 
   initSearchModel(): ProductSearchModel {
     const categoryID = this.getCategoryID();
+    const subCategoryID = this.getSubCategory()
     const brandID  = this.getBrandID();
     // console.log('initSearchModel')
     return this.agGridService.initProductSearchModel(
@@ -383,7 +414,8 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
         this.pageSize,
         this.currentPage,
         this.getSelectedItemTypeID(),
-        brandID
+        brandID, 
+        subCategoryID,
     );
   }
 
@@ -547,6 +579,55 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     const index = this.requiredItems.findIndex( data => data.itemID == sub.id )
     if (index == -1){ return false }
     if (index != -1){ return true  }
+  }
+
+
+  refreshGroupingDataOnly() {
+    const site             = this.siteService.getAssignedSite()
+    this.categories$       = this.menuService.getListOfCategoriesAll(site);
+    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(switchMap(data => { 
+      this.subCategoriesList = data;
+      return of(data)
+    }))
+  }
+
+  refreshSubCategories() {
+    const site          = this.siteService.getAssignedSite()
+    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(
+      switchMap(data => {
+        if (this.categoryID != 0  && this.categoryID != undefined) {
+          this.categoriesList = data.filter(data => {return data.categoryID == this.categoryID});
+          return of(data)
+        }
+        this.subCategoriesList = data;
+        return of(data)
+      })
+    )
+  }
+
+  refreshCategories() {
+    const site          = this.siteService.getAssignedSite()
+    this.categories$    = this.menuService.getListOfCategoriesAll(site).pipe(
+      switchMap(data => {
+        this.categoriesList = data;
+        return of(data)
+      })
+    )
+  }
+
+  refreshSubCategoryChange(event) {
+    this.subCategoryID = event;
+    this.refreshSearch(this.searchForm.controls['itemName'].value);
+  }
+
+  refreshCategoryChange(event) {
+    this.categoryID = event;
+    this.refreshSearch(this.searchForm.controls['itemName'].value);
+    this.refreshSubCategories();
+  }
+
+  syncSelection() {
+
   }
 
 }

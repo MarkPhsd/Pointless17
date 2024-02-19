@@ -133,7 +133,7 @@
 </ng-template>
 
 <ng-template #dCapCaptureView  let-item>
-  
+
   <div *ngIf="dCapViewEnabled(item)" >
 
     <div *ngIf="(order.creditBalanceRemaining != 0 && totalAuthPayments > 0 )">
@@ -150,14 +150,14 @@
                 (click)="incrementalAuthByRecordNo(item,  +(+order?.creditBalanceRemaining - +totalAuthPayments).toFixed(2))">
         <mat-label>Add <br> {{ order?.creditBalanceRemaining - totalAuthPayments | currency }}</mat-label>
       </button>
-    </div> 
+    </div>
 
-    <div  style="font-size:1.2em;margin-top:10px"  
+    <div  style="font-size:1.2em;margin-top:10px"
           *ngIf="(order.creditBalanceRemaining != 0 && totalAuthPayments > 0 && item?.tipAmount > 0 )">
         Tip {{item?.tipAmount  | currency}}
     </div>
 
-    <div *ngIf="( order.creditBalanceRemaining != 0 && totalAuthPayments > 0 ) || item.completionDate "
+    <div *ngIf="!isUser && ( order.creditBalanceRemaining != 0 && totalAuthPayments > 0 ) || item.completionDate "
           style="font-size:1.2em;margin-top:10px">
       <button   color="warn"
                 class="payment-buttons-sm"
@@ -165,7 +165,7 @@
                 mat-raised-button (click)="editPayment(item)">
         <mat-icon>edit</mat-icon><br>
           Edit Tip</button>
-    </div> 
+    </div>
 
   </div>
 </ng-template>
@@ -179,9 +179,9 @@
     ) && item.tranType === 'authorizationResponse')  " >
 
     <div *ngIf="order.creditBalanceRemaining !=  0 && totalAuthPayments > 0">
-      <button class="payment-button-balance" 
-              mat-raised-button 
-              color='primary' 
+      <button class="payment-button-balance"
+              mat-raised-button
+              color='primary'
               (click)="captureTriPOS(item)">
           <mat-label>Complete <br> {{ totalAuthPayments | currency }}</mat-label>
       </button>
@@ -247,7 +247,7 @@
   <div class="amount-paid" *ngIf="(item?.tranCode && item?.tranCode.toLowerCase()  != 'EMVPreAuth'.toLowerCase()) &&
                                   (item?.tranCode && item?.tranCode.toLowerCase()  != 'IncrementalAuth'.toLowerCase()) "
                                   >
-                            
+
     <span *ngIf="item?.tranCode">
       {{item?.tranCode.replace('PreAuthCapture', 'Captured')}}
     </span>
@@ -299,7 +299,7 @@
 <ng-template #removeLastAuthView>
   <div *ngIf="incrementalAuth">
     <button class="payment-button-balance"
-            color="warn" 
+            color="warn"
             mat-raised-button (click)="reverseIncrementalAuth(incrementalAuth)">
       <mat-label class="reverse-label">
         Reverse <br> Last Auth

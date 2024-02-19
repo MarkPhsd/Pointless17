@@ -62,8 +62,9 @@
 
               <div>
                 <mat-icon class="mat-label-info"
-                color="accent"
-                [matTooltip]="labelingService.profile[0].value">info</mat-icon>
+                          color="accent"
+                          [matTooltip]="labelingService.profile[0].value">info
+                </mat-icon>
 
                 <mat-slide-toggle
                         name="accountDisabled"
@@ -74,8 +75,9 @@
 
               <div>
                 <mat-icon class="mat-label-info"
-                color="accent"
-                [matTooltip]="labelingService.profile[1].value">info</mat-icon>
+                          color="accent"
+                          [matTooltip]="labelingService.profile[1].value">info
+                </mat-icon>
 
                 <mat-slide-toggle
                         name="accountLocked"
@@ -116,6 +118,7 @@
                   [inputForm]   ="inputForm"
                   [isAuthorized]="isAuthorized"
                   [enableMEDClients]="enableMEDClients"
+                  [auths]="userAuths"
                   [isStaff]="isStaff">
 
                   <div id="coachingMedical">

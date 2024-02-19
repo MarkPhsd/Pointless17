@@ -25,7 +25,7 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
 
   @ViewChild('buttonDisplay')    buttonDisplay: TemplateRef<any>;
 
-  _savePrompt: Subscription
+  _savePrompt      : Subscription
 
   modifierNote     : string;
   processing       : boolean;
@@ -49,9 +49,11 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
   notesDisplayColumns = 40;
   showNotes: boolean;
 
+
   setToggleKeyboard() {
     this.toggleKeyboard  = !this.toggleKeyboard;
   }
+
   intSubscriptions() {
     this.initPOSItemSubscription();
     this.initPromptGroupSubscription();

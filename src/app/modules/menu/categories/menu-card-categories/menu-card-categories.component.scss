@@ -45,12 +45,15 @@ $white: #efefef;
 
   @include for-phone-only  {
     font-weight: 500;
-    font-size: 1.75em;
+    font-size: clamp(1.2rem, 1.4vw, 1.4rem);
+    // font-size: 1.75em;
     margin: 0;
     position: inherit;
     -ms-transform: translateY(-20%);
     transform: translateY(20%);
   }
+
+  
 
 
 }
@@ -85,7 +88,7 @@ $white: #efefef;
   @include for-phone-only  {
     display: grid;
     grid-template-columns: 50% 50%;
-    gap: 10px;
+    gap: 5px;
   }
   z-index: 100;
 }

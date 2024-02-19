@@ -2,7 +2,7 @@ import { Component, OnInit,Input } from '@angular/core';
 import { DisplayMenuService } from 'src/app/_services/menu/display-menu.service';
 import {Observable, of, switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { AWSBucketService, MenuService } from 'src/app/_services';
+import { AWSBucketService } from 'src/app/_services';
 import { Router } from '@angular/router';
 import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
 @Component({
@@ -12,6 +12,8 @@ import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
 })
 export class DisplayMenuMainComponent implements OnInit {
 
+  ///this is just used to display menu headers
+  //its' not in use right now.
   action$ : Observable<any>;
   bucket  : string;
   placeHolderImage   : String = this.awsBucket.getPlaceHolderImage()
@@ -19,7 +21,6 @@ export class DisplayMenuMainComponent implements OnInit {
   @Input() gridItemWidth = '100%'
   @Input() hideLogo: boolean;
   @Input() iconView: boolean;
-
   style = ''
 
   constructor(

@@ -1,0 +1,177 @@
+<div *ngIf="!order">
+  <div *ngIf="(order$ | async) as order"></div>
+</div>
+<div *ngIf="(addMenuItem$ | async) as action"></div>
+<div *ngIf="obs$ | async"></div>
+  <!-- backcolorOpacity {{menu.backcolorOpacity}} {{menu | json}} -->
+  <!-- backgroundURL{{backgroundURL}} -->
+  <!-- [style.background]="backgroundURL" -->
+  <!-- {{items | json}} -->
+  <!-- backgroundURL {{backgroundURL }}  menu?.backcolorOpacity {{menu?.backcolorOpacity }} -->
+  <!-- [style.opacity]="menu?.backcolorOpacity" -->
+
+<ng-template #loading>
+  <mat-spinner [diameter]="50">
+  </mat-spinner>
+</ng-template>
+
+<div *ngIf="(bucket$ | async) as bucket" >
+  <ng-container [ngTemplateOutlet]="categoryView"
+                [ngTemplateOutletContext]="{$implicit: menu}"></ng-container>
+</div>
+<ng-template #category let-category>
+
+  <div class="category-view"
+       [style.background-color]="backGroundStyle"
+       style.background-repeat="repeat"
+       [style.height]="'calc(120% + 200px)'"
+       [style.width]="'100%'"
+       *ngIf="categoryMenu as category"
+      >
+       <!-- -->
+      <div [style.opacity]="1" >
+        <div class="category">
+          <h1>{{ categoryMenu?.name }}</h1>
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+      <!--  -->
+      <div [style.opacity]="1"  >
+        <div *ngIf="category" class="large-view">
+          <div class=" grid-item-features-container" >
+            <div class="feature-start"></div>
+            <div class="grid-item-features">
+              <div class="feature-column"><div *ngIf="category.showGlueten">GF </div></div>
+              <div class="feature-column"><div *ngIf="category.showABV">ABV</div></div>
+              <div class="feature-column"><div *ngIf="category.showImage"> </div></div>
+              <div class="feature-column"><div *ngIf="category.showProof">Proof</div></div>
+              <div class="feature-column"><div *ngIf="category.showTHC">THC </div></div>
+              <div class="feature-column"><div *ngIf="category.showCBD">CBD </div></div>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngTemplateOutlet="categoryItemDiscountsView,context: {$implicit: category}"></ng-container>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template #categoryItemDiscountsView let-category>
+
+  <div *ngIf="category && category.itemDiscounts && category.itemDiscounts.length>0">
+    <div class="item" *ngFor="let item of category.itemDiscounts">
+      <div class="grid-container"  *ngIf="item">
+
+        <div class="grid-add-button">
+          <div>
+            <button mat-fab color="primary" (click)="menuItemActionObs(item?.menuItem)">
+                <mat-icon>add</mat-icon>
+            </button>
+          </div>
+
+          <div classs="item-name-view-large">
+            <ng-container [ngTemplateOutlet]="itemName"></ng-container>
+          </div>
+
+          <div class="small-view row-span-all  text-padding">
+
+            <div class="row-span-all">
+              <ng-container [ngTemplateOutlet]="itemdescription"></ng-container>
+            </div>
+
+            <div class="row-span-all">
+              <ng-container [ngTemplateOutlet]="iteminfo"></ng-container>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="large-view">
+          <div class="row-span-all display-font-medium">
+            <ng-container [ngTemplateOutlet]="iteminfo"></ng-container>
+            <ng-container [ngTemplateOutlet]="itemdescription"></ng-container>
+          </div>
+        </div>
+
+        <ng-container [ngTemplateOutlet]="itemPriceImage"></ng-container>
+
+      </div>
+
+      <ng-template #itemName>
+        <div>
+          <button mat-button (click)="menuItemActionObs(item?.menuItem)">
+            <div class="item-price display-font-large">
+              {{ item?.menuItem?.name }}
+            </div>
+          </button>
+        </div>
+      </ng-template>
+
+      <ng-template #iteminfo>
+        <div class="grid-item-features">
+
+          <div class="feature-column" ><div *ngIf="category.showGlueten">
+            <div class="ps-flex-group">
+              <div class="small-view display-font-small">
+                GF
+              </div>
+              <div>
+                <mat-slide-toggle
+                  class="example-margin"
+                  color="primary"
+                  [checked]="item?.menuItem?.glutenFree"
+                  [disabled]="true" >
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div></div>
+
+          <div class="feature-column"><div *ngIf="item?.menuItem?.abv && category && category.showABV">
+            {{ item?.menuItem?.abv | percent: '1.2-2' }}
+          </div></div>
+
+          <div class="feature-column" ><div *ngIf="item?.menuItem?.proof && category && category.showProof">
+            {{ item?.menuItem?.proof | percent: '1.2-2' }}
+          </div></div>
+          <div class="feature-column" ><div *ngIf="item?.menuItem?.thc && category && category.showTHC">
+            {{ item?.menuItem?.thc }}
+          </div></div>
+
+          <div class="feature-column" ><div *ngIf="item?.menuItem?.cbd && category && category.showCBD">
+            {{ item?.menuItem?.cbd }}
+          </div></div>
+
+        </div>
+      </ng-template>
+
+      <ng-template #itemdescription>
+        <div class="text-spacing"  [innerHtml]=" item?.menuItem?.onlineShortDescription"></div>
+      </ng-template>
+
+      <ng-template #itemPriceImage>
+        <div *ngIf="category.showImage" class="grid-price-view-container">
+          <div class="grid-price-view">
+            <div class="grid-image-item">
+              <img
+                loading   = "lazy"
+                draggable = "false"
+                [src]     = "_getItemSrc(item, category)"
+                err-SRC   = "getPlaceHolder()"
+                onerror   = "this.src='assets/images/placeholderimage.png'"
+                class     = "menu-item-image"
+                [alt]     = "item?.logo">
+            </div>
+            <div class="item-price">
+              <button mat-button>
+                <div class="display-font-large">{{ item?.menuItem?.retail | currency }}</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+</ng-template>
+

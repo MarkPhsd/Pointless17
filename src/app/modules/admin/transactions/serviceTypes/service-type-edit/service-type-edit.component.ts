@@ -143,6 +143,14 @@ export class ServiceTypeEditComponent implements OnInit {
       this.updateItem(null)
     }
 
+    _deleteDefaultProductID1(event)  {
+      this.inputForm.patchValue({defaultProductID1: 0})
+      this.updateItem(null)
+    }
+    _deleteDefaultProductID2(event)  {
+      this.inputForm.patchValue({defaultProductID2: 0})
+      this.updateItem(null)
+    }
     deleteItem(event) {
 
       const site = this.siteService.getAssignedSite()

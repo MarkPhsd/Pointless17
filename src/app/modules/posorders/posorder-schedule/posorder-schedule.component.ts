@@ -294,7 +294,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     this.selectedIndex = index;
     const site = this.siteService.getAssignedSite();
     this.processingUpdate = true;
-    const action$ = this.orderService.changeOrderType(site, this.order.id, this.serviceType.id, true)
+    const action$ = this.orderService.changeOrderType(site, this.order.id, this.serviceType.id, true, this.order.history)
     this.action$ =   action$ .pipe(
       switchMap(data => {
         this.processingUpdate = false;

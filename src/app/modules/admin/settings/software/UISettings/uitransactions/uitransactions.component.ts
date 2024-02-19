@@ -97,8 +97,6 @@ export class UITransactionsComponent implements OnInit {
     }))
   }
 
-
-
   initFormData(data: TransactionUISettings) {
     this.inputForm = this.uISettingsService.initForm(this.inputForm);
       if (data && data) {

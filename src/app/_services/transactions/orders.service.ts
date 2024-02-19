@@ -847,13 +847,13 @@ export class OrdersService {
 
   }
 
-  changeOrderType(site: ISite, id: number, orderTypeID: number, updateItems: boolean): Observable<IPOSOrder> {
+  changeOrderType(site: ISite, id: number, orderTypeID: number, updateItems: boolean, history: boolean): Observable<IPOSOrder> {
 
     const controller = "/POSOrders/";
 
-    const endPoint = "changeOrderType";
+    const endPoint = "changeOrderTypeV2";
 
-    const parameters = `?id=${id}&orderTypeID=${orderTypeID}&updateItems=${updateItems}`
+    const parameters = `?id=${id}&orderTypeID=${orderTypeID}&updateItems=${updateItems}&history=${history}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 

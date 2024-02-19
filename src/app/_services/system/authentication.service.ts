@@ -109,7 +109,7 @@ export class AuthenticationService {
         localStorage.setItem('userAuthstemp', JSON.stringify(userAuths));
       }
     }
-
+  
     updateDeviceInfo(item: IDeviceInfo) {
       this._deviceInfo = item
     }
@@ -301,9 +301,8 @@ export class AuthenticationService {
       this.clearUserSettings();
       this.toolbarUIService.updateOrderBar(false)
       this.toolbarUIService.updateToolBarSideBar(false)
-      // console.log('cleared user settings go to login.isapp:', this.platFormservice.isApp())
+ 
       if (!this.platFormservice.isApp()) {
-
         if (!this.appInitService?.useAppGate) {
           this.router.navigate(['/login']);
           this.setPinPadLogIn(pinPadDefaultOnApp);

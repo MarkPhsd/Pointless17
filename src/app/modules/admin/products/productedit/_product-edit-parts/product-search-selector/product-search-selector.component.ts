@@ -18,6 +18,7 @@ export class ProductSearchSelector2Component implements OnInit, AfterViewInit {
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
+  @Output() deleteProductSelection  = new EventEmitter();
 
   itemNameInput: string; //for clear button
   @Input() formFieldClass     = 'formFieldClass-standard'
@@ -91,6 +92,18 @@ export class ProductSearchSelector2Component implements OnInit, AfterViewInit {
     })
   }
 
+
+  get searchValueAssigned() {
+    try {
+      if (this.searchForm.controls['itemLookup'].value) {
+        return true
+      }
+    } catch (error) {
+
+    }
+    return false
+  }
+
   getName(id: number) {
     if (!id)             {return null}
     const site  = this.siteService.getAssignedSite();
@@ -115,6 +128,33 @@ export class ProductSearchSelector2Component implements OnInit, AfterViewInit {
   searchItems(name: string) {
     if (!name) { return }
     this.searchPhrase.next(name);
+  }
+
+  clearInput() {
+    this.searchForm.patchValue({itemLookup : ''})
+
+    if (this.productLookupField === 'defaultProductID1') {
+      const prod =  { defaultProductID1: 0 }
+      this.inputForm.patchValue( prod )
+      this.deleteProductSelection.emit(true)
+      return;
+    }
+
+    if (this.productLookupField === 'defaultProductID2') {
+      const prod =  { defaultProductID2: 0 }
+      this.inputForm.patchValue( prod )
+      this.deleteProductSelection.emit(true)
+      return;
+    }
+
+    if (this.productLookupField === 'productID') {
+      const prod = { productID : 0 }
+      this.inputForm.patchValue( prod )
+      this.deleteProductSelection.emit(true)
+      return;
+    }
+
+
   }
 
   selectItem(item: IProduct){

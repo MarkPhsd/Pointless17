@@ -20,145 +20,23 @@
       [bucket]="bucket"
       [menu]="menu">
   </display-menu-title>
-
-  <!-- backcolorOpacity {{menu.backcolorOpacity}}
-  {{menu | json}} -->
-
-  <!-- backgroundURL{{backgroundURL}} -->
-  <!-- [style.background]="backgroundURL" -->
-  <!-- {{items | json}} -->
   <div *ngFor="let category of items" class="categories-grid" >
-    <ng-container *ngTemplateOutlet="categoryView,context: {$implicit: category}"></ng-container>
+    <app-menu-section [menu]="category"></app-menu-section>
   </div>
 
-  <!-- backgroundURL {{backgroundURL }}
-  menu?.backcolorOpacity {{menu?.backcolorOpacity }} -->
-  <!--  -->
-  <!-- [style.opacity]="menu?.backcolorOpacity" -->
-  <div class="category-view"
-            [style.background]="backgroundURL"
-            style.background-repeat="repeat"
-            [style.height]="'calc(120% + 200px)'"
-            [style.width]="'100%'"
-            [style.opacity]="1" >
-    <div *ngIf="menu && menu.footer">
-      {{ menu?.footer }}
-    </div>
-  </div>
+  <ng-container [ngTemplateOutlet]="footerView"
+                [ngTemplateOutletContext]="{$implicit: menu}"></ng-container>
 </div>
 
-<ng-template #categoryView let-category>
-
+<ng-template #footerView let-menu>
   <div class="category-view"
-       [style.background-color]="backGroundStyle"
-       style.background-repeat="repeat"
-       [style.height]="'calc(120% + 200px)'"
-       [style.width]="'100%'"
-      >
-       <!-- -->
-      <div [style.opacity]="1" >
-        <div class="category">
-          <h1>{{ category?.name }}</h1>
-          <mat-divider></mat-divider>
-        </div>
-      </div>
-      <!--  -->
-      <div [style.opacity]="1" >
-        <div *ngIf="category">
-          <div class="item-container">
-            <div class="grid-container">
-              <div></div>
-              <div *ngIf="category.showABV">ABV</div>
-              <div *ngIf="category.showImage"></div>
-              <div *ngIf="category.showProof">Proof</div>
-              <div *ngIf="category.showTHC">THC</div>
-              <div *ngIf="category.showCBD">CBD</div>
-              <div *ngIf="category.showGlueten">GF</div>
-            </div>
-          </div>
-        </div>
-
-        <ng-container *ngTemplateOutlet="categoryItemDiscountsView,context: {$implicit: category}"></ng-container>
-
+      [style.background]="backgroundURL"
+      style.background-repeat="repeat"
+      [style.height]="'calc(120% + 200px)'"
+      [style.width]="'100%'"
+      [style.opacity]="1" >
+    <div *ngIf="menu && menu.footer">
+    {{ menu?.footer }}
     </div>
   </div>
-
-
-</ng-template>
-
-<ng-template #categoryItemDiscountsView let-category>
-
-  <div *ngIf="category && category.itemDiscounts">
-    <div class="item" *ngFor="let item of category.itemDiscounts">
-
-      <div class="item-container" *ngIf="item" >
-        <div class="grid-container">
-
-          <div>
-            <button mat-fab color="primary" (click)="menuItemActionObs(item?.menuItem)">
-                <mat-icon>add</mat-icon>
-            </button>
-            <button mat-button (click)="menuItemActionObs(item?.menuItem)">
-              <div class="item-price">
-                {{ item?.menuItem?.name }}
-              </div>
-            </button>
-          </div>
-
-          <div  class="menu-item-image"
-              *ngIf="(!item?.menuItem?.urlImageMain ||
-                      item?.menuItem?.urlImageMain === '') && category.showImage">
-          </div>
-
-          <div *ngIf="item?.menuItem?.urlImageMain && item?.image != '' && category?.showImage">
-              <img
-                loading   = "lazy"
-                draggable = "false"
-                [src]     = "getItemSrc(item?.logo)"
-                err-SRC   = "getPlaceHolder()"
-                onerror   = "this.src='assets/images/placeholderimage.png'"
-                class     = "menu-item-image"
-                [alt]     = "item?.logo">
-          </div>
-
-          <div *ngIf="item?.menuItem?.abv && category && category.showABV">
-            {{ item?.menuItem?.abv | percent: '1.2-2' }}
-          </div>
-
-          <div *ngIf="item?.menuItem?.proof && category && category.showProof">
-            {{ item?.menuItem?.proof | percent: '1.2-2' }}
-          </div>
-
-          <div *ngIf="item?.menuItem?.thc && category && category.showTHC">
-            {{ item?.menuItem?.thc }}
-          </div>
-
-          <div *ngIf="item?.menuItem?.cbd && category && category.showCBD">
-            {{ item?.menuItem?.cbd }}
-          </div>
-
-          <div *ngIf="category.showGlueten">
-            <mat-slide-toggle
-              class="example-margin"
-              color="primary"
-              [checked]="item?.menuItem?.gluetenFree"
-              [disabled]="true" >
-            </mat-slide-toggle>
-          </div>
-        </div>
-
-        <div class="item-price">
-          <button mat-button>{{ item?.menuItem?.retail | currency }}</button>
-        </div>
-
-      </div>
-
-
-      <div *ngIf="item?.menuItem?.description" class="item-description-row">
-        {{  item?.description | slice: 0:200 }}
-      </div>
-
-  </div>
-  </div>
-
 </ng-template>

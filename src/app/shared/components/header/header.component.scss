@@ -70,6 +70,12 @@
   overflow      : hidden;
 }
 
+.mat-toolbar-spacing {
+  @include for-phone-only  {
+    justify-content: space-between;
+  }
+}
+
 .more-button {
   width: 50px;
 }

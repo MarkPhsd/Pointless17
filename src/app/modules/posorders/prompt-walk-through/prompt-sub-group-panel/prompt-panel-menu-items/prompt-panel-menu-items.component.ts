@@ -25,6 +25,7 @@ export class PromptPanelMenuItemsComponent implements OnInit {
   @Input() selectedSubGroup       : SelectedPromptSubGroup;
   @Input() subGroup               : PromptSubGroups;
   @Input() index                  : number;
+  @Input() phoneDevice            : boolean;
   panelIndex                      = 0;
 
   _accordionStep               : Subscription;

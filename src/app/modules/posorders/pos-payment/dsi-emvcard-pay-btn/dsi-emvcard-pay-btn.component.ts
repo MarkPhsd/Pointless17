@@ -1,4 +1,3 @@
-import { ManagedFocusComponent } from '@ag-grid-community/core';
 import { Component, Input, OnInit } from '@angular/core';
 import { IPaymentMethod } from 'ngx-paypal';
 import { Observable } from 'rxjs';

@@ -17,7 +17,7 @@ import { AWSBucketService, AuthenticationService, MenuService, OrdersService } f
 import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
@@ -50,7 +50,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
   @Output() outputDelete   :  EventEmitter<any> = new EventEmitter();
   @Output() outputSelectedItem : EventEmitter<any> = new EventEmitter();
-  @Input() uiConfig : TransactionUISettings;
+  @Input() ui : TransactionUISettings;
+  ui$: Observable<TransactionUISettings>;
 
   @Input() conditionalIndex    : number;
   @Input() purchaseOrderEnabled : boolean;
@@ -80,6 +81,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   @Input() enableExitLabel : boolean;
   @Input() displayHistoryInfo: boolean;
   @Input() enableItemReOrder  : boolean = false;
+  textNameLength : number = 30;
 
   packages: string;
   morebutton               = 'more-button';
@@ -147,7 +149,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   //&&
   // (!this.orderItem.rewardAvailibleID || this.orderItem.rewardCounterDiscountID ==0)
   get showQuantityEdit() {
-    if ((!this.showEdit  && (this.uiConfig.displayQuantity) &&
+    if ((!this.showEdit  && (this.ui.displayQuantity) &&
        !this.orderItem.serialCode && !this.orderItem.printed ) &&
        this.orderItem.rewardGroupApplied == 0) {
       return true;
@@ -180,6 +182,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
      }
     }
   }
+
 
   getEstPackages(orderItem: PosOrderItem ) {
     if  (orderItem.unitMultiplier == 0) { return ''}
@@ -242,6 +245,9 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
       this.morebutton = 'more-button'
       if (data) {
         this.mainPanel = data;
+        if (this.mainPanel) {
+          this.textNameLength = 50;
+        }
         this.morebutton = 'more-button-main'
         this.isNotInSidePanel = data;
         this.updateCardStyle(data)
@@ -265,7 +271,13 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
       }
     )
   }
-
+  initTransactionUISettings() {
+    this.ui$ = this.uISettingsService.transactionUISettings$.pipe(switchMap(data => {
+        this.ui = data
+        return of(data)
+      }
+    ));
+  }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
@@ -298,6 +310,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
                 public authenticationService: AuthenticationService,
                 public platFormService : PlatformService,
                 private orderService: OrdersService,
+                private uISettingsService: UISettingsService,
                 private requestMessageMethodsService: RequestMessageMethodsService,
               )
   {
@@ -306,6 +319,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
   async ngOnInit() {
     this.initSubscriptions();
+    this.initTransactionUISettings()
     const site = this.siteService.getAssignedSite();
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
@@ -344,6 +358,14 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     this.updateCardStyle(this.mainPanel)
     this.refreshSidePanel()
     this.packages = this.getEstPackages(this.orderItem).toString()
+  }
+
+  get cashDiscount() {
+    // console.log(this.ui?.dcapDualPriceValue, this.subTotal , this.subTotal * (1 + +this.ui?.dcapDualPriceValue))
+    if (this.ui && this.ui.dcapDualPriceValue && this.ui?.dcapDualPriceValue != 0) {
+      return  this.subTotal * (1 + +this.ui?.dcapDualPriceValue)
+    }
+    return null
   }
 
   //item.urlImageMain

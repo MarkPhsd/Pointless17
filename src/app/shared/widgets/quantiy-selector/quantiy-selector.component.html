@@ -1,13 +1,16 @@
   <div *ngIf="inputForm"
        [formGroup]="inputForm"
        class="buttons-quantity">
-
+       
     <div id="addItemToOrder">
-      <button mat-fab  class="button"
-              color="primary"
-              (click)="changeQuantity(1)">
-      <mat-icon>exposure_plus_1</mat-icon></button>
-    </div>
+        <button  mat-fab
+                class="button"
+                color="primary"
+                (click)="changeQuantity(-1)" >
+                <mat-icon>exposure_neg_1</mat-icon>
+        </button>
+      </div>
+
 
     <div class="quantity-input">
       <app-value-fields
@@ -19,11 +22,10 @@
     </div>
 
     <div id="addItemToOrder">
-      <button  mat-fab
-              class="button"
+      <button mat-fab  class="button"
               color="primary"
-              (click)="changeQuantity(-1)" >
-              <mat-icon>exposure_neg_1</mat-icon>
-      </button>
+              (click)="changeQuantity(1)">
+      <mat-icon>exposure_plus_1</mat-icon></button>
     </div>
+
   </div>

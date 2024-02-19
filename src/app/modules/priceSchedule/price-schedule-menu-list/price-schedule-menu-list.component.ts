@@ -60,11 +60,19 @@ export class PriceScheduleMenuListComponent implements OnInit {
     }))
   }
 
-  setItem(event) {
-    this.router.navigate(["/price-schedule-menu-items/", {id: event?.id }]);
+  setItem(menu) {
+    this.router.navigate(["/price-schedule-menu-items/", {id: menu?.id }]);
   }
 
-  _listItems(event) {}
+  _listItems(event) {
+    console.log(event)
+    if (this.menuStyle == 'fancy') {
+      this.router.navigate(['/app-menu-section/', {id: event} ])
+      return;
+    }
+
+  }
+
   _editItem(event) {}
   _nextPage(event) {}
 

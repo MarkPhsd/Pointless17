@@ -11,14 +11,10 @@
           </h2>
         </div>
 
-        <!-- <div>
-          <ng-container [ngTemplateOutlet]="largeScreenButtons"></ng-container>
-        </div> -->
-
       </div>
     </mat-card-subtitle>
     <mat-card-content>
-      <div   [innerHTML]="promptGroup?.instructions"> </div>
+      <div class="font-1-2em font-bold"  [innerHTML]="promptGroup?.instructions"> </div>
     </mat-card-content>
   </mat-card>
   <mat-divider></mat-divider>
@@ -26,7 +22,7 @@
   <mat-card>
     <div class="grid-prompt">
       <div>
-        <prompt-sub-group-panel></prompt-sub-group-panel>
+        <prompt-sub-group-panel [phoneDevice]="phoneDevice"></prompt-sub-group-panel>
       </div>
       <div>
         <prompt-items-selected></prompt-items-selected>

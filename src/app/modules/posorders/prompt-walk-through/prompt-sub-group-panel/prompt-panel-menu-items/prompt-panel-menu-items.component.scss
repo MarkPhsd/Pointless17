@@ -12,7 +12,7 @@
 
 .panel-description {
   font-size: 1.2em;
-  font-weight:400;
+  font-weight:600;
   margin-left:20px;
   @include for-phone-only {
     font-size   : 1.1em;
@@ -23,6 +23,11 @@
 .mat-button-toggle {
   background-color: #d4beba;
   color: #140c0c;
+
+  @include for-phone-only {
+    width: 15vw;
+    max-width: 40px;
+  }
 }
 
 .mat-action-row {

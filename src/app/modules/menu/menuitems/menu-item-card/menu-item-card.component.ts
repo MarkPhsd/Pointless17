@@ -48,6 +48,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   @Input() isStaff: boolean;
   @Input() uiHomePage        : UIHomePageSettings;
   @Input() categoryIDSelected: number;
+  //display type is for the department, top values for grocery
   @Input() displayType      : string ='product';
   @Input() buySell: boolean;
   @Input() promptModifier: boolean;
@@ -206,7 +207,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
     if (!this.isStaff) {
       if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
-        return this.buyItemView
+        return this.viewItemView
       }
     }
 
@@ -290,17 +291,21 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   altMethod(action){
 
+    // console.log('displayType', this.displayType)
+
     if (this.promptModifier) {
       this.menuItemActionObs(action)
     }
+
     if (this.displayType === 'header-category') {
+      console.log('displayType', this.displayType)
       this.menuItemActionObs(true, false, this.menuItem);
       return
     }
 
-    if (this.isStaff &&  !this.isApp) {
+    // if (this.isStaff &&  !this.isApp) {
       action = true;
-    }
+    // }
 
     this.menuItemActionObs(action)
   }
@@ -312,8 +317,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     //apply filter to display current category & department assigned.
     //apply filter to display subcategory assigned, department and category.
     //in order to accomplish some of these things, we need the header parameters.
-    // console.log('add', add )
-
     if (this.displayType == 'header-category') {
       if (!menuItem || !menuItem?.id) { return }
       this.outPutUpdateCategory.emit(menuItem?.id);
@@ -331,13 +334,13 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     }
 
     if (this.isCategory) {
+      console.log('nav category', this.menuItem.id, this.menuItem.itemType.id)
       this.listItems(this.menuItem?.id, this.menuItem?.itemType?.id);
       add = false;
       return;
     }
 
     if (plusOne) { add = true; }
-
     const action$ = this.orderMethodsService.menuItemActionObs(this.order, this.menuItem, add,
                                               this.orderMethodsService.assignPOSItems);
     this.action$ = action$.pipe(switchMap(data => {

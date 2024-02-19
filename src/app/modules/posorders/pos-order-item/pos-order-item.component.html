@@ -1,6 +1,6 @@
 <div *ngIf="(action$ | async) as item"></div>
 <div *ngIf="(printLabel$ | async) as item"></div>
-
+<div *ngIf="ui$ | async as ui"></div>
 <mat-card *ngIf="orderItem"
           id="panel"
           (swipeleft)="swipeOutItem()"
@@ -19,7 +19,7 @@
               {{orderItem.conditionalIndex }}
             </span>
 
-            {{ orderItem?.productName | truncateText: 30  }}
+            {{ orderItem?.productName | truncateText: textNameLength  }}
 
             <span style="margin-right:7px" *ngIf="orderItem?.splitGroupID  && (orderItem?.splitGroupID != 0 && orderItem?.splitGroupID != 1)">
               (  {{ orderItem?.splitGroupID }} )
@@ -48,9 +48,15 @@
                 {{packages}}  {{(orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName)}}
               </div>
 
-              <span *ngIf="uiConfig.displayItemPOSTTotal">
+              <span *ngIf="ui.displayItemPOSTTotal">
                 | Tax: {{ orderItem?.taxTotal | currency }}  | Total: {{orderItem?.total | currency}}
               </span>
+
+              <!-- {{ui.dcapMultiPrice}} |  {{ui?.dcapDualPriceValue}} -->
+              <!-- {{ ui.dcapDualPriceValue}} |  {{ (1 + ui.dcapDualPriceValue) }} -->
+              <div *ngIf="ui && ui?.dcapMultiPrice && ui?.dcapDualPriceValue != 0">
+                 Non-Credit Price @ {{ cashDiscount | currency }} | ({{ui.dcapDualPriceValue}}%)
+              </div>
             </div>
 
             <div  class="quantity"   *ngIf="subTotal < 0"  style="color:crimson">
@@ -68,7 +74,7 @@
                 {{packages}} {{(orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName)}}
               </div>
 
-              <span *ngIf="uiConfig.displayItemPOSTTotal">
+              <span *ngIf="ui.displayItemPOSTTotal">
                 | Tax: {{ orderItem?.taxTotal | currency }}  | Total: {{orderItem?.total | currency}}
              </span>
 
@@ -235,13 +241,13 @@
           <span (mouseleave)="menuTrigger.closeMenu()">
             <div class="button-list">
 
-                <div *ngIf="!showEdit && (uiConfig.displayAdd)">
+                <div *ngIf="!showEdit && (ui?.displayAdd)">
                   <button mat-raised-button    class="button"  color="accent" (click)="addItemToOrder()">
                     <mat-icon  class="mat-icon-label" >add</mat-icon>  <span *ngIf="!smallDevice">Add </span>
                   </button>
                 </div>
 
-                <div *ngIf="!showView && (uiConfig && uiConfig?.displayView) ">
+                <div *ngIf="!showView && (ui && ui?.displayView) ">
                   <button mat-button class="button" color="accent" (click)="openDialog()" >
                     <mat-icon  class="mat-icon-label">open_in_new</mat-icon> <span *ngIf="!smallDevice"> View </span>
                   </button>
@@ -261,7 +267,7 @@
                   </button>
                 </div>
 
-                <div *ngIf="!showEdit  && (uiConfig && uiConfig?.displayNotes)">
+                <div *ngIf="!showEdit  && (ui && ui?.displayNotes)">
                   <button mat-button color="accent" (click)="openModifierNote()">
                     <mat-icon  class="mat-icon-label">note_pad</mat-icon>
                     Notes
@@ -307,7 +313,7 @@
                   </button>
                 </div>
 
-                <div *ngIf="!showEdit && (uiConfig?.displayAdd) && (userAuths && userAuths?.refundItem)">
+                <div *ngIf="!showEdit && (ui?.displayAdd) && (userAuths && userAuths?.refundItem)">
                   <button mat-raised-button  class="button" color="warn" (click)="refundItem(orderItem)">
                     <mat-icon  class="warn">delete</mat-icon><span *ngIf="!smallDevice">Refund Item </span>
                   </button>
@@ -327,7 +333,7 @@
                   </button>
                 </div>
 
-                <div *ngIf="!showEdit && (uiConfig?.displayAdd) && (userAuths && !userAuths?.refundItem)">
+                <div *ngIf="!showEdit && (ui?.displayAdd) && (userAuths && !userAuths?.refundItem)">
                   <button mat-raised-button  class="button" color="warn" (click)="requestRefundItem(orderItem)">
                     <mat-icon  class="warn" >delete</mat-icon>
                       Refund <br>

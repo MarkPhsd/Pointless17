@@ -1,5 +1,7 @@
-<div *ngIf="isApp && order && isAuthorizedPayment">
-    <button
+<div *ngIf="isApp && order">
+
+    <button 
+            [disabled]="!isAuthorizedPayment"
             [ngClass]="themeClass"
             class="buttons payment-buttons"
             mat-raised-button

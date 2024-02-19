@@ -64,7 +64,6 @@ export class DCAPTransactionComponent implements OnInit {
     private fb                    : UntypedFormBuilder,
     private dCapService           : DcapService,
     private dcapMethodsService : DcapMethodsService,
-    private orderService          : OrdersService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     @Optional() private dialogRef  : MatDialogRef<DCAPTransactionComponent>)
     {
@@ -202,6 +201,7 @@ export class DCAPTransactionComponent implements OnInit {
         const site = this.siteService.getAssignedSite()
         this.initMessaging()
         this.processing = true;
+        console.log('payamount', this.posPayment)
         const sale$ = this.dCapService.payAmount(this.terminalSettings?.name , this.posPayment);
         this.processing$ = sale$.pipe(switchMap(data => {
           this.result = data;

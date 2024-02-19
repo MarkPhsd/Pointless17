@@ -259,11 +259,15 @@ constructor(  private _snackBar              : MatSnackBar,
 
 
   refreshGroupingDataOnly() {
-    const site          = this.siteService.getAssignedSite()
-    this.refreshDepartments();
-    this.categories$    = this.menuService.getListOfCategoriesAll(site);
-    this.subCategories$    = this.menuService.getListOfSubCategories(site)
+    const site             = this.siteService.getAssignedSite()
+    this.categories$       = this.menuService.getListOfCategoriesAll(site);
+    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(switchMap(data => { 
+ 
+      this.subCategoriesList = data;
+      return of(data)
+    }))
   }
+
 
 
   refreshSubCategories() {
