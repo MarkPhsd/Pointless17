@@ -1,17 +1,17 @@
 @import "/src/mixins.scss";
 
 .toggle-selector {
-  height: 250px;
+  height: 275px;
   margin-bottom: 15px;
   @include for-phone-only  {
     margin-bottom: 15px;
-    height: 250px;
+    height: 275px;
   }
 }
 
 
 mat-card {
-  width: 250px;
+  width: 300px;
 }
 
 mat-button-toggle {

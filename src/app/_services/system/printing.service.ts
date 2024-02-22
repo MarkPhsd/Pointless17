@@ -58,7 +58,7 @@ export class PrintingService {
   private _printReady       = new BehaviorSubject<any>(null);
   public printReady$        = this._printReady.asObservable();
   //applies to order filter for POS
-  private _prepStatus        = new BehaviorSubject<number>(null);
+  public _prepStatus        = new BehaviorSubject<number>(null);
   public prepStatus$         = this._prepStatus.asObservable();
   //applies to order filter for POS
   public printerLocation    : number;

@@ -30,6 +30,7 @@ import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 @Component({
   selector: 'app-pos-payment',
@@ -58,7 +59,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   @Input() order  :   IPOSOrder;
   isApp = this.platFormService.isApp();
   userAuths       :   IUserAuth_Properties;
-  _userAuths      :  Subscription;
+  _userAuths      :   Subscription;
   changeDueComing :   any;
   loginAction     :   any;
   id              :   number;
@@ -148,6 +149,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         }
       return of(null)
     }))
+
+
+
   }
 
   initSubscriptions() {
@@ -227,6 +231,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private changeDetectorRef: ChangeDetectorRef,
               private coachMarksService: CoachMarksService,
               private router          : Router,
+              private editDialog      : ProductEditButtonService,
               private orderService    : OrdersService,
               private fb              : UntypedFormBuilder) { }
 
@@ -961,6 +966,26 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   }
 
-
+  editPayment() {
+    let payment : any
+    // if (this.posPayment) { 
+    //   payment = this.posPayment;
+    // } else { 
+    //   payment = this.order.posPayments[0]
+    // }
+    payment = this.order.posPayments[0]
+  
+    payment = this.order.posPayments[0]
+    //get payment
+    const site = this.sitesService.getAssignedSite();
+    if (payment.paymentMethodID == 0) {
+      this.editDialog.openChangeDueDialog(payment, null, this.order)
+      return;
+    }
+    const method$ = this.paymentMethodService.getPaymentMethod(site, payment.paymentMethodID)
+    method$.subscribe( method => {
+      this.editDialog.openChangeDueDialog(payment, method, this.order)
+    })
+ }
 }
 

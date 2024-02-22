@@ -11,6 +11,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 
 // import { share } from 'rxjs/operators';
 
@@ -97,8 +98,13 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   _searchBar     : Subscription;
   searchBar      : boolean;
 
+  //order / cards / prep 
   _viewType     : Subscription;
   viewType      : number;
+
+  
+  prepStatus: number;
+  _prepStatus: Subscription;
 
   _printLocation  : Subscription;
   printLocation   : number;
@@ -137,6 +143,16 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   initViewSubscriber() {
     this._viewType = this.orderMethodsService.viewOrderType$.subscribe(data => {
       this.viewType = data;
+      if (data == 3) { 
+        this.updatePreStatus()
+      }
+    })
+  }
+
+  updatePreStatus() {
+    this._prepStatus = this.printingService.prepStatus$.subscribe(data => { 
+      this.prepStatus = data;
+      this.setOrderSubscriber()
     })
   }
 
@@ -147,7 +163,9 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
       return this.authenticationService.userAuths$
     })).subscribe(data => {
       this.userAuths = data;
-      this.setOrderSubscriber()
+      if (this.viewType == 3) { 
+        this.setOrderSubscriber()
+      }
       if (!data) {
         this.userAuths = {} as IUserAuth_Properties
       }
@@ -155,12 +173,22 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   };
 
   setOrderSubscriber() {
-    if (this.user) {
-      this.orderSubscription$ = this._addToListOBS(this.pageSize, 1, false).pipe(
+    if (this.user && this.viewType == 3) {
+      let model = {} as IPOSOrderSearchModel
+      if (this.searchModel)  {  model = this.searchModel}
+      model.pageNumber    = 1
+      model.pageSize      = 50
+      model.prepStatus   = +this.prepStatus;
+      // console.log('setOrderSubscriber', model)
+      const site    = this.siteService.getAssignedSite()
+      let results$ = this.orderService.getOrdersPrepBySearchPaged(site, model)
+      let prep$ = this.getResults(results$, false)
+      this.grid = "grid-flow-prep";
+      this.orderSubscription$ = prep$.pipe(
         repeatWhen(notifications =>
           notifications.pipe(
             tap(() =>
-            console.log('')
+              console.log('refresh', model)
             ),
             delay(this.seconds))
         ),
@@ -169,8 +197,8 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
         })
       )
     }
+ 
   }
-
 
   setScrollBarColor(color: string) {
     if (!color) {    color = '#6475ac' }
@@ -180,7 +208,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     this.styleTag.textContent = css;
     this.renderer.appendChild(document.head, this.styleTag);
   }
-
 
   destroySubscriptions() {
     if (this._orderBar) { this._orderBar.unsubscribe(); }
@@ -200,6 +227,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     private authenticationService: AuthenticationService,
     private platformService: PlatformService,
     private renderer: Renderer2, private el: ElementRef,
+    private printingService: PrintingService,
     private cd: ChangeDetectorRef,
     )
   {
@@ -383,7 +411,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     model.pageNumber = 1;
     model.pageSize = 25;
     return this.orderService.getOrdersPrepBySearchPaged(site,model).pipe(switchMap(data => {
-
       const newLocal = this;
       newLocal.orders = [...newLocal.orders, ...data.results];
       return of (data.results)
@@ -407,34 +434,52 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     let model         = {} as IPOSOrderSearchModel
     if (this.searchModel)  {  model = this.searchModel}
 
-    // console.log('model', model)
     if (pageNumber <= 0) { this.pageNumber = 1;  }
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize
     const site        = this.siteService.getAssignedSite();
     let results$      : Observable<POSOrdersPaged>;
     this.invisibleOrders = [];
+    this.loading      = true
+    this.endOfRecords = false;
 
     if (this.isUser || !this.user) {
       model.greaterThanZero = 0;
     }
-
+   
+    if (this.viewType == 1 || this.viewType == 0 || this.viewType == 2) {
+      // console.log('regular search' , this.viewType)
+      model.prepStatus = null;
+      results$    = this.orderService.getOrderBySearchPaged(site, model) //.pipe(share());
+    }
+    
     if (this.viewType == 3) {
       model.pageNumber    = pageNumber
       model.pageSize      = pageSize
-      results$            = this.orderService.getOrdersPrepBySearchPaged(site, model).pipe(switchMap(data => {
+      if (this.printingService._prepStatus.value) { 
+        model.prepStatus   = this.printingService._prepStatus.value;
+      }
+      results$            = this.orderService.getOrdersPrepBySearchPaged(site, model).pipe(switchMap(data => { 
         return of(data)
       }))
     }
-
-    if (this.viewType != 3) {
-      results$    = this.orderService.getOrderBySearchPaged(site, model) //.pipe(share());
+    
+    if (!results$) { 
+      this.loading      = false
+      this.endOfRecords = false;  
+      return of(null)
     }
 
-    this.loading      = true
-    this.endOfRecords = false;
+    // console.log('add to list', model, this.viewType, this.printingService._prepStatus.value)
+    return this.getResults(results$, reset)
+ 
+  }
+
+  getResults(results$: Observable<POSOrdersPaged>, reset)  {
 
     return results$.pipe(switchMap(data => {
+
+      // console.log('data', data)
         if (!this.orders)  {
           this.loading = false
           this.endOfRecords = true
@@ -492,6 +537,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
       item.results = null;
       return of(item)
     }))
+
   }
 
   mergeAndDeduplicate(items1: IPOSOrder[], items2: IPOSOrder[]): IPOSOrder[] {

@@ -61,8 +61,6 @@ export class UserBarComponent implements OnInit {
     this.userSwitchingService.clearLoggedInUser();
   }
 
-
-
   emailMailCount(event) {
     this.mailCount = event
   }

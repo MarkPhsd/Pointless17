@@ -62,27 +62,35 @@ export class POSOrderServiceTypeComponent implements OnDestroy  {
 
     this.serviceTypes$ = serviceTypes$.pipe(
       switchMap(data => {
-      if (!this.platFormService.isApp()) {
 
-        if (!data) { return of(null)}
+        if (!data) {
+          this.serviceTypes$ = of(data)
+        }
+        
+        if (!this.platFormService.isApp()) {
 
-        let list = data.filter( item => item.onlineOrder )
-        if (!list) { return of(null)}
+          if (!data) { return of(null)}
 
-        if (!this.userAuthorization.isManagement) {
-          list = list.filter(item => !item.managerRequired )
+          let list = data.filter( item => item.onlineOrder )
+          if (!list) { return of(null)}
+
+          if (!this.userAuthorization.isManagement) {
+            list = list.filter(item => !item.managerRequired )
+          }
+
+          if (!list) { return of(null)}
+
+          // this.serviceTypes$ = of(list)
+          this.serviceTypes  = list;
+          return of(list)
         }
 
-        if (!list) { return of(null)}
+        if (!this.userAuthorization.isManagement) {
+          data = data.filter(item => !item.managerRequired )
+        }
 
-        this.serviceTypes$ = of(list)
-        this.serviceTypes  = list;
-        return of(list)
-      }
-
-      if (!data) {
-        this.serviceTypes$ = of(data)
-      }
+        return of(data)
+    
     }))
   }
 

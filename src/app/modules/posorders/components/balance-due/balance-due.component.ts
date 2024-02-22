@@ -18,6 +18,8 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
+import { RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-balance-due',
@@ -32,6 +34,8 @@ export class ChangeDueComponent implements OnInit  {
   printing$ : Observable<any>;
   action$   : Observable<any>;
 
+
+
   inputForm             : UntypedFormGroup;
   @Input() paymentMethod: IPaymentMethod;
   @Input() order        : IPOSOrder;
@@ -43,7 +47,21 @@ export class ChangeDueComponent implements OnInit  {
   changeDue             : any;
   serviceType           : IServiceType;
 
+  isUser: boolean;
+  isStaff: boolean;
+  isAuthorized: boolean;
+
+  initAuthorization() {
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
+    this.isStaff  = this.userAuthorization.isUserAuthorized('admin,manager,employee');
+    this.isUser  = this.userAuthorization.isUserAuthorized('user');
+    if (this.isUser) {
+
+    }
+  }
+
   constructor(
+              private userAuthorization: UserAuthorizationService,
               private paymentService: POSPaymentService,
               private siteService: SitesService,
               public orderMethodsService: OrderMethodsService,
@@ -117,6 +135,7 @@ export class ChangeDueComponent implements OnInit  {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.printingCheck();
+    this.initAuthorization();
     this.initTransactionUISettings();
   }
 
@@ -203,23 +222,49 @@ export class ChangeDueComponent implements OnInit  {
     const site = this.siteService.getAssignedSite();
     const payment = this.payment
     if (payment) {
-      payment.tipAmount = amount;
-      const payment$ =  this.paymentService.putPOSPayment(site, payment);
-      //process tip via credit card service.
-      payment$.pipe(
-        switchMap( data =>  {
-            this.paymentService.updatePaymentSubscription(data)
-            const orderID = data.orderID.toString();
-            return this.orderService.getOrder(site, orderID, false);
-        })).subscribe(data => {
-          this.orderMethodsService.updateOrderSubscription(data)
-          this.dialogRef.close()
-          if (this.uiTransactions && this.uiTransactions.cardPointBoltEnabled) {
-            this.capture(this.payment)
-          }
-        }
-      )
+      if (this.uiTransactions.dCapEnabled) { 
+        this.action$ = this.processDcapTip(amount)
+        return;
+      }
+      this.action$ = this.applytoPOS(payment, amount, site)
     }
+  }
+
+  processDcapTip(amount: number) { 
+    const device = localStorage.getItem('devicename')
+    const site = this.siteService.getAssignedSite()
+    const process$ = this.dCapService.adustByRecordNo(device, this.payment, amount)
+    return process$.pipe(switchMap(data => { 
+      const rstream = data as RStream;
+      if (data) { 
+        if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) { 
+          this.siteService.notify(data.cmdResponse + ' ' + data.textResponse, 'close',50000, 'red' )
+          return of(null)
+        }
+      }
+      return this.applytoPOS(this.payment, amount, site)
+    }))
+  }
+
+  applytoPOS(payment, amount, site) { 
+    payment.tipAmount = amount;
+    const payment$ =  this.paymentService.putPOSPayment(site, payment);
+    //process tip via credit card service.
+    return  payment$.pipe(
+      switchMap( data =>  {
+          this.paymentService.updatePaymentSubscription(data)
+          const orderID = data.orderID.toString();
+          return this.orderService.getOrder(site, orderID, false);
+      })).pipe(
+        switchMap(data => {
+        this.orderMethodsService.updateOrderSubscription(data)
+        this.dialogRef.close()
+        if (this.uiTransactions && this.uiTransactions.cardPointBoltEnabled) {
+          this.capture(this.payment)
+        }
+        return of(data)
+      }
+    ))
   }
 
   capture(item: IPOSPayment) {

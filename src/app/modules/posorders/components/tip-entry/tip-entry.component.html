@@ -16,25 +16,19 @@
     <div class="action-center">
         <button class="tip-button"
                 mat-raised-button
-                (click)="specifiedTip(15)">Tip 15 % </button>
-        <div class="action-center-column">
-          {{ payment.amountPaid * (15/100) | currency }}
-        </div>
+                (click)="specifiedTip(15)">Tip 15 %  {{ payment.amountPaid * (15/100) | currency }}</button>
     </div>
 
     <div class="action-center">
-        <button  class="tip-button"  mat-raised-button (click)="specifiedTip(18)">Tip 18 %  </button>
-        {{ payment.amountPaid * (18/100) | currency }}
+        <button  class="tip-button"  mat-raised-button (click)="specifiedTip(18)">Tip 18 %   {{ payment.amountPaid * (18/100) | currency }}</button>
     </div>
 
     <div class="action-center">
-        <button  class="tip-button"  mat-raised-button (click)="specifiedTip(20)">Tip 20 %  </button>
-        {{ payment.amountPaid * (20/100) | currency  }}
+        <button  class="tip-button"  mat-raised-button (click)="specifiedTip(20)">Tip 20 %  {{ payment.amountPaid * (20/100) | currency  }}</button>
     </div>
 
     <div class="action-center">
-      <button  class="tip-button"  mat-raised-button (click)="specifiedTip(20)">Tip 22 %  </button>
-      {{ payment.amountPaid * (22/100) | currency  }}
+      <button  class="tip-button"  mat-raised-button (click)="specifiedTip(20)">Tip 22 %  {{ payment.amountPaid * (22/100) | currency  }}</button>
     </div>
 
   </div>

@@ -51,163 +51,170 @@
 </div>
 
 <mat-drawer-container >
+
   <mat-drawer
-      position  ="start"
-      [mode]    ="'side'"
-      [opened]  ="toggle"
-      [class]   ="'mat-orderBar-wide'" >
-      <mat-card>
-        <mat-card-content>
+        position  ="start"
+        [mode]    ="'side'"
+        [opened]  ="toggle"
+        [class]   ="'mat-orderBar-wide'" >
 
-          <h4><mat-icon>widgets</mat-icon> Widgets</h4>
-          <mat-divider></mat-divider>
+    <ng-container [ngTemplateOutlet]="sideMenu"></ng-container>
 
-          <div class="widget-list">
-            <mat-accordion multi="false">
-              <mat-expansion-panel [expanded]="accordionStep === 3"
-                        (opened)="setStep(3)"
-                        hideToggle>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon>analytics</mat-icon> Analytics
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-                <ul class="nav-list" *ngIf="layoutService.widgetCollection">
-                  <li *ngFor="let widget of layoutService.widgetCollection">
-                    <div *ngIf="widget.type === 'analytics'">
-                      <a draggable="true" class="nav-link"
-                        (dragstart)="onDrag($event, widget.identifier)">
-                        <mat-icon>{{ widget.icon }}</mat-icon>
-                        {{ widget.name }}
-                      </a>
-                    </div>
-                  </li>
-                </ul>
-              </mat-expansion-panel>
-              <mat-expansion-panel [expanded]="accordionStep === 0"
-                                  (opened)="setStep(0)"
-                                  hideToggle>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <mat-icon>shopping_cart</mat-icon> Orders
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                  <ul class="nav-list" *ngIf="layoutService.widgetCollection">
-                    <li *ngFor="let widget of layoutService.widgetCollection">
-                      <div *ngIf="widget.type === 'order'">
-                        <a draggable="true" class="nav-link"
-                            (dragstart)="onDrag($event, widget.identifier)">
-                          <mat-icon>{{ widget.icon }}</mat-icon>
-                          {{ widget.name }}
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
-              </mat-expansion-panel>
-              <mat-expansion-panel [expanded]="accordionStep === 1"
-                          (opened)="setStep(1)"
-                          hideToggle>
-                <mat-expansion-panel-header>
-                <mat-panel-title>
-                <mat-icon>menu_book</mat-icon> Menus
-                </mat-panel-title>
-                </mat-expansion-panel-header>
-                  <ul class="nav-list" *ngIf="layoutService.widgetCollection">
-                    <li *ngFor="let widget of layoutService.widgetCollection">
-                      <div *ngIf="widget.type === 'menu'">
-                        <a draggable="true" class="nav-link"
-                            (dragstart)="onDrag($event, widget.identifier)">
-                          <mat-icon>{{ widget.icon }}</mat-icon>
-                          {{ widget.name }}
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
-              </mat-expansion-panel>
-
-              <mat-expansion-panel  [expanded]="accordionStep === 2 "
-                                    (opened)="setStep(2)"
-                                    hideToggle>
-                <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon>stars</mat-icon>  Marketing
-                </mat-panel-title>
-                </mat-expansion-panel-header>
-                  <ul class="nav-list" *ngIf="layoutService.widgetCollection">
-                    <li *ngFor="let widget of layoutService.widgetCollection">
-                      <div *ngIf="widget.type === 'advertising'">
-                        <a draggable="true" class="nav-link"
-                            (dragstart)="onDrag($event, widget.identifier)">
-                          <mat-icon>{{ widget.icon }}</mat-icon>
-                          {{ widget.name | truncateText : 10}}
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
-              </mat-expansion-panel>
-            </mat-accordion>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    <mat-card>
-      <mat-card-content>
-        <h4><mat-icon>design_services</mat-icon>Designer</h4>
-        <div>
-          <mat-divider></mat-divider>
-        </div>
-        <div class="header-items">
-          <button mat-button
-                  (click)="addGrid()">
-            <mat-icon>add_box</mat-icon>Add Dashboard</button>
-        </div>
-
-        <div *ngIf="layoutService.dashboardModel" class="header-items">
-          <button mat-button
-                  (click)="editGrid()">
-            <mat-icon>edit</mat-icon>Edit Current </button>
-        </div>
-
-        <div *ngIf="layoutService.stateChanged">
-          <button mat-button color="accent"
-            (click)="saveChanges()">
-            <mat-icon>save</mat-icon>Save Required
-          </button>
-        </div>
-
-        <div class="header-items">
-          <button mat-button
-                  (click)="layoutService.forceRefresh(layoutService?.dashboardModel?.id)">
-            <mat-icon>refresh</mat-icon>Refresh</button>
-        </div>
-
-        <div class="header-items">
-          <button mat-button
-                  (click)="reset()">
-            <mat-icon>restart_alt</mat-icon>Reset</button>
-        </div>
-
-        <div class="header-items">
-          <button mat-button
-                  (click)="toggleDesignMode()">
-            <mat-icon *ngIf="layoutService.designerMode">toggle_off</mat-icon>
-            <mat-icon *ngIf="!layoutService.designerMode">toggle_on</mat-icon>
-            Toggle Designer Mode</button>
-        </div>
-
-      </mat-card-content>
-    </mat-card>
+    <ng-container [ngTemplateOutlet]="sideSectionSave"></ng-container>
 
     <grid-designer-info></grid-designer-info>
 
   </mat-drawer>
 
-  <mat-drawer-content class="mat-drawer-content"
+   <mat-drawer-content class="mat-drawer-content"
                       *ngIf="layoutService.dashboardCollection &&
-                      layoutService.dashboardCollection.length>0">
-
+                        layoutService.dashboardCollection.length>0" >
       <router-outlet #outlet="outlet"></router-outlet>
-
-  </mat-drawer-content>
+    </mat-drawer-content>
 
 </mat-drawer-container>
 
+<ng-template #sideMenu>
+  <mat-card>
+    <mat-card-content>
+      <h4><mat-icon>widgets</mat-icon> Widgets</h4>
+      <mat-divider></mat-divider>
+
+      <div class="widget-list">
+        <mat-accordion multi="false">
+          <mat-expansion-panel [expanded]="accordionStep === 3"
+                    (opened)="setStep(3)"
+                    hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>analytics</mat-icon> Analytics
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+            <ul class="nav-list" *ngIf="layoutService.widgetCollection">
+              <li *ngFor="let widget of layoutService.widgetCollection">
+                <div *ngIf="widget.type === 'analytics'">
+                  <a draggable="true" class="nav-link"
+                    (dragstart)="onDrag($event, widget.identifier)">
+                    <mat-icon>{{ widget.icon }}</mat-icon>
+                    {{ widget.name }}
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </mat-expansion-panel>
+          <mat-expansion-panel [expanded]="accordionStep === 0"
+                              (opened)="setStep(0)"
+                              hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>shopping_cart</mat-icon> Orders
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+              <ul class="nav-list" *ngIf="layoutService.widgetCollection">
+                <li *ngFor="let widget of layoutService.widgetCollection">
+                  <div *ngIf="widget.type === 'order'">
+                    <a draggable="true" class="nav-link"
+                        (dragstart)="onDrag($event, widget.identifier)">
+                      <mat-icon>{{ widget.icon }}</mat-icon>
+                      {{ widget.name }}
+                    </a>
+                  </div>
+                </li>
+              </ul>
+          </mat-expansion-panel>
+          <mat-expansion-panel [expanded]="accordionStep === 1"
+                      (opened)="setStep(1)"
+                      hideToggle>
+            <mat-expansion-panel-header>
+            <mat-panel-title>
+            <mat-icon>menu_book</mat-icon> Menus
+            </mat-panel-title>
+            </mat-expansion-panel-header>
+              <ul class="nav-list" *ngIf="layoutService.widgetCollection">
+                <li *ngFor="let widget of layoutService.widgetCollection">
+                  <div *ngIf="widget.type === 'menu'">
+                    <a draggable="true" class="nav-link"
+                        (dragstart)="onDrag($event, widget.identifier)">
+                      <mat-icon>{{ widget.icon }}</mat-icon>
+                      {{ widget.name }}
+                    </a>
+                  </div>
+                </li>
+              </ul>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel  [expanded]="accordionStep === 2 "
+                                (opened)="setStep(2)"
+                                hideToggle>
+            <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>stars</mat-icon>  Marketing
+            </mat-panel-title>
+            </mat-expansion-panel-header>
+              <ul class="nav-list" *ngIf="layoutService.widgetCollection">
+                <li *ngFor="let widget of layoutService.widgetCollection">
+                  <div *ngIf="widget.type === 'advertising'">
+                    <a draggable="true" class="nav-link"
+                        (dragstart)="onDrag($event, widget.identifier)">
+                      <mat-icon>{{ widget.icon }}</mat-icon>
+                      {{ widget.name | truncateText : 10}}
+                    </a>
+                  </div>
+                </li>
+              </ul>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+  </mat-card-content>
+</mat-card>
+</ng-template>
+
+<ng-template #sideSectionSave>
+  <mat-card>
+    <mat-card-content>
+      <h4><mat-icon>design_services</mat-icon>Designer</h4>
+      <div>
+        <mat-divider></mat-divider>
+      </div>
+      <div class="header-items">
+        <button mat-button
+                (click)="addGrid()">
+          <mat-icon>add_box</mat-icon>Add Dashboard</button>
+      </div>
+
+      <div *ngIf="layoutService.dashboardModel" class="header-items">
+        <button mat-button
+                (click)="editGrid()">
+          <mat-icon>edit</mat-icon>Edit Current </button>
+      </div>
+
+      <div *ngIf="layoutService.stateChanged">
+        <button mat-button color="accent"
+          (click)="saveChanges()">
+          <mat-icon>save</mat-icon>Save Required
+        </button>
+      </div>
+
+      <div class="header-items">
+        <button mat-button
+                (click)="layoutService.forceRefresh(layoutService?.dashboardModel?.id)">
+          <mat-icon>refresh</mat-icon>Refresh</button>
+      </div>
+
+      <div class="header-items">
+        <button mat-button
+                (click)="reset()">
+          <mat-icon>restart_alt</mat-icon>Reset</button>
+      </div>
+
+      <div class="header-items">
+        <button mat-button
+                (click)="toggleDesignMode()">
+          <mat-icon *ngIf="layoutService.designerMode">toggle_off</mat-icon>
+          <mat-icon *ngIf="!layoutService.designerMode">toggle_on</mat-icon>
+          Toggle Designer Mode</button>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</ng-template>

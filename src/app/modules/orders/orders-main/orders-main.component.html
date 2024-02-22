@@ -1,65 +1,14 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(viewType$ | async) as viewPrep"></div>
+
 <div class="parent-container">
-  <div *ngIf="!viewPrep">
-    <span>
-      <span>
-        <button *ngIf="smallDevice"  color="accent" mat-button (click)="filterBottomSheet()">
-          <mat-icon>search</mat-icon>
-        </button>
 
-        <span>
-          <span #coachingSearch *ngIf="!smallDevice || (!smallDevice && hidePanel)">
-            <button mat-button color="accent" (click)="searchBtn($event)">
-              <mat-icon>search</mat-icon>Search
-            </button>
-          </span>
-        </span>
-
-        <ng-container [ngTemplateOutlet]="freshOrders"></ng-container>
-        <ng-container [ngTemplateOutlet]="allOrders"></ng-container>
-      </span>
-
-      <span>
-
-        <button mat-button  (click)="newOrder()" *ngIf="isAuthorized || isStaff">
-          <mat-icon>receipt</mat-icon><span>New Order</span>
-        </button>
-
-        <button mat-button color="accent" (click)="getOrderItemHistory()"  *ngIf="isUser">
-          <mat-icon>receipt</mat-icon><span>Items you have bought</span>
-        </button>
-
-        <button #coachingOtherNew
-                mat-button (click)="newOrderOptions()"
-                *ngIf="isAuthorized || isStaff">
-          <mat-icon>add</mat-icon><span>Other New</span>
-        </button>
-
-        <ng-container [ngTemplateOutlet]="houseAccount"></ng-container>
-
-      </span>
-    </span>
-
-    <span #coachingListView>
-      <ng-container [ngTemplateOutlet]="styleView"></ng-container>
-    </span>
-
-    <span #coachingPrep>
-      <ng-container [ngTemplateOutlet]="prepView"></ng-container>
-    </span>
-
-    <span #coachingMergeView>
-      <ng-container [ngTemplateOutlet]="mergeViewEnabled"></ng-container>
-    </span>
-
-    <ng-container [ngTemplateOutlet]="transferOrderView"></ng-container>
-    <ng-container [ngTemplateOutlet]="filterMyOrdersView"></ng-container>
-    <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
-
-  </div>
+  <ng-container [ngTemplateOutlet]="filterViewFull"></ng-container>
 
   <div [class]="gridcontainer">
+
+    <ng-container [ngTemplateOutlet]="filterViewPhone"></ng-container> 
+
     <div>
       <div *ngIf="scheduleDateStart && scheduleDateEnd">
         <ng-container [ngTemplateOutlet]="scheduledItems"></ng-container>
@@ -74,8 +23,7 @@
           (outPutHidePanel)="hideFilterPanel($event)">
       </app-order-filter-panel>
     </div>
-  </div>
-
+  </div> 
 </div>
 
 <ng-template #transferOrderView>
@@ -155,7 +103,6 @@
           </mat-button-toggle-group>
 
           <ng-content [ngTemplateOutlet]="orderPrepRefresh"></ng-content>
-
        
       </span>
 
@@ -221,6 +168,7 @@
 </ng-template>
 
 <ng-template #orderCard>
+
   <app-order-cards
       [cardStyle]="'block'"
       (orderOutPut)="addOrderToSelectedList($event)" >
@@ -242,9 +190,7 @@
 
 <ng-template #orderPanel>
   <app-order-cards  [cardStyle]="'panel'">
-    <h2>
-      Your order history
-    </h2>
+    <h2>   Order history  </h2>
   </app-order-cards>
 </ng-template>
 
@@ -345,4 +291,65 @@
             (initPopOver)="initPopover()"
             [enabled]="true"></coach-marks-button>
   </span>
+</ng-template>
+
+
+<ng-template #filterView>
+  <div  *ngIf="!viewPrep" >
+    <span>
+      <span>
+        <button  *ngIf="smallDevice" color="accent" mat-button (click)="filterBottomSheet()">
+          <mat-icon>search</mat-icon>
+        </button>
+
+        <span>
+          <span #coachingSearch *ngIf="!smallDevice || (!smallDevice && hidePanel)">
+            <button mat-button color="accent" (click)="searchBtn($event)">
+              <mat-icon>search</mat-icon>Search
+            </button>
+          </span>
+        </span>
+
+        <ng-container [ngTemplateOutlet]="freshOrders"></ng-container>
+        <ng-container [ngTemplateOutlet]="allOrders"></ng-container>
+      </span>
+
+      <span>
+
+        <button mat-button  (click)="newOrder()" *ngIf="isAuthorized || isStaff">
+          <mat-icon>receipt</mat-icon><span>New Order</span>
+        </button>
+
+        <button mat-button color="accent" (click)="getOrderItemHistory()"  *ngIf="isUser">
+          <mat-icon>receipt</mat-icon><span>Past Items</span>
+        </button>
+
+        <button #coachingOtherNew
+                mat-button (click)="newOrderOptions()"
+                *ngIf="isAuthorized || isStaff">
+          <mat-icon>add</mat-icon><span>Other New</span>
+        </button>
+
+        <ng-container [ngTemplateOutlet]="houseAccount"></ng-container>
+
+      </span>
+    </span>
+
+    <span #coachingListView>
+      <ng-container [ngTemplateOutlet]="styleView"></ng-container>
+    </span>
+
+    <span #coachingPrep>
+      <ng-container [ngTemplateOutlet]="prepView"></ng-container>
+    </span>
+
+    <span #coachingMergeView>
+      <ng-container [ngTemplateOutlet]="mergeViewEnabled"></ng-container>
+    </span>
+
+    <ng-container [ngTemplateOutlet]="transferOrderView"></ng-container>
+    <ng-container [ngTemplateOutlet]="filterMyOrdersView"></ng-container>
+    <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
+
+  </div>
 </ng-template>

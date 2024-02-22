@@ -3,9 +3,9 @@
   <div [class]="gridflow">
 
     <div  *ngIf="(order && order.history == true || (order && order.completionDate))
-                || isUserStaff " >
+                || isStaff " >
 
-      <div *ngIf="isUserStaff && quickServiceTypes" class="flex-grid-row-5px">
+      <div *ngIf="isStaff && quickServiceTypes" class="flex-grid-row-5px">
 
         <div  *ngFor="let item of quickServiceTypes">
           <button style="margin-left:5px;width:75px"
@@ -23,7 +23,7 @@
               mat-raised-button
               color="primary"
               (click)="addNewOrder()" >
-        <span *ngIf="!isUserStaff">
+        <span *ngIf="!isUser">
           New Order
         </span>
         <mat-icon>
@@ -34,7 +34,7 @@
     </div>
 
     <div *ngIf="(deviceInfo && !deviceInfo.phoneDevice)">
-      <div *ngIf="isUserStaff && order ">
+      <div *ngIf="isStaff && order ">
         <button
                 mat-raised-button
                 color="primary"
@@ -59,7 +59,7 @@
         </button>
       </div>
 
-      <div *ngIf="!isUserStaff && order && (deviceInfo && !deviceInfo.phoneDevice)">
+      <div *ngIf="!isStaff && order && (deviceInfo && !deviceInfo.phoneDevice)">
         <button
               mat-raised-button
               color="primary"
@@ -82,6 +82,5 @@
         </button>
       </div>
     </div>
-
 
 </div>

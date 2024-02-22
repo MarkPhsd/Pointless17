@@ -346,7 +346,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.action$ = payment$.pipe(switchMap(payment => {
 
     let amount = this.totalAuthPayments; // this.order.creditBalanceRemaining;
-    return this.triposMethodService.openDialogCompleteCreditPayment(this.order, amount,
+      return this.triposMethodService.openDialogCompleteCreditPayment(this.order, amount,
                                                                 payment, this.uiTransactions)
     }))
   }

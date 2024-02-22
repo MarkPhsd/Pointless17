@@ -27,10 +27,6 @@ export class TipEntryComponent implements OnInit  {
 
   constructor(
               private snackBar : MatSnackBar,
-              private fb       : UntypedFormBuilder,
-              private router   : Router,
-              private uISettingsService: UISettingsService,
-
             )
   {
 
@@ -43,7 +39,6 @@ export class TipEntryComponent implements OnInit  {
   customTipAmount(amount) {
     if (this.payment) {
       const value = +amount;
-      console.log('value', value)
       this.tip( ( amount )  )
     }
   }

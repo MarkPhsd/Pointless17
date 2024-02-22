@@ -40,12 +40,15 @@ toggle-button {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-
 }
 
 .parent-container {
   overflow: hidden;
-  // height: 100%;
+  position: relative;
+  @include for-phone-only  {
+    overflow: hidden;
+    position: relative;
+  }
 }
 
 .grid-container {
@@ -54,7 +57,7 @@ toggle-button {
   gap: var(--gap);
   grid-template-columns:  auto 335px;
   overflow: hidden;
-
+  position: relative;
   @media (max-width: 815px) {
     grid-template-columns: auto;
   }
@@ -290,6 +293,7 @@ toggle-button {
 
 .loader {
   margin-bottom: 5px;
+  position: relative;
 }
 
 .floating-info {

@@ -23,15 +23,16 @@
       <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
 
       <div #coachingSplitGroups class="grid-header-item">
-        <mat-card>
+        <mat-card *ngIf="isStaff">
           <ng-container [ngTemplateOutlet]="referencedOrders"></ng-container>
         </mat-card>
-        <mat-card *ngIf="splitByItem">
+        <mat-card *ngIf="splitByItem && isStaff">
           <ng-container [ngTemplateOutlet]="splitItemorders"></ng-container>
         </mat-card>
       </div>
 
-      <div *ngIf="!serviceIsScheduled && isStaff" class="grid-header-item">
+      <div *ngIf=" (serviceType && (serviceType.promptScheduleTime || serviceType.deliveryService ))"
+            class="grid-header-item">
         <button class="payment-buttons"   color="accent" mat-button (click)="navSchedule()">
           <mat-icon>event</mat-icon>
           Schedule</button>
@@ -49,7 +50,15 @@
         <button class="button-margin-10 button-width-175 button-height-75"
                 color="accent"
                 mat-raised-button
-                (click)="exitOrder()">Leave Order</button>
+                (click)="exitOrder()"><mat-icon>exit_to_app</mat-icon>Leave Order</button>
+      </div>
+
+      <div *ngIf="isUser && paymentsEqualTotal && !isStaff" class="button-margin-10">
+        <h5>If you would like to enter a tip, please do so before the end of day.</h5>
+        <button class="button-margin-10 button-width-175 button-height-75"
+                color="accent"
+                mat-raised-button
+                (click)="editPayment()"><mat-icon>edit</mat-icon>Enter Tip</button>
       </div>
 
       <mat-card class="margin-bottom-10" *ngIf="isStaff">
@@ -131,40 +140,35 @@
                   &&  (order?.balanceRemaining != 0 || isNegativePaymentAllowed || isZeroPaymentAllowed ) ">
 
         <div *ngIf="(saleProcess$ |async) as saleProcess">  </div>
-
           <div class="grid-header-item" *ngIf="stepSelection == 1 || stepSelection  == 0">
             <div>
               <ng-container [ngTemplateOutlet]="wicEBTButton"></ng-container>
               <mat-card>
                 <mat-card-content>
-                  <div class="">
-                    <div class="action-center"  *ngIf="(!order.completionDate &&
-                                                      (
-                                                        (order?.balanceRemaining != 0 || isNegativePaymentAllowed ||
-                                                        isZeroPaymentAllowed )
-                                                        || (order?.balanceRemaining < 0 || isNegativePaymentAllowed )
-                                                        ) &&
-                                                      !splitByItem)">
+                  <div class="action-center"  *ngIf="(!order.completionDate &&
+                                                    (  (order?.balanceRemaining != 0 || isNegativePaymentAllowed ||
+                                                      isZeroPaymentAllowed )
+                                                      || (order?.balanceRemaining < 0 || isNegativePaymentAllowed )
+                                                      ) &&
+                                                    !splitByItem)">
 
-                      <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="paypalButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="triposPayButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="giftCardPayButtonView"></ng-container>
-                      <ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cashPay20"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cashPay50"></ng-container>
-                      <ng-container [ngTemplateOutlet]="cashPay100"></ng-container>
-                    </div>
+                    <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
+                    <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
+                    <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
+                    <ng-container [ngTemplateOutlet]="paypalButton"></ng-container>
+                    <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
+                    <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container>
+                    <ng-container [ngTemplateOutlet]="triposPayButton"></ng-container>
+                    <ng-container [ngTemplateOutlet]="giftCardPayButtonView"></ng-container>
+                    <ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
+                    <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
+                    <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
+                    <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
+                    <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
+                    <ng-container [ngTemplateOutlet]="cashPay20"></ng-container>
+                    <ng-container [ngTemplateOutlet]="cashPay50"></ng-container>
+                    <ng-container [ngTemplateOutlet]="cashPay100"></ng-container>
                   </div>
-
                 </mat-card-content>
               </mat-card>
             </div>

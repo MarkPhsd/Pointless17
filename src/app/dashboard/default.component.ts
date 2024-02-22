@@ -154,10 +154,15 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       return of(data)
     }), catchError(data => {
-      // console.log('data', data)
       this.siteService.notify(`Error sending order ${data.toString()}`, 'Close', 6000, 'red' )
       return of(null)
     }))
+  }
+  get appHeaderClass() {
+    if (this.hideAppHeader || this.viewPrep) { 
+      return 'app-header-hidden'
+    }
+    return ""
   }
 
 

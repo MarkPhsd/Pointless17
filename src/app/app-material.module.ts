@@ -88,8 +88,8 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
     MatTooltipModule,
     MatTreeModule,
     OverlayModule,
-    NgxMatDatetimePickerModule
-    ,NgxMatNativeDateModule
+    NgxMatDatetimePickerModule,
+    NgxMatNativeDateModule
   ],
   providers: [
     { provide: MatDialogRef , useValue:{} },

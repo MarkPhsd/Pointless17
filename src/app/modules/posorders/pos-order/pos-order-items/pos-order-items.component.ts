@@ -45,6 +45,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input() displayHistoryInfo: boolean;
   @Input() enableItemReOrder  : boolean = false;
   @Input() phoneDevice: boolean;
+  @Input() cardWidth: string;
+
 
   qrCodeStyle = ''
   mainStyle   =  ``
@@ -168,6 +170,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     // list.forEach(data => {
     //   // console.log(data.productName, data.productSortOrder)
     // })
+    this.conditionalIndex = 1;
     if (!this.conditionalIndex) { this.conditionalIndex = 1}
     items.forEach((item, index) => {
       if (item.id == item.idRef) {

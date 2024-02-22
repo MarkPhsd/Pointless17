@@ -40,7 +40,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   _order$             : Observable<IPOSOrder>;
   order$              : Subject<Observable<IPOSOrder>> = new Subject();
 
-  isUserStaff          : boolean;
+  isStaff : boolean = false;
+  isUser  : boolean = false
 
   user$               : Observable<any>;
   _user               : Subscription;
@@ -75,10 +76,14 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     this.user$ = this.authenticationService.user$.pipe(
       switchMap(user => {
       this.user = user;
-      this.isUserStaff = false;
+      this.isStaff = false;
+      this.isUser = false
       if (user) {
         if (user?.roles == 'admin' || user?.roles == 'manager' || user?.roles == 'employee') {
-          this.isUserStaff      = true
+          this.isStaff      = true
+        }
+        if (user?.roles == 'user' || user?.roles == 'guest') { 
+          this.isUser = true;
         }
       }
       return this.serviceTypeService.getSaleTypes(site)
@@ -169,7 +174,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   addNewOrder() {
     const site = this.siteService.getAssignedSite();
     const order = localStorage.getItem('orderSubscription')
-    // console.log('order', order)
+
     if (order && order != null) {
       this.paymentMethodsService.sendOrderProcessLockMethod(this.orderMethodsService.currentOrder)
     }

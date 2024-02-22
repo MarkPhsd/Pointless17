@@ -140,9 +140,13 @@
       <button class="payment-buttons-sm" mat-raised-button color='primary' (click)="captureDCap(item, totalAuthPayments)">
           <mat-label>Complete  <br> {{ totalAuthPayments | currency }}</mat-label>
       </button>
+  
+      <button *ngIf="item?.tranCode === 'EMVPreAuth'" class="payment-buttons-sm" style="margin:5px" mat-raised-button color='warn' (click)="voidPayment(item)">
+        <mat-label>Void Auth  <br> {{ totalAuthPayments | currency }}</mat-label>
+      </button>
     </div>
 
-    <div  *ngIf="( order.creditBalanceRemaining > totalAuthPayments )">
+    <div  *ngIf="( order.creditBalanceRemaining > totalAuthPayments ) && !item?.Voided">
       <button   class="payment-buttons-sm"
                 style="width:125px"
                 *ngIf="order.creditBalanceRemaining > totalAuthPayments"
@@ -159,7 +163,7 @@
 
     <div *ngIf="!isUser && ( order.creditBalanceRemaining != 0 && totalAuthPayments > 0 ) || item.completionDate "
           style="font-size:1.2em;margin-top:10px">
-      <button   color="warn"
+      <button   color="accent"
                 class="payment-buttons-sm"
                 style="width:125px"
                 mat-raised-button (click)="editPayment(item)">

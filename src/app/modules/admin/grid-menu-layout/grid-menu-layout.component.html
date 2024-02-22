@@ -1,6 +1,4 @@
-<div *ngIf="(action$  | async) as action">
-
-</div>
+<div *ngIf="(action$  | async) as action"></div>
 
 <div    [style.height]="pixelHeight"
         [style.max-height]="pixelHeight"
@@ -19,8 +17,7 @@
 
             [options]="options"
             class="gridster-container"
-            (drop)="onDrop($event)"
-          >
+            (drop)="onDrop($event)" >
 
     <gridster-item  [style.opacity]="getOpacity(item?.object?.opacity/100)"
                     [style.border-radius]="getBorderRadius(item?.object?.borderRadius)"

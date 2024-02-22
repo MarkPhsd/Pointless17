@@ -3,15 +3,15 @@
 
 .container {
   max-height: 800px;
-  max-width:  225px;
+  max-width:  325px;
   overflow-y: hidden;
   overflow-x: hidden;
 }
 
 mat-card {
   padding: 1px;
-  min-height: 100px;
-  height:     135px;
+  min-height: 175px;
+  height:     175px;
   width     : 100%;
 
   overflow: hidden;
@@ -91,8 +91,12 @@ mat-card-subtitle {
 .flex-row { 
   display: flex;
   flex-direction: row;
+
 }
 
+.margin-top-10 { 
+  margin-top:10px;
+}
 .mat-card {
   min-height: 155px;
   max-height: 165px;
@@ -112,6 +116,8 @@ mat-card-subtitle {
   // @include for-phone-only  {
   //   visibility:  hidden;
   // }
+  // font-size: 1.2em;
+  // font-weight: 600;
 }
 
 .orderType { 
@@ -125,6 +131,7 @@ mat-card-subtitle {
 }
 
 .field-center {
+ 
   @include for-phone-only  {
     grid-column: 1 / span 2;
     display: flex;

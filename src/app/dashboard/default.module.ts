@@ -501,8 +501,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     LinkedPriceSelectorComponent,
     PriceCategoriesComponent,
 
-
-
     WicEBTCardPayBtnComponent,
     TriPOSCardPayBtnComponent,
     StripeCardPayBtnComponent,
@@ -741,8 +739,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PSMenuGroupListComponent,
     PSMenuGroupEditComponent,
 
-
-
     ReceiptLayoutComponent,
     RecieptPopUpComponent,
     ReportsComponent,
@@ -863,7 +859,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       NgxJsonViewerModule,
       NgxColorsModule,
       FormsModule,
-
     ],
 
   exports: [

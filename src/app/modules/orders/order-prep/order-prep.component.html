@@ -3,12 +3,15 @@
 <div *ngIf="(action$ | async) as action"></div>
 
 <div class="container">
+
+
   <mat-card class="mat-card" [style]="serviceColor">
     <mat-card-content class="center">
       <div *ngIf="!smallDevice" class="grid-orderproperties">
-        <div class='date-header' *ngIf="order.orderDate">
-          {{order?.orderDate |  date: 'shortTime'}}  |  {{minutesOpen}} . <br>
-          {{order?.orderDate |  date: 'shortDate'}}
+        <div class='date-header font-1-3em font-bold' *ngIf="order.orderDate">
+          {{order?.orderDate |  date: 'shortTime'}}   <br>
+          {{order?.orderDate |  date: 'shortDate'}}   <br>
+          min: {{minutesOpen}} 
         </div>
 
         <div [class]="tableFont" >
@@ -20,21 +23,21 @@
           {{order?.employeeName | truncateText : 12 }}
         </div>
 
-        <div *ngIf="order.completionDate">
+        <div class="font-1-1em font-bold"  *ngIf="order.completionDate">
           {{order?.completionDate |  date: 'shortDate'}}
         </div>
 
-        <div *ngIf="!order.completionDate"
+        <div class="font-1-1em font-bold" *ngIf="!order.completionDate"
               class="time">
           {{order?.completionDate |  date: 'shortTime'}}
         </div>
       </div>
 
       <div class="center">
-        <div class="flex-row">
+        <div class="flex-row margin-top-10">
 
-          <div class="field-center">
-            {{order?.id}}
+          <div style="margin-top:8px" class="field-center ">
+            <span class=" font-1-3em font-bold">#{{order?.id}}</span> 
             <div class="orderID grid-action">
               
               <div *ngIf="prepScreen && (prepStatus == 1)">
@@ -65,39 +68,49 @@
           </div>
 
           <div>
+
+            <div *ngIf="prepScreen" class="items" style="width:50px;">
+              <mat-icon>shopping_cart</mat-icon> {{itemCount}} 
+            </div>
+            <!-- <div *ngIf="prepScreen" class="itemcount"> </div> -->
+
             <div class="field-center">
               <div class="order-name" >
                 <div *ngIf="smallDevice">
                   {{ order?.customerName | truncateText : 15}}
                 </div>
                 <div *ngIf="!smallDevice">
-                  {{ order?.customerName | truncateText : 12}}
+                  {{ order?.customerName | truncateText : 18}}
                 </div>
               </div>
             </div>
 <!--   
             <div *ngIf="!prepScreen" class="items">Items</div>
             <div *ngIf="!prepScreen" class="itemcount">{{order?.itemCount}} </div> -->
-  
-            <div *ngIf="prepScreen" class="items">Items  </div>
-            <div *ngIf="prepScreen" class="itemcount">{{itemCount}} </div>
           </div>
 
         </div>
       </div>
+    
     </mat-card-content>
 
   </mat-card>
 
+  <div *ngIf="order?.productOrderMemo" class="font-1-3em">
+    {{order?.productOrderMemo}}
+    <mat-divider></mat-divider>
+  </div>
+
   <div class="order-items"
        *ngIf="orderItems">
-        <pos-order-items
-          [mainPanel]      ="false"
-          [printLocation]  ="printLocation"
-          [prepStatus]     ='prepStatus'
-          [prepScreen]     ='true'
-          [order]          ="order"
-          [posOrderItems]  ="order.posOrderItems"  >
-        </pos-order-items>
+    <pos-order-items
+      [mainPanel]      ="false"
+      [printLocation]  ="printLocation"
+      [prepStatus]     ='prepStatus'
+      [prepScreen]     ='true'
+      [order]          ="order"
+      [cardWidth]      ="'width:325px;'"
+      [posOrderItems]  ="order.posOrderItems"  >
+    </pos-order-items>
   </div>
 </div>

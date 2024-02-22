@@ -83,6 +83,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   @Input() enableItemReOrder  : boolean = false;
   textNameLength : number = 30;
 
+  @Input() cardWidth: string;
+  
   packages: string;
   morebutton               = 'more-button';
   customcard               = 'custom-card'
@@ -106,7 +108,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   itemName   :            string;
   imagePath   :           string;
 
-  smallDevice           : boolean;
+  @Input() smallDevice           : boolean;
 
   showEdit              : boolean;
   showView              : boolean;
@@ -572,6 +574,11 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
           return;
         }
 
+        let width = '455px'
+        if (this.smallDevice) { 
+          width = ' 100vw'
+        }
+
         let requireWholeNumber = false;
         if (editField == 'quantity') {   requireWholeNumber = this.menuItem.itemType.requireWholeNumber }
         const item = {orderItem: this.orderItem,
@@ -580,10 +587,9 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
                       requireWholeNumber: requireWholeNumber,
                       instructions: instructions}
         let height  = '600px';
-        let width   = '455px'
+       
         if (editField == 'quantity') {
           height  = '600px';
-          width   = '455px'
         }
 
         if (editField == 'modifierNote') {
@@ -613,7 +619,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     dialogRef.afterClosed().subscribe(result => {
       // console.log('recieving determined result is: ', result)
       if (result) {
-        this.editDialog(item,'600px','600px')
+        this.editDialog(item,'100vw !important','600px')
       } else {
         this.siteService.notify('Not authorized', 'close', 1000, 'red')
       }
@@ -627,9 +633,12 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     //   height =  '500px';
     // }
     // console.log(width, height)
+
+    // this.notifyEvent('width', width)
     dialogRef = this.dialog.open(PosOrderItemEditComponent,
       { width     : width,
-        minWidth  : '300px',
+        maxWidth  : width,
+        minWidth  : width,
         height    : height,
         minHeight : height,
         data      : item

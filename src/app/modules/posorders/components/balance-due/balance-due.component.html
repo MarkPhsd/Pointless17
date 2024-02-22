@@ -1,11 +1,11 @@
 <div *ngIf="(action$ | async) as newOrder"></div>
 <div *ngIf="(dCapReset$ | async) as reset"></div>
 
+
 <div  class="grid-items"
       *ngIf=" (uiTransactions$ | async) as uiTransactions" >
-  <div>
-    <button class="big-button" mat-raised-button (click)="newDefaultOrder()">New Order</button>
-  </div>
+      
+  <ng-container [ngTemplateOutlet]="newOrderButton"></ng-container>
 
   <div class="center-panel">
     <div *ngIf="payment && step == 1">
@@ -16,17 +16,17 @@
           <div class="action-center">
             <mat-label class="h3" *ngIf="!payment.completionDate && payment"> Payment: {{ payment.amountPaid }} </mat-label>
             <br>
-            <mat-label class="h3"  color ="accent" *ngIf="payment.completionDate"> Change Due: <br> {{ changeDue | currency }}</mat-label>
+            <mat-label class="h3"  color ="accent" *ngIf="!isUser && payment.completionDate"> Change Due: <br> {{ changeDue | currency }}</mat-label>
           </div>
 
-          <div class="action-center">
+          <div *ngIf="!isUser" class="action-center">
             <mat-label>Scan to Start New Order</mat-label>
             <list-product-search-input></list-product-search-input>
           </div>
 
           <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
-
-          <div  *ngIf="(payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard)">
+          
+          <div  *ngIf="isUser || ((payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard))">
             <tip-entry-amount
               [payment]            = "payment"
               [paymentMethod]      = "paymentMethod"
@@ -43,16 +43,25 @@
         <div class="action-center">
           <mat-label class="h3" *ngIf="!payment.completionDate && payment">Payment: {{ payment.amountPaid }} </mat-label>
         </div>
-        <div class="action-center">
+        <div  *ngIf="!isUser" class="action-center">
           <mat-label class="h3"  color ="accent" *ngIf="payment.completionDate"> Change Due: <br> {{ changeDue | currency }}</mat-label>
         </div>
+      </div>
+
+      <div  *ngIf="isUser">
+        <tip-entry-amount
+          [payment]            = "payment"
+          [paymentMethod]      = "paymentMethod"
+          (specifiedTipAmount) = "specifiedTip($event)"
+          (outPutTip)          = "customTipAmount($event)"
+        ></tip-entry-amount>
       </div>
 
       <mat-card-actions>
         <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
       </mat-card-actions>
 
-      <div class="action-center" *ngIf="uiTransactions.enableTransactionTypeChoice">
+      <div class="action-center" *ngIf="!isUser && uiTransactions.enableTransactionTypeChoice">
         <new-order-type
                   [order]        ="order"
                   [payment]      ="payment"
@@ -63,12 +72,8 @@
 
     </mat-card>
   </div>
-
-  <div>
-    <button class="big-button" mat-raised-button (click)="newDefaultOrder()">
-      <h2>New Order</h2></button>
-  </div>
-
+  
+  <ng-container [ngTemplateOutlet]="newOrderButton"></ng-container>
 </div>
 
 <ng-template #actionCenterView let-stepValue>
@@ -86,8 +91,20 @@
 
     <button mat-button
             class="tip-button"
+            *ngIf="!isUser"
             (click)="changeStep()">
             <mat-icon>arrow_forward_ios</mat-icon>Next
     </button>
   </div>
 </ng-template>
+
+<ng-template #newOrderButton>
+  <div class="new-order-button" *ngIf="!isUser">
+    <button class="big-button" mat-raised-button (click)="newDefaultOrder()">
+      <h2>New Order</h2></button>
+  </div>
+</ng-template>
+<!-- 
+<div>
+  <button class="big-button" mat-raised-button (click)="newDefaultOrder()">New Order</button>
+</div> -->

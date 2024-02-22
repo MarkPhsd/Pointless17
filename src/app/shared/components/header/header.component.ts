@@ -533,7 +533,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     }
     this.setUserInfo(this.user)
 
-    console.log('get User info', this.user)
+    // console.log('get User info', this.user)
     this.setUserInitCheck(this.user)
     
     if (this.userChecked) {
@@ -542,7 +542,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     }
 
 
-    console.log('user info check')
+    
     return user
   }
 
@@ -556,16 +556,16 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
         return of(null)
       }
       
-      console.log('is user valid', data.id == user.id);
+      // console.log('is user valid', data.id == user.id);
       if (data.apiUserName  === user.username) { 
-        console.log('User names match');
+        // console.log('User names match');
       } else { 
         this.userSwitchingService.clearLoggedInUser()
-        console.log('User names match');
+        // console.log('User names match');
       }
       return of(data)
     }),catchError(data => {
-      console.log('userInitCheck error', data)
+      // console.log('userInitCheck error', data)
       this.userSwitchingService.clearLoggedInUser()
       return of(data)
     }));
@@ -707,6 +707,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   goHome() {
+    if (this.phoneDevice) { 
+      //hide the side bar
+      this.toolbarUIService.updateToolBarSideBar(false)
+    }
     this.smallDeviceLimiter();
     this.navigationService.navHome();
   }

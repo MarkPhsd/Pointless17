@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/_services';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
@@ -14,6 +14,8 @@ export class DashboardMenuComponent implements OnInit, OnDestroy {
   _dashboardModel: Subscription;
   collection: DashboardModel[];
 
+  @ViewChild('collectionView') collectionView  : TemplateRef<any>;
+  
   constructor(
     public layoutService       : GridsterLayoutService,
     public authService         : AuthenticationService,
@@ -33,6 +35,26 @@ export class DashboardMenuComponent implements OnInit, OnDestroy {
         this.filterCollection(data);
       }
     })
+  }
+
+  get collectionViewEnabled() {
+    // console.log('isnull',this.collection, this.checkIfIsNull(this.collection), this.collection == null,)
+    if (!this.checkIfIsNull(this.collection)) { 
+      if (this.collection ||this.collection.length>0) { 
+        console.log('collection', this.collection)
+        return this.collectionView
+      }
+    }
+    return null;
+  }
+
+  checkIfIsNull(array) { 
+    const collection = [null];
+
+    const containsNull = collection.some(element => element === null);
+
+    return containsNull // true if the array contains null, false otherwise
+
   }
 
   initSubscriptions() {

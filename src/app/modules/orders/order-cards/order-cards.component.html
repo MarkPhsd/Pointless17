@@ -5,15 +5,16 @@
 </div>
 
 <ng-template #orderPrepRefresh>
+  <!-- order prep refresh -->
   <div *ngIf="(orderSubscription$ | async) as orders;else loadingPrep">
-  
+  </div>
+  <div *ngIf="(results$ | async) as results">
   </div>
   <ng-template #loadingPrep>..loading</ng-template>
 </ng-template>
 
 <ng-template #ordersRefresh>
   <div *ngIf="(results$ | async) as results">
-  
   </div>
 </ng-template>
 

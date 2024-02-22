@@ -4,10 +4,11 @@ import { DashboardModel  } from 'src/app/modules/admin/grid-menu-layout/grid-mod
 import { GridManagerEditComponent } from '../grid-manager-edit/grid-manager-edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { AuthenticationService } from 'src/app/_services';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
+import { AuthenticationService } from 'src/app/_services';
+// import { NavigationService } from 'src/app/_services/system/navigation.service';
 
 @Component({
   selector: 'menu-manager',
@@ -17,30 +18,29 @@ import { NavigationService } from 'src/app/_services/system/navigation.service';
 export class GridManagerComponent implements OnInit, OnDestroy {
 
   dashboardModel: DashboardModel
-  layoutID      : number;
+  layoutID   : number;
 	// Components variables
-  toggle: boolean;
-  modal: boolean;
+  toggle     : boolean;
+  modal      : boolean;
   accordionStep = 3;
   matToolbarColor = 'primary';
-  inputForm: UntypedFormGroup;
+  inputForm  : UntypedFormGroup;
   allowDesign: boolean;
   hideMenu   : boolean;
-  action$:Observable<any>;
+  action$    : Observable<any>;
   _dashboard : Subscription;
-  isSafari        : any;
+  isSafari   : any;
+  pathID     : string;
 
-  pathID: string;
   constructor(
               private dialog             : MatDialog,
               private router             : Router,
-              public  layoutService: GridsterLayoutService,
-              private fb                 : UntypedFormBuilder,
-              private auth               : AuthenticationService,
+              public  layoutService      : GridsterLayoutService,
               private navigationService  : NavigationService,
               private _renderer          : Renderer2,
-              public route              : ActivatedRoute,
-              ){};
+              public route               : ActivatedRoute,
+              private authenticationService: AuthenticationService,
+              private fb: FormBuilder ){};
 
 	// On component init we store Widget Marketplace in a WidgetModel array
 	ngOnInit(): void {
@@ -50,13 +50,23 @@ export class GridManagerComponent implements OnInit, OnDestroy {
     this.renderTheme();
     this.inputForm = this.fb.group({type: ['']})
     this.refresh();
-    if (this.auth.isAuthorized)  {
+    if (this.authenticationService.isAuthorized)  {
       this.allowDesign = true;
     }
     this.initSubscriptions();
 
 	}
 
+  
+  initSubscriptions() {
+    this._dashboard = this.layoutService._dashboardModel.subscribe(data => {
+      this.dashboardModel = data;
+      console.log('data', data)
+      this.autoRoute(data)
+    })
+  }
+
+  
   autoRoute(data) {
     this.pathID = this.route.snapshot.paramMap.get('id');
 
@@ -64,15 +74,15 @@ export class GridManagerComponent implements OnInit, OnDestroy {
 
     }
     if (!data && this.pathID) {
-      this.action$ = this.layoutService.getDataOBS(+this.pathID , true).pipe(switchMap(data => {
-        this.layoutService.forceRefresh(+this.pathID)
-        return of(data)
-      }))
+      // this.action$ = this.layoutService.getDataOBS(+this.pathID , true).pipe(switchMap(data => {
+      //   this.layoutService.forceRefresh(+this.pathID)
+      //   return of(data)
+      // }))
       return;
     }
 
     if (this.pathID) {
-      this.layoutService.forceRefresh(+this.pathID)
+      // this.layoutService.forceRefresh(+this.pathID)
     }
   }
 
@@ -93,16 +103,6 @@ export class GridManagerComponent implements OnInit, OnDestroy {
     this.navigationService.navHome();
   }
 
-  initSubscriptions() {
-    this._dashboard = this.layoutService._dashboardModel.subscribe(data => {
-      this.dashboardModel = data;
-      // console.log('data', data)
-
-      this.autoRoute(data)
-
-    })
-  }
-
   saveChanges() {
     this.layoutService.itemChange(null)
   }
@@ -113,10 +113,12 @@ export class GridManagerComponent implements OnInit, OnDestroy {
 
   refresh() {
 		// We make a get request to get all widgets from our REST API
-    // const id = this.layoutService.dashboardModel.id;
-		this.layoutService.getWidgets().subscribe(widgets => {
-			this.layoutService.widgetCollection = widgets;
-		});
+    if (this.layoutService.dashboardModel) { 
+      const id = this.layoutService.dashboardModel.id;
+      this.layoutService.getWidgets().subscribe(widgets => {
+        this.layoutService.widgetCollection = widgets;
+      });
+    }
     this.layoutService.refreshCollection()
   }
 

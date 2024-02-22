@@ -57,11 +57,26 @@ export interface   DcapRStream {
   providedIn: 'root'
 })
 export class DcapService {
+  
 
   site = this.siteService.getAssignedSite()
   constructor(private http: HttpClient,
               private siteService: SitesService
               ) { }
+
+  adustByRecordNo(device: string, payment: IPOSPayment, amount: number) {
+
+    const controller = '/dCap/'
+
+    const endPoint = "AdjustByRecordNo"
+
+    const parameters = `?deviceName=${device}&gratuity=${amount}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, payment)
+  }
+
 
   batchClose(device: string) : Observable<any> {
 

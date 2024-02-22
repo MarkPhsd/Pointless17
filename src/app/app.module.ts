@@ -65,7 +65,6 @@ import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-l
 import { UserIdleModule } from 'angular-user-idle';
 import { DragAndDropModule } from 'angular-draggable-droppable';
 import { ResizeDirective } from './_directives/resize.directive';
-import { DashBoardRoutingModule } from './dash-board-routing.module';
 
 // Sentry.init({
 //   dsn: "https://ba163a19cdcf43ca80217e835d0f06bc@o1342227.ingest.sentry.io/6616061",
@@ -128,17 +127,20 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     CategoriesAlternateComponent,
     CurrencyFormatterDirective,
     LoginComponent,
+
     TvPriceTierMenuItemsComponent,
     TvPriceSpecialsComponent,
     RegisterAccountExistingUserWithTokenComponent,
     RegisterAccountMainComponent,
     ResetpasswordComponent,
+
     GridManagerComponent,
     GridSettingsComponent,
     GridMenuLayoutComponent,
     GridManagerEditComponent,
     GridComponentPropertiesComponent,
     GridDesignerInfoComponent,
+
     DashboardMenuComponent,
     OrderTotalBoardComponent,
     LimitValuesCardComponent,
@@ -159,6 +161,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     UserIdleModule.forRoot({idle: 10, timeout: 100, ping: 120}),
     AppRoutingModule,
     AppMaterialModule,
+    DefaultModule,
     AgGridModule,
     HttpClientModule,
     BrowserAnimationsModule,
@@ -166,34 +169,30 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     FormsModule,
     BrowserModule,
     CommonModule,
-    DashBoardRoutingModule,
-    DefaultModule,
     DynamicModule,
     EditorModule,
-    LayoutModule,
+    SharedModule,
     NGXMaterialModule,
     NgxElectronModule,
     DragAndDropModule,
-    DashBoardRoutingModule,
-    SharedModule,
-    // PointlessReportingLibModule,
+    LayoutModule,
   ],
 
   exports: [
     AppMaterialModule,
+    SharedModule,
     EditorModule,
     FormsModule,
     IonicModule,
     AgGridImageFormatterComponent,
     AgGridToggleComponent,
-    SharedModule,
-    // PointlessReportingLibModule,
   ],
 
   providers: [
     { provide: HTTP_INTERCEPTORS,  useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS,  useClass: ErrorInterceptor, multi: true },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    AppInitService,
     CurrencyPipe,
     CacheClientService,
     HttpClientCacheService,
@@ -202,7 +201,6 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     RenderingService,
     PagerService,
     StatusBar,
-    AppInitService,
     ErrorInterceptor,
     {
       provide: APP_INITIALIZER,

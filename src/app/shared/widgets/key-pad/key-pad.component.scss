@@ -86,6 +86,10 @@ mat-form-field {
   width        : 130px;
   height       : 85px;
   border-radius: 5px;
+  @include for-phone-only  {
+    width        : 115px;
+  }
+
 }
 
 .button-sized-scaled {
@@ -129,6 +133,8 @@ mat-form-field {
   margin-top  : 5px;
   padding     : 0px;
   border-radius: 5px;
+
+
 }
 
 button {

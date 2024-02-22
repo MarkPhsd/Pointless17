@@ -6,10 +6,9 @@
 <div *ngIf="(user$ | async) as user"></div>
 <div *ngIf="(viewType$ | async) as viewPrep"></div>
 
-<div *ngIf="!hideAppHeader && !viewPrep" >  
+<div class="getAppHeaderClass" >  
   <app-header> </app-header>
 </div>
-
 
 <div *ngIf="(posDevice$ | async) as device"></div>
 

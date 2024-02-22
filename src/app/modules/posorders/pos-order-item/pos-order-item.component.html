@@ -14,7 +14,7 @@
         <div [class]="flexGroup">
 
           <div [class]="productnameClass" >
-
+         
             <span  class="index" *ngIf="!isModifier && !prepScreen && orderItem.conditionalIndex">
               {{orderItem.conditionalIndex }}
             </span>
@@ -81,7 +81,7 @@
             </div>
           </div>
 
-          <div>
+          <div >
             <span *ngIf="purchaseOrderEnabled">
               Cost : {{ quantity }}  @  {{ wholeSale | currency }} = {{ wholeSale*quantity | currency}}
             </span>
@@ -90,7 +90,7 @@
               SN#/({{ orderItem?.serialCode }})
             </span>
 
-            <span class="notes"
+            <span class="notes item-info"
                           *ngIf="( mainPanel || wideBar )
                                   && orderItem
                                   && orderItem?.modifierNote">

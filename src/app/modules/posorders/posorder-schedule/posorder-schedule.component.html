@@ -1,6 +1,8 @@
 <mat-card *ngIf="order">
   <mat-card-title>
-    Plan Order <span style="margin-left:5px" *ngIf="processingUpdate"><mat-spinner [diameter]="25"> </mat-spinner></span>
+      Plan Order 
+      <!-- <span style="margin-left:5px" *ngIf="processingUpdate">
+      <mat-spinner [diameter]="25"> </mat-spinner></span> -->
   </mat-card-title>
 
   <mat-card-subtitle>
@@ -72,7 +74,13 @@
               [inputForm]="inputFormNotes">
             </pos-order-notes>
           </div>
+
+          <div class="instructions-small-view">
+            <ng-container [ngTemplateOutlet]="instructionsView"></ng-container>
+          </div>
+          
         </mat-tab>
+
     </mat-tab-group>
   </mat-card-content>
 
@@ -125,14 +133,23 @@
   </mat-card-actions>
 </mat-card>
 
-<div class="instructions" *ngIf="!platFormService.isApp()">
-  <div  *ngIf="serviceType" >
-    <div *ngIf="serviceType">
-      <div *ngIf="instructions"
-           style="margin:10px"
-           [innerHtml]="serviceType?.instructions"></div>
+<div class="instructions-large-view">
+  <ng-container [ngTemplateOutlet]="instructionsView"></ng-container>
+</div>
+
+<ng-template #instructionsView>
+  <div class="instructions" *ngIf="!platFormService.isApp()">
+    <div  *ngIf="serviceType" >
+      <div *ngIf="serviceType">
+        <div *ngIf="instructions"
+             style="margin:10px"
+             [innerHtml]="serviceType?.instructions"></div>
+      </div>
     </div>
   </div>
-</div>
+</ng-template>
+
+
+
 
 <div *ngIf="(action$ | async) as action"></div>

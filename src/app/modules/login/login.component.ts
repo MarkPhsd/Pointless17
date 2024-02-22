@@ -1,5 +1,5 @@
-﻿import { CompanyService, AuthenticationService, AWSBucketService, ThemesService, OrdersService, UserService} from 'src/app/_services';
-import { ICompany, IPOSOrder, IUser, IUserProfile }  from 'src/app/_interfaces';
+﻿import { CompanyService, AuthenticationService, AWSBucketService} from 'src/app/_services';
+import { ICompany, IPOSOrder, IUser}  from 'src/app/_interfaces';
 import { Component, Inject, Input, OnDestroy, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -33,10 +33,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   initApp    = true
 
   setPinPad$ = this.authenticationService.setPinPad$.pipe(switchMap(data => {
-    // console.log('pin pad', data)
-    if (data) {
-      this.togglePIN = true;
-    }
+    if (data) { this.togglePIN = true;  }
     return of(data)
   }))
 
@@ -123,24 +120,23 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-        private fb                   : UntypedFormBuilder,
-        private route                : ActivatedRoute,
-        private router               : Router,
-        private _renderer            : Renderer2,
-        private authenticationService: AuthenticationService,
-        private userSwitchingService : UserSwitchingService,
-
-        private _snackBar            : MatSnackBar,
-        private companyService       : CompanyService,
-        private siteService          : SitesService,
-        public  platformService       : PlatformService,
-        private appInitService       : AppInitService,
-        private uiSettingService     : UISettingsService,
-        private awsBucketService     : AWSBucketService,
-        private orderMethodsService:   OrderMethodsService,
+        private fb                     : UntypedFormBuilder,
+        private route                  : ActivatedRoute,
+        private router                 : Router,
+        private _renderer              : Renderer2,
+        private authenticationService  : AuthenticationService,
+        private userSwitchingService   : UserSwitchingService,
+        private _snackBar              : MatSnackBar,
+        private companyService         : CompanyService,
+        private siteService            : SitesService,
+        public  platformService        : PlatformService,
+        private appInitService         : AppInitService,
+        private uiSettingService       : UISettingsService,
+        private awsBucketService       : AWSBucketService,
+        private orderMethodsService    : OrderMethodsService,
         private electronService        : ElectronService,
-        private settingService: SettingsService,
-        private paymentMethodsservice: PaymentsMethodsProcessService,
+        private settingService         : SettingsService,
+        private paymentMethodsservice  : PaymentsMethodsProcessService,
         @Optional() private dialogRef  : MatDialogRef<LoginComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
     )

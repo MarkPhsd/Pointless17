@@ -637,4 +637,6 @@ export class CardPointMethodsService {
     this._dialog.next(this.dialogRef)
   }
 
+
+  
 }

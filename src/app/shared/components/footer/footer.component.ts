@@ -8,6 +8,7 @@ import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { OrderFilterPanelComponent } from 'src/app/modules/orders/order-filter-panel/order-filter-panel.component';
 import { PosOrderItemsComponent } from 'src/app/modules/posorders/pos-order/pos-order-items/pos-order-items.component';
 
 @Component({
@@ -159,5 +160,8 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
 
+  filterBottomSheet() {
+    this.bottomSheet.open(OrderFilterPanelComponent);
+  }
 
 }

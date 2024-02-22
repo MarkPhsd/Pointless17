@@ -14,8 +14,11 @@ router-outlet {
 app-header {
   width:  100%;
   height: 50px;
+  min-height: 50px;
 }
-
+.app-header-hidden { 
+  display: none;
+}
 .app-menu-tiny {
   height: calc(100vh - 165px);
 }
@@ -49,9 +52,13 @@ mat-drawer-container {
   padding-top: -5px;
   overflow: hidden;
   height: calc(100vh - 65px );
+  position: relative;
   @media (max-width: 815px) {  height: calc(100% - 115px );  }
-  @media (max-width: 768px) {   height: calc(100% - 115px );  }
-  @include for-phone-only  {   height: calc(100% - 115px );  }
+  @media (max-width: 768px) {  height: calc(100% - 115px );  }
+  @include for-phone-only  {   
+    position: relative;
+    height: calc(100% - 115px );  
+  }
 }
 
 mat-drawer-inner-container {

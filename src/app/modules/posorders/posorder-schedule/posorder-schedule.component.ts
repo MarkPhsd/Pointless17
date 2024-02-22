@@ -169,10 +169,10 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
 
   sendPrepRequest() {
     const action$ = this.saveOrderMemo()
+    this.processingUpdate = true;
     this.action$ =  action$.pipe(switchMap(data => {
       if (data && data.id) {
         this.processingUpdate = false;
-        console.log('data', data)
         return this.orderMethodsService.sendNotificationObs(data,1)
       }
       return of(null)
@@ -185,7 +185,6 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     console.log('check prep')
     this.action$ =  action$.pipe(
       switchMap(data => {
-        console.log('data', data)
         this.processingUpdate = false;
         if (data && data.id) {
           return this.orderMethodsService.sendNotificationObs(data,2)
@@ -268,8 +267,6 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     }
   }
 
-
-
   selectedServiceType(serviceType: IServiceType) {
     if (!serviceType) { return }
     this.serviceType = serviceType;
@@ -323,9 +320,9 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     this.order.preferredScheduleDate =  this.dateHelperService.format(event, 'medium');
     this.action$ = this.orderService.putOrder(site, this.order).pipe(
       switchMap(data => {
+        this.processingUpdate = false;
         this.orderMethodsService.updateOrderSubscription(data)
         this.updateSelectedIndex(3)
-        this.processingUpdate = false;
         return of(data)
       })
     )
@@ -393,5 +390,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   sendMessage(item, order) {
     this.action$ = this.orderMethodsService.sendOrderForMessageService(item, order)
   }
+
+  
 
 }

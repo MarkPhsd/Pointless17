@@ -6,7 +6,7 @@ mat-card {
   margin: 10px;
   overflow-y: auto;
   @include for-phone-only  {
-    height: calc(80vh - 125px);
+    height: calc(90vh - 125px);
   }
 }
 
@@ -19,6 +19,20 @@ mat-tab {
   object-fit: cover;
 }
 
+.instructions-small-view { 
+  display: none;
+  @include for-phone-only  {
+ 
+    display: flex;
+  }
+}
+
+.instructions-large-view { 
+  display: flex;
+  @include for-phone-only  {
+    display: none;
+  }
+}
 .action-grid {
   --gap: 10px;
   display: grid;

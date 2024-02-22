@@ -592,6 +592,16 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   voidDCapPayment() {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
+
+      // if (this.voidPayment.trancode == 'EMVPreAuth') { 
+      //   this.action$ =  this.paymentsMethodsService.processDcapCreditVoid(voidPayment).pipe(switchMap(data => {
+      //     setTimeout(() => {
+      //       this.closeDialog(null, null);
+      //     }, 50)
+      //     return of(data)
+      //   }))
+      // }
+
       if (voidPayment) {
         this.action$ =  this.paymentsMethodsService.processDcapCreditVoid(voidPayment).pipe(switchMap(data => {
           setTimeout(() => {
@@ -601,6 +611,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         }))
       }
     }
+
+   
   }
 
   get isDSIEmvPayment() {

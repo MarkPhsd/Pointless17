@@ -118,6 +118,30 @@ mat-card {
   margin-left: 10px ;
   font-size: 1.2em;
   background-blend-mode: lighten;
+
+}
+
+.notes {
+  font-weight: 600;
+  color: cornflowerblue;
+  background-blend-mode: difference;
+}
+.item-info { 
+  word-wrap: break-word; // Allows long words to be broken and wrapped onto the next line
+  overflow-wrap: break-word; // Similar to word-wrap, ensures compatibility with all browsers
+  box-sizing: border-box; // Ensures padding and border are included in the element's total width and height
+  margin: 0 auto; // Centers the div if it's inside a wider container
+  display: block; //
+  // width: 300px; // Fixed width
+  max-width: 100%; //
+  overflow: visible;
+
+  float: left;
+  align-items: flex-start;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: pre-wrap;
+  height: fit-content;
 }
 
 
@@ -170,50 +194,11 @@ button {
 }
 
 
-.notes {
-  font-weight: 600;
-  color: cornflowerblue;
-  background-blend-mode: difference;
-}
 
 .discount-description {
   font-style: italic;
 }
 
-// .panel {
-//   display: flex;
-//   flex-wrap: wrap;
-//   border: 1px solid #f00;
-//   min-height: 70px;
-
-//   $breakpoint: 600px;
-//   --multiplier: calc( #{$breakpoint} - 100%);
-
-//   .element{
-//     min-width: 33%;
-//     max-width: 100%;
-//     flex-grow: 1;
-//     flex-basis: calc( var(--multiplier) * 999 );
-//     background: orange;
-//   }
-
-// }
-
-// .panel-modifier {
-//   display: flex;
-//   flex-wrap: wrap;
-//   border: 1px solid #f00;
-
-//   $breakpoint: 600px;
-//   --multiplier: calc( #{$breakpoint} - 100%);
-//   .element{
-//     min-width: 33%;
-//     max-width: 100%;
-//     flex-grow: 1;
-//     flex-basis: calc( var(--multiplier) * 999 );
-//     background: orange;
-//   }
-// }
 
 .item-details-grid {
   --gap: 20px;

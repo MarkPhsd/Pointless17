@@ -1,4 +1,4 @@
-import {Component,  OnInit, OnDestroy, AfterViewInit, HostListener, TemplateRef, ViewChild, ChangeDetectorRef, QueryList, ViewChildren, ElementRef,
+import {Component,  OnInit, OnDestroy, AfterViewInit, HostListener, TemplateRef, ViewChild, ChangeDetectorRef, QueryList, ViewChildren, ElementRef, OnChanges,
   }  from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { OrderFilterPanelComponent } from '../order-filter-panel/order-filter-panel.component';
@@ -27,8 +27,7 @@ import { TransferOrderComponent } from '../transfer-order/transfer-order.compone
   styleUrls: ['./orders-main.component.scss'],
 })
 
-export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
-  filterDivHeight
+export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnChanges {
   @ViewChild('filterDiv') filterDiv: ElementRef;
   @ViewChild('orderCard')    orderCard: TemplateRef<any>;
   @ViewChild('orderList')    orderList: TemplateRef<any>;
@@ -38,6 +37,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('houseAccountsList')    houseAccountsList: TemplateRef<any>;
   @ViewChild('houseAccountView') houseAccountView: TemplateRef<any>;
   @ViewChild('mergeView') mergeView: TemplateRef<any>;
+  @ViewChild('filterView') filterView:TemplateRef<any>;
 
   @ViewChildren(InstructionDirective) instructionDirectives: QueryList<InstructionDirective>;
 
@@ -48,6 +48,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('coachingPrep', {read: ElementRef}) coachingPrep: ElementRef;
   @ViewChild('coachingMergeView', {read: ElementRef}) coachingMergeView: ElementRef;
 
+  
   viewHouseAccountListOn: boolean;
 
   @ViewChild('ordersSelectedView')    ordersSelectedView: TemplateRef<any>;
@@ -94,6 +95,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   // this.uiSettingService.updatePOSDevice(item)
   terminalSettings: ITerminalSettings;
   viewPrep: boolean;
+  filterDivHeight: number;
 
   viewType$ = this.orderMethodsService.viewOrderType$.pipe(switchMap(data => {
     this.viewPrep = false
@@ -119,6 +121,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     const viewportBottom = window.innerHeight;
     const remainingHeight = viewportBottom - divTop;
     this.filterDiv.nativeElement.style.maxHeight  = `${remainingHeight - 10}px`;
+    if (this.smallDevice) { 
+      this.filterDiv.nativeElement.style.maxHeight  = `${remainingHeight -60}px`;
+    }
     this.filterDivHeight = remainingHeight
   }
 
@@ -202,6 +207,13 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.orderMethodsService.updateOrderSearchModelDirect(this.searchModel)
   }
 
+  refreshPrep() {
+    this.searchModel.printLocation = this.printLocation;
+    this.searchModel.prepStatus = this.prepStatus
+    this.printingService.updatePrepStatus(this.prepStatus)
+    this.orderMethodsService.updateOrderSearchModel(this.searchModel)
+  }
+
   initSearchModelSubscriber() {
     this._searchModel =  this.orderMethodsService.posSearchModel$.subscribe(data => {
       if (!data) {
@@ -221,14 +233,11 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.userAuthorization.user) {
           if (this.userAuthorization.user?.userPreferences?.showAllOrders) {
-            console.log('updated', this.userAuthorization.user.employeeID)
             this.searchModel.employeeID =  0
           } else {
             this.searchModel.employeeID =  this.userAuthorization.user?.employeeID
           }
         }
-
-
 
         if (this.searchModel.scheduleDate_From && this.searchModel.scheduleDate_To) {
           this.scheduleDateStart = this.searchModel.scheduleDate_From;
@@ -276,6 +285,20 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this._UITransaction) { this._UITransaction.unsubscribe() }
   }
 
+  get filterViewFull() { 
+    if (!this.smallDevice) { 
+      return this.filterView
+    }
+    return null
+  }
+
+  get filterViewPhone() { 
+    if (this.smallDevice) { 
+      return this.filterView
+    }
+    return null
+  }
+
   constructor (
     public route             : ActivatedRoute,
     private _bottomSheet     : MatBottomSheet,
@@ -290,15 +313,24 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     public coachMarksService : CoachMarksService,
     private platFormService: PlatformService,
     private posOrderItemService: POSOrderItemService,
-    private orderService     : OrdersService)
+    private orderService     : OrdersService
+
+    )
   {
     this.initAuthorization();
     this.orderMethodsService.updateViewOrderType(1)
   }
 
+  ngOnChanges() { 
+    this.adjustWindow()
+    this.viewPrep = false;
+    this.smallDevice = true
+  }
+
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
+    this.adjustWindow()
     this.site = this.siteService.getAssignedSite();
     this.initCustomerView()
     this.displayPanel(null)
@@ -310,7 +342,10 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.isUser) {
       localStorage.setItem('OrderFilterPanelVisible', 'true')
     }
+    this.changeDetectorRef.detectChanges()
   }
+
+
 
   initCustomerView() {
     let user = this.userAuthorization.user;
@@ -488,13 +523,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
     this.orderMethodsService.refreshAllOrders()
   }
 
-  refreshPrep() {
-    this.searchModel.printLocation = this.printLocation;
-    this.searchModel.prepStatus = this.prepStatus
-    this.printingService.updatePrepStatus(this.prepStatus)
-    this.orderMethodsService.updateOrderSearchModel(this.searchModel)
-  }
-
   togglePrepStatus() {
     this.updatePreptStatus(this.prepStatus)
   }
@@ -644,6 +672,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit {
   adjustWindow(){
     this.getFilterHeight()
     this.smallDevice = false
+    this.viewPrep = false
     this.listHeight = '84vh'
     if (window.innerWidth < 768) {
       this.smallDevice = true

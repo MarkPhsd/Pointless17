@@ -126,7 +126,7 @@ export class OrderMethodsService implements OnDestroy {
   private _posOrders          = new BehaviorSubject<IPOSOrder[]>(null);
   public posOrders$           = this._posOrders.asObservable();
 
-  //applies to order filter for POS
+  //view type, order cards list or prep view
   private _viewOrderType      = new BehaviorSubject<number>(null);
   public viewOrderType$       = this._viewOrderType.asObservable();
 
@@ -397,19 +397,12 @@ export class OrderMethodsService implements OnDestroy {
 
   updateOrderSearchModel(searchModel: IPOSOrderSearchModel) {
     if (!searchModel) {
-      this._posSearchModel.next(searchModel);
+      this._posSearchModel.next(null);
       return ;
     }
-
-    // let model = JSON.parse(JSON.stringify(searchModel)) as IPOSOrderSearchModel
+    
     if (!searchModel.onlineOrders) {  searchModel.onlineOrders = false }
-
-    // let employeeID = searchModel.employeeID
-    // employeeID = this.setEmployeeID(employeeID )
-    // model.employeeID = this.setEmployeeID(employeeID )
     searchModel.clientID = this.setUserID()
-    // model.clientID = this.setUserID()
-
     this.updateOrderSearchModelDirect(JSON.parse(JSON.stringify(searchModel)))
   }
 

@@ -153,18 +153,6 @@ import { MenuSectionComponent } from './modules/display-menu/display-menu-list/m
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
-
-    { path: 'printerslist',  component: InstalledPrintersComponent, data: { title: 'Print Settings', animation: 'isLeft'} },
-    { path: 'blog-post-list',  component: BlogPostListComponent, data: { title: 'BlogPosts', animation: 'isLeft'} },
-
-    { path: 'menu-board',  component: GridManagerComponent,
-        children: [
-          // { path: '', component: GridManagerComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
-          // { path: 'menu-board', component: GridManagerComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
-          { path: 'grid-menu-layout', component: GridMenuLayoutComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
-        ]
-    },
-
     //'qr-order
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
     { path: 'qr-receipt',  component: QRCodeTableComponent, data: { title: 'Order', animation: 'isLeft'} },
@@ -376,12 +364,22 @@ const routes: Routes = [
 
       ]
     },
-
+   
+    { path: 'menu-board'    ,  component: GridManagerComponent,
+       children: [
+        // { path: '', component: GridManagerComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
+        // { path: 'menu-board', component: GridManagerComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
+        { path: 'grid-menu-layout', component: GridMenuLayoutComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
+      ]
+    },
+    { path: 'printerslist'  ,  component: InstalledPrintersComponent, data: { title: 'Print Settings', animation: 'isLeft'} },
+    { path: 'blog-post-list',  component: BlogPostListComponent, data: { title: 'BlogPosts', animation: 'isLeft'} },
     { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: {  title: 'Tiers',  animation: 'isLeft'}},
     { path: 'view-price-tiers', component: TierPricesComponent ,data: {  title: 'Price Tiers', animation: 'isLeft'}},
     { path: 'scale-reader', component: ScaleReaderComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
     { path: 'barcodescanner', component: BarcodeScannerComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
+    
     { path: 'login', component: LoginComponent, data: { title: 'Pointless Login', animation: 'isLeft'}},
     { path: 'resetpassword', component: ResetpasswordComponent,data: {  title: 'Reset Password',  animation: 'isLeft'}},
     { path: 'changepassword', component: ChangepasswordComponent,data: {  title: 'Change Password',  animation: 'isLeft'}},

@@ -425,10 +425,13 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   }
 
   get isSearchSelectorOn() {
-
     
     if (this.uiHomePage && this.uiHomePage.disableSearchFieldInMenu && this.isApp) {
       return null
+    }
+
+    if (this.uiHomePage?.disableSearchFieldInMenu) { 
+      return null;
     }
 
     if (!this.smallDevice || !this.uiHomePage.disableSearchFieldInMenu) {
