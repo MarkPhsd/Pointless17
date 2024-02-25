@@ -332,8 +332,9 @@ export class TriPosTransactionsComponent implements OnInit {
       // item.allowDebit      = true;
       // console.log('transaction request', item)
       this.processing$  =  this.methodsService.sale(site, item )
-        .pipe(switchMap(data => {
-            // console.log('transactionID', data.transactionId, data)
+      .pipe(switchMap(data => {
+
+            console.log('transactionID', data.transactionId, data)
             this.errorMessage = ''
             if ((data._hasErrors && data._errors.length>0) || !data.isApproved) {
               this.processing = false;

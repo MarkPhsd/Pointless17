@@ -1,5 +1,6 @@
 <div *ngIf="(action$  | async) as action"></div>
-
+{{options | json}}
+<button mat-button (click)="setOptions()">Set Options</button>
 <div    [style.height]="pixelHeight"
         [style.max-height]="pixelHeight"
          *ngIf="layoutService.dashboardModel">
@@ -33,7 +34,6 @@
               (outputDelete)="removeItem(item)"
               (outputSettings)="openItemSettings(item)">
             </mat-menu-basic>
-
           </div>
 
           <div [class]="gridsteritemclass">
@@ -46,7 +46,6 @@
                     ndcDynamicInputs  : item.object;
                     ndcDynamicOutputs : outputs">
             </ng-container>
-
           </div>
         </div>
     </gridster-item>

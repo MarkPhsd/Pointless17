@@ -35,7 +35,9 @@ export class FbClientTypesService {
       disableItemSales         : [],
       disableDeviceSales       : [],
       disableGiftCards         : [],
-
+      disableLabor              : [],
+      disableDepartmentSales    : [],
+      disableHourlySales        : [],
       // 'admin section
       closeDay             : [],
       sendTextBlast        : [],

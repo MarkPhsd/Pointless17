@@ -76,12 +76,12 @@
 
 <ng-template #sideMenu>
   <mat-card>
-    <mat-card-content>
+    <mat-card-content >
       <h4><mat-icon>widgets</mat-icon> Widgets</h4>
       <mat-divider></mat-divider>
 
-      <div class="widget-list">
-        <mat-accordion multi="false">
+      <div class="widget-list" >
+        <mat-accordion multi="false"  *ngIf="layoutService.widgetCollection">
           <mat-expansion-panel [expanded]="accordionStep === 3"
                     (opened)="setStep(3)"
                     hideToggle>
@@ -90,7 +90,8 @@
               <mat-icon>analytics</mat-icon> Analytics
             </mat-panel-title>
           </mat-expansion-panel-header>
-            <ul class="nav-list" *ngIf="layoutService.widgetCollection">
+          
+            <ul class="nav-list" >
               <li *ngFor="let widget of layoutService.widgetCollection">
                 <div *ngIf="widget.type === 'analytics'">
                   <a draggable="true" class="nav-link"
@@ -110,7 +111,7 @@
                 <mat-icon>shopping_cart</mat-icon> Orders
               </mat-panel-title>
             </mat-expansion-panel-header>
-              <ul class="nav-list" *ngIf="layoutService.widgetCollection">
+              <ul class="nav-list" >
                 <li *ngFor="let widget of layoutService.widgetCollection">
                   <div *ngIf="widget.type === 'order'">
                     <a draggable="true" class="nav-link"
@@ -130,7 +131,7 @@
             <mat-icon>menu_book</mat-icon> Menus
             </mat-panel-title>
             </mat-expansion-panel-header>
-              <ul class="nav-list" *ngIf="layoutService.widgetCollection">
+              <ul class="nav-list">
                 <li *ngFor="let widget of layoutService.widgetCollection">
                   <div *ngIf="widget.type === 'menu'">
                     <a draggable="true" class="nav-link"
@@ -197,7 +198,7 @@
 
       <div class="header-items">
         <button mat-button
-                (click)="layoutService.forceRefresh(layoutService?.dashboardModel?.id)">
+                (click)="refreshGrid()">
           <mat-icon>refresh</mat-icon>Refresh</button>
       </div>
 

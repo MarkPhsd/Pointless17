@@ -224,15 +224,15 @@ export class PaymentsMethodsProcessService implements OnDestroy {
                 paymentMethod: IPaymentMethod,
                 order: IPOSOrder): number {
 
-    console.log('finalize order', order.completionDate, order.balanceRemaining )
+    // console.log('finalize order', order.completionDate, order.balanceRemaining )
     if (!paymentResponse ) {
-      console.log('no payment response', order, paymentMethod)
+      // console.log('no payment response', order, paymentMethod)
       this.sitesService.notify(`No payment response `, 'close', 20000, 'red');
       return 0
     }
 
     if (!paymentResponse.payment) {
-      console.log('no payment in response', order, paymentMethod)
+      // console.log('no payment in response', order, paymentMethod)
       this.sitesService.notify('No payment in payment response', 'close', 20000, 'red');
       return 0
     }
@@ -244,8 +244,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     if (payment && paymentMethod) {
 
-      console.log('finalize order', order.balanceRemaining, paymentMethod , payment)
-      console.log('open change', ((payment.amountReceived >= payment.amountPaid && order.completionDate) || order.balanceRemaining == 0))
+      // console.log('finalize order', order.balanceRemaining, paymentMethod , payment)
+      // console.log('open change', ((payment.amountReceived >= payment.amountPaid && order.completionDate) || order.balanceRemaining == 0))
       if (paymentMethod.isCash) {
         if (this.platFormService.isApp()) {
           this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet()

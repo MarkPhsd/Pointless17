@@ -154,10 +154,10 @@ export class GridsterDataService {
 
     if (!grid || !site) { return }
 
-    if (grid.id) {
+    if (grid.id && grid.id != 0) {
      return this.updateGrid(site, grid)
     }
-    if (!grid.id) {
+    if (!grid.id || grid.id == 0) {
       return this.addGrid(site, grid)
     }
 

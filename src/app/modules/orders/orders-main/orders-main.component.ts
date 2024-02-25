@@ -231,6 +231,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
           this.searchModel.employeeID = 0;
         }
 
+        // console.log('this.userAuthorization.user', this.userAuthorization.user)
         if (this.userAuthorization.user) {
           if (this.userAuthorization.user?.userPreferences?.showAllOrders) {
             this.searchModel.employeeID =  0
@@ -238,6 +239,15 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
             this.searchModel.employeeID =  this.userAuthorization.user?.employeeID
           }
         }
+      
+        console.log('Auth .user', this.userAuthorization.user, this.searchModel.employeeID)
+        // if (this.authenticationService.userAuths)  { 
+        //   const auth = this.authenticationService.userAuths as IUserAuth_Properties;
+        //   if (auth.defaultViewAllOrders) { 
+
+        //   }
+        
+        // }
 
         if (this.searchModel.scheduleDate_From && this.searchModel.scheduleDate_To) {
           this.scheduleDateStart = this.searchModel.scheduleDate_From;
@@ -342,7 +352,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     if (this.isUser) {
       localStorage.setItem('OrderFilterPanelVisible', 'true')
     }
-    this.changeDetectorRef.detectChanges()
+    // this.changeDetectorRef.detectChanges()
   }
 
 

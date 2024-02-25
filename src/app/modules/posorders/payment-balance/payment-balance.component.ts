@@ -143,6 +143,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   getPaymentViewA(item: IPOSPayment) {
 
     if (
+        (item.completionDate) ||
         (item.account && !item.completionDate) ||
         (item.completionDate && item.amountPaid != 0) ||
         (item && item.voidReason) ||

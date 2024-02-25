@@ -1,5 +1,13 @@
+<div *ngIf="(action$ | async) as action"></div>
 
-<ng-container [ngTemplateOutlet]="collectionViewEnabled"></ng-container>
+<div class="ps-flex-group">
+  <div>
+    <button mat-button (click)="refresh()"><mat-icon>refresh</mat-icon></button>
+  </div>
+  <div>
+    <ng-container [ngTemplateOutlet]="collectionViewEnabled"></ng-container>
+  </div>
+</div>
 
 <ng-template #collectionView>
   <div  class="grid-items">
@@ -10,8 +18,8 @@
             *ngFor="let item of collection"
             class="discount-type-button"
             [value]="item?.id"
-            (click)="forceRefresh(item)">
-        {{item.name}}
+            (click)="selectMenu(item)">
+        {{item?.name}}
       </mat-button-toggle>
     </mat-button-toggle-group>
   </div>

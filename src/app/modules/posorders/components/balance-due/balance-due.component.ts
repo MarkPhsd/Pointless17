@@ -20,6 +20,7 @@ import { DcapService } from 'src/app/modules/payment-processing/services/dcap.se
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { PosPaymentComponent } from '../../pos-payment/pos-payment.component';
 
 @Component({
   selector: 'app-balance-due',
@@ -236,17 +237,17 @@ export class ChangeDueComponent implements OnInit  {
     const process$ = this.dCapService.adustByRecordNo(device, this.payment, amount)
     return process$.pipe(switchMap(data => { 
       const rstream = data as RStream;
-      if (data) { 
+      if (data && data.TextResponse && data.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) { 
         if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) { 
           this.siteService.notify(data.cmdResponse + ' ' + data.textResponse, 'close',50000, 'red' )
           return of(null)
         }
       }
-      return this.applytoPOS(this.payment, amount, site)
+      return this.getOrderUpdate(this.payment.orderID.toString(), site)
     }))
   }
 
-  applytoPOS(payment, amount, site) { 
+  applytoPOS(payment:IPOSPayment, amount, site) { 
     payment.tipAmount = amount;
     const payment$ =  this.paymentService.putPOSPayment(site, payment);
     //process tip via credit card service.
@@ -254,16 +255,21 @@ export class ChangeDueComponent implements OnInit  {
       switchMap( data =>  {
           this.paymentService.updatePaymentSubscription(data)
           const orderID = data.orderID.toString();
-          return this.orderService.getOrder(site, orderID, false);
-      })).pipe(
-        switchMap(data => {
+          return this.getOrderUpdate(orderID, site)
+
+      }))
+  }
+
+  getOrderUpdate(orderID: string, site) { 
+    return  this.orderService.getOrder(site, orderID.toString(), false).pipe(
+      switchMap(data => {
         this.orderMethodsService.updateOrderSubscription(data)
         this.dialogRef.close()
         if (this.uiTransactions && this.uiTransactions.cardPointBoltEnabled) {
-          this.capture(this.payment)
+            this.capture(this.payment)
+          }
+          return of(data)
         }
-        return of(data)
-      }
     ))
   }
 

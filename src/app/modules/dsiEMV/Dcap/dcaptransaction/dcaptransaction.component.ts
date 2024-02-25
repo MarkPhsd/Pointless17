@@ -201,8 +201,14 @@ export class DCAPTransactionComponent implements OnInit {
         const site = this.siteService.getAssignedSite()
         this.initMessaging()
         this.processing = true;
-        console.log('payamount', this.posPayment)
-        const sale$ = this.dCapService.payAmount(this.terminalSettings?.name , this.posPayment);
+
+       
+        let sale$ = this.dCapService.payAmount(this.terminalSettings?.name , this.posPayment);
+        if (this.manual) { 
+          console.log('manual', this.manual)
+          sale$ = this.dCapService.payAmountManual(this.terminalSettings?.name , this.posPayment);
+        }
+       
         this.processing$ = sale$.pipe(switchMap(data => {
           this.result = data;
           return this.processResults(data)

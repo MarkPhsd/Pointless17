@@ -26,12 +26,18 @@ export class GridMenuLayoutComponent implements OnInit {
   get options(): GridsterConfig {
     return this.layoutService.options;
   }
+
   get layout(): GridsterItem[] {
     return this.layoutService.layout;
   }
+
   get components(): IComponent[] {
     return this.layoutService.components;
   }
+
+  _saveModel = this.layoutService.saveChanges$.subscribe(data => { 
+    this.action$ = this.layoutService.saveModelUpdate()
+  })
 
   componentPropertiesList: DashBoardComponentProperties[];
   _dashboard : Subscription;
@@ -79,13 +85,13 @@ export class GridMenuLayoutComponent implements OnInit {
   {}
 
   ngOnInit() {
-    // const id = this.route.snapshot.paramMap.get('id');
-    // if (id) {
-    //   const site = this.sitesService.getAssignedSite();
-    //   this.action$ = this.initGrid(+id)
-    //   return;
-    // }
-    // this.initSites(id);
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      const site = this.sitesService.getAssignedSite();
+      this.action$ = this.initGrid(+id)
+      return;
+    }
+    this.initSites(id);
   }
 
   initSites(id) {
@@ -102,6 +108,7 @@ export class GridMenuLayoutComponent implements OnInit {
 
   //if we don't have to do sites.
   initGrid(id: number) {
+    console.log('init grid')
     this.initGridsterSettings()
     if ( id ) {
       return  this.layoutService.getDataOBS(+id)
@@ -109,7 +116,9 @@ export class GridMenuLayoutComponent implements OnInit {
   }
 
   initGridsterSettings() {
-
+    if (!this.layoutService.options) { 
+      this.layoutService.options = this.layoutService.getDefaultOptions()
+    }
     this.sitesService.sites$.subscribe(data => {
       this.sites = data
       this.initDesigerMode()
@@ -117,7 +126,6 @@ export class GridMenuLayoutComponent implements OnInit {
       this.initSubscription();
       this.changedOptions();
       this.layoutService.changedOptions();
-
     })
 
   }
@@ -190,7 +198,6 @@ export class GridMenuLayoutComponent implements OnInit {
     }
   }
 
-
   saveChanges() {
     this.itemChange()
   }
@@ -209,27 +216,72 @@ export class GridMenuLayoutComponent implements OnInit {
     this.openEditor(item)
 	}
 
+
   itemChange() {
-    this.layoutService.itemChange(null)
+    console.log('item change', this.layoutService.dashboardArray)
+    // this.layoutService.itemChange()
+
+
+    this.layoutService.dashboardModel.dashboard = this.layoutService.dashboardArray;
+
+    // console.log('update dashboard model', data)
+    this.layoutService.updateDashboardModel(this.layoutService.dashboardModel)
+    // return of(data)
   }
 
   onDrop(ev) {
-    const content = this.layoutService.onDrop(ev)
+    console.log('ev', ev)
+    return  this.layoutService.onDrop(ev)
+
+    // this.layoutService._saveChanges.next(true)
+    // console.log('item', item)
+    // console.log('current model', this.dashboardModel)
+
+    // this.initDashboard()  
+    // this.dashboardModel.dashboard.push(item)
+    // console.log('this.dash', this.dashboardModel)
   }
 
 	changedOptionsEvent() {
+    console.log('event change')
 		this.options.api.optionsChanged();
 	}
 
   changedOptions(): void {
+    console.log('options change')
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }
   }
 
+  setOptions() {
+   
+      this.layoutService.options = {
+        gridType: "fit",
+        enableEmptyCellDrop: true,
+        emptyCellDropCallback: this.onDrop,
+        pushItems: true,
+        swap: true,
+        pushDirections: { north: true, east: true, south: true, west: true },
+        resizable: { enabled: true },
+        itemChangeCallback: this.itemChange.bind(this),
+        draggable: {
+          enabled: true,
+          ignoreContent: true,
+          dropOverItems: true,
+          dragHandleClass: "drag-handler",
+          ignoreContentClass: "no-drag",
+        },
+        displayGrid: "always",
+        minCols: 10,
+        minRows: 10
+      };
+ 
+  }
+
 	removeItem(item) {
     this.layoutService.removeCard(item)
-    this.layoutService.saveDashBoard();
+    this.action$ = this.layoutService.saveDashBoard();
 	}
 
   openEditor(item: DashboardContentModel) {
@@ -243,6 +295,7 @@ export class GridMenuLayoutComponent implements OnInit {
       },
     )
   }
+
   getBorderRadius(value:any) {
     if (value) {
       return `${value}px`
@@ -251,6 +304,7 @@ export class GridMenuLayoutComponent implements OnInit {
       return '5px'
     }
   }
+
   getBorder(value:any) {
     if (value) {
       return `${value}px`
@@ -259,6 +313,7 @@ export class GridMenuLayoutComponent implements OnInit {
       return '1px'
     }
   }
+
   getOpacity(value:any) {
     if (value) {
       return `${value}`
@@ -267,6 +322,7 @@ export class GridMenuLayoutComponent implements OnInit {
       return '100'
     }
   }
+
   getLayer(value:any) {
     if (value) {
       return `${value}`

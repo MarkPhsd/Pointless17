@@ -79,6 +79,7 @@ export class AuthenticationService {
     updatePinPad(value: boolean) {
       this._setPinPad.next(value)
     }
+    
     get userAuths() {
 
       if (this._userAuths.value) {

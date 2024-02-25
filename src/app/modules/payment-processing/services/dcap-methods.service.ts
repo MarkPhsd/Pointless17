@@ -32,6 +32,10 @@ export class DcapMethodsService {
     success = false
     processing = false
 
+    const status = cmdResponse?.CmdStatus 
+    if (status ==   "Declined") { 
+      return {success :false , message: status, processing: processing, resultMessage: status};
+    }
     const response = cmdResponse?.TextResponse.toLowerCase();
     if (response === 'approved'.toLowerCase() || response === 'AP*'.toLowerCase() ||
         response === 'captured'.toLowerCase() || response === 'approval'.toLowerCase()

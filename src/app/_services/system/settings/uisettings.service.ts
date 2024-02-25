@@ -184,6 +184,7 @@ export interface CmdResponse{
 export interface UIHomePageSettings {
   pinPadDefaultOnApp: boolean;
   lockTerminalToBalanceSheet: boolean;
+  gloabalSecondLanguage: boolean;
   id                : number;
   menuEnabled       : boolean;
   brandsEnabled     : boolean;
@@ -657,6 +658,7 @@ export class UISettingsService {
   initHomePageForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
       id                    : [''],
+      gloabalSecondLanguage: [],
       pinPadDefaultOnApp    : [],
       lockTerminalToBalanceSheet: [],
       brandsEnabled         : [''],

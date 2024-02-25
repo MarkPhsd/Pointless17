@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DashboardModel, DashBoardProperties, widgetRoles } from '../grid-models';
@@ -17,6 +17,8 @@ export class GridManagerEditComponent implements OnInit {
 
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
   public selectedIndex          : number;
+  action$: Observable<any>;
+  flag: boolean; //for saving
 
   image: string;
   backgroundblendmode: string;
@@ -37,6 +39,7 @@ export class GridManagerEditComponent implements OnInit {
   backgroundColor: string;
   opacity: number;
 
+  init: boolean;
 
 	constructor(
               private siteService        : SitesService,
@@ -48,47 +51,34 @@ export class GridManagerEditComponent implements OnInit {
               private fb                 : UntypedFormBuilder,
 
   ) {
+   
+    if (data) { 
+      this.id = data;
+      this.init = true;
+      this.action$ = this.getDashBoard(data)
+    }
 
   };
 
   ngOnInit() {
+    if (this.init) { 
+      return
+    }
+  }
 
+  getDashBoard(id: number) { 
     const site  = this.siteService.getAssignedSite();
-    console.log('dashboard', this.layoutService.dashboardModel)
-
-    if (this.layoutService.dashboardModel == null) {
-      console.log('initialized')
+    if (!id || id == 0) { 
       this.dashboardModel = {} as DashboardModel
-      this.layoutService.updateDashboardModel(this.dashboardModel)
-      this.fillForm();
+      this.fillForm(this.dashboardModel);
       return;
     }
-
-    this.layoutService.dashboardModel$.subscribe(data => {
-        if (data) {
-          this.dashboardModel = data;
-          this.fillForm();
-          return;
-        }
-
-        if (!data && data != null) {
-          const id  = data.id;
-          this.gridDataService.getGrid(site,  id).subscribe(data => {
-            this.dashboardModel = data;
-            this.fillForm();
-          }
-        )
-
-        if (data == null) {
-          this.dashboardModel = {} as DashboardModel
-          this.fillForm();
-          return;
-        }
-
-       }
-      }
-    )
-
+    return this.gridDataService.getGrid(site,  this.id).pipe(switchMap(data => { 
+      if (!data) {   data = {} as DashboardModel;  }
+      this.dashboardModel = data as DashboardModel
+      this.fillForm(this.dashboardModel);
+      return of(data)
+    }))
   }
 
   onCancel(event) {
@@ -108,14 +98,9 @@ export class GridManagerEditComponent implements OnInit {
     }
   }
 
-  fillForm() {
+  fillForm(data: DashboardModel) {
     this.initForm();
-
-    this.initFormData();
-    if (!this.dashboardModel) {
-      this.dashboardModel = {} as DashboardModel;
-    }
-
+    this.initFormData(data);
     this.initPropertiesForm(this.dashboardModel);
   }
 
@@ -142,11 +127,13 @@ export class GridManagerEditComponent implements OnInit {
         icon                  : [''],
         gridColumns           : [''],
         gridRows              : [''],
-        pixelHeight:  [''],
-        pixelWidth:   [''],
+        pixelHeight           : [''],
+        pixelWidth            : [''],
       }
     )
-
+    this.inputProperties.valueChanges.subscribe(data => { 
+      this.flag = true
+    })
     if (model) {
       if (model.userName) {
         const jsonObject          = JSON.parse(model.userName) as DashBoardProperties;
@@ -170,16 +157,20 @@ export class GridManagerEditComponent implements OnInit {
       jSONBject: [''],
       active   : [''],
     })
-    return this.inputForm
+   
+
+    return this.inputForm;
+
   };
 
-  initFormData() {
-    this.inputForm.patchValue(this.dashboardModel)
+  initFormData(data) {
+    this.inputForm.patchValue(data)
+    this.inputForm.valueChanges.subscribe(data => { 
+      console.log('data', data)
+      this.flag = true
+    })
   }
 
-  delete(event) {
-    this.layoutService.deleteModel(this.dashboardModel)
-  }
 
   setValues(model: DashboardModel) {
     if (this.dashboardModel) {
@@ -191,9 +182,9 @@ export class GridManagerEditComponent implements OnInit {
 
     if (this.inputProperties) {
       const properties =  this.inputProperties.value as DashBoardProperties
-      properties.backgroundColor = this.backgroundColor;
-      properties.opacity   = this.opacity;
-      properties.image     = this.image;
+      properties.backgroundColor   = this.backgroundColor;
+      properties.opacity           = this.opacity;
+      properties.image             = this.image;
       properties.backgroundblendmode = this.backgroundblendmode;
       const properitesJson = JSON.stringify(properties);
       this.dashboardModel.userName = properitesJson;
@@ -203,21 +194,49 @@ export class GridManagerEditComponent implements OnInit {
     return this.dashboardModel;
   }
 
-  update(event): void {
+  delete(event) {
+    this.action$ =  this.layoutService.deleteModel(this.dashboardModel).pipe(switchMap(data => { 
+      setTimeout(() => {
+        this.onCancel(null)
+      }, 100);
+      return of(data)
+    }))
+  }
+
+  _update() {
     if (!this.inputForm) { return }
     let model = this.inputForm.value as DashboardModel;
     model = this.setValues(model)
-    this.layoutService.saveModel(model)
+    return this.layoutService.saveModel(model).pipe(switchMap(data =>  
+      {
+        this.flag = false  
+        return of(data)
+    }));
+ 
   };
 
+  update(event) { 
+    if (!this.inputForm) { return }
+    let model = this.inputForm.value as DashboardModel;
+    model = this.setValues(model)
+    this.action$ = this._update()
+  }
+
   updateExit(event) {
-    this.update(event)
-    this.dialogRef.close()
+    this.action$ = this._update().pipe(switchMap(data => { 
+      setTimeout(() => {
+        this.onCancel(null)
+      }, 100);
+      return of(data)
+    }))
   }
 
   receivedImage(event) {
     // this.inputForm.controls['image'].setValue(event)
+    this.flag = true
+    console.log('image', event)
     this.image = event
+    this.inputForm.patchValue({image: event})
   }
 
   formatLabel(value: number) {
@@ -225,6 +244,7 @@ export class GridManagerEditComponent implements OnInit {
       return Math.round(value / 1000) + 'k';
     }
     this.opacity = value;
+    this.flag = true;
     return value;
   }
   // Action triggered when user swipes mat-tabs

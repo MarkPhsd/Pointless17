@@ -9,7 +9,7 @@ mat-slider {
 .grid {
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat( auto-fit, minmax(185px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(100%, 1fr) );
   // grid-template-columns: 1fr 1fr 1fr 1fr;
   width: 95%;
   margin-top: 5px;

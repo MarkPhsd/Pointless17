@@ -229,6 +229,7 @@
 </ng-template>
 
 <ng-template #filterMyOrdersView>
+
   <span *ngIf="!smallDevice && !isUser && userAuthorization.user
                && userAuthorization.user.userPreferences &&
                (uiTransactions && uiTransactions.toggleUserOrAllOrders)"  >

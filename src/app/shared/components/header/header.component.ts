@@ -717,8 +717,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   navPOSOrders() {
     this.smallDeviceLimiter();
-    this.navigationService.navPOSOrders()
     this.orderMethodsService.refreshAllOrders()
+    this.navigationService.navPOSOrders()
   }
 
   navTableService() {

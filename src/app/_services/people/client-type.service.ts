@@ -7,22 +7,25 @@ import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-c
 
 export interface IUserAuth_Properties {
   allowCashPaymentForOtherServer: boolean;
-
   viewPaymentItemSalesReports: boolean;
   viewPaymentReports: boolean;
-   allowChangeOrderType : boolean;
+
+  allowChangeOrderType : boolean;
   // 'pos section
   voidOrder            : boolean;
   splitItemOverRide    : boolean;
   voidItem             : boolean;
   voidPayment          : boolean;
   deleteOrder          : boolean;
+
   // reports:
   disableBalanceEndOfDay   : boolean;
   disableItemSales         : boolean;
   disableDeviceSales       : boolean;
   disableGiftCards         : boolean;
-
+  disableLabor              : boolean;
+  disableDepartmentSales    : boolean;
+  disableHourlySales        : boolean;
   //payments
   houseAccountPayment  : boolean;
   changeItemPrice      : boolean;

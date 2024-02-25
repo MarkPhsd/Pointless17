@@ -457,7 +457,7 @@ export class OrderMethodsService implements OnDestroy {
     searchModel.completionDate_To = null;
     searchModel.orderID = null;
     searchModel.employeeID = 0;
-    searchModel.pageSize = 25;
+    searchModel.pageSize = 50;
     searchModel.pageNumber = 1;
     searchModel.searchOrderHistory = false
     searchModel.prepStatus  = null;

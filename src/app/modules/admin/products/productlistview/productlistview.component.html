@@ -78,12 +78,12 @@
     </div>
 
     <div>
-        <app-mat-select   [fieldName]       = "'webWorkRequired'"
-                          [inputForm]       = "searchForm"
-                          [list$]            = "requiresWorkList$"
-                          (outputItem)      = "refreshRequiredWork($event)"   >
+        <form-select-list   [formFieldName]        = "'webWorkRequired'"
+                            [searchForm]       = "searchForm"
+                            [list$]            = "requiresWorkList$"
+                            (selectionChange)  = "refreshRequiredWork($event)"   >
           <div fieldSearchDescription>Work</div>
-        </app-mat-select>
+        </form-select-list>
     </div>
 
     <div>
@@ -198,38 +198,45 @@
 </ng-template>
 <mat-divider></mat-divider>
 
-<div [class]="gridlist">
-  <div>
-
-    <div *ngIf="value" class="loader">
-      <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
-    </div>
-    <ag-grid-angular
-          #agGrid
-          [style]              ="gridDimensions"
-          id                   ="myGrid"
-          [class]              ="agtheme"
-          [columnDefs]         ="columnDefs"
-          [defaultColDef]      ="defaultColDef"
-          [gridOptions]        ="gridOptions"
-          [rowSelection]       ="rowSelection"
-          [frameworkComponents]="frameworkComponents"
-          (selectionChanged)   ="onSelectionChanged($event)"
-          (cellValueChanged)   ='cellValueChanged($event)'
-          (cellClicked)        ='onCellClicked($event)'
-          (gridReady)          ="onGridReady($event)">
-    </ag-grid-angular>
-
-  </div>
-
-  <div *ngIf="!hideAdd" >
-    <app-product-info-panel *ngIf="product"
-                            class="grid-list-item"
-                            [setProduct]="product"
-                            [id]="id">
-    </app-product-info-panel>
-  </div>
+<div *ngIf="(homePage$ | async) as home">
+  <ng-container [ngTemplateOutlet]="listView"></ng-container>
 </div>
+
+<ng-template #listView>
+  <div [class]="gridlist">
+    <div>
+  
+      <div *ngIf="value" class="loader">
+        <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+      </div>
+      <ag-grid-angular
+            #agGrid
+            [style]              ="gridDimensions"
+            id                   ="myGrid"
+            [class]              ="agtheme"
+            [columnDefs]         ="columnDefs"
+            [defaultColDef]      ="defaultColDef"
+            [gridOptions]        ="gridOptions"
+            [rowSelection]       ="rowSelection"
+            [frameworkComponents]="frameworkComponents"
+            (selectionChanged)   ="onSelectionChanged($event)"
+            (cellValueChanged)   ='cellValueChanged($event)'
+            (cellClicked)        ='onCellClicked($event)'
+            (gridReady)          ="onGridReady($event)">
+      </ag-grid-angular>
+  
+    </div>
+  
+    <div *ngIf="!hideAdd" >
+      <app-product-info-panel *ngIf="product"
+                              class="grid-list-item"
+                              [setProduct]="product"
+                              [id]="id">
+      </app-product-info-panel>
+    </div>
+  </div>
+  
+</ng-template>
 
 <div style="flex-grow:0">
   <span id="selectedRows"> </span>

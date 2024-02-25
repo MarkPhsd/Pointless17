@@ -44,9 +44,7 @@ export class GridManagerComponent implements OnInit, OnDestroy {
 
 	// On component init we store Widget Marketplace in a WidgetModel array
 	ngOnInit(): void {
-
     this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
     this.renderTheme();
     this.inputForm = this.fb.group({type: ['']})
     this.refresh();
@@ -54,35 +52,35 @@ export class GridManagerComponent implements OnInit, OnDestroy {
       this.allowDesign = true;
     }
     this.initSubscriptions();
-
 	}
 
   
+  refreshGrid() {
+    this.layoutService.refreshDashBoard(this.dashboardModel?.id)
+  }
+
   initSubscriptions() {
     this._dashboard = this.layoutService._dashboardModel.subscribe(data => {
       this.dashboardModel = data;
-      console.log('data', data)
       this.autoRoute(data)
     })
   }
-
   
   autoRoute(data) {
     this.pathID = this.route.snapshot.paramMap.get('id');
 
-    if (data && this.pathID)  {
-
-    }
+    if (data && this.pathID)  { }
     if (!data && this.pathID) {
-      // this.action$ = this.layoutService.getDataOBS(+this.pathID , true).pipe(switchMap(data => {
-      //   this.layoutService.forceRefresh(+this.pathID)
-      //   return of(data)
-      // }))
+      this.action$ = this.layoutService.getDataOBS(+this.pathID , true).pipe(switchMap(data => {
+        this.layoutService.refreshDashBoard(+this.pathID)
+        this.layoutService.updateDashboardModel(data)
+        return of(data)
+      }))
       return;
     }
 
     if (this.pathID) {
-      // this.layoutService.forceRefresh(+this.pathID)
+      this.layoutService.refreshDashBoard(+this.pathID)
     }
   }
 
@@ -104,24 +102,30 @@ export class GridManagerComponent implements OnInit, OnDestroy {
   }
 
   saveChanges() {
-    this.layoutService.itemChange(null)
+    this.layoutService.itemChange()
   }
 
   listMenu(id: number) {
-    this.layoutService.forceRefresh(id)
+    this.layoutService.refreshDashBoard(id)
   }
 
   refresh() {
 		// We make a get request to get all widgets from our REST API
-    if (this.layoutService.dashboardModel) { 
-      const id = this.layoutService.dashboardModel.id;
-      this.layoutService.getWidgets().subscribe(widgets => {
-        this.layoutService.widgetCollection = widgets;
-      });
-    }
-    this.layoutService.refreshCollection()
+    // if (this.layoutService.dashboardModel) { 
+      this.action$ =  this.layoutService.getWidgets().pipe(
+        switchMap(widgets => {
+          this.layoutService.widgetCollection = widgets;
+          return this.layoutService.refreshCollection()
+      }))
+    // }
   }
 
+  // refreshCollection
+  // publish
+  // saveModel
+  // deleteModel
+  // saveDashBoard
+  // itemChange
   reset() {
     this.layoutService.refreshCollection()
     const path = "/menu-board"
@@ -131,12 +135,12 @@ export class GridManagerComponent implements OnInit, OnDestroy {
 
   setStep(value: number) {
     this.accordionStep = value
-    // console.log(value)
   }
 
 	onDrag(event, identifier) {
 		event.dataTransfer.setData('widgetIdentifier', identifier);
-    this.layoutService.itemChange(null);
+    console.log('event', event, identifier)
+    // this.action$ = this.layoutService.itemChange() //
 	}
 
   toggleDesignMode() {
@@ -193,10 +197,10 @@ export class GridManagerComponent implements OnInit, OnDestroy {
   openEditor(id: number) {
     let dialogRef: any;
     dialogRef = this.dialog.open(GridManagerEditComponent,
-      { width:        '500px',
-        minWidth:     '500px',
-        height:       '650px',
-        minHeight:    '650px',
+      { width:        '90vw',
+        minWidth:     '90vw',
+        height:       '70vh',
+        minHeight:    '70vh',
         data : id
       },
     )

@@ -29,6 +29,7 @@ import { EditSelectedItemsComponent } from '../productedit/edit-selected-items/e
 import { MatDialog } from '@angular/material/dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { A } from '@angular/cdk/keycodes';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
@@ -123,7 +124,8 @@ endRow                  = 0;
 recordCount             = 0;
 isfirstpage             : boolean;
 islastpage              : boolean;
-
+homePage$: Observable<UIHomePageSettings>;
+uiHome: UIHomePageSettings;
 //This is for the filter Section//
 brands           : IUserProfile[];
 categories$      : Observable<IMenuItem[]>;
@@ -197,50 +199,62 @@ constructor(  private _snackBar              : MatSnackBar,
               private awsService             : AWSBucketService,
               private dialog                 : MatDialog,
               private orderService           : OrdersService,
+              private uiSettings: UISettingsService,
               private orderMethodsService: OrderMethodsService,
             )
   {  }
 
    ngOnInit() {
 
-    this.updateScreenSize();
-    const clientSearchModel       = {} as ClientSearchModel;
-    clientSearchModel.pageNumber  = 1
-    clientSearchModel.pageSize    = 1000;
-    this.urlPath$  =  this.awsService.awsBucketURLOBS().pipe(
-      switchMap(data => {
-        this.urlPath = data;
-        return of(data)
+    this.homePage$ = this.initHomePageSettings().pipe(switchMap(data => {
+      this.updateScreenSize();
+      const clientSearchModel       = {} as ClientSearchModel;
+      clientSearchModel.pageNumber  = 1
+      clientSearchModel.pageSize    = 1000;
+      this.urlPath$  =  this.awsService.awsBucketURLOBS().pipe(
+        switchMap(data => {
+          this.urlPath = data;
+          return of(data)
+        }
+      ))
+  
+      const site                = this.siteService.getAssignedSite()
+      this.refreshSubCategories();
+      this.refreshDepartments();
+      this.refreshCategories();
+      this.productTypes$        = this.itemTypeService.getBasicTypes(site)
+      const brandResults$       = this.contactsService.getBrands(site, clientSearchModel)
+  
+      brandResults$.subscribe(data => {
+        this.brands = data.results
+      })
+  
+      this.initForm();
+      this.formSubscriber();
+  
+      this.buttonName = 'Edit'
+  
+      if (this.editOff) {
+        this.buttonName = 'Assign'
+        this.initSubscriptions();
+        this.gridlist = "grid-list-nopanel"
       }
-    ))
+  
+      this.initAgGrid(this.pageSize);
+      this.requiresWorkList$ = of(this.requiresWorkList);
+  
+      this.initPaging();
+      return of(data)
+    }))
 
-    const site                = this.siteService.getAssignedSite()
-    this.refreshSubCategories();
-    this.refreshDepartments();
-    this.refreshCategories();
-    this.productTypes$        = this.itemTypeService.getBasicTypes(site)
-    const brandResults$       = this.contactsService.getBrands(site, clientSearchModel)
-
-    brandResults$.subscribe(data => {
-      this.brands = data.results
-    })
-
-    this.initForm();
-    this.formSubscriber();
-
-    this.buttonName = 'Edit'
-
-    if (this.editOff) {
-      this.buttonName = 'Assign'
-      this.initSubscriptions();
-      this.gridlist = "grid-list-nopanel"
-    }
-
-    this.initAgGrid(this.pageSize);
-    this.requiresWorkList$ = of(this.requiresWorkList);
-
-    this.initPaging();
   };
+
+  initHomePageSettings() {
+    return  this.uiSettings.UIHomePageSettings.pipe(switchMap( data => {
+      this.uiHome  = data as UIHomePageSettings;
+      return of(data)
+    }));
+  }
 
   initPaging() {
     this.pagingForm = this.fb.group({
@@ -262,7 +276,6 @@ constructor(  private _snackBar              : MatSnackBar,
     const site             = this.siteService.getAssignedSite()
     this.categories$       = this.menuService.getListOfCategoriesAll(site);
     this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(switchMap(data => { 
- 
       this.subCategoriesList = data;
       return of(data)
     }))
@@ -472,7 +485,13 @@ constructor(  private _snackBar              : MatSnackBar,
       sortable: false,
     };
 
-    this.columnDefs =  [
+    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs, false);
+    this.getCustomColoumnDefs()
+
+  }
+
+  getColumnDefs() { 
+    return [
 
       {headerName: 'Edit',  field: 'id',
             cellRenderer: "btnCellRenderer",
@@ -632,8 +651,206 @@ constructor(  private _snackBar              : MatSnackBar,
             width: 65
       },
     ]
+  }
 
-    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs, false);
+  getCustomColoumnDefs() { 
+    this.columnDefs =  []
+
+    const header=  {headerName: 'Edit',  field: 'id',
+           cellRenderer: "btnCellRenderer",
+           cellRendererParams: {
+             onClick: this.editProductFromGrid.bind(this),
+             label: this.buttonName,
+             getLabelFunction: this.getLabel.bind(this),
+             btnClass: 'btn btn-primary btn-sm'
+           },
+           minWidth: 125,
+           maxWidth: 125,
+           flex: 2,
+     }
+     this.columnDefs.push(header)
+
+      const itemName = {headerName: 'Name',     field: 'name',
+                 // sortable: true,
+           width   : 175,
+           minWidth: 175,
+           maxWidth: 275,
+           editable: true,
+           singleClickEdit: true,
+           flex    : 1,
+           cellRenderer: 'showMultiline',
+           wrapText: true,
+           cellStyle: {'white-space': 'normal', 'line-height': '1em'},
+           autoHeight: true,
+     }
+     this.columnDefs.push(itemName)
+
+
+     if (this.uiHome.gloabalSecondLanguage) { 
+       const language = {headerName: 'Language',     field: 'prodsecondLanguage',
+               // sortable: true,
+         width   : 175,
+         minWidth: 175,
+         maxWidth: 275,
+         editable: true,
+         singleClickEdit: true,
+         flex    : 1,
+         cellRenderer: 'showMultiline',
+         wrapText: true,
+         cellStyle: {'white-space': 'normal', 'line-height': '1em'},
+         autoHeight: true,
+       }
+       this.columnDefs.push(language)
+     }
+
+     const barcode = {headerName: 'Barcode',  field: 'barcode',
+                 // sortable: true,
+           width: 75,
+           minWidth: 125,
+           maxWidth: 150,
+           editable: true,
+           singleClickEdit: true,
+           cellRenderer: 'showMultiline',
+           wrapText: true,
+           cellStyle: {'white-space': 'normal', 'line-height': '1em'},
+           autoHeight: true,
+     }
+     this.columnDefs.push(barcode)
+
+
+     const Count = {headerName: 'Count',    field: 'productCount',
+                 // sortable: true,
+           width: 90,
+           minWidth: 90,
+           maxWidth: 90,
+           editable: true,
+           singleClickEdit: true,
+           comparator: myComparator,
+           // flex: 2,
+     }
+     this.columnDefs.push(Count)
+
+
+     const Department = {headerName: 'Department', field: 'department',
+           // sortable: true,
+           width: 140,
+           minWidth: 140,
+           maxWidth: 200,
+           comparator: myComparator,
+         // flex: 2,
+     }
+     this.columnDefs.push(Department)
+
+
+     const Category  = {headerName: 'Category', field: 'category',
+         // sortable: true,
+         width: 140,
+         minWidth: 140,
+         maxWidth: 200,
+         comparator: myComparator,
+       // flex: 2,
+     }
+     this.columnDefs.push(Category)
+
+
+    const subCategory =  {headerName: 'Sub Cat', field: 'subCategory',
+         // sortable: true,
+         width: 140,
+         minWidth: 140,
+         comparator: myComparator,
+         maxWidth: 200,
+       // flex: 2,
+     }
+     this.columnDefs.push(subCategory)
+
+     const type =  {headerName: 'Type', field: 'type',
+         // sortable: true,
+         width: 100,
+         minWidth: 100,
+         maxWidth: 125,
+         comparator: myComparator,
+         // flex: 2,
+     }
+     this.columnDefs.push(type)
+
+
+     const retail =    {headerName: 'Retail',   field: 'retail',
+         cellRenderer: this.agGridService.currencyCellRendererUSD,
+         width: 100,
+         minWidth: 100,
+         maxWidth: 125,
+         editable: true,
+         comparator: myComparator,
+         singleClickEdit: true,
+     }
+     this.columnDefs.push(retail)
+
+     const imageName =  { headerName: 'Image',
+         field: 'imageName',
+         width: 75,
+         minWidth: 75,
+         maxWidth: 75,
+         sortable: false,
+         autoHeight: true,
+         comparator: myComparator,
+         cellRenderer: AgGridImageFormatterComponent
+     }
+     this.columnDefs.push(imageName)
+
+     const bayName =   {headerName: 'Bay',   field: 'bayName',
+         width: 100,
+         minWidth: 100,
+         maxWidth: 125,
+         editable: true,
+         comparator: myComparator,
+         singleClickEdit: true,
+     }
+     this.columnDefs.push(imageName)
+
+     const idField = {   headerName: 'Copy', field: "id",
+         cellRenderer: "btnCellRenderer",
+         cellRendererParams: {
+           onClick: this.copyFromGrid.bind(this),
+           label: 'copy',
+           getLabelFunction: this.getLabelCopy.bind(this),
+           btnClass: 'btn btn-primary btn-sm'
+         },
+         minWidth: 85,
+         width: 85
+     }
+     this.columnDefs.push(idField)
+
+     const active =  {
+       headerName: "Active",
+         width:    100,
+         minWidth: 100,
+         maxWidth: 100,
+         flex: 1,
+         field: "active",
+         comparator: myComparator,
+         cellRenderer: function(params) {
+             var input = document.createElement('input');
+             input.type="checkbox";
+             input.checked = params.value;
+             input.disabled = false;
+             input.addEventListener('click', function (event) {  });
+             return input;
+         }
+     }
+     this.columnDefs.push(active)
+
+     const idDelete = {      headerName: 'Delete', field: "id",
+            cellRenderer: "btnCellRenderer",
+             cellRendererParams: {
+             onClick: this.deleteItem.bind(this),
+             label: 'delete',
+             getLabelFunction: this.getLabelCopy.bind(this),
+             btnClass: 'btn btn-primary btn-sm'
+           },
+           minWidth: 65,
+           width: 65
+     }
+     this.columnDefs.push(idDelete)
 
   }
 
@@ -663,7 +880,6 @@ constructor(  private _snackBar              : MatSnackBar,
     const item = event.data as IProduct
 
     this.action$ = this.updateValues(event.data?.id , event.value, colName).pipe(switchMap(data => {
-      console.log('data', data)
       if (data) {
         if (data.errorMessage) {
           this.siteService.notify(data.errorMessage, 'Close', 10000, 'red')
@@ -768,7 +984,6 @@ constructor(  private _snackBar              : MatSnackBar,
     this.refreshDepartments();
     this.refreshCategories();
     this.refreshSubCategories();
-
     this.onGridReady(this.params)
   }
 
@@ -878,7 +1093,6 @@ constructor(  private _snackBar              : MatSnackBar,
 
     this.selected = selected
     this.id = selectedRows[0].id;
-    console.log( this.id )
     this.getItem(this.id)
 
   }
@@ -924,10 +1138,6 @@ constructor(  private _snackBar              : MatSnackBar,
     item.departmentID = this.departmentID;
     item.itemTypeID = value?.productTypeSearch?.id;
     item.bayName = value?.bayName;
-    console.log('search', this.productTypeSearch)
-    console.log('id', this.productTypeID)
-    console.log('item', item)
-
     return;
     this.action$ = this.orderMethodsService.publishReconciliation('Reconcile', item).pipe(switchMap(data => {
       this.siteService.notify('Inventory Monitoring enabled', 'close', 5000, 'green');

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -18,6 +18,8 @@ export class GridDesignerInfoComponent implements OnInit {
   gridSetting    : GridsterSettings;
   grid           : ISetting;
   setting$       : Observable<ISetting>;
+  action$        : Observable<ISetting>;
+
   constructor(
     public authService         : AuthenticationService,
     public layoutService       : GridsterLayoutService,
@@ -27,15 +29,16 @@ export class GridDesignerInfoComponent implements OnInit {
 
   ngOnInit(): void {
     const i = 0
-    this.setting$ = this.layoutService.getGridsterDesignSettings()
-    this.setting$.subscribe(data => {
+    this.setting$ = this.layoutService.getGridsterDesignSettings().pipe(
+      switchMap(data => {
       if (data) {
         let gridSetting = JSON.parse(data.text) as GridsterSettings;
         if (!gridSetting) {gridSetting = {} as GridsterSettings;}
         this.refreshSettings(gridSetting)
         this.grid = data
       }
-    })
+      return of(data)
+    }))
   }
 
   getLayoutSettingsgDisplay(gridSetting: GridsterSettings) { 
@@ -72,22 +75,23 @@ export class GridDesignerInfoComponent implements OnInit {
       if (this.grid.id != 0) {
         console.log('put')
         setting$ =  this.settingService.putSetting(site, this.grid.id, this.grid);
-        this.saveSetting(setting$ );
+        this.action$ = this.saveSetting(setting$ );
         return;
       }
 
     }
   }
 
-  saveSetting(setting$) {
-    setting$.subscribe(data => {
+  saveSetting(setting$: Observable<ISetting>) {
+    return setting$.pipe(switchMap(data => {
       const gridSetting = JSON.parse(data.text) as GridsterSettings;
       console.log(data.text)
       this.layoutService.options.swap              = gridSetting.swap
       this.layoutService.options.swapWhileDragging = gridSetting.swapWhileDragging
       this.layoutService.options.pushItems         = gridSetting.pushItems         
       this.layoutService.changedOptions();
-    })
+      return of(data)
+    }));
   }
 
   changedOptions() {
@@ -95,6 +99,9 @@ export class GridDesignerInfoComponent implements OnInit {
   }
 
   refreshSettings(gridSetting: GridsterSettings) {
+    if (!this.layoutService.options) { 
+      this.layoutService.setDefaultOptions()
+    }
     if (gridSetting) { gridSetting = {} as GridsterSettings}
     if (!gridSetting.swap)              { gridSetting.swap  = false }
     if (!gridSetting.pushItems)         { gridSetting.pushItems  = false }
@@ -106,3 +113,5 @@ export class GridDesignerInfoComponent implements OnInit {
   }
 
 }
+
+

@@ -5,7 +5,7 @@ import { CardComponent } from 'src/app/modules/admin/reports/card/card.component
 import { DashBoardComponentProperties, DashboardContentModel, DashboardModel, DashBoardProperties, WidgetModel, widgetRoles } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 import { GridsterDataService } from '../gridster/gridster-data.service';
 import { SitesService } from '../reporting/sites.service';
-import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, switchMap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { StrainBoardComponent } from 'src/app/modules/tv-menu/strainBoard/strain-board/strain-board.component';
@@ -24,6 +24,7 @@ import { MenuItemCardDashboardComponent } from 'src/app/modules/menu/menu-item-c
 import { SettingsService } from './settings.service';
 import { TiersWithPricesComponent } from 'src/app/modules/menu/tierMenu/tiers-with-prices/tiers-with-prices.component';
 import { LastImageDisplayComponent } from 'src/app/shared/widgets/last-image-display/last-image-display.component';
+import { MenuSectionComponent } from 'src/app/modules/display-menu/display-menu-list/menu-section/menu-section.component';
 export interface IComponent {
   id: string;
   componentRef: string;
@@ -53,6 +54,9 @@ export class GridsterLayoutService {
 
   public _dashboardModels      = new BehaviorSubject<DashboardModel[]>(null);
   public dashboardModels$        = this._dashboardModels.asObservable();
+
+  public _saveChanges      = new BehaviorSubject<boolean>(null);
+  public saveChanges$        = this._saveChanges.asObservable();
 
   dashboardProperties: DashBoardProperties;
   sites: ISite[];
@@ -132,12 +136,107 @@ export class GridsterLayoutService {
 
   stateChanged: boolean;
 
+  // options: GridsterConfig 
   public options: GridsterConfig = {
 
+    gridType: GridType.Fit,
+    displayGrid: DisplayGrid.OnDragAndResize,
+    pushItems: true,
+    // pushDirections: { north: true, east: true, south: true, west: true },
+    swap             : true,
+    swapWhileDragging: true,
+    allowMultiLayer  : true,
+    resizable: { enabled: true },
+    enableEmptyCellDrop: true,
+    emptyCellDropCallback: this.onDrop,
+    itemChangeCallback : this.modifyChanges.bind(this),
+    draggable: {
+      enabled: true
+    },
+    // draggable: { enabled: false},
+    // resizable: { enabled: true},
+    minCols: 100,
+    minRows: 100,
+    maxCols: 100,
+    maxRows: 100,
+    maxItemRows: 100,
+    maxItemCols: 100,
+    maxItemArea: 1000000,
+    mobileBreakpoint: 640,
+
+};
+
+  setOptions(options) { 
+    this.options = options
+  }
+
+  setDefaultOptions() { 
+    // this.options = this.getDefaultOptions();
+
+    if (!this.options || this.options == undefined)  { 
+      console.log(this.options);
+      return 
+    }
+    if ( this.options.api == undefined) {
+      return;
+    }
+    this.options.api.optionsChanged();
+  }
+
+  getDefaultOptions() { 
+
+    return {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.OnDragAndResize,
       pushItems: true,
-			// pushDirections: { north: true, east: true, south: true, west: true },
+      // pushDirections: { north: true, east: true, south: true, west: true },
+      swap             : true,
+      swapWhileDragging: true,
+      allowMultiLayer  : true,
+      resizable: { enabled: true },
+      enableEmptyCellDrop: true,
+      emptyCellDropCallback: this.onDrop,
+      itemChangeCallback : this.modifyChanges.bind(this),
+      draggable: {
+        enabled: true
+      },
+      // draggable: { enabled: false},
+      // resizable: { enabled: true},
+      minCols: 100,
+      minRows: 100,
+      maxCols: 100,
+      maxRows: 100,
+      maxItemRows: 100,
+      maxItemCols: 100,
+      maxItemArea: 1000000,
+      mobileBreakpoint: 640,
+      api: {}
+    }
+    // return {
+    //   gridType: 'fit',
+    //   enableEmptyCellDrop: true,
+    //   pushItems: true,
+    //   swap: true,
+    //   pushDirections: { north: true, east: true, south: true, west: true },
+    //   resizable: { enabled: true },
+    //   draggable: {
+    //     enabled: true,
+    //     ignoreContent: true,
+    //     dropOverItems: true,
+    //     dragHandleClass: 'drag-handler',
+    //     ignoreContentClass: 'no-drag'
+    //   },
+    //   displayGrid: 'always',
+    //   minCols: 10,
+    //   minRows: 10,
+    //   api: {}
+    // };
+   
+    return {
+      gridType: GridType.Fit,
+      displayGrid: DisplayGrid.OnDragAndResize,
+      pushItems: true,
+			pushDirections: { north: true, east: true, south: true, west: true },
       swap             : true,
       swapWhileDragging: true,
       allowMultiLayer  : true,
@@ -145,8 +244,16 @@ export class GridsterLayoutService {
       enableEmptyCellDrop: true,
 			emptyCellDropCallback: this.onDrop,
       itemChangeCallback : this.modifyChanges.bind(this),
+      // draggable: {
+      //   enabled: true
+      // },
+
       draggable: {
-        enabled: true
+        enabled: true,
+        ignoreContent: true,
+        dropOverItems: true,
+        dragHandleClass: 'drag-handler',
+        ignoreContentClass: 'no-drag'
       },
       // draggable: { enabled: false},
       // resizable: { enabled: true},
@@ -158,8 +265,8 @@ export class GridsterLayoutService {
       maxItemCols: 100,
       maxItemArea: 1000000,
       mobileBreakpoint: 640,
-
-  };
+    };
+  }
 
   constructor(
     private siteService    : SitesService,
@@ -193,8 +300,9 @@ export class GridsterLayoutService {
     }
     this._dashboardModel.next(dashboard)
     if (dashboard) {
-      this.refreshCollection();
+      return this.refreshCollection();
     }
+    return of(null)
   }
 
   deleteItem(id: string): void {
@@ -224,41 +332,23 @@ export class GridsterLayoutService {
     return comp ? comp.componentRef : null;
   }
 
-  itemChange(item) {
-    if (item) { {
-        if (!this.dashboardModel.dashboard) {
-          this.dashboardModel.dashboard = []
-        }
-       this.dashboardModel.dashboard.push(item)
-      }
-    }
-    try {
-      this.dashboardModel.dashboard = this.dashboardArray;
 
-      let  tmp = JSON.stringify(this.dashboardModel);
-
-      let parsed: DashboardModel = JSON.parse(tmp);
-      this.serialize(parsed);
-      this.dashboardModel.jsonObject  = tmp;
-      this.saveModel(this.dashboardModel);
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   saveDashBoard() {
     this.dashboardModel.jsonObject  = null;
     const json = JSON.stringify(this.dashboardModel)
     this.dashboardModel.jsonObject = json;
-    this.saveModel(this.dashboardModel)
+    return  this.saveModel(this.dashboardModel)
   }
 
   deleteModel(model:DashboardModel) {
     const site     = this.siteService.getAssignedSite();
-    this.gridDataService.deleteGrid(site, model.id).subscribe(data => {
-      this.refreshCollection();
-    })
-
+    return this.gridDataService.deleteGrid(site, model.id).pipe(
+      switchMap(data => {
+        this.refreshCollection();
+        return of(data)
+      }
+    ))
   }
 
   saveModel(model:DashboardModel) {
@@ -267,10 +357,10 @@ export class GridsterLayoutService {
     this.dashboardModel = null
     let forceRefreshList = false;
     if (model.id == 0) { forceRefreshList = true}
-    // console.log(model)
-    this.gridDataService.saveGrid(site, model).subscribe(
-      {
-        next: data => {
+  
+    return this.gridDataService.saveGrid(site, model).pipe(
+      switchMap(data => {
+        if (data ) {
           if (data.errorMessage) {
             this.notifyEvent('Error Occured: ' + data.errorMessage, 'Failed')
           }
@@ -278,32 +368,28 @@ export class GridsterLayoutService {
           this.dashboardModel = data;
           this.stateChanged = false
           this.updateDashboardModel(data)
-          this.forceRefresh(data.id);
-          if (forceRefreshList) {
-            this.refreshCollection();
-          }
-        },
-        error: err => {
-          this.forceRefresh(null);
-          this.notifyEvent('Save failed: ' + err, 'Failed')
-          console.log('save failed', err)
+          this.refreshDashBoard(data?.id);
+          if (forceRefreshList) {  this.refreshCollection();  }
         }
-      }
-    );
-  }
 
-  publish(model$: Observable<DashboardModel>) {
-    model$.subscribe(
-      {
-        next : data =>{
-          this.notifyEvent('Saved', "Saved")
-          this.updateDashboardModel(data)
-        },
-        error: err => {
-            this.notifyEvent(err, "Failure")
-        }
+        return of(data)
+      }),catchError( err => {
+        this.refreshDashBoard(null);
+        this.notifyEvent('Save failed: ' + err, 'Failed')
+        console.log('save failed', err)
+        return of(err)
       }
-    )
+    ));
+  }
+  
+  publish(model$: Observable<DashboardModel>) {
+    return  model$.pipe(
+      switchMap(data => {
+        this.notifyEvent('Saved', "Saved")
+        this.updateDashboardModel(data)
+        return of(data)
+      }
+    ))
   }
 
   redirectTo(uri:string, item: any){
@@ -317,10 +403,9 @@ export class GridsterLayoutService {
   }
 
   toggleDesignerMode(mode) {
-
+    if (!this.options) { this.setDefaultOptions()}
     if (this.authService.isAuthorized)  {
       this.designerMode = mode
-
       const designerMode = localStorage.getItem('dashBoardDesignerMode')
       if (designerMode === 'true' || designerMode === 'false') {
         mode = (designerMode == 'true')
@@ -328,12 +413,9 @@ export class GridsterLayoutService {
           this.designerMode = mode
         }
       }
-
-
     }  else {
       this.designerMode = false;
     }
-
     this.options.draggable = { enabled: mode}
     this.options.resizable = { enabled: mode}
     this.changedOptions();
@@ -343,10 +425,11 @@ export class GridsterLayoutService {
     const designerMode = localStorage.getItem('dashBoardDesignerMode')
     let mode = (designerMode == 'true')
     this.designerMode = mode;
+    if (!this.options || !this.options.api) { this.setDefaultOptions()}
     this.options.draggable = { enabled: mode}
     this.options.resizable = { enabled: mode}
+    this.options.api.optionsChanged();
   }
-
 
   changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
@@ -365,7 +448,7 @@ export class GridsterLayoutService {
     });
   }
 
-  forceRefresh(id: number) {
+  refreshDashBoard(id: number) {
     if (id != 0) {
       if (id == null) { return }
       const path = "/menu-board/grid-menu-layout/";
@@ -379,19 +462,21 @@ export class GridsterLayoutService {
 
   refreshCollection() {
     const collection$ = this.getCollection()
-    collection$.subscribe(dashboards => {
-      this._dashboardModels.next(dashboards)
-			this.dashboardCollection = dashboards;
-      this.initGridDesignerMode()
-      this.changedOptions();
-      if (!this.dashboardModel) {
-        if (dashboards[0]) {
+    return collection$.pipe(
+      switchMap( dashboards => {
+        this._dashboardModels.next(dashboards)
+        this.dashboardCollection = dashboards;
+        this.initGridDesignerMode()
+        this.changedOptions();
+        if (!this.dashboardModel) {
+          if (dashboards[0]) {
 
+          }
+        } else {
+          // this.forceRefresh(this.dashboardModel.id.toString())
         }
-      } else {
-        // this.forceRefresh(this.dashboardModel.id.toString())
-      }
-		});
+        return of(dashboards)
+		}));
   }
 
   getCollection() {
@@ -432,6 +517,14 @@ export class GridsterLayoutService {
     item.icon = 'inventory'
     item.type = 'menu'
     list.push(item);
+
+    item = {} as WidgetModel;
+    item.name = 'Menu Section'
+    item.identifier = 'menusection'
+    item.icon = 'menu'
+    item.type = 'menu'
+    list.push(item);
+
 
     item = {} as WidgetModel;
     item.name = 'POSOrder'
@@ -482,6 +575,9 @@ export class GridsterLayoutService {
     item.type = 'advertising'
     list.push(item);
 
+ 
+
+
 		return of(list) ;
 	}
 
@@ -490,65 +586,76 @@ export class GridsterLayoutService {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
-
-  onDrop(ev) {
-		const componentType = ev.dataTransfer.getData("widgetIdentifier");
-    // console.log(componentType)
-
+  
+  initDashboard() {
     if (!this.dashboardArray) {
       this.dashboardArray = [] as DashboardContentModel[]
+    }
+    if (!this.dashboardModel)  { 
+      this.dashboardModel = { } as DashboardModel;
     }
     if (!this.dashboardModel.dashboard) {
       this.dashboardModel.dashboard= [] as DashboardContentModel[]
     }
+  }
 
+  onDrop(ev) {
+
+		const componentType = ev.dataTransfer.getData("widgetIdentifier");
+    console.log(componentType)
+    this.initDashboard()
+    let model = [] as DashboardContentModel[];
     let id = this.getRandomInt(1, 100000)// +this.dashboardArray.length + 1
 
 		switch (componentType) {
       case 'youtube' :
-        this.applyItem(id, 'YouTube', 'YouTube', YoutubePlayerComponent );
-        return;
+        model =  this.applyItem(id, 'YouTube', 'YouTube', YoutubePlayerComponent );
+        break;
       case 'iframe' :
-        this.applyItem(id, 'IFrame', 'IFrame', IFrameComponent );
-        return;
+        model =   this.applyItem(id, 'IFrame', 'IFrame', IFrameComponent );
+        break;
       case 'clientinfo' :
-        this.applyItem(id, 'ClientInfo', 'ClientInfo', OrderHeaderDemographicsBoardComponent );
-        return
+        model =   this.applyItem(id, 'ClientInfo', 'ClientInfo', OrderHeaderDemographicsBoardComponent );
+        break;
       case 'limits' :
-        this.applyItem(id, 'Limits', 'Limits', LimitValuesCardComponent );
-         return
+        model =    this.applyItem(id, 'Limits', 'Limits', LimitValuesCardComponent );
+        break;
       case 'lastitemadded' :
-        this.applyItem(id, 'lastItemAdded', 'LastItemAdded'  , LastImageDisplayComponent );
-        return
+        model =    this.applyItem(id, 'lastItemAdded', 'LastItemAdded'  , LastImageDisplayComponent );
+        break;
       case 'ordertotal' :
-        this.applyItem(id, 'OrderTotal', 'OrderTotal', OrderTotalBoardComponent );
-        return
+        model =    this.applyItem(id, 'OrderTotal', 'OrderTotal', OrderTotalBoardComponent );
+        break;
       case 'order' :
-        this.applyItem(id, 'POSOrder', 'POSOrder', PosOrderItemsComponent );
-        return
+        model =    this.applyItem(id, 'POSOrder', 'POSOrder', PosOrderItemsComponent );
+        break;
       case 'chart' :
-        this.applyItem(id, 'Chart', 'Chart', CardComponent );
-        return
+        model =     this.applyItem(id, 'Chart', 'Chart', CardComponent );
+        break;
       case 'menu' :
-        this.applyItem(id, 'Category', 'Category', CategoryItemsBoardComponent );
-        return
+        model =     this.applyItem(id, 'Category', 'Category', CategoryItemsBoardComponent );
+        break;
       case 'menuitem' :
-        this.applyItem(id, "Menu Item", 'MenuItem', MenuItemCardDashboardComponent );
-        return
+        model =    this.applyItem(id, "Menu Item", 'MenuItem', MenuItemCardDashboardComponent );
+        break;
       case 'flowerprices' :
-       this.applyItem(id, "Flower Prices", 'FlowerPrices', TiersWithPricesComponent );
-        return
+        model =     this.applyItem(id, "Flower Prices", 'FlowerPrices', TiersWithPricesComponent );
+        break;
+      case 'menusection' :
+        model =    this.applyItem(id, "Menu Section", 'MenuSections', MenuSectionComponent );
+        break;
     }
+    console.log('model', model)
+    return model;
+
 	}
 
   applyItem(id: number, name: string, componentName: string, component: any) {
-    if (!this.dashboardArray) { return }
-    // console.log(name,componentName)
-    const properties = {} as DashBoardComponentProperties;
-    properties.name = componentName;
-    let jsonString = ''
 
     if (componentName) {
+      const properties = {} as DashBoardComponentProperties;
+      properties.name = componentName;
+      let jsonString = ''
 
       const types = this.componentCollection.filter(data =>
          { return data.name.toLowerCase() === componentName.toLowerCase()}
@@ -585,14 +692,9 @@ export class GridsterLayoutService {
         properties.cardValueType = 'Product'
       }
 
-      // case 'limits' :
-      //   this.applyItem(id, 'lastItemAdded', 'Last Item Added'  , LastImageDisplayComponent );
-      //   return
-
       if (componentName.toLowerCase() === 'menu' || componentName.toLowerCase() === 'menu') {
         properties.type = 'menu'
       }
-
 
       if (types && types.length>0) {
         const type  = types[0].name.toLowerCase()
@@ -608,28 +710,37 @@ export class GridsterLayoutService {
       }
 
       jsonString = JSON.stringify(properties)
-
+      const  item = {
+        componentName: componentName,
+        cols      : 40,
+        rows      : 40,
+        x         : 0,
+        y         : 0,
+        component : component,
+        name      : name,
+        id        :  id,
+        properties: jsonString,
+      } as DashboardContentModel;
+  
+      this.dashboardArray.push(item)
     }
+    
+    return this.dashboardArray;
+  }
 
-    const  item = {
-      componentName: componentName,
-      cols      : 40,
-      rows      : 40,
-      x         : 0,
-      y         : 0,
-      component : component,
-      name      : name,
-      id        :  id,
-      properties: jsonString,
-    } as DashboardContentModel;
+  itemChange():  Observable<any> {
+    return this.saveModelUpdate()
+  }
 
-    this.itemChange(item);
-    if (this.dashboardModel) {
-      if (!this.dashboardModel.dashboard) {
-        this.dashboardModel.dashboard = [] as DashboardContentModel[]
-      }
-      this.dashboardModel.dashboard.push(item)
-    }
+  saveModelUpdate() {
+    this.initDashboard()
+
+    this.dashboardModel.dashboard = this.dashboardArray;
+    let  tmp = JSON.stringify(this.dashboardModel);
+    let parsed: DashboardModel = JSON.parse(tmp);
+    this.serialize(parsed);
+    this.dashboardModel.jsonObject  = tmp;
+    return this.saveModel(this.dashboardModel);
   }
 
   modifyChanges() {
@@ -712,7 +823,7 @@ export class GridsterLayoutService {
           }
         })
 
-        // console.log('dashboard model', data)
+        console.log('update dashboard model', data)
         this.updateDashboardModel(data)
 
         return of(data)
@@ -742,9 +853,11 @@ export class GridsterLayoutService {
 			this.componentCollection.forEach(component => {
 				// We check if component key in our dashboardCollection
 				// is equal to our component name key in our componentCollection
-        if (dashboard.componentName.toLowerCase() === component.name.toLowerCase()) {
-					dashboard.component = component.componentInstance;
-				}
+        if (dashboard.componentName) { 
+          if (dashboard.componentName.toLowerCase() === component.name.toLowerCase()) {
+            dashboard.component = component.componentInstance;
+          }
+        }
 			});
 		});
 	}
@@ -790,9 +903,11 @@ export class GridsterLayoutService {
 			this.componentCollection.forEach(component => {
 				// We check if component key in our dashboardCollection
 				// is equal to our component name key in our componentCollection
-				if (dashboard.componentName.toLowerCase() === component.name.toLowerCase()) {
-					dashboard.component = component.name;
-				}
+        if (dashboard.componentName) {
+          if (dashboard.componentName.toLowerCase() === component.name.toLowerCase()) {
+            dashboard.component = component?.name;
+          }
+        }
 			});
 		});
 	}

@@ -98,7 +98,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   @Input() printLocation : number;
   @Input() prepStatus    : boolean;
 
-  flexGroup = 'ps-flex-group-start-no-margin'
+  flexGroup                = 'ps-flex-group-start-no-margin'
   animationState          : string;
   color                   : ThemePalette = 'primary';
   mode                    : ProgressSpinnerMode = 'determinate';
@@ -260,13 +260,12 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   initAssignedItemSubscriber() {
     //disabled  class style when added button for item functions
     this._assignedPOSItems = this.orderMethodsService.assignedPOSItems$.subscribe( data => {
+  
         this.assignedPOSItems = data;
         if ( this.orderMethodsService.isItemAssigned( this.orderItem.id ) ) {
           this.productnameClass = 'product-name-alt'
           return
         } else {
-
-
           this.productnameClass = 'product-name'
           return
         }
@@ -325,15 +324,13 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     const site = this.siteService.getAssignedSite();
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
-    // console.log('bucketName', this.bucketName)
+  
     if (this.menuItem) {
       this.itemName   =  this.getItemName(this.menuItem?.name)
       this.imagePath  =  this.getImageUrl(this.menuItem?.urlImageMain)
-      // console.log('image path ', this.menuItem.urlImageMain )
     }
 
     if (!this.menuItem) {
-      // if (this.menuItem.i)
       if (this.order?.service?.filterType != 0 ) { return of(null) }
       this.basicItem$ = this.menuService.getItemBasicImage(site, this.orderItem?.productID).pipe(
         switchMap( data => {
@@ -343,9 +340,6 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
       )
     }
 
-    // if (this.orderItem && this.orderItem.id != this.orderItem.idRef )  {
-
-    // }
     const item = this.orderItem;
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
     this.showView = this.mainPanel && ( (  item.promptGroupID === 0) || ( item.promptGroupID != 0 && item.id != item.idRef ) )

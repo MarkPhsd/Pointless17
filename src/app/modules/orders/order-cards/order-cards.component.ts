@@ -12,6 +12,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 // import { share } from 'rxjs/operators';
 
@@ -178,7 +179,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
       if (this.searchModel)  {  model = this.searchModel}
       model.pageNumber    = 1
       model.pageSize      = 50
-      model.prepStatus   = +this.prepStatus;
+      model.prepStatus    = +this.prepStatus;
       // console.log('setOrderSubscriber', model)
       const site    = this.siteService.getAssignedSite()
       let results$ = this.orderService.getOrdersPrepBySearchPaged(site, model)
@@ -228,6 +229,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     private platformService: PlatformService,
     private renderer: Renderer2, private el: ElementRef,
     private printingService: PrintingService,
+    private userAuthorization: UserAuthorizationService,
     private cd: ChangeDetectorRef,
     )
   {
@@ -240,6 +242,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     this.updateItemsPerPage();
     this.site = this.siteService.getAssignedSite();
 
+    console.log('init model', this.searchModel)
     if (this.searchModel)  {
       const model           = this.searchModel
       this.employeeID       = model.employeeID
@@ -274,6 +277,9 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
           data = item;
         }
         this.searchModel = data
+
+ 
+
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
         this.nextPage(true)
@@ -410,7 +416,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     if (this.searchModel)  {  model = this.searchModel}
     model.pageNumber = 1;
     model.pageSize = 25;
-    return this.orderService.getOrdersPrepBySearchPaged(site,model).pipe(switchMap(data => {
+    return this.orderService.getOrdersPrepBySearchPaged(site, model).pipe(switchMap(data => {
       const newLocal = this;
       newLocal.orders = [...newLocal.orders, ...data.results];
       return of (data.results)

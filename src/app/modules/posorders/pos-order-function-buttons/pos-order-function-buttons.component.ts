@@ -10,7 +10,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { ITerminalSettings} from 'src/app/_services/system/settings.service';
 import { AuthenticationService } from 'src/app/_services';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
-import { IRequestMessage, RequestMessageService } from 'src/app/_services/system/request-message.service';
+import { RequestMessageService } from 'src/app/_services/system/request-message.service';
 import { PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 @Component({

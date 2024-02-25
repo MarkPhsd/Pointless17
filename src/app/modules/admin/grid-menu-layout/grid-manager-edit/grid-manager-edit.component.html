@@ -1,4 +1,5 @@
-  <mat-tab-group  mat-align-tabs="start"
+ <div *ngIf="(action$ | async) as action"></div>
+ <mat-tab-group  mat-align-tabs="start"
                   md-stretch-tabs
                   [(selectedIndex)]="selectedIndex"
                   (selectedIndexChange)="selectChange()">
@@ -11,9 +12,11 @@
           <mat-title>
             <div class="grid-title">
               <div>
-                Edit Dashboard
+                Edit Dashboard 
               </div>
 
+              <mat-icon *ngIf="flag">save</mat-icon>
+              
               <div class="buttons">
                 <app-edit-buttons-standard
                   (outputeupdateItem)     ="update($event)"
@@ -187,7 +190,6 @@
             <mat-lable>Leave unchecked for anyone to see. (permissions still apply to data access)</mat-lable>
           </mat-card-title>
           <mat-card-content>
-
             <dashboard-client-type-selection
                 [dashboardModel]        ="dashboardModel"
                 (outputClientTypesJSON) ="setRolesJSON($event)"
