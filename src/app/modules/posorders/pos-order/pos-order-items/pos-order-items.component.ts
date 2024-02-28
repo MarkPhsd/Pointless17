@@ -34,11 +34,13 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Output() outputRemoveItem  = new EventEmitter();
   @Input()  purchaseOrderEnabled: boolean;
 
+  //grid;
+  @Input() disableActions = false;
+
   @Input() printLocation  : number;
   @Input() prepStatus     : boolean;
   @Input() prepScreen     : boolean;
   @Input() site:            ISite;
-  @Input() disableActions = false;
   @Input() qrOrder        = false;
   @Input() enableExitLabel : boolean;
   @Input() userAuths       :   IUserAuth_Properties;
@@ -48,6 +50,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input() cardWidth: string;
 
 
+  initStylesEnabled : boolean; // for initializing for griddisplay
   qrCodeStyle = ''
   mainStyle   =  ``
   @Input() deviceWidthPercentage = '100%'
@@ -95,7 +98,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       return this.phoneDeviceView
     }
 
-    if (this.qrOrder) { 
+    if (this.qrOrder) {
       return this.posOrderItemsView
     }
 
@@ -105,25 +108,32 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     try {
       this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
-          if (data) {
-            this.uiConfig = data;
-          }
-        }
-      )
+        if (data) {    this.uiConfig = data; }
+      })
     } catch (error) {
     }
 
     try {
       this._bottomSheetOpen = this.orderMethodService.bottomSheetOpen$.subscribe(data => {
-        if (data) {
-         this.bottomSheetOpen = data
-        }
+        if (data) { this.bottomSheetOpen = data }
       })
     } catch (error) {
     }
 
     if (this.disableActions) {
-      // this.refreshOrderFromPOSDevice()
+      this.mainPanel  = true
+      this.qrOrder = false
+      this.phoneDevice = false
+      if (!this.initStylesEnabled) {
+        this.initStyles()
+        this.initStylesEnabled = true
+      }
+      this._order = this.orderMethodService.currentOrder$.subscribe( order => {
+        this.order = order
+        if (this.order && this.order.posOrderItems)  {
+          this.sortPOSItems(this.order.posOrderItems);
+        }
+      })
     }
 
     try {
@@ -277,7 +287,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
     if (this.phoneDevice) {
       this.mainStyle = `phone-panel ${this.orderItemsPanel}`
-      // this.deviceWidthPercentage = '345px'
       this.panelHeight = ''
     }
   }
@@ -320,8 +329,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   removeItemFromList(payload: any) {
-
-    // console.log('payload remove', payload)
     if (this.order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
       this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
       return
@@ -329,7 +336,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     const index = payload.index;
     const orderItem = payload.item
     this.orderMethodService.removeItemFromList(index, orderItem)
-
   }
 
   setAsPrepped(index) {
@@ -348,13 +354,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   swipeItemFromList(index) {
-
     if (this.disableActions) {return}
     const item =  this.order.posOrderItems[index]
     if (!item)  { return }
-
     this.action$ = this.orderMethodService.removeItemFromListOBS(index, item);
-
   }
 
   startAnimation(state) {
@@ -385,7 +388,12 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     const divTop = this.myScrollContainer.nativeElement.getBoundingClientRect().top;
     const viewportBottom = window.innerHeight;
     const remainingHeight = viewportBottom - divTop;
-    this.myScrollContainer.nativeElement.style.height  = `${remainingHeight-10}px`;
+    if (!this.disableActions) {
+      this.myScrollContainer.nativeElement.style.height  = `${remainingHeight-10}px`;
+    }
+    if (this.disableActions) {
+      this.myScrollContainer.nativeElement.style.height  = `${remainingHeight - 50}px`;
+    }
   }
 
   scrollToBottom(): void {

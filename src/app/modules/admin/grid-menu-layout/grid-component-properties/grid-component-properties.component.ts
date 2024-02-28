@@ -1,21 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DashBoardComponentProperties, DashboardContentModel, DashboardModel } from '../grid-models';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
+import { GridsterLayoutService, ValueTypeList } from 'src/app/_services/system/gridster-layout.service';
 import { MenuService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
-export interface ValueTypeList {
-  filter: string;
-  name  : string;
-  icon  : string;
-  usesRange: boolean;
-}
+import { HttpClient } from '@angular/common/http';
 
 export interface ItemValue {
   name: string;
@@ -29,71 +24,44 @@ export interface ItemValue {
 })
 
 export class GridComponentPropertiesComponent implements OnInit {
+  action$: Observable<any>;
 
-  message : string[];
-  productName: string;
+
+  message         : string[];
+
   dashBoardContent: DashboardContentModel;
   inputForm       : UntypedFormGroup;
-  rangeTypes      = ['year', 'month', 'date', 'week', 'hour','currentDay']
+
+  cardValueTypes  = this.layoutService.cardValueTypesList
+  cardTypes  = this.layoutService.cardTypesList;
+  menuBoardTypes = this.layoutService.menuBoardTypes;
+  rangeTypes    =  this.layoutService.rangeTypes;
   cardValueTypesTemp = []
-  cardValueTypes  = [
-    // {name: 'Top Products', filter: 'report', icon: ''},
-    {name: 'Sales Totals',      filter: 'report', icon: '', usesRange: true},
-    {name: 'Tax',               filter: 'report', icon: '', usesRange: true},
 
-    {name: 'Product Sales',     filter: 'report', icon: '', usesRange: true},
-    {name: 'Category Sales',    filter: 'report', icon: '', usesRange: true},
-    {name: 'Department Sales',  filter: 'report', icon: '', usesRange: true},
-    {name: 'Type Sales',        filter: 'report', icon: '', usesRange: true},
-
-    {name: 'Sales',             filter: 'report', icon: '', usesRange: true},
-    {name: 'Order Count',       filter: 'report', icon: '', usesRange: true},
-    {name: 'Avg Count',         filter: 'report', icon: '', usesRange: true},
-
-    {name: 'Employee Sales Count',  filter: 'report', icon: '', usesRange: true},
-    {name: 'Employee Sales',        filter: 'report', icon: '', usesRange: true},
-
-    {name: 'Square',            filter: 'table', icon: '', usesRange: true},
-    {name: 'Round',             filter: 'table', icon: '', usesRange: true},
-    {name: 'Half Found',        filter: 'table', icon: '', usesRange: true},
-  ]
-
-  cardTypes  = [
-    {name: 'chart'  ,  icon: 'bar_chart', filter: 'none'},
-    {name: 'report' ,  icon: 'list',  filter: 'none'},
-    {name: 'menu'   ,  icon: 'menu',  filter: 'none'},
-    {name: 'tables' ,  icon: 'table', filter: 'none'},
-    {name: 'order'  ,  icon: 'shopping_cart',  filter: 'none'},
-    {name: 'youtube',  icon: 'smart_display',  filter: 'smart_display'},
-    {name: 'iframe' ,  icon: 'whatshot',  filter: 'whatshot'},
-
-  ] as ValueTypeList[];
-
-  menuBoardTypes = [
-    {name: 'Flowers',          icon: 'list',    filter:  'menu'},
-    {name: 'Category',         icon: 'list',    filter:  'menu'},
-    {name: 'Specials',         icon: 'list',    filter:  'menu'},
-    {name: 'Product',          icon: 'product', filter:  'menu'},
-    {name: 'FlowerPrices',     icon: 'list',    filter:  'menu'},
-    {name: 'POSOrder',         icon: 'cart'   , filter:  'order'},
-    {name: 'ClientInfo',       icon: 'cart'   , filter:  'order'},
-    {name: 'OrderTotal',       icon: 'cart'   , filter:  'order'},
-    {name: 'Limits',           icon: 'production_quantity_limits'   , filter:  'order'},
-  ] as ValueTypeList[];
 
   itemValue      : ItemValue;
+  productName     : string;
+  image           : string;
+  //used for filter and UI
   cardType       : string;
-
-  cardValueType  : string;
-  listItemID     : string;
   chartType      : string;
+  cardValueType  : string;
+
+  listItemName   : string;
+  listItemID     : number;
+  //mat-slider requires variable.
   opacity        : number;
+  //mat-slider requires variable.
   border         : number;
+  //mat-slider requires variable.
   borderRadius   : number;
+   //mat-slider requires variable.
   refreshTime    : number;
   layerIndex     : number;
   disableActions : boolean;
   rangeType      : string;
+
+  //mat-slider requires variable.
   rangeValue     : number;
   dateRangeReport: boolean;
 
@@ -114,6 +82,7 @@ export class GridComponentPropertiesComponent implements OnInit {
     public layoutService       : GridsterLayoutService,
     private menuService        : MenuService,
     private priceScheduleService: PriceScheduleService,
+    private httpClient: HttpClient,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb                 : UntypedFormBuilder,
     private _snackBar          : MatSnackBar,) {
@@ -125,7 +94,7 @@ export class GridComponentPropertiesComponent implements OnInit {
   ngOnInit() {
     this.chartTypes = this.layoutService.cartTypeCollection;
     if (!this.dashBoardContent) { return }
-    this.fillForm();
+    this.initForm();
     const site          = this.siteService.getAssignedSite();
     this.categories$    = this.menuService.getListOfCategoriesAll(site)
     this.specials$      = this.priceScheduleService.getList(site);
@@ -133,15 +102,18 @@ export class GridComponentPropertiesComponent implements OnInit {
 
   onCancel(event) {this.dialogRef.close()}
 
+  setImage(event) {
+    this.image = event;
+    this.inputForm.patchValue({image: event})
+  }
+
   setCardType(item: ValueTypeList) {
     this.cardType = item.name;
     this.setCardTypeValuesList(item.name);
-    if (this.inputForm) { this.inputForm.controls['type'].setValue(item.name) }
   }
 
   setRangeType(type: string) {
     this.rangeType = type
-    if (this.inputForm) { this.inputForm.controls['rangeType'].setValue(type) }
   }
 
   initRange(type: string) {
@@ -161,11 +133,11 @@ export class GridComponentPropertiesComponent implements OnInit {
       if (item.id) {
         const site = this.siteService.getAssignedSite();
         this.menuService.getMenuItemByID(site, item.id).subscribe(data => {
-            this.listItemID  = data.id.toString()
+            this.listItemID  = data.id
             this.productName = data.name;
             this.inputForm.patchValue({productName: data.name})
             this.inputForm.patchValue({listItemID: data.id})
-            this.updateCard(this.inputForm)
+            // this.updateCard(this.inputForm)
           }
         )
       }
@@ -174,30 +146,41 @@ export class GridComponentPropertiesComponent implements OnInit {
 
   getProductName(id, cardType, valueType) {
     if (!cardType) {return }
-    if (cardType.toLowerCase() != 'menu') { return }
+    if (cardType.toLowerCase()  != 'menu') { return }
     if (valueType.toLowerCase() != 'product') { return }
     const site = this.siteService.getAssignedSite();
     this.menuService.getMenuItemByID(site, id).subscribe(data => {
-      this.productName = data.name;
+        this.productName = data.name;
       }
     )
   }
 
-  setCategory(value: string) {
+  setCategory(value: any) {
+    this.cardValueType = this.inputForm.controls['cardValueType'].value;
+    // console.log(this.cardValueType,'value', value)
+    if (this.cardValueType == 'Menu Section') {
+      const item = {name: value?.name,active: value?.active, id: value?.id}  as ItemValue
+      // this.listItemID = JSON.stringify(item)
+      this.listItemID = value?.id;
+      this.productName = value?.productName;
+      this.setSelectValue(item)
+      console.log('item', item, this.listItemID)
+      return
+    }
     this.listItemID = value;
     this.setSelectValue(value)
   }
 
   setCardValueType(type: string) {
-    this.cardValueType = type;
     this.initRange(type)
     this.refreshTypeList(type);
-    if (this.inputForm) { this.inputForm.controls['cardValueType'].setValue(type)  }
+    if (this.inputForm) { this.inputForm.patchValue({cardValueType: type})  }
   }
 
   refreshTypeList(type: string) {
     this.list$      = null;
     this.listItemID = null;
+    console.log('refreshTypelist', type)
     const site      = this.siteService.getAssignedSite();
     if (type === 'Category') {
       this.list$ = this.menuService.getListOfCategoriesAll(site)
@@ -205,13 +188,16 @@ export class GridComponentPropertiesComponent implements OnInit {
     if (type === 'Specials') {
       this.list$  = this.priceScheduleService.getList(site);
     }
+    if (type === 'Menu Section') {
+      this.list$  = this.priceScheduleService.getMenuListItems(site);
+    }
   }
 
   receiveData() {
   }
 
-  fillForm() {
-    this.initForm();
+  initForm() {
+    this.inputForm = this.layoutService.initGridFormProperties()
     if (!this.dashBoardContent) {
       this.dashBoardContent = {} as DashboardContentModel;
       return
@@ -219,122 +205,65 @@ export class GridComponentPropertiesComponent implements OnInit {
     this.initFormData();
   }
 
-  initForm() {
-    this.inputForm = this.fb.group({
-      id            : [''], //
-      name          : [''], // : string;
-      roles         : [''], // : widgetRoles[]
-      menuType      : [''], // : string;
-      listItemID     : [''], //: string;
-      opacity        : [''], //: number;
-      borderRadius   : [''], //: number;
-      border         : [''], //: number;
-      layerIndex     : [''], //: number;
-
-      lengthOfRange  : [''], //: string; //number of range month, year etc
-      rangeType      : [''], //: string; //hour, month, day, year
-      type           : [''], //: string; //preset types, menu, report widget
-      cardValueType  : [''], //: string; //componentName
-      dateFrom       : [''], //: string; //not implemented
-      dateTo         : [''], //: string; //not implemented
-      chartType      : [''], //: string;
-
-      MMJMenu        : [''], //: boolean;
-      chartHeight    : [''], //: string;
-      chartWidth     : [''], //: string;
-      itemID         : [''], //: string;
-
-      disableActions : [''], //: boolean;
-      autoPlay       : [''], //: boolean;
-      url            : [''], //: string;
-      autoRepeat     : [''], //: boolean;
-
-      refreshTime    : [''], //: number;
-      rangeValue     : [''], //: number;
-      dateRangeReport: [''], //: boolean;
-      productName    : [''], //: boolean;
-    })
-    return this.inputForm
-  };
-
+  //dashboard properties
+  //contains both the object as one property
+  //and then the properites along witht he object as all the other features.
+  //it needs to have the object as a separate feature beacuse of how we
+  //iterate the cards on the grid.
   initFormData() {
     const site = this.siteService.getAssignedSite();
-    let object = {} as DashBoardComponentProperties;
-
-    const item = this.dashBoardContent.properties
-    if (!item) {
-      object               = {} as DashBoardComponentProperties;
-      object.name          = this.dashBoardContent.name;
-      object.id            = this.dashBoardContent.id;
-      object.type          = '';
-      object.cardValueType = '';
-      object.listItemID    = '';
-    }
-
-    if (item) {
-      let item = JSON.parse(this.dashBoardContent.properties) as DashBoardComponentProperties;
-      object.name          = item?.name;
-      object.id            = this.dashBoardContent.id;
-      object.dateFrom      = item?.dateFrom;
-      object.dateTo        = item?.dateTo;
-      object.rangeType     = item?.rangeType;
-      object.type          = item?.type;
-      object.menuType      = item?.menuType;
-      object.lengthOfRange = item?.lengthOfRange;
-      object.listItemID    = item?.listItemID;
-      object.cardValueType = item?.cardValueType;
-
-      object.MMJMenu       = item?.MMJMenu;
-      object.chartHeight   = item?.chartHeight;
-      object.chartWidth    = item?.chartWidth;
-      object.disableActions= item?.disableActions;
-      object.url           = item?.url;
-      object.autoPlay      = item?.autoPlay;
-      object.autoRepeat    = item?.autoRepeat;
-      object.chartType     = item?.chartType;
-      object.dateRangeReport = item?.dateRangeReport;
-
-      object.border        = item?.border;
-      object.borderRadius  = item?.borderRadius;
-      object.opacity       = item?.opacity;
-      object.layerIndex    = item?.layerIndex;
-      object.refreshTime   = item?.refreshTime;
-      object.rangeValue    = item?.rangeValue;
-      object.productName   = item?.productName;
+    let item = {} as  DashBoardComponentProperties
+    if (!item) {  item = this.initItem()  }
+    if (this.dashBoardContent.properties) {
+      item = JSON.parse(this.dashBoardContent.properties) as DashBoardComponentProperties;
+      item.id  = this.dashBoardContent.id;
     }
 
     //establish default range value.
-    this.rangeValue  = +object?.rangeValue
-    if (! object.layerIndex ) { object.layerIndex = 1;}
-    this.inputForm.patchValue(object);
+    this.rangeValue  = +item?.rangeValue
+    if (!item.layerIndex ) { item.layerIndex = 1;}
 
-    this.cardType = ''
-    this.cardValueType = ''
-    this.border = 0
+    this.setDefaultValues(item)
+    this.setCardTypeValuesList(item?.type);
+    this.refreshTypeList(item?.cardValueType);
+    this.initRange( item?.cardValueType);
+    if (item.listItemID) {  this.listItemID = item?.listItemID; };
+    if (item.productName) {  this.productName = item?.productName; };
+
+    const selectValue = {id: item?.listItemID, name: item?.productName};
+    if (item.listItemID) { this.setSelectValue( selectValue ) }
+
+    this.inputForm.patchValue(item);
+  }
+
+  initItem() {
+    let  item          = {} as DashBoardComponentProperties;
+    item.name          = this.dashBoardContent?.name;
+    item.id            = this.dashBoardContent?.id;
+    item.type          = '';
+    item.cardValueType = '';
+    item.listItemID    = 0;
+    item.productName   =''
+    return item;
+  }
+
+  setDefaultValues(item) {
+    this.cardType     = ''
+    this.border       = 0
     this.borderRadius = 5
-    this.opacity    = 0
-    this.layerIndex = 1
-    this.productName = object?.productName;
-    if (object.type)            { this.cardType = object?.type };
-
-    if (object.cardValueType)   { this.cardValueType = object?.cardValueType };
-    if (object.border)          { this.border = object?.border  };
-    if (object.borderRadius)    { this.borderRadius = object?.borderRadius };
-    if (object.opacity)         { this.opacity = object?.opacity  };
-    if (object.layerIndex)      { this.layerIndex = object?.layerIndex };
-
-    this.setCardTypeValuesList(object.type);
-
-    this.refreshTypeList(this.cardValueType);
-    if (object.listItemID) {  this.listItemID = object?.listItemID; };
-    if (object.listItemID) { this.setSelectValue(object?.listItemID); };
-    this.initRange(this.cardValueType);
+    this.opacity      = 0
+    this.layerIndex   = 1
+    this.productName  = item?.productName;
+    this.image        = item?.image;
+    if (item.type)            { this.cardType = item?.type };
+    if (item.border)          { this.border = item?.border  };
+    if (item.borderRadius)    { this.borderRadius = item?.borderRadius };
+    if (item.opacity)         { this.opacity = item?.opacity  };
+    if (item.layerIndex)      { this.layerIndex = item?.layerIndex };
   }
 
   setCardTypeValuesList(type: string) {
-
     let cardValueTypes = this.cardValueTypes;
-
     if (type === 'order') {
       cardValueTypes = this.menuBoardTypes.filter( data => data.filter === type);
       this.cardValueTypesTemp = cardValueTypes;
@@ -358,7 +287,20 @@ export class GridComponentPropertiesComponent implements OnInit {
     this.cardValueTypesTemp = this.cardValueTypes;
   }
 
-  update(event): void {
+  update(event){
+    this.action$ = this._update(event);
+  }
+
+  updateExit(event) {
+    this.action$ = this._update(event).pipe(switchMap(data => {
+      setTimeout(data => {
+        this.dialogRef.close()
+      },100)
+      return of(data)
+    }))
+  }
+
+  _update(event) {
     //update the DashboardContentModel in memory
     const content = this.updateCard(this.inputForm);
     // then slice out the current DashboardContentModel from the DashboardModel
@@ -372,7 +314,8 @@ export class GridComponentPropertiesComponent implements OnInit {
       dashBoard.dashboard =  list
       dashBoard.dashboard.push(content);
     }
-    this.updateDashBoard(dashBoard)
+    this.updateDashBoard(dashBoard);
+    return this.layoutService.saveModelUpdate()
   };
 
   updateCard(form: UntypedFormGroup): DashboardContentModel {
@@ -383,25 +326,22 @@ export class GridComponentPropertiesComponent implements OnInit {
     let model             = form.value as DashBoardComponentProperties;
     model.listItemID      = this.listItemID;
     model.id              = this.dashBoardContent.id;
-    model.cardValueType   = this.cardValueType;
-    model.type            = this.cardType;
+
+    //can't be stored inform.
     model.layerIndex      = this.layerIndex;
     model.border          = this.border;
     model.borderRadius    = this.borderRadius;
     model.opacity         = this.opacity;
     model.refreshTime     = this.refreshTime;
     model.rangeValue      = this.rangeValue;
-    model.dateRangeReport = this.dateRangeReport;
-    console.log(model)
-    if (!this.validateCard(model)) {return}
     content = this.setComponentName(model, content)
-
     if (content.component)  {content.component   = ''}
     content.name        = model.name;
+
+    if (!this.validateCard(model)) {return}
     const jsonObject    = JSON.stringify(model);
     content.properties  = jsonObject;
     this.dashBoardContent.properties = content.properties ;
-    this.fillForm()
     return content;
   }
 
@@ -459,6 +399,16 @@ export class GridComponentPropertiesComponent implements OnInit {
       return content
     }
 
+    if (model?.cardValueType.toLowerCase() ===  'text'){
+      content.componentName = 'text'
+      return content
+    }
+
+    if (model?.cardValueType.toLowerCase() ===  'image'){
+      content.componentName = 'image'
+      return content
+    }
+
     return content
   }
 
@@ -472,25 +422,37 @@ export class GridComponentPropertiesComponent implements OnInit {
     let result = true
     this.message = []
 
-    if ( model.type === 'order') {
-      return true;
-    }
+    if ( model.type === 'order') {  return true;  }
 
     if (model.type != 'youtube' && model.type != 'iframe' ) {
       if (!model.cardValueType)  {
-        this.message.push("No type assigned.")
+        this.message.push("No Card Type Value assigned.")
         result = false
       }
     }
     return  result;
   }
 
-  setSelectValue(value: string) {
+  getDefaultCCS() {
+    let styles$ = this.httpClient.get('assets/htmlTemplates/MenuSectionStyles.txt', {responseType: 'text'}).pipe(
+      switchMap(styles => {
+        this.inputForm.patchValue({ccs: styles})
+        return of(styles)
+    }))
+    this.action$ = styles$
+  }
+
+  setSelectValue(value: any) {
     if (value) {
       if (this.inputForm) {
-        const item =   JSON.parse(JSON.stringify(value))
-        this.inputForm.controls['listItemID'].setValue(value);
-        this.itemValue = item
+        if (this.inputForm.controls['cardValueType'].value == 'Menu Section') {
+          this.inputForm.patchValue({listItemID: value?.id, productName: value?.name})
+          console.log('value', value)
+          return;
+        }
+        this.inputForm.patchValue({listItemID: value?.id})
+        this.inputForm.patchValue({productName: value?.name})
+        this.itemValue = value
       }
     }
   }
@@ -503,11 +465,6 @@ export class GridComponentPropertiesComponent implements OnInit {
         this.chartType = value;
       }
     }
-  }
-
-  updateExit(event) {
-    this.update(event)
-    this.dialogRef.close()
   }
 
   notifyEvent(message: string, action: string) {

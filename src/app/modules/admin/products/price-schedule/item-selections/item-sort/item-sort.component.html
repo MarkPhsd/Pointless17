@@ -11,30 +11,22 @@
       <div  class="drag-list "
             cdkDropList
             #accordionList="cdkDropList"
-            (cdkDropListDropped)  ="drop($event)"
-          >
+            (cdkDropListDropped)  ="drop($event)" >
         <div *ngFor="let item of discountInfos; let index = index;"
-            class="pop"
-            cdkDrag
-            (click)="assignItem(item, index)"
-          >
+             class="pop" cdkDrag  (click)="assignItem(item, index)">
             <div class="grid-row">
               <div>
-                {{item?.name}}
+                {{item?.sort}} - {{item?.name}}
               </div>
               <div>
-                <button  mat-button
-                  (click)="deleteSelected(item, index)">
-                      Remove
-                  <mat-icon>delete</mat-icon>
+                <button  mat-button  (click)="deleteSelected(item, index)">
+                  Remove  <mat-icon>delete</mat-icon>
                 </button>
               </div>
 
               <div>
-                <button  mat-button
-                  (click)="editSelected(item, index)">
-                      Edit 
-                  <mat-icon>edit</mat-icon>
+                <button  mat-button  (click)="editSelected(item, index)">
+                  Edit <mat-icon>edit</mat-icon>
                 </button>
               </div>
 

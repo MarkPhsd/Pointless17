@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 export interface SearchModel {
+  summaryOnly       : boolean;
   name:                  string;
   pageSize:              number;
   pageNumber:            number;

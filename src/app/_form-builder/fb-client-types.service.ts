@@ -28,7 +28,7 @@ export class FbClientTypesService {
       changeItemPrice      : [],
       changeInventoryValue : [],
       blindClose           : [],
-
+      buysSalesReports     : [],
       editEmail:    [],
 
       disableBalanceEndOfDay   : [],

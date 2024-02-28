@@ -1,73 +1,76 @@
-<div class="grid">
-  <div class="grid-values grid-items ">
-    <div>
-      Opacity {{opacity}}
+<!-- <mat-card>
+  <mat-card-subtitle>Properites</mat-card-subtitle>
+  <div class="flex-grid-column">
+    <div class="grid-values grid-items ">
+      <div>
+        Opacity {{opacity}}
+      </div>
+      <div>
+        <mat-slider
+                    thumbLabel
+                    [displayWith]="formatOpacity"
+                    tickInterval="1000"
+                    step="1"
+                    min="0"
+                    max="100"
+                    [(ngModel)]="opacity"
+                    aria-label="units"
+        ></mat-slider>
+      </div>
     </div>
-    <div>
-      <mat-slider
-                  thumbLabel
-                  [displayWith]="formatOpacity"
-                  tickInterval="1000"
-                  step="1"
-                  min="0"
-                  max="100"
-                  [(ngModel)]="opacity"
-                  aria-label="units"
-      ></mat-slider>
-    </div>
-  </div>
 
-  <div class="grid-values grid-items">
-    <div>
-      Border {{border}}
+    <div class="grid-values grid-items">
+      <div>
+        Border {{border}}
+      </div>
+      <div>
+        <mat-slider
+                    thumbLabel
+                    [displayWith]="formatBorder"
+                    tickInterval="1000"
+                    step="1"
+                    min="0"
+                    max="100"
+                    [(ngModel)]="border"
+                    aria-label="units"
+        ></mat-slider>
+      </div>
     </div>
-    <div>
-      <mat-slider
-                  thumbLabel
-                  [displayWith]="formatBorder"
-                  tickInterval="1000"
-                  step="1"
-                  min="0"
-                  max="100"
-                  [(ngModel)]="border"
-                  aria-label="units"
-      ></mat-slider>
-    </div>
-  </div>
 
-  <div class="grid-values grid-items">
-    <div>
-      Border-Radius {{borderRadius}}
+    <div class="grid-values grid-items">
+      <div>
+        Border-Radius {{borderRadius}}
+      </div>
+      <div>
+        <mat-slider
+                    thumbLabel
+                    [displayWith]="formatBorderRadius"
+                    tickInterval="1000"
+                    step="1"
+                    min="0"
+                    max="100"
+                    [(ngModel)]="borderRadius"
+                    aria-label="units"
+        ></mat-slider>
+      </div>
     </div>
-    <div>
-      <mat-slider
-                  thumbLabel
-                  [displayWith]="formatBorderRadius"
-                  tickInterval="1000"
-                  step="1"
-                  min="0"
-                  max="100"
-                  [(ngModel)]="borderRadius"
-                  aria-label="units"
-      ></mat-slider>
-    </div>
-  </div>
 
-  <div class="grid-values grid-items">
-    <div>
-      Layer {{layerIndex}}
-    </div>
-    <div>
-      <mat-slider
-                  thumbLabel
-                  [displayWith]="formatLayer"
-                  tickInterval="1000"
-                  step="1"
-                  min="0"
-                  max="100"
-                  [(ngModel)]="layerIndex"
-                  aria-label="units"
-      ></mat-slider>
+    <div class="grid-values grid-items">
+      <div>
+        Layer {{layerIndex}}
+      </div>
+      <div>
+        <mat-slider
+                    thumbLabel
+                    [displayWith]="formatLayer"
+                    tickInterval="1000"
+                    step="1"
+                    min="0"
+                    max="100"
+                    [(ngModel)]="layerIndex"
+                    aria-label="units"
+        ></mat-slider>
+      </div>
     </div>
   </div>
-</div>
+</mat-card> -->

@@ -1,44 +1,21 @@
-<div *ngIf="!order">
-  <div *ngIf="(order$ | async) as order"></div>
-</div>
-<div *ngIf="(addMenuItem$ | async) as action"></div>
-<div *ngIf="obs$ | async"></div>
-  <!-- backcolorOpacity {{menu.backcolorOpacity}} {{menu | json}} -->
-  <!-- backgroundURL{{backgroundURL}} -->
-  <!-- [style.background]="backgroundURL" -->
-  <!-- {{items | json}} -->
-  <!-- backgroundURL {{backgroundURL }}  menu?.backcolorOpacity {{menu?.backcolorOpacity }} -->
-  <!-- [style.opacity]="menu?.backcolorOpacity" -->
-
-<ng-template #loading>
-  <mat-spinner [diameter]="50">
-  </mat-spinner>
-</ng-template>
-
 <div *ngIf="(bucket$ | async) as bucket" >
   <ng-container [ngTemplateOutlet]="categoryView"
                 [ngTemplateOutletContext]="{$implicit: menu}"></ng-container>
 </div>
+
 <ng-template #category let-category>
 
   <div class="category-view"
-       [style.background-color]="backGroundStyle"
-       style.background-repeat="repeat"
-       [style.height]="'calc(120% + 200px)'"
-       [style.width]="'100%'"
-       *ngIf="categoryMenu as category"
-      >
-       <!-- -->
-      <div [style.opacity]="1" >
-        <div class="category">
-          <h1>{{ categoryMenu?.name }}</h1>
-          <mat-divider></mat-divider>
-        </div>
+       *ngIf="categoryMenu as category"  >
+
+      <div class="category">
+        <h1>{{ categoryMenu?.name }}</h1>
+        <mat-divider></mat-divider>
       </div>
-      <!--  -->
+
       <div [style.opacity]="1"  >
-        <div *ngIf="category" class="large-view">
-          <div class=" grid-item-features-container" >
+        <div *ngIf="category" class="header-large-view">
+          <div class="grid-item-features-container" >
             <div class="feature-start"></div>
             <div class="grid-item-features">
               <div class="feature-column"><div *ngIf="category.showGlueten">GF </div></div>
@@ -58,12 +35,15 @@
 
 <ng-template #categoryItemDiscountsView let-category>
 
+  <!-- <ngx-json-viewer [json]="category?.itemDiscounts"></ngx-json-viewer> -->
+
   <div *ngIf="category && category.itemDiscounts && category.itemDiscounts.length>0">
     <div class="item" *ngFor="let item of category.itemDiscounts">
+
       <div class="grid-container"  *ngIf="item">
 
         <div class="grid-add-button">
-          <div>
+          <div *ngIf="!disableActions">
             <button mat-fab color="primary" (click)="menuItemActionObs(item?.menuItem)">
                 <mat-icon>add</mat-icon>
             </button>
@@ -102,7 +82,8 @@
         <div>
           <button mat-button (click)="menuItemActionObs(item?.menuItem)">
             <div class="item-price display-font-large">
-              {{ item?.menuItem?.name }}
+              <!-- {{ item?.menuItem?.name }} -->
+              {{item?.sort}}. {{item?.name}}
             </div>
           </button>
         </div>
@@ -150,10 +131,10 @@
       </ng-template>
 
       <ng-template #itemPriceImage>
-        <div *ngIf="category.showImage" class="grid-price-view-container">
+        <div  class="grid-price-view-container">
           <div class="grid-price-view">
-            <div class="grid-image-item">
-              <img
+            <div class="grid-image-item"  >
+              <img *ngIf="category.showImage"
                 loading   = "lazy"
                 draggable = "false"
                 [src]     = "_getItemSrc(item, category)"
@@ -175,3 +156,11 @@
 
 </ng-template>
 
+
+<div *ngIf="!order">  <div *ngIf="(order$ | async) as order"></div> </div>
+<div *ngIf="(addMenuItem$ | async) as action"></div>
+<div *ngIf="obs$ | async"></div>
+<ng-template #loading>
+  <mat-spinner [diameter]="50">
+  </mat-spinner>
+</ng-template>

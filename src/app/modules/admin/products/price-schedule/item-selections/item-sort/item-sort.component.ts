@@ -26,14 +26,15 @@ export class ItemSortComponent  {
   index                    : number;
 
   _priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
-    this.priceSchedule = data
     if (data) {
-      this.priceSchedule = data;
+      console.log('data.itemDiscount', data.itemDiscounts)
       if (data.itemDiscounts) {
-        data.itemDiscounts.sort(data => data.sort)
-        this.initList(data.itemDiscounts);
+        data.itemDiscounts.sort((a, b) => a.sort - b.sort);
+        console.log('data.discount' , data.itemDiscounts)
+        this.discountInfos =  data.itemDiscounts //.sort((a, b) => a.sort - b.sort);
       }
      }
+     this.priceSchedule = data
   })
 
   constructor(
@@ -52,11 +53,12 @@ export class ItemSortComponent  {
     }
   }
 
-  initList(list: DiscountInfo[]) {
-    if (list) {
-      this.discountInfos = list.sort((a , b) => (+a.sort > +b.sort) ? 1: -1)
-    }
-  }
+  // initList(list: DiscountInfo[]) {
+  //   if (list) {
+  //     this.discountInfos = list.sort((a, b) => a.sort - b.sort);
+  //     console.log('initList .discount' , list)
+  //   }
+  // }
 
   assignItem(item, index) {
     if (item) {
@@ -65,7 +67,7 @@ export class ItemSortComponent  {
     }
   }
 
-  editSelected(item: DiscountInfo, index) { 
+  editSelected(item: DiscountInfo, index) {
     this.editItemWithId(item.itemID)
   }
 

@@ -41,7 +41,7 @@ export class GridDesignerInfoComponent implements OnInit {
     }))
   }
 
-  getLayoutSettingsgDisplay(gridSetting: GridsterSettings) { 
+  getLayoutSettingsgDisplay(gridSetting: GridsterSettings) {
     gridSetting.swap              = this.layoutService.options.swap;
     gridSetting.swapWhileDragging = this.layoutService.options.swapWhileDragging;
     gridSetting.pushItems         = this.layoutService.options.pushItems;
@@ -58,14 +58,13 @@ export class GridDesignerInfoComponent implements OnInit {
       const json = JSON.stringify(this.gridSetting);
 
       if (!this.grid) { this.grid = {} as ISetting}
-      
+
       this.grid.text = json;
       console.log(this.grid.id)
 
       let setting$ = new Observable<ISetting>();
       if (this.grid) {
         if (this.grid.id  == undefined && this.grid.id == 0) {
-          console.log('post')
           setting$ =  this.settingService.postSetting(site, this.grid)
           this.saveSetting(setting$ );
           return;
@@ -85,12 +84,11 @@ export class GridDesignerInfoComponent implements OnInit {
   saveSetting(setting$: Observable<ISetting>) {
     return setting$.pipe(switchMap(data => {
       const gridSetting = JSON.parse(data.text) as GridsterSettings;
-      console.log(data.text)
-      this.layoutService.options.swap              = gridSetting.swap
-      this.layoutService.options.swapWhileDragging = gridSetting.swapWhileDragging
-      this.layoutService.options.pushItems         = gridSetting.pushItems         
-      this.layoutService.changedOptions();
-      return of(data)
+        this.layoutService.options.swap              = gridSetting.swap
+        this.layoutService.options.swapWhileDragging = gridSetting.swapWhileDragging
+        this.layoutService.options.pushItems         = gridSetting.pushItems
+        this.layoutService.changedOptions();
+        return of(data)
     }));
   }
 
@@ -99,17 +97,9 @@ export class GridDesignerInfoComponent implements OnInit {
   }
 
   refreshSettings(gridSetting: GridsterSettings) {
-    if (!this.layoutService.options) { 
-      this.layoutService.setDefaultOptions()
-    }
-    if (gridSetting) { gridSetting = {} as GridsterSettings}
-    if (!gridSetting.swap)              { gridSetting.swap  = false }
-    if (!gridSetting.pushItems)         { gridSetting.pushItems  = false }
-    if (!gridSetting.swapWhileDragging) { gridSetting.swapWhileDragging  = false }
-    this.gridSetting                      = gridSetting;
-    this.layoutService.options.swap       = gridSetting.swap;
-    this.layoutService.options.swapWhileDragging = gridSetting.swapWhileDragging;
-    this.layoutService.options.pushItems  = gridSetting.pushItems;
+    if ( gridSetting) { gridSetting = {} as GridsterSettings}
+    this.layoutService.gridSetting      = gridSetting;
+    this.layoutService._gridSetting.next(gridSetting)
   }
 
 }

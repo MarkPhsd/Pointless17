@@ -249,7 +249,6 @@ import { DsiAndroidResultsComponent } from '../modules/payment-processing/dsiEMV
 import { DSIAndroidSettingsComponent } from '../modules/payment-processing/dsiEMVAndroid/dsiandroid-settings/dsiandroid-settings.component';
 import { DsiEMVAndroidComponent } from '../modules/payment-processing/dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
 import { ZoomFloorPlanComponent } from '../modules/floor-plan/zoom-floor-plan/zoom-floor-plan.component';
-import { AdminModule } from '../modules/admin/admin.module';
 import { SoftwareComponent } from '../modules/admin/settings/software/software.component';
 
 import { PSMenuGroupListComponent } from '../modules/admin/products/price-schedule-menu-groups/psmenu-group-list/psmenu-group-list.component';
@@ -300,7 +299,7 @@ import { PriceScheduleMenuOptionsComponent } from '../modules/admin/products/pri
 import { AdminDisplayMenuListComponent } from '../modules/admin/products/display-menu/display-menu-list/display-menu-list.component';
 import { AdminDisplayMenuComponent } from '../modules/admin/products/display-menu/display-menu/display-menu.component';
 import { DisplayMenuListComponent } from '../modules/display-menu/display-menu-list/display-menu-list.component';
-// import { DisplayMenuComponent } from '../modules/display-menu/display-menu/display-menu.component';
+
 import { AdminDisplayMenuSelctorComponent } from '../modules/admin/products/display-menu/display-menu/display-menu-selctor/display-menu-selctor.component';
 import { DisplayMenuMainComponent } from '../modules/display-menu/display-menu/display-menu-main/display-menu-main.component';
 import { DisplayMenuTitleComponent } from '../modules/display-menu/display-menu-title/display-menu-title.component';

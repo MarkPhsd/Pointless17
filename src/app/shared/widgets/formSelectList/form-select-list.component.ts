@@ -41,12 +41,12 @@ export class FormSelectListComponent implements OnInit , OnChanges{
     })
 
   }
+
   setSelectValue() {
     if (this.formValue) {
       if (this.searchForm) {
         const item =   JSON.parse(JSON.stringify(this.formValue))
         this.searchForm.controls[this.formFieldName].setValue(this.formValue);
-        // console.log('set form value', this.formValue)
       }
     }
   }

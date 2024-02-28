@@ -10,12 +10,9 @@
             [style]="headerBackColor">
   <mat-toolbar-row class="mat-toolbar-spacing">
 
-  
       <ng-container [ngTemplateOutlet]="backButtonView"></ng-container>
-
       <ng-container *ngIf="logoViewEnabled"
                     [ngTemplateOutlet]="logoView"></ng-container>
-
       <ng-container [ngTemplateOutlet]="menuBarView"></ng-container>
       <ng-container [ngTemplateOutlet]="showSearchMenuView"></ng-container>
       <ng-container [ngTemplateOutlet]="goHomeView"></ng-container>

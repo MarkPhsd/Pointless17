@@ -1,8 +1,9 @@
 <div *ngIf="(action$  | async) as action"></div>
-{{options | json}}
-<button mat-button (click)="setOptions()">Set Options</button>
-<div    [style.height]="pixelHeight"
-        [style.max-height]="pixelHeight"
+
+ <!-- <button mat-button (click)="setOptions()">Set Options</button> -->
+
+ <div    [style.height]="pixelHeight"
+         [style.max-height]="pixelHeight"
          *ngIf="layoutService.dashboardModel">
 
   <gridster [style.background]="backgroundColor"
@@ -40,6 +41,9 @@
             <mat-label class="title">
                {{ item?.object?.name }}
             </mat-label >
+            <div class="description">
+              <div [innerHtml]="item?.text"></div>
+            </div>
             <ng-container
                     class="cutting-corners"
                     *ngComponentOutlet="item.component;
@@ -52,3 +56,5 @@
   </gridster>
 
 </div>
+
+<!-- {{options | json}} -->

@@ -197,9 +197,9 @@ export class TriPosTransactionsComponent implements OnInit {
       const authorizationCompletion$ = this.methodsService.authorizationCompletion(site, item );
       this.processing$ =  authorizationCompletion$.pipe(
         switchMap(data => {
-          // console.log('Complete Auth', data.transactionId )
-          // console.log('Auth Data', data)
-          // console.log('Has Errors / Approved ', data._hasErrors, data.isApproved )
+          console.log('Complete Auth', data.transactionId )
+          console.log('Auth Data', data)
+          console.log('Has Errors / Approved ', data._hasErrors, data.isApproved )
           this.initMessaging();
           if (data._hasErrors || !data.isApproved) {
             console.log('not authorized')
@@ -213,7 +213,7 @@ export class TriPosTransactionsComponent implements OnInit {
       }
       )).pipe(switchMap(data => {
 
-        // console.log('data result of completion', data)
+        console.log('data result of completion', data)
         if (!data) { return of(null)};
         this.initMessaging();
         this.dialogRef.close(true);
@@ -278,9 +278,9 @@ export class TriPosTransactionsComponent implements OnInit {
       item = this.getRef(item, this.posPayment)
 
       this.processing$ =  this.methodsService.authorizeAmount( site, item ).pipe(switchMap(data => {
-        // console.log('Complete Auth', data.transactionId )
-        // console.log('Auth Data', data)
-        // console.log('Has Errors / Approved ', data._hasErrors, data.isApproved )
+        console.log('Complete Auth', data.transactionId )
+        console.log('Auth Data', data)
+        console.log('Has Errors / Approved ', data._hasErrors, data.isApproved )
 
         if ((data._hasErrors && data._errors.length>0) || !data.isApproved) {
           this.displayErrors(data)
@@ -334,7 +334,7 @@ export class TriPosTransactionsComponent implements OnInit {
       this.processing$  =  this.methodsService.sale(site, item )
       .pipe(switchMap(data => {
 
-            console.log('transactionID', data.transactionId, data)
+            console.log('transaction', data.transactionId, data)
             this.errorMessage = ''
             if ((data._hasErrors && data._errors.length>0) || !data.isApproved) {
               this.processing = false;

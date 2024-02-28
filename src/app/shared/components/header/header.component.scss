@@ -350,10 +350,10 @@ button {
   width: 100%;
 }
 
+h1, h3, h2, h4 {
+  font-size: .9rem;
+}
 @media (min-width: 10em) and (max-width: 100em) {
-  h1, h3, h2, h4 {
-    font-size: .9rem;
-  }
   size-format {
     display: none;
   }

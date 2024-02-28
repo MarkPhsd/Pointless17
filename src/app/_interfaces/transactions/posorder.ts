@@ -19,6 +19,7 @@ export interface IReconcilePayload {
 }
 
 export interface IPOSOrderSearchModel {
+  summaryOnly: boolean;
   completionDate_From:         string;
   completionDate_To:           string;
   orderDate_From:              string;

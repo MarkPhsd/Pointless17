@@ -54,7 +54,7 @@ export class GridManagerComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
 	}
 
-  
+
   refreshGrid() {
     this.layoutService.refreshDashBoard(this.dashboardModel?.id)
   }
@@ -65,7 +65,7 @@ export class GridManagerComponent implements OnInit, OnDestroy {
       this.autoRoute(data)
     })
   }
-  
+
   autoRoute(data) {
     this.pathID = this.route.snapshot.paramMap.get('id');
 
@@ -73,7 +73,7 @@ export class GridManagerComponent implements OnInit, OnDestroy {
     if (!data && this.pathID) {
       this.action$ = this.layoutService.getDataOBS(+this.pathID , true).pipe(switchMap(data => {
         this.layoutService.refreshDashBoard(+this.pathID)
-        this.layoutService.updateDashboardModel(data)
+        this.layoutService.updateDashboardModel(data, true)
         return of(data)
       }))
       return;
@@ -111,7 +111,7 @@ export class GridManagerComponent implements OnInit, OnDestroy {
 
   refresh() {
 		// We make a get request to get all widgets from our REST API
-    // if (this.layoutService.dashboardModel) { 
+    // if (this.layoutService.dashboardModel) {
       this.action$ =  this.layoutService.getWidgets().pipe(
         switchMap(widgets => {
           this.layoutService.widgetCollection = widgets;
@@ -144,20 +144,14 @@ export class GridManagerComponent implements OnInit, OnDestroy {
 	}
 
   toggleDesignMode() {
-
-    if (!this.layoutService.designerMode){
-      console.log(this.layoutService.designerMode)
-      localStorage.setItem('dashBoardDesignerMode', 'true')
-      this.layoutService.toggleDesignerMode(true)
-      return
+    const user = this.authenticationService._user.value
+    if (!user) {
+      return;
     }
-
-    if (this.layoutService.designerMode){
-      localStorage.setItem('dashBoardDesignerMode', 'false')
-      this.layoutService.toggleDesignerMode(false)
-      return
+    if (user?.roles === 'admin' || user?.roles === 'manager') {
+      this.layoutService.designerMode = !this.layoutService.designerMode;
+      this.layoutService.toggleDesignerMode( this.layoutService.designerMode)
     }
-
   }
 
   hide() {
@@ -179,7 +173,7 @@ export class GridManagerComponent implements OnInit, OnDestroy {
     this.layoutService.dashboardModel = null;
     this.layoutService.dashboardContentModel = null;
     this.layoutService.dashboardID = 0;
-    this.layoutService.updateDashboardModel(null)
+    this.layoutService.updateDashboardModel(null, true)
     this.openEditor(0)
   }
 

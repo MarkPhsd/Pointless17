@@ -1,6 +1,6 @@
 import { Injectable, Input } from '@angular/core';
 import { AuthenticationService } from '../system/authentication.service';
-import { BehaviorSubject, Observable  } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap  } from 'rxjs';
 import { ISite, IUser }  from 'src/app/_interfaces';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
@@ -128,6 +128,27 @@ export class PriceScheduleService {
 
   };
 
+  getMenuListItems(site: ISite): Observable<IPriceSearchModel[]> {
+
+    const search =  {type: "Menu List"};
+
+    const controller = "/PriceSchedules/"
+
+    const endPoint = "getMenuList"
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    // const url = { url: uri, cacheMins: 0}
+
+    return  this.httpClient.post<PS_SearchResultsPaged>(url, search).pipe(switchMap(data => {
+      const results = data as PS_SearchResultsPaged;
+      return of(results.results)
+    }))
+
+  };
+
   getSimpleMenuList(site: ISite): Observable<PS_SearchResultsPaged> {
 
     const search =  {type: "Menu List"};
@@ -181,7 +202,7 @@ export class PriceScheduleService {
   getPriceScheduleFull(site: ISite, id: number): Observable<IPriceSchedule> {
     let endPoint = "getPriceScheduleFull"
     let user =  JSON.parse(localStorage.getItem('user')) as IUser
-    console.log('getPriceScheduleFull', user)
+    // console.log('getPriceScheduleFull', user)
     if (!user || (user && !user.id)) {
        endPoint = "getPublicPriceScheduleFull"
     }

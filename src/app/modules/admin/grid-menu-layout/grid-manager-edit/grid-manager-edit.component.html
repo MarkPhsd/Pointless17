@@ -12,11 +12,11 @@
           <mat-title>
             <div class="grid-title">
               <div>
-                Edit Dashboard 
+                Edit Dashboard
               </div>
 
               <mat-icon *ngIf="flag">save</mat-icon>
-              
+
               <div class="buttons">
                 <app-edit-buttons-standard
                   (outputeupdateItem)     ="update($event)"
@@ -34,6 +34,7 @@
 
                 <div>
                   <app-value-fields
+                    style="width:300px";
                     [inputForm]="inputForm"
                     [fieldName]="'name'"
                     [fieldsClass]="'fields-small'">
@@ -72,6 +73,7 @@
 
               <div>
                 <app-value-fields
+                  style="width:300px";
                   [inputForm]="inputProperties"
                   [fieldName]="'icon'"
                   [fieldsClass]="'fields-small'">
@@ -125,6 +127,7 @@
 
               <div class="span-col-2">
                 <app-value-fields
+                    style="width:300px";
                     [inputForm]="inputProperties"
                     [fieldName]="'pixelWidth'"
                     [fieldsClass]="'fields-small'">
@@ -134,6 +137,7 @@
 
               <div class="span-col-2">
                 <app-value-fields
+                  style="width:300px";
                   [inputForm]="inputProperties"
                   [fieldName]="'pixelHeight'"
                   [fieldsClass]="'fields-small'">
@@ -147,6 +151,7 @@
               <div></div>
               <div class="span-col-2">
                 <app-value-fields
+                    style="width:300px";
                     [inputForm]="inputProperties"
                     [fieldName]="'gridColumns'"
                     [fieldsClass]="'fields-small'">
@@ -156,6 +161,7 @@
 
               <div class="span-col-2">
                 <app-value-fields
+                  style="width:300px";
                   [inputForm]="inputProperties"
                   [fieldName]="'gridRows'"
                   [fieldsClass]="'fields-small'">

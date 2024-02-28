@@ -35,12 +35,10 @@ export class ChangeDueComponent implements OnInit  {
   printing$ : Observable<any>;
   action$   : Observable<any>;
 
-
-
   inputForm             : UntypedFormGroup;
   @Input() paymentMethod: IPaymentMethod;
   @Input() order        : IPOSOrder;
-  @Input() payment      : IPOSPayment;
+  @Input() payment      : any;
   finalizer: boolean;
   _finalizer: Subscription;
 
@@ -89,6 +87,10 @@ export class ChangeDueComponent implements OnInit  {
       this.paymentMethod = data.paymentMethod;
       this.changeDue = (this.payment.amountReceived - this.payment.amountPaid).toFixed(2)
       this.step = 1;
+
+
+      console.log(data.payment)
+
       if (!this.paymentMethod?.isCreditCard && !this.payment.account) {
         this.step = 2
       }
@@ -223,7 +225,12 @@ export class ChangeDueComponent implements OnInit  {
     const site = this.siteService.getAssignedSite();
     const payment = this.payment
     if (payment) {
-      if (this.uiTransactions.dCapEnabled) { 
+      if (this.uiTransactions.dCapEnabled) {
+        if (this.payment?.tranCode === 'EMVPreAuth') {
+          this.action$ = this.completeAuthWithDcapTip(amount)
+          return;
+        }
+
         this.action$ = this.processDcapTip(amount)
         return;
       }
@@ -231,14 +238,14 @@ export class ChangeDueComponent implements OnInit  {
     }
   }
 
-  processDcapTip(amount: number) { 
+  processDcapTip(amount: number) {
     const device = localStorage.getItem('devicename')
     const site = this.siteService.getAssignedSite()
     const process$ = this.dCapService.adustByRecordNo(device, this.payment, amount)
-    return process$.pipe(switchMap(data => { 
+    return process$.pipe(switchMap(data => {
       const rstream = data as RStream;
-      if (data && data.TextResponse && data.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) { 
-        if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) { 
+      if (data && data.TextResponse && data.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) {
+        if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) {
           this.siteService.notify(data.cmdResponse + ' ' + data.textResponse, 'close',50000, 'red' )
           return of(null)
         }
@@ -247,7 +254,24 @@ export class ChangeDueComponent implements OnInit  {
     }))
   }
 
-  applytoPOS(payment:IPOSPayment, amount, site) { 
+  completeAuthWithDcapTip(amount: number) {
+    const device = localStorage.getItem('devicename')
+    const site = this.siteService.getAssignedSite()
+    this.payment.tipAmount = amount;
+    const process$ = this.dCapService.preAuthCaptureByRecordNo(device, this.payment)
+    return process$.pipe(switchMap(data => {
+      const rstream = data as RStream;
+      if (data && data.TextResponse && data.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) {
+        if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) {
+          this.siteService.notify(data.cmdResponse + ' ' + data.textResponse, 'close',50000, 'red' )
+          return of(null)
+        }
+      }
+      return this.getOrderUpdate(this.payment.orderID.toString(), site)
+    }))
+  }
+
+  applytoPOS(payment:IPOSPayment, amount, site) {
     payment.tipAmount = amount;
     const payment$ =  this.paymentService.putPOSPayment(site, payment);
     //process tip via credit card service.
@@ -260,7 +284,7 @@ export class ChangeDueComponent implements OnInit  {
       }))
   }
 
-  getOrderUpdate(orderID: string, site) { 
+  getOrderUpdate(orderID: string, site) {
     return  this.orderService.getOrder(site, orderID.toString(), false).pipe(
       switchMap(data => {
         this.orderMethodsService.updateOrderSubscription(data)

@@ -51,29 +51,31 @@ export class GridManagerEditComponent implements OnInit {
               private fb                 : UntypedFormBuilder,
 
   ) {
-   
-    if (data) { 
+
+    if (data) {
       this.id = data;
       this.init = true;
       this.action$ = this.getDashBoard(data)
     }
-
+    if (!data) {
+      this.action$ = this.getDashBoard(0)
+    }
   };
 
   ngOnInit() {
-    if (this.init) { 
+    if (this.init) {
       return
     }
   }
 
-  getDashBoard(id: number) { 
+  getDashBoard(id: number) {
     const site  = this.siteService.getAssignedSite();
-    if (!id || id == 0) { 
+    if (!id || id == 0) {
       this.dashboardModel = {} as DashboardModel
       this.fillForm(this.dashboardModel);
       return;
     }
-    return this.gridDataService.getGrid(site,  this.id).pipe(switchMap(data => { 
+    return this.gridDataService.getGrid(site,  this.id).pipe(switchMap(data => {
       if (!data) {   data = {} as DashboardModel;  }
       this.dashboardModel = data as DashboardModel
       this.fillForm(this.dashboardModel);
@@ -131,7 +133,7 @@ export class GridManagerEditComponent implements OnInit {
         pixelWidth            : [''],
       }
     )
-    this.inputProperties.valueChanges.subscribe(data => { 
+    this.inputProperties.valueChanges.subscribe(data => {
       this.flag = true
     })
     if (model) {
@@ -157,7 +159,7 @@ export class GridManagerEditComponent implements OnInit {
       jSONBject: [''],
       active   : [''],
     })
-   
+
 
     return this.inputForm;
 
@@ -165,7 +167,7 @@ export class GridManagerEditComponent implements OnInit {
 
   initFormData(data) {
     this.inputForm.patchValue(data)
-    this.inputForm.valueChanges.subscribe(data => { 
+    this.inputForm.valueChanges.subscribe(data => {
       console.log('data', data)
       this.flag = true
     })
@@ -195,7 +197,7 @@ export class GridManagerEditComponent implements OnInit {
   }
 
   delete(event) {
-    this.action$ =  this.layoutService.deleteModel(this.dashboardModel).pipe(switchMap(data => { 
+    this.action$ =  this.layoutService.deleteModel(this.dashboardModel).pipe(switchMap(data => {
       setTimeout(() => {
         this.onCancel(null)
       }, 100);
@@ -207,15 +209,15 @@ export class GridManagerEditComponent implements OnInit {
     if (!this.inputForm) { return }
     let model = this.inputForm.value as DashboardModel;
     model = this.setValues(model)
-    return this.layoutService.saveModel(model).pipe(switchMap(data =>  
+    return this.layoutService.saveModel(model, true).pipe(switchMap(data =>
       {
-        this.flag = false  
+        this.flag = false
         return of(data)
     }));
- 
+
   };
 
-  update(event) { 
+  update(event) {
     if (!this.inputForm) { return }
     let model = this.inputForm.value as DashboardModel;
     model = this.setValues(model)
@@ -223,7 +225,7 @@ export class GridManagerEditComponent implements OnInit {
   }
 
   updateExit(event) {
-    this.action$ = this._update().pipe(switchMap(data => { 
+    this.action$ = this._update().pipe(switchMap(data => {
       setTimeout(() => {
         this.onCancel(null)
       }, 100);

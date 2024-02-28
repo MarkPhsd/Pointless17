@@ -51,7 +51,7 @@ export interface DashboardContentModel {
   x: number;
   properties?: any;// DashBoardComponentProperties ; // json object
   object: DashBoardComponentProperties;
-  layerIndex: any;
+  layerIndex: number;
 }
 
 //not stored in database as table.
@@ -60,7 +60,8 @@ export interface DashBoardComponentProperties {
   name           : string;
   roles          : widgetRoles[]
   menuType       : string;
-  listItemID     : string;
+  listItemID     : number;
+  listItemName   : string;
   opacity        : number;
   borderRadius   : number;
   border         : number;
@@ -88,6 +89,11 @@ export interface DashBoardComponentProperties {
   rangeValue     : number;
   dateRangeReport: boolean;
   productName    : string;
+
+  displayTitle: string;
+  text        : string;
+  image       : string;
+  css         : string;
 }
 
 export interface widgetRoles {

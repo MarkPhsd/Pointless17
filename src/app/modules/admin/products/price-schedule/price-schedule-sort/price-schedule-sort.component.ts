@@ -43,7 +43,8 @@ export class PriceScheduleSortComponent implements OnInit   {
     this.priceSchedules$ = this.priceScheduleService.getMenuList(site).pipe(
       switchMap( data => {
         this.priceSchedules = data.results
-        this.priceSchedules.sort((a, b) => (a.sort > b.sort ? 1 : -1));
+        // this.priceSchedules.sort((a, b) => (a.sort > b.sort ? 1 : -1));
+        this.priceSchedules.sort((a, b) => a.sort - b.sort);
         return of(this.priceSchedules)
       }
     ))
@@ -55,7 +56,8 @@ export class PriceScheduleSortComponent implements OnInit   {
       switchMap( data => {
         this.priceSchedules = data.results
         console.table(this.priceSchedules)
-        this.priceSchedules.sort((a, b) => (a.sort > b.sort ? 1 : -1));
+        // this.priceSchedules.sort((a, b) => (a.sort > b.sort ? 1 : -1));
+        this.priceSchedules.sort((a, b) => a.sort - b.sort);
         console.table(this.priceSchedules)
         return of(this.priceSchedules)
       }

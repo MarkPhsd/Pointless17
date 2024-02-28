@@ -140,13 +140,13 @@
       <button class="payment-buttons-sm" mat-raised-button color='primary' (click)="captureDCap(item, totalAuthPayments)">
           <mat-label>Complete  <br> {{ totalAuthPayments | currency }}</mat-label>
       </button>
-  
+
       <button *ngIf="item?.tranCode === 'EMVPreAuth'" class="payment-buttons-sm" style="margin:5px" mat-raised-button color='warn' (click)="voidPayment(item)">
         <mat-label>Void Auth  <br> {{ totalAuthPayments | currency }}</mat-label>
       </button>
     </div>
 
-    <div  *ngIf=" ( order.creditBalanceRemaining > totalAuthPayments ) && !item?.Voided && item.tranCode != 'EMVSale'">
+    <div  *ngIf=" ( order.creditBalanceRemaining > totalAuthPayments ) &&  (item?.voidReason != 0 && !item.voidReason) && item.tranCode != 'EMVSale'">
       <button   class="payment-buttons-sm"
                 style="width:125px"
                 *ngIf="order.creditBalanceRemaining > totalAuthPayments"
@@ -161,7 +161,7 @@
         Tip {{item?.tipAmount  | currency}}
     </div>
 
-    <div *ngIf=" !isUser && ( order.creditBalanceRemaining != 0 && totalAuthPayments > 0 ) || item.completionDate "
+    <div *ngIf=" !isUser && (( order.creditBalanceRemaining != 0 && totalAuthPayments > 0 ) || item.completionDate) &&  (item?.voidReason != 0 && !item.voidReason) "
           style="font-size:1.2em;margin-top:10px">
       <button   color="accent"
                 class="payment-buttons-sm"
@@ -280,7 +280,7 @@
 
 <ng-template #voidActionView let-item>
   <div *ngIf="(authData$ | async) as auth">
-    <div *ngIf="!qrOrder &&  auth.voidPayment && item.completionDate">
+    <div *ngIf="!qrOrder &&  auth.voidPayment && item.completionDate &&  (item?.voidReason != 0 && !item.voidReason)">
       <button mat-button
               [disabled]="(item.voidReason && item.voidReason != 0 && item.voidAmount == item.amountPaid)"
               class="payment-button-balance"

@@ -4,7 +4,7 @@
 
 <div  class="grid-items"
       *ngIf=" (uiTransactions$ | async) as uiTransactions" >
-      
+
   <ng-container [ngTemplateOutlet]="newOrderButton"></ng-container>
 
   <div class="center-panel">
@@ -25,7 +25,7 @@
           </div>
 
           <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
-          
+
           <div  *ngIf="isUser || ((payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard))">
             <tip-entry-amount
               [payment]            = "payment"
@@ -72,7 +72,7 @@
 
     </mat-card>
   </div>
-  
+
   <ng-container [ngTemplateOutlet]="newOrderButton"></ng-container>
 </div>
 
@@ -104,7 +104,7 @@
       <h2>New Order</h2></button>
   </div>
 </ng-template>
-<!-- 
+<!--
 <div>
   <button class="big-button" mat-raised-button (click)="newDefaultOrder()">New Order</button>
 </div> -->

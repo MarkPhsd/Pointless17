@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { GridsterLayoutService, IComponent  } from 'src/app/_services/system/gridster-layout.service';
-import { GridsterConfig, GridsterItem, } from 'angular-gridster2';
+import { DisplayGrid, GridsterConfig, GridsterItem, GridType, } from 'angular-gridster2';
 import { DashBoardComponentProperties, DashboardContentModel, DashBoardProperties,  } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 
 // COMPONENTS
@@ -13,6 +13,8 @@ import { ISite } from 'src/app/_interfaces';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 
+
+
 @Component({
   selector: 'grid-menu-layout',
   templateUrl: './grid-menu-layout.component.html',
@@ -23,9 +25,7 @@ export class GridMenuLayoutComponent implements OnInit {
   action$: Observable<any>;
   @Input() layoutID : any;
 
-  get options(): GridsterConfig {
-    return this.layoutService.options;
-  }
+	options : GridsterConfig
 
   get layout(): GridsterItem[] {
     return this.layoutService.layout;
@@ -34,13 +34,14 @@ export class GridMenuLayoutComponent implements OnInit {
   get components(): IComponent[] {
     return this.layoutService.components;
   }
-
-  _saveModel = this.layoutService.saveChanges$.subscribe(data => { 
+  _saveModel = this.layoutService.saveChanges$.subscribe(data => {
     this.action$ = this.layoutService.saveModelUpdate()
   })
 
   componentPropertiesList: DashBoardComponentProperties[];
   _dashboard : Subscription;
+  _options: Subscription;
+  _gridSetting: Subscription;
 
 	aButtonDisabled          = true;
 	bButtonDisabled          = true;
@@ -86,13 +87,79 @@ export class GridMenuLayoutComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
+    this.options = this.initOptions()
     if (id) {
       const site = this.sitesService.getAssignedSite();
+      // this.layoutService.setOptions(this.options)
       this.action$ = this.initGrid(+id)
       return;
     }
     this.initSites(id);
+
   }
+
+  initOptions(): GridsterConfig {
+    const item =  {
+        gridType: GridType.Fit,
+        displayGrid: DisplayGrid.OnDragAndResize, // displayGrid: "always",
+        enableEmptyCellDrop: true,
+        emptyCellDropCallback: this.onDrop,
+        itemChangeCallback: this.itemChange.bind(this),
+
+        pushItems: true,
+        swap: true,
+        pushDirections: { north: true, east: true, south: true, west: true },
+
+        resizable: { enabled: true },
+        draggable: {
+          dragHandleClass: "drag-handler",
+          dropOverItems: true,
+          enabled: true
+        },
+
+        minCols: 50,
+        minRows: 50,
+
+        maxCols: 100,
+        maxRows: 100,
+        maxItemRows: 100,
+        maxItemCols: 100,
+        maxItemArea: 1000000,
+        mobileBreakpoint: 640,
+
+    } as GridsterConfig;
+
+
+    this._options = this.layoutService.options$.subscribe(data => {
+      if (data) {
+        if (this.options) {
+          if (!this.options.draggable) {
+            this.options.draggable = {}
+          }
+          this.options.draggable.enabled = this.layoutService.designerMode
+        }
+        try {
+          this.options.api.optionsChanged();
+        } catch (error) {
+        }
+      }}
+    )
+
+    this._gridSetting = this.layoutService.gridSetting$.subscribe(gridSetting => {
+      if (this.options && gridSetting) {
+        this.options.swap               = gridSetting.swap;
+        this.options.swapWhileDragging  = gridSetting.swapWhileDragging;
+        this.options.pushItems         = gridSetting.pushItems;
+        try {
+          this.options.api.optionsChanged();
+        } catch (error) {
+        }
+      }
+    })
+
+    return item
+  }
+
 
   initSites(id) {
     this.action$ =  this.sitesService.getSites().pipe(
@@ -116,7 +183,7 @@ export class GridMenuLayoutComponent implements OnInit {
   }
 
   initGridsterSettings() {
-    if (!this.layoutService.options) { 
+    if (!this.layoutService.options) {
       this.layoutService.options = this.layoutService.getDefaultOptions()
     }
     this.sitesService.sites$.subscribe(data => {
@@ -135,9 +202,7 @@ export class GridMenuLayoutComponent implements OnInit {
     this._dashboard = this.layoutService._dashboardModel.subscribe(data => {
       this.layoutService.dashboardModel = data;
 
-      if (!data) {
-        return;
-      }
+      if (!data) {   return;   }
 
       if (data.userName) {
         this.layoutService.dashboardProperties = JSON.parse(data.userName) as DashBoardProperties
@@ -147,7 +212,6 @@ export class GridMenuLayoutComponent implements OnInit {
       this.backgroundColor     = 'white';
       this.opacity             = 1;
       this.image               = ''
-
 
       if (this.layoutService.dashboardProperties) {
 
@@ -204,42 +268,28 @@ export class GridMenuLayoutComponent implements OnInit {
 
   updateGridsterUserMode(mode: boolean) {
     this.layoutService.designerMode    = mode;
-    if (mode) {
-      this.gridsteritemclass= 'gridster-item';
-    }
-    if (!mode) {
-      this.gridsteritemclass= 'gridster-item-user';
-    }
+    if (mode) { this.gridsteritemclass= 'gridster-item';  }
+    if (!mode) {  this.gridsteritemclass= 'gridster-item-user';   }
   }
 
 	openItemSettings(item) {
     this.openEditor(item)
 	}
 
-
+  //when an item moves in the grid.
   itemChange() {
     console.log('item change', this.layoutService.dashboardArray)
     // this.layoutService.itemChange()
 
-
     this.layoutService.dashboardModel.dashboard = this.layoutService.dashboardArray;
+    // this.layoutService.updateDashboardModel(this.layoutService.dashboardModel ,false)
 
-    // console.log('update dashboard model', data)
-    this.layoutService.updateDashboardModel(this.layoutService.dashboardModel)
-    // return of(data)
+    this.action$ = this.layoutService.saveDashBoard()
   }
 
+  //when a component is dropped in the grid.
   onDrop(ev) {
-    console.log('ev', ev)
     return  this.layoutService.onDrop(ev)
-
-    // this.layoutService._saveChanges.next(true)
-    // console.log('item', item)
-    // console.log('current model', this.dashboardModel)
-
-    // this.initDashboard()  
-    // this.dashboardModel.dashboard.push(item)
-    // console.log('this.dash', this.dashboardModel)
   }
 
 	changedOptionsEvent() {
@@ -255,7 +305,6 @@ export class GridMenuLayoutComponent implements OnInit {
   }
 
   setOptions() {
-   
       this.layoutService.options = {
         gridType: "fit",
         enableEmptyCellDrop: true,
@@ -276,7 +325,7 @@ export class GridMenuLayoutComponent implements OnInit {
         minCols: 10,
         minRows: 10
       };
- 
+
   }
 
 	removeItem(item) {
@@ -287,9 +336,9 @@ export class GridMenuLayoutComponent implements OnInit {
   openEditor(item: DashboardContentModel) {
     let dialogRef: any;
     dialogRef = this.dialog.open(GridComponentPropertiesComponent,
-      { width:        '650px',
-        minWidth:     '650px',
-        height:       '850px',
+      { width:        '80vw',
+        minWidth:     '700px',
+        height:       '90vh',
         minHeight:    '850px',
         data : item
       },

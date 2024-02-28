@@ -11,31 +11,33 @@
   width: 300px;
 }
 
-mat-card {
-  height: 99%;
+.mat-card {
+  // height: 99%;
   // overflow-y: auto;
   // overflow-x: hidden;
 }
-mat-button-toggle-group {
+
+.mat-button-toggle-group {
   flex-wrap: wrap;
-  max-width: 485px;
+  // max-width: 485px;
 }
 
-mat-button-toggle {
+.mat-button-toggle {
   // border: 1px solid #5b5872;
   border-radius: 4px;
   margin:  3px;
 }
+
 mat-divider {
   margin-top: 5px;
   margin-bottom: 5px;
 }
 
-mat-slider {
+.mat-slider {
   width: 275px;
 }
 
-toggle-fields {
+.toggle-fields {
   margin-top: 5px;
   margin-bottom: 5px;
 }
@@ -52,10 +54,11 @@ toggle-fields {
 }
 
 .info-container {
-  height: 650px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  // height: 100%;
+  // overflow-y: auto;
+  // overflow-x: hidden;
 }
+
 .field {
   max-width: 200px;
   width: 200px;

@@ -20,6 +20,7 @@ import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IOrderItemSearchModel, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { TransferOrderComponent } from '../transfer-order/transfer-order.component';
+import { SearchModel } from 'src/app/_services/system/paging.service';
 
 @Component({
   selector: 'app-orders-main',
@@ -38,6 +39,8 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   @ViewChild('houseAccountView') houseAccountView: TemplateRef<any>;
   @ViewChild('mergeView') mergeView: TemplateRef<any>;
   @ViewChild('filterView') filterView:TemplateRef<any>;
+  @ViewChild('orderSummaryView')  orderSummaryView:TemplateRef<any>;
+
 
   @ViewChildren(InstructionDirective) instructionDirectives: QueryList<InstructionDirective>;
 
@@ -48,14 +51,14 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   @ViewChild('coachingPrep', {read: ElementRef}) coachingPrep: ElementRef;
   @ViewChild('coachingMergeView', {read: ElementRef}) coachingMergeView: ElementRef;
 
-  
+
   viewHouseAccountListOn: boolean;
 
   @ViewChild('ordersSelectedView')    ordersSelectedView: TemplateRef<any>;
   mergeOrders: boolean;
   posOrdersSelectedList: IPOSOrder[]
   action$: Observable<any>;
-
+  orderSummary$
   orderItemHistory$: Observable<any>;
 
   isApp: boolean;
@@ -121,7 +124,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     const viewportBottom = window.innerHeight;
     const remainingHeight = viewportBottom - divTop;
     this.filterDiv.nativeElement.style.maxHeight  = `${remainingHeight - 10}px`;
-    if (this.smallDevice) { 
+    if (this.smallDevice) {
       this.filterDiv.nativeElement.style.maxHeight  = `${remainingHeight -60}px`;
     }
     this.filterDivHeight = remainingHeight
@@ -150,6 +153,14 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
       }
       this.coachMarksService.showCurrentPopover();
     }
+  }
+
+  get orderSummaryEnabled() {
+    if (!this.user) {return null}
+    if (this.user?.roles == 'admin' || this.user?.roles == 'manager') {
+      return this.orderSummaryView
+    }
+    return null;
   }
 
   initStatusSubscriber() {
@@ -239,22 +250,23 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
             this.searchModel.employeeID =  this.userAuthorization.user?.employeeID
           }
         }
-      
-        console.log('Auth .user', this.userAuthorization.user, this.searchModel.employeeID)
-        // if (this.authenticationService.userAuths)  { 
-        //   const auth = this.authenticationService.userAuths as IUserAuth_Properties;
-        //   if (auth.defaultViewAllOrders) { 
-
-        //   }
-        
-        // }
 
         if (this.searchModel.scheduleDate_From && this.searchModel.scheduleDate_To) {
           this.scheduleDateStart = this.searchModel.scheduleDate_From;
           this.scheduleDateEnd   = this.searchModel.scheduleDate_To;
         }
+
+        this.setOrderSummary(this.searchModel)
+
       }
     })
+  }
+
+  setOrderSummary(search: IPOSOrderSearchModel) {
+    const item = JSON.parse(JSON.stringify(search))
+    item.summaryOnly = true;
+    const site = this.siteService.getAssignedSite()
+    this.orderSummary$ = this.orderService.getOrderBySearchPaged(site, item)
   }
 
   getOrderItemHistory() {
@@ -295,15 +307,15 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     if (this._UITransaction) { this._UITransaction.unsubscribe() }
   }
 
-  get filterViewFull() { 
-    if (!this.smallDevice) { 
+  get filterViewFull() {
+    if (!this.smallDevice) {
       return this.filterView
     }
     return null
   }
 
-  get filterViewPhone() { 
-    if (this.smallDevice) { 
+  get filterViewPhone() {
+    if (this.smallDevice) {
       return this.filterView
     }
     return null
@@ -331,7 +343,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     this.orderMethodsService.updateViewOrderType(1)
   }
 
-  ngOnChanges() { 
+  ngOnChanges() {
     this.adjustWindow()
     this.viewPrep = false;
     this.smallDevice = true

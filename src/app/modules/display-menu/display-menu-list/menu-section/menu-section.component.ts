@@ -1,4 +1,5 @@
-import { Component, Input, OnInit,  TemplateRef, ViewChild } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, ElementRef, Inject, Input, OnInit,  Renderer2,  TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { concatMap,  Observable, of,  switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
@@ -15,6 +16,13 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   styleUrls: ['./menu-section.component.scss']
 })
 export class MenuSectionComponent implements OnInit {
+  //Grid Display
+  @Input() disableActions: boolean;
+  @Input() refreshTime = 1;
+  @Input() listItemID: any;
+  @Input() text: any;
+  @Input() ccs: any;
+
   bucket$: Observable<any>;
   @Input() menu: IDisplayMenu;
   @ViewChild('category') category : TemplateRef<any>;
@@ -26,9 +34,10 @@ export class MenuSectionComponent implements OnInit {
   obs$      : Observable<any>;
   item      : IMenuItem;
   bucket    : string;
-  // containerStyle = "{ 'background': 'cement.png' | asUrl,
-  //                     'background-repeat': 'repeat', 'height': '500vh'}"
   @Input() order: IPOSOrder;
+
+
+
   containerStyle      = ``
   containerBackground = 'cemement.png';
   backgroundURL       = `url(backgroundURL.png)`;
@@ -83,22 +92,40 @@ export class MenuSectionComponent implements OnInit {
     public route              : ActivatedRoute,
     private awsBucket         : AWSBucketService,
     private priceScheduleService: PriceScheduleService,
+    private renderer: Renderer2,
+    private el: ElementRef,
+    @Inject(DOCUMENT) private document: Document,
     private orderMethodService  : OrderMethodsService,) {
       this.id = +this.route.snapshot.paramMap.get('id');
   }
 
   ngOnInit(): void {
+    if (this.listItemID && this.listItemID != 0) { this.id = this.listItemID  }
+    if (this.ccs) { this.addStyles(this.ccs) }
     this.bucket$ = this.getBucket()
     if (this.id) {
       const site   = this.siteService.getAssignedSite();
       this.obs$ = this.priceScheduleService.getPriceScheduleFull(site, this.id).pipe(switchMap(data =>{
-        this.categoryMenu = data
+        this.categoryMenu = data;
+        this.categoryMenu.itemDiscounts.sort((a, b) => a.sort - b.sort);
+        console.log('Items', this.categoryMenu.itemDiscounts)
         return of(data)
       }))
-      //then get this specific menu section via observable.
-      //other wise it's provided by input.
       return;
     }
+
+  }
+
+  addStyles(styles): void {
+    const style = this.renderer.createElement('style');
+    const text = this.renderer.createText(styles); // Example CSS
+
+    this.renderer.appendChild(style, text);
+    // Append the style element directly to this component's native element
+    this.renderer.appendChild(this.el.nativeElement, style);
+
+    // this.renderer.appendChild(style, text);
+    // this.renderer.appendChild(this.document.head, style);
   }
 
   get categoryView() {

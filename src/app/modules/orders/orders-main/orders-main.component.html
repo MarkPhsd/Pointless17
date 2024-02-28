@@ -4,10 +4,11 @@
 <div class="parent-container">
 
   <ng-container [ngTemplateOutlet]="filterViewFull"></ng-container>
+  <ng-container [ngTemplateOutlet]="orderSummaryEnabled"></ng-container>
 
   <div [class]="gridcontainer">
 
-    <ng-container [ngTemplateOutlet]="filterViewPhone"></ng-container> 
+    <ng-container [ngTemplateOutlet]="filterViewPhone"></ng-container>
 
     <div>
       <div *ngIf="scheduleDateStart && scheduleDateEnd">
@@ -23,8 +24,14 @@
           (outPutHidePanel)="hideFilterPanel($event)">
       </app-order-filter-panel>
     </div>
-  </div> 
+  </div>
 </div>
+
+<ng-template #orderSummaryView>
+  <div *ngIf="(orderSummary$ | async) as items" style="margin-left:10px;font-weight:500;">
+    # {{items?.paging?.recordCount}} | Total: {{items?.summary?.total | currency}}
+  </div>
+</ng-template>
 
 <ng-template #transferOrderView>
   <button #coachingTransferOrder class="dark-theme-green " mat-button (click)="transferOrder()"
@@ -73,6 +80,7 @@
   ></house-accounts-list>
 </ng-template>
 
+
 <ng-template #orderPrep>
   <span *ngIf="viewType == 3 && (printerLocations$ | async) as printLocations">
       <span class="toggle-sections">
@@ -103,7 +111,7 @@
           </mat-button-toggle-group>
 
           <ng-content [ngTemplateOutlet]="orderPrepRefresh"></ng-content>
-       
+
       </span>
 
       <span class="toggle-sections">

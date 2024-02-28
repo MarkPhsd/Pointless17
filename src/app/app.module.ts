@@ -46,7 +46,6 @@ import { NgxElectronModule } from 'ngx-electron';
 import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
 import { GridManagerEditComponent } from './modules/admin/grid-menu-layout/grid-manager-edit/grid-manager-edit.component';
-import { GridSettingsComponent } from './modules/admin/grid-menu-layout/grid-settings/grid-settings.component';
 import { DynamicModule } from 'ng-dynamic-component';
 import { GridComponentPropertiesComponent } from './modules/admin/grid-menu-layout/grid-component-properties/grid-component-properties.component';
 import { GridDesignerInfoComponent } from './modules/admin/grid-menu-layout/grid-designer-info/grid-designer-info.component';
@@ -135,7 +134,6 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     ResetpasswordComponent,
 
     GridManagerComponent,
-    GridSettingsComponent,
     GridMenuLayoutComponent,
     GridManagerEditComponent,
     GridComponentPropertiesComponent,
