@@ -62,144 +62,25 @@
     <div class="info-container">
       <div class="grid-container">
           <div class="grid-item">
-            <div class="header">
-              <h4><mat-icon>subject</mat-icon> Basics </h4>
-            </div>
-
-              <app-value-fields
-                    [inputForm]="productForm"
-                    [fieldName]="'name'">
-                <div  > Name </div>
-
-              </app-value-fields>
-
-              <app-category-select   [inputForm]="productForm"
-                                     [fieldName]="'subCategoryID'"
-                                     [type]="'subcategory'">Sub Category
-              </app-category-select>
-
-              <app-category-select   [inputForm]="productForm"
-                                     [type]="'category'">Category
-              </app-category-select>
-
-              <app-department-select
-                    [id] = "product?.brandID" [inputForm]="productForm">Department
-              </app-department-select>
-
-              <div class="grid-container-medium">
-                <product-type-select  [inputForm]="productForm">
-                </product-type-select>
-                <div>
-                  <button mat-button color="accent" class="edit-button" (click)="editType()">
-                    <mat-icon  color="accent" >open_in_new</mat-icon>
-                  </button>
-                </div>
-              </div>
-
-              <app-brand-type-select
-                      [formFieldClass]="'formFieldClass-standard'"
-                      [id] = "product.brandID"
-                      [fieldName]="'brandID'"
-                      [inputForm]="productForm">
-                Brand
-              </app-brand-type-select>
-
-              <app-value-fields
-                    [inputForm]="productForm"
-                    [fieldName]="'barcode'">
-                Barcode
-              </app-value-fields>
-
-              <app-value-fields
-                    [inputForm]="productForm"
-                    [fieldName]="'barCodeAlt'">
-                Barcode Alt
-              </app-value-fields>
-
-              <app-value-fields
-                    [inputForm]="productForm"
-                    [fieldName]="'sku'">
-                SKU
-              </app-value-fields>
-
-              <app-value-fields
-                    [inputForm]="productForm"
-                    [fieldName]="'prodSecondLanguage'">
-                Alt Language
-              </app-value-fields>
-
+            <ng-container [ngTemplateOutlet]="basicsView"></ng-container>
           </div>
 
           <div class="grid-item" >
-            <div *ngIf="itemType &&  (itemType.useType &&
-                                        (
-                                           itemType.useType?.toLowerCase() === 'product' ||
-                                           itemType.useType?.toLowerCase() === 'modifier'
-                                        )
-                                      )">
-                <div class="header">
-                  <h4><mat-icon>price_change</mat-icon>Prices</h4>
-                </div>
-                <div  class="grid-container-small"  style="max-width: 200px">
-                  <div >
-                    <ng-container [ngTemplateOutlet]="priceCategorySelector"></ng-container>
-                  </div>
-               </div>
-            </div>
-
+            <ng-container [ngTemplateOutlet]="priceCategorySelectorView"></ng-container>
           </div>
 
           <div class="grid-item">
 
             <div class="header">
-              <h4> <mat-icon>list</mat-icon> {{ itemType.name }}</h4>
+              <h4> <mat-icon>list</mat-icon> {{ itemType?.name }}</h4>
             </div>
 
-             <div *ngIf="fbProductsService.isLiquor(itemType)">
-                <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
-                <ng-container [ngTemplateOutlet]="proof"></ng-container>
-                <ng-container [ngTemplateOutlet]="yearsOld"></ng-container>
-                <ng-container [ngTemplateOutlet]="abv"></ng-container>
-            </div>
-
-            <div *ngIf="itemType && itemType.useType && (itemType.type?.toLowerCase() === 'grocery' ||
-                                                         itemType.type?.toLowerCase() === 'tobacco' ||
-                                                         itemType.type?.toLowerCase() === 'restaurant' ||
-                                                         itemType.type?.toLowerCase() === 'food')">
-
-              <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
-
-              <div *ngIf="itemType && itemType.type">
-                <ng-container [ngTemplateOutlet]="promptGroupSelector"></ng-container>
-              </div>
-
-            </div>
-
-            <div *ngIf="itemType && itemType.useType && (itemType.type?.toLowerCase() === 'grocery' ||
-                          itemType.type?.toLowerCase() === 'restaurant')">
-              <ng-container [ngTemplateOutlet]="gluetenFree"></ng-container>
-            </div>
-
-
-            <div *ngIf="fbProductsService.isRetail(itemType)">
-              <retail-product-edit  [inputForm]="productForm"> </retail-product-edit>
-              <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
-            </div>
-
-            <div *ngIf="fbProductsService.isGrouping(itemType)">
-
-            </div>
-
-            <div  *ngIf="fbProductsService.isCannabis(itemType)">
-              <cannabis-item-edit [product]  ="product"
-                                  [inputForm]="productForm">
-              </cannabis-item-edit>
-            </div>
-
-            <div *ngIf="fbProductsService.isWeightedItem(itemType)">
-              <ng-container [ngTemplateOutlet]="tareValueView"></ng-container>
-            </div>
-
+            <ng-container [ngTemplateOutlet]="liquorView"></ng-container>
+            <ng-container [ngTemplateOutlet]="groceryPromptView"></ng-container>
+            <ng-container [ngTemplateOutlet]="gluetenFreeView"></ng-container>
+            <ng-container [ngTemplateOutlet]="retailProductView"></ng-container>
+            <ng-container [ngTemplateOutlet]="cannabisView"></ng-container>
+            <ng-container [ngTemplateOutlet]="tareValueTemplate"></ng-container>
 
           </div>
 
@@ -392,9 +273,10 @@
 
 <ng-template #countryOfOrigin>
   <app-value-fields
-  [inputForm]="productForm"
-  [fieldName]="'countryOfOrigin'">
-  Country Of Origin
+    *ngIf="productForm"
+    [inputForm]="productForm"
+    [fieldName]="'countryOfOrigin'">
+    Country Of Origin
   </app-value-fields>
 </ng-template>
 
@@ -433,7 +315,6 @@
   </app-value-fields>
 </ng-template>
 
-
 <ng-template #bayInfo>
   <app-value-fields
       [inputForm]="productForm"
@@ -443,21 +324,19 @@
   <app-value-fields
     [inputForm]="productForm"
     [fieldName]="'baySection'">
-    Bay Numebr
+    Bay Number
   </app-value-fields>
 </ng-template>
 
 <ng-template #unitSelector>
 
-  <ng-container [ngTemplateOutlet]="unitTypeSelector"></ng-container>
+ <ng-container [ngTemplateOutlet]="unitTypeSelector"></ng-container>
 
   <ng-container [ngTemplateOutlet]="reOrderUnit"></ng-container>
 
   <ng-container [ngTemplateOutlet]="sizeSelectorAddOn"></ng-container>
 
 </ng-template>
-
-
 
 <ng-template #partBuilderSelector>
   <div class="grid-container-3Column">
@@ -474,11 +353,6 @@
       </field-value-selector>
     </div>
     <div></div>
-    <!-- <div>
-      <button mat-button (click)="clearPB()">
-        <mat-icon color="warn">delete</mat-icon>
-      </button>
-    </div> -->
   </div>
 </ng-template>
 
@@ -495,28 +369,17 @@
           Unit of Measure
         </unit-type-select>
       </div>
-
       <div style="margin-right:2px;margin-top:5px;">
         <button mat-button (click)="openUnit()">
-
           <mat-icon color="accent" style="font-size:1.5em">open_in_new</mat-icon>
         </button>
       </div>
-
-      <!-- <div>
-        <button mat-button (click)="clearUnit()">
-          <mat-icon  style="font-size:1.5em" color="warn">delete</mat-icon>
-        </button>
-      </div> -->
   </div>
 </ng-template>
 
 <ng-template #reOrderUnit>
-
   <div class="grid-container-3Column" style="max-width: 200px"
        *ngIf="product && productForm && reOrderUnitSearchForm">
-
-
       <div>
         <unit-type-select
           [inputForm]      = 'productForm'
@@ -528,19 +391,11 @@
           Re - Order UOM
         </unit-type-select>
       </div>
-
       <div  style="margin-top:5px;">
         <button mat-button (click)="openReOrderUnit()">
           <mat-icon   color="accent" style="font-size:1.5em">open_in_new</mat-icon>
         </button>
       </div>
-
-      <!-- <div>
-        <button mat-button (click)="clearReOrderUnit()">
-          <mat-icon  style="font-size:1.5em" color="warn">delete</mat-icon>
-        </button>
-      </div> -->
-
   </div>
 </ng-template>
 
@@ -597,4 +452,127 @@
       [fieldName]="'pieceWeight'">
     Piece Weight
   </app-value-fields>
+</ng-template>
+
+<ng-template #basicsView>
+
+  <div class="header">
+    <h4><mat-icon>subject</mat-icon> Basics </h4>
+  </div>
+
+  <app-value-fields
+      [inputForm]="productForm"
+      [fieldName]="'name'">
+    <div  > Name </div>
+  </app-value-fields>
+
+  <app-category-select   [inputForm]="productForm"
+                         [fieldName]="'subCategoryID'"
+                         [type]="'subcategory'">Sub Category
+  </app-category-select>
+
+  <app-category-select   [inputForm]="productForm"
+                         [type]="'category'">Category
+  </app-category-select>
+
+  <app-department-select
+        [id] = "product?.brandID" [inputForm]="productForm">Department
+  </app-department-select>
+
+  <div class="grid-container-medium">
+    <product-type-select  [inputForm]="productForm">
+    </product-type-select>
+    <div>
+      <button mat-button color="accent" class="edit-button" (click)="editType()">
+        <mat-icon  color="accent" >open_in_new</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <app-brand-type-select
+          [formFieldClass]="'formFieldClass-standard'"
+          [id] = "product.brandID"
+          [fieldName]="'brandID'"
+          [inputForm]="productForm">
+    Brand
+  </app-brand-type-select>
+
+  <app-value-fields
+        [inputForm]="productForm"
+        [fieldName]="'barcode'">
+    Barcode
+  </app-value-fields>
+
+  <app-value-fields
+        [inputForm]="productForm"
+        [fieldName]="'barCodeAlt'">
+    Barcode Alt
+  </app-value-fields>
+
+  <app-value-fields
+        [inputForm]="productForm"
+        [fieldName]="'sku'">
+    SKU
+  </app-value-fields>
+
+  <app-value-fields
+        [inputForm]="productForm"
+        [fieldName]="'prodSecondLanguage'">
+    Alt Language
+  </app-value-fields>
+
+</ng-template>
+
+<ng-template #priceCategorySelectorTemplate>
+  <div *ngIf="productForm">
+      <div class="header">
+      <h4><mat-icon>price_change</mat-icon>Prices</h4>
+      </div>
+      <div  class="grid-container-small"  style="max-width: 200px">
+      <div >
+      <ng-container [ngTemplateOutlet]="priceCategorySelector"></ng-container>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #liquorTemplate>
+  <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
+  <ng-container [ngTemplateOutlet]="proof"></ng-container>
+  <ng-container [ngTemplateOutlet]="yearsOld"></ng-container>
+  <ng-container [ngTemplateOutlet]="abv"></ng-container>
+</ng-template>
+
+<ng-template #groceryPromptTemplate>
+  <div>
+    <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
+    <div *ngIf="itemType && itemType.type">
+      <ng-container [ngTemplateOutlet]="promptGroupSelector"></ng-container>
+    </div>
+  </div>
+</ng-template>
+<ng-template #gluetenFreeTemplate>
+  <div  *ngIf="productForm">
+    <ng-container [ngTemplateOutlet]="gluetenFree"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #retailProductView>
+  <div>
+    <retail-product-edit  [inputForm]="productForm"> </retail-product-edit>
+    <ng-container [ngTemplateOutlet]="countryOfOrigin"></ng-container>
+  </div>
+</ng-template>
+<ng-template #cannabisTemplate>
+  <div >
+    <cannabis-item-edit *ngIf="productForm"
+                        [product]  ="product"
+                        [inputForm]="productForm">
+    </cannabis-item-edit>
+  </div>
+</ng-template>
+<ng-template #tareValueTemplate>
+  <div *ngIf="productForm">
+    <ng-container [ngTemplateOutlet]="tareValueView"></ng-container>
+  </div>
 </ng-template>

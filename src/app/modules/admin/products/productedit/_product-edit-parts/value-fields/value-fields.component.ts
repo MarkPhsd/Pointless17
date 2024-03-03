@@ -1,5 +1,5 @@
 import { Component, ElementRef, forwardRef, Input, ViewChild, EventEmitter, AfterViewInit, Renderer2, Output, TemplateRef } from '@angular/core';
-import { FormArrayName, UntypedFormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormArrayName, UntypedFormGroup, NG_VALUE_ACCESSOR, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-value-fields',
@@ -8,9 +8,17 @@ import { FormArrayName, UntypedFormGroup, NG_VALUE_ACCESSOR } from '@angular/for
 })
 
 export class ValueFieldsComponent implements  AfterViewInit  {
-  @Input() inputForm    : UntypedFormGroup
-  @Input() formArray    : FormArrayName
+
+  @ViewChild('passwordField') passwordField : TemplateRef<any>;
+  @ViewChild('regularField')  regularField : TemplateRef<any>;
+  @ViewChild('toggleField')  toggleField : TemplateRef<any>;
+  @ViewChild('fieldDescriptionView')  fieldDescriptionView : TemplateRef<any>;
+
+  //required
+  @Input() inputForm    : FormGroup
   @Input() fieldName    : string;
+
+  @Input() formArray    : FormArrayName
   @Input() fieldDescription: string;
   @Input() fieldType    = 'text';
   @Input() passwordMask : boolean;
@@ -24,6 +32,24 @@ export class ValueFieldsComponent implements  AfterViewInit  {
 
   itemHeader: string;
   @ViewChild('itemText') items: ElementRef
+
+  get toggleView() {
+    if (this.type === 'toggle') {
+      return this.toggleView
+    }
+    return null;
+  }
+
+  get fieldTypeValue() {
+    if (this.passwordMask) {
+      return this.passwordField
+    }
+    return this.regularField;
+  }
+
+  get fieldDescriptionViewEnabled() {
+    return null;
+  }
 
   constructor( private renderer: Renderer2) {
 
@@ -39,6 +65,8 @@ export class ValueFieldsComponent implements  AfterViewInit  {
 
     }
   }
+
+
 
   cancelButton() {
     this.outPutCancel.emit(true)

@@ -39,10 +39,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   public _sendOrderAndLogOut     = new BehaviorSubject<any>(null);
   public  sendOrderAndLogOut$      = this._sendOrderAndLogOut.asObservable();
 
-
   public _sendOrderOnExit     = new BehaviorSubject<any>(null);
   public sendOrderOnExit$     = this._sendOrderOnExit.asObservable();
-
 
   ngOnDestroy(): void {
       if (this.dialogSubject){ this.dialogSubject.unsubscribe()}

@@ -881,7 +881,7 @@ mat-dialog-container {
   font-size: 1.5em;
 }
 
-.font-bold { 
+.font-bold {
   font-weight: 600;
 }
 
@@ -921,6 +921,14 @@ mat-dialog-container {
   gap: 10px;
 }
 
+.flex-grid-column-nogap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:flex-start;
+  gap: 0;
+}
+
 .flex-grid-row {
   display: flex;
   flex-direction: row;
@@ -932,7 +940,6 @@ mat-dialog-container {
 .flex-grid-row-5px {
   display: flex;
   flex-direction: row;
-  // flex-wrap: wrap;
   justify-content:flex-start;
   gap: 5px;
 }

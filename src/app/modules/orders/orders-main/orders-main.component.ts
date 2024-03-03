@@ -20,8 +20,6 @@ import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IOrderItemSearchModel, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { TransferOrderComponent } from '../transfer-order/transfer-order.component';
-import { SearchModel } from 'src/app/_services/system/paging.service';
-
 @Component({
   selector: 'app-orders-main',
   templateUrl: './orders-main.component.html',
@@ -39,9 +37,8 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   @ViewChild('houseAccountView') houseAccountView: TemplateRef<any>;
   @ViewChild('mergeView') mergeView: TemplateRef<any>;
   @ViewChild('filterView') filterView:TemplateRef<any>;
-  @ViewChild('orderSummaryView')  orderSummaryView:TemplateRef<any>;
-
-
+  @ViewChild('summaryView')  summaryView:TemplateRef<any>;
+  @ViewChild('sortSelectors') sortSelectors: TemplateRef<any>
   @ViewChildren(InstructionDirective) instructionDirectives: QueryList<InstructionDirective>;
 
   @ViewChild('coachingSearch', {read: ElementRef}) coachingSearch: ElementRef;
@@ -58,7 +55,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   mergeOrders: boolean;
   posOrdersSelectedList: IPOSOrder[]
   action$: Observable<any>;
-  orderSummary$
+  summary$
   orderItemHistory$: Observable<any>;
 
   isApp: boolean;
@@ -155,10 +152,10 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     }
   }
 
-  get orderSummaryEnabled() {
+  get summaryEnabled() {
     if (!this.user) {return null}
     if (this.user?.roles == 'admin' || this.user?.roles == 'manager') {
-      return this.orderSummaryView
+      return this.summaryView
     }
     return null;
   }
@@ -225,6 +222,29 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     this.orderMethodsService.updateOrderSearchModel(this.searchModel)
   }
 
+  get sortSelectorsView() {
+    if (this.viewType == 0) {
+      return this.sortSelectors
+    }
+  }
+
+  setSortData(event) {
+    if (event) {
+
+      if (!this.searchModel) { return }
+      this.searchModel.sortBy1 = event?.sort1;
+      this.searchModel.sortBy1Asc = event?.sort1Asc;
+
+      this.searchModel.sortBy2 = event?.sort2;
+      this.searchModel.sortBy2Asc = event?.sort2Asc;
+
+      this.searchModel.sortBy3 = event?.sort3;
+      this.searchModel.sortBy3Asc = event?.sort3Asc;
+
+      this.orderMethodsService.updateOrderSearchModel(this.searchModel)
+    }
+  }
+
   initSearchModelSubscriber() {
     this._searchModel =  this.orderMethodsService.posSearchModel$.subscribe(data => {
       if (!data) {
@@ -256,17 +276,16 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
           this.scheduleDateEnd   = this.searchModel.scheduleDate_To;
         }
 
-        this.setOrderSummary(this.searchModel)
-
+        this.setSummary(this.searchModel)
       }
     })
   }
 
-  setOrderSummary(search: IPOSOrderSearchModel) {
+  setSummary(search: IPOSOrderSearchModel) {
     const item = JSON.parse(JSON.stringify(search))
     item.summaryOnly = true;
     const site = this.siteService.getAssignedSite()
-    this.orderSummary$ = this.orderService.getOrderBySearchPaged(site, item)
+    this.summary$ = this.orderService.getOrderBySearchPaged(site, item)
   }
 
   getOrderItemHistory() {

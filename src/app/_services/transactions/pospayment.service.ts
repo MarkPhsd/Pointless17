@@ -15,8 +15,6 @@ import { IPaymentMethod } from './payment-methods.service';
 export class POSPaymentService {
 
 
-
-
   private _searchModel          = new BehaviorSubject<IPaymentSearchModel>(null);
   public searchModel$           = this._searchModel.asObservable();
 

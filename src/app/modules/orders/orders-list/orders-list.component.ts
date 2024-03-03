@@ -186,14 +186,14 @@ export class OrdersListComponent implements OnInit,OnDestroy {
 
   initClasses()  {
     const platForm      = this.platForm;
-    if (!this.height) { this.height = "84vh" }
+    if (!this.height) { this.height = "80vh" }
     let height = this.height
     this.gridDimensions = `width: 100%; height: ${height}`
     this.agtheme        = 'ag-theme-material';
     if (platForm === 'capacitor') { this.gridDimensions = `width: 100%; height: ${height}` }
     if (platForm === 'electron')  { this.gridDimensions = `width: 100%; height: ${height}` }
     if (this.smallDevice) {
-      this.gridDimensions = 'width: 100%; height: 84vh;'
+      this.gridDimensions = 'width: 100%; height: 80vh;'
     }
   }
 

@@ -1,6 +1,8 @@
 <div class="container" *ngIf="toggleListGrid">
   <div class="grid-list">
     <div>
+      <ng-container [ngTemplateOutlet]="sortSelectors"></ng-container>
+      <ng-container [ngTemplateOutlet]="summaryEnabled"></ng-container>
       <div *ngIf="value" class="loader">
         <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
       </div>
@@ -28,3 +30,19 @@
   </div>
 
 </div>
+
+<ng-template #summaryView>
+  <div *ngIf="(summary$ | async) as items" style="margin-left:10px;font-weight:500;">
+    # {{items?.paging?.recordCount}} | Total: {{items?.summary?.amountPaid | currency}}
+  </div>
+</ng-template>
+<ng-template #sortSelectors>
+  <app-sort-selectors
+    (outPutSort)="setSortData($event)"
+    [searchType]="'payment'"
+    [sortByEmployee]="true"
+    [sortByService]="true"
+    [sortByAmount]="true"
+    >
+  </app-sort-selectors>
+</ng-template>

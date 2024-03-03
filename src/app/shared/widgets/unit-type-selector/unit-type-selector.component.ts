@@ -39,7 +39,6 @@ export class UnitTypeSelectorComponent implements OnInit {
     distinctUntilChanged(),
     switchMap(searchPhrase => {
       this.searchModel = {} as SearchModel;
-      console.log('searchPhrase', searchPhrase, this.searchModel)
       this.searchModel.name = searchPhrase;
       return this.menuService.getUnitTypesSearch(this.site,  this.searchModel).pipe(switchMap(data => {
         return of(data.results)
@@ -68,12 +67,11 @@ export class UnitTypeSelectorComponent implements OnInit {
     private fb          : UntypedFormBuilder,
     private siteService : SitesService,
     )
-  {
-    this.site = this.siteService.getAssignedSite();
-  }
+  { this.site = this.siteService.getAssignedSite();  }
 
   ngOnInit() {
     // if (this.doNotPassName) { return }
+    if (!this.searchForm) { return }
     this.searchForm = this.fb.group({
       unitTypeSelections : ['']
     })

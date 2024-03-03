@@ -61,14 +61,23 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     this.refreshReports()
   }
 
+  refreshReport(event) {
+    this.refreshReports()
+  }
   refreshReports() {
     this.voids$ = null;
     this.refunds$ = null;
     this.sales$ = null;
-
+    console.log('refresh type', this.type)
     // console.log('sales')
     if (this.type === 'service') {
       this.refreshService();
+    }
+
+    if (this.type == 'buysell') {
+
+      this.refreshSales();
+      return;
     }
 
     if (this.type == 'sales') {
@@ -109,14 +118,21 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.groupBy   = this.groupBy;
     searchModel.zrunID    = this.zrunID;
     searchModel.reportRunID = this.reportRunID;
+
+
+      console.log(this.type, searchModel, 'model')
+
     this.sales$  = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => {
       this.checkList(1)
       // console.log('type', this.type)
-      if (this.type == 'service' || this.groupBy === 'service' ||
-          this.groupBy == 'paymentMethod' ||
-          this.groupBy == 'devicename' ||
+      if (this.type    === 'service' ||
+          this.groupBy === 'service' ||
+          this.groupBy === 'paymentMethod' ||
+          this.groupBy === 'devicename' ||
           this.groupBy === 'orderEmployeeCount' ||
-          this.groupBy === 'employee') {
+          this.groupBy === 'employee'||
+          this.groupBy === 'positivePayments'||
+          this.groupBy === 'negativePayments' ) {
         this.outputComplete.emit('paymentReport')
       }
       return of(data)

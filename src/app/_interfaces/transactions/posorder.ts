@@ -48,6 +48,13 @@ export interface IPOSOrderSearchModel {
   description: string;
   searchOrderHistory: boolean;
   onlineOrders: boolean;
+  sortBy1: string;
+  sortBy1Asc: string;
+  sortBy2: string;
+  sortBy2Asc: string;
+  sortBy3: string;
+  sortBy3Asc: string;
+
 }
 
 export interface IPOSOrder {
@@ -533,6 +540,13 @@ export interface IPaymentSearchModel {
   tipInput                     : boolean;
   zrun                         : number;
   reportRunID                  : number;
+  sortBy1: string;
+  sortBy1Asc: string;
+  sortBy2: string;
+  sortBy2Asc: string;
+  sortBy3: string;
+  sortBy3Asc: string;
+
 }
 
 // Public Property Payment As t_Payments
@@ -683,4 +697,119 @@ export interface Summary {
   paymentsTotal:        number;
   balanceRemaining:     number;
   history:              boolean;
+}
+
+export interface OrderToFrom {
+  id: number;
+  orderTime?: Date | null;
+  orderDate?: Date | null;
+  shipTime?: Date | null;
+  shipDate?: Date | null;
+  completionDate?: Date | null;
+  completionTime?: Date | null;
+  scheduleDate?: Date | null;
+  scheduleTime?: Date | null;
+  scheduleTo?: Date | null;
+  shippedDate?: Date | null;
+  alarmDate?: Date | null;
+  eTA?: Date | null;
+  arrivalDate?: Date | null;
+  timeIn?: Date | null;
+  shipOutOrderDate?: Date | null;
+  employeeID?: number | null;
+  shift?: number | null;
+  clientID?: number | null;
+  serviceTypeID?: number | null;
+  deliveryEmployee?: number | null;
+  operationsEmployee?: number | null;
+  purchaseOrderNumber?: string;
+  supplierID?: number | null;
+  productOrderMemo?: string;
+  fieldRepMemo?: string;
+  compName?: string;
+  shippingNumber?: string;
+  tableNumber?: number | null;
+  activePO?: boolean | null;
+  tableNumberStore?: number | null;
+  zrun?: string;
+  taxInfo?: number | null;
+  voidComp?: number | null;
+  serviceArea?: string;
+  registerName?: string;
+  discountType?: number | null;
+  discountAmount?: number | null;
+  discountCash?: number | null;
+  discountName?: number | null;
+  orderPrepared?: number | null; // Short in VB.NET is mapped to number in TypeScript
+  quote?: string;
+  seatCount?: number | null;
+  shipName?: string;
+  shipAddress?: string;
+  shipAddress2?: string;
+  shipCity?: string;
+  shipState?: string;
+  shipPostalCode?: string;
+  shipSuite?: string;
+  employeeDisc?: number | null;
+  shipPostal?: string;
+  serviceAreaID?: number | null;
+  reportRunID?: number | null;
+  shipZip?: string;
+  voidReason?: string;
+  displayTotal?: number | null;
+  registerTransaction?: boolean | null;
+  serviceType?: string;
+  positiveNegative?: number | null;
+  serverName?: string;
+  destAddress?: string;
+  destAddress2?: string;
+  destCity?: string;
+  destZip?: string;
+  destState?: string;
+  mileage?: number | null;
+  driveTime?: number | null;
+  sortOrder?: number | null;
+  orderPhone?: string;
+  vehicle?: string;
+  driverID?: number | null;
+  productOrderRef?: number | null;
+  siteID?: number | null;
+  statusName?: string;
+  eventSubject?: string;
+  taxTotal?: number | null;
+  gSTTaxTotal?: number | null;
+  managerID?: number | null;
+  costTotal?: number | null;
+  termsDueDate?: Date | null;
+  resolutionDescription?: string;
+  shipVia?: number | null;
+  location?: string;
+  cRVTotal?: number | null;
+  taxTotal2?: number | null;
+  taxTotal3?: number | null;
+  qBImport?: number | null; // Byte in VB.NET is mapped to number in TypeScript
+  checkinRepID?: number | null;
+  checkInRepName?: string;
+  onlineOrderID?: number | null;
+  routeDetailID?: number | null;
+  routeID?: number | null;
+  orderLocked?: string;
+  beginDate: Date;
+  endDate: Date;
+  orderPercentDiscountID?: number | null;
+  gratuity?: number | null;
+  specialFee?: number | null;
+  gratuityID?: number | null;
+  tableUUID?: string;
+  floorPlanID?: number | null;
+  tableName?: string;
+  orderCode?: string;
+  addedPercentageFee?: number | null;
+  priceColumn?: number | null;
+  defaultPercentageDiscount?: number | null;
+  cashDiscountPercent?: number | null;
+  cashDiscountValue?: number | null;
+
+  items?: any[];
+  payments?: any[];
 }

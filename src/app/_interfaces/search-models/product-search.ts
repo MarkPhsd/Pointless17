@@ -59,4 +59,12 @@ export interface ProductSearchModel {
   gender: number;
   bayName: string;
   genderAny: boolean;
+  sort1 : string;//=  searchForm.sort1
+  sortBy1    : string;// =  searchForm.sortBy1
+  sortBy1Asc : string;
+  sortBy2    : string;//=  searchForm.sortBy2
+  sortBy2Asc : string;//=  searchForm.sortBy2Asc
+  sortBy3    : string;//=  searchForm.sortBy3Asc
+  sortBy3Asc : string;// =  searchForm.sortBy3Asc
+
 }

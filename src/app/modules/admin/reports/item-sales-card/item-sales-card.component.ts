@@ -94,7 +94,6 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
       searchModel.groupByType = false;
     }
 
-
     searchModel.removeGiftCards   = this.removeGiftCard
     searchModel.startDate         = this.dateFrom;
     searchModel.endDate           = this.dateTo;
@@ -103,6 +102,12 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     searchModel.scheduleDateEnd   = this.scheduleDateEnd;
     searchModel.taxFilter         = this.taxFilter;
     searchModel.reportRunID       = this.reportRunID;
+
+    if (this.groupBy === 'itemQuantity' || this.groupBy === 'itemSize') {
+      searchModel.groupByType = true;
+      this.getSpecialReports(this.groupBy, searchModel)
+      return
+    }
 
     if (this.site) {
       if (this.groupBy === 'transactionType') {
@@ -132,6 +137,40 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
       }))
     }
     return
+  }
+
+  getSpecialReports(name: string, model: any) {
+    if (this.site) {
+      let sales$: Observable<IReportItemSaleSummary>
+      if (name = 'itemSize') {
+        sales$ = this.getItemSizeSalesReport(model, this.site)
+      }
+      if (name = 'itemQuantity') {
+        sales$ = this.getItemQuantityGroupedReport(model, this.site)
+      }
+
+      this.sales$ = sales$.pipe(switchMap(data => {
+        this.sales = data;
+        this.cdr.detectChanges()
+        this.outputComplete.emit('item groupItem Sales')
+        this.renderComplete.emit(true)
+        return of(data)
+      }))
+    }
+  }
+    //itemSize
+    //itemQuantity
+
+    // itemQuantityGroupedSales
+    // itemSizeSales
+    // <!-- GetItemSizeSalesReport
+    // GetItemQuantityGroupedReport -->
+  getItemSizeSalesReport(model: any, site: ISite) {
+    return this.reportingItemsSalesService.getItemSizeSalesReport(this.site, model)
+  }
+
+  getItemQuantityGroupedReport(model: any, site: ISite) {
+   return this.reportingItemsSalesService.getItemQuantityGroupedReport(this.site, model)
   }
 
   dataGridView() {

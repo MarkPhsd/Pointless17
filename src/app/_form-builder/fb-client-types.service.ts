@@ -30,7 +30,8 @@ export class FbClientTypesService {
       blindClose           : [],
       buysSalesReports     : [],
       editEmail:    [],
-
+      itemSalesGroupByQuantity: [],
+      itemSalesGroupBySize: [],
       disableBalanceEndOfDay   : [],
       disableItemSales         : [],
       disableDeviceSales       : [],

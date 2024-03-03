@@ -1,18 +1,17 @@
 import { Component, Output, OnInit,
-  ViewChild ,ElementRef, EventEmitter, OnDestroy, Input } from '@angular/core';
+  ViewChild ,ElementRef, EventEmitter, OnDestroy, Input, TemplateRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AWSBucketService} from 'src/app/_services';
+import { AWSBucketService, AuthenticationService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Observable, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import { IPaymentSearchModel, IPOSPayment, IPOSPaymentsOptimzed, IServiceType } from 'src/app/_interfaces';
+import { IPaymentSearchModel, IPOSPayment, IPOSPaymentsOptimzed, IServiceType, IUser } from 'src/app/_interfaces';
 import { Capacitor } from '@capacitor/core';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -26,7 +25,7 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
   styleUrls: ['./pospayments.component.scss']
 })
 export class POSPaymentsComponent implements  OnInit,  OnDestroy {
-
+  @ViewChild('summaryView')  summaryView:TemplateRef<any>;
   toggleListGrid = true // displays list of payments or grid
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -35,7 +34,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   searchPhrase:         Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
-
+  summary$
   // //search with debounce
   searchItems$              : Subject<IPaymentSearchModel[]> = new Subject();
   _searchItems$ = this.searchPhrase.pipe(
@@ -50,6 +49,8 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   get PaginationPageSize(): number {return this.pageSize;  }
   get gridAPI(): GridApi {  return this.gridApi;  }
 
+  _user: Subscription;
+  user: IUser;
   //AgGrid
   params               : any;
   private gridApi      : GridApi;
@@ -93,6 +94,14 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   searchModel     :   IPaymentSearchModel;
   isAuthorized    :   boolean;
 
+  initUser() {
+    this._user = this.authenticationService.user$.subscribe(data => {
+      this.user = data;
+    })
+  }
+
+
+
   constructor(  private snackBar                : MatSnackBar,
                 private pOSPaymentService       : POSPaymentService,
                 private agGridService           : AgGridService,
@@ -101,7 +110,8 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
                 private agGridFormatingService  : AgGridFormatingService,
                 private awsService              : AWSBucketService,
                 private userAuthorization       : UserAuthorizationService,
-                private _bottomSheet            : MatBottomSheet
+                private _bottomSheet            : MatBottomSheet,
+                public authenticationService: AuthenticationService,
               )
   {
     this.initSubscriptions();
@@ -114,17 +124,21 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     this.urlPath            = await this.awsService.awsBucketURL();
     this.rowSelection       = 'multiple'
     this.initAuthorization();
+    this.initUser();
   };
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
+    if (this._user) {this._user.unsubscribe()}
     if (this._searchModel) { this._searchModel.unsubscribe()}
   }
 
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
   }
+
+
 
   initClasses()  {
     const platForm      = this.platForm;
@@ -151,18 +165,46 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     })
   }
 
+  get summaryEnabled() {
+    // console.log(this.user?.roles)
+    if (!this.user) {return null}
+    if (this.user?.roles == 'admin' || this.user?.roles == 'manager') {
+      return this.summaryView
+    }
+    return null;
+  }
+
+
+  setSortData(event) {
+
+    if (event) {
+
+      if (!this.searchModel) { return }
+      this.searchModel.sortBy1 = event?.sort1;
+      this.searchModel.sortBy1Asc = event?.sort1Asc;
+
+      this.searchModel.sortBy2 = event?.sort2;
+      this.searchModel.sortBy2Asc = event?.sort2Asc;
+
+      this.searchModel.sortBy3 = event?.sort3;
+      this.searchModel.sortBy3Asc = event?.sort3Asc;
+
+      this.pOSPaymentService.updateSearchModel(this.searchModel)
+      this.refreshResults()
+    }
+  }
 
   initSubscriptions() {
     try {
       this._searchModel = this.pOSPaymentService.searchModel$.subscribe( data => {
-        this.searchModel            = data
+          this.searchModel            = data
           if (!this.searchModel) {
             const searchModel       = {} as IPaymentSearchModel;
             this.currentPage        = 1
             searchModel.pageNumber  = 1;
             searchModel.pageSize    = 25;
-            this.searchModel        = searchModel
-            this.refreshSearch_sub()
+            this.searchModel        = searchModel;
+
             return
           }
         }
@@ -171,6 +213,20 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
       console.log('init subscription error', error)
     }
   }
+
+  refreshResults() {
+    this.setSummary(this.searchModel)
+    this.refreshSearch_sub()
+  }
+
+  setSummary(search: IPaymentSearchModel) {
+    const item = JSON.parse(JSON.stringify(search))
+    item.summaryOnly = true;
+    const site = this.siteService.getAssignedSite()
+    console.log('set summary')
+    this.summary$ = this.pOSPaymentService.searchPayments(site, item)
+  }
+
 
   editRowSelection(event) {
     this.editItemWithId(event.rowData)
@@ -310,6 +366,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   refreshSearch(): Observable<IPaymentSearchModel[]> {
     this.currentPage         = 1
     const searchModel = this.initSearchModel();
+    this.setSummary(searchModel)
     return this.refreshSearch_sub()
   }
 

@@ -268,7 +268,7 @@ export class GridsterLayoutService {
     // this.options = this.getDefaultOptions();
 
     if (!this.options || this.options == undefined)  {
-      console.log(this.options);
+      // console.log(this.options);
       return
     }
     if ( this.options.api == undefined) {
@@ -469,13 +469,8 @@ export class GridsterLayoutService {
   }
 
   saveModel(model:DashboardModel, refresh: boolean) {
-
     const site     = this.siteService.getAssignedSite();
-
-    // this.dashboardArray = null
-    // this.dashboardModel = null
     let forceRefreshList = false;
-
     if (model.id == 0) { forceRefreshList = true}
 
     return this.gridDataService.saveGrid(site, model).pipe(
@@ -484,13 +479,10 @@ export class GridsterLayoutService {
           if (data.errorMessage) {
             this.notifyEvent('Error Occured: ' + data.errorMessage, 'Failed')
           }
-          // this.dashboardArray = data.dashboard;
-          // this.dashboardModel = data;
           this.stateChanged = false
-
-          console.log('data', data)
+          // console.log('data', data)
           if (refresh) {
-            console.log('update board')
+            // console.log('update board')
             this.updateDashboardModel(data, false)
             this.refreshDashBoard(data?.id);
           }
@@ -765,7 +757,7 @@ export class GridsterLayoutService {
         model =    this.applyItem(id, "Menu Section", 'MenuSections', MenuSectionComponent , ev);
         break;
     }
-    console.log('model', model)
+    // console.log('model', model)
     return model;
 
 	}
@@ -839,7 +831,7 @@ export class GridsterLayoutService {
       const x = ev?.target?.offsetTop;
       const y = ev?.target?.offsetLeft;
 
-      console.log('x,y', x, y)
+      // console.log('x,y', x, y)
       jsonString = JSON.stringify(properties)
       const  item = {
         componentName: componentName,
@@ -865,11 +857,13 @@ export class GridsterLayoutService {
 
   saveModelUpdate() {
     this.initDashboard()
-
     this.dashboardModel.dashboard = this.dashboardArray;
     let  tmp = JSON.stringify(this.dashboardModel);
+    // console.log('tep model', tmp)
     let parsed: DashboardModel = JSON.parse(tmp);
+    // console.log('tep model', parsed)
     this.serialize(parsed);
+    // console.log('tep model', parsed)
     this.dashboardModel.jsonObject  = tmp;
     return this.saveModel(this.dashboardModel, false);
   }
@@ -952,7 +946,7 @@ export class GridsterLayoutService {
           }
         })
 
-        console.log('update dashboard model', data)
+        // console.log('update dashboard model', data)
         this.updateDashboardModel(data, true)
         return of(data)
       })
@@ -1023,7 +1017,6 @@ export class GridsterLayoutService {
 
 	serialize(dashboardModel: DashboardModel) {
     if (!dashboardModel.dashboard) {
-
       return
     }
 		dashboardModel.dashboard.forEach(dashboard => {

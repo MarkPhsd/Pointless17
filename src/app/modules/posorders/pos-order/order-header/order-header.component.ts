@@ -5,6 +5,7 @@ import { of, switchMap, Observable, Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IAppConfig } from 'src/app/_services/system/app-init.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -32,7 +33,6 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   @Input() order: IPOSOrder
   @Input() isUserStaff = false
 
-
   @ViewChild('coachingSplit', {read: ElementRef}) coachingSplit: ElementRef;
   @ViewChild('coachingFire', {read: ElementRef}) coachingFire: ElementRef;
   @ViewChild('coachingLabel', {read: ElementRef}) coachingLabel: ElementRef;
@@ -40,11 +40,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   @ViewChild('qrCodeToggle') qrCodeToggle: TemplateRef<any>;
   qrCode$ : Observable<any>;
-
   _order: Subscription;
-
-
-
   _posDevice: Subscription;
   _uiTransactionSettings: Subscription;
   user          : any;
@@ -75,6 +71,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
       this.user = data;
     })
   }
+
   transactionUISettingsSubscriber() {
     try {
       this._uiTransactionSettings = this.uiSettingsService.transactionUISettings$.subscribe( data => {
@@ -110,6 +107,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
              private coachMarksService: CoachMarksService,
              public  prepPrintingService: PrepPrintingServiceService,
              private paymentMethodsService: PaymentsMethodsProcessService,
+             private fbProductButtonService: ProductEditButtonService,
              private httpClient : HttpClient,
     ) {
 
@@ -135,6 +133,11 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   ngOnChanges() {
     this.refreshPrintOption()
+  }
+
+  editOrder() {
+    if (!this.order) { return }
+    const diag = this.fbProductButtonService.openOrderEditor(this.order)
   }
 
   printReceipt(){

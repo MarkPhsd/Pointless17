@@ -231,8 +231,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <div header>
               <mat-icon >summarize</mat-icon> Payments - {{site.name}}
             </div>
-            <!-- <mat-icon>credit_card</mat-icon> Payments - {{site.name}} -->
           </payment-report>
+
+          <ng-container *ngTemplateOutlet="paymentPositiveNegView, context: {$implicit: site}"></ng-container>
 
           <payment-report
                   [groupBy]="'service'"
@@ -243,7 +244,6 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <div header>
               <mat-icon >summarize</mat-icon> Sale Type - {{site.name}}
             </div>
-            <!-- <mat-icon>credit_card</mat-icon> Sale Type - {{site.name}} -->
           </payment-report>
 
           <div *ngIf="uiHomePage && uiHomePage?.enableInventoryPerItem">
@@ -269,9 +269,8 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [dateTo]  ="dateTo"
                   [notifier]="childNotifier">
             <div header>
-              <mat-icon >people</mat-icon> Emplolyee - {{site.name}}
+              <mat-icon >people</mat-icon> Employee - {{site.name}}
             </div>
-            <!-- <mat-icon>people</mat-icon> Emplolyee - {{site.name}} -->
           </payment-report>
 
           <ng-container *ngTemplateOutlet="balanceSheetView,
@@ -327,9 +326,6 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [type]="'refunds'"
                   [autoPrint]="autoPrint"
                   >
-            <!-- <div header>
-              <mat-icon >summarize</mat-icon> Refund Payments {{site.name}}
-            </div> -->
             <mat-icon>credit_card</mat-icon> Refund Payments {{site.name}}
           </payment-report>
         </ng-template>
@@ -478,6 +474,43 @@ assets/htmlTemplates/salesreportStyles.html' -->
             </item-sales-card>
           </div>
         </ng-template>
+
+        <ng-template #itemSizeSales let-site>
+          <div>
+            <item-sales-card
+                  [notifier]="count"
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [groupBy]="'itemQuantity'">
+                <div class="header">
+                  <mat-icon>menu</mat-icon> Item Sales
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+        </ng-template>
+        <ng-template #itemQuantityGrouppedSales let-site>
+          <div>
+            <item-sales-card
+                  [notifier]="count"
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [groupBy]="'itemSize'">
+                <div class="header">
+                  <mat-icon>menu</mat-icon> Item Sales
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+        </ng-template>
+
+
 
         <ng-template #serviceFees let-site>
           <div>
@@ -817,4 +850,27 @@ assets/htmlTemplates/salesreportStyles.html' -->
       [dateTo]="dateTo"
       [notifier]="childNotifier">
   </balance-sheet-report>
+</ng-template>
+
+<ng-template #paymentPositiveNeg let-site>
+  <payment-report
+          [groupBy]  ="'positivePayments'"
+          [site]     ="site"
+          [dateFrom] ="dateFrom"
+          [dateTo]   ="dateTo"
+          [notifier] ="childNotifier"
+          [type]     ="'buysell'"
+          [autoPrint]="autoPrint"  >
+    <mat-icon>credit_card</mat-icon> Positive Payments {{site.name}}
+  </payment-report>
+  <payment-report
+          [groupBy]  ="'negativePayments'"
+          [site]     ="site"
+          [dateFrom] ="dateFrom"
+          [dateTo]   ="dateTo"
+          [notifier] ="childNotifier"
+          [type]     ="'buysell'"
+          [autoPrint]="autoPrint"  >
+    <mat-icon>credit_card</mat-icon> Negative Payments {{site.name}}
+  </payment-report>
 </ng-template>

@@ -53,6 +53,7 @@ import { PosOrderItemEditComponent } from 'src/app/modules/posorders/pos-order-i
 import { IInventoryAssignment, InventoryAssignmentService } from '../inventory/inventory-assignment.service';
 import { AddInventoryItemComponent } from 'src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component';
 import { DCAPTransactionComponent } from 'src/app/modules/dsiEMV/Dcap/dcaptransaction/dcaptransaction.component';
+import { PosOrderEditorComponent } from 'src/app/modules/posorders/pos-order/pos-order-editor/pos-order-editor.component';
 
 @Injectable({
   providedIn: 'root'
@@ -90,6 +91,20 @@ export class ProductEditButtonService {
     )
     return dialogRef;
   }
+
+  openOrderEditor(order: IPOSOrder) {
+    let dialogRef: any;
+    const site = this.siteService.getAssignedSite();
+
+    dialogRef = this.dialog.open(PosOrderEditorComponent,
+      { width:        '90vw',
+        height:       '90vh',
+        data:  order
+      },
+    )
+    return dialogRef
+  }
+
 
   openDynamicGrid(data: any) {
     let dialogRef: any;

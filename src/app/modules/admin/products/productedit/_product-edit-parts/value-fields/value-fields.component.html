@@ -1,40 +1,22 @@
 <div *ngIf="inputForm && !searchingEnabled">
-  <div [formGroup]="inputForm">
-    <mat-form-field
-          [class]="fieldsClass"
-          appearance="outline">
 
-        <mat-label>
-          <ng-content></ng-content>
-          {{itemHeader | titlecase}}
-        </mat-label>
-        <div *ngIf="type === 'input' && passwordMask">
-          <input matInput
-                [disabled] ='!enabled'
-                [class]="fieldsClass"
-                appAppPasswordMask
-                ngDefaultControl
-                [type]="fieldType"
-                [formControlName]="fieldName">
-        </div>
+  <!-- <ng-container [ngTemplateOutlet]="passwordMask"></ng-container> -->
+  <ng-container [ngTemplateOutlet]="fieldTypeValue"></ng-container>
+  <ng-container [ngTemplateOutlet]="fieldDescriptionView"></ng-container>
+  <ng-container [ngTemplateOutlet]="toggleView"></ng-container>
 
-        <div *ngIf="type === 'input' && !passwordMask">
-          <input matInput
-                [class]="fieldsClass"
-                [disabled] ='!enabled'
-                [type]="fieldType"
-                ngDefaultControl
-                [formControlName]="fieldName">
-        </div>
-    </mat-form-field>
-  </div>
+</div>
 
-  <div   *ngIf="!enabled && !searchingEnabled">
-    <h3>
-      {{itemHeader | titlecase}} : {{inputForm.controls[fieldName].value}}
+<ng-template #fieldDescriptionView>
+  <div   *ngIf="!enabled">
+    <h3 class="flex-grid-column-nogap">
+      <ng-content select='[description]'></ng-content>
+       {{inputForm.controls[fieldName].value}}
     </h3>
   </div>
+</ng-template>
 
+<ng-template #toggleField>
   <div [formGroup]="inputForm && !searchingEnabled"
        *ngIf="type === 'toggle'">
     <mat-slide-toggle
@@ -45,6 +27,53 @@
         [formControlName]="fieldName">
     </mat-slide-toggle>
   </div>
+</ng-template>
 
-</div>
+<ng-template #passwordField>
+  <div [formGroup]="inputForm">
+    <mat-form-field
+          *ngIf="enabled"
+          [class]="fieldsClass"
+          appearance="outline">
+        <mat-label>
+          <ng-content></ng-content>
+          {{itemHeader | titlecase}}
+        </mat-label>
+        <div *ngIf="type === 'input' && passwordMask">
+          <input matInput
+                [disabled] ='!enabled'
+                [class]="fieldsClass"
+                appAppPasswordMask
+                ngDefaultControl
+                [name]="fieldName"
+                placeholder="Favorite food"
+                [type]="fieldType"
+                [formControlName]="fieldName">
+        </div>
+    </mat-form-field>
+  </div>
+</ng-template>
 
+<ng-template #regularField>
+  <div *ngIf="inputForm" [formGroup]="inputForm">
+    <mat-form-field
+          *ngIf="enabled"
+          [class]="fieldsClass"
+          appearance="outline">
+        <mat-label>
+          <ng-content></ng-content>
+          {{itemHeader | titlecase}}
+        </mat-label>
+        <div *ngIf="type === 'input' && !passwordMask">
+          <input matInput
+                [class]="fieldsClass"
+                [disabled] ='!enabled'
+                [type]="fieldType"
+                placeholder="Favorite food"
+                [name]="fieldName"
+                ngDefaultControl
+                [formControlName]="fieldName">
+        </div>
+    </mat-form-field>
+  </div>
+</ng-template>

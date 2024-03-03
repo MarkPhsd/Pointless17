@@ -198,474 +198,17 @@
         <mat-tab label="Authorizations"
                  *ngIf="jsonObjectForm"
                  [formGroup]="jsonObjectForm">
-
-          <div class="grid-auths"    >
-
-            <div>
-
-                <h4>Admin</h4>
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="addEmployee" >
-                    <mat-label>Add employees</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="deleteEmployee" >
-                    <mat-label>Delete employees</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="changeClientType" >
-                    <mat-label>Change User Type</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="changeAuths" >
-                    <mat-label>Change Auths</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <mat-label>Used for Super User Admin</mat-label>
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="accessAdmins" >
-                    <mat-label>Access Admins</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <!-- <mat-label>Allow Upload Pictures</mat-label> -->
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="uploadPictures" >
-                    <mat-label>Upload Pictures</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-            </div>
-
-            <div>
-              <h3>Sales</h3>
-
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="allowChangeOrderType" >
-                  <mat-label>Allow change order type (closed orders) </mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="allowNegativeTransaction" >
-                  <mat-label>Allow Negative Value Order </mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="allowZeroTransaction" >
-                  <mat-label>Allow Zero Value Order </mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="allowBuy" >
-                  <mat-label>Allow Buy From Customer</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="splitItemOverRide" >
-                  <mat-label>Allow Move Split Items</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="allowCashPaymentForOtherServer" >
-                  <mat-label>Allow Accept Cash <br> for Other Server</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="allowNegativeTransaction" >
-                  <mat-label>Allow Negative Value Order </mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="disableEditOtherUsersOrders" >
-                  <mat-label>Disable Edit Other Users Orders</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="disableVoidClosedItem" >
-                  <mat-label>Disable Void Item on Closed Orders</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="voidOrder" >
-                  <mat-label>Void Order</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="voidItem" >
-                  <mat-label>Void Item</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="voidPayment" >
-                  <mat-label>Void Payment</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="refundPayment" >
-                  <mat-label>Refund Payment</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="refundItem" >
-                  <mat-label>Refund Item</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="refundOrder" >
-                  <mat-label>Refund Order</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="houseAccountPayment" >
-                  <mat-label>House Account Payment</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="allowSuspendTransaction" >
-                  <mat-label>Suspend Order</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="priceColumnOption" >
-                  <mat-label>Price Column Option </mat-label>
-                </mat-slide-toggle>
-              </div>
-
-            </div>
-
-            <div>
-              <h3>End of Day Printing</h3>
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="closeDay" >
-                  <mat-label>Allow Close Day</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="blindClose" >
-                  <mat-label>Blind Close (hide sales totals)</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="disableGiftCards" >
-                  <mat-label >Disable Gift Cards</mat-label>
-                </mat-slide-toggle>
-              </div>
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="disableItemSales" >
-                  <mat-label>Disable Item Sales</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="disableDepartmentSales" >
-                  <mat-label>Disable Department Sales</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="disableLabor" >
-                  <mat-label>Disable Labor</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="disableHourlySales" >
-                  <mat-label>Disable Hourly Sales</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="disableDeviceSales" >
-                  <mat-label>Disable Sales by Device</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="disableBalanceEndOfDay" >
-                  <mat-label>Disable Balance Sheet Summary</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-            </div>
-
-            <div>
-              <h3>Balance Sheets Printing</h3>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="blindBalanceSheet" >
-                  <mat-label>Blind (hide sales summary)</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="balanceSheetViewTypeSales" >
-                  <mat-label>Item Type Summary</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="balanceSheetTransactionTypes" >
-                  <mat-label>Transaction Type Summary</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="balanceSheetDetails" >
-                  <mat-label>Show all Payments</mat-label>
-                </mat-slide-toggle>
-              </div>
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="balanceSheetCreditCardPayments" >
-                  <mat-label>Enable Credit Card Payment List</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="balanceSheetDisableBank" >
-                  <mat-label>Disable Bank</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="balanceSheetDisableCashDrops" >
-                  <mat-label>Disable Cash Drops</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-          </div>
-
-            <div>
-                <h4>Marketing</h4>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="sendTextBlast" >
-                    <mat-label>Send Text Blast</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="sendEmailBlast" >
-                    <mat-label>Send Email Blast</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-              </div>
-
-              <div>
-                <h4>Reporting</h4>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="accessDailyReport" >
-                    <mat-label>Daily Report</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="accessHistoryReports" >
-                    <mat-label>History Reports</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="searchBalanceSheets" >
-                    <mat-label>Balance Sheet Audit</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="buysSalesReports" >
-                    <mat-label>Buy/Sales</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-              </div>
-
-              <div>
-                <h4>Inventory</h4>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="importMETRCPackages" >
-                    <mat-label>Import Metrc</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="adjustInventory" >
-                    <mat-label>Adjust Inventory</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="adjustInventoryCount" >
-                    <mat-label>Adjust Inventory Count</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="intakeInventory" >
-                    <mat-label>Intake Inventory</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="changeInventoryValue" >
-                    <mat-label>Change Inventory Price/Cost</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="deleteInventory" >
-                    <mat-label>Delete Inventory</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="allowReconciliation" >
-                    <mat-label>Allow Reconciliation</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <!-- Add Auth add feature
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="allowSeeItemCost" >
-                    <mat-label>Allow See Item Cost</mat-label>
-                  </mat-slide-toggle>
-                </div> -->
-
-              </div>
-
-              <div>
-                <h4>Products</h4>
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="deleteProduct" >
-                    <mat-label>Delete Product</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="editProduct" >
-                    <mat-label>Edit Product</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="changeItemPrice" >
-                    <mat-label>Change Item Price</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="adjustProductCount" >
-                    <mat-label>Adjust Product Count</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-              </div>
-
-              <div>
-                <h4>Client Types</h4>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="deleteClientType" >
-                    <mat-label>Delete Client Types</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="editEmail" >
-                    <mat-label>Edit Email</mat-label>
-                  </mat-slide-toggle>
-                </div>
-              </div>
-          </div>
-
+                 <div class="grid-auths">
+                   <ng-container [ngTemplateOutlet]="adminView"></ng-container>
+                   <ng-container [ngTemplateOutlet]="salesView"></ng-container>
+                   <ng-container [ngTemplateOutlet]="endOfDayPrinting"></ng-container>
+                   <ng-container [ngTemplateOutlet]="balanceSheetView"></ng-container>
+                   <ng-container [ngTemplateOutlet]="marketingView"></ng-container>
+                   <ng-container [ngTemplateOutlet]="reportingView"></ng-container>
+                   <ng-container [ngTemplateOutlet]="inventoryView"></ng-container>
+                   <ng-container [ngTemplateOutlet]="productView"></ng-container>
+                   <ng-container [ngTemplateOutlet]="clientView"></ng-container>
+                 </div>
         </mat-tab>
 
         <mat-tab label="Behaviors"
@@ -694,3 +237,502 @@
 
 </div>
 
+<ng-template #adminView>
+
+  <div [formGroup]="jsonObjectForm">
+    <h4>Admin</h4>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="addEmployee" >
+          <mat-label>Add employees</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="deleteEmployee" >
+          <mat-label>Delete employees</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="changeClientType" >
+          <mat-label>Change User Type</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="changeAuths" >
+          <mat-label>Change Auths</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <mat-label>Used for Super User Admin</mat-label>
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="accessAdmins" >
+          <mat-label>Access Admins</mat-label>
+        </mat-slide-toggle>
+      </div>
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="uploadPictures" >
+          <mat-label>Upload Pictures</mat-label>
+        </mat-slide-toggle>
+      </div>
+  </div>
+
+</ng-template>
+
+<ng-template #salesView>
+
+  <div [formGroup]="jsonObjectForm">
+    <h3>Sales</h3>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="allowChangeOrderType" >
+        <mat-label>Allow change order type (closed orders) </mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="allowNegativeTransaction" >
+        <mat-label>Allow Negative Value Order </mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="allowZeroTransaction" >
+        <mat-label>Allow Zero Value Order </mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="allowBuy" >
+        <mat-label>Allow Buy From Customer</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="splitItemOverRide" >
+        <mat-label>Allow Move Split Items</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="allowCashPaymentForOtherServer" >
+        <mat-label>Allow Accept Cash <br> for Other Server</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="allowNegativeTransaction" >
+        <mat-label>Allow Negative Value Order </mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="disableEditOtherUsersOrders" >
+        <mat-label>Disable Edit Other Users Orders</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="disableVoidClosedItem" >
+        <mat-label>Disable Void Item on Closed Orders</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="voidOrder" >
+        <mat-label>Void Order</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="voidItem" >
+        <mat-label>Void Item</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="voidPayment" >
+        <mat-label>Void Payment</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="refundPayment" >
+        <mat-label>Refund Payment</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="refundItem" >
+        <mat-label>Refund Item</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="refundOrder" >
+        <mat-label>Refund Order</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="houseAccountPayment" >
+        <mat-label>House Account Payment</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="allowSuspendTransaction" >
+        <mat-label>Suspend Order</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="priceColumnOption" >
+        <mat-label>Price Column Option </mat-label>
+      </mat-slide-toggle>
+    </div>
+
+  </div>
+
+</ng-template>
+
+<ng-template #endOfDayPrinting>
+
+  <div [formGroup]="jsonObjectForm">
+    <h3>End of Day Printing</h3>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="closeDay" >
+        <mat-label>Allow Close Day</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="blindClose" >
+        <mat-label>Blind Close (hide sales totals)</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="disableGiftCards" >
+        <mat-label >Disable Gift Cards</mat-label>
+      </mat-slide-toggle>
+    </div>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="disableItemSales" >
+        <mat-label>Disable Item Sales</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="disableDepartmentSales" >
+        <mat-label>Disable Department Sales</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="disableLabor" >
+        <mat-label>Disable Labor</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="disableHourlySales" >
+        <mat-label>Disable Hourly Sales</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="disableDeviceSales" >
+        <mat-label>Disable Sales by Device</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="disableBalanceEndOfDay" >
+        <mat-label>Disable Balance Sheet Summary</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="buysSalesReports" >
+        <mat-label>Enable Positive / Negative Payment Report</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="itemSalesGroupBySize" >
+        <mat-label>Group sales by UOM / Size</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="itemSalesGroupByQuantity" >
+        <mat-label>Group Item Sales by Quantity </mat-label>
+      </mat-slide-toggle>
+    </div>
+
+  </div>
+</ng-template>
+
+<ng-template #balanceSheetView>
+  <div [formGroup]="jsonObjectForm">
+      <h3>Balance Sheets Printing</h3>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="blindBalanceSheet" >
+          <mat-label>Blind (hide sales summary)</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="balanceSheetViewTypeSales" >
+          <mat-label>Item Type Summary</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="balanceSheetTransactionTypes" >
+          <mat-label>Transaction Type Summary</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="balanceSheetDetails" >
+          <mat-label>Show all Payments</mat-label>
+        </mat-slide-toggle>
+      </div>
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="balanceSheetCreditCardPayments" >
+          <mat-label>Enable Credit Card Payment List</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="balanceSheetDisableBank" >
+          <mat-label>Disable Bank</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="balanceSheetDisableCashDrops" >
+          <mat-label>Disable Cash Drops</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+    </div>
+</ng-template>
+
+
+
+<ng-template #marketingView>
+  <div [formGroup]="jsonObjectForm">
+    <h4>Marketing</h4>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="sendTextBlast" >
+        <mat-label>Send Text Blast</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="sendEmailBlast" >
+        <mat-label>Send Email Blast</mat-label>
+      </mat-slide-toggle>
+    </div>
+</div>
+</ng-template>
+
+
+
+
+<ng-template #reportingView>
+  <div [formGroup]="jsonObjectForm">
+    <h4>Reporting</h4>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="accessDailyReport" >
+        <mat-label>Daily Report</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="accessHistoryReports" >
+        <mat-label>History Reports</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="searchBalanceSheets" >
+        <mat-label>Balance Sheet Audit</mat-label>
+      </mat-slide-toggle>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #inventoryView>
+  <div [formGroup]="jsonObjectForm">
+    <h4>Inventory</h4>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="importMETRCPackages" >
+        <mat-label>Import Metrc</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="adjustInventory" >
+        <mat-label>Adjust Inventory</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="adjustInventoryCount" >
+        <mat-label>Adjust Inventory Count</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="intakeInventory" >
+        <mat-label>Intake Inventory</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="changeInventoryValue" >
+        <mat-label>Change Inventory Price/Cost</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="deleteInventory" >
+        <mat-label>Delete Inventory</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="allowReconciliation" >
+        <mat-label>Allow Reconciliation</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <!-- Add Auth add feature
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="allowSeeItemCost" >
+        <mat-label>Allow See Item Cost</mat-label>
+      </mat-slide-toggle>
+    </div> -->
+
+  </div>
+</ng-template>
+
+<ng-template #productView>
+  <div [formGroup]="jsonObjectForm">
+    <h4>Products</h4>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="deleteProduct" >
+        <mat-label>Delete Product</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="editProduct" >
+        <mat-label>Edit Product</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="changeItemPrice" >
+        <mat-label>Change Item Price</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="adjustProductCount" >
+        <mat-label>Adjust Product Count</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+  </div>
+</ng-template>
+
+<ng-template #clientView>
+  <div [formGroup]="jsonObjectForm">
+    <h4>Client Types</h4>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="deleteClientType" >
+        <mat-label>Delete Client Types</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="editEmail" >
+        <mat-label>Edit Email</mat-label>
+      </mat-slide-toggle>
+    </div>
+  </div>
+</ng-template>

@@ -15,6 +15,7 @@ import { PrintingService, printOptions } from 'src/app/_services/system/printing
 })
 export class PaymentReportDataComponent implements OnInit {
 
+  @Output() outPutRefresh = new EventEmitter<any>;
   @ViewChild('printsection') printsection: ElementRef;
   @Input() styles: string;
   @Input() printerName: string;
@@ -43,11 +44,25 @@ export class PaymentReportDataComponent implements OnInit {
     )
      { }
 
+
+  get groupByPayment() {
+    if (!this.groupBy) { return false}
+    if (this.groupBy.toLowerCase() === 'paymentMethod'.toLowerCase()  ) {
+      return true;
+    }
+    if (this.groupBy.toLowerCase() === 'buySell'.toLowerCase()  ) {
+      return true;
+    }
+    return false;
+  }
+
   ngOnInit(): void {
     const i = 0
     this.type = this.type.toUpperCase()
   }
-
+  refresh() {
+    this.outPutRefresh.emit(true)
+  }
   downloadCSV() {
     if (!this.sales) { return }
     this.reportingItemsSalesService.downloadFile(this.sales.paymentSummary, 'PaymentReport')

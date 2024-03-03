@@ -35,9 +35,8 @@
 
 <ng-template #categoryItemDiscountsView let-category>
 
-  <!-- <ngx-json-viewer [json]="category?.itemDiscounts"></ngx-json-viewer> -->
-
   <div *ngIf="category && category.itemDiscounts && category.itemDiscounts.length>0">
+
     <div class="item" *ngFor="let item of category.itemDiscounts">
 
       <div class="grid-container"  *ngIf="item">

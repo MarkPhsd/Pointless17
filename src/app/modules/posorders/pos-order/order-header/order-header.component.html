@@ -3,7 +3,9 @@
 <span *ngIf="order">
 
   <div>
-    <ng-container [ngTemplateOutlet]="qrCodeDisplayView"></ng-container>
+      <ng-container [ngTemplateOutlet]="qrCodeDisplayView"></ng-container>
+
+
   </div>
 
   <ng-template #qrCodeToggle>
@@ -48,8 +50,15 @@
 
       <div *ngIf="(isApp) || (!isApp  && isUserStaff) && uiTransactionSettings ">
 
-        <span>
-          <button mat-button (click)="qrCodeDisplayToggle()"><mat-icon>qr_code</mat-icon>QR Link </button>
+        <span class="flex-grid-column-nogap">
+          <div>
+            <button mat-button (click)="qrCodeDisplayToggle()">
+              <mat-icon>qr_code</mat-icon>QR Link
+            </button>
+          </div>
+          <div>
+            <ng-container [ngTemplateOutlet]="editOrderView"></ng-container>
+          </div>
         </span>
 
         <div class="button-row" *ngIf="(!qrOrder && !hideButtonOptions)">
@@ -96,8 +105,6 @@
 
         <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
 
-
-
         <div >
           <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption && isSale && isUserStaff" >
             <value-from-list-selector
@@ -121,4 +128,10 @@
           (initPopOver)="initPopOver()"
           [enabled]="user && user?.userPreferences &&  user?.userPreferences?.enableCoachMarks"></coach-marks-button>
   </div>
+</ng-template>
+
+<ng-template #editOrderView>
+  <span *ngIf="!hideButtonOptions && user?.roles === 'admin'">
+    <button mat-button (click)="editOrder()"><mat-icon>edit</mat-icon></button>
+  </span>
 </ng-template>

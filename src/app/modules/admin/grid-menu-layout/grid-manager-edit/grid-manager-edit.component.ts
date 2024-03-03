@@ -72,11 +72,13 @@ export class GridManagerEditComponent implements OnInit {
     const site  = this.siteService.getAssignedSite();
     if (!id || id == 0) {
       this.dashboardModel = {} as DashboardModel
+      console.log('no dashboard fill form', )
       this.fillForm(this.dashboardModel);
       return;
     }
     return this.gridDataService.getGrid(site,  this.id).pipe(switchMap(data => {
       if (!data) {   data = {} as DashboardModel;  }
+      console.log('data dashboard fill form', data)
       this.dashboardModel = data as DashboardModel
       this.fillForm(this.dashboardModel);
       return of(data)
@@ -159,10 +161,7 @@ export class GridManagerEditComponent implements OnInit {
       jSONBject: [''],
       active   : [''],
     })
-
-
     return this.inputForm;
-
   };
 
   initFormData(data) {

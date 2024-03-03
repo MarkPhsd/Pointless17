@@ -234,6 +234,8 @@ export class FbProductsService {
         slug                       :   [''],
         pB_MainID                   : [],
         thumbnail                   :  [],
+        baySection: [],
+        bayName: [],
       })
       return fb;
     }

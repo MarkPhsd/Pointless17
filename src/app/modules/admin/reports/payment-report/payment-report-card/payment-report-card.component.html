@@ -10,7 +10,7 @@
   <div *ngFor="let payment of payments" class="printFont-14">
 
     <div *ngIf="groupBy">
-      <div *ngIf="groupBy && groupBy.toLowerCase() === 'employee'"
+      <div *ngIf="groupBy.toLowerCase() === 'employee'"
           class="grid-payment-report-card ">
         <div *ngIf="payment.employeeName"
             class="employeeName" >
@@ -24,8 +24,8 @@
         <div   class='grid-item-right'  >    {{payment?.tipAmount | currency }}</div>
       </div>
 
-      <div *ngIf="groupBy && groupBy.toLowerCase() === 'paymentMethod'.toLowerCase() || groupBy.toLowerCase() === 'devicename'"
-          class="grid-payment-report-card">
+      <div *ngIf=" (groupBy.toLowerCase() === 'paymentMethod'.toLowerCase() || groupBy.toLowerCase() === 'devicename')|| buySell "
+          class="grid-payment-report-card" >
         <div class="grid-item" *ngIf="payment.paymentMethod" >{{ payment?.paymentMethod }} </div>
         <div class="grid-item" *ngIf="!payment.paymentMethod" >EMPTY</div>
         <div  class='grid-item-right'  >   {{payment?.amountPaid | currency }}   </div>
@@ -34,7 +34,7 @@
         <div   class='grid-item-right'  >    {{payment?.tipAmount | currency }}</div>
       </div>
 
-      <div *ngIf="groupBy && groupBy === 'service'"
+      <div *ngIf="groupBy === 'service'"
             class="grid-payment-report-card">
         <div class="grid-item" *ngIf="payment.serviceType" >{{ payment?.serviceType }} </div>
         <div class="grid-item" *ngIf="!payment.serviceType" >EMPTY </div>

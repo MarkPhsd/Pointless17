@@ -217,32 +217,32 @@ constructor(  private _snackBar              : MatSnackBar,
           return of(data)
         }
       ))
-  
+
       const site                = this.siteService.getAssignedSite()
       this.refreshSubCategories();
       this.refreshDepartments();
       this.refreshCategories();
       this.productTypes$        = this.itemTypeService.getBasicTypes(site)
       const brandResults$       = this.contactsService.getBrands(site, clientSearchModel)
-  
+
       brandResults$.subscribe(data => {
         this.brands = data.results
       })
-  
+
       this.initForm();
       this.formSubscriber();
-  
+
       this.buttonName = 'Edit'
-  
+
       if (this.editOff) {
         this.buttonName = 'Assign'
         this.initSubscriptions();
         this.gridlist = "grid-list-nopanel"
       }
-  
+
       this.initAgGrid(this.pageSize);
       this.requiresWorkList$ = of(this.requiresWorkList);
-  
+
       this.initPaging();
       return of(data)
     }))
@@ -275,7 +275,7 @@ constructor(  private _snackBar              : MatSnackBar,
   refreshGroupingDataOnly() {
     const site             = this.siteService.getAssignedSite()
     this.categories$       = this.menuService.getListOfCategoriesAll(site);
-    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(switchMap(data => { 
+    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(switchMap(data => {
       this.subCategoriesList = data;
       return of(data)
     }))
@@ -318,6 +318,21 @@ constructor(  private _snackBar              : MatSnackBar,
     )
   }
 
+  setSortData(event) {
+    if (event) {
+      console.log(event)
+      this.searchForm.patchValue({
+        sortBy1: event?.sort1,
+        sortBy1Asc : event?.sort1Asc,
+        sortBy2 :event?.sort2,
+        sortBy2Asc : event?.sort2Asc,
+        sortBy3 : event?.sort3,
+        sortBy3Asc : event?.sort3Asc
+      })
+      this.initSearchModel()
+      this.refreshSearch(1);
+    }
+  }
 
   refreshDepartments() {
     const site          = this.siteService.getAssignedSite()
@@ -409,6 +424,14 @@ constructor(  private _snackBar              : MatSnackBar,
       bayName           : [],
       minQuantityFilter : [],
       webWorkRequired   : [false],
+      sort1: [],
+
+      sortBy1: [],
+      sortBy1Asc : [],
+      sortBy2 : [],
+      sortBy2Asc : [],
+      sortBy3 : [],
+      sortBy3Asc : [],
     });
   }
 
@@ -490,7 +513,7 @@ constructor(  private _snackBar              : MatSnackBar,
 
   }
 
-  getColumnDefs() { 
+  getColumnDefs() {
     return [
 
       {headerName: 'Edit',  field: 'id',
@@ -653,7 +676,7 @@ constructor(  private _snackBar              : MatSnackBar,
     ]
   }
 
-  getCustomColoumnDefs() { 
+  getCustomColoumnDefs() {
     this.columnDefs =  []
 
     const header=  {headerName: 'Edit',  field: 'id',
@@ -686,7 +709,7 @@ constructor(  private _snackBar              : MatSnackBar,
      this.columnDefs.push(itemName)
 
 
-     if (this.uiHome.gloabalSecondLanguage) { 
+     if (this.uiHome.gloabalSecondLanguage) {
        const language = {headerName: 'Language',     field: 'prodsecondLanguage',
                // sortable: true,
          width   : 175,
@@ -906,6 +929,8 @@ constructor(  private _snackBar              : MatSnackBar,
 
     const searchForm = this.searchForm.value;
 
+    console.log('search', this.searchForm.value, searchForm.value)
+
     searchModel.viewAll    = this.viewAll;
     searchModel.active     = this.active;
     searchModel.barcode    = searchModel.name
@@ -913,8 +938,17 @@ constructor(  private _snackBar              : MatSnackBar,
     searchModel.pageNumber = this.currentPage
     searchModel.hideSubCategoryItems = false;
 
+    // searchModel = searchForm.sort
+    searchModel.sortBy1    =  searchForm?.sortBy1
+    searchModel.sortBy1Asc =  searchForm?.sortBy1Asc
+    searchModel.sortBy2    =  searchForm?.sortBy2
+    searchModel.sortBy2Asc =  searchForm?.sortBy2Asc
+    searchModel.sortBy3Asc =  searchForm?.sortBy3
+    searchModel.sortBy3    =  searchForm?.sortBy3Asc
+
     searchModel.webWorkRequired = this.webWorkRequired
     searchModel.bayName    = searchForm?.bayName;
+
     if (this.searchForm.controls['minQuantityFilter'].value) {
       searchModel.minQuantityFilter = this.minQuantityFilterValue;
     }
@@ -976,7 +1010,8 @@ constructor(  private _snackBar              : MatSnackBar,
     this.initAgGrid(this.pageSize)
     const site               = this.siteService.getAssignedSite()
     if (page != 0) { this.currentPage         = page}
-    const productSearchModel = this.initSearchModel();
+    const model = this.initSearchModel();
+    console.log('refreshSearch', model)
     this.onGridReady(this.params)
   }
 

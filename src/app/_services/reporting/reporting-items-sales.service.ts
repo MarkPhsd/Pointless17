@@ -323,6 +323,30 @@ export class ReportingItemsSalesService {
 
   }
 
+  getItemSizeSalesReport(site: ISite, model: any) : Observable<IReportItemSaleSummary> {
+    model.productsOnly = true;
+
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `getItemSizeSalesReport`
+
+    const url = `${site.url}${controller}${endPoint}`
+
+    return  this.http.put<IReportItemSaleSummary>(url, model )
+  }
+
+  getItemQuantityGroupedReport(site: ISite, model: any): Observable<IReportItemSaleSummary> {
+    model.productsOnly = true;
+
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `getItemQuantityGroupedReport`
+
+    const url = `${site.url}${controller}${endPoint}`
+
+    return  this.http.put<IReportItemSaleSummary>(url, model )
+  }
+
   getGifCardIssueReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
 
     IReportingSearchModel.productsOnly = true;

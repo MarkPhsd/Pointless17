@@ -4,9 +4,7 @@
                   [(selectedIndex)]="selectedIndex"
                   (selectedIndexChange)="selectChange()">
 
-      <mat-tab label="Settings"
-          (swipeleft)="swipe(1, $event.type)"
-          (swiperight)="swipe(1, $event.type)">
+      <mat-tab label="Settings">
 
         <mat-card>
           <mat-title>
@@ -28,13 +26,14 @@
               </div>
             </div>
           </mat-title>
-          <mat-card-content >
+
+          <mat-card-content *ngIf="dashboardModel">
             <div class="grid" [formGroup]="inputForm"
-                  *ngIf="inputForm && dashboardModel; else loading;" >
+                  *ngIf="inputForm; else loading;" >
 
                 <div>
                   <app-value-fields
-                    style="width:300px";
+                    style="width:300px"
                     [inputForm]="inputForm"
                     [fieldName]="'name'"
                     [fieldsClass]="'fields-small'">
@@ -73,7 +72,7 @@
 
               <div>
                 <app-value-fields
-                  style="width:300px";
+                  style="width:300px"
                   [inputForm]="inputProperties"
                   [fieldName]="'icon'"
                   [fieldsClass]="'fields-small'">
@@ -127,7 +126,7 @@
 
               <div class="span-col-2">
                 <app-value-fields
-                    style="width:300px";
+                    style="width:300px"
                     [inputForm]="inputProperties"
                     [fieldName]="'pixelWidth'"
                     [fieldsClass]="'fields-small'">
@@ -137,7 +136,7 @@
 
               <div class="span-col-2">
                 <app-value-fields
-                  style="width:300px";
+                  style="width:300px"
                   [inputForm]="inputProperties"
                   [fieldName]="'pixelHeight'"
                   [fieldsClass]="'fields-small'">
@@ -151,7 +150,7 @@
               <div></div>
               <div class="span-col-2">
                 <app-value-fields
-                    style="width:300px";
+                    style="width:300px"
                     [inputForm]="inputProperties"
                     [fieldName]="'gridColumns'"
                     [fieldsClass]="'fields-small'">
@@ -161,7 +160,7 @@
 
               <div class="span-col-2">
                 <app-value-fields
-                  style="width:300px";
+                  style="width:300px"
                   [inputForm]="inputProperties"
                   [fieldName]="'gridRows'"
                   [fieldsClass]="'fields-small'">
@@ -186,9 +185,7 @@
 
       </mat-tab>
 
-      <mat-tab label="Permissions"
-          (swipeleft)="swipe(1, $event.type)"
-          (swiperight)="swipe(1, $event.type)">
+      <mat-tab label="Permissions">
 
         <mat-card *ngIf="dashboardModel" class="widgets-selection">
           <mat-card-title>

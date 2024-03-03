@@ -243,6 +243,8 @@
   </payment-report>
 </ng-template>
 
+<ng-container *ngTemplateOutlet="paymentPositiveNegView, context: {$implicit: site}"></ng-container>
+
 <ng-template #paymentDiscrepancy>
   <div *ngIf="iBalanceSheet">
     <app-audit-payment
@@ -463,4 +465,29 @@
           (initPopOver)="initPopOver()"
           [enabled]="user && user?.userPreferences &&  user?.userPreferences?.enableCoachMarks"></coach-marks-button>
   </div>
+</ng-template>
+
+<ng-template #paymentPositiveNeg let-site>
+  <payment-report
+          (outputComplete)="setOutPutCompleted('positive')"
+          [groupBy]="'positivePayments'"
+          [site]    ="site"
+          [dateFrom]="dateFrom"
+          [dateTo]  ="dateTo"
+          [notifier]="childNotifier"
+          [type]="'sales'"
+          [autoPrint]="autoPrint"  >
+    <mat-icon>credit_card</mat-icon> Positive Payments {{site.name}}
+  </payment-report>
+  <payment-report
+          (outputComplete)="setOutPutCompleted('negative')"
+          [groupBy]="'negativePayments'"
+          [site]    ="site"
+          [dateFrom]="dateFrom"
+          [dateTo]  ="dateTo"
+          [notifier]="childNotifier"
+          [type]="'sales'"
+          [autoPrint]="autoPrint"  >
+    <mat-icon>credit_card</mat-icon> Negative Payments {{site.name}}
+  </payment-report>
 </ng-template>

@@ -159,7 +159,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }))
   }
   get appHeaderClass() {
-    if (this.hideAppHeader || this.viewPrep) { 
+    if (this.hideAppHeader || this.viewPrep) {
       return 'app-header-hidden'
     }
     return ""
@@ -167,7 +167,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   processLogOut() {
-    // console.log('processLogOut')
+    // console.trace('processLogOut')
     this.userIdle.resetTimer();
     this.orderMethodsSevice.clearOrderSubscription()
     this.userSwitchingService.clearLoggedInUser();

@@ -1,6 +1,7 @@
-<div *ngIf="order$ && (order$ | async) as order">
-  <app-order-total
-    [order]="order">
-  </app-order-total>
-</div>
-
+<span *ngIf="(order$ | async) as order">
+  <div *ngIf="order">
+    <app-order-total
+      [order]="order">
+    </app-order-total>
+  </div>
+</span>

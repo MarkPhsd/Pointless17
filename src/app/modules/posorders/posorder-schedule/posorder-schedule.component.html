@@ -1,6 +1,6 @@
 <mat-card *ngIf="order">
   <mat-card-title>
-      Plan Order 
+      Plan Order
       <!-- <span style="margin-left:5px" *ngIf="processingUpdate">
       <mat-spinner [diameter]="25"> </mat-spinner></span> -->
   </mat-card-title>
@@ -73,12 +73,14 @@
               [order]="order"
               [inputForm]="inputFormNotes">
             </pos-order-notes>
+
+            <ng-container [ngTemplateOutlet]="payOptionView"></ng-container>
           </div>
 
           <div class="instructions-small-view">
             <ng-container [ngTemplateOutlet]="instructionsView"></ng-container>
           </div>
-          
+
         </mat-tab>
 
     </mat-tab-group>
@@ -121,14 +123,8 @@
         </mat-card>
       </div>
 
-      <div *ngIf="saveValid">
-        <button style="float: left;height:75px;width:125px"
-                mat-raised-button
-                color   ="primary"
-                (click) ="save()">
-          <mat-icon aria-label="save">credit_card</mat-icon> Pay
-        </button>
-      </div>
+      <ng-container [ngTemplateOutlet]="payOptionView"></ng-container>
+
     </div>
   </mat-card-actions>
 </mat-card>
@@ -149,7 +145,15 @@
   </div>
 </ng-template>
 
-
-
-
 <div *ngIf="(action$ | async) as action"></div>
+
+<ng-template #payOptionView>
+  <div *ngIf="saveValid">
+    <button style="float: left;height:75px;width:125px"
+            mat-raised-button
+            color   ="primary"
+            (click) ="save()">
+      <mat-icon aria-label="save">credit_card</mat-icon> Pay
+    </button>
+  </div>
+</ng-template>

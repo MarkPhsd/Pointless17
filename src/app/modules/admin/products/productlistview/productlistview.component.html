@@ -168,7 +168,7 @@
       </div>
 
       <div *ngIf="advanced && pagingForm">
-        <div  *ngIf="sortList" [formGroup]="pagingForm">
+        <!-- <div  *ngIf="sortList" [formGroup]="pagingForm">
           <mat-form-field style="font-size:1em;" appearance="outline">
             <mat-label>Sort By</mat-label>
             <mat-select
@@ -181,8 +181,12 @@
                 </mat-option>
               </mat-select>
           </mat-form-field>
-        </div>
+        </div> -->
+
+        <ng-container [ngTemplateOutlet]="sortSelectors"></ng-container>
       </div>
+
+      <!-- retail, barcode, department, category, subcategory, type, count, name -->
 
     </div>
 
@@ -205,7 +209,7 @@
 <ng-template #listView>
   <div [class]="gridlist">
     <div>
-  
+
       <div *ngIf="value" class="loader">
         <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
       </div>
@@ -224,9 +228,9 @@
             (cellClicked)        ='onCellClicked($event)'
             (gridReady)          ="onGridReady($event)">
       </ag-grid-angular>
-  
+
     </div>
-  
+
     <div *ngIf="!hideAdd" >
       <app-product-info-panel *ngIf="product"
                               class="grid-list-item"
@@ -235,7 +239,7 @@
       </app-product-info-panel>
     </div>
   </div>
-  
+
 </ng-template>
 
 <div style="flex-grow:0">
@@ -292,4 +296,13 @@
       </div>
     </span>
   </mat-menu>
+</ng-template>
+
+<ng-template #sortSelectors>
+  <app-sort-selectors
+    (outPutSort)="setSortData($event)"
+    [searchType]="'order'"
+    [productSort]="true"  >
+  </app-sort-selectors>
+
 </ng-template>

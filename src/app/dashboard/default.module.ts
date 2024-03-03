@@ -388,6 +388,7 @@ import { PosSplitOrdersComponent } from '../modules/posorders/pos-payment/posspl
 import { TransferOrderComponent } from '../modules/orders/transfer-order/transfer-order.component';
 import { DCAPTransactionComponent } from '../modules/dsiEMV/Dcap/dcaptransaction/dcaptransaction.component';
 import { MenuSectionComponent } from '../modules/display-menu/display-menu-list/menu-section/menu-section.component';
+import { PosOrderEditorComponent } from '../modules/posorders/pos-order/pos-order-editor/pos-order-editor.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -666,6 +667,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     POSSplitItemsComponent,
     PosSplitOrdersComponent,
     PosSplitGroupsComponent,
+    PosOrderEditorComponent,
+
     PrintGroupReceiptComponent,
     PrepOrderComponent,
     PrepContainerComponent,
@@ -868,6 +871,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     NgxPayPalModule,
     NgxJsonViewerModule,
     NgxColorsModule,
+    SharedModule,
   ],
 
   providers: [

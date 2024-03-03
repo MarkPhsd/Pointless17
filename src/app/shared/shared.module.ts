@@ -242,6 +242,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { NgxColorsModule } from 'ngx-colors';
 import { CloseFloatingButtonComponent } from './widgets/close-floating-button/close-floating-button.component';
 import { MenuCardCategoriesComponent } from '../modules/menu/categories/menu-card-categories/menu-card-categories.component';
+import { SortSelectorsComponent } from './widgets/sort-selectors/sort-selectors.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -477,6 +478,7 @@ import { MenuCardCategoriesComponent } from '../modules/menu/categories/menu-car
     ReportGroupSelectorComponent,
     ReportTypesComponent,
     SortSelectorComponent,
+    SortSelectorsComponent,
     MatSelectorComponent,
     EditBarComponent,
     UserBarComponent,
@@ -702,6 +704,8 @@ import { MenuCardCategoriesComponent } from '../modules/menu/categories/menu-car
     StrainIndicatorComponent,
     StoreCreditInfoComponent,
     StoreCreditSearchComponent,
+    SortSelectorComponent,
+    SortSelectorsComponent,
     SummarycardComponent,
     TagChipsProductsComponent,
     TaxFieldsComponent,
@@ -732,7 +736,6 @@ import { MenuCardCategoriesComponent } from '../modules/menu/categories/menu-car
     GroupByTypesComponent,
     ReportGroupSelectorComponent,
     ReportTypesComponent,
-    SortSelectorComponent,
     MatSelectorComponent,
     EditBarComponent
   ],

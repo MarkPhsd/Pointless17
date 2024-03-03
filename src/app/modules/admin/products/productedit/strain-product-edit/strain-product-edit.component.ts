@@ -1,4 +1,4 @@
-import { Component, Inject,  OnInit,} from '@angular/core';
+import { Component, Inject,  OnInit, TemplateRef, ViewChild,} from '@angular/core';
 import { IItemBasic, MenuService } from 'src/app/_services';
 import { FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -11,12 +11,11 @@ import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { catchError, switchMap } from 'rxjs/operators';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { UnitTypeMethodsService } from 'src/app/_services/menu/unit-type-methods.service';
 import { SearchModel } from 'src/app/_services/system/paging.service';
-import { IMenuItem, menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
+import { menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 
@@ -26,6 +25,83 @@ import { InventoryEditButtonService } from 'src/app/_services/inventory/inventor
   styleUrls: ['./strain-product-edit.component.scss']
 })
 export class StrainProductEditComponent implements OnInit {
+
+  // <div *ngIf="fbProductsService.isGrouping(itemType)">
+
+  @ViewChild('cannabisTemplate')     cannabisTemplate : TemplateRef<any>;
+  @ViewChild('priceCategoryTemplate') priceCategoryTemplate : TemplateRef<any>;
+  @ViewChild('tareValueTemplate')     tareValueTemplate : TemplateRef<any>;
+  @ViewChild('retailProductTemplate') retailProductTemplate : TemplateRef<any>;
+  @ViewChild('gluetenFreeTemplate')   gluetenFreeTemplate : TemplateRef<any>;
+  @ViewChild('liquorTemplate') liquorTemplate : TemplateRef<any>;
+  @ViewChild('priceCategorySelectorTemplate') priceCategorySelectorTemplate : TemplateRef<any>;
+
+
+  @ViewChild('groceryPromptTemplate') groceryPromptTemplate : TemplateRef<any>;
+
+  get groceryPromptView() {
+    const itemType = this.itemType;
+    if ( itemType && itemType.useType && (itemType.type?.toLowerCase() === 'grocery' ||
+          itemType.type?.toLowerCase() === 'tobacco' ||
+          itemType.type?.toLowerCase() === 'restaurant' ||
+          itemType.type?.toLowerCase() === 'food')) {
+      return this.groceryPromptTemplate
+    }
+    return null;
+  }
+
+  get priceCategorySelectorView() {
+    const itemType = this.itemType;
+    if (itemType &&  (itemType.useType &&
+          ( itemType.useType?.toLowerCase() === 'product' ||
+            itemType.useType?.toLowerCase() === 'modifier'
+          ) )) {
+      return this.priceCategorySelectorTemplate
+    }
+    return null;
+  }
+
+  get liquorView() {
+    const itemType = this.itemType;
+    if (this.fbProductsService.isLiquor(itemType)) {
+      return this.liquorTemplate
+    }
+    return null;
+  }
+  get cannabisView() {
+    const itemType = this.itemType;
+    if (this.fbProductsService.isCannabis(this.itemType)) {
+      return this.cannabisTemplate;
+    }
+    return null;
+  }
+
+  get gluetenFreeView() {
+    const itemType = this.itemType;
+    if (itemType && itemType.useType && (itemType.type?.toLowerCase() === 'grocery' ||
+         itemType.type?.toLowerCase() === 'restaurant')) {
+     return this.gluetenFreeTemplate
+    }
+    return null;
+  }
+
+  get tareValueView() {
+    const itemType = this.itemType;
+    if (this.fbProductsService.isWeightedItem(itemType)) {
+      return this.tareValueTemplate
+    }
+    return null;
+  }
+
+
+  get retailProductView() {
+    const itemType = this.itemType;
+   if (this.fbProductsService.isRetail(itemType)){
+    return this.retailProductTemplate
+   }
+   return null;
+  }
+
 
   managerProtected     : boolean;
   productForm          : UntypedFormGroup;
@@ -68,7 +144,6 @@ export class StrainProductEditComponent implements OnInit {
               private siteService: SitesService,
               public  fbProductsService: FbProductsService,
               private inventoryEditButon: InventoryEditButtonService,
-              private productEditButtonService: ProductEditButtonService,
               private itemTypeMethodsService: ItemTypeMethodsService,
               private unitTypeMethodsService: UnitTypeMethodsService,
               public  labelingService: LabelingService,

@@ -63,6 +63,10 @@
               <button mat-raised (click)="print()">
               <mat-icon>print</mat-icon></button>
             </div>
+            <div>
+              <button mat-raised (click)="refresh()">
+              <mat-icon>refresh</mat-icon></button>
+            </div>
           </div>
         </div>
 
@@ -88,12 +92,12 @@
             <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="totals">#</div>
             <div *ngIf="groupBy.toLowerCase()  === 'employee'" class="totals">Tip</div>
 
-            <div *ngIf="groupBy === 'paymentMethod'" class="grid-item">Method</div>
-            <div *ngIf="groupBy === 'paymentMethod'" class="totals">Amount</div>
-            <div *ngIf="groupBy === 'paymentMethod'" class="totals">Avg</div>
-            <div *ngIf="groupBy === 'paymentMethod'" class="totals">#</div>
-            <div *ngIf="groupBy === 'paymentMethod'" class="totals">Tip</div>
-            <div *ngIf="surCharge && groupBy === 'paymentMethod'" class="totals">SCharge</div>
+            <div *ngIf="groupByPayment" class="grid-item">Method</div>
+            <div *ngIf="groupByPayment" class="totals">Amount</div>
+            <div *ngIf="groupByPayment" class="totals">Avg</div>
+            <div *ngIf="groupByPayment" class="totals">#</div>
+            <div *ngIf="groupByPayment" class="totals">Tip</div>
+            <div *ngIf="groupByPayment" class="totals">SCharge</div>
           </div>
 
           <div  class="grid-payment-report-card-header"
@@ -106,7 +110,7 @@
           </div>
 
           <div  class="grid-payment-report-card-header"
-            *ngIf="payments && groupBy && groupBy === 'service'">
+            *ngIf="payments && groupBy && (groupBy === 'service' || groupBy.toLowerCase() === 'buysell') ">
             <div *ngIf="groupBy === 'service'" class="grid-item">Method</div>
             <div *ngIf="groupBy === 'service'" class="totals">Amount</div>
             <div *ngIf="groupBy === 'service'" class="totals">Avg</div>
@@ -143,7 +147,7 @@
       </ng-template>
 
       <ng-template #totalsView>
-        <div class="grid-footer-payments" *ngIf="groupBy && (groupBy === 'paymentMethod')">
+        <div class="grid-footer-payments" *ngIf="groupByPayment">
         </div>
 
         <div class="header-grid"  *ngIf="payments">

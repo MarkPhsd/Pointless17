@@ -31,7 +31,6 @@ export class ClientTypeEditComponent implements OnInit {
   jsonObjectForm         : UntypedFormGroup;
   uiTransactions$        = this.uisettingService.transactionUISettings$
                             .pipe(switchMap(data => {
-                              // data.enableLimitsView
                               return of(data)
                             }))
 
@@ -61,17 +60,10 @@ export class ClientTypeEditComponent implements OnInit {
   initializeForm()  {
 
     this.inputForm = this.initFormFields();
-    console.log('id', this.id)
     if (this.inputForm && (!this.id || this.id == undefined)) {
-      // const data = {} as clientType;
-      // this.clientType = data;
-      // this.inputForm.patchValue(data)
-      // this.initJSONObjectForm(data.jsonObject)
-
       this.clientType$= this.initEmptyClientType();
       return ;
     }
-
 
     if (this.inputForm && this.id) {
       const site = this.siteService.getAssignedSite();

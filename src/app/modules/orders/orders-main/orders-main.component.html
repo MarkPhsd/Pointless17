@@ -4,7 +4,9 @@
 <div class="parent-container">
 
   <ng-container [ngTemplateOutlet]="filterViewFull"></ng-container>
-  <ng-container [ngTemplateOutlet]="orderSummaryEnabled"></ng-container>
+
+
+  <ng-container [ngTemplateOutlet]="summaryEnabled"></ng-container>
 
   <div [class]="gridcontainer">
 
@@ -27,8 +29,18 @@
   </div>
 </div>
 
-<ng-template #orderSummaryView>
-  <div *ngIf="(orderSummary$ | async) as items" style="margin-left:10px;font-weight:500;">
+<ng-template #sortSelectors>
+  <app-sort-selectors
+    (outPutSort)="setSortData($event)"
+    [searchType]="'order'"
+    [sortByEmployee]="true"
+    [sortByService]="true"
+    [sortByAmount]="true">
+  </app-sort-selectors>
+</ng-template>
+
+<ng-template #summaryView>
+  <div *ngIf="(summary$ | async) as items" style="margin-left:10px;font-weight:500;">
     # {{items?.paging?.recordCount}} | Total: {{items?.summary?.total | currency}}
   </div>
 </ng-template>
@@ -360,5 +372,6 @@
     <ng-container [ngTemplateOutlet]="filterMyOrdersView"></ng-container>
     <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
 
+    <ng-container [ngTemplateOutlet]="sortSelectorsView"></ng-container>
   </div>
 </ng-template>

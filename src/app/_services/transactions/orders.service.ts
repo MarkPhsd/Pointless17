@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { Observable, of, switchMap } from 'rxjs';
 import { IProductPostOrderItem, IServiceType, ISite, IUserProfile }   from 'src/app/_interfaces';
-import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel, IReconcilePayload } from 'src/app/_interfaces/transactions/posorder';
+import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel, IReconcilePayload, OrderToFrom } from 'src/app/_interfaces/transactions/posorder';
 import { IPagedList } from '../system/paging.service';
 import { IItemBasic } from '../menu/menu.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -50,7 +50,6 @@ export interface OrderActionResult {
 })
 
 export class OrdersService {
-
 
 
   get platForm() {  return Capacitor.getPlatform(); }
@@ -804,6 +803,18 @@ export class OrdersService {
       )
   }
 
+  deleteTOrder(site: ISite, id: number, history: boolean) {
+    const controller = "/POSOrders/";
+
+    const endPoint = "deleteTOrder";
+
+    const parameters = `?id=${id}&history=${history}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>( url )
+  }
+
   deleteOrder(site: ISite, id: number)   : Observable<any> {
 
       const controller = "/POSOrders/";
@@ -863,7 +874,33 @@ export class OrdersService {
   }
 
 
+  getT_Order(site: ISite, id: number, history: boolean): Observable<OrderToFrom> {
 
+    const controller = "/POSOrders/";
+
+    const endPoint = "GetTOrder";
+
+    const parameters = `?id=${id}&history=${history}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>( url )
+
+  }
+
+  putT_Order(site: ISite,  order: any, history: boolean): Observable<OrderToFrom> {
+
+    const controller = "/POSOrders/";
+
+    const endPoint = "PutOrder";
+
+    const parameters = `?history=${history}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.put<any>( url , order)
+
+  }
 
   notificationEvent(description, title){
     this._SnackBar.open ( description, title , {

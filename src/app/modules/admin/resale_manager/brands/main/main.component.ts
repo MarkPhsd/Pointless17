@@ -1,31 +1,21 @@
-import { Component,   Input, Output, OnInit,
-  EventEmitter,
-  HostListener,
-  OnDestroy} from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { AWSBucketService, ContactsService, MenuService } from 'src/app/_services';
-import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
+import { Component, OnInit,} from '@angular/core';
+import { AWSBucketService,  MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IItemBasicB, IProductSearchResultsPaged } from 'src/app/_services/menu/menu.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { Observable, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
+import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { Observable,  of, switchMap } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { IGetRowsParams, GridApi } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
-import { ClientSearchModel, IProduct, IUserProfile } from 'src/app/_interfaces';
 import { Capacitor,  } from '@capacitor/core';
 import { Subscription } from 'rxjs';
-import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
-import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { MatDialog } from '@angular/material/dialog';
 import { BrandClassSearch, BrandClassSearchResults, BrandsResaleService, Brands_Resale } from 'src/app/_services/resale/brands-resale.service';
 import { Router } from '@angular/router';
-import { C } from '@angular/cdk/keycodes';
+import { IProduct, IUserProfile } from 'src/app/_interfaces';
 
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
@@ -143,13 +133,11 @@ export class BrandEditorMainComponent implements OnInit {
   }
 
   constructor(
-    private agGridService          : AgGridService,
     private fb                     : UntypedFormBuilder,
     private siteService            : SitesService,
     private productEditButtonService: ProductEditButtonService,
     private agGridFormatingService : AgGridFormatingService,
     private awsService             : AWSBucketService,
-    private dialog                 : MatDialog,
     private router                 : Router,
     private brandsResaleService    : BrandsResaleService,
     private menuService            : MenuService,
@@ -189,7 +177,6 @@ export class BrandEditorMainComponent implements OnInit {
           this.pageSize  = pageSize
           this.currentPage = page
           this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize , this.columnDefs, false);
-          console.log('init paging refrsh')
           this.refreshGrid()
         }
       }

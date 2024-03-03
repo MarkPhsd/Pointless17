@@ -1,14 +1,13 @@
-import { Component,  Inject,  Input, Output, OnInit, Optional,
-  ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component,  Inject,   OnInit,  } from '@angular/core';
 import { Router } from '@angular/router';
-import { AWSBucketService, ContactsService, MenuService } from 'src/app/_services';
+import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import {  UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { tap } from 'rxjs/operators';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
-import { update } from 'lodash';
+
 import { EMPTY, Observable } from 'rxjs';
 
 @Component({
@@ -63,7 +62,6 @@ export class PaymentMethodEditComponent  implements OnInit {
                 this.paymentMethod = data
                 this.id         = data.id
                 this.inputForm.patchValue(this.paymentMethod)
-                console.log(this.paymentMethod)
               }
             }
           )

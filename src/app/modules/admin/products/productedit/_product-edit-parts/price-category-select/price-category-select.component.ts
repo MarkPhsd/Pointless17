@@ -1,4 +1,4 @@
-import { Component, OnInit, Input , EventEmitter, Output} from '@angular/core';
+import { Component, OnInit, Input , EventEmitter, Output, ChangeDetectorRef, ViewChild, TemplateRef} from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable, of, switchMap } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
@@ -15,12 +15,13 @@ import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 
 export class PriceCategorySelectComponent implements OnInit {
 
+  @ViewChild('additionalPricesView') additionalPricesView: TemplateRef<any>;
   action$: Observable<any>;
   hidecheckbox = true;
   isOpenPrice: boolean;
   showMorePrices: boolean;
   @Output() itemSelect  = new EventEmitter();
-  @Input() inputForm:      UntypedFormGroup;
+  @Input() inputForm    : UntypedFormGroup;
   @Input() priceCategoryID: number;
   @Input() itemType     = {} as IItemType;
   priceCategory         :   PriceCategories;
@@ -33,6 +34,7 @@ export class PriceCategorySelectComponent implements OnInit {
   constructor(
                private sitesService: SitesService,
                private fb: UntypedFormBuilder,
+               public cd: ChangeDetectorRef,
                public fbProductsService: FbProductsService,
                private priceCategoryService: PriceCategoriesService,
                private menuPricingService: PriceCategoriesService,) {
@@ -46,6 +48,12 @@ export class PriceCategorySelectComponent implements OnInit {
     this.priceCategoriesPaged$ = this.menuPricingService.getPriceCategoriesNoChildrenByPage(site);
   }
 
+  get additionalPricesTemplate() {
+    if (this.showMorePrices){
+      return this.additionalPricesView
+    }
+    return null
+  }
   get showAdditionalButton() {
     if (this.fbProductsService.isTobacco(this.itemType) &&  this.fbProductsService.isRetail(this.itemType) &&
         this.fbProductsService.isLiquor(this.itemType) &&  this.fbProductsService.isProduct(this.itemType)) {
@@ -53,6 +61,22 @@ export class PriceCategorySelectComponent implements OnInit {
     }
   return false
 
+  }
+
+  get showMorePricesView() {
+    const itemType = this.itemType;
+    if( !this.isInventory
+        && ( this.fbProductsService.isTobacco(itemType) ||
+             this.fbProductsService.isRetail(itemType)  ||
+             this.fbProductsService.isLiquor(itemType)  ||
+             this.fbProductsService.isProduct(itemType)
+            )
+        || this.showAdditionalCost
+        || this.showMorePrices
+        ) {
+      return true
+    }
+    return false
   }
 
   openPriceCategory() {

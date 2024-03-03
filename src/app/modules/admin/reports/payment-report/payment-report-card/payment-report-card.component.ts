@@ -23,6 +23,16 @@ export class PaymentReportCardComponent implements OnInit {
     const i = 0;
   }
 
+  get buySell() {
+    if (this.groupBy.toLowerCase() === 'negativePayments'.toLowerCase()) {
+      return true
+    }
+    if (this.groupBy.toLowerCase() === 'positivePayments'.toLowerCase()) {
+      return true
+    }
+    return false;
+  }
+
   get reportView() {
     if (this.type === 'voids') {
       return this.voidsView

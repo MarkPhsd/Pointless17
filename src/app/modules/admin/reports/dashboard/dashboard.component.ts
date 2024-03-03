@@ -82,7 +82,9 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     {name: 'Non Taxed', id: '3', icon: ''},
     {name: 'All Items', id: '4', icon: ''},
     {name: 'Item Types', id: '9', icon:''},
-    {name: 'Service Fees', id: '10', icon:''}
+    {name: 'Service Fees', id: '10', icon:''},
+    {name: 'Item Sizes', id: '11', icon:''},
+    {name: 'Quantity Grouped', id: '12', icon:''}
   ]
 
   @ViewChild('customReport')      customReport: TemplateRef<any> | undefined;
@@ -93,6 +95,8 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   @ViewChild('itemSales')       itemSales: TemplateRef<any> | undefined;
   @ViewChild('itemTypeSales')       itemTypeSales: TemplateRef<any> | undefined;
   @ViewChild('serviceFees')       serviceFees: TemplateRef<any> | undefined;
+  @ViewChild('itemQuantityGrouppedSales')     itemQuantityGrouppedSales: TemplateRef<any> | undefined;
+  @ViewChild('itemSizeSales')       itemSizeSales: TemplateRef<any> | undefined;
 
   @ViewChild('itemVoids')       itemVoids: TemplateRef<any> | undefined;
 
@@ -100,6 +104,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   @ViewChild('paymentVoids')     paymentVoids: TemplateRef<any> | undefined;
   @ViewChild('paymentRefunds')   paymentRefunds: TemplateRef<any> | undefined;
   @ViewChild('reportDesigner')   reportDesigner: TemplateRef<any> | undefined;
+  @ViewChild('paymentPositiveNeg')   paymentPositiveNeg: TemplateRef<any> | undefined;
 
   @ViewChild('reportCategories')     reportCategories: TemplateRef<any> | undefined;
   @ViewChild('reportCategoriesList') reportCategoriesList: TemplateRef<any> | undefined;
@@ -578,6 +583,30 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     const filteredData = this.reportsListView.filter(data => data.id === 9 && data.visible);
     if (filteredData.length > 0) {
       return this.itemTypeSales
+    }
+    return null
+  }
+
+  get itemSizeSalesView() {
+    const filteredData = this.reportsListView.filter(data => data.id === 11 && data.visible);
+    if (filteredData.length > 0) {
+      return this.itemSizeSales
+    }
+    return null
+  }
+
+  get paymentPositiveNegView() {
+    const auth = this.authService._userAuths.value
+    if (auth.buysSalesReports) {
+      return this.paymentPositiveNeg
+    }
+    return null;
+  }
+
+  get itemQuantityGrouppedSalesView() {
+    const filteredData = this.reportsListView.filter(data => data.id === 12 && data.visible);
+    if (filteredData.length > 0) {
+      return this.itemQuantityGrouppedSales
     }
     return null
   }

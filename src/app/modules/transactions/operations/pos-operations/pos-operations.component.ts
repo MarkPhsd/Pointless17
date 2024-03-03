@@ -34,7 +34,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   closingProcedure$: Observable<any>
   @ViewChild('printsection') printsection: ElementRef;
   @ViewChild('metrcNetSalesSummary') metrcNetSalesSummary: TemplateRef<any>;
-
+  @ViewChild('paymentPositiveNeg')   paymentPositiveNeg: TemplateRef<any> | undefined;
   //coaching
   @ViewChild('coachingCloseDay', {read: ElementRef}) coachingCloseDay: ElementRef;
   @ViewChild('coachingUnClosedBalanceSheets', {read: ElementRef}) coachingUnClosedBalanceSheets: ElementRef;
@@ -150,6 +150,14 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       return of(data)
     }))
     this.initTerminalSettings()
+  }
+
+  get paymentPositiveNegView() {
+    const auth = this.auths
+    if (auth?.buysSalesReports) {
+      return this.paymentPositiveNeg
+    }
+    return null;
   }
 
 
@@ -635,6 +643,10 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     if (this.auths.disableGiftCards ) {
       total = total -1
     }
+    if (this.auths.buysSalesReports ) {
+      total = total +2
+    }
+
     return total
   }
 

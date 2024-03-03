@@ -26,16 +26,6 @@
         </div>
       </button>
     </div>
-
-    <!-- (isInventory && (inputForm.controls['priceCategoryID'].value  && inputForm.controls['priceCategoryID'].value != 0)) -->
-    <!-- <div style="margin-top:5px;"
-         *ngIf="(priceCategoryID == 0)">
-      <button mat-button
-              color="warn"
-              (click)="clearPriceCategory()">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div> -->
   </div>
 
   <app-value-fields
@@ -75,8 +65,8 @@
       </button>
   </div>
 
-  <div *ngIf="!isInventory && (fbProductsService.isTobacco(itemType)  || fbProductsService.isRetail(itemType) ||
-              fbProductsService.isLiquor(itemType) || fbProductsService.isProduct(itemType) || showAdditionalCost)">
+  <div *ngIf="showMorePricesView && inputForm">
+
     <app-value-fields
       [inputForm]="inputForm"
       [fieldsClass]="'font-medium'"
@@ -92,6 +82,7 @@
     </app-value-fields>
 
     <app-value-fields
+      *ngIf=" fbProductsService.isAlcohol(itemType) || fbProductsService.isAlcohol(itemType) || fbProductsService.isProduct(itemType)"
       [inputForm]="inputForm"
       [fieldsClass]="'font-medium'"
       [fieldName]="'crv'"  >
@@ -99,7 +90,8 @@
     </app-value-fields>
   </div>
 
-  <div style="margin-top:5px;"  *ngIf="!isInventory && !itemType.disableSimplePrice">
+  <!-- !isInventory &&  *ngIf="!isInventory && !itemType.disableSimplePrice" -->
+  <!-- <div style="margin-top:5px;" >
     <button class="button"
             mat-raised-button
             (click)="showMorePrices = !showMorePrices">
@@ -110,36 +102,34 @@
           Show More Prices
         </div>
       </button>
-  </div>
+  </div> -->
 
-  <div *ngIf="showMorePrices"  class="ps-grid-items-75-col vertical-scroll">
-    <div>
-      <ng-container [ngTemplateOutlet]="retailFields"></ng-container>
+  <ng-container [ngTemplateOutlet]="additionalPricesView"></ng-container>
+
+  <ng-template #additionalPricesView>
+    <div   class="ps-grid-items-75-col vertical-scroll">
+      <div>
+        <ng-container [ngTemplateOutlet]="retailFields"></ng-container>
+      </div>
+      <div>
+        <ng-container [ngTemplateOutlet]="priceFields"></ng-container>
+      </div>
     </div>
-    <div>
-      <ng-container [ngTemplateOutlet]="priceFields"></ng-container>
-    </div>
-  </div>
-</div>
+  </ng-template>
 
 <ng-template #retailFields>
-  <div *ngIf="!isInventory && showMorePrices" [formGroup]="inputForm">
+  <div *ngIf="inputForm"  [formGroup]="inputForm">
     <app-value-fields
-      *ngIf="!isInventory && !itemType.disableSimplePrice"
-      [fieldsClass]="'font-medium'"
       [inputForm]= "inputForm"
       [fieldName]="'priceA'">
       Price 1
     </app-value-fields>
     <app-value-fields
-      *ngIf="!isInventory && !itemType.disableSimplePrice"
-      [fieldsClass]="'font-medium'"
       [inputForm]= "inputForm"
       [fieldName]="'priceB'">
       Price 2
     </app-value-fields>
     <app-value-fields
-      *ngIf="!isInventory && !itemType.disableSimplePrice"
       [fieldsClass]="'font-medium'"
       [inputForm]= "inputForm"
       [fieldName]="'priceC'">
@@ -149,7 +139,7 @@
 </ng-template>
 
 <ng-template #priceFields>
-  <div *ngIf="!isInventory && showMorePrices && inputForm" [formGroup]="inputForm">
+  <div *ngIf="inputForm" [formGroup]="inputForm">
     <app-value-fields
       [inputForm]="inputForm"
       [fieldsClass]="'font-medium'"
