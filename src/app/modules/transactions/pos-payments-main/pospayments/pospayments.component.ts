@@ -18,7 +18,18 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { PosPaymentEditComponent } from 'src/app/modules/posorders/pos-payment/pos-payment-edit/pos-payment-edit.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
-
+function myComparator(value1, value2) {
+  if (value1 === null && value2 === null) {
+    return 0;
+  }
+  if (value1 === null) {
+    return -1;
+  }
+  if (value2 === null) {
+    return 1;
+  }
+  return value1 - value2;
+}
 @Component({
   selector: 'app-pospayments',
   templateUrl: './pospayments.component.html',
@@ -30,7 +41,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-  @Input()  height = "90vh"
+  @Input()  height = "80vh"
   searchPhrase:         Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
@@ -139,20 +150,11 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   }
 
 
-
   initClasses()  {
     const platForm      = this.platForm;
     let height = this.height
-    if (!height) {
-      height = "80vh"
-    }
-
     this.gridDimensions = `width: 100%; height: ${height}`
     this.agtheme        = 'ag-theme-material';
-
-    if (!height) {
-      height = "80vh"
-    }
 
     if (platForm === 'capacitor') { this.gridDimensions = `width: 100%; height: ${height}` }
     if (platForm === 'electron')  { this.gridDimensions = `width: 100%; height: ${height}` }
@@ -319,14 +321,29 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
                   maxWidth: 100,
                   // flex: 2,
       },
-      {headerName: 'History', field: 'history', sortable: true,
-          cellRenderer: this.agGridService.currencyCellRendererUSD,
-          visible : false,
-          width   : 0,
-          minWidth: 0,
-          maxWidth: 0,
-          // flex: 2,
-        },
+      {headerName: 'Auth', field: 'preAuth', sortable: true,
+            width   : 100,
+            minWidth: 100,
+            maxWidth: 100,
+            // flex: 2,
+      },
+      {
+        headerName: "History",
+          width:    100,
+          minWidth: 100,
+          maxWidth: 100,
+          flex: 1,
+          field: "history",
+          comparator: myComparator,
+          cellRenderer: function(params) {
+              var input = document.createElement('input');
+              input.type="checkbox";
+              input.checked = params.value;
+              input.disabled = false;
+              input.addEventListener('click', function (event) {  });
+              return input;
+          }
+      },
     ]
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
@@ -435,6 +452,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
               let results  =  this.refreshImages(data.results)
               params.successCallback(results)
               this.rowData = results
+
             }
 
           }

@@ -5,11 +5,9 @@ import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IServiceType,  } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-// import { DatePipe } from '@angular/common'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -29,16 +27,16 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   scheduleForm              : UntypedFormGroup;
   order                     : IPOSOrder;
   _order                    : Subscription;
-  errorMessage: string;
-  SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
-  public       selectedIndex          = 0;
-  showSaveButton = false;
+  errorMessage    : string;
+  SWIPE_ACTION    = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
+  public          selectedIndex          = 0;
+  showSaveButton  = false;
   processingUpdate: boolean;
-  scheduledDate: string;
-  messages = [];
+  scheduledDate   : string;
+  messages        = [];
 
   saving: boolean;
-  messages$ = this.getScheduleMessages() //   Observable<IRequestMessage[]>;
+  messages$      = this.getScheduleMessages() //   Observable<IRequestMessage[]>;
 
   isAuthorized  : boolean;
   isUser        : boolean;
@@ -57,7 +55,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
         this.scheduledDate = data?.preferredScheduleDate;
       }
       const site = this.siteService.getAssignedSite()
-      if (data && data.serviceType) { 
+      if (data && data.serviceType) {
         return this.serviceTypeService.getTypeCached(site, +data.serviceTypeID)
       }
       const item = {} as IServiceType;
@@ -65,16 +63,13 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     })).subscribe(data => {
       this.serviceType = data;
 
-      if (data) { 
+      if (data) {
         this.instructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.instructions);
         this.shippingInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.shippingInstructions);
         this.scheduleInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.scheduleInstructions);
       }
-
     })
   }
-
-
 
   constructor(
     private orderService      : OrdersService,
@@ -194,7 +189,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   }
 
   saveOrderMemo() {
-    const site = this.siteService.getAssignedSite();
+    const site  = this.siteService.getAssignedSite();
     const notes = this.inputFormNotes.controls['productOrderMemo'].value;
     const order = {} as IPOSOrder
     if (!notes) {return of(this.order)};
@@ -214,12 +209,12 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     if (this.order && this.order.clients_POSOrders) {
       const client = this.order.clients_POSOrders;
       this.inputFormNotes = this.fb.group({
-        productOrderMemo  :[this.order.productOrderMemo],
+        productOrderMemo  :[this.order.productOrderMemo, Validators.maxLength(500)],
       })
       return
     }
     this.inputFormNotes =  this.fb.group({
-      productOrderMemo  :[this.order?.productOrderMemo],
+      productOrderMemo  :[this.order?.productOrderMemo, Validators.maxLength(500)],
     })
   }
 
@@ -391,6 +386,6 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     this.action$ = this.orderMethodsService.sendOrderForMessageService(item, order)
   }
 
-  
+
 
 }

@@ -53,8 +53,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   @ViewChild('coachingSplitGroups', {read: ElementRef}) coachingSplitGroups: ElementRef;
   @ViewChild('coachingPaymentFull', {read: ElementRef}) coachingPaymentFull: ElementRef;
   @ViewChild('coachingPaymentPartial', {read: ElementRef}) coachingPaymentPartial: ElementRef;
-
-
   process$: Observable<any>;
   @Input() order  :   IPOSOrder;
   isApp = this.platFormService.isApp();
@@ -286,19 +284,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this.uiTransactions?.enableGiftCards) {
       return this.giftCardPayButton
     }
-    // this.paymentGiftCardsList.forEach(data => {
-    //     if (data.name.toLowerCase() === 'gift card') {
-    //       pass = true
-    //     }
-    //   }
-    // )
-    // if (pass) {
-    //   return this.giftCardPayButton
-    // }
     return null
   }
-
-
     //Allow Cash Payments For Other Servers
     get isCashAuthorizedPayment() {
       if (this.user?.roles === 'user' || this.user?.roles == 'guest') { return false }
@@ -314,14 +301,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
           return false
         }
       }
-
       return true;
     }
 
   setGroupID(event) {
     console.log('setgroupd', event);
     //then apply it to the split section, so it updates and shows the appropriate group for this current split
-
   }
 
   enterRewardsAmount(amount) {

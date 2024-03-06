@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "2.21.1",
+  "version": "2.21.7",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -133,6 +133,7 @@
     "file-saver": "^2.0.5",
     "fs": "0.0.1-security",
     "glob-parent": "^6.0.0",
+    "globalthis": "^1.0.3",
     "hammerjs": "^2.0.8",
     "highcharts": "^9.1.1",
     "highcharts-angular": "^2.10.0",

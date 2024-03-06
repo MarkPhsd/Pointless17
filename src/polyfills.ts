@@ -3,6 +3,18 @@
  */
 //  (window as any).global = window;
  (window as any).global = window;
+
+ import 'globalthis/auto';
+
+ if (typeof queueMicrotask === "undefined") {
+   window.queueMicrotask = function(callback) {
+     Promise.resolve()
+       .then(callback)
+       .catch(e => setTimeout(() => { throw e; }));
+   };
+ }
+
+
 // import '@angular/localize/init';
 /**
  * This file includes polyfills needed by Angular and is loaded before the app.
@@ -39,10 +51,10 @@
  *
  * The following flags will work for all browsers.
  *
- * (window as any).__Zone_disable_requestAnimationFrame = true; // disable patch requestAnimationFrame
+ // disable patch requestAnimationFrame
  * (window as any).__Zone_disable_on_property = true; // disable patch onProperty such as onclick
  * (window as any).__zone_symbol__UNPATCHED_EVENTS = ['scroll', 'mousemove']; // disable patch specified eventNames
- *
+ * window as any).__Zone_disable_requestAnimationFrame = true;
  *  in IE/Edge developer tools, the addEventListener will also be wrapped by zone.js
  *  with the following flag, it will bypass `zone.js` patch for IE/Edge
  *
