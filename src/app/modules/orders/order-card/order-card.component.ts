@@ -14,14 +14,14 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
 })
 export class OrderCardComponent implements OnInit {
   @Input() disableEdit: boolean;
+  @Input() order : IPOSOrder;
   serviceColor: string;
   serviceType$ : Observable<IServiceType>;
   phoneDevice: boolean;
-  @Input() order : IPOSOrder;
   smallDevice : boolean;
   minutesOpen: number;
   orderNameLength: number = 10;
-  
+
   dateFormat = 'shortDate'
   timeFormat = 'shortTime'
   tableFont = 'font-dark-green font-1-4em font-weight-500';

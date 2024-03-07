@@ -72,6 +72,7 @@ export class GridComponentPropertiesComponent implements OnInit {
   chartTypes       = [];
   menuBoardType    : ValueTypeList
   categories$      : Observable<IMenuItem[]>;
+  priceSchedules$  : Observable<IPriceSchedule[]>;
   specials$        : Observable<IPriceSchedule[]>;
   list$            : Observable<any[]>;
   list             : any[];
@@ -157,14 +158,11 @@ export class GridComponentPropertiesComponent implements OnInit {
 
   setCategory(value: any) {
     this.cardValueType = this.inputForm.controls['cardValueType'].value;
-    // console.log(this.cardValueType,'value', value)
-    if (this.cardValueType == 'Menu Section') {
+    if (this.cardValueType == 'Menu Section' || this.cardValueType.toLowerCase() == 'CatalogSchedule'.toLowerCase()) {
       const item = {name: value?.name,active: value?.active, id: value?.id}  as ItemValue
-      // this.listItemID = JSON.stringify(item)
       this.listItemID = value?.id;
       this.productName = value?.productName;
       this.setSelectValue(item)
-      console.log('item', item, this.listItemID)
       return
     }
     this.listItemID = value;
@@ -348,6 +346,16 @@ export class GridComponentPropertiesComponent implements OnInit {
   setComponentName( model: DashBoardComponentProperties, content: DashboardContentModel,) {
 
     if (!model.cardValueType) { return content}
+
+    if (model.cardValueType === 'catalogschedules') {
+      content.componentName = 'catalogschedules'
+      return content
+    }
+
+    if (model.cardValueType === 'catalogschedule') {
+      content.componentName = 'catalogschedule'
+      return content
+    }
 
     if (model.cardValueType === 'Product') {
       content.componentName = 'product'

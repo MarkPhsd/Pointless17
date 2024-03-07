@@ -65,33 +65,34 @@ import { UserIdleModule } from 'angular-user-idle';
 import { DragAndDropModule } from 'angular-draggable-droppable';
 import { ResizeDirective } from './_directives/resize.directive';
 
-// Sentry.init({
-//   dsn: "https://ba163a19cdcf43ca80217e835d0f06bc@o1342227.ingest.sentry.io/6616061",
-//   debug: false,
 
-//   // beforeSend: (event, hint) => {
-//   //   if (true) {
-//   //     console.error(hint.originalException || hint.syntheticException);
-//   //     return null; // this drops the event and nothing will be sent to sentry
-//   //   }
-//   //   return event;
-//   //  },
-//   // beforeSend: (event, hint) => {
-//   //   setTimeout(() => console.error(hint.originalException || hint.syntheticException), 0);
-//   //   return event;
-//   // },
-//   integrations: [
-//     new BrowserTracing({
-//       tracingOrigins: ["localhost", "https://yourserver.io/api"],
-//       routingInstrumentation: Sentry.routingInstrumentation,
-//     }),
-//   ],
+Sentry.init({
+  dsn: "https://ba163a19cdcf43ca80217e835d0f06bc@o1342227.ingest.sentry.io/6616061",
+  debug: false,
+
+  // beforeSend: (event, hint) => {
+  //   if (true) {
+  //     console.error(hint.originalException || hint.syntheticException);
+  //     return null; // this drops the event and nothing will be sent to sentry
+  //   }
+  //   return event;
+  //  },
+  // beforeSend: (event, hint) => {
+  //   setTimeout(() => console.error(hint.originalException || hint.syntheticException), 0);
+  //   return event;
+  // },
+  // integrations: [
+  //   new BrowserTracing({
+  //     tracingOrigins: ["localhost", "https://yourserver.io/api"],
+  //     routingInstrumentation: Sentry.routingInstrumentation,
+  //   }),
+  // ],
 
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // We recommend adjusting this value in production
-  // tracesSampleRate: 3.0,
-// });
+  tracesSampleRate: 3.0,
+});
 
 enableProdMode();
 // platformBrowserDynamic()
@@ -203,8 +204,8 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     {
       provide: APP_INITIALIZER,
       useFactory: init_app,
-      // deps: [AppInitService, Sentry.TraceService],
-      deps: [AppInitService],
+      deps: [AppInitService, Sentry.TraceService],
+      // deps: [AppInitService],
       multi: true
     },
     Title

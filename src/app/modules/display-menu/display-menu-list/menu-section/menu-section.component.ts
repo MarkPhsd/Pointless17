@@ -27,6 +27,7 @@ export class MenuSectionComponent implements OnInit {
   @Input() menu: IDisplayMenu;
   @ViewChild('category') category : TemplateRef<any>;
   @ViewChild('loading') loading : TemplateRef<any>;
+  @Input() order: IPOSOrder;
   categoryMenu: IPriceSchedule;
   id        : number;
   addMenuItem$ : Observable<any>;
@@ -34,9 +35,6 @@ export class MenuSectionComponent implements OnInit {
   obs$      : Observable<any>;
   item      : IMenuItem;
   bucket    : string;
-  @Input() order: IPOSOrder;
-
-
 
   containerStyle      = ``
   containerBackground = 'cemement.png';
@@ -108,7 +106,6 @@ export class MenuSectionComponent implements OnInit {
       this.obs$ = this.priceScheduleService.getPriceScheduleFull(site, this.id).pipe(switchMap(data =>{
         this.categoryMenu = data;
         this.categoryMenu.itemDiscounts.sort((a, b) => a.sort - b.sort);
-        console.log('Items', this.categoryMenu.itemDiscounts)
         return of(data)
       }))
       return;
@@ -119,13 +116,8 @@ export class MenuSectionComponent implements OnInit {
   addStyles(styles): void {
     const style = this.renderer.createElement('style');
     const text = this.renderer.createText(styles); // Example CSS
-
     this.renderer.appendChild(style, text);
-    // Append the style element directly to this component's native element
     this.renderer.appendChild(this.el.nativeElement, style);
-
-    // this.renderer.appendChild(style, text);
-    // this.renderer.appendChild(this.document.head, style);
   }
 
   get categoryView() {

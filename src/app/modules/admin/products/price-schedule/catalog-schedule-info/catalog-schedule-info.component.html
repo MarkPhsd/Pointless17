@@ -1,0 +1,17 @@
+<mat-card *ngIf="priceSchedule">
+  <mat-card-content>
+    <div *ngIf="priceSchedule">
+      <scheduled-menu-image
+          [hideButton]="true"
+          [item]="priceSchedule">
+      </scheduled-menu-image>
+    </div>
+    <scheduled-menu-header
+        [priceSchedule]="priceSchedule"
+        [css]="ccs"
+        [showText]="true" >
+    </scheduled-menu-header>
+  </mat-card-content>
+</mat-card>
+
+<div *ngIf="(priceSchedule$ | async) as priceSchedule"></div>

@@ -1,11 +1,9 @@
 <div *ngIf="priceSchedule  && (!isApp || showText)">
-    <div
-        class="text"
-        [innerHTML]="priceSchedule?.description" >
+    <div  class="text"
+         [innerHTML]="priceSchedule?.description" >
     </div>
 
     <div *ngIf="priceSchedule.type && priceSchedule?.type.toLowerCase() != 'menu list'">
-
       <div *ngIf="!priceSchedule.type && priceSchedule.name">{{priceSchedule?.name}}</div>
       <div *ngIf="priceSchedule.type">
         <h4>{{priceSchedule?.name}} is a "{{priceSchedule?.type.toLowerCase()}}" reward.</h4>

@@ -9,7 +9,6 @@ import { BehaviorSubject, catchError, Observable, of, switchMap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { StrainBoardComponent } from 'src/app/modules/tv-menu/strainBoard/strain-board/strain-board.component';
-import { AuthenticationService } from './authentication.service';
 import { CategoryItemsBoardComponent } from 'src/app/modules/tv-menu/category-items-board/category-items-board.component';
 import { PosOrderItemsComponent } from 'src/app/modules/posorders/pos-order/pos-order-items/pos-order-items.component';
 import { PosOrderBoardComponent } from 'src/app/modules/posorders/pos-order/pos-order-board/pos-order-board.component';
@@ -26,6 +25,8 @@ import { TiersWithPricesComponent } from 'src/app/modules/menu/tierMenu/tiers-wi
 import { LastImageDisplayComponent } from 'src/app/shared/widgets/last-image-display/last-image-display.component';
 import { MenuSectionComponent } from 'src/app/modules/display-menu/display-menu-list/menu-section/menu-section.component';
 import { FormBuilder } from '@angular/forms';
+import { CatalogScheduleInfoComponent } from 'src/app/modules/admin/products/price-schedule/catalog-schedule-info/catalog-schedule-info.component';
+import { CatalogScheduleInfoListComponent } from 'src/app/modules/admin/products/price-schedule/catalog-schedule-info-list/catalog-schedule-info-list.component';
 export interface IComponent {
   id: string;
   componentRef: string;
@@ -36,7 +37,6 @@ export interface ValueTypeList {
   icon  : string;
   usesRange: boolean;
 }
-
 
 //https://tiberiuzuld.github.io/angular-gridster2/api
 //https://stackblitz.com/edit/gridster-in-angular?file=app%2Fapp.component.ts
@@ -87,6 +87,8 @@ export class GridsterLayoutService {
     {name: 'Category',         icon: 'list',    filter:  'menu'},
     {name: 'Specials',         icon: 'list',    filter:  'menu'},
     {name: 'Product',          icon: 'product', filter:  'menu'},
+    {name: "catalogschedule", icon: 'cart' ,   filter:  'menu'},
+    {name: "catalogschedules", icon: 'cart' ,   filter:  'menu'},
     {name: 'FlowerPrices',     icon: 'list',    filter:  'menu'},
     {name: 'POSOrder',         icon: 'cart'   , filter:  'order'},
     {name: 'ClientInfo',       icon: 'cart'   , filter:  'order'},
@@ -180,14 +182,16 @@ export class GridsterLayoutService {
   ]
 
 	protected componentCollection = [
-		{ name: "Category"    , componentInstance: CategoryItemsBoardComponent },
-    { name: "Product"     , componentInstance: MenuItemCardDashboardComponent},
-    { name: "MenuSections" , componentInstance: MenuSectionComponent},
-		{ name: "Flowers"     , componentInstance: StrainBoardComponent },
-    { name: "FlowerPrices", componentInstance: TiersWithPricesComponent},
+		{ name: "Category"    ,  componentInstance  : CategoryItemsBoardComponent },
+    { name: "Product"     ,  componentInstance  : MenuItemCardDashboardComponent},
+    { name: "MenuSections" , componentInstance  : MenuSectionComponent},
+		{ name: "Flowers"     ,  componentInstance  : StrainBoardComponent },
+    { name: "FlowerPrices",  componentInstance  : TiersWithPricesComponent},
+    { name: "catalogschedule",  componentInstance  : CatalogScheduleInfoComponent},
+    { name: "catalogschedules",  componentInstance  : CatalogScheduleInfoListComponent},
 
-		{ name: "Chart"       , componentInstance: CardDashboardComponent },
-    { name: "report"      , componentInstance: CardComponent },
+		{ name: "Chart"       , componentInstance  : CardDashboardComponent },
+    { name: "report"      , componentInstance  : CardComponent },
 
     { name: "POSOrder"    , componentInstance:   PosOrderBoardComponent },
     { name: "ClientInfo"  , componentInstance:   OrderHeaderDemographicsBoardComponent },
@@ -389,7 +393,6 @@ export class GridsterLayoutService {
     private gridDataService: GridsterDataService,
     private _snackBar      : MatSnackBar,
     private router         : Router,
-    private authService    : AuthenticationService,
     private settingsService: SettingsService,
     private fb: FormBuilder,
   ) {
@@ -449,8 +452,6 @@ export class GridsterLayoutService {
     return comp ? comp.componentRef : null;
   }
 
-
-
   deleteModel(model:DashboardModel) {
     const site     = this.siteService.getAssignedSite();
     return this.gridDataService.deleteGrid(site, model.id).pipe(
@@ -472,7 +473,6 @@ export class GridsterLayoutService {
     const site     = this.siteService.getAssignedSite();
     let forceRefreshList = false;
     if (model.id == 0) { forceRefreshList = true}
-
     return this.gridDataService.saveGrid(site, model).pipe(
       switchMap(data => {
         if (data ) {
@@ -480,15 +480,11 @@ export class GridsterLayoutService {
             this.notifyEvent('Error Occured: ' + data.errorMessage, 'Failed')
           }
           this.stateChanged = false
-          // console.log('data', data)
           if (refresh) {
-            // console.log('update board')
             this.updateDashboardModel(data, false)
             this.refreshDashBoard(data?.id);
           }
-          // if (forceRefreshList) {  this.refreshCollection();  }
         }
-
         return of(data)
       }),catchError( err => {
         this.refreshDashBoard(null);
@@ -583,10 +579,8 @@ export class GridsterLayoutService {
         this.changedOptions();
         if (!this.dashboardModel) {
           if (dashboards[0]) {
-
           }
         } else {
-          // this.forceRefresh(this.dashboardModel.id.toString())
         }
         return of(dashboards)
 		}));
@@ -597,9 +591,6 @@ export class GridsterLayoutService {
 		// We make get request to get all dashboards from our REST API
 		return this.gridDataService.getGrids(site)
   }
-
-
-
 
   	// Return Array of WidgetModel
 	getWidgets(): Observable<Array<WidgetModel>> {
@@ -641,23 +632,36 @@ export class GridsterLayoutService {
     item.type = 'menu'
     list.push(item);
 
+    item = {} as WidgetModel;
+    item.name       = 'catalog schedule'
+    item.identifier = 'catalogschedule'
+    item.icon = 'menu'
+    item.type = 'menu'
+    list.push(item);
 
     item = {} as WidgetModel;
-    item.name = 'POSOrder'
+    item.name       = 'catalog schedules'
+    item.identifier = 'catalogschedules'
+    item.icon = 'menu'
+    item.type = 'menu'
+    list.push(item);
+
+    item = {} as WidgetModel;
+    item.name       = 'POSOrder'
     item.identifier = 'order'
     item.icon = 'shopping_cart'
     item.type = 'order'
     list.push(item);
 
     item = {} as WidgetModel;
-    item.name = 'ClientInfo'
+    item.name       = 'ClientInfo'
     item.identifier = 'clientinfo'
     item.icon = 'person'
     item.type = 'order'
     list.push(item);
 
     item = {} as WidgetModel;
-    item.name = 'OrderTotal'
+    item.name       = 'OrderTotal'
     item.identifier = 'ordertotal'
     item.icon = 'credit_card'
     item.type = 'order'
@@ -719,6 +723,7 @@ export class GridsterLayoutService {
     let model = [] as DashboardContentModel[];
     let id = this.getRandomInt(1, 100000)// +this.dashboardArray.length + 1
 
+    console.log('component type', componentType)
 		switch (componentType) {
       case 'youtube' :
         model =  this.applyItem(id, 'YouTube', 'YouTube', YoutubePlayerComponent, ev);
@@ -753,9 +758,16 @@ export class GridsterLayoutService {
       case 'flowerprices' :
         model =     this.applyItem(id, "Flower Prices", 'FlowerPrices', TiersWithPricesComponent , ev);
         break;
+      case 'catalogschedule' :
+          model =    this.applyItem(id, "Catalog Schedule", 'catalogschedule', CatalogScheduleInfoComponent , ev);
+          break;
+      case 'catalogschedules' :
+          model =    this.applyItem(id, "Catalog Schedules", 'catalogschedules', CatalogScheduleInfoComponent , ev);
+          break;
       case 'menusection' :
         model =    this.applyItem(id, "Menu Section", 'MenuSections', MenuSectionComponent , ev);
         break;
+
     }
     // console.log('model', model)
     return model;
@@ -769,10 +781,20 @@ export class GridsterLayoutService {
       properties.name = componentName;
       let jsonString = ''
 
-
       const types = this.componentCollection.filter(data =>
          { return data.name.toLowerCase() === componentName.toLowerCase()}
       )
+
+      console.log('apply item componentName', componentName)
+      if (componentName.toLowerCase() === 'catalogschedule'.toLowerCase()) {
+        properties.type = 'menu'
+        properties.cardValueType = 'catalogschedule'
+      }
+
+      if (componentName.toLowerCase() === 'catalogschedules'.toLowerCase()) {
+        properties.type = 'menu'
+        properties.cardValueType = 'catalogschedulelist'
+      }
 
       if (componentName.toLowerCase() === 'posorder') {
         properties.type = 'order'
@@ -800,15 +822,14 @@ export class GridsterLayoutService {
         properties.cardValueType = 'Product'
       }
 
-      if (componentName.toLowerCase() === 'lastItemAdded') {
-        properties.type = 'menu'
-        properties.cardValueType = 'Product'
-      }
+
+
 
       if (componentName.toLowerCase() === 'MenuSections'.toLowerCase()) {
         properties.type = 'menu'
         properties.cardValueType = 'Menu Section'
       }
+
       if (componentName.toLowerCase() === 'menu' || componentName.toLowerCase() === 'menu') {
         properties.type = 'menu'
       }
@@ -914,13 +935,10 @@ export class GridsterLayoutService {
     if (id == 0 || id == undefined) {
       if (ignoreManager) {
         this.router.navigateByUrl('/menu-manager')
-        // return of(null)
-        // console.log('ignore managemr')
       }
     }
 
     let gridData$ = this.gridDataService.getGrid(site, id)
-    // console.log('getDataOBS')
 
     return gridData$.pipe(
       switchMap( data => {
@@ -946,7 +964,6 @@ export class GridsterLayoutService {
           }
         })
 
-        // console.log('update dashboard model', data)
         this.updateDashboardModel(data, true)
         return of(data)
       })
@@ -965,11 +982,7 @@ export class GridsterLayoutService {
 
   parseJson(dashboardModel: DashboardModel) {
 		// We loop on our dashboardCollection
-
-    if (!dashboardModel.dashboard) {
-      dashboardModel.dashboard = [] as DashboardContentModel[]
-    }
-
+    if (!dashboardModel.dashboard) {    dashboardModel.dashboard = [] as DashboardContentModel[]  }
 		dashboardModel.dashboard.forEach(dashboard => {
 			// We loop on our componentCollection
 			this.componentCollection.forEach(component => {
@@ -986,8 +999,7 @@ export class GridsterLayoutService {
 
   initComponentComplexData(item: DashboardContentModel): DashboardContentModel {
     const properties = JSON.parse(item.properties)
-    // console.log(properties)
-    item.object = this.getDateRange(properties);
+    item.object      = this.getDateRange(properties);
     return item;
   }
 
@@ -1019,12 +1031,14 @@ export class GridsterLayoutService {
     if (!dashboardModel.dashboard) {
       return
     }
+
 		dashboardModel.dashboard.forEach(dashboard => {
 			// We loop on our componentCollection
 			this.componentCollection.forEach(component => {
 				// We check if component key in our dashboardCollection
 				// is equal to our component name key in our componentCollection
         if (dashboard.componentName) {
+          console.log('serialize', dashboard.componentName, component.name.toLowerCase())
           if (dashboard.componentName.toLowerCase() === component.name.toLowerCase()) {
             dashboard.component = component?.name;
           }

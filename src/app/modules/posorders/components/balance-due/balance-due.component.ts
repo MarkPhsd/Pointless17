@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of,Subscription } from 'rxjs';
 import {  switchMap } from 'rxjs/operators';
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
-import { IPOSOrder, IPOSPayment, IServiceType, ServiceType } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSPayment, IServiceType } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { IBalanceDuePayload } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -13,7 +13,6 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { TransactionUISettings,  UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
@@ -54,9 +53,6 @@ export class ChangeDueComponent implements OnInit  {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
     this.isStaff  = this.userAuthorization.isUserAuthorized('admin,manager,employee');
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
-    if (this.isUser) {
-
-    }
   }
 
   constructor(
@@ -81,24 +77,20 @@ export class ChangeDueComponent implements OnInit  {
   {
 
     if (data) {
-
       this.order = data.order
       this.payment = data.payment
       this.paymentMethod = data.paymentMethod;
-      this.changeDue = (this.payment.amountReceived - this.payment.amountPaid).toFixed(2)
+      this.changeDue = (this.payment?.amountReceived - this.payment?.amountPaid).toFixed(2)
       this.step = 1;
-
-
-      console.log(data.payment)
-
-      if (!this.paymentMethod?.isCreditCard && !this.payment.account) {
+      if (this.payment && (!this.paymentMethod?.isCreditCard && !this.payment.account)) {
         this.step = 2
       }
       this.orderMethodsService.setLastOrder(data.order)
     }
     this.initForm();
-    this.orderMethodsService.setScanner( )
-
+    if (this.step == 1) {
+      this.orderMethodsService.setScanner( )
+    }
   }
 
   printingCheck() {
@@ -113,7 +105,9 @@ export class ChangeDueComponent implements OnInit  {
     const site = this.siteService.getAssignedSite();
     this.action$ = this.orderMethodsService.newOrderWithPayloadMethod(site, null).pipe(
      switchMap(data => {
-        this.dialogRef.close()
+        setTimeout(() => {
+          this.dialogRef.close()
+        }, 100);
         return of(data)
       })
     )
@@ -168,7 +162,6 @@ export class ChangeDueComponent implements OnInit  {
 
   initDevice(ui: TransactionUISettings) {
     if (ui.dCapEnabled) {
-      const site = this.siteService.getAssignedSite();
       this.dCapReset$ = this.dCapService.resetDevice(localStorage.getItem('devicename'))
     }
   }
@@ -189,8 +182,7 @@ export class ChangeDueComponent implements OnInit  {
       const site = this.siteService.getAssignedSite();
        this.printing$ = this.orderService.getPOSOrderGroupTotal(site, this.payment.orderID, this.payment.groupID).pipe(switchMap(data => {
         this.printingService.printOrder = data;
-
-        this.printingService.previewReceipt(       this.uiTransactions?.singlePrintReceipt, data);
+        this.printingService.previewReceipt(this.uiTransactions?.singlePrintReceipt, data);
         return of(data)
       }))
       return;
@@ -208,7 +200,6 @@ export class ChangeDueComponent implements OnInit  {
   customTipAmount(amount) {
     if (this.payment) {
       const value = +amount;
-      console.log('value', value)
       this.tip( ( amount )  )
     }
   }
@@ -230,7 +221,6 @@ export class ChangeDueComponent implements OnInit  {
           this.action$ = this.completeAuthWithDcapTip(amount)
           return;
         }
-
         this.action$ = this.processDcapTip(amount)
         return;
       }
@@ -243,7 +233,6 @@ export class ChangeDueComponent implements OnInit  {
     const site = this.siteService.getAssignedSite()
     const process$ = this.dCapService.adustByRecordNo(device, this.payment, amount)
     return process$.pipe(switchMap(data => {
-      const rstream = data as RStream;
       if (data && data.TextResponse && data.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) {
         if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) {
           this.siteService.notify(data.cmdResponse + ' ' + data.textResponse, 'close',50000, 'red' )
@@ -260,14 +249,13 @@ export class ChangeDueComponent implements OnInit  {
     this.payment.tipAmount = amount;
     const process$ = this.dCapService.preAuthCaptureByRecordNo(device, this.payment)
     return process$.pipe(switchMap(data => {
-      const rstream = data as RStream;
       if (data && data.TextResponse && data.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) {
         if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) {
-          this.siteService.notify(data.cmdResponse + ' ' + data.textResponse, 'close',50000, 'red' )
+          this.siteService.notify(data?.cmdResponse + ' ' + data?.textResponse, 'close',50000, 'red' )
           return of(null)
         }
       }
-      return this.getOrderUpdate(this.payment.orderID.toString(), site)
+      return this.getOrderUpdate(this.payment?.orderID.toString(), site)
     }))
   }
 
@@ -280,7 +268,6 @@ export class ChangeDueComponent implements OnInit  {
           this.paymentService.updatePaymentSubscription(data)
           const orderID = data.orderID.toString();
           return this.getOrderUpdate(orderID, site)
-
       }))
   }
 
@@ -288,12 +275,17 @@ export class ChangeDueComponent implements OnInit  {
     return  this.orderService.getOrder(site, orderID.toString(), false).pipe(
       switchMap(data => {
         this.orderMethodsService.updateOrderSubscription(data)
-        this.dialogRef.close()
+
+        setTimeout(() => {
+          this.dialogRef.close()
+        }, 100);
+
         if (this.uiTransactions && this.uiTransactions.cardPointBoltEnabled) {
-            this.capture(this.payment)
-          }
-          return of(data)
+          this.capture(this.payment)
         }
+
+        return of(data)
+      }
     ))
   }
 

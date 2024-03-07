@@ -16,7 +16,6 @@
             [style.max-height]="pixelHeight"
             [style.height]="pixelHeight"
             [style.width]="pixelWidth"
-
             [options]="options"
             class="gridster-container"
             (drop)="onDrop($event)" >
@@ -39,7 +38,7 @@
 
           <div [class]="gridsteritemclass">
             <mat-label class="title">
-               {{ item?.object?.name }}
+               {{ item?.object?.name }} <br>
             </mat-label >
             <div class="description">
               <div [innerHtml]="item?.text"></div>

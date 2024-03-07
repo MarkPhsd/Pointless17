@@ -18,7 +18,7 @@ import { AWSBucketService } from 'src/app/_services';
 export class PriceScheduleFieldsComponent implements OnInit {
 
 
-  andOrGroup =  ['And', 'Or','1','2','3','4','5','6']
+  andOrGroup =  ['', 'And', 'Or','1','2','3','4','5','6']
   @Input() inputForm        : UntypedFormGroup;
   @Input() arrayTypeName    : string;
   @Input() andOrOption      = true;
@@ -26,7 +26,6 @@ export class PriceScheduleFieldsComponent implements OnInit {
   @Input() formArray        : UntypedFormArray;
   @Input() hideDelete       = false;
   @Input() item  : IPriceSchedule;
-
 
   isApp: boolean;
   showAllFlag = false;
@@ -49,7 +48,7 @@ export class PriceScheduleFieldsComponent implements OnInit {
 
         // switch(this.arrayTypeName) {
         //   case ('requiredItemTypes'): {
-    
+
         //     break;
         //   }
         //   case 'requiredCategories': {
@@ -57,7 +56,7 @@ export class PriceScheduleFieldsComponent implements OnInit {
         //     break;
         //   }
         //   case 'requiredBrands': {
-         
+
         //     break;
         //   }
         //   case 'requiredItems': {

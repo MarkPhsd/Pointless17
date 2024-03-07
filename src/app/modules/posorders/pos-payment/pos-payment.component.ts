@@ -381,13 +381,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       let list  = [] as IPaymentMethod[]
       return paymentMethods$.pipe(
         switchMap(data => {
-          // let list = data.filter( item => !item.isCreditCard)
-          // list = list.filter( item => !item.isCash)
-          // list = list.filter( item => !item.wic)
-          // list = list.filter( item => !item.ebt)
-
           list = data.filter( item => item.enabledOnline)
-          // list = list.filter( item => item.name != 'Gift Card')
         return  of(list)
       })
       )
@@ -400,7 +394,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
           list = list.filter( item => !item.wic)
           list = list.filter( item => !item.ebt)
           list = list.filter( item => item.name != 'Gift Card')
-
           if (!this.isCashAuthorizedPayment) {
               list = data.filter( item => !item.isCash)
           }
@@ -493,7 +486,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         return false
       }
 
-      // console.log('prompt schedule time', serviceType.promptScheduleTime, this.order.preferredScheduleDate)
       if (serviceType.promptScheduleTime && !this.order.preferredScheduleDate) {
         this.paymentIsReady = false;
         this.message = `Schedule date required.`
@@ -559,17 +551,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   applyPaymentAmount(event) {
-
-    // console.log('applyPaymentAmount event', event)
     if (!event && this.groupPaymentAmount != 0) {
       this.initPaymentForm();
       return
     }
-
     let amount;
     if (event) {   amount = event  }
-
-    console.log('applyPaymentAmount', this.paymentMethod, event, this.groupPaymentAmount)
     if (this.order &&  this.paymentMethod) {
         if (event) {
           amount = event
@@ -612,9 +599,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
                                                           this.paymentMethod,
                                                           this.order.balanceRemaining,
                                                           this.order.creditBalanceRemaining );
-    // console.log('no payment method isValidAmount', isValidAmount)
-
-
     if (this.enterCustomAmount) {
       this.enterCustomAmount = false
       this._paymentAmount    = amount;
@@ -763,7 +747,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   processGetResults(amount, posPayment: IPOSPayment): Observable<IPaymentResponse> {
     if (!posPayment) {
-      // console.log('posPayment null')
       this.sitesService.notify('No Payment info provided.', 'Close', 50000, 'red')
       return of(null)
     }

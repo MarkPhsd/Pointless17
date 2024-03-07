@@ -400,7 +400,7 @@ export class OrderMethodsService implements OnDestroy {
       this._posSearchModel.next(null);
       return ;
     }
-    
+
     if (!searchModel.onlineOrders) {  searchModel.onlineOrders = false }
     searchModel.clientID = this.setUserID()
     this.updateOrderSearchModelDirect(JSON.parse(JSON.stringify(searchModel)))
@@ -1869,7 +1869,6 @@ export class OrderMethodsService implements OnDestroy {
       // this.promptGroupService.updatePromptGroup(null)
       // this.promptWalkService.updatePromptGroup(null)
       if (!result) {
-
         return
       }
       if (result) {
@@ -1884,7 +1883,7 @@ export class OrderMethodsService implements OnDestroy {
     const site = this.siteService.getAssignedSite();
     if (id) {
       this.posOrderItemService.deletePOSOrderItem(site, id).subscribe(result => {
-        if (result.scanResult) {
+        if (result && result.scanResult) {
         } else  {
 
           this.siteService.notify('Item must be voided', 'Notice', 1500, 'yellow')

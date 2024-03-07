@@ -20,6 +20,9 @@ export class ScheduledMenuHeaderComponent implements OnInit {
   @Input() priceSchedule: IPriceSchedule;
   @Input() showText: boolean;
 
+  @Input() css : string;
+  @Input() ccs : string;
+
   showAllFlag: boolean;
   iconName   = 'expand';
   textShow = 'Show More..'
@@ -50,9 +53,16 @@ export class ScheduledMenuHeaderComponent implements OnInit {
       this.gridItemImage= 'grid-item-image-app'
       this.gridHeaderApp = 'header-grid-app';
     }
-    this.setTitle()
+    this.setTitle();
+    this.addStyles(this.css);
   }
 
+  addStyles(styles): void {
+    // const style = this.renderer.createElement('style');
+    // const text = this.renderer.createText(styles); // Example CSS
+    // this.renderer.appendChild(style, text);
+    // this.renderer.appendChild(this.el.nativeElement, style);
+  }
   setTitle() {
     if (this.name) {
       if (this.href === '/scheduled-menu') {

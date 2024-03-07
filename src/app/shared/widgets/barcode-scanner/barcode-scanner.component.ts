@@ -141,7 +141,7 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 
     if (result.hasContent) {
       this.stopScan();
-      this.scanResult = 'Content Resolved ' + result.content
+      this.scanResult = 'Content Resolved ' + result?.content
       this.resolveContent(result);
 
     } else {

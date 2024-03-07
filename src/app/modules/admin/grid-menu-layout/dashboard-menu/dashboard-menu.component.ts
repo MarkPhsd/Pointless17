@@ -16,7 +16,7 @@ export class DashboardMenuComponent implements OnInit, OnDestroy {
   action$ : Observable<any>;
 
   @ViewChild('collectionView') collectionView  : TemplateRef<any>;
-  
+
   constructor(
     public layoutService       : GridsterLayoutService,
     public authService         : AuthenticationService,
@@ -27,8 +27,6 @@ export class DashboardMenuComponent implements OnInit, OnDestroy {
     this.initCollection()
     this.initSubscriptions()
   }
-
-
 
   initCollection() {
     this.action$ = this.layoutService.getCollection().pipe(switchMap(data => {
@@ -41,22 +39,17 @@ export class DashboardMenuComponent implements OnInit, OnDestroy {
   }
 
   get collectionViewEnabled() {
-    // console.log('collectionViewEnabled', this.collection, this.checkIfIsNull(this.collection), this.collection == null,)
-    // if (!this.checkIfIsNull(this.collection)) { 
-      if (this.collection && this.collection.length>0) { 
+      if (this.collection && this.collection.length>0) {
         return this.collectionView
       }
     // }
     return null;
   }
 
-  checkIfIsNull(array) { 
+  checkIfIsNull(array) {
     const collection = [null];
-
     const containsNull = collection.some(element => element === null);
-
     return containsNull // true if the array contains null, false otherwise
-
   }
 
   initSubscriptions() {
@@ -74,20 +67,22 @@ export class DashboardMenuComponent implements OnInit, OnDestroy {
   filterCollection(dashBoardModels: DashboardModel[]) {
     if (!dashBoardModels) { return }
     this.collection = null;
-    if (this.authService.isAuthorized) { 
+    if (this.authService.isAuthorized) {
       this.collection = dashBoardModels;
       this.layoutService._dashboardModel.next(dashBoardModels[0])
       return
     }
-    if (this.authService.isAdmin) { 
+
+    if (this.authService.isAdmin) {
       this.collection = dashBoardModels;
       this.layoutService._dashboardModel.next(dashBoardModels[0])
-      return  
+      return
     }
+
     this.collection = dashBoardModels.filter(data => {
       if (data?.type === 'Menu' || data?.type === 'POSOrder'  || data?.type === 'Order') {
         this.layoutService._dashboardModel.next(data)
-        return 
+        return
       }
     })
 
@@ -99,17 +94,13 @@ export class DashboardMenuComponent implements OnInit, OnDestroy {
 
   selectMenu(item) {
     if (!item || !item.id) {return }
-    // this.action$ = this.layoutService.refreshCollection()
-
     this.action$ = this.layoutService.getDataOBS(item.id).pipe(switchMap(data =>
-      { 
-        if (data.id) { 
+      {
+        if (data.id) {
           this.layoutService.refreshDashBoard(data.id)
         }
         return of(data)
     }));
-
-    console.log('refresh')
   }
 
 

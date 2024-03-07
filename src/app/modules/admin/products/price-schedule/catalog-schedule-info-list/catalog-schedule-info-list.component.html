@@ -1,0 +1,6 @@
+<div *ngFor="let item of (list$ | async)">
+  <catalog-schedule-info
+    [ccs]="ccs"
+    [priceSchedule]="item">
+  </catalog-schedule-info>
+</div>

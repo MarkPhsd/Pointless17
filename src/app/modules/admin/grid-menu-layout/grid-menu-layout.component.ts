@@ -78,10 +78,8 @@ export class GridMenuLayoutComponent implements OnInit {
     public layoutService  : GridsterLayoutService,
     private dialog        : MatDialog,
     public authService    : AuthenticationService,
-    private awsservice    : AWSBucketService,
     private  sitesService     : SitesService,
     public route              : ActivatedRoute,
-    private navigationService : NavigationService,
   )
   {}
 
@@ -90,7 +88,6 @@ export class GridMenuLayoutComponent implements OnInit {
     this.options = this.initOptions()
     if (id) {
       const site = this.sitesService.getAssignedSite();
-      // this.layoutService.setOptions(this.options)
       this.action$ = this.initGrid(+id)
       return;
     }
@@ -175,7 +172,6 @@ export class GridMenuLayoutComponent implements OnInit {
 
   //if we don't have to do sites.
   initGrid(id: number) {
-    console.log('init grid')
     this.initGridsterSettings()
     if ( id ) {
       return  this.layoutService.getDataOBS(+id)
@@ -278,12 +274,7 @@ export class GridMenuLayoutComponent implements OnInit {
 
   //when an item moves in the grid.
   itemChange() {
-    console.log('item change', this.layoutService.dashboardArray)
-    // this.layoutService.itemChange()
-
     this.layoutService.dashboardModel.dashboard = this.layoutService.dashboardArray;
-    // this.layoutService.updateDashboardModel(this.layoutService.dashboardModel ,false)
-
     this.action$ = this.layoutService.saveDashBoard()
   }
 
@@ -293,12 +284,10 @@ export class GridMenuLayoutComponent implements OnInit {
   }
 
 	changedOptionsEvent() {
-    console.log('event change')
 		this.options.api.optionsChanged();
 	}
 
   changedOptions(): void {
-    console.log('options change')
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }

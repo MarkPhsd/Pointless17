@@ -22,7 +22,7 @@ export class IFrameComponent implements OnInit {
   constructor(public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    console.log(this.chartHeight)
+    // console.log(this.chartHeight)
     this.urlSafe= this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
   }
 

@@ -389,6 +389,8 @@ import { TransferOrderComponent } from '../modules/orders/transfer-order/transfe
 import { DCAPTransactionComponent } from '../modules/dsiEMV/Dcap/dcaptransaction/dcaptransaction.component';
 import { MenuSectionComponent } from '../modules/display-menu/display-menu-list/menu-section/menu-section.component';
 import { PosOrderEditorComponent } from '../modules/posorders/pos-order/pos-order-editor/pos-order-editor.component';
+import { CatalogScheduleInfoComponent } from '../modules/admin/products/price-schedule/catalog-schedule-info/catalog-schedule-info.component';
+import { CatalogScheduleInfoListComponent } from '../modules/admin/products/price-schedule/catalog-schedule-info-list/catalog-schedule-info-list.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -544,6 +546,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PrintTemplateComponent,
     ///end admin
 
+    CatalogScheduleInfoComponent,
+    CatalogScheduleInfoListComponent,
     DisplayMenuMainComponent,
     DisplayMenuListComponent,
     DisplayMenuTitleComponent,

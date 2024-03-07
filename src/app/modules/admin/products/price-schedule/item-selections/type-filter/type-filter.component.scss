@@ -62,6 +62,17 @@
   overflow-x: hidden;
 }
 
+
+.grid-container-price-schedule {
+  display: grid;
+  grid-template-columns: 1fr calc(100vw - 200px - 300px);
+  row-gap: 5px;
+  gap: 10px;
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
 .type-list {
   height: 71vh;
   overflow-y: scroll;

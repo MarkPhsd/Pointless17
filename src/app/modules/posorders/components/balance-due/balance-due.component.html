@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <div  *ngIf="isUser">
+      <div  *ngIf="isUser || ((payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard))">
         <tip-entry-amount
           [payment]            = "payment"
           [paymentMethod]      = "paymentMethod"

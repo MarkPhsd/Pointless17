@@ -31,6 +31,7 @@
     </mat-card-subtitle>
 
     <mat-card-content>
+
       <div *ngIf="inputForm && dashBoardContent; else loading;"
            [formGroup]="inputForm"
            class="info-container" >
@@ -118,7 +119,6 @@
                 <ng-container [ngTemplateOutlet]="iFrameURLView"></ng-container>
               </div>
 
-              <!-- ?menu  -->
               <div class="small-margin"
                     *ngIf="cardType === 'menu' &&
                            (cardValueType?.toLowerCase() != 'flowerprices' ||
@@ -127,6 +127,12 @@
                             cardValueType?.toLowerCase() != 'menusection' )">
                 <ng-container [ngTemplateOutlet]="selectedTypeView"></ng-container>
                 <ng-container [ngTemplateOutlet]="cannabisView"></ng-container>
+              </div>
+
+              <div class="small-margin"
+                    *ngIf="cardType === 'menu' &&
+                          ( inputForm.controls['cardValueType'].value === 'catalogschedules' )">
+                <ng-container [ngTemplateOutlet]="catalogSchedules"></ng-container>
               </div>
 
               <div *ngIf="cardType &&
@@ -289,11 +295,11 @@
   <ng-template #ccsView>
     <div [formGroup]="inputForm">
       <div>
-        <button mat-button (click)="getDefaultCCS()">Set Default CCS</button>
+        <button mat-button (click)="getDefaultCCS()">Set Default CSS</button>
       </div>
       <div>
         <mat-form-field appearance="outline"  style="width:100%;min-width:350px;max-width:550px" >
-          <mat-label>CCS</mat-label>
+          <mat-label>CSS</mat-label>
           <textarea matInput
                 rows="15"
                 cols="15"
@@ -355,6 +361,25 @@
     </div>
 
     <div class="grid-item" *ngIf="(list$ | async) as list">
+        <form-select-list [searchForm]           = "inputForm"
+                          [formFieldName]        = "'listItemID'"
+                          [list]                 = "list"
+                          [showActiveInactive]   = "true"
+                          [formValue]            = 'itemValue'
+                          (selectionChangeValue) = "setCategory($event)"
+                        >
+        <div fieldSearchDescription>Select</div>
+        </form-select-list>
+    </div>
+  </ng-template>
+
+
+  <ng-template #catalogSchedules>
+    <div *ngIf="itemValue">
+      Selected : {{itemValue?.name}}
+    </div>
+
+    <div class="grid-item" *ngIf="(specials$ | async) as list">
         <form-select-list [searchForm]           = "inputForm"
                           [formFieldName]        = "'listItemID'"
                           [list]                 = "list"

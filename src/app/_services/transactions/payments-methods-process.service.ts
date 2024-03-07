@@ -113,7 +113,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
                  amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
 
     let response: IPaymentResponse;
+
     const balance$ =  this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet();
+
     if (posPayment.tipAmount) {  amount = (amount - posPayment.tipAmount)  }
 
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod);
@@ -133,11 +135,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         }
         return this.finalizeOrderProcesses(order);
       })).pipe(concatMap( data => {
-        //finalize order process doesn't alwways return a value.
-        if (!data) {
-          data = order;
-        }
-        // console.log('balance remaining', data, data?.balanceRemaining)
+        if (!data) {   data = order;  }
         if (data.balanceRemaining == 0) {
           this.finalizeOrder(response, paymentMethod, order);
           this._initTransactionComplete.next(true)
@@ -271,8 +269,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   sendToPrep(order: IPOSOrder, printUnPrintedOnly: boolean, uiTransactions: TransactionUISettings,
             cancelUpdateSubscription?: boolean): Observable<any> {
-    if (!this.userAuthorizationService?.user) {   return of(null)  }
 
+    if (!this.userAuthorizationService?.user) {   return of(null)  }
     if (!uiTransactions) {this.uiSettingService._transactionUISettings.value}
     if (order) {
       const expoPrinter = uiTransactions?.expoPrinter
@@ -297,7 +295,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   prepPrintUnPrintedItems(id: number, cancelUpdateSubscription?: boolean) {
-
     if (!this.userAuthorizationService?.user) { return of(null)  }
     if (id) {
       const site = this.sitesService.getAssignedSite()
@@ -305,10 +302,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         concatMap(data => {
           return this.orderService.getOrder(site, id.toString(), false)
         })).pipe(concatMap( order => {
-          // console.log('prepPrintUnPrintedItems order', order.posOrderItems)
-
           if (order) {
-            // console.log('update order')
             this.orderMethodsService.updateOrderSubscription(order)
             return of(order)
           }
@@ -318,7 +312,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return of(null)
   }
   // Error in processing cash paymentTypeError: Cannot read properties of undefined (reading 'pipe')
-
   //openDrawerFromBalanceSheet
   processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,
                      amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
@@ -1110,11 +1103,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   validatePaymentAmount(amount, paymentMethod: IPaymentMethod, balanceRemaining: number, creditBalanceRemaining): boolean {
 
     if (  +amount > +balanceRemaining ) {
-      // if (!paymentMethod.isCreditCard) {
-      //   this.notify(`Enter amount smaller than ${balanceRemaining}.`, 'Try Again', 3000)
-      //   return false
-      // }
-      // console.log('creditBalanceRemaining', creditBalanceRemaining)
       if (paymentMethod.isCreditCard) {
         this.notify(`Enter amount smaller than ${creditBalanceRemaining}.`, 'Try Again', 3000)
         return false
