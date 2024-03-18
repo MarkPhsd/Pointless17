@@ -46,7 +46,7 @@
                 appAppPasswordMask
                 ngDefaultControl
                 [name]="fieldName"
-                placeholder="Favorite food"
+                [placeholder]="fieldName"
                 [type]="fieldType"
                 [formControlName]="fieldName">
         </div>
@@ -69,7 +69,7 @@
                 [class]="fieldsClass"
                 [disabled] ='!enabled'
                 [type]="fieldType"
-                placeholder="Favorite food"
+                [placeholder]="fieldName"
                 [name]="fieldName"
                 ngDefaultControl
                 [formControlName]="fieldName">

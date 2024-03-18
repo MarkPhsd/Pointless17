@@ -33,6 +33,11 @@ export class RecieptPopUpComponent implements OnInit {
     if (data)  {
       this.autoPrint = data?.autoPrint;
       this.options = data
+      if (data.order) {
+        this.orders = []
+        this.order = data.order;
+        this.orders.push(data.order)
+      }
     }
   }
 

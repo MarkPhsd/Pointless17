@@ -26,8 +26,10 @@ export interface IUserAuth_Properties {
   disableLabor              : boolean;
   disableDepartmentSales    : boolean;
   disableHourlySales        : boolean;
-  buysSalesReports     : boolean;
-  itemSalesGroupBySize: boolean;
+  disableUOMSales           : boolean;
+
+  buysSalesReports        : boolean;
+  itemSalesGroupBySize    : boolean;
   itemSalesGroupByQuantity: boolean;
   //payments
   houseAccountPayment  : boolean;

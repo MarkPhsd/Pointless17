@@ -150,51 +150,60 @@ export class PrintingService {
     this.labelContentList = []
   }
 
-  printLabels(order: IPOSOrder, newLabels: boolean): Observable<any> {
-    if (!order || !order.posOrderItems) {
-
-      return of(null)
-    }
-
+  //prints posItem
+  printLabels(order: IPOSOrder, newLabels: boolean, joinLabels?: boolean): Observable<any> {
+    if (!order || !order.posOrderItems) {  return of(null)  }
     let timer  =  +localStorage.getItem('testVariable' )
-    if (!timer || timer != 0) {
-      timer = +50000
-    }
+    if (!timer || timer != 0) { timer = +50000 }
 
-    let printCount = 0
-    const printLabelList  = []
-    if (order) {
-      if (order.posOrderItems) {
-        this.obs$ = []
+    let printCount = 0;
+    const printLabelList  = [];
+    this.obs$ = []
+
+    if (order && order.posOrderItems) {
         const items = order.posOrderItems
-        if (items.length > 0) {
-
-          items.forEach( item => {
-            if (!item.printed && newLabels) {
-
-              this.obs$.push(
-                this.printItemLabel(item, null, order, false) //.pipe( delay(timer)  )
-              )
-              printLabelList.push(item)
-              printCount += 1
-            }
-            if (!newLabels) {
-              this.obs$.push(
-                this.printItemLabel(item, null, order, false) //.pipe( delay(timer) )
-              )
-              printLabelList.push(item)
-              printCount += 1
-            }
-          })
-        }
+      if (items.length > 0) {
+        items.forEach( item => {
+          let result = this._printLabelSub({item: item,
+                                            newLabels: newLabels,
+                                            printLabelList: printLabelList,
+                                            printCount: printCount,
+                                            order: order,
+                                            joinLabels: joinLabels})
+          printCount= result?.printCount;
+        })
       }
-
       if (printCount == 0) {return of(null)};
       return forkJoin(this.obs$)
-
     }
     return of(null)
   }
+
+  _printLabelSub( labelProcess: any ) {
+      // {newLabels: boolean, printLabelList:any[], printCount: number, order: IPOSOrder}
+    let  newLabels      = labelProcess?.newLabels;
+    let  printCount     = labelProcess?.printCount;
+    let  order          = labelProcess?.order;
+    let  printLabelList = labelProcess?.printLabelList;
+    let  item           = labelProcess?.item
+    let  joinLabels     = labelProcess?.joinLabels;
+
+    if (!item.printed && newLabels) {
+      this.obs$.push( this.printItemLabel(item, null, order, joinLabels) )
+      printLabelList.push(item)
+      printCount += 1
+    }
+
+    if (!newLabels) {
+      this.obs$.push( this.printItemLabel(item, null, order, joinLabels) )
+      printLabelList.push(item)
+      printCount += 1
+    }
+
+    let result = {newLabels: newLabels, printCount: printCount, printLabelList: printLabelList, order: order}
+    return result;
+  }
+
 
   async initDefaultLayouts() {
     const site = this.siteService.getAssignedSite();
@@ -444,7 +453,7 @@ export class PrintingService {
 
   printElectronForLabels(contents: string, printerName: string, options: printOptions) : any {
 
-    let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+    let printWindow = new this.electronService.remote.BrowserWindow({show: false, width: 350, height: 600 })
     if (options.silent) { printWindow.hide(); }
 
     return  printWindow.loadURL(contents)
@@ -456,15 +465,18 @@ export class PrintingService {
         printWindow.webContents.print(
           options,
           (success, failureReason) => {
-            // printWindow.close();
-            // printWindow = null;
-            console.log('Print Window : printing, success, failurereason', success, failureReason);
-            return printWindow
+
+            try {
+              printWindow.close();
+              console.log('window close')
+              printWindow = null;
+            } catch (error) {
+              console.log('error close window', error)
+            }
           }
         )
 
         }).catch( err => {
-          console.log('Print window Load URL error:', err, options)
           this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
           printWindow.close();
           printWindow = null;
@@ -474,10 +486,34 @@ export class PrintingService {
 
   }
 
+  printLabelElectron(printString: string, printerName: string) {
+    const uuid = UUID.UUID().slice(0,5);
+    // const file = `file:///c://pointless//labels//print${uuid}.txt`
+    // const fileName = `c:\\pointless\\labels\\print${uuid}.txt`;
+    const file = `file:///c://pointless//print.txt`
+    const fileName = `c:\\pointless\\print.txt`;
+    try {
+      this.saveContentsToFile(fileName, printString);
+    } catch (error) {
+      this.siteService.notify(`File could not be written.
+                                Please make sure you have a writable folder ${fileName}`, 'Close', 3000, 'red')
+    }
+
+    const options = {
+      silent: true,
+      printBackground: false,
+      deviceName: printerName
+    } as printOptions
+
+    try {
+      this.printElectronForLabels( file, printerName, options )
+    } catch (error) {
+      return false
+    }
+  }
+
   printElectron(contents: string, printerName: string, options: printOptions) : boolean {
-
     if (!this.platFormService.isAppElectron) { return }
-
     let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
     if (options.silent) { printWindow.hide(); }
 
@@ -492,7 +528,6 @@ export class PrintingService {
             console.log('Print Window : printing ', success, failureReason);
             printWindow.close();
             printWindow = null;
-
             return true
           }
         )
@@ -502,47 +537,42 @@ export class PrintingService {
           this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
           printWindow.close();
           printWindow = null;
-
           return false
       }
     )
-
-
     return false;
-
-
   }
 
-    removeAllStyles() {
-      const styleSheets = document.querySelectorAll('link[rel="stylesheet"], style');
-      styleSheets.forEach(sheet => {
-        sheet.parentNode.removeChild(sheet);
-      });
-    }
+  removeAllStyles() {
+    const styleSheets = document.querySelectorAll('link[rel="stylesheet"], style');
+    styleSheets.forEach(sheet => {
+      sheet.parentNode.removeChild(sheet);
+    });
+  }
 
-    reloadStylesheets() {
-      this.removeAllStyles()
-      const stylesheets = [
-        { id: 'global-styles', href: 'src/styles.scss' },
-        { id: 'material-theme', href: './node_modules/@angular/material/prebuilt-themes/indigo-pink.css' }
-      ];
+  reloadStylesheets() {
+    this.removeAllStyles()
+    const stylesheets = [
+      { id: 'global-styles', href: 'src/styles.scss' },
+      { id: 'material-theme', href: './node_modules/@angular/material/prebuilt-themes/indigo-pink.css' }
+    ];
 
-      stylesheets.forEach(sheet => {
-        const existingLinkElement = document.getElementById(sheet.id) as HTMLLinkElement;
-        if (existingLinkElement) {
-          const newLinkElement = document.createElement('link');
-          newLinkElement.id = sheet.id;
-          newLinkElement.rel = 'stylesheet';
-          newLinkElement.href = sheet.href.split('?')[0] + '?reload=' + new Date().getTime();
+    stylesheets.forEach(sheet => {
+      const existingLinkElement = document.getElementById(sheet.id) as HTMLLinkElement;
+      if (existingLinkElement) {
+        const newLinkElement = document.createElement('link');
+        newLinkElement.id = sheet.id;
+        newLinkElement.rel = 'stylesheet';
+        newLinkElement.href = sheet.href.split('?')[0] + '?reload=' + new Date().getTime();
 
-          // Remove the old link element
-          existingLinkElement.parentNode.removeChild(existingLinkElement);
+        // Remove the old link element
+        existingLinkElement.parentNode.removeChild(existingLinkElement);
 
-          // Add the new link element
-          document.head.appendChild(newLinkElement);
-        }
-      });
-    }
+        // Add the new link element
+        document.head.appendChild(newLinkElement);
+      }
+    });
+  }
 
    async printElectronAsync(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
     if (!this.platFormService.isAppElectron) { return }
@@ -643,10 +673,6 @@ export class PrintingService {
     }
   }
 
-  getDefaultReceiptPrinter()
-  {
-    console.log('')
-  }
 
   printElectronReceipt(printerName: string, document) {
     const prtContent  = document.getElementById('printsection');
@@ -709,11 +735,10 @@ export class PrintingService {
     }))
   }
 
+  //prints an item label from a POS Order
   printItemLabel(item: any, menuItem$: Observable<IMenuItem>, order: IPOSOrder, joinLabels: boolean ) {
     const site = this.siteService.getAssignedSite()
-    if (!menuItem$) {
-      menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
-    }
+    if (!menuItem$) {   menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)  }
     const posItem$ = this.getPOSItem(site, item.id, order.history)
 
     return posItem$.pipe(
@@ -734,7 +759,6 @@ export class PrintingService {
       item.menuItem = menuItem;
       return this.menuItemService.getProduct(site, item.menuItem.id)
     })).pipe(concatMap(data => {
-        // console.log('packager', data.packager, data)
         if (data.packager) {
           return this.getContact(site, data.packager)
         }
@@ -742,77 +766,56 @@ export class PrintingService {
       }
     )).pipe(concatMap(data => {
       if (data) {   item.lab = data; }
-      return this.printLabel(item,  order.history, joinLabels)
+      return this.printLabel(item,  order.history, joinLabels, order)
     }))
   }
 
-  getLabelPrinter() {
-    return
-  }
+  //Prints a label on it's own
+  printLabel(item: any, history: boolean, joinLabels: boolean, order?: IPOSOrder) {
 
-  printLabel(item: any, history: boolean, joinLabels: boolean) {
-
-    let printWindows: any
-    if (!item) {return of(null)}
+    if (!item || !item.orderID) {return of(null)}
 
     const site = this.siteService.getAssignedSite();
     const orderID = item.orderID;
-
     let printer = {} as any;
-    let  menuItem$  : Observable<IMenuItem>
-    if (!item.menuItem) {
-      menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID);
-    } else {
-      menuItem$ = of(item.menuItem)
-    }
+    let menuItem$ = this.getLabelMenuItem(site, item)
 
-    // console.log('print label')
-    const printer$ = this.settingService.getDeviceSettings(localStorage.getItem('devicename')).pipe(
-      concatMap(data => {
-        const item = JSON.parse(data.text) as ITerminalSettings;
-        this.uiSettingsService.updatePOSDevice(item)
-        printer = {text: item?.labelPrinter}
-        this.labelPrinter = item?.labelPrinter;
-        return of(item)
-      }),catchError( concatMap(data => {
-        this.siteService.notify("Print Label Error:" + data, "Close", 2000, 'red')
-        return of(data)
-      }))
-    )
+    const printer$ = this.getLabelprinterFromDevice()
 
     const result$ =  printer$.pipe(
       concatMap(data => {
+        printer = {text: data?.labelPrinter}
         if (!data ) {
-          // console.log('No Printer assigned to label')
           this.siteService.notify('No Printer assigned to label', 'Alert', 2000)
           return of(null)
         }
         return menuItem$
-
       })).pipe(
         concatMap(data => {
-          if ( !data || !data.itemType) {
-            // console.log('no printer menu item')
-            return of(null)
-          }
+          if ( !data || !data.itemType) {   return of(null)   }
           this.menuItem = data;
           if ( data.itemType && ( ( data.itemType.labelTypeID != 0 ) && printer.text ) ) {
             return  this.settingService.getSetting(site, data.itemType.labelTypeID)
           } else {
             if (history) {
+              this.siteService.notify('History Item printing.', 'Close',  10000)
               return of(null)
             }
-            // console.log('setting item as printed')
             return this.orderItemService.setItemAsPrinted(site, item )
           }
       })).pipe(
         concatMap( data => {
 
-          if (!data) { return of(null) }
+          if (!data) {
+            console.log('No item type data', data);
+            this.siteService.notify('No Label Type Identified.', 'Close', 10000)
+            return of(null)
+          }
+
           try {
             let field = 'productName';
             if (data[field]) {
-              // console.log('not going to print label')
+              this.siteService.notify('Item type Error.', 'Close', 10000)
               return of(null)
             }
           } catch (error) {
@@ -831,110 +834,111 @@ export class PrintingService {
           lab$ = of(null)
           producer$ = of(null);
 
-          if (labID) {
-            // console.log('trying to get contact for label', labID)
-            this.getContact(site, labID)
-          }
-          if (producerID) {
-            // console.log('trying to get producer for label' , producerID)
-            producer$  = this.getContact(site, producerID);
-          }
+          if (labID) {  this.getContact(site, labID)   }
+          if (producerID) {  producer$  = this.getContact(site, producerID)  }
 
           return forkJoin([lab$, producer$, of(data)])
 
       })).pipe(
         concatMap( results => {
 
-            // console.log('results', results)
-            if (!results) {
-              // console.log('no results for lab, producer, data')
-              return of(null)
-            }
-            const data = results[2];
+          if (!results) {
+            this.siteService.notify('Lab or producer not found.', 'Close', 10000)
+            return of(null)
+          }
+          const data = results[2];
 
-            if (!data) {
-              // console.log('no results for forkJoin third element')
-              return of(null)
-            }
+          if (!data) { return of(null) }
 
-            try {
-              const lab = results[0]
-              const producer = results[1];
-              if (lab) {
-                item.lab = lab;
-              }
-              if (producer) {
-                item.producer = producer;
-              }
+          try {
+            const lab = results[0]
+            const producer = results[1];
+            if (lab) {  item.lab = lab;  }
+            if (producer) {  item.producer = producer; }
 
-              if (this.menuItem) {
-                if (this.menuItem?.itemType?.type === 'cannabis') {
-                  if (!lab) {
-                    this.siteService.notify('Item has no lab assigned.', 'Alert', 2000)
-                  }
-                  if (!producer) {
-                    this.siteService.notify('Item has no producer assigned.', 'Alert', 2000)
-                  }
-                }
-              }
-            } catch (error) {
-              console.log('error printing label', error )
-            }
-
-            if (item.inventoryItem) {
-              item = item.inventoryItem;
-            }
-
-
-            const content = this.renderingService.interpolateText(item, data.text);
-            // console.log('content',content.length, printer.text,joinLabels, this.labelContentList )
-
-            if (printer.text) {
-              const printerName = printer.text
-              if (!joinLabels) {
-                this.labelContentList = []
-                // console.log('print text', printerName)
-                this.printLabelElectron(content, printerName) ;
-              }
-              if (joinLabels) {
-                this.labelContentList.push(content)
+            if (this.menuItem) {
+              if (this.menuItem?.itemType?.type === 'cannabis') {
+                if (!lab) { this.siteService.notify('Item has no lab assigned.', 'Alert', 2000)  }
+                if (!producer) {  this.siteService.notify('Item has no producer assigned.', 'Alert', 2000)  }
               }
             }
+          } catch (error) {
+            console.log('error printing label', error )
+          }
 
-            if (!item.printed || (data && !data.printed)) {
-              return this.orderItemService.setItemAsPrinted(site, item )
+          if (item.inventoryItem) {    item = item.inventoryItem;  }
+          const content = this.renderingService.interpolateText(item, data.text);
+
+          if (!printer.text) { printer.text = this.labelPrinter; }
+          if (printer.text) {
+            const printerName = printer?.text
+
+            if (!joinLabels) {
+              this.labelContentList = []
+              this.printLabelElectron(content, printerName) ;
             }
-            return of(null);
+
+            if (joinLabels) {
+              this.labelContentList.push(content)
+            }
+          }
+
+          if (!item.printed || (data && !data.printed)) {
+            return this.orderItemService.setItemAsPrinted(site, item )
+          }
+          return of(null);
       })).pipe(
         concatMap( data => {
-          return this.orderService.getOrder(site, orderID.toString() , history);
-      })).pipe(concatMap(data => {
-        // console.log('before update order', data)
-        // this.orderMethodsService.updateOrder(data)
-        return of(data)
+          if (!joinLabels) {
+            return this.orderService.getOrder(site, orderID.toString() , history);
+          }
+          return of(order)
       }))
-
     return result$
+  }
+
+  getLabelPrinter() {
+    return
+  }
+  getLabelMenuItem(site : ISite, item: any): Observable<IMenuItem> {
+    let  menuItem$  : Observable<IMenuItem>
+    if (!item.menuItem) {
+      menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID);
+    } else {
+      menuItem$ = of(item.menuItem)
+    }
+    return menuItem$
+  }
+
+  getLabelprinterFromDevice() {
+    return this.settingService.getDeviceSettings(localStorage.getItem('devicename')).pipe(
+      concatMap(data => {
+        const item = JSON.parse(data.text) as ITerminalSettings;
+        this.uiSettingsService.updatePOSDevice(item)
+        this.labelPrinter = item?.labelPrinter;
+        return of(item)
+      })
+    )
+  }
+
+  getContact(site: ISite, contactID: number): Observable<IClientTable> {
+    if (!contactID || contactID == null) {return of(null)};
+    const client$ = this.clientService.getClient(site, contactID).pipe(
+    switchMap(data =>
+      { return of(data)  }
+      ),
+    catchError(data => {
+        return of(null)
+    }))
+    return client$
   }
 
   stopTime() {
     clearInterval(this.interval);
   }
 
-  getContact(site: ISite, contactID: number): Observable<IClientTable> {
-
-    if (!contactID || contactID == null) {return of(null)};
-
-    const client$ = this.clientService.getClient(site, contactID).pipe(
-    switchMap(data =>
-      {
-        return of(data)
-      }
-      ),
-      catchError(data => {
-        return of(null)
-    }))
-    return client$
+  getDefaultReceiptPrinter()
+  { console.log('')
   }
 
   async saveContentsToFile(filePath: string, contents: string) {
@@ -943,33 +947,23 @@ export class PrintingService {
       let response      : any;
       // response   =  await fileWriting.createFile(filePath, contents)
       response          =  await fileWriting.writeToFile(filePath, contents)
+
+      console.log('save File' , filePath, contents )
+
     } catch (error) {
       this.siteService.notify(`File could not be written. ${error}`, 'Close', 3000, 'red')
     }
   }
 
-  printLabelElectron(printString: string, printerName: string) {
-    console.log('printLabelElectron')
+  saveCreditCardSale(data: string, code: string) {
     const uuid = UUID.UUID().slice(0,5);
-    const file = `file:///c://pointless//print.txt`
-    const fileName = `c:\\pointless\\print.txt`;
+    const file = `file:///c://pointless//payments//${code}.txt`
+    const fileName = `c:\\pointless\\payments\\print${code}.txt`;
     try {
-      this.saveContentsToFile(fileName, printString);
+      this.saveContentsToFile(fileName, data);
     } catch (error) {
       this.siteService.notify(`File could not be written.
                                 Please make sure you have a writable folder ${fileName}`, 'Close', 3000, 'red')
-    }
-
-    const options = {
-      silent: true,
-      printBackground: false,
-      deviceName: printerName
-    } as printOptions
-
-    try {
-      return this.printElectronForLabels( file, printerName, options )
-    } catch (error) {
-      return false
     }
   }
 
@@ -1090,16 +1084,17 @@ export class PrintingService {
         return of(null)
       }
     }
-    this.printSub(printerName, autoPrint);
+
+    this.printSub(printerName, autoPrint, order);
     return of(null);
 
   };
 
-  printSub(printerName: string, autoPrint?: boolean) {
+  printSub(printerName: string, autoPrint?: boolean, order?: IPOSOrder) {
     const dialogRef = this.dialog.open(RecieptPopUpComponent,
       { width: '425px',
         height: '90vh',
-        data: {autoPrint: autoPrint, printerName: printerName}
+        data: {autoPrint: autoPrint, printerName: printerName, order: order}
       },
     )
     dialogRef.afterClosed().subscribe( result => {

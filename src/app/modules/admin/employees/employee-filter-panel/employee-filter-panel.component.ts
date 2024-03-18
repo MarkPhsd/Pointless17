@@ -35,7 +35,7 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
   selectedEmployee            : number;
   selectedjobTypeID           : number;
   selectedType                : number;
-  toggleTerminated             = "1"
+  toggleTerminated            : number;
   printForm          : UntypedFormGroup;
   user               = {} as IUser;
   employees$        :   Observable<IItemBasic[]>;
@@ -73,7 +73,6 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
     //Add 'implements OnDestroy' to the class.
     if (this._searchModel)     {this._searchModel.unsubscribe()}
     if (this._currentEmployee) {this._currentEmployee.unsubscribe()}
-
   }
 
   constructor(
@@ -85,9 +84,7 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
       private router                  : Router,
       private productEditButtonService: ProductEditButtonService,
     )
-  {
-  this.initAuthorization();
-  }
+  {  this.initAuthorization(); }
 
   ngOnInit(): void {
     this.searchModel =    this.initSearchModel();
@@ -131,12 +128,11 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
       if (!search.jobTypeID) { search.jobTypeID = 0}
       this.selectedjobTypeID   = search.jobTypeID;
       if (!search.terminated) {  search.terminated  = 1;  }
-      this.toggleTerminated   = search.terminated.toString();
+      this.toggleTerminated   = search.terminated
     }
   }
 
   applyMetrcKey(){
-
     if (this.currentEmployee) {
       this.productEditButtonService.openEmployeeMetrcKeyEntryComponent(this.currentEmployee)
     }
@@ -158,43 +154,45 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
 
   initSearchModel(): EmployeeSearchModel {
     const site = this.siteService.getAssignedSite()
-
     this.searchModel = {} as EmployeeSearchModel
     this.searchModel.pageNumber = 1;
     this.searchModel.pageSize   = 25;
-
-    this.toggleTerminated = "1"
     this.selectedjobTypeID = 0;
     this.initSearchForm();
     this.searchModel.name = ''
-
     this.searchModel.terminated  = +this.toggleTerminated
     this.searchModel.jobTypeID   = this.selectedjobTypeID;
-
     return this.searchModel
   }
 
   getSearchModel(): EmployeeSearchModel {
-
     let search = this.searchModel;
-    if (!this.searchModel) {
-      search =  this.initSearchModel()
-    }
-
+    if (!this.searchModel) { search =  this.initSearchModel()  }
     return search;
   }
-
 
   refreshSearchPhrase(event) {
     const search = this.getSearchModel()
     search.name = event;
     this.employeeService.updateSearchModel( search )
-
   }
 
   refreshSearch() {
-    const search = this.getSearchModel()
-    this.employeeService.updateSearchModel( search )
+    let search = this.getSearchModel()
+    search.terminated = this.toggleTerminated;
+    console.log('search,', this.toggleTerminated, search)
+    let model = {} as EmployeeSearchModel
+    model.currentPage = search.currentPage
+    model.pageCount = search.pageCount
+    model.pageSize = search.pageSize
+    model.terminated = this.toggleTerminated;
+    model.name = search.name
+    model.jobTypeID = search.jobTypeID;
+
+    // this.searchModel.name = ''
+    // this.searchModel.terminated  = +this.toggleTerminated
+    // this.searchModel.jobTypeID   = this.selectedjobTypeID;
+    this.employeeService.updateSearchModel( model )
   }
 
   newEmployee() {

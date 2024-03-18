@@ -1,15 +1,13 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { ISetting, IUser } from 'src/app/_interfaces';
-import { AuthenticationService, OrdersService } from 'src/app/_services';
+import { AuthenticationService,  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { PosEditSettingsComponent } from './pos-edit-settings/pos-edit-settings.component';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
@@ -31,11 +29,9 @@ export class PosListComponent implements OnInit, OnDestroy {
   @Input() user: IUser;
   constructor( private AuthenticationService : AuthenticationService,
                private setingsServerice      : SettingsService,
-               private orderService          : OrdersService,
                public orderMethodsService: OrderMethodsService,
                private siteService           : SitesService,
                public  platForm              : PlatformService,
-               private dialog                : MatDialog,
                private _snackBar             : MatSnackBar,)
   { }
 
@@ -66,7 +62,7 @@ export class PosListComponent implements OnInit, OnDestroy {
     terminal.name = 'New Terminal'
     const item$ = this.setingsServerice.postSetting(site, terminal)
     item$.subscribe(data => {
-      this.editItem(data)
+      const dialog = this.setingsServerice.editPOSDevice(data)
     })
   }
 
@@ -76,23 +72,13 @@ export class PosListComponent implements OnInit, OnDestroy {
       const site  = this.siteService.getAssignedSite()
       const item$ = this.setingsServerice.getSetting(site, id)
       item$.subscribe(data => {
-        this.editItem(data)
+        const dialog = this.setingsServerice.editPOSDevice(data)
+        // dialog.afterClosed(data => {
+        // })
       })
     }
   }
 
-  editItem(data): Observable<typeof dialogRef> {
-    let dialogRef: any;
-    dialogRef = this.dialog.open(PosEditSettingsComponent,
-      { width:        '800px',
-        minWidth:     '800px',
-        height:       '650px',
-        minHeight:    '650px',
-        data   : data
-      },
-    )
-    return dialogRef;
-  }
 
   setPOSName(event) {
     // if (this.platForm.isApp()) {

@@ -278,7 +278,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       const prep$ = this.prepPrintingService.printLocations(order,
                                                             printUnPrintedOnly,
                                                             expoPrinter,
-                                                            templateID);
+                                                            templateID, cancelUpdateSubscription);
       let item$ =  prep$.pipe(
         concatMap( data => {
           return  this.prepPrintUnPrintedItems(order?.id, cancelUpdateSubscription)
@@ -300,8 +300,16 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       const site = this.sitesService.getAssignedSite()
       return  this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
         concatMap(data => {
+
+          if (cancelUpdateSubscription) {
+            console.log('cancelUpdateSubscription', cancelUpdateSubscription)
+            return of(null)
+          }
           return this.orderService.getOrder(site, id.toString(), false)
         })).pipe(concatMap( order => {
+          if (cancelUpdateSubscription) {
+            return of(null)
+          }
           if (order) {
             this.orderMethodsService.updateOrderSubscription(order)
             return of(order)
@@ -625,6 +633,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     //if not approved, but you know it is, then check the messages for approval, sometimes they need to be updated.
     if (this.isCardPointApproved(trans)) {
+
+      try {
+        payment   = this.applyCardPointResponseToPayment(trans, payment)
+      } catch (error) {
+        console.log('error', error)
+      }
+
+
       payment   = this.applyCardPointResponseToPayment(trans, payment)
       payment.textResponse =  trans?.resptext.toLowerCase();
       let paymentMethod    = {} as IPaymentMethod;
@@ -632,12 +648,13 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
       const process$ =  this.paymentMethodService.getPaymentMethodByName(site, 'credit').pipe(
         switchMap( data => {
-          // console.log('paymentMethod', paymentMethod)
           payment.paymentMethodID = data.id;
           paymentMethod = data;
+
           return this.processPayment(site, payment, order, payment.amountPaid, paymentMethod)
         }
       )).pipe(switchMap(data => {
+        console.log('payment Response', data)
         let response = data;
         return of(payment.textResponse)
       }))
@@ -697,9 +714,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     let paymentResponse: IPaymentResponse
 
     if (trans?.cardLogo) {   cardType = trans?.cardLogo;  }
-
-    // console.log('trans', trans)
-    // console.log('cardType', cardType)
 
     return this.getPaymentMethodByName(site, cardType).pipe(
       switchMap( data => {
@@ -866,52 +880,51 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   applyCardPointResponseToPayment(response: any, payment: IPOSPayment) {
 
-    payment.resptext = response?.resptext;
-    payment.cvvresp = response?.cvvresp;
-    payment.respcode = response?.respcode;
-    payment.preAuth = response?.authcode;
-    payment.entryMethod = response?.entrymode;
-    payment.avsresp = response?.avsresp;
-    payment.entrymode = response?.entrymode;
-    payment.respproc = response?.respproc;
-    payment.bintype = response?.bintype;
-    payment.expiry = response?.expiry;
-    payment.retref = response?.retref;
-    payment.respstat = response?.respstat;
-    payment.account = response?.account;
-    payment.transactionData = JSON.stringify(response);
+    try {
+        payment.resptext = response?.resptext;
+        payment.cvvresp = response?.cvvresp;
+        payment.respcode = response?.respcode;
+        payment.preAuth = response?.authcode;
+        payment.entryMethod = response?.entrymode;
+        payment.avsresp = response?.avsresp;
+        payment.entrymode = response?.entrymode;
+        payment.respproc = response?.respproc;
+        payment.bintype = response?.bintype;
+        payment.expiry = response?.expiry;
+        payment.retref = response?.retref;
 
-    const tip = +payment?.tipAmount
-    const amountPaid = +payment?.amountPaid
-    const amount  = +response?.amount
+        payment.account = response?.account;
+        payment.transactionData = JSON.stringify(response);
 
-    if ( tip !=0 ) {
-      if (amount == tip + amountPaid) {
-        payment.amountPaid      = +(+payment?.amountPaid).toFixed(2)
-        payment.amountReceived  = +(+payment?.amountPaid).toFixed(2)
-        payment.tipAmount       = +(tip ).toFixed(2)
-      }
-    } else {
-      payment.amountPaid = response?.amount;
-      payment.amountReceived = response?.amount;
+        const tip = +payment?.tipAmount
+        const amountPaid = +payment?.amountPaid
+        const amount  = +response?.amount
+
+        if ( tip !=0 ) {
+          if (amount == tip + amountPaid) {
+            payment.amountPaid      = +(+payment?.amountPaid).toFixed(2)
+            payment.amountReceived  = +(+payment?.amountPaid).toFixed(2)
+            payment.tipAmount       = +(tip ).toFixed(2)
+          }
+        } else {
+          payment.amountPaid = response?.amount;
+          payment.amountReceived = response?.amount;
+        }
+
+        payment.saleType      = 1;
+        payment.exp           =  response?.expiry;
+        payment.approvalCode  =  response?.authcode;
+        payment.captureStatus =  response?.resptext;
+    } catch (error) {
+      console.log('applyCardPointResponseToPayment', error)
     }
 
-    payment.saleType      = 1;
-    payment.exp           =  response?.expiry;
-    payment.approvalCode  =  response?.authcode;
-    payment.captureStatus =  response?.resptext;
-
-    // console.log('response payment', payment)
     return payment;
   }
 
   applyTripPOSResponseToPayment(response: any, payment: IPOSPayment, tipValue: number) {
-    // console.log('type', response._type, )
-    // console.table(response)
 
     payment = this.applyPaymentAmount(response,payment,tipValue)
-
-    // console.log('payment response saved', payment.amountPaid)
 
     payment.account         = response?.accountNumber;
     payment.accountNum      = response?.accountNum;

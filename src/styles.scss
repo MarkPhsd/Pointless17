@@ -695,6 +695,13 @@ mat-dialog-container {
   transform: translate(-50%, -50%);
 }
 
+.centered-2 {
+  position: fixed;
+  top: 250px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .centered-flex, .flex-centered {
   display: flex;
   flex-direction: column;

@@ -147,9 +147,10 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
         (item.account && !item.completionDate) ||
         (item.completionDate && item.amountPaid != 0) ||
         (item && item.voidReason) ||
+        (item.tranType  && item?.tranType?.toLowerCase()  === 'emvsale'.toLowerCase() ) ||
         (item.tranType  && item?.tranType?.toLowerCase()  === 'authorizationresponse'.toLowerCase() ) ||
         (item.tranType  && item?.tranType.toLowerCase()   === 'VoidSaleByRecordNo'.toLowerCase() ) &&
-                          item?.tranType != 'incrementalAuthorizationResponse') {
+                           item?.tranType != 'incrementalAuthorizationResponse') {
       return true
                           }
       return false
@@ -168,6 +169,16 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     }
     return false
   }
+
+  emvDataCap(item) {
+    const order = this.order;
+    if (  item?.captureStatus != 'captured' )
+      {
+      return true
+    }
+    return false
+  }
+
 
   dCapViewEnabled(item) {
     const uiTransactions = this.uiTransactions;

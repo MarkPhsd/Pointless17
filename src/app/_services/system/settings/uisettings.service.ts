@@ -115,6 +115,7 @@ export interface TransactionUISettings {
   rewardPointValue: number;
   enableOnScreenKeyboard: boolean;
   employeeClockNotifier: number;
+  printServerDevice: string;
 }
 
 export interface StripeAPISettings {
@@ -922,6 +923,7 @@ export class UISettingsService {
       employeeClockNotifier: [],
       dsiTipPromptValues: [],
       allowPreAuth: [],
+      printServerDevice: [],
      })
   }
 

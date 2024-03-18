@@ -11,11 +11,12 @@ import { IAppConfig } from 'src/app/_services/system/app-init.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { RequestMessageService } from 'src/app/_services/system/request-message.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 
 @Component({
@@ -73,12 +74,27 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   }
 
   transactionUISettingsSubscriber() {
+
     try {
-      this._uiTransactionSettings = this.uiSettingsService.transactionUISettings$.subscribe( data => {
-        if (data) {
-          this.uiTransactionSettings = data;
+      this._uiTransactionSettings = this.uiSettingsService.transactionUISettings$.pipe( switchMap(data => {
+
+
+        if (!data) {
+          const ui$ = this.uiSettingsService.getUITransactionSetting().pipe(switchMap(data => {
+            if (data) {
+              this.uiSettingsService.updateUISubscription(data)
+            }
+            return of(data)
+          }));
+          return ui$
         }
-      });
+
+        return of(data)
+
+      })).subscribe(data => {
+
+        this.uiTransactionSettings = data;
+      })
     } catch (error) {
 
     }
@@ -108,6 +124,8 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
              public  prepPrintingService: PrepPrintingServiceService,
              private paymentMethodsService: PaymentsMethodsProcessService,
              private fbProductButtonService: ProductEditButtonService,
+             private requestMessageService: RequestMessageService,
+             private paymentService: POSPaymentService,
              private httpClient : HttpClient,
     ) {
 
@@ -140,23 +158,54 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     const diag = this.fbProductButtonService.openOrderEditor(this.order)
   }
 
+
+  remotePrint(message:string, exitOnSend: boolean) {
+    const order = this.order;
+    if (this.posDevice) {
+      if (this.posDevice?.remotePrint) {
+        const serverName = this.uiTransactionSettings.printServerDevice;
+        let remotePrint = {message: 'printReceipt', deviceName: this.posDevice.deviceName,
+                           printServer: serverName,id: order.id,history: order.history} as any;
+        const site = this.siteService.getAssignedSite()
+        this.printAction$ =  this.paymentService.remotePrintMessage(site, remotePrint).pipe(switchMap(data => {
+          if (data) {
+            this.siteService.notify('Print job sent', 'Close', 3000, 'green')
+          } else {
+            this.siteService.notify('Print Job not sent', 'Close', 3000, 'green')
+          }
+
+          if (this.posDevice?.exitOrderOnFire) {
+            //then exit the order.
+            this.clearOrder()
+          }
+          return of(data)
+        }))
+        return true;
+      }
+    }
+
+    return false
+  }
   printReceipt(){
     const order = this.order;
+
+    if (this.remotePrint('printReceipt', this.posDevice?.exitOrderOnFire)) {
+      return
+    }
+
     if (this.uiTransactionSettings.prepOrderOnExit) {
-      // this.paymentsMethodsProcessService.updateSendOrderOnExit(order)
       this.printAction$ = this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
-        // console.log('print out action from receipt')
         const site = this.siteService.getAssignedSite()
         return this.ordersService.getOrder(site, order.id.toString(), order.history)
-
       })).pipe(switchMap(data => {
-        // console.log('print receipt singlePrintReceipt', data.posOrderItems)
         this.orderMethodsService.updateOrder(data)
         this.printingService.previewReceipt(this.uiTransactionSettings?.singlePrintReceipt, data);
         return of(data)
       }))
       return
     }
+
+
     this.printingService.previewReceipt(this.uiTransactionSettings?.singlePrintReceipt, order)
   }
 
@@ -194,6 +243,11 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   reSendOrder() {
     let extiOnFire : boolean
+
+    if (this.remotePrint('rePrintPrep', this.posDevice?.exitOrderOnFire)) {
+      return
+    }
+
     if (this.posDevice) {
       if (this.posDevice.exitOrderOnFire) {
         extiOnFire = this.posDevice.exitOrderOnFire
@@ -207,6 +261,12 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   }
 
   sendOrder() {
+
+    if (this.remotePrint('printPrep', this.posDevice?.exitOrderOnFire)) {
+      return
+    }
+
+
     // const expo$ = this.paymentsMethodsProcessService.sendToPrep
     let extiOnFire : boolean
     if (this.posDevice) {

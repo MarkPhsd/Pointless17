@@ -5,7 +5,7 @@
         class="grid-item" >
     <mat-form-field appearance="outline" class="form-fields">
         <mat-label >Search Items</mat-label>
-          <input
+        <input
                   #input
                   matInput
                   type           ="text"
@@ -108,6 +108,7 @@
 <ng-template #typeListSelector>
   <div *ngIf="searchForm" [formGroup]="searchForm">
     <mat-form-field  appearance="outline">
+      <mat-label>Types</mat-label>
         <mat-select
               type="number"
               (selectionChange)="refreshSearch()"

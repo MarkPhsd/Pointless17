@@ -3,7 +3,6 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, catchError, concatMap, of, switchMap } from 'rxjs';
 import { IPOSPayment, IPOSOrder } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -13,7 +12,6 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
 import { DcapService,DcapRStream } from 'src/app/modules/payment-processing/services/dcap.service';
-
 
 @Component({
   selector: 'app-dcaptransaction',
@@ -49,8 +47,6 @@ export class DCAPTransactionComponent implements OnInit {
   autoActionData: any;
   terminalSettings$: Observable<ITerminalSettings>;
   result: any;
-
-
 
   constructor(
     public  userAuthService       : UserAuthorizationService,
@@ -154,9 +150,9 @@ export class DCAPTransactionComponent implements OnInit {
     }))
   }
 
-    refundAmount() {
-      if (!this.validateTransactionData()) { return }
-      if (this.terminalSettings) {
+  refundAmount() {
+    if (!this.validateTransactionData()) { return }
+    if (this.terminalSettings) {
         const device = this.terminalSettings.name;
         const site = this.siteService.getAssignedSite()
         this.initMessaging()
@@ -201,14 +197,11 @@ export class DCAPTransactionComponent implements OnInit {
         const site = this.siteService.getAssignedSite()
         this.initMessaging()
         this.processing = true;
-
-       
         let sale$ = this.dCapService.payAmount(this.terminalSettings?.name , this.posPayment);
-        if (this.manual) { 
+        if (this.manual) {
           console.log('manual', this.manual)
           sale$ = this.dCapService.payAmountManual(this.terminalSettings?.name , this.posPayment);
         }
-       
         this.processing$ = sale$.pipe(switchMap(data => {
           this.result = data;
           return this.processResults(data)
@@ -227,7 +220,6 @@ export class DCAPTransactionComponent implements OnInit {
         return of(null)
       }
       let item = this.readResult(response)
-
       if (item?.success) {
         const device = this.terminalSettings?.name;
         const item$ = this.paymentMethodsService.processDCAPResponse(response,
@@ -314,10 +306,8 @@ export class DCAPTransactionComponent implements OnInit {
       return of(null)
     }
 
-
     applyTipAmount(event) {
       this.tipValue = event;
-      // console.log('apply tip amount', this.tipValue, event)
     }
 
     addTipPercent(value) {
@@ -329,7 +319,6 @@ export class DCAPTransactionComponent implements OnInit {
         return
       }
     }
-
 
     validateTransactionData() {
       let result = true;
@@ -359,21 +348,8 @@ export class DCAPTransactionComponent implements OnInit {
 
     _close() {   this.dialogRef.close()  }
 
-    // setTransactionInfo(): authorizationPOST {
-    //   //we will be sending the api call via the type of transaciton
-    //   //including the pospayment
-    //   //including the deviceInfo
-    //   //
-    //   return item;
-    // }
 
     get _tipValue() {
-      // console.log('inputFormValue', this.inputForm.value)
-      // if (this.inputForm) {
-      //  const value =  this.inputForm.controls['itemName'].value
-      //  this.tipValue = value;
-      //  return value;
-      // }
       if (!this.tipValue) {
         this.tipValue = '0.00'
       }

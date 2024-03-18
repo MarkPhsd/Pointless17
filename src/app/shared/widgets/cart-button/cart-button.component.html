@@ -1,5 +1,6 @@
   <div *ngIf="(actionOrder$ | async) as actionOrder"></div>
   <div *ngIf="(user$ | async) as user"></div>
+
   <div [class]="gridflow">
 
     <div  *ngIf="(order && order.history == true || (order && order.completionDate))

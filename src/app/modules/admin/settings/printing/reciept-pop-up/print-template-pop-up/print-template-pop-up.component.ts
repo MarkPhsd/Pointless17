@@ -26,9 +26,7 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
   index = 0;
 
   constructor(private dialogRef: MatDialogRef<PrintTemplatePopUpComponent>,
-              private orderService: OrdersService,
               private printingService: PrintingService,
-              private orderMethodsService: OrderMethodsService,
               @Inject(MAT_DIALOG_DATA) public data: any
               )
   {
@@ -63,9 +61,6 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
     this.printingService._printOrder.next(this.printOrder)
     this.currentView = this.printTemplate;
     this.hideTemplate = false;
-
-    // console.log('printingCompleted', this.index, this.printOrders.length);
-
     if (this.index + 1 > this.printOrders.length) {
       this.exit()
       return;

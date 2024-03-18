@@ -1,11 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { Observable, of, switchMap } from 'rxjs';
-import { OrderToFrom } from 'src/app/_interfaces';
+import { IPOSOrder, OrderToFrom, employee } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
+import { EmployeeService } from 'src/app/_services/people/employee-service.service';
+import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-pos-order-editor',
@@ -16,14 +20,23 @@ export class PosOrderEditorComponent implements OnInit {
   saving: boolean;
   action$: Observable<any>;
   order$: Observable<OrderToFrom>;
-  order: OrderToFrom;
+  posOrder: IPOSOrder;
+  order:  OrderToFrom;
   history: boolean;
   inputForm              : UntypedFormGroup;
+  dateTimeFormat = 'y-MM-dd h:mm:ss a';
+
+  employees$ = this.employeeService.getEmployees(this.siteService.getAssignedSite())
+
   constructor(
     private orderService: OrdersService,
+    private employeeService: EmployeeService,
+    private orderMethodsService: OrderMethodsService,
     private fb: FormBuilder,
     public userAuthService          : UserAuthorizationService,
     private siteService             : SitesService,
+    private dataHelper: DateHelperService,
+    private router: Router,
     private dialogRef: MatDialogRef<PosOrderEditorComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
    {
@@ -32,18 +45,111 @@ export class PosOrderEditorComponent implements OnInit {
       const site = this.siteService.getAssignedSite();
       this.history = data?.history;
       this.order$ = orderService.getT_Order(site, data?.id, data?.history).pipe(switchMap(data => {
-        this.order = data;
-        this.inputForm.patchValue(data)
-        return of(data)
+        this.fillForm(data)
+        return this.orderMethodsService.currentOrder$
+      })).pipe(switchMap(data => {
+        this.posOrder = data
+        return of(this.order)
       }))
     }
   }
 
+  fillForm(data) {
+    this.order = data;
+    this.inputForm.patchValue(data)
+    console.log('orderDate', this.order?.orderDate)
+    this.patchDates(this.order)
+  }
+
+  assignClientID(id: number) {
+    if (this.order) {
+      const site = this.siteService.getAssignedSite();
+      this.order.clientID = id
+      this.action$ =   this.orderService.putOrder(site, this.posOrder).pipe(switchMap(data => {
+        this.orderMethodsService.updateOrderSubscription(data)
+        this.posOrder = data;
+        return this.orderService.getT_Order(site, data?.id, data?.history)
+      })).pipe(switchMap(data => {
+        return of(data)
+      }))
+    }
+    return of(this.order)
+  }
+
+  assignCustomer(event) {
+    if (event) {
+      this.assignClientID(event.id)
+    }
+  }
+
+  removeClient() {
+    if (this.order) {
+      this.assignClientID(0);
+    }
+  }
+
+  openClient() {
+    if (this.order && this.posOrder.clients_POSOrders) {
+      this.router.navigate(["/profileEditor/", {id: this.order.clientID}]);
+    }
+  }
+
+  patchDates(data: OrderToFrom) {
+    let  orderDate : Date = null;
+    let  completion : Date = null;
+    let scheduleDate: Date = null;
+    let scheduleTo: Date = null;
+
+    let shipOutOrderDate: Date = null;
+    let eTA: Date = null;
+    let arrivalDate: Date = null;
+
+    let termsDueDate: Date = null;
+    let beginDate: Date = null;
+
+    let orderPrepared: Date = null;
+
+    if (data.orderDate) {
+      orderDate = new Date(this.dataHelper.format( data.orderDate,  this.dateTimeFormat))
+    }
+    if (data.completionDate) {
+      completion = new Date(this.dataHelper.format( data.completionDate,  this.dateTimeFormat))
+    }
+    if (data.scheduleDate) {
+      scheduleDate = new Date(this.dataHelper.format( data.scheduleDate,  this.dateTimeFormat))
+    }
+    if (data.scheduleDate) {
+      scheduleDate = new Date(this.dataHelper.format( data.scheduleDate,  this.dateTimeFormat))
+    }
+    if (data.shipOutOrderDate) {
+      shipOutOrderDate = new Date(this.dataHelper.format( data.shipOutOrderDate,  this.dateTimeFormat))
+    }
+    if (data.eTA) {
+      eTA = new Date(this.dataHelper.format( data.eTA,  this.dateTimeFormat))
+    }
+    if (data.arrivalDate) {
+      arrivalDate = new Date(this.dataHelper.format( data.arrivalDate,  this.dateTimeFormat))
+    }
+    if (data.termsDueDate) {
+      termsDueDate = new Date(this.dataHelper.format( data.termsDueDate,  this.dateTimeFormat))
+    }
+    if (data.beginDate) {
+      beginDate = new Date(this.dataHelper.format( data.beginDate,  this.dateTimeFormat))
+    }
+    if (data.orderPrepared) {
+      orderPrepared = new Date(this.dataHelper.format( data.orderPrepared,  this.dateTimeFormat))
+    }
+
+    console.log('orderDate Format', orderDate)
+    console.log('orderDate object', this.order?.orderDate)
+    this.inputForm.patchValue({ orderDate: orderDate, completionDate: completion, scheduleDate: scheduleDate, scheduleTo:scheduleTo,shipOutOrderDate:shipOutOrderDate,
+                                eTA: eTA,arrivalDate: arrivalDate,termsDueDate: termsDueDate,beginDate:beginDate,orderPrepared:orderPrepared })
+
+
+  }
 
   ngOnInit(): void {
     this.initForm();
-
-
   }
 
   initForm() {
@@ -182,7 +288,6 @@ export class PosOrderEditorComponent implements OnInit {
   }
 
   updateItem(event, boolean) {
-
     console.log('event', event, boolean)
     this.action$ = this._updateItem()
   }
@@ -196,8 +301,11 @@ export class PosOrderEditorComponent implements OnInit {
     this.order = this.inputForm.value;
     this.order.items = items;
     this.order.payments = payments;
+    this.order = this.saveDates(this.order)
     return this.orderService.putT_Order(site, this.order, this.history).pipe(switchMap(data => {
       const order$ = this.orderService.getOrder(site, data?.id.toString(), this.history);
+      this.initForm()
+      this.fillForm(data)
       return order$
     })).pipe(switchMap(data => {
       this.saving = false
@@ -205,12 +313,50 @@ export class PosOrderEditorComponent implements OnInit {
     }))
   }
 
+
   updateItemExit(event) {
     this.action$ = this._updateItem().pipe(switchMap(data => {
       setTimeout(() => {
         this.dialogRef.close(true);
       }, 100);
       return of(data)
+    }))
+  }
+
+  saveDates(data: OrderToFrom) {
+    if (data.orderDate) {
+      data.orderDate =  this.dataHelper.format( data.orderDate,  this.dateTimeFormat)
+    }
+    if (data.completionDate) {
+      data.completionDate = this.dataHelper.format( data.completionDate,  this.dateTimeFormat)
+    }
+    if (data.scheduleDate) {
+      data.scheduleDate = this.dataHelper.format( data.scheduleDate,  this.dateTimeFormat)
+    }
+    if (data.scheduleDate) {
+      data.scheduleDate =  this.dataHelper.format( data.scheduleDate,  this.dateTimeFormat)
+    }
+    if (data.shipOutOrderDate) {
+      data.shipOutOrderDate =  this.dataHelper.format( data.shipOutOrderDate,  this.dateTimeFormat)
+    }
+    if (data.eTA) {
+      data.eTA         =  this.dataHelper.format( data.eTA,  this.dateTimeFormat)
+    }
+    if (data.arrivalDate) {
+      data.arrivalDate = this.dataHelper.format( data.arrivalDate,  this.dateTimeFormat)
+    }
+    if (data.termsDueDate) {
+      data.termsDueDate = this.dataHelper.format( data.termsDueDate,  this.dateTimeFormat)
+    }
+
+    return data;
+  }
+
+  assignEmployeeID(id: number) {
+    const site = this.siteService.getAssignedSite()
+    this.action$ =  this.employeeService.getEmployee(site, id).pipe(switchMap(data => {
+      this.order.serverName = data?.name;
+      return this.orderService.putT_Order(site, this.order, this.history)
     }))
   }
 

@@ -86,6 +86,8 @@ export interface   IRequestMessagesResult {
 })
 export class RequestMessageService {
 
+
+
   defaultSubjects = [
     {name: 'Please Complete', type: 'ps', subject: 'Please Complete', template: true, message: 'Please review this order for prep. I would like it completed. I agree to pay when it the order is completed.', id: 1},
     {name: 'Please Review for Prep', type: 'ps', subject: 'Please Review for Prep', template: true,  message: 'Please review this order for prep. I would like it confirmed and then please contact me.', id: 2},
@@ -106,6 +108,7 @@ export class RequestMessageService {
     {name: 'Check Service Request', id: 'csr'},
     {name: 'Price Schedule', id: 'ps'},
     {name: 'Order Ready - Use Only One Template', id: 'on'},
+    {name: 'Print Job', id: 'Print Job'},
   ];
 
   isAuthorized   = false;
@@ -117,6 +120,20 @@ export class RequestMessageService {
               ) {
 
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
+  }
+
+  archiveMessages(site: ISite, list: IRequestMessage[]): Observable<IRequestResponse> {
+    //this should perform the operation on the backend via the api.
+    const controller = "/RequestMessages/"
+
+    const endPoint = "archiveMessages"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IRequestResponse>(url, list)
+
   }
 
    delete(site: ISite, id: number): Observable<IRequestResponse> {

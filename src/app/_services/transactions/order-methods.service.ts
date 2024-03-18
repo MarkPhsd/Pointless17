@@ -1438,7 +1438,7 @@ export class OrderMethodsService implements OnDestroy {
             return;
           }
 
-          console.log((order?.posOrderItems?.length , order.posOrderItems))
+          // console.log((order?.posOrderItems?.length , order.posOrderItems))
           if ((order && order.posOrderItems.length == 1) || this.authenticationService.isStaff) {
             this.toolbarServiceUI.updateOrderBar(true);
             return;
@@ -1532,7 +1532,7 @@ export class OrderMethodsService implements OnDestroy {
           if (!serviceType) {   serviceType = order.service  }
           this.processOrderResult(order, site, serviceType?.retailType, null, serviceType?.resaleType )
           if (overRideNavigation) {
-            console.log('set active order')
+            // console.log('set active order')
             this.setActiveOrder(order)
             return of(null)
           }

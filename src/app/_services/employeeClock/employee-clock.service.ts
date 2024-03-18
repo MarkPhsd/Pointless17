@@ -22,7 +22,7 @@ export interface EmployeeClockSearchModel{
   startDate: string;
   endDate: string;
   employeeID: number;
-  summary: true;
+  summary: boolean;
 }
 
 

@@ -1,6 +1,6 @@
 <!-- Styles
 assets/htmlTemplates/salesreportStyles.html' -->
-
+<div *ngIf="action$ | async as result"></div>
 <div  class="container" *ngIf="(uiTransactions$ | async) as value">
   <ng-container *ngTemplateOutlet="headerView"></ng-container>
 
@@ -23,6 +23,23 @@ assets/htmlTemplates/salesreportStyles.html' -->
         [inputForm] ="completionDateForm">
       </mat-date-range>
     </div>
+
+    <ng-container [ngTemplateOutlet]="zrunReports"></ng-container>
+
+    <ng-template #zrunReports>
+      <div  class="grid-buttons" style="margin-top:5px" *ngIf="zrunListForm">
+        <div *ngIf="zrunReports$ | async as list">
+          <app-mat-select
+            [inputForm]="zrunListForm"
+            [fieldName]="'id'"
+            [useID]="true"
+            (outputItem)="setDaterangeByZRUN($event)"
+            [list]="list">
+            Select ZRUN
+          </app-mat-select>
+        </div>
+      </div>
+    </ng-template>
 
     <div>
       <button mat-raised-button
@@ -166,7 +183,11 @@ assets/htmlTemplates/salesreportStyles.html' -->
               (click)="showView(7)">Payment Refunds</button>
       <button mat-flat-button  style="width:150px;height:50px"color="warn"
               (click)="showView(5)">Item Voids</button>
+
+      <button *ngIf="zrunID" style="width:150px;height:50px" mat-raised-button (click)="deleteDuplicates()" color="warn">Delete Duplicates ({{zrunID}})</button>
+
     </div>
+
   </div>
 
 </ng-template>
@@ -194,7 +215,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
 
 <ng-template #reportsView>
 
-  <div class="grid-flow" *ngIf="sites && showValues && dateFrom && dateTo">
+  <div class="grid-flow" *ngIf="sites && showValues && ((dateFrom && dateTo) || zrunID)">
     <div  *ngFor="let site of sites">
       <div style="margin-left:15px;width:350px;">
         <div style="text-align: center;">
@@ -213,10 +234,11 @@ assets/htmlTemplates/salesreportStyles.html' -->
 
           <sales-tax-report
                   [site]="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]="dateTo"
-                  [minimized]="'true'"
-                  [notifier]="childNotifier">
+                  [dateFrom]  ="dateFrom"
+                  [dateTo]    ="dateTo"
+                  [minimized] ="'true'"
+                  [zrunID]    ="zrunID"
+                  [notifier]  ="childNotifier">
             <div header>
               <mat-icon >summarize</mat-icon> Sales - {{site.name}}
             </div>
@@ -227,6 +249,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [site]    ="site"
                   [dateFrom]="dateFrom"
                   [dateTo]  ="dateTo"
+                  [zrunID]  ="zrunID"
                   [notifier]="childNotifier">
             <div header>
               <mat-icon >summarize</mat-icon> Payments - {{site.name}}
@@ -240,6 +263,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [site]    ="site"
                   [dateFrom]="dateFrom"
                   [dateTo]  ="dateTo"
+                  [zrunID]  ="zrunID"
                   [notifier]="childNotifier">
             <div header>
               <mat-icon >summarize</mat-icon> Sale Type - {{site.name}}
@@ -254,6 +278,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [dateTo]="dateTo"
                   [removeGiftCard]="true"
                   [viewType] = "'sales'"
+                  [zrunID]  ="zrunID"
                   [groupBy]="'serviceType'">
                 <div class="header">
                   <mat-icon>menu</mat-icon>  Item Sales Type
@@ -267,6 +292,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [site]    ="site"
                   [dateFrom]="dateFrom"
                   [dateTo]  ="dateTo"
+                  [zrunID]  ="zrunID"
                   [notifier]="childNotifier">
             <div header>
               <mat-icon >people</mat-icon> Employee - {{site.name}}
@@ -281,6 +307,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [site]    ="site"
                   [dateFrom]="dateFrom"
                   [dateTo]  ="dateTo"
+                  [zrunID]  ="zrunID"
                   [notifier]="childNotifier">
             <div header>
               <mat-icon >summarize</mat-icon> Devices - {{site.name}}
@@ -305,6 +332,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [dateTo]  ="dateTo"
                   [notifier]="childNotifier"
                   [autoPrint]="autoPrint"
+                  [zrunID]  ="zrunID"
                   [type]="'voids'">
             <div header>
               <mat-icon >summarize</mat-icon> Void Payments {{site.name}}
@@ -324,6 +352,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [dateTo]  ="dateTo"
                   [notifier]="childNotifier"
                   [type]="'refunds'"
+                  [zrunID]  ="zrunID"
                   [autoPrint]="autoPrint"
                   >
             <mat-icon>credit_card</mat-icon> Refund Payments {{site.name}}
@@ -342,6 +371,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [groupBy]  = "'void'"
                   [viewType] = "'voids'"
                   [autoPrint]="autoPrint"
+                  [zrunID]  ="zrunID"
                   >
                 <div class="header">
                   <mat-icon>menu</mat-icon>  Item Voids
@@ -362,6 +392,8 @@ assets/htmlTemplates/salesreportStyles.html' -->
           <ng-container *ngTemplateOutlet="nonTaxedCategorySalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="itemSalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="itemTypeSalesView,context: {$implicit: site}"></ng-container>
+          <ng-container *ngTemplateOutlet="itemSizeSalesView,context: {$implicit: site}"></ng-container>
+          <ng-container *ngTemplateOutlet="uomSalesView,context: {$implicit: site}"></ng-container>
         </ng-container>
 
         <ng-template #departmentSales let-site>
@@ -410,7 +442,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [dateTo]="dateTo"
                   [removeGiftCard]="true"
                   [viewType] = "'sales'"
-                  [groupBy]="'category'">
+                  [groupBy]="'category'"
+                  [zrunID]  ="zrunID"
+                  >
                 <div class="header">
                   <mat-icon>menu</mat-icon>  Category Sales
                   <mat-divider></mat-divider>
@@ -429,7 +463,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [removeGiftCard]="true"
                   [viewType] = "'sales'"
                   [taxFilter]="2"
-                  [groupBy]="'category'">
+                  [groupBy]="'category'"
+                  [zrunID]  ="zrunID"
+                  >
                 <div class="header">
                   <mat-icon>menu</mat-icon> Taxed Category Sales
                   <mat-divider></mat-divider>
@@ -448,7 +484,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [removeGiftCard]="true"
                   [viewType] = "'sales'"
                   [taxFilter]="1"
-                  [groupBy]="'category'">
+                  [groupBy]="'category'"
+                  [zrunID]  ="zrunID"
+                  >
                 <div class="header">
                   <mat-icon>menu</mat-icon> Non Taxed Category Sales
                   <mat-divider></mat-divider>
@@ -466,7 +504,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [dateTo]="dateTo"
                   [removeGiftCard]="true"
                   [viewType] = "'sales'"
-                  [groupBy]="'items'">
+                  [groupBy]="'items'"
+                  [zrunID]  ="zrunID"
+                  >
                 <div class="header">
                   <mat-icon>menu</mat-icon> Item Sales
                   <mat-divider></mat-divider>
@@ -484,7 +524,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [dateTo]="dateTo"
                   [removeGiftCard]="true"
                   [viewType] = "'sales'"
-                  [groupBy]="'itemQuantity'">
+                  [groupBy]="'itemQuantity'"
+                  [zrunID]  ="zrunID"
+                  >
                 <div class="header">
                   <mat-icon>menu</mat-icon> Item Sales
                   <mat-divider></mat-divider>
@@ -492,25 +534,25 @@ assets/htmlTemplates/salesreportStyles.html' -->
             </item-sales-card>
           </div>
         </ng-template>
-        <ng-template #itemQuantityGrouppedSales let-site>
+
+        <ng-template #uomSales let-site>
           <div>
             <item-sales-card
-                  [notifier]="count"
-                  [site]="site"
-                  [dateFrom]="dateFrom"
-                  [dateTo]="dateTo"
+                  [notifier] ="count"
+                  [site]     ="site"
+                  [dateFrom] ="dateFrom"
+                  [dateTo]   ="dateTo"
                   [removeGiftCard]="true"
                   [viewType] = "'sales'"
-                  [groupBy]="'itemSize'">
+                  [groupBy]  ="'uom'"
+                  [zrunID]   ="zrunID" >
                 <div class="header">
-                  <mat-icon>menu</mat-icon> Item Sales
+                  <mat-icon>menu</mat-icon> UOM Sales
                   <mat-divider></mat-divider>
                 </div>
             </item-sales-card>
           </div>
         </ng-template>
-
-
 
         <ng-template #serviceFees let-site>
           <div>
@@ -521,7 +563,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [dateTo]="dateTo"
                   [removeGiftCard]="true"
                   [viewType] = "'sales'"
-                  [groupBy]="'serviceFees'">
+                  [groupBy]="'serviceFees'"
+                  [zrunID]  ="zrunID"
+                  >
                 <div class="header">
                   <mat-icon>menu</mat-icon> Service Fees
                   <mat-divider></mat-divider>
@@ -539,7 +583,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [dateTo]="dateTo"
                   [removeGiftCard]="true"
                   [viewType] = "'sales'"
-                  [groupBy]="'items'">
+                  [groupBy]="'items'"
+                  [zrunID]  ="zrunID"
+                  >
                 <div class="header">
                   <mat-icon>menu</mat-icon> Item Sales
                   <mat-divider></mat-divider>
@@ -557,7 +603,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [dateTo]="dateTo"
                   [removeGiftCard]="true"
                   [viewType] = "'sales'"
-                  [groupBy]="'type'">
+                  [groupBy]="'type'"
+                  [zrunID]  ="zrunID"
+                  >
                 <div class="header">
                   <mat-icon>menu</mat-icon> Item Type
                   <mat-divider></mat-divider>
@@ -614,7 +662,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
         [dateTo]  ="dateTo"
         [type]    ="'metrcSummary'"
         [counter]  ="count+1"
-        [notifier]="childNotifier"  >
+        [notifier]="childNotifier"
+        [zrunID]  ="zrunID"
+        >
     <div summary>
       <mat-icon >receipt</mat-icon> {{site?.name}} METRC:
     </div>
@@ -622,7 +672,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
 </ng-template>
 
 <ng-template #financialSalesCharts>
-  <div *ngIf="dateFrom && dateTo">
+  <div *ngIf=" ((dateFrom && dateTo) || zrunID)">
     <div class="grid-charts">
       <div>
         <app-widget-card
@@ -633,6 +683,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
           [sites]    ="sites"
           [counter]  ="count+1"
           [notifier]="childNotifier"
+          [zrunID]  ="zrunID"
         ></app-widget-card>
       </div>
 
@@ -645,6 +696,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
           [sites]    ="sites"
           [counter]  ="count+1"
           [notifier]="childNotifier"
+          [zrunID]  ="zrunID"
         ></app-widget-card>
       </div>
 
@@ -657,6 +709,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
           [sites]    ="sites"
           [counter]  ="count+1"
           [notifier]="childNotifier"
+          [zrunID]  ="zrunID"
           ></app-widget-card>
       </div>
 
@@ -669,10 +722,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
           [sites]    ="sites"
           [counter]  ="count+1"
           [notifier]="childNotifier"
+          [zrunID]  ="zrunID"
         ></app-widget-card>
       </div>
-
-
     </div>
   </div>
   <div *ngFor="let site of sites">
@@ -682,7 +734,8 @@ assets/htmlTemplates/salesreportStyles.html' -->
       [site]    ="site"
       [counter]  ="count+1"
       [groupBy]    ="'avgHourly'"
-      [notifier]="childNotifier">
+      [notifier]="childNotifier"
+      >
       <div title>
       </div>
       <div site><h4>{{site.name}}</h4></div>
@@ -696,7 +749,8 @@ assets/htmlTemplates/salesreportStyles.html' -->
       [site]    ="site"
       [counter]  ="count+1"
       [groupBy]    ="'avg15Min'"
-      [notifier]="childNotifier">
+      [notifier]="childNotifier"
+      >
       <div title>
       </div>
       <div site><h4>{{site.name}}</h4></div>
@@ -724,7 +778,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
           [site]="sites[i]"
           [groupBy]="'product'"
           [counter]  ="count+1"
-          [notifier]="childNotifier">
+          [notifier]="childNotifier"
+          [zrunID]  ="zrunID"
+          >
           <div site><h4>{{sites[i].name}} - Top Product Sales</h4></div>
         </product-chart-report>
       </div>
@@ -738,7 +794,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
           [site]="sites[i]"
           [groupBy]="'product'"
           [counter]  ="count+1"
-          [notifier]="childNotifier">
+          [notifier]="childNotifier"
+          [zrunID]  ="zrunID"
+          >
           <div site><h4>{{sites[i].name}} - Top Product Quantity</h4></div>
         </product-chart-report>
       </div>
@@ -752,7 +810,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
           [site]="sites[i]"
           [groupBy]="'product'"
           [counter]  ="count+1"
-          [notifier]="childNotifier">
+          [notifier]="childNotifier"
+          [zrunID]  ="zrunID"
+          >
           <div site><h4>{{sites[i].name}} - Top Product Profit</h4></div>
         </product-chart-report>
       </div>
@@ -768,7 +828,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
         [site]    ="site"
         [counter]  ="count+1"
         [groupBy]    ="'category'"
-        [notifier]="childNotifier">
+        [notifier]="childNotifier"
+        [zrunID]  ="zrunID"
+        >
         <div site><h4>{{site.name}}</h4></div>
       </product-chart-report>
     </div>
@@ -783,7 +845,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
         [site]    ="site"
         [counter]  ="count+1"
         [groupBy]    ="'department'"
-        [notifier]="childNotifier">
+        [notifier]="childNotifier"
+        [zrunID]  ="zrunID"
+        >
         <div site><h4>{{site.name}}</h4></div>
       </product-chart-report>
     </div>
@@ -798,7 +862,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
         [site]     ="site"
         [counter]  ="count+1"
         [groupBy]    ="'type'"
-        [notifier]="childNotifier">
+        [notifier]="childNotifier"
+        [zrunID]  ="zrunID"
+        >
         <div site><h4>{{site.name}}</h4></div>
       </product-chart-report>
     </div>
@@ -816,7 +882,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
         [notifier]  ="childNotifier"
         [startDate] ="dateFrom"
         [counter]   ="count+1"
-        [endDate]   ="dateTo">
+        [endDate]   ="dateTo"
+        >
+
     </employee-clock-list>
   </ng-container>
 
@@ -840,6 +908,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
     [site]="site"
     [dateFrom]="dateFrom"
     [dateTo]="dateTo"
+    [zrunID]  ="zrunID"
   ></app-audit-payment>
 </ng-template>
 
@@ -848,6 +917,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
       [site]="site.site"
       [dateFrom]="dateFrom"
       [dateTo]="dateTo"
+      [zrunID]  ="zrunID"
       [notifier]="childNotifier">
   </balance-sheet-report>
 </ng-template>
@@ -860,6 +930,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
           [dateTo]   ="dateTo"
           [notifier] ="childNotifier"
           [type]     ="'buysell'"
+          [zrunID]  ="zrunID"
           [autoPrint]="autoPrint"  >
     <mat-icon>credit_card</mat-icon> Positive Payments {{site.name}}
   </payment-report>
@@ -870,6 +941,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
           [dateTo]   ="dateTo"
           [notifier] ="childNotifier"
           [type]     ="'buysell'"
+          [zrunID]  ="zrunID"
           [autoPrint]="autoPrint"  >
     <mat-icon>credit_card</mat-icon> Negative Payments {{site.name}}
   </payment-report>

@@ -44,22 +44,6 @@ export class OrderTotalBoardComponent implements OnInit {
     }))
   }
 
-  // refreshOrderFromPOSDevice() {
-  //   const retryDelay = 1000; // 30 seconds
-  //   if (!this.posName) { return; }
-  //   this.order$ = of(null).pipe(
-  //     tap(() => console.log('Attempting to fetch order...')),
-  //     switchMap(() => this.getOrder()),
-  //     catchError(error => {
-  //       console.error('Error fetching order, will retry in 30 seconds', error);
-  //       // Use timer to delay the next retry
-  //       return timer(retryDelay).pipe(
-  //         tap(() => this.refreshOrderFromPOSDevice()) // Restart the process after a delay
-  //       );
-  //     })
-  //   );
-  // }
-
   refreshOrderFromPOSDevice() {
     const retryDelay = 1000; // 30 seconds
     if (!this.posName) { return; }
@@ -75,34 +59,6 @@ export class OrderTotalBoardComponent implements OnInit {
     );
     console.log('tracking');
   }
-  // refreshOrderFromPOSDevice() {
-  //   const retryDelay = 30000; // 30 seconds
-  //   if (!this.posName) { return; }
-  //   this.order$ = this.getOrder().pipe(
-  //     retryWhen(errors =>
-  //       errors.pipe(
-  //         // Log the error or perform a side effect here if needed
-  //         tap(err => console.error('Error fetching order, retrying...', err)),
-  //         // Wait for a specified time before retrying
-  //         delayWhen(() => timer(retryDelay)),
-  //       )
-  //     ),
-  //   );
-  //   console.log('tracking');
-  // }
-  // refreshOrderFromPOSDevice() {
-  //   const seconds = 1000 * this.refreshTime;
-  //   if (!this.posName) { return }
-  //   this.order$  = this.getOrder().pipe(
-  //     repeatWhen(notifications =>
-  //       notifications.pipe(
-  //         delay(seconds * 1)),
-  //     ),
-  //     catchError((err: any) => {
-  //       return throwError(err);
-  //     })
-  //   )
-  //   console.log('tracking')
-  // }
+
 
 }

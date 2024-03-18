@@ -8,6 +8,9 @@
                 (selectionChange)="emitPrinter()"
               >
       <div *ngIf="printerList; else loading">
+        <mat-option *ngFor="let item of printerList" [value]="''">
+          Clear
+        </mat-option>
         <mat-option *ngFor="let item of printerList" [value]="item.name">
           {{ item.name }}
         </mat-option>

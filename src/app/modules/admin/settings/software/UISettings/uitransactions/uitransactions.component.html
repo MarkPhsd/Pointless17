@@ -741,6 +741,41 @@
           </mat-slide-toggle>
         </div>
 
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="prepOrderOnClose"  >
+            <mat-label>Send Items for prep at order close.</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div style="width:150px">
+          <mat-label>Print Server Device</mat-label>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'printServerDevice'">
+              Print Server Device
+          </app-value-fields>
+
+          <div *ngIf="(posDeviceList$ | async) as list ">
+            <mat-form-field style="width: 200px" class="fields"
+                appearance="outline">
+              <mat-label>Default Client Type</mat-label>
+                <mat-select
+                          type              = "number"
+                          formControlName   = "printServerDevice" >
+                  <mat-option
+                      *ngFor="let item of list"
+                      [value]="item?.name">
+                      {{item?.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+
+          <div *ngIf="inputForm.controls['printServerDevice'].value">
+            <button mat-raised-button (click)="openPOSDevice(inputForm.controls['printServerDevice'].value)"><mat-icon>open_in_new</mat-icon>Open</button>
+          </div>
+        </div>
 
         <div class="toggle-fields">
           <mat-slide-toggle
@@ -762,7 +797,7 @@
         <h3>Timed Events</h3>
         <div class="grid-views">
 
-          <div>
+          <div  style="width:150px">
             <mat-label>Employee Break Notifier</mat-label>
             <app-value-fields
                 [inputForm]="inputForm"
@@ -778,13 +813,16 @@
 
           <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Payment Options</h4>
 
-          <div class="toggle-fields">
+          <div>
             <mat-label class="mat-label-design">Button for Balance Due - adds item to transaction that rounds order total to nearest dollar.</mat-label>
-            <mat-slide-toggle
-                      formControlName="enableRounding" >
-              <mat-label>Enable rounding</mat-label>
-            </mat-slide-toggle>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="enableRounding" >
+                <mat-label>Enable rounding</mat-label>
+              </mat-slide-toggle>
+            </div>
           </div>
+
 
           <div class="toggle-fields">
             <mat-slide-toggle

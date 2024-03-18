@@ -8,11 +8,7 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angul
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { AgGridFormatingService, rowItem } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-// import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { employee,} from 'src/app/_interfaces';
 import { Capacitor,  } from '@capacitor/core';
@@ -22,7 +18,6 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { EmployeeSearchModel, EmployeeSearchResults, EmployeeService } from 'src/app/_services/people/employee-service.service';
 import { EmployeeEditComponent } from '../employee-edit/employee-edit.component';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-
 
 @Component({
   selector: 'employee-list',
@@ -186,6 +181,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     try {
       this._searchModel = this.employeeService.searchModel$.subscribe( data => {
           this.searchModel            = data
+          console.log('data', data)
           if (!this.searchModel) {
             const searchModel       = {} as EmployeeSearchModel;
             this.currentPage        = 1
@@ -313,7 +309,7 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     searchModel.jobTypeID  = 0
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
-    searchModel.terminated = 1
+    // searchModel.terminated = 1
     if (this.jobTypeID && this.jobTypeID !=0 ) {
       searchModel.jobTypeID  = this.jobTypeID;
     }
@@ -323,10 +319,8 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
   refreshSearchAny(event) {
     this.employeeService.searchModel$.subscribe(data => {
       this.searchModel = data;
-      // console.log('update search', data)
       return this.refreshSearch_sub()
     })
-
   }
 
   //this is called from subject rxjs obversablve above constructor.
@@ -352,18 +346,14 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     this.endRow        = endRow;
     if (tempStartRow > startRow) { return this.currentPage - 1 }
     if (tempStartRow < startRow) { return this.currentPage + 1 }
-    console.log('setCurrentPage', this.currentPage, startRow,tempStartRow)
     return this.currentPage
   }
 
   //this is called from OnGridReady
   // it instantes the currentpage
   getRowData(params, startRow: number, endRow: number):  Observable<EmployeeSearchResults>  {
-    console.log('this.currentpage', startRow, endRow, this.currentPage)
     this.currentPage          = this.setCurrentPage(startRow, endRow)
-    console.log('this.currentpage', this.currentPage)
     const searchModel         = this.initSearchModel();
-    console.log('search Model get row data', searchModel)
     const site                = this.siteService.getAssignedSite()
     return this.employeeService.getEmployeeBySearch(site, searchModel)
   }
@@ -397,7 +387,6 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
               this.isfirstpage   = resp.isFirstPage
               this.islastpage    = resp.isFirstPage
               this.currentPage   = resp.currentPage
-              console.log('current page ' , this.currentPage)
               this.numberOfPages = resp.pageCount
               this.recordCount   = resp.recordCount
               if (this.numberOfPages !=0 && this.numberOfPages) {

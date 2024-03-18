@@ -84,7 +84,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   textNameLength : number = 30;
 
   @Input() cardWidth: string;
-  
+
   packages: string;
   morebutton               = 'more-button';
   customcard               = 'custom-card'
@@ -260,7 +260,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   initAssignedItemSubscriber() {
     //disabled  class style when added button for item functions
     this._assignedPOSItems = this.orderMethodsService.assignedPOSItems$.subscribe( data => {
-  
+
         this.assignedPOSItems = data;
         if ( this.orderMethodsService.isItemAssigned( this.orderItem.id ) ) {
           this.productnameClass = 'product-name-alt'
@@ -324,7 +324,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     const site = this.siteService.getAssignedSite();
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
-  
+
     if (this.menuItem) {
       this.itemName   =  this.getItemName(this.menuItem?.name)
       this.imagePath  =  this.getImageUrl(this.menuItem?.urlImageMain)
@@ -569,19 +569,20 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
         }
 
         let width = '455px'
-        if (this.smallDevice) { 
+        if (this.smallDevice) {
           width = ' 100vw'
         }
 
         let requireWholeNumber = false;
         if (editField == 'quantity') {   requireWholeNumber = this.menuItem.itemType.requireWholeNumber }
+
         const item = {orderItem: this.orderItem,
                       editField: editField,
                       menuItem: this.menuItem,
                       requireWholeNumber: requireWholeNumber,
                       instructions: instructions}
         let height  = '600px';
-       
+
         if (editField == 'quantity') {
           height  = '600px';
         }
@@ -875,7 +876,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
   printLabel(item: PosOrderItem) {
     this.printLabel$ = this.printingService.printItemLabel(item, this.menuItem$,
-                                                            this.order, false).pipe(switchMap(data => {
+                                                              this.order, false).pipe(switchMap(data => {
                                                               this.orderMethodsService.updateOrder(data)
                                                               return of(data)
                                                            }))

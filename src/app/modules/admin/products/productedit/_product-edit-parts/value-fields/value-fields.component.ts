@@ -66,8 +66,6 @@ export class ValueFieldsComponent implements  AfterViewInit  {
     }
   }
 
-
-
   cancelButton() {
     this.outPutCancel.emit(true)
   }

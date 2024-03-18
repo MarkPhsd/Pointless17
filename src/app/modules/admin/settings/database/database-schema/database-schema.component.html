@@ -1,14 +1,48 @@
+<div *ngIf=" action$| async" ></div>
 <div *ngIf="processingVisible">
   <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
 </div>
 
 <div>
 
-  <button mat-raised-button
-          color="primary"
-          (click)="updateSchema()">
-          Update Schema
-  </button>
+  <button mat-raised-button color="primary" (click)="manageData = !manageData" >Manage Data</button>
+
+  <div *ngIf="manageData">
+    <button mat-raised-button
+        color="primary"
+        (click)="updateSchema()">
+        Update Schema
+    </button>
+
+    <button mat-raised-button
+        color="primary"
+        (click)="cleanData()">
+      Clean Data
+    </button>
+
+    <div>
+      <mat-card>
+        <mat-card-title>
+          Operations
+        </mat-card-title>
+        <button mat-raised-button color="primary"(click)="closeByDate()">
+          <mat-icon>calendar</mat-icon>Close By Date
+        </button>
+
+        <div [formGroup]="closeDateForm">
+          <mat-form-field style="width:135px;" class="flex-input" appearance="outline">
+            <mat-label>Date</mat-label>
+            <input matInput formControlName="date" matInput [matDatepicker]="picker">
+
+            <mat-datepicker-toggle  matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
 
   <div *ngIf=" (apiVersion$ | async) as version ">
     <h4 >API Version: {{version}}</h4>

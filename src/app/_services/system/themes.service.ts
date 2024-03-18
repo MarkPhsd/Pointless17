@@ -1,5 +1,5 @@
 import { Injectable, Renderer2 } from "@angular/core";
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import {  Observable } from 'rxjs';
 import { ITheme }  from 'src/app/_interfaces';
 // import  * as  ThemesJSON from 'src/assets/ThemesJSON';
 
@@ -11,9 +11,7 @@ export class ThemesService {
 
   theme: Observable<ITheme[]>;
 
-
-  constructor(
-    private _renderer : Renderer2) {}
+  constructor(  private _renderer : Renderer2) {}
 
   getThemeOptions()
   {

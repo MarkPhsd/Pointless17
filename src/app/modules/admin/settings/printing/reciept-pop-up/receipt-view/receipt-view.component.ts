@@ -142,11 +142,12 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   setPrintReady(event) {
-    // if (!this.autoPrinted && this.autoPrint) {
-    //   if (this.print()) {
-    //     this.autoPrinted = true;
-    //   }
-    // }
+    console.log('event', this.autoPrinted , this.autoPrint)
+    if (!this.autoPrinted && this.autoPrint) {
+      if (this.print()) {
+        this.autoPrinted = true;
+      }
+    }
   }
 
   async printViewCompleted(event) {
@@ -181,6 +182,11 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   {}
 
   ngOnInit() {
+
+    if (this.order) {
+      this.printingService.printOrder = this.order;
+    }
+
     this.isElectronApp = this.platFormService.isAppElectron
     this.initPrintView() //done
     this.intSubscriptions();
@@ -559,8 +565,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       this.order$ = this.getOrder();
     }
   }
-
-
 
   getOrder() {
      let printOrder$  = of(this.printingService.printOrder);

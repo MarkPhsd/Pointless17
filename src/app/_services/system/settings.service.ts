@@ -11,6 +11,9 @@ import { DSIEMVSettings, StripeAPISettings, TransactionUISettings, UIHomePageSet
 import { EmailModel } from '../twilio/send-grid.service';
 import { UserAuthorizationService } from './user-authorization.service';
 import { ebayoAuthorization } from '../resale/ebay-api.service';
+import { PosEditSettingsComponent } from 'src/app/modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
+import { DialogRef } from '@angular/cdk/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 interface IIsOnline {
   result: string;
@@ -39,7 +42,11 @@ export interface ITerminalSettings {
   enablePrepView    : boolean;
   defaultLabel      : string;
   printServer       : number;
-  dsiEMVSettings    : DSIEMVSettings
+  dsiEMVSettings    : DSIEMVSettings;
+  printServerTime    : number;
+  printServerEnable  : boolean;
+  remoteReceipt   : string;
+  remotePrint     : boolean;
 }
 
 
@@ -48,9 +55,6 @@ export interface ITerminalSettings {
 })
 
 export class SettingsService {
-  deleteDuplicates(): any {
-    throw new Error('Method not implemented.');
-  }
 
   private _TerminalSettings     = new BehaviorSubject<ITerminalSettings>(null);
   public  terminalSettings$      = this._TerminalSettings.asObservable();
@@ -62,6 +66,20 @@ export class SettingsService {
 
   apiUrl: any;
 
+
+  editPOSDevice(data): Observable<typeof dialogRef> {
+    let dialogRef: any;
+    dialogRef = this.dialog.open(PosEditSettingsComponent,
+      { width:        '800px',
+        minWidth:     '800px',
+        height:       '650px',
+        minHeight:    '650px',
+        data   : data
+      },
+    )
+    return dialogRef;
+  }
+
   updateTerminalSetting(data: ITerminalSettings) {
     this.terminalSettings = data;
     this._TerminalSettings.next(data);
@@ -70,12 +88,12 @@ export class SettingsService {
   constructor( private http: HttpClient,
                private httpCache: HttpClientCacheService,
                private siteService: SitesService,
+               private dialog: MatDialog,
                private appInitService  : AppInitService,
                private userAuthorizationService     : UserAuthorizationService,
                ) {
      this.apiUrl =  this.appInitService.apiBaseUrl()
   }
-
 
   clearEbayAuth(site, setting: ISetting) {
     const controller = '/settings/'
@@ -482,8 +500,9 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
+    return this.http.get<TransactionUISettings>(url) as Observable<TransactionUISettings>;
+
     return this.getAppCahcURI(url).pipe(switchMap(data => {
-      // this.tra
       return of(data)
     })) as Observable<TransactionUISettings>
 

@@ -112,7 +112,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   uiTransactionSetting  : TransactionUISettings;
   uiTransactionSetting$ : Observable<TransactionUISettings>;
   uiHomePageSetting$    : Observable<UIHomePageSettings>;
-
+  initUITransactions    : boolean;
   _orderBar           : Subscription;
   orderBar            : boolean;
 
@@ -144,6 +144,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   floorPlans$     : Observable<IFloorPlan[]>;
   posDevice$      : Observable<ITerminalSettings>;
   terminalSetting : any;
+  posDevice: ITerminalSettings;
   mailCount  = 0;
   headerBackColor: string;
   userChecked: boolean;
@@ -175,6 +176,19 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       this.user = data
       this.setInterFace(data)
       this.setHeaderBackColor(this.user?.userPreferences?.headerColor)
+      if (!this.initUITransactions) {
+        this.initUITransactions = true;
+        this.getTransactionUI()
+      }
+    })
+  }
+
+  getTransactionUI() {
+    this.uiSettings.getSetting('UITransactionSetting').subscribe(data => {
+      if (data) {
+        const config = JSON.parse(data.text)
+        this.uiSettings.updateUISubscription(config)
+      }
     })
   }
 
@@ -279,7 +293,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     this.mediaWatcher()
     this.initSite();
     this.updateScreenSize();
-    this.pollingService.poll();
     this.initUserOrder();
 
     this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(this.site);
@@ -307,6 +320,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
             const posDevice = JSON.parse(data?.text) as ITerminalSettings;
             this.uiSettings.updatePOSDevice(posDevice)
             this.terminalSetting = data;
+            this.posDevice = posDevice;
             this.zoom(posDevice)
             return of(posDevice)
 
@@ -535,31 +549,31 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
     // console.log('get User info', this.user)
     this.setUserInitCheck(this.user)
-    
+
     if (this.userChecked) {
       this.signOut = false;
       return
     }
 
 
-    
+
     return user
   }
 
-  setUserInitCheck(user) { 
+  setUserInitCheck(user) {
     this.userInitCheck$ = this.getUserSubscriber(user).pipe(switchMap(data => {
       //or is guest if is guest then override this.
       if (!data) {
         return of(null)
       }
-      if (!this.user) { 
+      if (!this.user) {
         return of(null)
       }
-      
+
       // console.log('is user valid', data.id == user.id);
-      if (data.apiUserName  === user.username) { 
+      if (data.apiUserName  === user.username) {
         // console.log('User names match');
-      } else { 
+      } else {
         this.userSwitchingService.clearLoggedInUser()
         // console.log('User names match');
       }
@@ -571,20 +585,20 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     }));
   }
 
-  setUserInfo(data) { 
+  setUserInfo(data) {
     this.setInterFace(data)
     if (!this.user || !this.user.password) { return}
   }
 
-  setInterFace(data) { 
+  setInterFace(data) {
     this.signOut = false;
     this.userChecked = true
 
-    if (this.user) { 
+    if (this.user) {
       this.user.id = data?.id
       this.user.roles = data?.roles;
     }
- 
+
     this.refreshUserBar(this.user)
     this.setUIFeaturesForUser(data);
   }
@@ -707,7 +721,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   goHome() {
-    if (this.phoneDevice) { 
+    if (this.phoneDevice) {
       //hide the side bar
       this.toolbarUIService.updateToolBarSideBar(false)
     }

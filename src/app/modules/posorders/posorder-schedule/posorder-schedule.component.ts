@@ -44,7 +44,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   instructions
   shippingInstructions
   scheduleInstructions;
-
+  dateTimeFormat = 'y-MM-dd h:mm:ss a'
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.pipe(
       switchMap( data => {
@@ -238,6 +238,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
           return;
         }
 
+        // logInTime = this.dataHelper.format( clock.logInTime,  this.dateTimeFormat)/
         if (!this.order.preferredScheduleDate && this.serviceType.promptScheduleTime) {
           this.selectedIndex = 2;
           return;
@@ -312,7 +313,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   saveShippingTime(event) {
     const site = this.siteService.getAssignedSite();
     this.processingUpdate = true;
-    this.order.preferredScheduleDate =  this.dateHelperService.format(event, 'medium');
+    this.order.preferredScheduleDate =  this.dateHelperService.format(event, this.dateTimeFormat);
     this.action$ = this.orderService.putOrder(site, this.order).pipe(
       switchMap(data => {
         this.processingUpdate = false;

@@ -3,7 +3,7 @@ import { formatDate as ngFormatDate } from "@angular/common";
 import { Inject } from "@angular/core";
 import { Injectable } from "@angular/core";
 import { LOCALE_ID } from "@angular/core";
-
+import * as moment from 'moment';
 // ----------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------- //
 
@@ -68,7 +68,7 @@ export class DateHelperService {
 
 	// I initialize the date-helper with the given localization token.
 	constructor( @Inject( LOCALE_ID ) localID: string ) {
-
+    // console.log('localID', localID)
 		this.localID = localID;
 
 	}
@@ -116,6 +116,21 @@ export class DateHelperService {
 		return( result );
 
 	}
+
+  adjustTimeZone(date: Date): Date {
+
+    // return new Date(date.getTime() );
+    if (!date) { return null}
+    const localTimeOffset = date.getTimezoneOffset() * 60000;
+
+    const returnDate =  new Date(date.getTime() - localTimeOffset);
+
+    // console.log('Initial Date', date)
+    // console.log('Return  Date' , returnDate)
+    // console.log('Return isoString' , returnDate.toISOString())
+
+    return returnDate
+  }
 
 
 	// I return the number of days in the given month. The year must be included since
@@ -203,6 +218,7 @@ export class DateHelperService {
 	// LOCALE_ID that is being used in the application.
 	public format( value: DateInput, mask: string ) : string {
 
+    // console.log('localID', this.localID )
 		return( ngFormatDate( value, mask, this.localID ) );
 
 	}

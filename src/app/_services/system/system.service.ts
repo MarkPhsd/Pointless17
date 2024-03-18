@@ -41,8 +41,13 @@ export class SystemService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
     return this.http.get<SchemaUpdateResults[]>(url);
    }
-
-
+   cleanData(site: ISite) {
+    const controller = "/System/"
+    const endPoint = 'cleanData'
+    const parameters = ''
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+    return this.http.get<any>(url);
+  }
    getAPIVersion(site: ISite): Observable<string> {
     const controller = "/System/"
     const endPoint = 'getAPIVersion'

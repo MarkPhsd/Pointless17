@@ -1,11 +1,11 @@
 {
   "name": "pointlesspos",
-  "version": "2.25.9",
+  "version": "2.27.3",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless POS",
   "author": "Coast to Coast Business Solutions, Inc.",
-  "license": "ISC",
+"license": "ISC",
   "scripts": {
   "electron:start": "electron ./",
     "postinstall": "electron-builder install-app-deps",

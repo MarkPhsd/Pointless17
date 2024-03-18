@@ -6,10 +6,19 @@
   </div>
 
   <button mat-button (click)="onExportToCsv()"><mat-icon>download</mat-icon>CSV</button>
-  <button mat-button (click)="jsonView = !jsonView"><mat-icon>list</mat-icon>
-    <span *ngIf="!jsonView">JSON</span>
-    <span *ngIf="jsonView">List</span>
+
+  <button mat-button (click)="viewType = 0"><mat-icon>list</mat-icon>List
   </button>
+  <button mat-button (click)="viewType = 1"><mat-icon>data</mat-icon>JSON
+  </button>
+  <button mat-button (click)="viewType = 2"><mat-icon>money</mat-icon>Sales
+  </button>
+
+  <app-list-printers-electron
+      [printerName]      ="printerName"
+      (outputPrinterName)="setPrinter($event)" >
+    Receipt Printer
+  </app-list-printers-electron>
 
 
   <div *ngIf="smallDevice">
@@ -19,9 +28,9 @@
   <div class="grid-list">
     <div>
       <div *ngIf="value" class="loader">
-        <!-- <span>Page: {{pageNumber}}</span> -->
           <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
       </div>
+
 
       <div *ngIf="summary"  class="grid-headers">
         <div>Total Hours</div>
@@ -41,8 +50,11 @@
         <div>{{summary?.otPay || 0  | currency}}</div>
       </div>
 
+      <ng-container [ngTemplateOutlet]="taxReportView"></ng-container>
+
+
       <ag-grid-angular
-          *ngIf="!jsonView"
+          *ngIf="viewType == 0"
           #agGrid
           [style]              ="gridDimensions"
           id                   ="myGrid"
@@ -56,11 +68,11 @@
           (gridReady)          ="onGridReady($event)">
       </ag-grid-angular>
 
-      <mat-card *ngIf="jsonView" [style] ="JSONDimensions">
+      <mat-card *ngIf="viewType == 1" [style] ="JSONDimensions">
         <mat-card-title>
           <h4>Data</h4>
           <mat-label>To retrieve all day, make sure you page through go to the last page in the list view.</mat-label>
-          <button mat-button *ngIf="jsonView" (click)="copyJSONToClipBoard()"><mat-icon>file_copy</mat-icon>Copy JSON</button>
+          <button mat-button (click)="copyJSONToClipBoard()"><mat-icon>file_copy</mat-icon>Copy JSON</button>
         </mat-card-title>
         <mat-card-content>
           <ngx-json-viewer [json]="jsonData"></ngx-json-viewer>
@@ -80,3 +92,32 @@
   </div>
 
 </div>
+
+<ng-template #taxReport>
+  <button mat-raised-button (click)="getSalesEmployeesInPeriod()"><mat-icon>refresh</mat-icon>Refresh Sales</button>
+  <div *ngIf=" (employeeList$ | async) as list">
+    <div *ngFor="let item of list.results">
+      <!-- (outputComplete) ="setOutPutCompleted($event)" -->
+      <sales-tax-report
+            [printerName]    ="printerName"
+            [site]           ="site"
+            [dateFrom]       ="startDate"
+            [dateTo]         ="endDate"
+            [employeeID]     ="item?.id"
+            [disableDiscounts]="true"
+            [disableOther]       ="true"
+            [disableTaxBreakDown]="true"
+            [disableCOSG]        ="true"
+            [disableLabor]       ="true"
+            >
+        <div header>
+           {{item?.employeeName}} {{item?.id}}
+          <mat-divider></mat-divider>
+        </div>
+      </sales-tax-report>
+    </div>
+  </div>
+</ng-template>
+<!-- search.startDate =  this.startDate;
+search.endDate   =  this.endDate;
+search.employeeID = this.employeeID -->

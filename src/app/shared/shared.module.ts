@@ -27,6 +27,8 @@ import { HammerCardComponent } from './widgets/hammer-card/hammer-card.component
 import { TiersCardComponent } from '../modules/tv-menu/tv-price-specials/tiers-card/tiers-card.component';
 import { FacilitySearchSelectorComponent } from 'src/app/shared/widgets/facility-search-selector/facility-search-selector.component';
 import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
+import { ListPrintersElectronComponent } from '../modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
+
 import { ListProductSearchInputComponent } from './widgets/search-list-selectors/list-product-search-input/list-product-search-input.component';
 import { MoveInventoryLocationComponent } from 'src/app/modules/admin/inventory/move-inventory-location/move-inventory-location.component';
 import { AdjustmentReasonsComponent } from './widgets/adjustment-reasons/adjustment-reasons.component';
@@ -243,6 +245,7 @@ import { NgxColorsModule } from 'ngx-colors';
 import { CloseFloatingButtonComponent } from './widgets/close-floating-button/close-floating-button.component';
 import { MenuCardCategoriesComponent } from '../modules/menu/categories/menu-card-categories/menu-card-categories.component';
 import { SortSelectorsComponent } from './widgets/sort-selectors/sort-selectors.component';
+import { PayAPIComponent } from '../modules/payment-processing/pay-api/pay-api.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -341,7 +344,7 @@ import { SortSelectorsComponent } from './widgets/sort-selectors/sort-selectors.
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
     ListProductSearchInputComponent,
-
+    ListPrintersElectronComponent,
 
     MatDateRangeComponent,
     MatSelectComponent,
@@ -617,6 +620,7 @@ import { SortSelectorsComponent } from './widgets/sort-selectors/sort-selectors.
 
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
+    ListPrintersElectronComponent,
     LogoComponent,
     Label1by8Component,
     MatDateRangeComponent,

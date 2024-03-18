@@ -66,6 +66,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   @Input() interpolatedCreditPaymentsTexts = [] as string[];
   @Input() interpolatedWICEBTPaymentsTexts = [] as string[];
   @Output() printReady = new EventEmitter()
+
   autoPrinted = false;
   setPrinterWidthClass = "receipt-width-80"
   gridReceiptClass     = 'receipt-width-85'
@@ -73,7 +74,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   _printOrder          : Subscription;
   printOrder$: Observable<any>;
   printOrder: IPrintOrders;
-
   enabledPrintReady: boolean;
 
   initSubscriptions() {
@@ -183,18 +183,24 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   }
 
   outputPrint() {
+    console.log('outputPrint')
     setTimeout(() => {
       const prtContent     = document.getElementById('printsection');
+      console.log('prtContent', )
       if (!prtContent) {
         return
       }
       const content        = `${prtContent.innerHTML}`
+      console.log('content', )
       if (!content) {
         return
       }
       // if (this.enabledPrintReady) { return }
       // this.enabledPrintReady = true;
+      console.log('content', 'prtContent')
+
       this.printingService.updatePrintReady({ready: true, index: this.index});
+      this.printReady.emit(true)
       this.outPutPrintReady.emit({ready: true, index: this.index})
     }, 500)
   }

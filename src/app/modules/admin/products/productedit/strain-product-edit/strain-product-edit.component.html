@@ -441,6 +441,7 @@
 </ng-template>
 
 <ng-template #tareValueView>
+  {{jsonForm.value | json}}
   <app-value-fields
       [inputForm]="jsonForm"
       [fieldName]="'tareValue'">

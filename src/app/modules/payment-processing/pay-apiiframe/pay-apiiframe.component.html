@@ -1,0 +1,32 @@
+
+
+  <mat-card class=" centered-2 centered-flex" style="width:500px;"  >
+    <mat-card-title style="background:antiquewhite">
+      <div class="ps-flex-group">
+        <div>
+          <div style="margin-top:5px">
+            Payment Details
+          </div>
+        </div>
+        <div>
+          <img src="../assets/images/accepted.png">
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-card-title>
+
+    <mat-card-content class="flex-centered">
+      <iframe id="token-iframe" frameborder="0" style="height:350px"></iframe>
+      <input type="hidden" id="token" />
+
+      <p id="token_text"></p>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <div style="margin-left:5px">
+        <button mat-raised-button color="primary" (click)="requestToken()">Request Token</button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+
+

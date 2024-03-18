@@ -54,29 +54,30 @@
             <div class="grid-item tax_label">Non-Taxable:</div>
             <div class="grid-item-right tax" >{{sale.nonTaxableSalesTotal | currency}}</div>
 
-            <div class="grid-item totals_label">All Taxes:</div>
-            <div class="grid-item-right tax" >{{sale.taxTotal1 + sale.taxTotal2 + sale.taxTotal3 | currency }}  </div>
 
-            <div class="grid-item tax_label"> Tax 1: </div>
-            <div class="grid-item-right tax" >{{sale.taxTotal1 | currency }}  </div>
+            <div *ngIf="!disableTaxBreakDown" class="grid-item totals_label">All Taxes:</div>
+            <div *ngIf="!disableTaxBreakDown" class="grid-item-right tax" >{{sale.taxTotal1 + sale.taxTotal2 + sale.taxTotal3 | currency }}  </div>
 
-            <div class="grid-item tax_label"> Tax 2: </div>
-            <div class="grid-item-right tax" > {{sale.taxTotal2 | currency }} </div>
+            <div *ngIf="!disableTaxBreakDown" class="grid-item tax_label"> Tax 1: </div>
+            <div *ngIf="!disableTaxBreakDown" class="grid-item-right tax" >{{sale.taxTotal1 | currency }}  </div>
 
-            <div class="grid-item tax_label"> Tax 3: </div>
-            <div class="grid-item-right tax" >{{sale.taxTotal3 | currency }}  </div>
+            <div *ngIf="!disableTaxBreakDown" class="grid-item tax_label"> Tax 2: </div>
+            <div *ngIf="!disableTaxBreakDown" class="grid-item-right tax" > {{sale.taxTotal2 | currency }} </div>
 
-            <div class="grid-item tax_label" > CRV: </div>
-            <div class="grid-item-right tax" > {{sale.crv | currency }}  </div>
+            <div *ngIf="!disableTaxBreakDown" class="grid-item tax_label"> Tax 3: </div>
+            <div *ngIf="!disableTaxBreakDown" class="grid-item-right tax" >{{sale.taxTotal3 | currency }}  </div>
 
-            <div class="grid-item totals_label">Profit (net - cost): </div>
-            <div class="grid-item-right tax" >{{sale.netSales - sale.itemCost | currency }}  </div>
+            <div *ngIf="!disableTaxBreakDown" class="grid-item tax_label" > CRV: </div>
+            <div *ngIf="!disableTaxBreakDown" class="grid-item-right tax" > {{sale.crv | currency }}  </div>
 
-            <div class="grid-item tax_label"> C.O.G.S. : </div>
-            <div class="grid-item-right tax" >{{sale.itemCost | currency }}  </div>
+            <div *ngIf="!disableCOSG" class="grid-item totals_label">Profit (net - cost): </div>
+            <div *ngIf="!disableCOSG" class="grid-item-right tax" >{{sale.netSales - sale.itemCost | currency }}  </div>
 
-            <div class="grid-item totals_label">Cost of Good %: </div>
-            <div class="grid-item-right tax" > % {{ (( sale.itemCost / sale.netSales )*100).toFixed(2) }}  </div>
+            <div *ngIf="!disableCOSG" class="grid-item tax_label"> C.O.G.S. : </div>
+            <div *ngIf="!disableCOSG" class="grid-item-right tax" >{{sale.itemCost | currency }}  </div>
+
+            <div *ngIf="!disableCOSG" class="grid-item totals_label">Cost of Good %: </div>
+            <div *ngIf="!disableCOSG" class="grid-item-right tax" > % {{ (( sale.itemCost / sale.netSales )*100).toFixed(2) }}  </div>
 
           </div>
 
@@ -89,26 +90,26 @@
             <div class="grid-item other_label">Other Charges:</div>
             <div class="grid-item-right other">{{sale.gratuity | currency }} </div>
           </div>
+          <span *ngIf="!disableLabor">
+            <div class="grid" *ngIf="laborSummary">
+              <div class="grid-item field_bold totals_label"> Labor  :</div>
+              <div class="grid-item-right field_bold totals_label"> {{laborSummary?.otPay + laborSummary?.regPay | currency }}  </div>
+            </div>
 
-          <div class="grid" *ngIf="laborSummary">
-            <div class="grid-item field_bold totals_label"> Labor  :</div>
-            <div class="grid-item-right field_bold totals_label"> {{laborSummary?.otPay + laborSummary?.regPay | currency }}  </div>
-          </div>
+            <div class="grid" *ngIf="laborSummary && sale.netSales && sale.netSales != 0">
+              <div class="grid-item field_bold totals_label"> Labor % of Net Sales  :</div>
 
-          <div class="grid" *ngIf="laborSummary && sale.netSales && sale.netSales != 0">
-            <div class="grid-item field_bold totals_label"> Labor % of Net Sales  :</div>
-
-            <!-- {{ (payment?.count && payment?.count > 0) ? (payment?.amountPaid / payment?.count).toFixed(2) : 0 | currency }}  -->
-            <div class="grid-item field_bold totals_label"> %
-              {{
-                (sale.netSales && sale?.netSales > 0 && (laborSummary?.otPay +  laborSummary?.regPay)>0 ) ? (((laborSummary?.otPay + laborSummary?.regPay) / (sale.netSales)) *100).toFixed(2) : 0
-              }}  </div>
-          </div>
-
+              <!-- {{ (payment?.count && payment?.count > 0) ? (payment?.amountPaid / payment?.count).toFixed(2) : 0 | currency }}  -->
+              <div class="grid-item field_bold totals_label"> %
+                {{
+                  (sale.netSales && sale?.netSales > 0 && (laborSummary?.otPay +  laborSummary?.regPay)>0 ) ? (((laborSummary?.otPay + laborSummary?.regPay) / (sale.netSales)) *100).toFixed(2) : 0
+                }}  </div>
+            </div>
+          </span>
         </mat-card-footer>
       </mat-card>
 
-      <mat-card  *ngIf="!sale.resultsMessage" >
+      <mat-card  *ngIf="!sale.resultsMessage && !disableDiscounts" >
 
         <mat-card-title>
 
@@ -174,7 +175,7 @@
         </mat-card-footer>
       </mat-card>
 
-      <mat-card  *ngIf="!sale.resultsMessage" >
+      <mat-card  *ngIf="!sale.resultsMessage && !disableOther" >
         <mat-card-title>
           <div class="grid">
             <div  class="totals_label">

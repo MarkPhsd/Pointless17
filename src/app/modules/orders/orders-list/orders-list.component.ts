@@ -114,7 +114,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   //list height
 
   message = ''
-  @Input() height = "84vh"
+  @Input() height = "80vh"
 
   initSubscriptions() {
 
@@ -283,13 +283,30 @@ export class OrdersListComponent implements OnInit,OnDestroy {
             // flex: 2,
       },
       //
-      {headerName: 'Employee', field: 'employee',     sortable: true,
+      {headerName: 'Employee', field: 'employeeName',     sortable: true,
             width   : 150,
             minWidth: 150,
             maxWidth: 150,
             flex: 2,
       },
-
+      {headerName: 'BalanceID', field: 'reportRunID',     sortable: true,
+        width   : 150,
+        minWidth: 150,
+        maxWidth: 150,
+        flex: 2,
+      },
+      {headerName: 'ZRunID', field: 'zrun',     sortable: true,
+            width   : 150,
+            minWidth: 150,
+            maxWidth: 150,
+            flex: 2,
+      },
+      {headerName: 'POS', field: 'deviceName',     sortable: true,
+            width   : 150,
+            minWidth: 150,
+            maxWidth: 150,
+            flex: 2,
+      },
       {headerName: 'Orignal ID', field: 'orderID_Temp', sortable: true,
             visible : true,
             width   : 100,
@@ -298,7 +315,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
             flex: 2,
       },
       {headerName: 'History', field: 'history', sortable: true,
-            visible : true,
+            visible : false,
             width   : 50,
             minWidth: 50,
             maxWidth: 50,

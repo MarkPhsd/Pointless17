@@ -8,11 +8,10 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 
-
 @Component({
   selector: 'app-employee-clock-edit',
   templateUrl: './employee-clock-edit.component.html',
-  styleUrls: ['./employee-clock-edit.component.scss']
+  styleUrls: ['./employee-clock-edit.component.scss'],
 })
 export class EmployeeClockEditComponent implements OnInit {
 
@@ -22,11 +21,15 @@ export class EmployeeClockEditComponent implements OnInit {
   inputForm: UntypedFormGroup;
   breaks: employeeBreak[];
   message: string;
+  login: Date;
+  logOut:Date;
+  private _logOutTime: Date;
 
+  dateTimeFormat = 'y-MM-dd h:mm:ss a'
   constructor(
       private employeeClockService: EmployeeClockService,
-      private siteService: SitesService, 
-      private fb: UntypedFormBuilder, 
+      private siteService: SitesService,
+      private fb: UntypedFormBuilder,
       private dataHelper: DateHelperService,
       private fbProductsService: FbProductsService,
       private dialogRef: MatDialogRef<EmployeeClockEditComponent>,
@@ -36,15 +39,16 @@ export class EmployeeClockEditComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     this.initForm();
     this.clock$ = this.employeeClockService.getEmployeeClock(site, data).pipe(
-      switchMap(data => { 
+      switchMap(data => {
         this.patchValuesToForm(data)
         return of(data)
-      }),catchError(data => { 
+      }),catchError(data => {
         this.message = 'Error ' + JSON.stringify(data)
         return of(data)
       })
     )
   }
+
 
   // | "y" | "year"
 	// | "M" | "month"
@@ -54,24 +58,41 @@ export class EmployeeClockEditComponent implements OnInit {
 	// | "s" | "second"
 	// | "S" | "millisecond"
 
-  patchValuesToForm(data) { 
+
+  patchValuesToForm(data) {
     this.clock = data;
     this.breaks = data.breaks
     this.inputForm.patchValue(data)
-    let login: string 
-    let logOut: string;
-    login = this.dataHelper.format( data.logInTime, 'y-MM-dd hh:mm')
-    logOut = this.dataHelper.format( data.logOutTime, 'y-MM-dd hh:mm')
-    this.inputForm.patchValue({ logInTime: login, logOutTime: logOut })
+    this.login  = null; // Date
+    this.logOut = null; //Date;
+
+    if (data.logInTime) {
+      this.login = new Date(this.dataHelper.format( data.logInTime,  this.dateTimeFormat))
+    }
+    if (data.logOutTime) {
+      this.logOut = new Date(this.dataHelper.format( data.logOutTime, this.dateTimeFormat))
+    }
+
+    this.inputForm.patchValue({ logInTime: this.login, logOutTime: this.logOut })
+
   }
+
+  updateTime() {
+    const value1 =  this.inputForm.controls['loginTime'].value;
+    const value2 = this.inputForm.controls['logOutTime'].value;
+    console.log('update time, ', value1)
+
+    this.inputForm.patchValue({ logInTime: this.login, logOutTime: this.logOut })
+  }
+
 
   ngOnInit(): void {
     const i = 0;
     this.initForm();
   };
 
-  initForm() { 
-    this.inputForm = this.fb.group({ 
+  initForm() {
+    this.inputForm = this.fb.group({
       id:               [],
       employeeID:       [],
       logInTime:        [],
@@ -82,7 +103,7 @@ export class EmployeeClockEditComponent implements OnInit {
       active:           [],
       periodID:         [],
       employeePosition: [],
-      payRate:         [],
+      payRate:          [],
       employeMealCount: [],
       regHours:         [],
       otHours:          [],
@@ -99,44 +120,74 @@ export class EmployeeClockEditComponent implements OnInit {
     })
   }
 
-  updateSave(event) { 
+  getClockValue() {
+
+    const clock = this.inputForm.value as EmployeeClock
+    let logInTime  : string;
+    let logOutTime : string;
+
+    try {
+      if (clock && clock.logInTime) {
+        logInTime = this.dataHelper.format( clock.logInTime,  this.dateTimeFormat)
+        clock.logInTime = logInTime
+        clock.logInDate = logInTime
+      }
+    } catch (error) {
+
+    }
+
+    try {
+      if (clock &&  clock.logOutTime && clock.logOutTime != null) {
+        logOutTime = this.dataHelper.format( clock.logOutTime,  this.dateTimeFormat)
+        clock.logOutDate = logOutTime
+        clock.logOutTime = logOutTime
+      }
+    } catch (error) {
+
+    }
+
+    return clock;
+  }
+  updateSave(event) {
     const site = this.siteService.getAssignedSite()
-    const clock = this.inputForm.value
+    const clock = this.getClockValue()
+
     this.clock$ = this.employeeClockService.putEmployeeClock(site, clock.id, clock).pipe(
-      switchMap( data => { 
+      switchMap( data => {
         this.patchValuesToForm(data)
         return of(data)
-      }),catchError(data => { 
+      }),catchError(data => {
         this.message = 'Error ' + JSON.stringify(data)
         return of(data)
       })
     )
   }
 
-  updateItemExit(event) { 
+  updateItemExit(event) {
     const site = this.siteService.getAssignedSite()
-    const clock = this.inputForm.value
+    const clock = this.getClockValue()
+
     this.clock$  = this.employeeClockService.putEmployeeClock(site, clock.id,clock).pipe(
-      switchMap( data => { 
+      switchMap( data => {
         this.patchValuesToForm(data)
         this.onCancel(null)
         return of(data)
-      }),catchError(data => { 
+      }),catchError(data => {
         this.message = 'Error ' + JSON.stringify(data)
         return of(data)
       })
     )
   }
 
-  deleteItem(event) { 
+  deleteItem(event) {
     const site  = this.siteService.getAssignedSite()
     const clock = this.inputForm.value
     this.clock$ = this.employeeClockService.deleteEmployeeClock(site, clock.id).pipe(
-      switchMap( data => { 
+      switchMap( data => {
         this.patchValuesToForm(data)
         this.onCancel(null)
         return of(data)
-      }),catchError(data => { 
+      }),catchError(data => {
         this.message = 'Error ' + JSON.stringify(data)
         return of(data)
       })

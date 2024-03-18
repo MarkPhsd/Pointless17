@@ -97,6 +97,11 @@ export class LoginComponent implements OnInit, OnDestroy {
           const image  = `${this.bucket}${data.backgroundImage}`
           this.assingBackGround(image)
           this.uiHomePageSetting = data;
+
+          if (data?.pinPadDefaultOnApp) {
+            localStorage.setItem('rememberMe', 'true')
+            this.rememberMe = true;
+          }
           if (data.logoHomePage) {
             this.logo = `${this.bucket}${data.logoHomePage}`;
           }
@@ -237,8 +242,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     return this.userEntryView;
   }
-
-
 
   initForm() {
     this.loginForm = this.fb.group({

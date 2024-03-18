@@ -187,6 +187,8 @@
         </div>
        </div>
 
+      <ng-container [ngTemplateOutlet]="printServer"></ng-container>
+
       <h2><mat-icon>credit_card</mat-icon>Payment Processing Settings</h2>
 
       <div class='grid-container'>
@@ -327,6 +329,70 @@
   <div *ngIf="inputForm && inputForm.controls['triposLaneID'].value">
     <app-tripos-settings [laneID]="inputForm && inputForm.controls['triposLaneID'].value"></app-tripos-settings>
    </div>
+</ng-template>
+
+<ng-template #printServer>
+  <mat-card  *ngIf="inputForm" [formGroup]="inputForm">
+    <mat-card-title>
+      <mat-icon>server</mat-icon>Print Server
+    </mat-card-title>
+    <mat-card-subtitle>
+      <ul>
+        <li>
+          This feature requires  it also be enabled from Settings - Transaction Settings.
+        </li>
+        <li>
+          It will print all orders / labels required.
+        </li>
+        <li>
+          The Windows App must be running assigned as this device. It's not recommended that this also be a regular terminal.
+        </li>
+      </ul>
+    </mat-card-subtitle>
+    <mat-card-content>
+      <div>
+        <mat-slide-toggle
+            formControlName="printServerEnable">
+          <mat-label>Print Server</mat-label>
+        </mat-slide-toggle>
+      </div>
+      <div>
+        <mat-label>Set to a value greater than one.</mat-label>
+        <mat-form-field appearance="outline">
+          <mat-label >Print Timer</mat-label>
+          <input matInput type="number"
+                  formControlName="printServerTime"
+                  class="form-control" >
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card *ngIf="inputForm" [formGroup]="inputForm">
+    <mat-card-title>
+      <mat-icon>print</mat-icon>Remote Print
+    </mat-card-title>
+    <mat-card-subtitle>
+      Enable this on devices that do not have a receipt printer.
+    </mat-card-subtitle>
+    <mat-card-content>
+      <div>
+        <mat-slide-toggle
+            formControlName="remotePrint">
+          <mat-label>Print To Server</mat-label>
+        </mat-slide-toggle>
+      </div>
+      <!-- <div>
+        <mat-form-field appearance="outline">
+          <mat-label >Print Timer</mat-label>
+          <input matInput type="number"
+                  formControlName="remoteReceipt"
+                  class="form-control" >
+        </mat-form-field>
+      </div> -->
+    </mat-card-content>
+  </mat-card>
+
 </ng-template>
 
 <ng-template #dsiEMVSettingsView>

@@ -103,7 +103,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     searchModel.taxFilter         = this.taxFilter;
     searchModel.reportRunID       = this.reportRunID;
 
-    if (this.groupBy === 'itemQuantity' || this.groupBy === 'itemSize') {
+    if (this.groupBy === 'itemQuantity' || this.groupBy === 'uom' || this.groupBy === 'itemSize') {
       searchModel.groupByType = true;
       this.getSpecialReports(this.groupBy, searchModel)
       return
@@ -148,7 +148,9 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
       if (name = 'itemQuantity') {
         sales$ = this.getItemQuantityGroupedReport(model, this.site)
       }
-
+      if (name = 'uom') {
+        sales$ = this.getUOMReport(model, this.site)
+      }
       this.sales$ = sales$.pipe(switchMap(data => {
         this.sales = data;
         this.cdr.detectChanges()
@@ -166,9 +168,11 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     // <!-- GetItemSizeSalesReport
     // GetItemQuantityGroupedReport -->
   getItemSizeSalesReport(model: any, site: ISite) {
-    return this.reportingItemsSalesService.getItemSizeSalesReport(this.site, model)
+    return this.reportingItemsSalesService.getUOMReport(this.site, model)
   }
-
+  getUOMReport(model: any, site: ISite) {
+    return this.reportingItemsSalesService.getUOMReport(this.site, model)
+  }
   getItemQuantityGroupedReport(model: any, site: ISite) {
    return this.reportingItemsSalesService.getItemQuantityGroupedReport(this.site, model)
   }

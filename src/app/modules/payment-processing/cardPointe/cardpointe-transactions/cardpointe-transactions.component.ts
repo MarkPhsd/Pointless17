@@ -84,17 +84,11 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
       if (this.methodsService.connect && !this.methodsService.connect?.xSessionKey)  { return }
       const response = data.response;
       const request = data.request;
-
-      // console.log('data.response', data.response);
-      // console.log('data.request', data.request);
-
-      //if  already captured.
       if (request?.capture) {
         this._finalizeSale.next(response);
         this._sale = new BehaviorSubject<number>(null)
         return
       }
-
       const auth = this.methodsService.getAuthCaptureRequest(response)
       this._processSale(auth)
     })
@@ -129,12 +123,9 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
     this._finalizeSale.subscribe(data => {
       if (!data) {return}
       this.processingTransaction = true
-
       const order =  this.orderMethodsService.currentOrder;
       const payment = this.methodsService.payment;
-
       this.processCardPointResonse$ = this.paymentMethodsService.processCardPointResponse( data, payment, order).pipe(switchMap( data => {
-          // console.log('processCardPointResponse', data)
           this.processingTransaction = false;
           this.methodsService.initValues();
           this.dialogRef.close(null)
@@ -184,9 +175,7 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
   ngOnInit()  {
     this.terminalSettings$ =  this.methodsService.getBoltInfo().pipe(
       switchMap(data => {
-        console.log('data result', data.boltInfo, data.terminal)
         if (data.boltInfo && data.terminal) {
-
           this.methodsService.boltTerminal = {} as BoltTerminal;
           if (!this.methodsService.boltInfo) {   this.methodsService.boltInfo = {} as BoltInfo;  }
           this.methodsService.boltInfo = data.boltInfo ;
@@ -197,7 +186,7 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
           this.initConnectSubscriber();
           this._connect.next(true);
         } else {
-          console.log('not initiaited', data)
+
           this.orderService.notificationEvent('Info not initialized. Please close and reopen window.', 'Alert')
         }
         return of(data)
@@ -236,7 +225,6 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
     const tip$  = this.methodsService.getProcessTip(this.methodsService.boltTerminal.xSessionKey);
     this.methodsService.processing = true;
     this.siteService.getAssignedSite();
-
     sendAuth$.subscribe(data => {
       if (!data || data.errorcode != 0) {
         if (data.errorcode == 7 ) {
@@ -295,7 +283,6 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
   sendAuthCardOnly(manual: boolean) {
     const site = this.siteService.getAssignedSite()
     this.methodsService.processing = true;
-
     const auth$ = this.methodsService.sendAuthCard(null, false, manual);
 
     if (this.methodsService.payment) {

@@ -335,6 +335,18 @@ export class ReportingItemsSalesService {
     return  this.http.put<IReportItemSaleSummary>(url, model )
   }
 
+  getUOMReport(site: ISite, model: any) : Observable<IReportItemSaleSummary> {
+    model.productsOnly = true;
+
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `getUOMReport`
+
+    const url = `${site.url}${controller}${endPoint}`
+
+    return  this.http.put<IReportItemSaleSummary>(url, model )
+  }
+
   getItemQuantityGroupedReport(site: ISite, model: any): Observable<IReportItemSaleSummary> {
     model.productsOnly = true;
 

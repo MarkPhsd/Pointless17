@@ -701,21 +701,21 @@ export interface Summary {
 
 export interface OrderToFrom {
   id: number;
-  orderTime?: Date | null;
-  orderDate?: Date | null;
-  shipTime?: Date | null;
-  shipDate?: Date | null;
-  completionDate?: Date | null;
-  completionTime?: Date | null;
-  scheduleDate?: Date | null;
-  scheduleTime?: Date | null;
-  scheduleTo?: Date | null;
-  shippedDate?: Date | null;
-  alarmDate?: Date | null;
-  eTA?: Date | null;
-  arrivalDate?: Date | null;
-  timeIn?: Date | null;
-  shipOutOrderDate?: Date | null;
+  orderTime?: string | null;
+  orderDate?: string | null;
+  shipTime?: string | null;
+  shipDate?: string | null;
+  completionDate?: string | null;
+  completionTime?: string | null;
+  scheduleDate?: string | null;
+  scheduleTime?: string | null;
+  scheduleTo?: string | null;
+  shippedDate?: string | null;
+  alarmDate?: string | null;
+  eTA?: string | null;
+  arrivalDate?: string | null;
+  timeIn?: string | null;
+  shipOutOrderDate?: string | null;
   employeeID?: number | null;
   shift?: number | null;
   clientID?: number | null;
@@ -780,7 +780,7 @@ export interface OrderToFrom {
   gSTTaxTotal?: number | null;
   managerID?: number | null;
   costTotal?: number | null;
-  termsDueDate?: Date | null;
+  termsDueDate?: string | null;
   resolutionDescription?: string;
   shipVia?: number | null;
   location?: string;
@@ -809,7 +809,6 @@ export interface OrderToFrom {
   defaultPercentageDiscount?: number | null;
   cashDiscountPercent?: number | null;
   cashDiscountValue?: number | null;
-
   items?: any[];
   payments?: any[];
 }

@@ -39,7 +39,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import {DragDropModule } from '@angular/cdk/drag-drop';
 // import {ScrollingModule } from '@angular/cdk/scrolling';
 // import { OverlayModule } from '@angular/cdk/overlay';
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule ,  } from '@angular-material-components/datetime-picker';
 
 // import {  NgxMatMomentModule } from "@angular-material-components/moment-adapter";
 @NgModule({
@@ -93,7 +94,8 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
   ],
   providers: [
     { provide: MatDialogRef , useValue:{} },
-    { provide: MAT_DIALOG_DATA, useValue: {} }
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: false } }
   ]
 })
 export class AppMaterialModule  {}

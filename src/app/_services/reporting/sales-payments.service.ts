@@ -40,6 +40,10 @@ export interface IPaymentSalesSummary {
 }
 
 export interface PaymentSummary {
+  id: number;
+  name: string;
+  surchargeAmount: number;
+  gratuity: number;
   amountPaid:    number;
   tipAmount:    number;
   paymentMethod: string;
@@ -67,6 +71,7 @@ export interface PaymentSummary {
 })
 export class SalesPaymentsService {
 
+
   getPaymentDiscrepancy(site: any, zrunID: number, dateFrom: string, dateTo: string): Observable<IPaymentSalesSummary> {
     const controller = `/SalesPayments/`
 
@@ -80,6 +85,18 @@ export class SalesPaymentsService {
     return  this.http.post<IPaymentSalesSummary>(`${url}`, model)
   }
 
+  listZrunsInDateRange(site: ISite, startDate: string, endDate: string): Observable<IPaymentSalesSummary> {
+
+    const controller = `/SalesPayments/`
+
+    const endPoint = `listZrunsInDateRange`
+
+    const parameters = `?startDate=${startDate}&endDate=${endDate}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IPaymentSalesSummary>(url)
+  }
 
   getSalesAndLaborPeriodAverage(site: ISite, startDate: string, endDate: string) : Observable<ILaborSummary[]> {
 

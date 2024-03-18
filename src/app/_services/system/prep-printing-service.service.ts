@@ -24,7 +24,8 @@ export class PrepPrintingServiceService {
               ) { }
 
 
-  printLocations(order: IPOSOrder, printUnPrintedOnly: boolean,  expoName: string, templateID: number): Observable<any> {
+  printLocations(order: IPOSOrder, printUnPrintedOnly: boolean,  expoName: string, templateID: number,
+                cancelUpdateSubscription?: boolean): Observable<any> {
 
     const site = this.siteService.getAssignedSite();
     const locations$ = this.locationsService.getLocations();
@@ -38,8 +39,6 @@ export class PrepPrintingServiceService {
     })).pipe( concatMap (data => {
         data.forEach(location => {
           const newItems = [] as PosOrderItem[];
-
-
           if (posItems.length != 0) {
             posItems.forEach(data => {
               if (printUnPrintedOnly) {
@@ -55,6 +54,7 @@ export class PrepPrintingServiceService {
             )
           }
           if (newItems.length > 0) {
+
             const item = this.setOrder(newItems, order, location)
             printOrders.push(item)
           }
@@ -103,14 +103,12 @@ export class PrepPrintingServiceService {
             height:       '600px',
             minHeight:    '600px',
             data : printOrderList,
-
           },
           ).afterClosed()
       }))
     } catch (error) {
       this.siteService.notify('error printElectronTemplateOrder :' + error.toString(), 'close', 5000, 'red')
     }
-    console.log ('nothing printing')
     return of(null)
   }
 

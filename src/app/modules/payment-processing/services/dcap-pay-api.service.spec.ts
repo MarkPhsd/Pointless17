@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DcapMethodsService } from './dcap-methods.service';
+import { DcapPayAPIService } from './dcap-pay-api.service';
 
-describe('DcapMethodsService', () => {
-  let service: DcapMethodsService;
+describe('DcapPayAPIService', () => {
+  let service: DcapPayAPIService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DcapMethodsService);
+    service = TestBed.inject(DcapPayAPIService);
   });
 
   it('should be created', () => {

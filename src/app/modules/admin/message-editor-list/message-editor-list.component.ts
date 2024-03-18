@@ -1,5 +1,5 @@
-import { Component,  Inject,  Input, Output, OnInit, Optional,
-  ViewChild ,ElementRef, AfterViewInit, EventEmitter, TemplateRef } from '@angular/core';
+import { Component,  Output, OnInit,
+  ViewChild ,ElementRef, EventEmitter, TemplateRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
@@ -132,7 +132,6 @@ export class MessageEditorListComponent implements OnInit {
   initSettingsForm() {
     this.uISettingsService.transactionUISettings$.subscribe( data => {
       if (data) {
-        // console.log('data', data)
         this.settingsForm = this.uISettingsService.initForm(this.settingsForm);
         this.uiSettings = data;
         this.settingsForm.patchValue(data)

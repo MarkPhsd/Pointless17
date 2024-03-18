@@ -103,4 +103,12 @@
   </div>
 </div>
 
+<div *ngIf="messageRefresh$ | async"></div>
 <div *ngIf="(order$ | async) as order"></div>
+<div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="(user$ | async) as user"></div>
+<div *ngIf="(printServerDevice$ | async) as device"></div>
+<div *ngFor="let observable of observablesArray$ | async">
+  <ng-container *ngIf="observable | async as value">
+  </ng-container>
+</div>

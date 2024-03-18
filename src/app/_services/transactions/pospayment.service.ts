@@ -220,6 +220,19 @@ export class POSPaymentService {
     })
   }
 
+  remotePrintMessage(site: ISite, remotePrint: any): Observable<boolean> {
+    const controller = '/POSPayments/'
+
+    const endPoint  = 'RemotePrintMessage'
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<boolean>(url, remotePrint);
+  }
+
+
   searchPayments(site: ISite, searchModel: IPaymentSearchModel): Observable<IPOSPaymentsOptimzed> {
     const controller = '/POSPayments/'
 

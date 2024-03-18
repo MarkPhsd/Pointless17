@@ -49,10 +49,8 @@
       </div>
       <ng-container [ngTemplateOutlet]="menuView"></ng-container>
     </div>
-
   </mat-card-content>
 </mat-card>
-
 
 <ng-template #menuView>
   <div (click)="assignItem()"
@@ -223,6 +221,7 @@
 </ng-template>
 
 <ng-template #exitlabelButtonView>
+
   <div *ngIf="userAuthService?.isStaff && enableExitLabel && mainPanel && orderItem?.printLocation">
     <button mat-button  class="exit-label-button" color="accent" (click)="printLabel(orderItem)">
       <mat-icon>print</mat-icon>
@@ -272,7 +271,7 @@
 
 <ng-template #itemNameView>
   <div [class]="productnameClass" >
-         
+
     <span  class="index" *ngIf="!isModifier && !prepScreen && orderItem.conditionalIndex">
       {{orderItem.conditionalIndex }}
     </span>

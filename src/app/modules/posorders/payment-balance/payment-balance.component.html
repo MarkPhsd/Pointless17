@@ -78,11 +78,12 @@
   </mat-card-subtitle>
 
   <mat-card-content *ngIf="order.posPayments">
-    <div  *ngFor="let item of order.posPayments">
 
+    <div  *ngFor="let item of order.posPayments">
       <div class="payment-grid"
             *ngIf=" getPaymentViewA(item) ||
-                    getPaymentViewB(item)
+                    getPaymentViewB(item) ||
+                    emvDataCap(item)
                   ">
 
         <ng-container *ngTemplateOutlet="tranTypeInfoView, context: {$implicit: item}"></ng-container>
@@ -98,7 +99,7 @@
 
         <div *ngIf="item.voidReason && item.voidReason != 0" >
           <mat-label class="void-info">
-            {{item.voidReason}}
+            {{item.voidReason}} | {{item.voidAmount | currency}}
           </mat-label>
         </div>
 
@@ -107,6 +108,7 @@
   </mat-card-content>
 
   <mat-card-actions>
+
     <div  *ngIf="!qrOrder && (!isUser && paymentsEqualTotal) || order?.service?.filterType == 1">
       <button mat-raised-button color="warn"  (click)="closeOrder()">
         <mat-icon >close</mat-icon>Close</button>
@@ -224,13 +226,12 @@
     <span *ngIf="item.groupID != 0"> ({{item.groupID}})</span>
     <span *ngIf="item.voidReason"><mat-icon>void</mat-icon> </span>
 
-    <div *ngIf="item?.paymentMethod?.isCash && item?.amountPaid > 0">
-      <span *ngIf="item.amountPaid - item.amountReceived !=0">
+    <div *ngIf=" item?.completionDate ">
+      <!-- <span *ngIf="item.amountPaid - item.amountReceived !=0"> -->
         Received: {{ item.amountReceived | currency}} <br>
         Due:  {{item.amountPaid - item.amountReceived | currency}}
-      </span>
+      <!-- </span> -->
     </div>
-
   </div>
 </ng-template>
 
@@ -279,8 +280,9 @@
 </ng-template>
 
 <ng-template #voidActionView let-item>
+
   <div *ngIf="(authData$ | async) as auth">
-    <div *ngIf="!qrOrder &&  auth.voidPayment && item.completionDate &&  (item?.voidReason != 0 && !item.voidReason)">
+    <div *ngIf="!qrOrder &&  auth.voidPayment && (item.completionDate || item.amountPaid != 0) &&  (item?.voidReason != 0 && !item.voidReason)">
       <button mat-button
               [disabled]="(item.voidReason && item.voidReason != 0 && item.voidAmount == item.amountPaid)"
               class="payment-button-balance"

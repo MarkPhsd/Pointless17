@@ -185,6 +185,10 @@ export class PosEditSettingsComponent implements OnInit {
       enablePrepView  : [],
       defaultLabel    : [],
       dsiEMVSettings  :[],
+      printServerTime   :[], //: number;
+      printServerEnable :[],// : boolean;
+      remoteReceipt:[],//
+      remotePrint: [],
     })
 
     this.dsiEMVSettings = this.fb.group({

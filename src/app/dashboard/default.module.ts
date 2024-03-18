@@ -159,7 +159,6 @@ import { EditSettingsComponent } from '../modules/admin/transactions/paymentMeth
 import { PaymentMethodSettingsComponent } from '../modules/admin/transactions/paymentMethods/payment-method-settings/payment-method-settings.component';
 
 import { UITransactionsComponent } from '../modules/admin/settings/software/UISettings/uitransactions/uitransactions.component';
-import { ListPrintersElectronComponent } from '../modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
 import { DefaultReceiptSelectorComponent } from '../modules/admin/settings/printing/default-receipt-selector/default-receipt-selector.component';
 import { RequiresSerialComponent } from '../modules/posorders/requires-serial/requires-serial.component';
 import { BalanceSheetCalculationsViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-calculations-view/balance-sheet-calculations-view.component';
@@ -391,6 +390,9 @@ import { MenuSectionComponent } from '../modules/display-menu/display-menu-list/
 import { PosOrderEditorComponent } from '../modules/posorders/pos-order/pos-order-editor/pos-order-editor.component';
 import { CatalogScheduleInfoComponent } from '../modules/admin/products/price-schedule/catalog-schedule-info/catalog-schedule-info.component';
 import { CatalogScheduleInfoListComponent } from '../modules/admin/products/price-schedule/catalog-schedule-info-list/catalog-schedule-info-list.component';
+import { PayAPIComponent } from '../modules/payment-processing/pay-api/pay-api.component';
+import { PayAPIFrameComponent } from '../modules/payment-processing/pay-apiiframe/pay-apiiframe.component';
+
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -616,7 +618,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ItemCategoriesEditComponent,
     ImageCaptureComponent,
     LabelViewSelectorComponent,
-    ListPrintersElectronComponent,
 
     MenuGroupItemEditComponent,
 
@@ -657,6 +658,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     OrderPanelComponent,
     TransferOrderComponent,
 
+    PayAPIComponent,
+    PayAPIFrameComponent,
     PartBuilderMainComponent,
     PartBuilderEditComponent,
     PartBuilderFilterComponent,

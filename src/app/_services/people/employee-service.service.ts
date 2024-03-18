@@ -45,8 +45,6 @@ export interface EmployeePinResults {
 //  terminationDate  : string;
 // }
 
-
-
 export interface EmployeeSearchModel {
   dOB: string;
   name: string;
@@ -237,6 +235,28 @@ export class EmployeeService {
     }))
 
   }
+
+  terminateEmployee(site: ISite, id: number): Observable<employee>{
+
+    const endPoint = "/employees/"
+
+    const parameters = `terminateEmployee?id=${id}`;
+
+    const url = `${site.url}${endPoint}${parameters}`
+
+    return this.http.get<employee>(url);
+  }
+
+  retoreEmployee(site: ISite, id: number): Observable<employee>{
+    const endPoint = "/employees/"
+
+    const parameters = `retoreEmployee?id=${id}`;
+
+    const url = `${site.url}${endPoint}${parameters}`
+
+    return this.http.get<employee>(url);
+  }
+
 
   //GetSaleTypes
 

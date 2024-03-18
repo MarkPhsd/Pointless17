@@ -46,10 +46,10 @@ button {
   margin: 5px 5px 5px 5px;
 }
 
-mat-icon {
-  line-height: 1.2em;
-  vertical-align: bottom;
-}
+// mat-icon {
+//   line-height: 1.2em;
+//   vertical-align: bottom;
+// }
 
 .roleDescription {
   font-size:      .8em;
@@ -62,14 +62,14 @@ mat-icon {
   vertical-align: middle;
 }
 
-mat-form-field {
-  font-size: .8em;
-  margin: 5px 5px 5px 5px;
-}
+// mat-form-field {
+//   font-size: .8em;
+//   margin: 5px 5px 5px 5px;
+// }
 
-mat-raised-button, button {
-  margin: 3px 3px 3px 3px
-}
+// mat-raised-button, button {
+//   margin: 3px 3px 3px 3px
+// }
 
 .grid-views {
 
@@ -81,5 +81,10 @@ mat-raised-button, button {
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
   overflow-y: visible;
+
+}
+
+.flex-input {
+  display: flex;
 
 }

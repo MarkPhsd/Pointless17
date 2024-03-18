@@ -34,7 +34,7 @@ export class UITransactionsComponent implements OnInit {
   action$         : Observable<unknown>;
   serviceType$    : Observable<IServiceType[]>;
   categories$     :  Observable<IProductCategory[]>;
-
+  posDeviceList$ =  this.settingService.getPOSNames(this.sitesService.getAssignedSite());
   receiptList$    :  Observable<IItemBasic[]>;
   receiptList     : IItemBasic[];
   isAdmin: boolean
@@ -75,9 +75,7 @@ export class UITransactionsComponent implements OnInit {
        localStorage.setItem('testVariable' ,  this.testForm.controls['testVariable'].value)
     })
     this.receiptList$ = this.getReceiptList();
-
   }
-
 
   initUITransactionSettings() {
     this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
@@ -87,6 +85,14 @@ export class UITransactionsComponent implements OnInit {
         this.initFormData(  this.uiTransactions )
         return of(data);
     }));
+  }
+
+  openPOSDevice(device: string) {
+    const site         = this.sitesService.getAssignedSite()
+    this.action$ = this.settingService.getPOSDeviceBYName(site, device).pipe(switchMap(data => {
+      this.settingService.editPOSDevice(data)
+      return of(data)
+    }))
   }
 
   getReceiptList() {

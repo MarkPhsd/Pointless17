@@ -24,7 +24,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   @Input() site: ISite;
   @Input() dateTo: string;
   @Input() dateFrom: string;
-
+  @Input() employeeID: number;
   @Input() scheduleDateStart: string;
   @Input() scheduleDateEnd: string;
   // scheduleDateStart       :     string;
@@ -42,6 +42,12 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   @Input() printerName: string;
   printAction$: Observable<any>;
   printing: boolean;
+
+  @Input() disableDiscounts: boolean;
+  @Input() disableOther: boolean;
+  @Input() disableTaxBreakDown: boolean;
+  @Input() disableCOSG: boolean;
+  @Input() disableLabor: boolean;
 
   @Output() outputComplete = new EventEmitter<any>()
 
@@ -68,7 +74,6 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   }
 
   refreshSales() {
-
     this.processing = true;
     this.laborSummary$ = this.getLaborSummary().pipe(
       switchMap(data => {
@@ -87,6 +92,8 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
                 scheduleDateEnd: this.scheduleDateEnd,
                 scheduleDateStart: this.scheduleDateStart } as IReportingSearchModel;
 
+    if (this.employeeID != 0) { item.employeeID = this.employeeID  }
+    console.log('Search', item, item.employeeID)
     if (item.scheduleDateEnd && item.scheduleDateStart) {
       this.sales$ =  this.reportingItemsSalesService.putSalesTaxReport(this.site, item ).pipe(switchMap(data => {
           this.sales = data;
@@ -137,6 +144,9 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       search.pageSize =   500;
       search.startDate =  this.dateFrom;
       search.endDate   =  this.dateTo;
+      if (this.employeeID != 0) {
+        search.employeeID = this.employeeID
+      }
       const laborSummary$ = this.employeeClockService.getTimeClockSummaryOnly(site, search)
       return laborSummary$
     }

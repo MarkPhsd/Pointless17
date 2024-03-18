@@ -82,7 +82,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
         if (user?.roles == 'admin' || user?.roles == 'manager' || user?.roles == 'employee') {
           this.isStaff      = true
         }
-        if (user?.roles == 'user' || user?.roles == 'guest') { 
+        if (user?.roles == 'user' || user?.roles == 'guest') {
           this.isUser = true;
         }
       }
@@ -149,6 +149,9 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     }
     if (this.id) {
       clearInterval(this.id);
+    }
+    if (this.timerID) {
+      clearInterval(this.timerID);
     }
   }
 
@@ -289,12 +292,17 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   refreshOrderCheck() {
-    if (!this.refreshCurrentOrderCheck) {
-      this.timerID = setInterval(
-        () =>
-        this.refreshOrder(),
-        2000
-      );
+    try {
+
+      console.log('timer', this.timerID)
+      if (!this.refreshCurrentOrderCheck) {
+        this.timerID = setInterval(
+          () =>  this.refreshOrder(),
+          2000
+        );
+      }
+    } catch (error) {
+
     }
   }
 

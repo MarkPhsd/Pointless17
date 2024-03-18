@@ -3,7 +3,7 @@ import { Component, ElementRef, EventEmitter, Input,
 import { AuthenticationService, AWSBucketService, IItemBasicB, MenuService, OrdersService, TextMessagingService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
 import { Observable, of, Subscription } from 'rxjs';
-import { delay,  repeatWhen, switchMap  } from 'rxjs/operators';
+import { concatMap, delay,  repeatWhen, switchMap  } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -123,6 +123,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   id: any = '';
   order$: Observable<IPOSOrder>;
+  client$: Observable<any>;
+
   product: IProduct;
   serviceType$: Observable<IServiceType>;
   printAction$:  Observable<any>;
@@ -558,7 +560,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       })
     )
   }
-
 
   refreshCategories() {
     const site          = this.siteService.getAssignedSite()
@@ -1006,24 +1007,27 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     });
   }
 
-  async assignCustomer(event) {
+  assignCustomer(event) {
     if (event) {
-      await this.assignClientID(event.id)
+      this.assignClientID(event.id)
     }
   }
 
-  async assignClientID(id: number) {
+  assignClientID(id: number) {
     if (this.order) {
       const site = this.siteService.getAssignedSite();
       this.order.clientID = id
-      const order = await this.orderService.putOrder(site, this.order).pipe().toPromise()
-      this.orderMethodsService.updateOrderSubscription(order)
+      this.client$ =   this.orderService.putOrder(site, this.order).pipe(switchMap(data => {
+        this.orderMethodsService.updateOrderSubscription(data)
+        return of(data)
+      }))
     }
+    return of(this.order)
   }
 
-  async  removeClient() {
+  removeClient() {
     if (this.order) {
-      await this.assignClientID(0);
+      this.assignClientID(0);
     }
   }
 
@@ -1037,13 +1041,20 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   ///update the inventory
   //update the subscription order Info
   printLabels(newLabels: boolean) {
-    this.printLabels$ = this.printingService.printLabels(this.order , newLabels).pipe(
-        switchMap(data => {
+    const joinLabels = true
+    this.printLabels$ = this.printingService.printLabels(this.order , newLabels, joinLabels).pipe(
+      concatMap(data => {
+        console.log('data', data, joinLabels)
+        if (joinLabels) {
           this.printingService.printJoinedLabels();
-          return of(data)
         }
-      )
-    )
+        const site = this.siteService.getAssignedSite()
+        return  this.orderService.getOrder(site, this.order.id.toString(), this.order.history)
+      }
+    )).pipe(concatMap(data => {
+      this.orderMethodsService.updateOrder(data)
+      return of(data)
+    }))
   }
 
   setStep(value:number) {

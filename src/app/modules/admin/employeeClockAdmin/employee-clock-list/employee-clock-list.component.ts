@@ -1,5 +1,5 @@
 import { Component,   OnInit,
-  ViewChild ,ElementRef,  HostListener, OnDestroy, Input } from '@angular/core';
+  ViewChild ,ElementRef,  HostListener, OnDestroy, Input, TemplateRef } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subject, Subscription  } from 'rxjs';
@@ -36,18 +36,22 @@ export interface rowItem {
 })
 export class EmployeeClockListComponent implements OnInit {
 
+  @ViewChild('taxReport') taxReport : TemplateRef<any>;
   @ViewChild('input', {static: true}) input: ElementRef;
   searchPhrase:         Subject<any> = new Subject();
   message: string;
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
   dateRange        : UntypedFormGroup;
-  jsonView: boolean;
+  viewType: number;
   jsonData: EmployeeClock[]
+  printerName: string;
+
   @Input() reportOnly: boolean;
   @Input() notifier   : Subject<boolean>
   @Input() startDate: string;
   @Input() endDate: string;
+
   _changeNotifier: Subscription
    //AgGrid
    params               : any;
@@ -75,7 +79,7 @@ export class EmployeeClockListComponent implements OnInit {
    //search form filters
    searchForm:        UntypedFormGroup;
    inputForm        : UntypedFormGroup;
-   jobTypeID     : number;
+   jobTypeID       : number;
    selected        : any[];
    selectedRows    : any;
    agtheme         = 'ag-theme-material';
@@ -91,15 +95,17 @@ export class EmployeeClockListComponent implements OnInit {
    smallDevice       = false;
    @Input() counter: number;
    buttonName      = 'Edit';
-   pageNumber: number = 1;
-   employeeID: number;
+   pageNumber      : number = 1;
+   employeeID      : number;
 
   summary: EmployeeClock;
+  employeeList$: Observable<EmployeeClockResults>;
 
   get PaginationPageSize(): number {return this.pageSize;  }
   get gridAPI(): GridApi {  return this.gridApi;  }
   get platForm()         {  return Capacitor.getPlatform(); }
 
+  site = this.siteService.getAssignedSite();
   constructor(
     private _snackBar               : MatSnackBar,
     private employeeClockService    : EmployeeClockService,
@@ -118,6 +124,15 @@ export class EmployeeClockListComponent implements OnInit {
     const i = 0;
     this.updateItemsPerPage();
     this.initNotifierSubscription();
+
+    this.viewType = 0;
+  }
+
+  get taxReportView() {
+    if (this.viewType == 2) {
+      return this.taxReport
+    }
+    return null;
   }
 
   initNotifierSubscription() {
@@ -126,13 +141,11 @@ export class EmployeeClockListComponent implements OnInit {
     }
     this._changeNotifier = this.notifier.asObservable().subscribe(data => {
       this.initGridColumns()
-      console.log('refresh')
       let search = {} as EmployeeClockSearchModel
       search.summary = true;
       search.endDate = this.endDate;
       search.startDate = this.startDate;
       this.searchModel = search;
-
       this.refreshSearch(search);
     })
   }
@@ -151,14 +164,8 @@ export class EmployeeClockListComponent implements OnInit {
   }
 
   initGridColumns() {
-    this.frameworkComponents = {
-      btnCellRenderer: ButtonRendererComponent
-    };
-
-    this.defaultColDef = {
-      flex: 2,
-    };
-
+    this.frameworkComponents = { btnCellRenderer: ButtonRendererComponent  };
+    this.defaultColDef = { flex: 2, };
     this.columnDefs = []
 
     let item  =   {
@@ -280,12 +287,16 @@ export class EmployeeClockListComponent implements OnInit {
     } as any
 
     this.columnDefs.push(item);
-
   }
+
   agColumnApiRefresh() {
     if (this.columnDefs) {
       this.agGridFormatingService.initGridOptionsFormated(this.pageSize, this.columnDefs)
     }
+  }
+
+  setPrinter(event) {
+     this.printerName = event;
   }
 
   //mutli select method for selection change.
@@ -328,11 +339,26 @@ export class EmployeeClockListComponent implements OnInit {
 
   //this doesn't change the page, but updates the properties for getting data from the server.
   setCurrentPage(startRow: number, endRow: number): number {
+
     const tempStartRow = this.startRow
+
+    // console.log(this.currentPage, startRow,endRow)
+    if (startRow == 0) {
+      // console.log('decrease')
+      this.currentPage = 1
+      return this.currentPage
+    }
+
     this.startRow      = startRow
     this.endRow        = endRow;
-    if (tempStartRow > startRow) { return this.currentPage - 1 }
-    if (tempStartRow < startRow) { return this.currentPage + 1 }
+    if (tempStartRow > startRow) {
+      // console.log('decrease')
+      return this.currentPage - 1
+    }
+    if (tempStartRow < startRow) {
+
+      return this.currentPage + 1
+    }
     return this.currentPage
   }
 
@@ -340,7 +366,7 @@ export class EmployeeClockListComponent implements OnInit {
     const search = {} as EmployeeClockSearchModel
     this.message = ''
     if (search) {
-      search.pageNumber = this.pageNumber;
+
       if (data) {
         search.employeeID = data?.employeeID;
       }
@@ -351,14 +377,14 @@ export class EmployeeClockListComponent implements OnInit {
         }
       }
       if (!this.pageNumber) {  this.pageNumber = 1; }
-      search.pageNumber = this.pageNumber;
+      search.pageNumber = this.currentPage;
       search.summary    = data?.summary;
       search.pageSize   = this.pageSize;
-      this.currentPage  = this.currentPage;
       search.startDate  = this.startDate;
       search.endDate    = this.endDate;
     }
     this.searchModel = search
+    // console.log(this.searchModel)
     this.onGridReady(this.params)
   }
 
@@ -374,6 +400,7 @@ export class EmployeeClockListComponent implements OnInit {
 
   //ag-grid standard method
   async onGridReady(params: any) {
+    // console.log('onGridReady, params')
     // if (!params) { return }
     try {
       if (params)  {
@@ -387,7 +414,6 @@ export class EmployeeClockListComponent implements OnInit {
     }
 
     this.onFirstDataRendered(this.params)
-
     // if (!params) { return }
     if (params == undefined) { return }
     if (!params.startRow ||  !params.endRow) {
@@ -402,16 +428,19 @@ export class EmployeeClockListComponent implements OnInit {
 
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
+
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
       if (!items$) { return }
       items$.subscribe(data =>
         {
-            const resp           =  data.paging
-            this.summary         = data?.summary
+          const resp           =  data.paging
+          this.summary         = data?.summary
 
             if (resp) {
               this.isfirstpage   = resp.isFirstPage
               this.islastpage    = resp.isFirstPage
+              // console.log(this.currentPage, resp.currentPage)
+
               this.currentPage   = resp.currentPage
               this.numberOfPages = resp.pageCount
               this.recordCount   = resp.recordCount
@@ -425,10 +454,14 @@ export class EmployeeClockListComponent implements OnInit {
                 // console.log('add first page', data.results)
                 this.jsonData = data.results
               } else {
+                if (this.jsonData) {
+                  this.jsonData = [...this.jsonData, ...data.results]
+                } else {
+                  this.jsonData = data.results;
+                }
                 // console.log('add more page', data.results)
-                this.jsonData = [...this.jsonData, ...data.results]
               }
-              console.log('jsonData', this.jsonData)
+              // console.log('jsonData', this.jsonData)
               let results  =  this.refreshImages(data.results)
               params.successCallback(results)
               this.rowData = results
@@ -444,40 +477,60 @@ export class EmployeeClockListComponent implements OnInit {
     this.autoSizeAll(true)
   }
 
-  //ag-grid standard method
-  getRowData(params, startRow: number, endRow: number):  Observable<EmployeeClockResults>  {
-    const site                = this.siteService.getAssignedSite()
-
+  getSearch() : EmployeeClockSearchModel{
     let search = {} as EmployeeClockSearchModel
     search = this.searchModel;
     if (!this.searchModel) {  search = {} as EmployeeClockSearchModel }
-
-    this.currentPage          = this.setCurrentPage(startRow, endRow)
-
+    // this.currentPage          = this.setCurrentPage(1, 100)
     if (search) {
       search.pageNumber = this.currentPage;
       search.pageSize =   this.pageSize;
-      this.currentPage =  this.currentPage;
       search.startDate =  this.startDate;
       search.endDate   =  this.endDate;
       search.employeeID = this.employeeID
     }
+    return search
+  }
 
+  //ag-grid standard method
+  getRowData(params, startRow: number, endRow: number):  Observable<EmployeeClockResults>  {
+
+    this.currentPage          = this.setCurrentPage(startRow, endRow)
+    const site                = this.siteService.getAssignedSite()
+    const search = this.getSearch();
     if (search.startDate && search.endDate) {
       if (search.summary) {
         return this.employeeClockService.getTimeClockSummary(site, search)
       }
       return this.employeeClockService.listEmployeesBetweenPeriod(site, search)
     }
+  }
 
+  _getRow(summary: boolean ): Observable<EmployeeClockResults> {
+    const site                = this.siteService.getAssignedSite()
+    let search = this.getSearch()
+    search.summary = summary;
+    if (search.startDate && search.endDate) {
+      if (search.summary) {
+        return this.employeeClockService.getTimeClockSummary(site, search)
+      }
+      return this.employeeClockService.listEmployeesBetweenPeriod(site, search)
+    }
+  }
+
+  getSalesEmployeesInPeriod() {
+     //   return this.employeeClockService.listEmployeesBetweenPeriod(site, search)
+    this.employeeList$ = this._getRow(true)
   }
 
   onFirstDataRendered (params) {
     try {
-      params.api.sizeColumnsToFit()
+      // params.api.sizeColumnsToFit()
       window.setTimeout(() => {
-        const colIds = params.columnApi.getAllColumns().map(c => c.colId)
-        params.columnApi.autoSizeColumns(colIds)
+        // if (params.columnApi.getAllColumns()) {
+        //   const colIds = params.columnApi.getAllColumns().map(c => c.colId)
+        //   params.columnApi.autoSizeColumns(colIds)
+        // // }
       }, 50)
       } catch (error) {
       console.log(error)
@@ -516,27 +569,18 @@ export class EmployeeClockListComponent implements OnInit {
   listAll(){
     const control = this.itemName
     control.setValue('')
-    // this.refreshSearch()
   }
 
-  onExportToCsv() {
-    this.gridApi.exportDataAsCsv();
-  }
+  onExportToCsv() {  this.gridApi.exportDataAsCsv();  }
 
   @HostListener("window:resize", [])
   updateItemsPerPage() {
     this.smallDevice = false
-    if (window.innerWidth < 768) {
-      this.smallDevice = true
-      // this.gridDimensions = 'width: 100%; height: 85%;'
-    }
+    if (window.innerWidth < 768) { this.smallDevice = true }
   }
 
   editItemWithId(item:any) {
-    if(!item) {
-      // console.log(item)
-      return
-    }
+    if(!item) {  return }
     const id   = item.rowData.id;
     const site = this.siteService.getAssignedSite()
     const dialog = this.productEditButtonService.openClockEditor(id)
@@ -547,8 +591,8 @@ export class EmployeeClockListComponent implements OnInit {
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-    duration: 2000,
-    verticalPosition: 'top'
+      duration: 2000,
+      verticalPosition: 'top'
     });
   }
 

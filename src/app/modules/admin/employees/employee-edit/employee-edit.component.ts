@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -33,6 +33,7 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
   @ViewChild('coachingUserAuthorized', {read: ElementRef}) coachingUserAuthorized: ElementRef;
   @ViewChild('coachingUserType', {read: ElementRef}) coachingUserType: ElementRef;
   @ViewChild('coachingTermination', {read: ElementRef}) coachingTermination: ElementRef;
+  @ViewChild('terminateEmployeeView') terminateEmployeeView: TemplateRef<any>;
 
   inputForm   : UntypedFormGroup;
   clientForm  : UntypedFormGroup;
@@ -196,6 +197,32 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
     })
   }
 
+  get terminateEmployeeEnableView() {
+    if (this.employee && this.employee.id != 0) {
+      return this.terminateEmployeeView
+    }
+    return null;
+  }
+
+  restoreEmployee() {
+    const site     = this.siteService.getAssignedSite();
+    this.action$ = this.employeeService.retoreEmployee(site, this.employee.id).pipe(switchMap(data => {
+      this.siteService.notify(`Employe is restired, PIN is ${data?.password}`, 'Close', 3000)
+      this.employee = data;
+      this.inputForm.patchValue(this.employee)
+      return of(data)
+    }))
+  }
+  terminateEmployee() {
+    const site     = this.siteService.getAssignedSite();
+    this.action$ = this.employeeService.terminateEmployee(site, this.employee.id).pipe(switchMap(data => {
+      this.siteService.notify('Employe is terminated, PIN is changed', 'Close', 3000)
+      this.employee = data;
+      this.inputForm.patchValue(this.employee)
+      return of(data)
+    }))
+  }
+
   fillForm(id: any) {
     this.initForm()
     const site     = this.siteService.getAssignedSite();
@@ -293,7 +320,6 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
 
       return empeloyeeClient$.pipe(
         switchMap( data => {
-          console.log('client', this.client)
           this.client = data.client;
           this.initClientForm(this.client)
           return of(data)

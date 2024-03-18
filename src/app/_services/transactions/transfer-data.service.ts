@@ -10,12 +10,24 @@ import { AuthenticationService } from '..';
 })
 export class TransferDataService {
 
+
   constructor( private http: HttpClient,
                private auth: AuthenticationService) { }
 
   pageNumber = 1;
   pageSize  = 50;
 
+  deleteDuplicates(site: ISite, zrunID: string): Observable<any> {
+    const controller =  "/TransferData/"
+
+    const endPoint = `deleteDuplicates`
+
+    const parameters = `?zrunID=${zrunID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>(url);
+  }
 
   closeAll(site: ISite) : Observable<any> {
 

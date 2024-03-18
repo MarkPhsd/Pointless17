@@ -22,7 +22,7 @@ import { SitesService } from '../reporting/sites.service';
 import { IAppConfig } from './app-init.service';
 import { ISite } from 'src/app/_interfaces';
 
-export const POLLING_INTERVAL  = (60 * 1000) * 1;                   // <-- poll every 1 min
+export const POLLING_INTERVAL  = (60 * 10000) * 1;                   // <-- poll every 1 min
 
 // https://makeitnew.io/polling-using-rxjs-8347d05e9104
 // https://stackoverflow.com/questions/68288286/how-to-call-api-every-10sec-based-on-status-response-in-angular-11
@@ -40,7 +40,7 @@ export class PollingService   {
   action$: Observable<ISite>;
   private _poll          = new BehaviorSubject<boolean>(null);
   public poll$           = this._poll.asObservable();
-
+  public pollOnce$
   constructor(
               private siteService: SitesService,
               private http: HttpClient) {
@@ -65,10 +65,20 @@ export class PollingService   {
     return of(site);
   }
 
-
   clearPoll() {
-    this._poll.next(false)
+    this._poll.next(true)
     this.timer$.next(POLLING_INTERVAL);
+  }
+
+  pollOnce(): Observable<boolean> {
+    this.getCurrentUrl()
+    return this.http.get(`${this.apiUrl}/system/PingServer`).pipe(switchMap(data => {
+      return of(true)
+    }),
+    catchError(data  => {
+      this._poll.next(false)
+      return of(false)
+    }))
   }
 
   poll() {

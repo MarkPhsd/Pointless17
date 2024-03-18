@@ -1,6 +1,7 @@
 <div *ngIf="(terminalSettings$ | async) as termainal">
 
-  <div  *ngIf="methodsService.boltInfoInitialized && methodsService.boltTerminalInitialized;
+  <div  *ngIf="methodsService.boltInfoInitialized &&
+               methodsService.boltTerminalInitialized;
                 else loadingBoltInfo">
     <mat-card >
 

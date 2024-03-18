@@ -1,14 +1,19 @@
 import { Component, Input, OnInit, Output,EventEmitter, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { catchError, delay, Observable, of, repeatWhen, switchMap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, concatMap, delay, finalize, Observable, of, repeatWhen, Subject, switchMap, take, throwError, timer } from 'rxjs';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
 import { IRequestMessage, IRequestMessageSearchModel, IRequestResponse, RequestMessageService } from 'src/app/_services/system/request-message.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 
 @Component({
   selector: 'app-request-messages',
@@ -17,74 +22,176 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class RequestMessagesComponent implements OnInit {
 
+  //keep track of new observables for print jobs
+  private observablesArraySubject = new BehaviorSubject<Observable<any>[]>([]);
+  public observablesArray$ = this.observablesArraySubject.asObservable();
+
   @Input() user: IUser;
   @Output() emitCount = new EventEmitter()
-  searchModel: IRequestMessageSearchModel;
   @Input() hideshowMessages: boolean; //hideshowMessages
-
   @Input() enableActions: boolean;
   @Input() orderID: number;
-
-  // action$: Observable<any>;
+  @Input() posDevice: ITerminalSettings
+  @Input() uiTransaction  : TransactionUISettings;
+  searchModel: IRequestMessageSearchModel;
   messages$: Observable<IRequestMessage[]>;
   message$: Observable<IRequestResponse>;
-  refreshTime = 1
+  refreshTime: number = 1
   order$: Observable<IPOSOrder>;
+  printJobs$ : Observable<IPOSOrder>[];
+  action$ : Observable<any>;
+  user$: Observable<IUser>;
+  printServerDevice: ITerminalSettings;
+  printServerDevice$ : Observable<ITerminalSettings>;
+  messageRefresh$: Observable<any>;
+  initRefresh: boolean;
+  private observablesQueue: Observable<any>[] = [];
+  private queueSubject = new Subject<Observable<any>>();
+  private isProcessing = false;
 
+  addObservable(newObservable: Observable<any>): void {
+    const observableWithFinalize = newObservable.pipe(
+      take(1),
+      finalize(() => this.onObservableComplete())
+    );
+    this.observablesQueue.push(observableWithFinalize);
+    this.checkQueue();
+  }
+
+  private checkQueue(): void {
+    if (!this.isProcessing && this.observablesQueue.length > 0) {
+      this.isProcessing = true;
+      const nextObservable = this.observablesQueue.shift();
+      this.queueSubject.next(nextObservable);
+    }
+  }
+
+  private onObservableComplete(): void {
+    this.isProcessing = false;
+    this.checkQueue();
+  }
+
+  private processQueue(): void {
+    this.queueSubject.subscribe(observable => {
+      observable.subscribe({
+        complete: () => {
+          // Observable completed its work
+        },
+        error: (err) => {
+          console.error('Observable encountered an error: ', err);
+          this.onObservableComplete(); // Ensure the queue continues even if an error occurs
+        }
+      });
+    });
+  }
 
   refreshOrderMessages() {
-    console.log("refreshOrderMessages")
     const site     = this.siteService.getAssignedSite();
-    const search   = {  }   as IRequestMessageSearchModel;
+    const search   = {}   as IRequestMessageSearchModel;
     search.orderID = this.orderID;
-    this.messages$ = this.requestMessageService.getOpenRequestMessagesByOrder(site, search).pipe(switchMap(data => {
-      console.log('messages', data)
+    const messages$ = this.requestMessageService.getOpenRequestMessagesByOrder(site, search);
+    this.messages$ = messages$.pipe(switchMap(data => {
       return of(data)
     }))
     this.hideshowMessages = true;
   }
 
   refreshMessagingService(user) {
-    this._refreshMessagingService(user)
+    return  this._refreshMessagingService(user)
   }
 
-  _refreshMessagingService(user) {
-    if (!user) { return }
-    const seconds = 6000 * this.refreshTime;
-    const site = this.siteService.getAssignedSite();
-    const search = {} as IRequestMessageSearchModel;
-    if (user?.id) {
-      search.userID = user.id;
-      return this.getMessages().pipe(
-        repeatWhen(notifications =>
-          notifications.pipe(
-            delay(seconds * 10)),
-        ),
-        catchError((err: any) => {
-         console.log('error messages', err)
-         return of(null)
-        })
-      )
-    }
-    return of( [] as IRequestMessage[])
+  // _refreshMessagingService(user) {
+  //   let retryDelay = 1000; // 30 seconds
+  //   if (!user) { return }
+  //   retryDelay = 6000 * 1 //this.refreshTime;
+  //   if (user?.id) {
+  //     this.messageRefresh$ = this.getMessages().pipe(
+  //       catchError(err => {
+  //         console.error('Error fetching order, will retry in 30 seconds', err);
+  //         // Use timer to delay the retry
+  //         return timer(retryDelay);
+  //       }),
+  //       switchMap(() => this.getMessages()),
+  //       // Repeat this process indefinitely
+  //       repeatWhen(completed => completed.pipe(delay(retryDelay)))
+  //     );
+  //   }
+  // }
+
+  // _refreshMessagingService(user) {
+  //   let retryDelay = 6000; // Assuming 6 seconds as the base retry delay
+  //   if (!user) { return; }
+
+  //   this.messageRefresh$ = this.getMessages('message A').pipe(
+  //     catchError(err => {
+  //       // console.error('Error fetching messages, will retry in 30 seconds', err);
+  //       // Use timer to delay the retry
+  //       return timer(retryDelay);
+  //     }),
+  //     switchMap(() => this.getMessages('message B ')),
+  //     // Repeat this process indefinitely, with a conditional delay based on the queue state
+  //     repeatWhen(completed => completed.pipe(
+  //       delay(retryDelay),
+  //       switchMap(() => {
+  //         // Check if the process queue is active by examining `isProcessing`
+  //         if (this.isProcessing) {
+  //           // If the queue is active, you might want to introduce an additional delay
+  //           // or handle it differently. Adjust this part as needed.
+  //           const additionalDelay = 5000; // Example: Add an extra 30 seconds delay
+  //           return timer(additionalDelay);
+  //         } else {
+  //           // If the queue is not active, proceed without additional delay
+  //           return of(null);
+  //         }
+  //       })
+  //     ))
+  //   );
+  // }
+
+  _refreshMessagingService(user): void {
+    if (!user) return;
+
+    let retryDelay = 6000; // Base retry delay
+
+    this.messageRefresh$ = this.getMessages().pipe(
+      catchError(err => {
+        console.error('Error fetching messages, will retry after delay', err);
+        // Return an observable that emits once (like a placeholder) to trigger the repeat mechanism
+        return of(null);
+      }),
+      // Use repeatWhen to handle retries
+      repeatWhen(notifications => notifications.pipe(
+        // Decide on the delay based on the queue's active state
+        switchMap(() => this.isQueueActive ? timer(retryDelay + 30000) : timer(retryDelay))
+      ))
+    );
+  }
+
+  get isQueueActive(): boolean {
+    // Check the queue's active state
+    // Assuming 'isProcessing' indicates the queue's state, replace with actual logic if different
+    return this.isProcessing;
   }
 
   refreshMessages() {
-    console.log("refreshMessages 1" )
     if (this.orderID) {
       this.refreshOrderMessages();
       return
     }
-    console.log("refreshMessages 2" )
-    this.messages$ = this.getMessages();
+    this.messages$ = this.getMessages('refresh messages');
   }
 
-  getMessages(): Observable<IRequestMessage[]> {
+  getMessages(message?: string): Observable<IRequestMessage[]> {
     const site      = this.siteService.getAssignedSite();
     const search    = {} as IRequestMessageSearchModel;
     search.userID   = this.authenticationService.userValue.id;
     let check: boolean;
     let messages$: Observable<IRequestMessage[]>;
+
+    if (this.printServerDevice?.printServerEnable) {
+      messages$ = this.getManagerMessages()
+      check = true
+    }
 
     if (this.user.roles === 'manager' || this.user.roles === 'admin') {
       messages$ = this.getManagerMessages()
@@ -96,10 +203,15 @@ export class RequestMessagesComponent implements OnInit {
       check = true
     }
 
-    if (!check) { return of(null)}
+    if (!check) {
+      console.log('no check')
+      return of(null)
+    }
 
     return messages$.pipe(
-      switchMap(data => {
+      concatMap(data => {
+        console.log('process get messages', message, data)
+        this.processMessages(data)
         this.emitCount.emit(data?.length)
         return of(data)
       })
@@ -110,33 +222,162 @@ export class RequestMessagesComponent implements OnInit {
     const site      = this.siteService.getAssignedSite();
     const search    = {} as IRequestMessageSearchModel;
     search.archived = false;
-    return this.requestMessageService.getOpenRequestMessages(site, search);
+    return this.requestMessageService.getOpenRequestMessages(site, search).pipe(concatMap(data => {
+      return of(data)
+    }))
+  }
+
+  processMessages(list:IRequestMessage[]): Observable<IRequestMessage[]> {
+    // copy the messages
+
+    if (!list) { return of(null)}
+
+    let messages = [... list];
+    //filter out the
+    const filteredMessages = messages.filter(data => !data.archived && data.subject === 'Printing');
+
+    this.collectPrintOrders(filteredMessages)
+
+    const resultList = list.filter(data => {
+      if (!data.archived && data.subject != 'Printing') {
+        return data
+      }
+    })
+
+    return of(resultList)
+  }
+
+  get isPrintServer() {
+    let isDevice = false
+    if (!this.platFormService.isAppElectron) { return isDevice }
+    if (!this.uiTransaction?.printServerDevice) { return isDevice}
+
+    if (this.posDevice && (this.posDevice?.name === this.uiTransaction?.printServerDevice)) {
+      this.printServerDevice = this.posDevice
+    }
+    if (this.printServerDevice && this.printServerDevice.printServerEnable) {
+
+      if (this.initRefresh) {
+        this.setPrintServer(this.printServerDevice)
+        this.initRefresh = true
+      }
+      return true
+    }
+
+    const site = this.siteService.getAssignedSite()
+    this.printServerDevice$ = this.settingsService.getPOSDeviceSettings(site, this.uiTransaction.printServerDevice).pipe(
+      switchMap(data =>
+      {
+        isDevice =  this.setPrintServer(data)
+        return of(data)
+      }
+    ))
+
+    return isDevice
+  }
+
+  setPrintServer(data: ITerminalSettings) {
+    if (data?.printServerEnable) {
+      if (data?.printServerTime != 0) {
+        this.refreshTime = +data?.printServerTime
+        this._refreshMessagingService(this.user)
+        return true
+      }
+    }
+    return false
+  }
+  //depending on the type of job it is. we need to create an observable for each print job.
+
+  collectPrintOrders(printMessages: IRequestMessage[]) {
+
+    if (!this.uiTransaction.printServerDevice) { return }
+    // console.log('collectPrintOrders', printMessages)
+    const site = this.siteService.getAssignedSite()
+    let printJobs$ : Observable<any>[]
+    const cancelUpdate = true
+    printMessages.forEach((data, index) => {
+      if (data.method === 'printPrep') {
+        const order$ = this.orderService.getOrder(site, data.orderID.toString(),false).pipe(concatMap(order => {
+            return this.paymentsMethodsProcessService.sendToPrep(order, true, this.uiTransaction, cancelUpdate  )
+          })).pipe(concatMap(order =>  {
+            return this._archiveMessage(data)
+          }))
+        this.addObservable(order$)
+      }
+      // //need to fix this.
+      // if (data.method === 'printPaymentReceipt') {
+      //   const order$ = this.orderService.getOrder(site, data.orderID.toString(),false).pipe(switchMap(data => {
+      //      return this.paymentsMethodsProcessService.sendToPrep(data, true, this.uiTransaction  )
+      //     })).pipe(switchMap(data =>  {
+      //       return this._archiveMessage(data)
+      //     }))
+      //   this.addObservable(order$)
+      // }
+      if (data.method === 'printReceipt') {
+        if (!this.isStaff && !this.posDevice) { return }
+        const order$ = this.orderService.getOrder(site, data.orderID.toString(),false).pipe(concatMap(data => {
+           console.log('print receipt', index)
+           this.printingService.printOrder = data;
+           this.printingService.previewReceipt(true, data);
+           return of(data)
+        })).pipe(concatMap(order =>  {
+          return this._archiveMessage(data)
+        }))
+        this.addObservable(order$)
+      }
+      // if (data.method === 'rePrintPrep') {
+      //   const order$ = this.orderService.getOrder(site, data.orderID.toString(), false).pipe(switchMap(data => {
+      //      return this.paymentsMethodsProcessService.sendToPrep(data, false, this.uiTransaction  )
+      //     })).pipe(switchMap(data =>  {
+      //       return this._archiveMessage(data)
+      //     }))
+      //   this.addObservable(order$)
+      // }
+    });
+    printMessages = []
+    // this.printJobs$ = printJobs$;
+  }
+
+  get isStaff() {
+    if (!this.user || !this.user?.roles) { return false}
+    if (this.user?.roles.toLowerCase() === 'admin' || this.user?.roles.toLowerCase() === 'manager' || this.user?.roles.toLowerCase() === 'employee') {
+      return true
+    }
+    return false
+  }
+
+  archivePrintOrderMessages(printMessages: IRequestMessage[]) {
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.requestMessageService.archiveMessages(site, printMessages)
+    this.printJobs$ = []
   }
 
   forceRefreshMessage()  {
-    this.getMessages()
+    this.getMessages('force refresh')
   }
 
   initUserSubscriber() {
-    if (this.user) {
-      return;
-    }
-    this.authenticationService.user$.subscribe(data => {
-      this.messages$ = null;
-      this.refreshMessagingService(data)
-    })
+    this.user$ =  this.authenticationService.user$.pipe(
+      switchMap(data => {
+        this.messages$ = null;
+        this.isPrintServer
+        return of(data)
+    }))
   }
 
   //list out messages.
   constructor(private requestMessageService: RequestMessageService,
               private siteService: SitesService,
+              private settingsService: SettingsService,
               private userAuthService: UserAuthorizationService,
               private authenticationService: AuthenticationService,
               private router: Router,
               private orderMethodsService: OrderMethodsService,
               private orderService       : OrdersService,
+              private platFormService: PlatformService,
               private dialogRef: MatDialogRef<RequestMessagesComponent>,
-              private requestMessageMehodsService: RequestMessageMethodsService,
+              private printingService: PrintingService,
+              private paymentsMethodsProcessService: PaymentsMethodsProcessService,
               @Inject(MAT_DIALOG_DATA) public data: any
      )
   {
@@ -152,15 +393,15 @@ export class RequestMessagesComponent implements OnInit {
   ngOnInit(): void {
     let user = this.userAuthService.user
     if (this.user) { user = this.user; }
-
     // get only order messages;
+
+    this.initUserSubscriber();
+
     if (this.orderID) {
       this.refreshOrderMessages()
       return;
     }
-
-    this.refreshMessagingService(user)
-    this.initUserSubscriber()
+    this.processQueue();
   }
 
   exit() {
@@ -175,7 +416,7 @@ export class RequestMessagesComponent implements OnInit {
         return of(data)
       })
     ).pipe(switchMap(data => {
-      return this._refreshMessagingService(this.user);
+      return this.getMessages('toggle archive')
     }))
   }
 
@@ -187,7 +428,7 @@ export class RequestMessagesComponent implements OnInit {
         return of(data)
       })
     ).pipe(switchMap(data => {
-      return this._refreshMessagingService(this.user);
+      return this.getMessages('add menu item')
     }))
   }
 
@@ -199,8 +440,18 @@ export class RequestMessagesComponent implements OnInit {
         return of(data)
       })
     ).pipe(switchMap(data => {
-      return this._refreshMessagingService(this.user);
+      return this.getMessages('archive')
     }))
+  }
+
+  _archiveMessage(message){
+    const site = this.siteService.getAssignedSite();
+    message.archived = !message.archived;
+    return this.requestMessageService.saveMessage(site, message).pipe(
+      switchMap(data => {
+        return of(data)
+      })
+    )
   }
 
   _openOrderFromItemMessage(event: IRequestMessage) {
@@ -237,21 +488,13 @@ export class RequestMessagesComponent implements OnInit {
     //navigate to order
     // console.log('event', event)
     const methods  = event?.method.split('=');
-    // console.log('event', methods)
-
     if (methods[1]) {
-
       const value =  methods[1] //event.orderID
       this.orderMethodsService.setLastOrder()
-//
-      // console.log('_openOrderFromOrderMessage', event, value, methods[1]);
       if (!value) { return };
-
       const site = this.siteService.getAssignedSite();
-
       return this.orderService.getOrder(site, value.toString(), false).pipe(
         switchMap(data => {
-            // console.log('data', data)
             this.orderMethodsService.setActiveOrder(data)
             return of(data)
           }
@@ -273,7 +516,7 @@ export class RequestMessagesComponent implements OnInit {
     if (!event) { return  }
     if (!event.type) { return  }
 
-    console.log('event', event?.type, event)
+    // console.log('event', event?.type, event)
     if (event.type.toLocaleLowerCase()  === "ir") {
       this.router.navigate(['menuitems',{id: event.method}])
     }

@@ -27,31 +27,82 @@
         </div>
       </mat-card-title>
 
-      <mat-card-content>
+      <!-- <mat-card-content>
         <app-value-fields
+              style="width:125px"
               [inputForm]="inputForm"
               [fieldName]="'logInTime'">
           Log In
         </app-value-fields>
-      </mat-card-content>
+      </mat-card-content> -->
+      <div *ngIf="inputForm" [formGroup]="inputForm">
+        <mat-form-field class="form-field" appearance ='outline'>
+          <input matInput
+                 [ngxMatDatetimePicker]="pickerLogIn"
+                 placeholder="Log in"
+                 formControlName="logInTime">
+          <mat-datepicker-toggle matSuffix [for]="pickerLogIn"></mat-datepicker-toggle>
+          <ngx-mat-datetime-picker #pickerLogIn
+             [showSpinners]="true"
+             [showSeconds]="true"
+             [stepHour]="true"
+             [stepMinute]="true"
+             [stepSecond]="true"
+             [touchUi]="true"
+             [color]="'primary'"
+             [enableMeridian]="true"
+             [disableMinute]="false"
+             [hideTime]="false">
+          </ngx-mat-datetime-picker>
+       </mat-form-field>
+      </div>
 
-      <mat-card-content>
+      <!-- <mat-card-content>
         <app-value-fields
+              style="width:125px"
               [inputForm]="inputForm"
               [fieldName]="'logOutTime'">
           Log Out
         </app-value-fields>
-      </mat-card-content>
+      </mat-card-content> -->
+
+      <div *ngIf="inputForm" [formGroup]="inputForm">
+          <mat-form-field class="form-field"  appearance ='outline'>
+            <input matInput
+                  [ngxMatDatetimePicker]="picker"
+                  placeholder="Log out"
+                  formControlName="logOutTime"
+                   >
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker
+              [showSpinners]="true"
+              [showSeconds]="true"
+              [stepHour]="true"
+              [stepMinute]="true"
+              [stepSecond]="true"
+              [touchUi]="true"
+              [color]="'primary'"
+              [enableMeridian]="true"
+              [disableMinute]="false"
+
+              [hideTime]="false">
+            </ngx-mat-datetime-picker>
+        </mat-form-field>
+      </div>
 
       <mat-card-content>
         <app-value-fields
+              style="width:125px"
               [inputForm]="inputForm"
               [fieldName]="'payRate'">
           Pay Rate
         </app-value-fields>
       </mat-card-content>
 
-      <div class="info">
+      <!-- {{inputForm.controls['logInTime'].value}} <br>
+      {{inputForm.controls['logInTime'].value}} -->
+
+      <div class="ps-grid-items-75-col" style="width:160px">
         <div *ngIf="clock?.regHours">Hours</div>
         <div *ngIf="clock?.regHours">{{clock?.regHours.toFixed(2)}}</div>
         <div *ngIf="clock?.regPay">Pay</div>

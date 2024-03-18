@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "2.21.9",
+  "version": "2.25.7",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -13,6 +13,9 @@
   },
   "scripts": {
     "ng": "ng",
+
+    "start with SSL": "ng serve --configuration dev --public-host --host=192.168.0.3 --port=4400 --ssl true --ssl-key ./localhost-key.pem --ssl-cert ./localhost.pem ",
+
     "start with IP": "ng serve --configuration dev --public-host --host=192.168.0.3 --port=4400 ",
     "startLocal": "ng serve --configuration dev --host=localhost --port=4200",
     "startLocalNode": "ng serve   --configuration dev --host=localhost --port=4200",
@@ -50,6 +53,7 @@
     "@angular/forms": "^14.3.0",
     "@angular/localize": "^14.3.0",
     "@angular/material": "^14.2.7",
+    "@angular/material-moment-adapter": "^17.3.0",
     "@angular/platform-browser": "^14.3.0",
     "@angular/platform-browser-dynamic": "^14.3.0",
     "@angular/router": "^14.3.0",

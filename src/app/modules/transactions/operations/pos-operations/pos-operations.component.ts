@@ -96,6 +96,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       this.user = data;
     })
   }
+
   get isElectronApp() {
     return this.platFormService.isAppElectron
   }
@@ -645,6 +646,9 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     }
     if (this.auths.buysSalesReports ) {
       total = total +2
+    }
+    if (this.auths.disableUOMSales) {
+      total = total -1
     }
 
     return total

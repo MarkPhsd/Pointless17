@@ -150,6 +150,8 @@ import { EbayFulfillmentPolicyComponent } from './modules/admin/inventory/ebay/e
 import { EbayReturnPolicyComponent } from './modules/admin/inventory/ebay/ebay-return-policy/ebay-return-policy.component';
 import { DisplayMenuMenuComponent } from './modules/display-menu/display-menu-menu/display-menu-menu.component';
 import { MenuSectionComponent } from './modules/display-menu/display-menu-list/menu-section/menu-section.component';
+import { PayAPIComponent } from './modules/payment-processing/pay-api/pay-api.component';
+import { PayAPIFrameComponent } from './modules/payment-processing/pay-apiiframe/pay-apiiframe.component';
 
 const routes: Routes = [
     // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
@@ -159,6 +161,8 @@ const routes: Routes = [
 
     {path: '', component: DefaultComponent,
       children: [
+        { path: 'pay-api', component: PayAPIComponent, data: { title: 'Order', animation: 'isLeft'} },
+        { path: 'pay-api-iframe', component: PayAPIFrameComponent, data: { title: 'Order', animation: 'isLeft'} },
 
         //ebay-publish-product
         { path: 'ebay-publish-product', component: EbayPublishProductComponent, canActivate: [AuthGuard], data: {title: 'Ebay Publisher', animation: 'isLeft'}},
@@ -364,7 +368,7 @@ const routes: Routes = [
 
       ]
     },
-   
+
     { path: 'menu-board'    ,  component: GridManagerComponent,
        children: [
         // { path: '', component: GridManagerComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
@@ -379,7 +383,7 @@ const routes: Routes = [
     { path: 'scale-reader', component: ScaleReaderComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
     { path: 'barcodescanner', component: BarcodeScannerComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
-    
+
     { path: 'login', component: LoginComponent, data: { title: 'Pointless Login', animation: 'isLeft'}},
     { path: 'resetpassword', component: ResetpasswordComponent,data: {  title: 'Reset Password',  animation: 'isLeft'}},
     { path: 'changepassword', component: ChangepasswordComponent,data: {  title: 'Change Password',  animation: 'isLeft'}},

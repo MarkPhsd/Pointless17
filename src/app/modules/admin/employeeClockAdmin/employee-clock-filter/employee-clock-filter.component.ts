@@ -102,7 +102,7 @@ export class EmployeeClockFilterComponent implements OnInit {
   }
 
   emitDatePickerData(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {
-    console.log(this.dateRangeForm.value);
+    // console.log(this.dateRangeForm.value);
     if (dateRangeStart && dateRangeEnd) {
       // if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("end").value) {
         // this.dateFrom = dateRangeStart.value //this.dateRangeForm.get("start").value

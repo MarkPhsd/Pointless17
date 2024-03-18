@@ -286,7 +286,10 @@
       <div class="ps-flex-group-column">
 
         <app-request-messages
+          *ngIf="uiTransactionSetting"
           [user]="user"
+          [posDevice]="posDevice"
+          [uiTransaction]="uiTransactionSetting"
           [hideshowMessages]="true"
           (emitCount)="emailMailCount($event)">
         </app-request-messages>

@@ -7,11 +7,12 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IPOSOrder, IPOSPayment, PosPayment } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 
 @Component({
   selector: 'app-tri-pos-transactions',
@@ -44,6 +45,7 @@ export class TriPosTransactionsComponent implements OnInit {
     private orderService        : OrdersService,
     public orderMethodsService: OrderMethodsService,
     private setingsServerice: SettingsService,
+    private printingService: PrintingService,
     private fb: UntypedFormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
 
@@ -197,12 +199,10 @@ export class TriPosTransactionsComponent implements OnInit {
       const authorizationCompletion$ = this.methodsService.authorizationCompletion(site, item );
       this.processing$ =  authorizationCompletion$.pipe(
         switchMap(data => {
-          console.log('Complete Auth', data.transactionId )
-          console.log('Auth Data', data)
-          console.log('Has Errors / Approved ', data._hasErrors, data.isApproved )
+
           this.initMessaging();
           if (data._hasErrors || !data.isApproved) {
-            console.log('not authorized')
+
             this.displayErrors(data)
             return of (null)
           }
@@ -278,9 +278,6 @@ export class TriPosTransactionsComponent implements OnInit {
       item = this.getRef(item, this.posPayment)
 
       this.processing$ =  this.methodsService.authorizeAmount( site, item ).pipe(switchMap(data => {
-        console.log('Complete Auth', data.transactionId )
-        console.log('Auth Data', data)
-        console.log('Has Errors / Approved ', data._hasErrors, data.isApproved )
 
         if ((data._hasErrors && data._errors.length>0) || !data.isApproved) {
           this.displayErrors(data)
@@ -329,12 +326,11 @@ export class TriPosTransactionsComponent implements OnInit {
       const site           = this.siteService.getAssignedSite();
       this.processing      = true;
       this.errorMessage    = ''
-      // item.allowDebit      = true;
-      // console.log('transaction request', item)
-      this.processing$  =  this.methodsService.sale(site, item )
-      .pipe(switchMap(data => {
 
-            console.log('transaction', data.transactionId, data)
+      this.processing$  =  this.methodsService.sale(site, item )
+                          .pipe(switchMap(data => {
+            this.printingService.saveCreditCardSale(JSON.stringify(data), this.order?.orderCode)
+
             this.errorMessage = ''
             if ((data._hasErrors && data._errors.length>0) || !data.isApproved) {
               this.processing = false;
@@ -346,9 +342,7 @@ export class TriPosTransactionsComponent implements OnInit {
           }
         )).pipe(switchMap(data => {
           //return the current order. Error messsage should have been
-          if (!data || !data.payment) {
-            return of(this.order)
-          }
+          if (!data || !data.payment) {   return of(this.order)  }
 
           const payment = data.payment
           const trans = data.trans
@@ -381,7 +375,6 @@ export class TriPosTransactionsComponent implements OnInit {
   displayErrors(trans) {
     let message = ''
     this.errorMessage = ''
-    // console.log('displayErrors', trans, trans._errors)
     if (trans._errors) {
       if (trans._hasErrors) {
         trans._errors.forEach(item => {
@@ -430,8 +423,6 @@ export class TriPosTransactionsComponent implements OnInit {
       this.processing = true;
       this.errorMessage = ''
       this.posPayment.saleType = 3;
-
-      // console.log('refund item', item)
 
       this.processing$ =  this.methodsService.refund(site, item ).pipe(
         switchMap(data => {

@@ -7,28 +7,52 @@
 
 <div class="container" *ngIf="(order$ | async) as item; else loading">
 
-  <!-- <span *ngIf="inputForm">
-    {{inputForm.value | json}}
-  </span> -->
-
   <mat-card class="mat-card">
     <mat-card-title>
       <div class="header-container" *ngIf="inputForm" >
-        <div>
-          <h4><mat-icon>order</mat-icon> </h4>
-          <app-value-fields
-              [enabled]="false"
-              [inputForm]="inputForm"
-              [fieldName]="'id'">
-            <div description>ID:</div>
-          </app-value-fields>
+        <div class="grid-split-groups">
+          <div>
+            <h4><mat-icon>order</mat-icon> </h4>
+            <app-value-fields
+                [enabled]="false"
+                [inputForm]="inputForm"
+                [fieldName]="'id'">
+              <div description>ID:</div>
+            </app-value-fields>
 
-          <app-value-fields
-              [enabled]="false"
-              [inputForm]="inputForm"
-              [fieldName]="'orderCode'">
-              <div description>Order Code:</div>
-          </app-value-fields>
+            <div>
+              <app-value-fields
+                  [enabled]="false"
+                  [inputForm]="inputForm"
+                  [fieldName]="'serviceType'">
+                Service Type
+              </app-value-fields>
+            </div>
+
+            <app-value-fields
+                [enabled]="false"
+                [inputForm]="inputForm"
+                [fieldName]="'orderCode'">
+                <div description>Order Code:</div>
+            </app-value-fields>
+
+            <div [formGroup]="inputForm" *ngIf="inputForm" class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="activePO" >
+                <mat-label>Suspended</mat-label>
+              </mat-slide-toggle>
+            </div>
+          </div>
+          <div *ngIf="posOrder">
+            <app-order-header-demo-graphics
+              [canRemoveClient]     ="true"
+              [order]               ="posOrder"
+              [mainPanel]           ="true"
+              (outPutOpenClient)    ="openClient()"
+              (outPutRemoveClient)  ="removeClient()"
+              (outPutAssignCustomer)="assignCustomer($event)" >
+            </app-order-header-demo-graphics>
+          </div>
         </div>
 
         <div>
@@ -48,7 +72,7 @@
     </mat-card-subtitle>
 
     <mat-card-content>
-      <mat-tab-group  style="width:100%">
+      <mat-tab-group  style="width:100%;min-height:600px">
         <mat-tab label="ID POS Info" style="padding:5px">
           <div class="grid-split-groups">
             <div>
@@ -57,15 +81,11 @@
             <div>
               <ng-container [ngTemplateOutlet]="types"></ng-container>
             </div>
+            <div>
+              <ng-container [ngTemplateOutlet]="staffView"></ng-container>
+            </div>
           </div>
-        </mat-tab>
-
-        <mat-tab label="Staff" style="padding:5px">
-          <ng-container [ngTemplateOutlet]="staffView"></ng-container>
-        </mat-tab>
-
-        <mat-tab label="Customer" style="padding:5px">
-          <ng-container [ngTemplateOutlet]="customerView"></ng-container>
+          <ng-container [ngTemplateOutlet]="datesView"></ng-container>
         </mat-tab>
 
         <mat-tab label="Shipping" style="padding:5px">
@@ -76,10 +96,6 @@
           <ng-container [ngTemplateOutlet]="notesAndTags"></ng-container>
         </mat-tab>
 
-        <mat-tab label="Dates" style="padding:5px">
-          <ng-container [ngTemplateOutlet]="datesView"></ng-container>
-        </mat-tab>
-
       </mat-tab-group>
     </mat-card-content>
   </mat-card>
@@ -87,136 +103,170 @@
 </div>
 
 <ng-template #identifier>
-
-
-  <app-value-fields
-    [inputForm]="inputForm"
-    [fieldName]="'zrun'">
-    ZRunID
-  </app-value-fields>
-
-  <app-value-fields
-    [inputForm]="inputForm"
-    [fieldName]="'reportRunID'">
-    Balance Sheet ID
-  </app-value-fields>
-
-  <app-value-fields
-    [inputForm]="inputForm"
-    [fieldName]="'registerName'">
-    POS / Device
-  </app-value-fields>
-
-  <app-value-fields
+  <div class="text-form-field">
+    <app-value-fields
       [inputForm]="inputForm"
-      [fieldName]="'serviceType'">
-    Service Type
-  </app-value-fields>
+      [fieldName]="'zrun'">
+      ZRunID
+    </app-value-fields>
+  </div>
+  <div class="text-form-field">
+    <app-value-fields
+      [inputForm]="inputForm"
+      [fieldName]="'reportRunID'">
+      Balance Sheet ID
+    </app-value-fields>
+  </div>
+  <div class="text-form-field">
+    <app-value-fields
+      [inputForm]="inputForm"
+      [fieldName]="'registerName'">
+      POS / Device
+    </app-value-fields>
+  </div>
 
 </ng-template>
 
 <ng-template #types>
 
-  <app-value-fields
-    [inputForm]="inputForm"
-    [fieldName]="'purchaseOrderNumber'">
-    PO Number
-  </app-value-fields>
-
-  <app-value-fields
-    [inputForm]="inputForm"
-    [fieldName]="'tableName'">
-    Table Name
-  </app-value-fields>
-
-  <app-value-fields
-    [inputForm]="inputForm"
-    [fieldName]="'progress'">
-    Progress
-  </app-value-fields>
-
-  <app-value-fields
+  <div class="text-form-field">
+    <app-value-fields
       [inputForm]="inputForm"
-      [fieldName]="'statusID'">
-    StatusID
-  </app-value-fields>
+      [fieldName]="'purchaseOrderNumber'">
+      PO Number
+    </app-value-fields>
+  </div>
+
+  <div class="text-form-field">
+      <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'tableName'">
+        Table Name
+      </app-value-fields>
+  </div>
+
+  <div class="text-form-field">
+    <app-value-fields
+      [inputForm]="inputForm"
+      [fieldName]="'progress'">
+      Progress
+    </app-value-fields>
+  </div>
+
+  <div class="text-form-field">
+    <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'statusID'">
+      StatusID
+    </app-value-fields>
+  </div>
+
 
 </ng-template>
 
 <ng-template #shippingAddres>
-  <app-value-fields
+  <div class="text-form-field">
+    <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'shipName'">
+      Name
+    </app-value-fields>
+  </div>
+  <div class="text-form-field">
+    <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'shipAddress'">
+      Address
+    </app-value-fields>
+  </div>
+  <div class="text-form-field">
+    <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'shipAddress2'">
+      Address2
+    </app-value-fields>
+  </div>
+  <div class="text-form-field">
+    <app-value-fields
       [inputForm]="inputForm"
-      [fieldName]="'shipName'">
-    Name
-  </app-value-fields>
-  <app-value-fields
-      [inputForm]="inputForm"
-      [fieldName]="'shipAddress'">
-    Address
-  </app-value-fields>
-  <app-value-fields
-      [inputForm]="inputForm"
-      [fieldName]="'shipAddress2'">
-    Address2
-  </app-value-fields>
-  <app-value-fields
-    [inputForm]="inputForm"
-    [fieldName]="'shipSuite'">
-    Suite
-  </app-value-fields>
-  <app-value-fields
-      [inputForm]="inputForm"
-      [fieldName]="'shipCity'">
-    City
-  </app-value-fields>
-  <app-value-fields
-      [inputForm]="inputForm"
-      [fieldName]="'shipState'">
-    State/Province
-  </app-value-fields>
-  <app-value-fields
-      [inputForm]="inputForm"
-      [fieldName]="'shipPostalCode'">
-    Postal
-  </app-value-fields>
-  <app-value-fields
-      [inputForm]="inputForm"
-      [fieldName]="'shipZip'">
-      Zip
-  </app-value-fields>
+      [fieldName]="'shipSuite'">
+      Suite
+    </app-value-fields>
+  </div>
+  <div class="text-form-field">
+    <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'shipCity'">
+      City
+    </app-value-fields>
+  </div>
+  <div class="text-form-field">
+    <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'shipState'">
+      State/Province
+    </app-value-fields>
+  </div>
+  <div class="text-form-field">
+    <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'shipPostalCode'">
+      Postal
+    </app-value-fields>
+  </div>
+  <div class="text-form-field">
+    <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'shipZip'">
+        Zip
+    </app-value-fields>
+  </div>
 </ng-template>
 
 <ng-template #staffView>
-  <app-value-fields
+
+  <div *ngIf="(employees$ | async) as list">
+    <app-mat-select
+      [class]="'mat-form-regular'"
+      [hideClear]="true"
       [inputForm]="inputForm"
+      [list]="list"
+      [useID]="true"
+      (outputItem) = "assignEmployeeID($event)"
       [fieldName]="'employeeID'">
-    SalesID
-  </app-value-fields>
-  <app-value-fields
+      Sales Person
+    </app-mat-select>
+
+    <app-mat-select
+      [class]="'mat-form-regular'"
+      [hideClear]="true"
       [inputForm]="inputForm"
-      [fieldName]="'employeeName'">
-    Salesperson
-  </app-value-fields>
-  <app-value-fields
-      [inputForm]="inputForm"
+      [list]="list"
+      [useID]="true"
       [fieldName]="'driverID'">
-    Driver ID
-  </app-value-fields>
-  <app-value-fields
+      Driver
+    </app-mat-select>
+
+    <app-mat-select
+      [class]="'mat-form-regular'"
+      [hideClear]="true"
       [inputForm]="inputForm"
-      [fieldName]="'deliveryEmployee'">
-    Delivery
-  </app-value-fields>
-  <app-value-fields
-      [inputForm]="inputForm"
-      [fieldName]="'operationsEmployee'">
-    Operations Employee
-  </app-value-fields>
-  <app-value-fields
-      [inputForm]="inputForm"
+      [list]="list"
+      [useID]="true"
       [fieldName]="'checkInRepName'">
-      Check In Rep
-  </app-value-fields>
+      Check in Rep
+    </app-mat-select>
+
+    <app-mat-select
+      [class]="'mat-form-regular'"
+      [hideClear]="true"
+      [inputForm]="inputForm"
+      [list]="list"
+      [useID]="true"
+      [fieldName]="'operationsEmployee'">
+      Operations
+    </app-mat-select>
+  </div>
 </ng-template>
 
 <ng-template #customerView>
@@ -261,110 +311,226 @@
 </ng-template>
 
 <ng-template #datesView>
+
   <mat-card [formGroup]="inputForm">
-    <h3>Date & Time </h3>
-    <div class="ps-flex-grid-start">
+    <h3><mat-icon>time</mat-icon> </h3>
+    <div class="grid-split-groups">
       <div>
         <h4>Transaction</h4>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'orderDate'">
-          Start
-        </app-value-fields>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'completionDate'">
-          End
-        </app-value-fields>
+
+        <div>
+          <mat-form-field class="form-field" appearance ='outline'>
+            <mat-label>Start Date</mat-label>
+            <input matInput
+                   [ngxMatDatetimePicker]="picker_orderDate"
+                   placeholder="Start"
+                   formControlName="orderDate">
+            <mat-datepicker-toggle matSuffix [for]="picker_orderDate"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker_orderDate
+               [showSpinners]="true"
+               [showSeconds]="true"
+               [stepHour]="true"
+               [stepMinute]="true"
+               [stepSecond]="true"
+               [touchUi]="true"
+               [color]="'primary'"
+               [enableMeridian]="true"
+               [disableMinute]="false"
+               [hideTime]="false">
+            </ngx-mat-datetime-picker>
+         </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="form-field" appearance ='outline'>
+            <mat-label>End Date</mat-label>
+            <input matInput
+                   [ngxMatDatetimePicker]="picker_completionDate"
+                   placeholder="End"
+                   formControlName="completionDate">
+            <mat-datepicker-toggle matSuffix [for]="picker_completionDate"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker_completionDate
+               [showSpinners]="true"
+               [showSeconds]="true"
+               [stepHour]="true"
+               [stepMinute]="true"
+               [stepSecond]="true"
+               [touchUi]="true"
+               [color]="'primary'"
+               [enableMeridian]="true"
+               [disableMinute]="false"
+               [hideTime]="false">
+            </ngx-mat-datetime-picker>
+         </mat-form-field>
+        </div>
+
       </div>
 
       <div>
         <h4>Schedule</h4>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'scheduleDate'">
-          Start
-        </app-value-fields>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'scheduleTo'">
-          End
-        </app-value-fields>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'scheduleDate'">
-          Preferred
-        </app-value-fields>
+
+        <div>
+          <mat-form-field class="form-field" appearance ='outline'>
+            <mat-label>Schedule Date</mat-label>
+            <input matInput
+                   [ngxMatDatetimePicker]="picker_scheduleDate"
+                   placeholder="Schedule Date"
+                   formControlName="scheduleDate">
+            <mat-datepicker-toggle matSuffix [for]="picker_scheduleDate"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker_scheduleDate
+               [showSpinners]="true"
+               [showSeconds]="true"
+               [stepHour]="true"
+               [stepMinute]="true"
+               [stepSecond]="true"
+               [touchUi]="true"
+               [color]="'primary'"
+               [enableMeridian]="true"
+               [disableMinute]="false"
+               [hideTime]="false">
+            </ngx-mat-datetime-picker>
+         </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="form-field" appearance ='outline'>
+            <mat-label>Scheduled To</mat-label>
+            <input matInput
+                   [ngxMatDatetimePicker]="picker_scheduleTo"
+                   placeholder="Schedule To"
+                   formControlName="scheduleTo">
+            <mat-datepicker-toggle matSuffix [for]="picker_scheduleTo"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker_scheduleTo
+               [showSpinners]="true"
+               [showSeconds]="true"
+               [stepHour]="true"
+               [stepMinute]="true"
+               [stepSecond]="true"
+               [touchUi]="true"
+               [color]="'primary'"
+               [enableMeridian]="true"
+               [disableMinute]="false"
+               [hideTime]="false">
+            </ngx-mat-datetime-picker>
+         </mat-form-field>
+        </div>
+        <h4>Delivery</h4>
+        <div class="text-form-field ">
+          <app-value-fields
+
+                [inputForm]="inputForm"
+                [fieldName]="'routeID'">
+            RouteID
+          </app-value-fields>
+        </div>
       </div>
 
       <div>
         <h4>Shipping</h4>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'shipOutOrderDate'">
-          Shipped
-        </app-value-fields>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'shippingNumber'">
-          Tracking
-        </app-value-fields>
+        <div>
+          <mat-form-field class="form-field" appearance ='outline'>
+            <mat-label>Shipped Out Order Date</mat-label>
+            <input matInput
+                   [ngxMatDatetimePicker]="picker_shipOutOrderDate"
+                   placeholder="Shipped Date"
+                   formControlName="shipOutOrderDate">
+            <mat-datepicker-toggle matSuffix [for]="picker_shipOutOrderDate"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker_shipOutOrderDate
+               [showSpinners]="true"
+               [showSeconds]="true"
+               [stepHour]="true"
+               [stepMinute]="true"
+               [stepSecond]="true"
+               [touchUi]="true"
+               [color]="'primary'"
+               [enableMeridian]="true"
+               [disableMinute]="false"
+               [hideTime]="false">
+            </ngx-mat-datetime-picker>
+         </mat-form-field>
+        </div>
+        <div class="text-form-field ">
+          <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'shippingNumber'">
+            Tracking
+          </app-value-fields>
+        </div>
 
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'eTA'">
-          ETA
-        </app-value-fields>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'arrivalDate'">
-          Inventory Arrival
-        </app-value-fields>
+        <div>
+          <mat-form-field class="form-field" appearance ='outline'>
+            <mat-label>ETA</mat-label>
+            <input matInput
+                   [ngxMatDatetimePicker]="picker_eTA"
+                   placeholder="ETA"
+                   formControlName="eTA">
+            <mat-datepicker-toggle matSuffix [for]="picker_eTA"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker_eTA
+               [showSpinners]="true"
+               [showSeconds]="true"
+               [stepHour]="true"
+               [stepMinute]="true"
+               [stepSecond]="true"
+               [touchUi]="true"
+               [color]="'primary'"
+               [enableMeridian]="true"
+               [disableMinute]="false"
+               [hideTime]="false">
+            </ngx-mat-datetime-picker>
+         </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="form-field" appearance ='outline'>
+            <mat-label>Arrival Date</mat-label>
+            <input matInput
+                   [ngxMatDatetimePicker]="picker_arrivalDate"
+                   placeholder="ETA"
+                   formControlName="arrivalDate">
+            <mat-datepicker-toggle matSuffix [for]="picker_arrivalDate"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker_arrivalDate
+               [showSpinners]="true"
+               [showSeconds]="true"
+               [stepHour]="true"
+               [stepMinute]="true"
+               [stepSecond]="true"
+               [touchUi]="true"
+               [color]="'primary'"
+               [enableMeridian]="true"
+               [disableMinute]="false"
+               [hideTime]="false">
+            </ngx-mat-datetime-picker>
+         </mat-form-field>
+        </div>
       </div>
 
       <div>
         <h4>Agreements</h4>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'termsDueDate'">
-          Terms
-        </app-value-fields>
+        <div>
+          <mat-form-field class="form-field" appearance ='outline'>
+            <input matInput
+                   [ngxMatDatetimePicker]="picker_termsDueDate"
+                   placeholder="Terms Due"
+                   formControlName="termsDueDate">
+            <mat-datepicker-toggle matSuffix [for]="picker_termsDueDate"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker_termsDueDate
+               [showSpinners]="true"
+               [showSeconds]="true"
+               [stepHour]="true"
+               [stepMinute]="true"
+               [stepSecond]="true"
+               [touchUi]="true"
+               [color]="'primary'"
+               [enableMeridian]="true"
+               [disableMinute]="false"
+               [hideTime]="false">
+            </ngx-mat-datetime-picker>
+         </mat-form-field>
+        </div>
       </div>
 
-      <div>
-        <h4>Delivery</h4>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'routeID'">
-          RouteID
-        </app-value-fields>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'beginDate'">
-          Begin Date
-        </app-value-fields>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'termsDueDate'">
-          End Date
-        </app-value-fields>
-      </div>
-
-      <div>
-        <h4>Prep Work</h4>
-        <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'orderPrepared'">
-          Preppared
-        </app-value-fields>
-      </div>
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="activePO" >
-          <mat-label>Active</mat-label>
-        </mat-slide-toggle>
-      </div>
     </div>
   </mat-card>
 </ng-template>
+
+
