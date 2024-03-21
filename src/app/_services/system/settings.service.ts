@@ -47,6 +47,7 @@ export interface ITerminalSettings {
   printServerEnable  : boolean;
   remoteReceipt   : string;
   remotePrint     : boolean;
+  remotePrepPrint: boolean;
 }
 
 

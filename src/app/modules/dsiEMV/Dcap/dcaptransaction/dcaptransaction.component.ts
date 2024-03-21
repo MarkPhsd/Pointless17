@@ -47,6 +47,7 @@ export class DCAPTransactionComponent implements OnInit {
   autoActionData: any;
   terminalSettings$: Observable<ITerminalSettings>;
   result: any;
+  response: DcapRStream;
 
   constructor(
     public  userAuthService       : UserAuthorizationService,
@@ -244,6 +245,7 @@ export class DCAPTransactionComponent implements OnInit {
       } else {
         this.processing = false
         this.message = 'Processing failed, ' + JSON.stringify(response)
+        this.response = response;
         return of(null)
       }
     }
@@ -348,11 +350,8 @@ export class DCAPTransactionComponent implements OnInit {
 
     _close() {   this.dialogRef.close()  }
 
-
     get _tipValue() {
-      if (!this.tipValue) {
-        this.tipValue = '0.00'
-      }
+      if (!this.tipValue) {  this.tipValue = '0.00' }
       return this.tipValue;
     }
 
@@ -360,6 +359,7 @@ export class DCAPTransactionComponent implements OnInit {
       this.processing = false;
       this.errorMessage = ''
       this.message = ''
+      this.response = null;
     }
 
     readResult(cmdResponse: DcapRStream) {

@@ -189,6 +189,7 @@ export class PosEditSettingsComponent implements OnInit {
       printServerEnable :[],// : boolean;
       remoteReceipt:[],//
       remotePrint: [],
+      remotePrepPrint: [],
     })
 
     this.dsiEMVSettings = this.fb.group({

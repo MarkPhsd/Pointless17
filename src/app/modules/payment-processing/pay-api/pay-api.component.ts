@@ -23,19 +23,21 @@ export class PayAPIComponent implements OnInit {
   cardInValid: boolean;
   cvvInvalid: boolean;
   action$: Observable<any>;
-  aquireKey$: Observable<any>;
-  payment$: Observable<any>;
+
   @Input() order: IPOSOrder;
   formInitialized: boolean;
   publicKey: string;//"[Token Key Goes Here]"
-
+  payAPIKeyEnabled: boolean;
+  payAPIKeyExists$ : Observable<any>;
+  payMID$: Observable<any>;
+  payment$: Observable<any>;
   constructor(
     private fb: FormBuilder,
-    private paymentService: DcapPayAPIService) { }
+    private dcapPayAPIService: DcapPayAPIService) { }
 
-  private setTokenValue(token: string): void {
-    this.tokenInput.nativeElement.value = token;
-  }
+  // private setTokenValue(token: string): void {
+  //   this.tokenInput.nativeElement.value = token;
+  // }
 
   ngOnInit(): void {
     // this.initForm()
@@ -48,8 +50,8 @@ export class PayAPIComponent implements OnInit {
       this.order.id          = 871919
     }
 
-    this.aquireKey$ = this.getAPIKey().pipe(switchMap(data => {
-      this.publicKey = data?.apiKey
+    this.payAPIKeyExists()
+    this.payMID$ = this.getPayMID().pipe(switchMap(data => {
       if (this.publicKey) {
         this.initDCap()
         return of(data)
@@ -58,22 +60,16 @@ export class PayAPIComponent implements OnInit {
   }
 
   encodeUrl(){
-    const originalString = "COASTSAND0GP:qvfznJd-edvaYyYNe6eRf_Itgt0tqF4aS8TZ1SBaQbWUT-7yS6L33YdQGYzAON3c3yDVxOIYZooyiuSs1yivSQ";
+    const originalString = "COASTSAND0GP:41543bd14e444bc5bf3598e15b9f7a78";
       // Encode the string
     this.encodedString = btoa(originalString);
     console.log(this.encodedString);
   }
 
-  getAPIKey() :Observable<KeyResponse> {
-    let getKey$    =  this.paymentService.getPrivatePayAPIKey()
-    let aquireKey$ =  this.paymentService.acquireApiKey();
+  getPayMID() :Observable<string> {
+    let getKey$    =  this.dcapPayAPIService.getPayMID()
     return getKey$.pipe(switchMap(data => {
-      if ( !data || !data.apiKey ) {
-        return aquireKey$
-      }
-      return of(data)
-    })).pipe(switchMap(data => {
-      this.publicKey = data?.apiKey;
+      this.publicKey = data;
       return of(data)
     }))
   }
@@ -90,7 +86,6 @@ export class PayAPIComponent implements OnInit {
     }
     this.loadScript(scriptUrl)
     .then(() => {
-      console.log('DatacapWebToken script loaded successfully');
       this.formInitialized = true
       console.log(window.DatacapWebToken);
     })
@@ -164,60 +159,53 @@ export class PayAPIComponent implements OnInit {
   //   }
   // }
 
-  initializeForm(): void {
-    var tokenCallback = (response: any) => {
-      if (response.Token) {
-        this.setTokenValue(response.Token);
-      } else {
-        // Handle error or no token scenario
-      }
-    };
-    window.DatacapWebToken.requestToken("[Token Key Goes Here]", "payment_form", tokenCallback);
-  }
+  // initializeForm(): void {
+  //   var tokenCallback = (response: any) => {
+  //     if (response.Token) {
+  //       this.setTokenValue(response.Token);
+  //     } else {
+  //       // Handle error or no token scenario
+  //     }
+  //   };
+  //   window.DatacapWebToken.requestToken(this.publicKey, "payment_form", tokenCallback);
+  // }
 
   requestToken(): void {
-    const tokenCallback = (response: any) => {
-      if (response.Error) {
-        alert("Token error: " + response.Error);
-      } else {
-        const tokenElement = document.getElementById("token");
-        if (tokenElement instanceof HTMLInputElement) { // This check ensures that tokenElement is not null and is an input element
-          tokenElement.value = response.Token;
-          // Here, you might want to do something with the token, like sending it to your server;
-          if (response.token) {
-            let posPayment = {} as IPOSPayment;
-            posPayment.orderID    = this.order.id;
-            posPayment.amountPaid = this.order.total;
-            posPayment.preAuth    = response?.token;
-            this.payment$ = this.paymentService.sale(posPayment).pipe(switchMap(data => {
-              ///then we use this to apply to an order
-              //and complete the sale
-              return of(data)
-            }))
+
+    console.log('request token')
+     const tokenCallback = (response: any) => {
+         console.log('All response', response)
+          if (response.Error) {
+            alert("Token error: " + response.Error);
+          } else {
+
+            console.log('response', response.Token)
+            // Here, you might want to do something with the token, like sending it to your server;
+            if (response.Token) {
+                let posPayment = {} as IPOSPayment;
+                posPayment.orderID    = this.order.id;
+                posPayment.amountPaid = this.order.total;
+                posPayment.preAuth    = response?.Token;
+                this.payment$ = this.dcapPayAPIService.sale(response,posPayment).pipe(switchMap(data => {
+                   return of(data)
+                }))
+
           }
-        } else {
-          console.error("Token input element not found");
-        }
+        };
       }
-    };
 
-    window.DatacapWebToken.requestToken(this.publicKey, "payment_form", tokenCallback);
+      console.log('public key', this.publicKey)
+      let mid  = this.publicKey
+      window.DatacapWebToken.requestToken(mid, "payment_form", tokenCallback);
+
   }
 
-  acquireInitialApiKey() {
-    this.aquireKey$ = this.paymentService.acquireInitialApiKey().pipe(switchMap(data => {
-      this.publicKey = data.apiKey
+  payAPIKeyExists() {
+    this.payAPIKeyExists$ = this.dcapPayAPIService.payAPIKeyExists().pipe(switchMap(data => {
+      this.payAPIKeyEnabled = data;
       return of(data)
     }))
   }
-
-  acquireApiKey() {
-    this.aquireKey$ = this.paymentService.acquireApiKey().pipe(switchMap(data => {
-      this.publicKey = data.apiKey
-      return of(data)
-    }))
-  }
-
 
 
 }

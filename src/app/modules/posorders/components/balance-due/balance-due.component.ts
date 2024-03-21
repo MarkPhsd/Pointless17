@@ -137,7 +137,7 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   initTransactionUISettings() {
-      this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
+    this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
       switchMap(data => {
         if (data) {
           this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
@@ -153,7 +153,9 @@ export class ChangeDueComponent implements OnInit  {
       this.printing$ = this.processSendOrder(this.order)
       return of(data)
     })).pipe(switchMap(data => {
-      if (this.uiTransactions.autoPrintReceiptOnClose) {
+      console.log('Auto Print Receipt on Close', this.uiTransactions?.autoPrintReceiptOnClose)
+      if (this.uiTransactions?.autoPrintReceiptOnClose) {
+        console.log('Print Order', this.order?.id)
         this.printingService.previewReceipt(true, this.order)
       }
       return of(data)
@@ -275,7 +277,6 @@ export class ChangeDueComponent implements OnInit  {
     return  this.orderService.getOrder(site, orderID.toString(), false).pipe(
       switchMap(data => {
         this.orderMethodsService.updateOrderSubscription(data)
-
         setTimeout(() => {
           this.dialogRef.close()
         }, 100);

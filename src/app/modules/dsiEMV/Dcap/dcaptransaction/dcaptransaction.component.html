@@ -1,27 +1,17 @@
-<!-- <div *ngIf="isDev">Dev On</div> -->
 <div *ngIf=" (action$ | async) as action"></div>
 <div *ngIf="(uiSettings$  | async) as ui">
-
   <div *ngIf="(terminalSettings$  | async) as terminalSettings; else loading">
-
-    <!-- enure validated -->
     <div *ngIf="(!dsiEmv || (!dsiEmv?.TranDeviceID || dsiEmv?.TranDeviceID === '')) || !posPayment">
-
       <div *ngIf="!posPayment">
         <mat-icon>alert</mat-icon> No Payment Found
       </div>
-
       <div *ngIf="(!dsiEmv || (!dsiEmv?.TranDeviceID || dsiEmv?.TranDeviceID === ''))">
         <mat-icon>alert</mat-icon> No ID found for Device. {{terminalSettings?.TranDeviceID}}
       </div>
-
       <button mat-raised-button (click)="_close()">Close</button>
     </div>
 
-    <!--  -->
-
     <mat-card *ngIf="dsiEmv">
-
       <mat-card-title>
         # {{posPayment.id}}
         <h3>
@@ -31,12 +21,17 @@
 
       <mat-card-subtitle style="font-size:1.1em;font-weight:400">
         <div *ngIf="resultMessage">
-          {{resultMessage}}
+          Result Mesage {{resultMessage}}
         </div>
         <div *ngIf="message">
-          {{message}}
+          <h3>Text Response : {{response?.TextResponse}}</h3>
+          <h3>Response Origin : {{response?.ResponseOrigin}}</h3>
+          <h3>DSIX Return Code : {{response?.DSIXReturnCode}}</h3>
+          <h3>Cmd Status : {{response?.CmdStatus}}</h3>
+         <!-- Message: {{message}} -->
         </div>
         <div *ngIf="errorMessage">
+
           <h3><mat-icon color="warn">warning</mat-icon>  {{errorMessage}}</h3>
         </div>
       </mat-card-subtitle>

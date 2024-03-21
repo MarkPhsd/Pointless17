@@ -456,6 +456,7 @@ export class PrintingService {
     let printWindow = new this.electronService.remote.BrowserWindow({show: false, width: 350, height: 600 })
     if (options.silent) { printWindow.hide(); }
 
+    console.log('printElectronForLabels contents', contents)
     return  printWindow.loadURL(contents)
       .then( e => {
 
@@ -465,10 +466,8 @@ export class PrintingService {
         printWindow.webContents.print(
           options,
           (success, failureReason) => {
-
             try {
               printWindow.close();
-              console.log('window close')
               printWindow = null;
             } catch (error) {
               console.log('error close window', error)
@@ -488,12 +487,13 @@ export class PrintingService {
 
   printLabelElectron(printString: string, printerName: string) {
     const uuid = UUID.UUID().slice(0,5);
-    // const file = `file:///c://pointless//labels//print${uuid}.txt`
-    // const fileName = `c:\\pointless\\labels\\print${uuid}.txt`;
-    const file = `file:///c://pointless//print.txt`
-    const fileName = `c:\\pointless\\print.txt`;
+    console.log(printString, printerName)
+    const file = `file:///c://pointless//labels//print${uuid}.txt`
+    let fileName = `c:\\pointless\\labels\\print${uuid}.txt`;
     try {
-      this.saveContentsToFile(fileName, printString);
+       this.saveContentsToFile(fileName, printString);
+      // fileName = `c:\\pointless\\print.txt`;
+      //  this.saveContentsToFile(fileName, printString);
     } catch (error) {
       this.siteService.notify(`File could not be written.
                                 Please make sure you have a writable folder ${fileName}`, 'Close', 3000, 'red')
@@ -506,6 +506,7 @@ export class PrintingService {
     } as printOptions
 
     try {
+
       this.printElectronForLabels( file, printerName, options )
     } catch (error) {
       return false
@@ -900,6 +901,7 @@ export class PrintingService {
   getLabelPrinter() {
     return
   }
+
   getLabelMenuItem(site : ISite, item: any): Observable<IMenuItem> {
     let  menuItem$  : Observable<IMenuItem>
     if (!item.menuItem) {
@@ -945,11 +947,7 @@ export class PrintingService {
     try {
       const fileWriting = this.electronService.remote.require('./datacap/transactions.js');
       let response      : any;
-      // response   =  await fileWriting.createFile(filePath, contents)
-      response          =  await fileWriting.writeToFile(filePath, contents)
-
-      console.log('save File' , filePath, contents )
-
+      response           =  await fileWriting.writeToFile(filePath, contents)
     } catch (error) {
       this.siteService.notify(`File could not be written. ${error}`, 'Close', 3000, 'red')
     }
@@ -1036,8 +1034,6 @@ export class PrintingService {
     const item$ = this.settingService.getSettingByNameCachedNoRoles(site, name)
     const printer$ = item$.pipe(
       switchMap(
-      // {
-        // next:
         data => {
           if (!data) {
             const item = {} as ISetting;

@@ -35,6 +35,9 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
   public _connect     = new BehaviorSubject<any>(null);
   terminalSettings$ : Observable<any>;
   processCardPointResonse$: Observable<any>;
+  sendAuth$: Observable<any>;
+
+  processing: boolean;
 
   initConnectSubscriber() {
     this._connect.subscribe(
@@ -221,21 +224,27 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
 
  sendAuthCardAndCapture(manual: boolean) {
     // this.methodsService.initValues()
+    this.processingTransaction = true
     const sendAuth$ = this.methodsService.sendAuthCard(null, true, manual);
     const tip$  = this.methodsService.getProcessTip(this.methodsService.boltTerminal.xSessionKey);
     this.methodsService.processing = true;
     this.siteService.getAssignedSite();
-    sendAuth$.subscribe(data => {
-      if (!data || data.errorcode != 0) {
-        if (data.errorcode == 7 ) {
+    this.sendAuth$ = sendAuth$.pipe(
+      switchMap(data => {
+        if (!data || data.errorcode != 0) {
+          if (data.errorcode == 7 ) {
+            this.siteService.notify(`Error 7 Occured : result ${data?.errormessage}`, 'close', 90000, 'red')
+            this.processingTransaction = false
           return;
         }
-        this.orderService.notificationEvent(`result ${data?.errormessage}`, 'Error Occured')
+        this.siteService.notify(`Error Occured : result ${data?.errormessage}`, 'close', 90000, 'red')
+        this.processing = false
         return
       }
       const item = {request: this.methodsService.request, response: data};
       this._sale.next(item)
-    })
+      return of(data)
+    }))
 
  }
 

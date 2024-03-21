@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup, FormGroupDirective,UntypedFormControl ,NgForm, UntypedFormBuilder, FormGroup} from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { Observable, switchMap, of } from 'rxjs';
+import { Observable, switchMap, of, ObservableNotification } from 'rxjs';
 import { clientType, IProductCategory, IServiceType, ISetting } from 'src/app/_interfaces';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { AuthenticationService, IItemBasic, MenuService } from 'src/app/_services';
@@ -12,6 +12,7 @@ import { ebayHeaders } from 'src/app/_services/resale/ebay-api.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { DcapPayAPIService } from 'src/app/modules/payment-processing/services/dcap-pay-api.service';
 
 @Component({
   selector: 'app-uitransactions',
@@ -38,6 +39,10 @@ export class UITransactionsComponent implements OnInit {
   receiptList$    :  Observable<IItemBasic[]>;
   receiptList     : IItemBasic[];
   isAdmin: boolean
+  payAPIKeyExists$ : Observable<any>;
+  aquireKey$ : Observable<any>;
+  payAPIKeyEnabled: boolean;
+
   constructor(
       private uISettingsService: UISettingsService,
       private settingService   : SettingsService,
@@ -48,6 +53,7 @@ export class UITransactionsComponent implements OnInit {
       private menuService: MenuService,
       private fb: UntypedFormBuilder,
       public labelingService: LabelingService,
+      private paymentService: DcapPayAPIService,
       private authenticationService: AuthenticationService,
   ) {
   }
@@ -66,6 +72,7 @@ export class UITransactionsComponent implements OnInit {
 
     this.categories$     = this.menuService.getCategoryListNoChildren(site);
 
+    this.payAPIKeyExists();
     this.initUITransactionSettings()
     this.saving$  = null;
     this.testForm = this.fb.group({
@@ -115,6 +122,43 @@ export class UITransactionsComponent implements OnInit {
         this.payPalEnabled = this.uiTransactions.payPalEnabled
         this.vipCustomer$ = null;
       }
+  }
+
+
+  acquireInitialApiKey() {
+    this.aquireKey$ = this.paymentService.acquireInitialApiKey().pipe(switchMap(data => {
+      // this.publicKey = data.apiKey
+
+      this.sitesService.notify(`Result  ${data?.message} - ${data?.returnCode}`,'close', 50000, 'green')
+      this.payAPIKeyExists();
+
+      return of(data)
+    }))
+  }
+
+  acquireApiKey() {
+    this.aquireKey$ = this.paymentService.acquireApiKey().pipe(switchMap(data => {
+      // this.publicKey = data.apiKey
+      this.sitesService.notify(`Result  ${data?.message} - ${data?.returnCode}`,'close', 50000, 'green')
+      this.payAPIKeyExists();
+      return of(data)
+    }))
+  }
+
+  payAPIKeyExists() {
+    this.payAPIKeyExists$ = this.paymentService.payAPIKeyExists().pipe(switchMap(data => {
+      this.payAPIKeyEnabled = data;
+      return of(data)
+    }))
+  }
+
+  deleteKey( ) {
+
+    const warn = window.confirm('Are you usre you want to delete the key? You may have to reset from your account')
+    if (!warn) { return }
+    this.payAPIKeyExists$ = this.paymentService.deleteKey().pipe(switchMap(data => {
+      return  this.paymentService.payAPIKeyExists()
+    }))
   }
 
   updateSetting(){

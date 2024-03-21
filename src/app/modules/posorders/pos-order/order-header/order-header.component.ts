@@ -158,13 +158,22 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     const diag = this.fbProductButtonService.openOrderEditor(this.order)
   }
 
-
   remotePrint(message:string, exitOnSend: boolean) {
     const order = this.order;
+    if (message == 'printReceipt') {
+
+    }
     if (this.posDevice) {
-      if (this.posDevice?.remotePrint) {
+      let pass = false
+      if (message === 'printPrep') {
+        if (this.posDevice?.remotePrepPrint) {
+          pass = true
+        }
+      }
+
+      if (this.posDevice?.remotePrint || pass) {
         const serverName = this.uiTransactionSettings.printServerDevice;
-        let remotePrint = {message: 'printReceipt', deviceName: this.posDevice.deviceName,
+        let remotePrint = {message: message, deviceName: this.posDevice.deviceName,
                            printServer: serverName,id: order.id,history: order.history} as any;
         const site = this.siteService.getAssignedSite()
         this.printAction$ =  this.paymentService.remotePrintMessage(site, remotePrint).pipe(switchMap(data => {
@@ -186,6 +195,8 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
     return false
   }
+
+
   printReceipt(){
     const order = this.order;
 
@@ -265,7 +276,6 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     if (this.remotePrint('printPrep', this.posDevice?.exitOrderOnFire)) {
       return
     }
-
 
     // const expo$ = this.paymentsMethodsProcessService.sendToPrep
     let extiOnFire : boolean

@@ -1,5 +1,5 @@
 <div *ngIf="(action$ | async) as action"></div>
-
+<div *ngIf="(aquireKey$ |async) as action"></div>
 <ng-template #loading>... loading
   <mat-spinner [diameter]="25"></mat-spinner>
 </ng-template>
@@ -477,89 +477,194 @@
           </mat-card>
 
           <mat-card>
-            <h4>Datacap </h4>
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="dCapEnabled" >
-                <mat-label>DCAP Integration</mat-label>
-              </mat-slide-toggle>
-            </div>
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="dCapSurcharge" >
-                <mat-label>DCAP Surcharge</mat-label>
-              </mat-slide-toggle>
-            </div>
+            <mat-card-title>
+              <h3>Datacap </h3>
+            </mat-card-title>
+            <mat-card-content>
 
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="dcapMultiPrice" >
-                <mat-label>Data Cap Multi Price</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-            <div class="toggle-fields" >
-              <app-value-fields
-                    style="width:100px"
-                    [inputForm]="inputForm"
-                    [fieldName]="'dcapDualPriceValue'">
-                  Dual Price / Cash Discount
-                </app-value-fields>
-                <mat-label>Enter value .035 is 3.5%</mat-label>
+              <h4>DC Direct API</h4>
+              <div>
+                <mat-label>MID & Account is configured in the config file. </mat-label>
+                <mat-label>Device settings are configured per terminal via terminal settings.</mat-label>
+              </div>
               <mat-divider></mat-divider>
-            </div>
-
-            <div class="toggle-fields" >
-                <app-value-fields
-                    style="width:100px"
-                    [inputForm]="inputForm"
-                    [fieldName]="'dCapSurchargeValue'">
-                  Surcharge Value
-                </app-value-fields>
-                <mat-label>Enter value .035 is 3.5%</mat-label>
-                <mat-divider></mat-divider>
-            </div>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="dsiEMVAndroidEnabled">
-                <mat-label>Data Cap EMV Android</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="dsiEMVNeteEpayEnabled">
-                <mat-label>Data Cap Netepay PDCX</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-            <div class="toggle-fields">
+              <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="dsiEMVIP">
-                <mat-label>Datacap EMV IP</mat-label>
-              </mat-slide-toggle>
-            </div>
+                          formControlName="dCapEnabled" >
+                  <mat-label>DC Direct Integration</mat-label>
+                </mat-slide-toggle>
+              </div>
 
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="dsiTipPrompt" >
-                <mat-label>Data Cap Prompt Tip</mat-label>
-              </mat-slide-toggle>
-            </div>
+              <div  style="margin-left:20px"  *ngIf="inputForm.controls['dCapEnabled'].value">
 
+                  <div class="toggle-fields">
+                    <mat-slide-toggle
+                              formControlName="dCapSurcharge" >
+                      <mat-label>DCAP Surcharge</mat-label>
+                    </mat-slide-toggle>
+                  </div>
 
+                  <div style="width:225px">
+                    <app-value-fields
+                        style="width:100px"
+                        [inputForm]="inputForm"
+                        [fieldName]="'dCapSurchargeValue'">
+                      Surcharge Value
+                    </app-value-fields>
+                    <mat-label>Enter value .035 is 3.5%</mat-label>
+                  </div>
 
+                  <div class="toggle-fields">
+                    <mat-slide-toggle
+                              formControlName="dcapMultiPrice" >
+                      <mat-label>Data Cap Multi Price</mat-label>
+                    </mat-slide-toggle>
+                  </div>
 
-            <div>
-              <mat-label>Enter Values with commas, E.g. 10,15,20.</mat-label>
-              <app-value-fields
-                  [inputForm]="inputForm"
-                  [fieldName]="'dsiTipPromptValues'">
-                Prompt Tip Values
-              </app-value-fields>
-            </div>
+                  <div class="toggle-fields" style="width:225px">
+                    <app-value-fields
+                          style="width:100px"
+                          [inputForm]="inputForm"
+                          [fieldName]="'dcapDualPriceValue'">
+                        Dual Price / Cash Discount
+                      </app-value-fields>
+                      <mat-label>Enter value .035 is 3.5%</mat-label>
+                    <mat-divider></mat-divider>
+                  </div>
 
+                  <div class="toggle-fields" >
+
+                  <mat-divider></mat-divider>
+
+                      <div class="toggle-fields">
+                        <mat-slide-toggle
+                                  formControlName="dsiTipPrompt" >
+                          <mat-label>Data Cap Prompt Tip</mat-label>
+                        </mat-slide-toggle>
+                      </div>
+
+                      <div style="width:225px">
+                        <mat-label>Enter Values with commas, E.g. 10,15,20.</mat-label>
+                        <app-value-fields
+                            [inputForm]="inputForm"
+                            [fieldName]="'dsiTipPromptValues'">
+                          Prompt Tip Values
+                        </app-value-fields>
+                      </div>
+                  </div>
+
+              </div>
+
+              <h4>Pay API</h4>
+              <div>
+                <mat-label>MID & Account is configured in the config file. </mat-label>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="dcapPayAPIEnabled" >
+                  <mat-label>DCAP PAYAPI Enabled</mat-label>
+                </mat-slide-toggle>
+
+                <div *ngIf="inputForm.controls['dcapPayAPIEnabled'].value">
+                  <div  *ngIf="(payAPIKeyExists$ | async) as key"></div>
+                  <div  style="margin:5px">
+                    <h3><mat-icon>key</mat-icon>Key Exists: {{payAPIKeyEnabled}}</h3>
+                    <button *ngIf="!payAPIKeyEnabled" class="payment-buttons" mat-raised-button color="primary" (click)="acquireInitialApiKey()">Init Key</button>
+                    <button *ngIf="payAPIKeyEnabled" class="payment-buttons" mat-raised-button color="primary" (click)="acquireApiKey()">Replace Key</button>
+                    <button *ngIf="payAPIKeyEnabled" class="payment-buttons" mat-raised-button color="primary" (click)="deleteKey()">Delete Key</button>
+                  </div>
+                </div>
+
+              </div>
+
+              <div style="margin-left:20px" *ngIf="inputForm.controls['dcapPayAPIEnabled'].value">
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="dcapPayAPIPreAuth">
+                    <mat-label>Pre Auth</mat-label>
+                  </mat-slide-toggle>
+                </div>
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="dcapPayAPIZeroAuth">
+                    <mat-label>Zero Auth</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="dcapPayAPITokenAuth">
+                    <mat-label>Pre Auth</mat-label>
+                  </mat-slide-toggle>
+                </div>
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="dcapPayAPIRecurringAuth">
+                    <mat-label>Zero Auth</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="dCapPayAPISurcharge">
+                    <mat-label>Surcharge</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div  style="width:225px">
+                  <app-value-fields
+                        [inputForm]="inputForm"
+                        [fieldName]="'dCapPayAPISurchargeValue'">
+                      Surcharge Value
+                  </app-value-fields>
+                  <mat-label>Enter value .035 is 3.5%</mat-label>
+                </div>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="dcapPayAPIMultiPrice">
+                    <mat-label>Dual Price</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div  style="width:225px">
+                   <app-value-fields
+                        style="width:100px"
+                        [inputForm]="inputForm"
+                        [fieldName]="'dcapPayAPIDualPriceValue'">
+                    Dual Price Value
+                  </app-value-fields>
+                  <mat-label>Enter value .035 is 3.5%</mat-label>
+                </div>
+
+              </div>
+
+              <h4>Deprecated Net Epay</h4>
+              <mat-divider></mat-divider>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="dsiEMVAndroidEnabled">
+                  <mat-label>Data Cap EMV Android</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="dsiEMVNeteEpayEnabled">
+                  <mat-label>Data Cap Netepay PDCX</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <!-- <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="dsiEMVIP">
+                  <mat-label>Datacap EMV IP</mat-label>
+                </mat-slide-toggle>
+              </div> -->
+
+            </mat-card-content>
           </mat-card>
 
           <mat-divider></mat-divider>
@@ -571,6 +676,7 @@
                 <mat-label>Tri POS (FISGlobal)</mat-label>
               </mat-slide-toggle>
             </div>
+            <mat-label>Settings are configured in the config file and per terminal via terminal settings.</mat-label>
           </mat-card>
 
           <mat-card>

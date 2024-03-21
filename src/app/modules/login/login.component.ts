@@ -17,6 +17,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { ElectronService } from 'ngx-electron';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { PollingService } from 'src/app/_services/system/polling.service';
 
 @Component({
     selector   : 'login-dashboard',
@@ -142,6 +143,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private electronService        : ElectronService,
         private settingService         : SettingsService,
         private paymentMethodsservice  : PaymentsMethodsProcessService,
+        private pollingService: PollingService,
         @Optional() private dialogRef  : MatDialogRef<LoginComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
     )
@@ -452,6 +454,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           //for some reason they were here, but they prevented a login,
           //after login it would log out. but reviewing these two lines does not
           //reveal why.
+          this.pollingService._poll.next(true)
           this.spinnerLoading = false;
           this.orderMethodsService.updateOrder(null)
           this.paymentMethodsservice._sendOrderAndLogOut.next(null)

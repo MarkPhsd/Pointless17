@@ -1,3 +1,4 @@
+<div *ngIf="(sendAuth$ | async) as auth"></div>
 <div *ngIf="(terminalSettings$ | async) as termainal">
 
   <div  *ngIf="methodsService.boltInfoInitialized &&
@@ -23,22 +24,21 @@
 
         <div class="transaction-buttons-grid" >
 
-          <div  *ngIf="!methodsService.payment?.account">
-            <button [disabled]="!methodsService.amount"
+          <div  *ngIf="!methodsService.payment?.account && methodsService.amount">
+            <!-- processingTransaction {{processingTransaction}} -->
+            <button [disabled]=" processingTransaction  || (!methodsService.boltTerminal || methodsService.boltTerminal.xSessionKey === '')"
                     mat-raised-button color="primary"
                     (click)="sendAuthCardAndCapture(false)">
                     Sale</button>
           </div>
 
           <div  *ngIf="!methodsService.payment.account">
-            <button [disabled]="!methodsService.manualPrompt && !methodsService.amount &&
-                                (!methodsService.boltTerminal ||
-                                methodsService.boltTerminal.xSessionKey === '')"
+            <button [disabled]="processingTransaction &&  (!methodsService.boltTerminal ||  methodsService.boltTerminal.xSessionKey === '') "
                     mat-raised-button color="primary"
                     (click)="sendAuthCardAndCapture(true)">
                     Manual<br>
-                    <div *ngIf="methodsService.payment.amountPaid < 0">  Refund</div>
-                    <div *ngIf="methodsService.payment.amountPaid > 0">  Sale</div>
+                <div *ngIf="methodsService.payment.amountPaid < 0">  Refund</div>
+                <div *ngIf="methodsService.payment.amountPaid > 0">  Sale</div>
             </button>
           </div>
 

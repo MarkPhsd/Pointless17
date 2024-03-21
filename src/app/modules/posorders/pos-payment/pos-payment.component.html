@@ -90,11 +90,9 @@
                                             && platFormService.isApp()
                                             && isCreditProcessingEnabled
                                             ">
-
                                          <!--    ((order?.balanceRemaining != 0 || isZeroPaymentAllowed) &&
                                             ( order?.balanceRemaining < 0 ||  isNegativePaymentAllowed ))  -->
             <!--  && !paymentsEqualTotal -->
-
             <div *ngIf="!splitByItem">
               <h4>Payment Amount: {{paymentAmount | currency}}</h4>
             </div>
@@ -211,7 +209,7 @@
                 <div class="item-container item-buttons-container">
                   <div>
                     <button mat-raised-button
-                            class="payment-buttons"  
+                            class="payment-buttons"
                             (click)="goToPaymentMethod()" >
                       Start Over
                       <mat-icon>back</mat-icon>
@@ -395,7 +393,7 @@
         [creditBalanceRemaining]="creditPaymentAmount"
         [paymentAmount] ="order.balanceRemaining"
         [isApp]         ="isApp" >
-      <div>Total</div> 
+      <div>Total</div>
     </cash-payment-buttons>
   </ng-container>
 </ng-template>

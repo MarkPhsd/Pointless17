@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DcapPayAPIService } from '../services/dcap-pay-api.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
+import { Observable, of, switchMap } from 'rxjs';
 // declare var DatacapHostedWebToken: any; // This allows TypeScript to recognize the global variable
 
 @Component({
@@ -13,6 +15,12 @@ export class PayAPIFrameComponent implements OnInit {
   fieldsClass: string;
   customCSS = ".card-data { background-color: #ADD8E6; color: white; font-size: 1.3em; margin:5px}";
   inputForm: FormGroup;
+  order = {} as IPOSOrder;
+
+  payAPIKeyEnabled: boolean;
+  payAPIKeyExists$ : Observable<any>;
+  payMID$: Observable<any>;
+  payment$: Observable<any>;
 
   constructor(
     private fb: FormBuilder,
@@ -31,7 +39,13 @@ export class PayAPIFrameComponent implements OnInit {
     } else {
       script.src = 'https://token.dcap.com/v1/client/hosted';
     }
-
+    if (!this.order) {
+      this.order = {} as IPOSOrder;
+      this.order.subTotal    = 1.00;
+      this.order.taxTotal    = .07
+      this.order.total       = 1.07
+      this.order.id          = 871919
+    }
     document.head.appendChild(script);
     script.onload = () => {
       this.initializeForm();
@@ -42,21 +56,29 @@ export class PayAPIFrameComponent implements OnInit {
     var tokenCallback  = (response: any) => {
       console.log('response', response)
       if (response.Token) {
-        this.setTokenValue(response.Token);
+        // this.setTokenValue(response.Token);
+
+        if (response.token) {
+          let posPayment = {} as IPOSPayment;
+          posPayment.orderID    = this.order.id;
+          posPayment.amountPaid = this.order.total;
+          posPayment.preAuth    = response?.token;
+          this.payment$ = this.paymentService.sale(response, posPayment).pipe(switchMap(data => {
+          return of(data)
+       }))
+
+
       } else {
       }
     }
 
-    const token = 'qvfznJd-edvaYyYNe6eRf_Itgt0tqF4aS8TZ1SBaQbWUT-7yS6L33YdQGYzAON3c3yDVxOIYZooyiuSs1yivSQ'
-    window.DatacapHostedWebToken.init(token, 'token-iframe', tokenCallback);
-  }
+    const token = '41543bd14e444bc5bf3598e15b9f7a78'
+    window.DatacapHostedWebToken.init('41543bd14e444bc5bf3598e15b9f7a78', 'token-iframe', tokenCallback);
+  }}
 
   requestToken() {
     window.DatacapHostedWebToken.requestToken()
   }
-
-
-
 
 
 }

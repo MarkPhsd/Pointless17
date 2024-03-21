@@ -45,6 +45,7 @@ export interface SaleResponse {
 })
 export class DcapPayAPIService {
 
+
   site = this.siteService.getAssignedSite();
 
   constructor(private http: HttpClient,
@@ -77,6 +78,44 @@ export class DcapPayAPIService {
     return this.http.get<KeyResponse>(url)
   }
 
+  deleteKey() {
+      const controller = '/payAPI/'
+
+      const endPoint = "deleteKey"
+
+      const parameters = ``
+
+      const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.get<KeyResponse>(url)
+  }
+
+  payAPIKeyExists(): Observable<boolean> {
+
+    const controller = '/payAPI/'
+
+    const endPoint = "payAPIKeyExists"
+
+    const parameters = ``
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<boolean>(url)
+  }
+
+  getPayMID(): Observable<string> {
+
+    const controller = '/payAPI/'
+
+    const endPoint = "getPayMID"
+
+    const parameters = ``
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<string>(url)
+  }
+
   getPrivatePayAPIKey(): Observable<KeyResponse> {
 
     const controller = '/payAPI/'
@@ -90,17 +129,17 @@ export class DcapPayAPIService {
     return this.http.get<KeyResponse>(url)
   }
 
-  sale(posPayment: IPOSPayment) {
+  sale(response: any, posPayment: IPOSPayment) {
 
     const controller = '/payAPI/'
 
-    const endPoint = "sale"
+    const endPoint = "payAPISale"
 
     const parameters = ``
 
     const url = `${this.site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.get<any>(url)
+    return this.http.post <any>(url,{responseToken: response, posPayment: posPayment})
   }
 
   handlePaymentResponse(response: TokenResponse) {

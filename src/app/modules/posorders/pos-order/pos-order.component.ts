@@ -778,7 +778,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
             this.enableExitLabel = posDevice.enableExitLabel;
             return of(posDevice)
           } catch (error) {
-             this.siteService.notify('Error setting device info.' + error, 'Close', 5000, 'yellow')
+            this.siteService.notify(`Error setting device info, for device: ${devicename}` + JSON.stringify(error), 'Close', 10000, 'yellow')
           }
           return of(null)
         }

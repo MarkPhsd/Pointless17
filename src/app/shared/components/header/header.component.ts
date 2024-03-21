@@ -325,7 +325,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
             return of(posDevice)
 
           } catch (error) {
-            this.siteService.notify('Error setting device info.' + JSON.stringify(error), 'Close', 10000, 'yellow')
+            this.siteService.notify(`Error setting device info, for device: ${devicename}` + JSON.stringify(error), 'Close', 10000, 'yellow')
           }
         }
         return of(null)

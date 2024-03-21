@@ -485,8 +485,6 @@ export class RequestMessagesComponent implements OnInit {
   }
 
   _openOrderFromOrderMessage(event: IRequestMessage) {
-    //navigate to order
-    // console.log('event', event)
     const methods  = event?.method.split('=');
     if (methods[1]) {
       const value =  methods[1] //event.orderID

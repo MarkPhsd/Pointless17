@@ -65,6 +65,18 @@ export interface TransactionUISettings {
   dcapDualPriceValue     : number;
   dsiTipPrompt           : boolean;
   dsiTipPromptValues     : string;
+
+  dcapPayAPIEnabled         : boolean;
+  dcapPayAPIPreAuth         : boolean;
+  dcapPayAPIZeroAuth        : boolean;
+  dcapPayAPITokenAuth       : boolean;
+  dcapPayAPIRecurringAuth   : boolean;
+  dCapPayAPISurcharge          : boolean;
+  dCapPayAPISurchargeValue     : string;
+  dcapPayAPIMultiPrice         : boolean
+  dcapPayAPIDualPriceValue     : number;
+
+
   allowPreAuth           : boolean;
   payPalEnabled          : boolean;
   payPalClientID         : string;
@@ -924,6 +936,17 @@ export class UISettingsService {
       dsiTipPromptValues: [],
       allowPreAuth: [],
       printServerDevice: [],
+
+      dcapPayAPIEnabled         : [],
+      dcapPayAPIPreAuth         : [],
+      dcapPayAPIZeroAuth        : [],
+      dcapPayAPITokenAuth       : [],
+      dcapPayAPIRecurringAuth   : [],
+      dCapPayAPISurcharge          : [],
+      dCapPayAPISurchargeValue     : [],
+      dcapPayAPIMultiPrice         : [],
+      dcapPayAPIDualPriceValue     : [],
+
      })
   }
 

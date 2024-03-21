@@ -1,12 +1,19 @@
-<div *ngIf="(aquireKey$ | async) as key">
-  <div *ngIf="key.message">
-    {{key?.message}}
+<div *ngIf="(payMID$ | async) as key">
+  <div *ngIf="!key">
+    No MID Present
   </div>
-  <div *ngIf="key.apiKey">
-    Key Present
+</div>
+{{publicKey}}<br>
+
+4761739001010119 <br>
+12<br>
+2022<br>
+201<br>
+
+<div *ngIf="(payAPIKeyExists$ | async) as key">
+  <div *ngIf="!key">
+    No Key Present
   </div>
-  {{encodedString}}
-  <!-- {{key| json}} -->
 </div>
 
 <div *ngIf="(payment$ | async) as posPayment">
@@ -21,8 +28,8 @@
 <mat-card *ngIf="publicKey && formInitialized"
           class="centered-2 centered-flex"
           style="width:500px;">
-    <mat-card-title  style="border-radius:5px;padding:5px;background:rgb(177, 180, 192)">
-      <div class="ps-flex-group" style="background:rgb(140, 146, 180)">
+    <mat-card-title  style="border-radius:5px;padding:5px;background: rgb(68 96 210)">
+      <div class="ps-flex-group" style="background:rgb(189, 193, 219)">
         <div>
           <div style="margin-top:5px">
             Payment Details
@@ -56,16 +63,9 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <div  class="flex-grid-row">
-        <div style="margin:5px">
+      <div  class="flex-centered flex-grid-row">
+        <div style="margin:5px;float:right">
           <button class="payment-buttons" mat-raised-button color="primary" (click)="requestToken()">Pay</button>
-        </div>
-
-        <div style="margin:5px">
-          <button class="payment-buttons" mat-raised-button color="primary" (click)="acquireInitialApiKey()">Init Key</button>
-        </div>
-        <div style="margin:5px">
-          <button class="payment-buttons" mat-raised-button color="primary" (click)="acquireApiKey()">Replace Key</button>
         </div>
 
       </div>
