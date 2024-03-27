@@ -204,11 +204,11 @@
         <div *ngIf="(!auths?.disableItemSales)">
           <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>
           <ng-container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container>
+          <span *ngIf="(!auths.disableUOMSales)">
+            <ng-container [ngTemplateOutlet]="uomSales"></ng-container>
+          </span>
         </div>
 
-        <div *ngIf="(!auths.disableUOMSales)">
-          <ng-container [ngTemplateOutlet]="uomSales"></ng-container>
-        </div>
 
       </div>
     </span>
@@ -427,20 +427,19 @@
 </ng-template>
 
 <ng-template #uomSales>
-  <div>
-    <item-sales-card
-          (outputComplete)="setOutPutCompleted('uomSales')"
-          [site]          ="localSite"
-          [removeGiftCard]="true"
-          [viewType]      = "'sales'"
-          [groupBy]       ="'uom'"
-          [zrunID]        ="iBalanceSheet.id" >
-        <div class="header">
-          <mat-icon>menu</mat-icon> UOM Sales
-          <mat-divider></mat-divider>
-        </div>
-    </item-sales-card>
-  </div>
+  <item-sales-card
+        (outputComplete)="setOutPutCompleted('uomSales')"
+        [site]          ="localSite"
+        [zrunID]        ="iBalanceSheet.id"
+        [removeGiftCard]="true"
+        [viewType]      = "'sales'"
+        [groupBy]       ="'uom'"
+         >
+      <div class="header">
+        <mat-icon>menu</mat-icon> UOM Sales
+        <mat-divider></mat-divider>
+      </div>
+  </item-sales-card>
 </ng-template>
 
 <ng-template #itemAdjustmentVoids>

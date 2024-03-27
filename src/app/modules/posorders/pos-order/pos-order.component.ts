@@ -1147,20 +1147,19 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.printingService.previewReceipt()
   }
 
+  sendOrderToCustomer() { 
+    
+    this.order.clients_POSOrders.id
+    
+  }
+
   textNotify() {
-    // this.outPutTextNotify.emit(true)
     this.orderMethodsService.sendSSMSOrderISReady(this.order)
   }
 
   emailNotifyOrder(event) {
     this.orderMethodsService.emailOrder(this.order).subscribe(data => {
-      // if (data.isSuccessStatusCode  || data === 'success') {
       this.orderMethodsService.notifyEvent('Email Sent', 'Sent');
-      //   this.orderMethodService.notifyEvent('Email Sent', 'Success')
-      //  }
-      // if (!data.isSuccessStatusCode) {
-      //   this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
-      // }
     })
   }
 
@@ -1180,7 +1179,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   get newItemEntryView() {
-
     if (!this.order.completionDate || this.order.history ) {
       return this.newItemEntry
     }

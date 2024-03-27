@@ -18,7 +18,7 @@ export class ChangepasswordComponent implements OnInit {
   returnUrl : string;
   error     = '';
   statusMessage: any;
-
+  userName: string;
   //receive user
   @Input() user: IUser;
 
@@ -33,11 +33,13 @@ export class ChangepasswordComponent implements OnInit {
     //    if (this.authenticationService.userValue) {
     //      this.router.navigate(['/']);
     //  }
+
+    this.userName =   this.route.snapshot.paramMap.get('userName');
   }
 
   ngOnInit() {
       this.loginForm = this.formBuilder.group({
-          username:        ['', Validators.required],
+          username:        [this.userName, Validators.required],
           confirmpassword: ['', Validators.required],
           password:        ['', Validators.required],
           resetcode:       ['', Validators.required],
@@ -56,9 +58,9 @@ export class ChangepasswordComponent implements OnInit {
   updatePassword(){
     try {
       const user    = {} as IUser;
-      user.username = this.f.username.value
-      user.password = this.f.password.value
-      user.token    = this.f.resetcode.value
+      user.username = this.f.username.value.trim()
+      user.password = this.f.password.value.trim()
+      user.token    = this.f.resetcode.value.trim()
 
       this.submitted = true;
       this.statusMessage = "Waiting"

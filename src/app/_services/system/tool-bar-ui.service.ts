@@ -99,9 +99,7 @@ export class ToolBarUIService {
   }
 
   updateOrderBar(value: boolean) {
-
     const deviceInfo = this.authenticationService.deviceInfo;
-    // console.log('device info update order bar', deviceInfo)/
     if (deviceInfo && deviceInfo.phoneDevice) {
       return;
     }
@@ -114,7 +112,6 @@ export class ToolBarUIService {
 
     this.orderBar = value
     this._orderBar.next(value);
-
     this.resizeWindow();
   }
 

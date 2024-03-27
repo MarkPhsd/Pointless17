@@ -68,7 +68,7 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     this.voids$ = null;
     this.refunds$ = null;
     this.sales$ = null;
-    console.log('refresh type', this.type)
+    // console.log('refresh type', this.type)
     // console.log('sales')
     if (this.type === 'service') {
       this.refreshService();
@@ -120,7 +120,7 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.reportRunID = this.reportRunID;
 
 
-      console.log(this.type, searchModel, 'model')
+      // console.log(this.type, searchModel, 'model')
 
     this.sales$  = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => {
       this.checkList(1)

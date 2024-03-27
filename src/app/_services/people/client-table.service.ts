@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { EMPTY, Observable, of, } from 'rxjs';
-import { IClientTable, ISite, IUserProfile,employee, FlowVendor, ImportFlowVendorResults, UserPreferences }   from  'src/app/_interfaces';
+import { EMPTY, Observable, catchError, concatMap, of, switchMap } from 'rxjs';
+import { IClientTable, ISite, IUser, IUserProfile,employee, FlowVendor, ImportFlowVendorResults, UserPreferences }   from  'src/app/_interfaces';
 import { IDriversLicense } from 'src/app/_interfaces/people/drivers-license';
 import { IEmployeeClient } from './employee-service.service';
 import { IItemBasic } from '..';
 import { ErrorInterceptor } from 'src/app/_http-interceptors/error.interceptor';
+import { UserSwitchingService } from '../system/user-switching.service';
 
 export interface NamesCities {
   names: string[];
@@ -17,13 +18,35 @@ export interface NamesCities {
 })
 export class ClientTableService {
 
-
   constructor( private ErrorInterCeptor: ErrorInterceptor,
                private http: HttpClient,
                private auth: AuthenticationService) { }
 
   pageNumber = 1;
   pageSize  = 50;
+
+  createGuestAccount(site: ISite): Observable<IUser > {
+    const controller =  "/ClientTable/"
+
+    const endPoint = `CreateGuestAccount`
+
+    const url = `${site.url}${controller}${endPoint}`
+
+    return  this.http.get<IUser>(url).pipe(concatMap(data => {
+      // console.log('createGuestAccount', data)
+      const botaValue = `${data.username}:${data.password}`
+      data.authdata = window.btoa(botaValue)
+      // console.log('botaValue', botaValue, data.authdata)
+      data.message = "success"
+      data.token  = data?.password;
+      localStorage.setItem('user', JSON.stringify(data))
+      this.auth.updateUser(data)
+      return of(data)
+    }),catchError(data => {
+      console.log('createGuestAccount error', data)
+      return of (null)
+    }))
+  }
 
 
   getClient(site: ISite, id: any, overRideError?: boolean) : Observable<IClientTable> {

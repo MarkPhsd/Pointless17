@@ -90,7 +90,6 @@ export class DCAPTransactionComponent implements OnInit {
     }
 
     autoActions(data) {
-      // data.autoPay = false;
       if (data?.autoPay) {
         if (data?.value> 0 ) {
           this.payAmount();
@@ -136,7 +135,9 @@ export class DCAPTransactionComponent implements OnInit {
         return of(data)
       })).pipe(concatMap(data => {
         if (this.autoActionData) {
-          this.autoActions(this.autoActionData)
+          if (this.terminalSettings && this.dsiEmv) {
+            this.autoActions(this.autoActionData)
+          }
           return of(data)
         }
       }))

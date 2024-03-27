@@ -1,12 +1,31 @@
 @import "/src/mixins.scss";
 
-mat-card {
+.mat-card-class {
   width: 100%;
   height: calc(90vh - 125px);
   margin: 10px;
   overflow-y: auto;
   @include for-phone-only  {
-    height: calc(90vh - 125px);
+    overflow: auto;
+    height: calc(100vh - 125px);
+  }
+}
+
+.header-less-tabs .mat-tab-header { display: none; }
+.mat-tab-header { 
+  visibility: hidden;
+}
+.mat-tab-group { 
+  .mat-tab-header {
+    display: none;
+    visibility: hidden;
+  }
+}
+
+.invisible-tabs {
+  .mat-tab-header {
+    display: none;
+    visibility: hidden;
   }
 }
 
@@ -22,7 +41,6 @@ mat-tab {
 .instructions-small-view { 
   display: none;
   @include for-phone-only  {
- 
     display: flex;
   }
 }

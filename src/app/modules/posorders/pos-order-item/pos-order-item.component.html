@@ -2,6 +2,7 @@
 <div *ngIf="(printLabel$ | async) as item"></div>
 <div *ngIf="ui$ | async as ui"></div>
 
+
 <mat-card *ngIf="orderItem"
           id="panel"
           (swipeleft)="swipeOutItem()"
@@ -18,9 +19,11 @@
           <ng-container [ngTemplateOutlet]="purchaseOrderView"></ng-container>
         </div>
 
-         <ng-container [ngTemplateOutlet]="voidInfoView"></ng-container>
+        <ng-container [ngTemplateOutlet]="voidInfoView"></ng-container>
         <ng-container [ngTemplateOutlet]="formView"></ng-container>
       </div>
+
+      <ng-container *ngIf="mainPanel" [ngTemplateOutlet]="buyAgainViewUser"></ng-container>
 
       <div *ngIf="(mainPanel && !bottomSheetOpen) && !prepScreen">
         <ng-container [ngTemplateOutlet]="exitlabelButtonView"></ng-container>
@@ -36,21 +39,23 @@
           <ng-container [ngTemplateOutlet]="isDisplayMenuItemOn"></ng-container>
       </div>
 
-      <div *ngIf="!prepScreen && disableActions && enableItemReOrder">
-        <button aria-label="add "
-                color="accent"
-                [disabled]="!menuItem?.active && !menuItem?.webEnabled"
-                mat-raised-button
-                style="height:50px"
-                (click)="buyAgain(menuItem)">
-          <mat-icon>add</mat-icon>
-          Buy Again
-        </button>
-      </div>
       <ng-container [ngTemplateOutlet]="menuView"></ng-container>
     </div>
   </mat-card-content>
 </mat-card>
+
+<ng-template #buyAgain>
+
+    <button aria-label="add"
+            class="buy-again"
+            color="accent"
+            mat-raised-button
+            style="height:50px"
+            (click)="buyAgainClick(menuItem)">
+      <mat-icon>add</mat-icon>
+    </button>
+
+</ng-template>
 
 <ng-template #menuView>
   <div (click)="assignItem()"
@@ -71,6 +76,8 @@
                 #menu="matMenu">
         <span (mouseleave)="menuTrigger.closeMenu()">
           <div class="button-list">
+
+              <ng-container *ngIf="!mainPanel || isStaff"  [ngTemplateOutlet]="buyAgainViewStaff"></ng-container>
 
               <div *ngIf="!showEdit && (ui?.displayAdd)">
                 <button mat-raised-button    class="button"  color="accent" (click)="addItemToOrder()">
@@ -249,10 +256,9 @@
   </div>
 </ng-template>
 
-
 <ng-template #voidInfoView>
   <div class="grid-item-span" *ngIf="!isModifier">
-    <span *ngIf="!prepScreen && orderItem?.printed ">
+    <span *ngIf="(userAuthService?.isStaff) &&  !prepScreen && orderItem?.printed ">
       <mat-icon color="warn" >print</mat-icon>
       <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.printed | date: 'shortTime'}} </span>
     </span>
@@ -267,7 +273,6 @@
     </div>
   </div>
 </ng-template>
-
 
 <ng-template #itemNameView>
   <div [class]="productnameClass" >
@@ -339,8 +344,6 @@
   </div>
 </ng-template>
 
-
-
 <ng-template #purchaseOrderView>
   <div >
     <span *ngIf="purchaseOrderEnabled">
@@ -371,12 +374,18 @@
       % Off Savings $ {{orderItem?.itemOrderPercentageDiscount}},
     </span>
 
-    <span class='status-icon' *ngIf="orderItem?.printed && prepScreen && (!isModifier && orderItem?.id != orderItem?.idRef)">
+    <span class='status-icon' *ngIf="
+        (userAuthService?.isStaff) &&
+        orderItem?.printed && prepScreen && (!isModifier && orderItem?.id != orderItem?.idRef)
+        ">
       <mat-icon  class="mat-icon-label" color="warn"  *ngIf="orderItem?.printed && !prepScreen" >print</mat-icon>
       <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.printed | date: 'shortTime'}} </span>
     </span>
 
-    <span  class='ready-icon' *ngIf="orderItem?.itemPrepped && prepScreen && !isModifier">
+    <span  class='ready-icon' *ngIf="
+                (userAuthService?.isStaff) &&
+                orderItem?.itemPrepped && prepScreen && !isModifier
+            ">
       <mat-icon class="mat-icon-label" color="alert" *ngIf="prepScreen" >done</mat-icon>
       <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.itemPrepped | date: 'shortTime'}} </span>
     </span>

@@ -35,8 +35,6 @@ $white: #efefef;
   text-align: center;
   text-overflow: ellipsis;
   margin: 0.25em;
-  // font-size: 1.2em;
-  // max-height: 1em;
   font-size: 1.3em;
   height: 2em;
   font-weight: 500;
@@ -44,18 +42,18 @@ $white: #efefef;
   position: relative;
 
   @include for-phone-only  {
+
+    // display: grid;
+    // align-items: center;
+
     font-weight: 500;
     font-size: clamp(1.2rem, 1.4vw, 1.4rem);
-    // font-size: 1.75em;
+    height: 100%;
     margin: 0;
     position: inherit;
     -ms-transform: translateY(-20%);
     transform: translateY(20%);
   }
-
-  
-
-
 }
 
 .button {
@@ -130,6 +128,9 @@ img {
   @include for-phone-only  {
     min-width: 12vh;
     min-height: 12vh;
+
+    width: 12vh;
+    height: 12vh;
     // border-radius: 50%;
   }
 }

@@ -68,10 +68,12 @@ export class PollingService   {
   clearPoll() {
     this._poll.next(true)
     this.timer$.next(POLLING_INTERVAL);
+    this._poll.next(true)
   }
 
   pollOnce(): Observable<boolean> {
     this.getCurrentUrl()
+    this._poll.next(true)
     return this.http.get(`${this.apiUrl}/system/PingServer`).pipe(switchMap(data => {
       return of(true)
     }),

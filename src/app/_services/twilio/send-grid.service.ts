@@ -151,11 +151,8 @@ export class SendGridService {
   sendSMTPTest( emailTo: string, customerName: string): Observable<any> {
 
     const site = this.siteService.getAssignedSite()
-
     const controller =  "/FluentMail/"
-
     const endPoint = `sendSMTPTest`
-
     const item = {} as emailSMTP
     item.emailTo = emailTo;
     item.name = customerName;
@@ -167,7 +164,6 @@ export class SendGridService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.http.post<any>(url, item)
-
   }
 
 

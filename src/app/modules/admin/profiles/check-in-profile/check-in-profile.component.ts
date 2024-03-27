@@ -8,7 +8,6 @@ import { EMPTY, Observable, of, Subscription } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
 import { clientType, IClientTable, IUser, IUserProfile } from 'src/app/_interfaces';
-import { ClientType } from 'src/app/_interfaces/menu/price-schedule';
 import { IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { AWSBucketService, AuthenticationService, ContactsService, OrdersService } from 'src/app/_services';
@@ -189,7 +188,6 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       this.initDateRangeForm();
       this.initConfirmPassword();
       this.initSelectForm();
-
     })
 
   }

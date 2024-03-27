@@ -43,7 +43,7 @@ export class POSOrderScheduleCardComponent implements OnInit, OnDestroy {
     if (!order ||  order.preferredScheduleDate) {
       return null
     }
-    return  this.dateService.format(order?.preferredScheduleDate, 'mm/dd/yyyy');
+    return `Scheduled  ${this.dateService.format(order?.preferredScheduleDate, 'medium')}`
   }
   schedule() {
     this.router.navigate(['pos-order-schedule'])

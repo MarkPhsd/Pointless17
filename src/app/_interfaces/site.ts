@@ -1,6 +1,6 @@
 
 import { MatTableDataSource } from '@angular/material/table';
-import { ISalesPayments, ISalesReportingOrdersSummary,  } from './';
+import { ISalesPayments, ISalesReportingOrdersSummary, IUser,  } from './';
 
 export interface ISite {
 
@@ -13,6 +13,9 @@ export interface ISite {
     state:   string;
     zip:     string;
     phone:   string;
+
+    user: IUser;
+
     metrcURL: string;
     metrcLicenseNumber: string;
     metrcKey: string;

@@ -72,9 +72,14 @@
           <button mat-raised-button
                   style="height:75px;width:125px"
                   color='primary'
-                  aria-label="save"
+                  (click)="back()">
+            Back
+          </button>
+          <button mat-raised-button
+                  style="height:75px;width:125px"
+                  color='primary'
                   (click)="save()">
-            <mat-icon aria-label="save">save</mat-icon> Next
+              Next
           </button>
         </mat-card-actions>
       </mat-card-content>

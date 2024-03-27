@@ -148,7 +148,7 @@
       </button>
     </div>
 
-    <div  *ngIf=" ( order.creditBalanceRemaining > totalAuthPayments ) &&  (item?.voidReason != 0 && !item.voidReason) && item.tranCode != 'EMVSale'">
+    <div  *ngIf="item.voidAmount == 0 &&  ( order.creditBalanceRemaining > totalAuthPayments ) &&  (item?.voidReason != 0 && !item.voidReason) && item.tranCode != 'EMVSale'">
       <button   class="payment-buttons-sm"
                 style="width:125px"
                 *ngIf="order.creditBalanceRemaining > totalAuthPayments"
@@ -163,7 +163,8 @@
         Tip {{item?.tipAmount  | currency}}
     </div>
 
-    <div *ngIf=" !isUser && (( order.creditBalanceRemaining != 0 && totalAuthPayments > 0 ) || item.completionDate) &&  (item?.voidReason != 0 && !item.voidReason) "
+    <div *ngIf="item.voidAmount == 0 && (!isUser && (( order.creditBalanceRemaining != 0 && totalAuthPayments > 0 ) ||
+                 item.completionDate) &&  (item?.voidReason != 0 && !item.voidReason)) "
           style="font-size:1.2em;margin-top:10px">
       <button   color="accent"
                 class="payment-buttons-sm"

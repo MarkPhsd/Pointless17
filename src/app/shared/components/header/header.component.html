@@ -6,8 +6,8 @@
 <span *ngIf="(userSave$  | async) as pref"></span>
 <span *ngIf="(action$ | async) as action"></span>
 <mat-toolbar [class]="mattoolbar"
-            [color]="matToolbarColor"
-            [style]="headerBackColor">
+             [color]="matToolbarColor"
+             [style]="headerBackColor">
   <mat-toolbar-row class="mat-toolbar-spacing">
 
       <ng-container [ngTemplateOutlet]="backButtonView"></ng-container>

@@ -1,4 +1,4 @@
-  <mat-card class="centered centered-flex"
+  <mat-card class="centered centered-flex mat-card" 
             *ngIf="uiHomePageSetting; else loading">
         <mat-card-title>
           <div>
@@ -37,11 +37,15 @@
               <div [formGroup]="loginForm">
                 <div>
                   <mat-form-field appearance="outline">
-                      <mat-label>Phone or Email</mat-label>
+                      <mat-label>
+                        <span *ngIf="uiHomePageSetting.twilioEnabled">Phone </span> 
+                        <span *ngIf="uiHomePageSetting.smtpEmailEnabled && uiHomePageSetting.twilioEnabled">or</span>
+                        <span *ngIf="uiHomePageSetting.smtpEmailEnabled"> Email</span>
+                      </mat-label>
                       <input matInput type="text" formControlName="username" class="form-control"
                           [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
                       <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                          <div *ngIf="f.username.errors.required">Username is required</div>
+                          <div *ngIf="f.username.errors.required">You may use your number or email as account name</div>
                       </div>
                   </mat-form-field>
                 </div>
@@ -58,7 +62,6 @@
 
               <div >
                 <div *ngIf="submitted && (result$ | async) as result; else loading">
-                  <!-- {{result?.message | json}} -->
                 </div>
                 {{message}}
               </div>
@@ -69,6 +72,7 @@
 
               <div class="margin-5" >
                 <button mat-raised-button
+                        color="warn"
                         (click)='goBack()'>Cancel</button>
               </div>
         </mat-card-content>

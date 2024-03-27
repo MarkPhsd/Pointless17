@@ -3,8 +3,7 @@
 
   <div [class]="gridflow">
 
-    <div  *ngIf="(order && order.history == true || (order && order.completionDate))
-                || isStaff " >
+    <div  *ngIf="(order && order.history == true || (order && order.completionDate)) || isStaff " >
 
       <div *ngIf="isStaff && quickServiceTypes" class="flex-grid-row-5px">
 

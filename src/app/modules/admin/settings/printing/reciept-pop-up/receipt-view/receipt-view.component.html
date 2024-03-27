@@ -3,70 +3,70 @@
   <button  mat-raised-button (click) ="email$ = null">Clear</button>
 </div>
 
-  <div *ngIf="printView">
+<div *ngIf="printView">
 
-    <div *ngIf="(printAction$ | async) as printAction"></div>
+  <div *ngIf="(printAction$ | async) as printAction"></div>
 
-    <div *ngIf="(refreshView$ | async) as layout">
-      <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
-      <div #coachingReceiptView class="buttons-grid">
+  <div *ngIf="(refreshView$ | async) as layout">
+    <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
+    <div #coachingReceiptView class="buttons-grid">
 
-        <div *ngIf="platFormService.isApp()">
-          <button  mat-button (click)="print()">
-            <span *ngIf="printerName">
-              <mat-icon>print</mat-icon>{{printerName}}
-            </span>
-          </button>
-        </div>
-
-        <div *ngIf="!hideExit">
-          <button mat-button (click)="exit()">
-            <mat-icon>close</mat-icon> Exit
-          </button>
-        </div>
-
-      </div>
-
-      <div class="buttons-grid">
-        <span #coachingLink></span>
-        <span #coachingPDF></span>
-        <div>
-          <button *ngIf="order" mat-button (click)="email()">
-            <mat-icon>email</mat-icon>Email
-          </button>
-          <button mat-button
-                  [disabled]="!order || !order?.orderCode"
-                  *ngIf="!isElectronApp"
-                  (click)="openLink()">
-              <mat-icon>link</mat-icon>Link
-          </button>
-        </div>
-
-        <button  mat-button (click)="convertToPDF()">
-          <mat-icon>pdf</mat-icon> PDF
+      <div *ngIf="platFormService.isApp()">
+        <button  mat-button (click)="print()">
+          <span *ngIf="printerName">
+            <mat-icon>print</mat-icon>{{printerName}}
+          </span>
         </button>
-
       </div>
 
+      <div *ngIf="!hideExit">
+        <button mat-button (click)="exit()">
+          <mat-icon>close</mat-icon> Exit
+        </button>
+      </div>
+
+    </div>
+
+    <div class="buttons-grid">
+      <span #coachingLink></span>
+      <span #coachingPDF></span>
       <div>
+        <button *ngIf="order" mat-button (click)="email()">
+          <mat-icon>email</mat-icon>Email
+        </button>
+        <button mat-button
+                [disabled]="!order || !order?.orderCode"
+                *ngIf="!isElectronApp"
+                (click)="openLink()">
+            <mat-icon>link</mat-icon>Link
+        </button>
       </div>
 
-      <div class="mat-card-white">
-        <ng-container>
-          <ng-container [ngTemplateOutlet]="currentView"></ng-container>
-        </ng-container>
-      </div>
+      <button  mat-button (click)="convertToPDF()">
+        <mat-icon>pdf</mat-icon> PDF
+      </button>
+
+    </div>
+
+    <div>
+    </div>
+
+    <div class="mat-card-white">
+      <ng-container>
+        <ng-container [ngTemplateOutlet]="currentView"></ng-container>
+      </ng-container>
     </div>
   </div>
+</div>
 
 <ng-template #balanceSheetTemplate>
   <balance-sheet-view
-      id="printsection"
-      [printType]="'balanceSheetFinal'"
+      id                  ="printsection"
+      [printType]         ="'balanceSheetFinal'"
       [disableAuditButton]="true"
-      [autoPrint]="autoPrint"
-      [styles]="receiptStyles"
-      (renderComplete)="printViewCompleted('balance-sheet-view')">
+      [autoPrint]         ="autoPrint"
+      [styles]            ="receiptStyles"
+      (renderComplete)    ="printViewCompleted('balance-sheet-view')">
   </balance-sheet-view>
 </ng-template>
 

@@ -48,13 +48,12 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe(
         user => {
-        user = JSON.parse(localStorage.getItem('user')) as IUser;
-        this.user = user
+
         if (!user || !user.token) {
           this.menus = [] as AccordionMenu[];
           return
         }
-        this.user = user;
+        this.user = user
         this.refreshMenu(user)
       }
     )
@@ -74,14 +73,19 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
                 private authenticationService   : AuthenticationService,
     ) {
     this.site  =  this.siteService.getAssignedSite();
-
-    this.refreshToolBarType();
     if (this.siteService.phoneDevice) {
       this.submenuposition = 'submenu-position-tiny'
     }
     if (!this.siteService.phoneDevice) {
       this.submenuposition = 'submenu-position'
     }
+  }
+
+  ngOnInit() {
+    this.initMenus();
+    this.refreshToolBarType();
+    this.updateScreenSize();
+    this.initSubscription()
   }
 
   refreshToolBarType() {
@@ -106,18 +110,26 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngOnDestroy() {
+    if (this._user) { this._user.unsubscribe() }
+    this.initMenus();
+  }
+
+  initMenus() {
+    this.menus   = [] as AccordionMenu[];
+    this.submenu = [] as SubMenu[];
+    this.menu$ = of([])
+  }
   setSmallMenu() {
     const result = !this.smallMenu
     this.toolbarUIService.updateBarSize(result)
     localStorage.setItem('barSize', String(result))
-
     let fixed ;
     if (result == true) {
       fixed = false
     } else {
       fixed = true;
     }
-
     localStorage.setItem('barSizeFixed', String(fixed))
     this.updateScreenSize();
   }
@@ -133,45 +145,19 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
   minimizeMenu () {
     const result = true
-    console.log(result)
     this.toolbarUIService.updateBarSize(result)
     localStorage.setItem('barSize', String(result))
     this.updateScreenSize();
-    console.log('moust out')
   }
 
   @HostListener("window:resize", [])
   updateScreenSize() {
-
     this.tinyMenu = false
-
     this.gridtoggletiny = "grid-toggle-tiny"
-
-    // if (window.innerWidth < 599 || this.smallMenu) {
-    //   this.tinyMenu = true
-    //   this.gridtoggletiny = "grid-toggle-collapsed"
-    // }
-
     if (this.smallMenu) {
       this.tinyMenu = true
       this.gridtoggletiny = "grid-toggle-collapsed"
     }
-
-  }
-
-  ngOnInit() {
-    this.initMenu()
-    this.initSubscription()
-  }
-
-  ngOnDestroy() {
-    if (this._user) { this._user.unsubscribe() }
-    this.initMenus();
-  }
-
-  initMenus() {
-    this.menus   = [] as AccordionMenu[];
-    this.submenu = [] as SubMenu[];
   }
 
   initMenu() {
@@ -179,53 +165,39 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this.initMenus();
     const user = this.authenticationService.userValue;
     this.user  = user;
-    if (!user || !user.token) { return}
-    if (!user.roles) { return }
+    if (!user || !user.token || !user.roles) { return}
 
     const site       = this.siteService.getAssignedSite();
     const menuCheck$ = this.menusService.mainMenuExists(site);
-
     this.accordionMenu$ = menuCheck$.pipe(
       switchMap( data => {
-          
-          if (user && user.roles === 'admin') {
+          if (user?.roles === 'admin') {
             return  this.menusService.createMainMenu(user , site)
           }
-
-          if (user) {
-            return  this.menusService.getMenuGroupByName(site, this.menuName)
-          }
-
+          return  this.menusService.getMenuGroupByName(site, this.menuName)
         }
       )
     ).pipe(
       switchMap(data => {
-        if (!user.roles) {return}
-
+        if (!data) { return of(null)}
         if (user.roles === 'admin' ) {
-          if (!data) {  return }
+          if (!data) {  return of(null) }
           const menuGroup = data as MenuGroup;
           this.refreshMenuFromAccordion(menuGroup.accordionMenus)
-          return
+          return of(data)
         }
-
-        if (user.roles && user.roles != 'admin' ) {
-          if (!data) {  return }
-          this.refreshMenuFromAccordion(data)
-          return
-        }
+        if (!data) {  return of(null) }
+        this.refreshMenuFromAccordion(data)
         return of(data)
       }
     ))
   }
 
   refreshMenu(user: IUser) {
-
     this.initMenu();
+    if (!user) {
 
-    if (!user || !user.token) {
-      // console.log('user', user)
-      return
+      return;
     }
     const site  = this.siteService.getAssignedSite();
     const menu$ = this.menusService.getMenuGroupByName(site,  this.menuName)
@@ -242,22 +214,17 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
             return of(null)
           }
         } catch (error) {
-
         }
-        if (data.length>0) {
-          if (data)
+        if (data.length > 0) {
           try {
             data.filter( item => {
               this.addItemToMenu(item, this.menus)
             })
             this.menus =  [...new Set(this.menus)]
-
             if (this.menus) {
-              // this.toggle(this.menus[0], 0)
               this._toggle(this.menus[0], 0, true)
             }
           } catch (error) {
-
           }
         }
         return of(this.menus)
@@ -297,8 +264,6 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
       console.log('hide menu')
       this.hideMenu()
     }
-    // if (this.tinyMenu) {
-    // }
   }
 
   toggle(menu: AccordionMenu, index: number) {
@@ -309,26 +274,24 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     try {
       this.displayCategories = true
       this.index = index;
-
       if (!this.config.multi) {
-
         this.menus.filter(
           (menu, i) => i !== index && menu.active
-        ).forEach(menu => 
+        ).forEach(menu =>
           {
-            if (menu && menu.active) { 
+            if (menu && menu.active) {
               menu.active = !menu.active
             }
           });
-      
+
       }
 
-      if (this.menus && this.menus[index] && this.menus[index].active) { 
+      if (this.menus && this.menus[index] && this.menus[index].active) {
         this.menus[index].active = !this.menus[index].active;
       }
 
-      if (!this.menus[index]  || !this.menus[index].submenus) { 
-        return 
+      if (!this.menus[index]  || !this.menus[index].submenus) {
+        return
       }
       this.submenu  = this.menus[index].submenus
 

@@ -1,12 +1,12 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { HostListener, Injectable, OnDestroy } from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
 import { AuthenticationService, MenuService, OrderPayload, OrdersService, TextMessagingService } from 'src/app/_services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { BehaviorSubject, catchError,Observable, of, Subscription, switchMap } from 'rxjs';
-import { IClientTable,  IPOSOrder, IPOSOrderSearchModel, IPOSPayment, IPurchaseOrderItem, IReconcilePayload, IServiceType, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
+import { BehaviorSubject, catchError,concatMap,Observable, of, Subscription, switchMap } from 'rxjs';
+import { IClientTable,  IPOSOrder, IPOSOrderSearchModel, IPOSPayment, IPurchaseOrderItem, IReconcilePayload, IServiceType, IUser, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
@@ -41,6 +41,7 @@ import { IRequestMessage } from '../system/request-message.service';
 import { error } from 'console';
 import { IPositionElements } from 'ngx-infinite-scroll';
 import { MenuItem } from 'electron';
+import { ClientTableService } from '../people/client-table.service';
 export interface ProcessItem {
   order   : IPOSOrder;
   item    : IMenuItem;
@@ -219,8 +220,7 @@ export class OrderMethodsService implements OnDestroy {
   updateOrderSubscriptionLoginAction(order: IPOSOrder) {
     this.storeCreditMethodService.updateSearchModel(null)
     this.getCost(order)
-    this.currentOrder = order;
-    this._currentOrder.next(order);
+    this.updateOrderSubscriptionOnly(null);
     if (order == null) {
       order = this.getStateOrder();
       order = this.getCost(order);
@@ -261,19 +261,16 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   updateOrder(order: IPOSOrder) {
-    // console.log('update order ', order)
+    // console.trace('update order ', order)
     try {
       if (!order) {
-        // console.log('clear order')
-        this.currentOrder = null;
-        this._currentOrder.next(null);
+        this.updateOrderSubscriptionOnly(null);
         this.setStateOrder(null)
         this.setActiveOrder(null)
         return
       }
       this.preSwitchOrder(order)
-      this.currentOrder = order;
-      this._currentOrder.next(order);
+      this.updateOrderSubscriptionOnly(order);
       if (order?.service?.filterType == 0  ) {
       }
       this.setStateOrder(order);
@@ -581,9 +578,10 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   constructor(public route                    : ActivatedRoute,
-
+              private clientTableService      : ClientTableService,
               private dialog                  : MatDialog,
-              public  authenticationService    : AuthenticationService,
+              public  authenticationService   : AuthenticationService,
+              private userAuthService         : UserAuthorizationService,
               private siteService             : SitesService,
               private editDialog              : ProductEditButtonService,
               private floorPlanService        : FloorPlanService,
@@ -728,6 +726,7 @@ export class OrderMethodsService implements OnDestroy {
                     passAlongItem: PosOrderItem[]): Observable<ItemPostResults> {
 
     const searchResults = this.updateMenuSearchModel(item);
+
     if (add) {
       if (item && !item.itemType) {
         const site = this.siteService.getAssignedSite()
@@ -744,6 +743,7 @@ export class OrderMethodsService implements OnDestroy {
         this.listItem(item.id);
         return of(null)
       }
+
       return  this.addItemToOrderObs(order, item, 1, 0, passAlongItem)
     }
     this.listItem(item.id);
@@ -883,7 +883,6 @@ export class OrderMethodsService implements OnDestroy {
  sendNotification(order: IPOSOrder, id: number) {
     const item = this.emailSubjects.filter(items => { return items.id == id})[0];
     if (!item) {
-      // console.log('no item!')
       return
     }
     return this.sendTemplateOrder(order, '', item.name, item.subject).subscribe()
@@ -1049,7 +1048,10 @@ export class OrderMethodsService implements OnDestroy {
 
   addItemToOrderObs(order: IPOSOrder, item: IMenuItem, quantity: number, rewardAvailableID: number, passAlongItem: PosOrderItem[],
                     selectedProductPrice?: ProductPrice, unitTypeID?: any): Observable<ItemPostResults> {
+
+
     this.selectedProductPrice = selectedProductPrice;
+
 
     let passAlong; // = passAlongItem[0]
     if (passAlongItem && passAlongItem[0]) {
@@ -1065,8 +1067,6 @@ export class OrderMethodsService implements OnDestroy {
     const item$ = this.menuService.getMenuItemByBarcode(site, barcode, this.order?.clientID);
     let quantity = 1;
     if (inputQuantity) {  quantity = inputQuantity }
-
-    // console.log('addItemToOrderFromBarcode assignPOSItems',  this.assignPOSItems)
 
     return   item$.pipe(switchMap( data => {
       if ( !data ) {
@@ -1119,6 +1119,8 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
+
+
   validateItem(item, barcode) {
 
     if (!item && !barcode) {
@@ -1156,8 +1158,8 @@ export class OrderMethodsService implements OnDestroy {
                        quantity: number,
                        input: any) {
 
-    const valid = this.validateUser();
-    if (!valid) { return };
+    // const valid = this.validateUser();
+    // if (!valid) { return };
     this.initItemProcess();
 
     quantity = this.setQuantityValue(quantity)
@@ -1234,7 +1236,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   scanBarcodedItem(site, order, barcode,quantity,packaging, portionValue, passAlongItems, unitTypeID,productPrice, cost){
-    return this.scanItemForOrder(site, order, barcode, quantity, packaging,
+    const newItem$ = this.scanItemForOrder(site, order, barcode, quantity, packaging,
               portionValue,
               passAlongItems,
               unitTypeID, productPrice,
@@ -1244,6 +1246,25 @@ export class OrderMethodsService implements OnDestroy {
         return of(data);
       }
     ))
+
+    const user$ = this.getUserOrCreateUser()
+    return user$.pipe(switchMap(data => {
+      return newItem$
+    }))
+
+  }
+
+  getUserOrCreateUser(): Observable<IUser> {
+    const user =  this.userAuthService.user;
+    // const valid = this.validateUser();
+    let user$ : Observable<IUser>;
+    if (user) {
+      // console.log('user logged in')
+      return  of(user)
+    } else {
+      const site = this.siteService.getAssignedSite()
+      return this.clientTableService.createGuestAccount(site)
+    }
   }
 
   processItemPOSObservable( order : IPOSOrder ,
@@ -1259,25 +1280,23 @@ export class OrderMethodsService implements OnDestroy {
                             productPrice?: ProductPrice,
                             cost?: number) : Observable<ItemPostResults> {
 
-    // console.log('processItemPOSObservable order.id', order)
-    const valid = this.validateUser();
-    if (!valid) {
-      this.notifyEvent(`Invalid user.`, 'Alert ')
-      return of(null)
-    };
 
+
+    let tempItem = {} as ItemPostResults
+    const user$ = this.getUserOrCreateUser()
+    // return  user$.pipe(switchMap(data => { return of(tempItem)}))
     this.initItemProcess();
+
     if (!this.validateItem(item, barcode)) {  return of(null) }
     if (this.assignedPOSItem && !passAlongItem) { passAlongItem  = this.assignedPOSItem[0]; };
     order = this.validateOrder();
-
     this.overrideClear = false;
-    if (item?.itemType?.useType.toLowerCase() === 'modifier') {
+    if (item && item?.itemType.useType && item?.itemType?.useType.toLowerCase() === 'modifier') {
       this.assignPOSItems = passAlongItems
       this.overrideClear = true
     }
 
-    console.log('processItemPOSObservable')
+    // console.log('order', order?.id)
     if (order) {
       const site       = this.siteService.getAssignedSite();
       if (barcode)  {
@@ -1294,7 +1313,7 @@ export class OrderMethodsService implements OnDestroy {
           portionValue     = input?.portionValue;
           itemNote         = input?.itemNote;
         }
-        // console.log('useType passAlong 2', passAlongItems )
+
         if (item) {
           const deviceName  = localStorage.getItem('devicename')
           const splitGroupID = this.splitEntryValue;
@@ -1318,9 +1337,8 @@ export class OrderMethodsService implements OnDestroy {
 
           if (order.id == 0 || !order.id) {
             const orderPayload = this.getPayLoadDefaults(null)
-
-            return this.orderService.postOrderWithPayload(site, orderPayload).pipe(
-              switchMap(data => {
+            const newItem$     = this.orderService.postOrderWithPayload(site, orderPayload).pipe(
+              concatMap(data => {
                 if (!data) {
                   this.order = data;
                   this.siteService.notify('No order started. There might be something wrong.', 'Close', 2000)
@@ -1329,19 +1347,33 @@ export class OrderMethodsService implements OnDestroy {
                 newItem.orderID = data.id;
                 return this.posOrderItemService.postItem(site, newItem)
               })).pipe(
-                switchMap(data => {
+                concatMap(data => {
                   this.processItemPostResultsPipe(data)
                   return of(data);
               })
             )
+
+            return user$.pipe(concatMap(data => {
+              // console.log('post order add item 1', data)
+              if (!data && data.id != 0) { return of(null)  }
+              return newItem$
+            }))
           }
 
-          return  this.posOrderItemService.postItem(site, newItem).pipe(switchMap(
-            data=> {
+          let postItem$ =  this.posOrderItemService.postItem(site, newItem).pipe(concatMap(
+            data => {
               this.processItemPostResultsPipe(data)
               return of(data);
             }
           ))
+
+          // console.log('returning post')
+          return user$.pipe(concatMap(data => {
+            // console.log('post order add item 2', data)
+            if (!data) { return of(null)  }
+            return postItem$
+          }))
+
         }
 
       } catch (error) {
@@ -1349,6 +1381,7 @@ export class OrderMethodsService implements OnDestroy {
         console.log('error', error)
       }
     }
+
     this.notifyEvent('Nothing added.', 'Alert ')
     return of(null)
   }
@@ -1374,7 +1407,7 @@ export class OrderMethodsService implements OnDestroy {
   isProductLowCount(data: ItemPostResults) {
     if (data?.message === 'Manager OverRide' && data?.resultErrorDescription === 'Low Product Count') {
       //we have data.
-      console.log('isProductCount', data)
+      // console.log('isProductCount', data)
       const item = {menuItem: data.menuItem, quantity: data.quantity, order: data.order}
 
       const  requestData = {action:'saleAuth', postData: item}
@@ -1418,12 +1451,6 @@ export class OrderMethodsService implements OnDestroy {
         if (!data || !data.order) { return };
 
         if (this.processItem?.item?.caseQty>0 && this.processItem?.item?.caseRetail>0) {
-          // if this.
-          // console.log('case price', this.processItem?.item?.caseRetail, this.processItem?.item?.caseQty);
-          // const confirm = window.confirm('Use case price?')
-          // if (confirm) {
-          //   // data.posItem.quantity =
-          // }
         }
 
         this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
@@ -1555,21 +1582,21 @@ export class OrderMethodsService implements OnDestroy {
     let order: any
     const order$ = this.newOrderWithPayloadMethod(site, serviceType )
     return order$.pipe(
-          switchMap( data => {
-            order = data
-            if (!serviceType) {   serviceType = order.service  }
-            this.processOrderResult(order, site, serviceType?.retailType, null, serviceType?.resaleType)
-            return this.navToDefaultCategory()
+        switchMap( data => {
+          order = data
+          if (!serviceType) {   serviceType = order.service  }
+          this.processOrderResult(order, site, serviceType?.retailType, null, serviceType?.resaleType)
+          return this.navToDefaultCategory()
 
-          })).pipe(switchMap( item => {
-            // console.log('serviceType', serviceType)
-            this.processOrderResult(order, site, serviceType?.retailType, item?.id, serviceType?.resaleType)
-            return of(order)
-          }),
-        catchError(data => {
-          this.siteService.notify(`Order not started. ${data.toString()}`, 'Alert', 2000, 'red')
-          return of(data)
-        }))
+        })).pipe(switchMap( item => {
+          // console.log('serviceType', serviceType)
+          this.processOrderResult(order, site, serviceType?.retailType, item?.id, serviceType?.resaleType)
+          return of(order)
+        }),
+      catchError(data => {
+        this.siteService.notify(`Order not started. ${data.toString()}`, 'Alert', 2000, 'red')
+        return of(data)
+    }))
   }
 
   //////////////////async await functions.
@@ -1605,7 +1632,7 @@ export class OrderMethodsService implements OnDestroy {
         if (data && data?.id) {
           id = data?.id;
         }
-        console.log('serviceType', serviceType)
+        // console.log('serviceType', serviceType)
         this.processOrderResult(order, site, serviceType?.retailType, id, serviceType?.resaleType)
         return of(data)
     }))
@@ -1663,7 +1690,6 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   setLastOrder(order?) {
-    // console.log('set last order', order)
     if (order ) {
       const order = JSON.stringify(this.order)
       this.lastOrder =  JSON.parse(order)// structuredClone(this.order);
@@ -1805,6 +1831,14 @@ export class OrderMethodsService implements OnDestroy {
 
  }
 
+ @HostListener("window:resize", [])
+  get IsSmallDevice() {
+    if (window.innerWidth < 599) {
+      return true
+    }
+    return false
+  }
+
   async  promptOpenPriceOption(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem): Promise<boolean> {
 
     if (!order || !item || !posItem) {return}
@@ -1814,14 +1848,22 @@ export class OrderMethodsService implements OnDestroy {
     //the pop up will occur and prompt with options.
     //the function will return true once complete.
 
+    let width = '500px'
+    let maxWidth = '500px'
+    let minWidth = '500px'
+    if (this.IsSmallDevice) {
+      width     =       '100%'
+      minWidth  =  '100% !important'
+      maxWidth  =   '100% !important'
+    }
+
     item =  this.menuService.getPricesFromProductPrices(item)
     if (item && item.priceCategories && item.priceCategories.productPrices.length > 1 ) {
 
       const  newItem = {order: order, item: item, posItem: posItem}
       const dialogRef = this.dialog.open(PriceOptionsComponent,
         {
-          width:     '500px',
-          maxWidth:  '500px',
+          width:    width,
           height:    '75vh',
           maxHeight: '75vh',
           panelClass: 'foo',
@@ -2232,10 +2274,19 @@ export class OrderMethodsService implements OnDestroy {
       }
       this.updateProcess();
       return false;
-  }
+   }
 
+   @HostListener("window:resize", [])
    fieldPrompt(item) {
-      let dialogRef =  this.editDialog.editDialog(item, '500px', '500px');
+      let width = '500px'
+      if (window.innerWidth < 768) {
+        width = '100% !important'
+      }
+      // console.log('fieldPrompt', window.innerWidth, width);
+      //'100% !important'
+
+      console.log('width', width)
+      let dialogRef =  this.editDialog.editDialog(item, width, '500px');
       dialogRef.afterClosed().subscribe(data => {
         if (data && data.result) {
           this.updateProcess();
@@ -2295,7 +2346,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   removeItemFromListOBS(index: number, orderItem: PosOrderItem) {
-    console.log('removeItemFromListOBS')
+    // console.log('removeItemFromListOBS')
     if (orderItem) {
       const site = this.siteService.getAssignedSite()
       if (orderItem.printed || this.order.completionDate ) {

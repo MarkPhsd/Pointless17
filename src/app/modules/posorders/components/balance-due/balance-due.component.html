@@ -1,7 +1,6 @@
 <div *ngIf="(action$ | async) as newOrder"></div>
 <div *ngIf="(dCapReset$ | async) as reset"></div>
 
-
 <div  class="grid-items"
       *ngIf=" (uiTransactions$ | async) as uiTransactions" >
 
@@ -81,8 +80,11 @@
     <button mat-button
             class="tip-button"
             (click)="printReceipt()">
-            <mat-icon>print</mat-icon>
-            Print</button>
+            <mat-icon *ngIf="!isApp">email</mat-icon>
+            <span *ngIf="isApp">Send</span>
+            <mat-icon *ngIf="isApp">print</mat-icon>
+            <span *ngIf="isApp">Print</span>
+    </button>
 
     <button mat-button
             class="tip-button"

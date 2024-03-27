@@ -2,7 +2,7 @@
 // @import '~@angular/material/theming';
 @import '/src/theme/variables.scss';
 
-mat-card {
+.mat-card {
 
   padding   : 4px;
   max-height: 165px;
@@ -22,15 +22,15 @@ mat-card {
   // }
 }
 
-mat-card:hover {
+.mat-card:hover {
   box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
 }
 
-mat-card:active:hover {
+.mat-card:active:hover {
   box-shadow: 1px 1px 2px rgb(138, 88, 88), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
 }
 
-mat-card-subtitle {
+.mat-card-subtitle {
   padding: 1px;
 }
 
@@ -66,7 +66,7 @@ mat-card-subtitle {
     // grid-template-rows    : auto;
     // grid-gap              : 5px;
     // row-gap               : 1px;
-    visibility: hidden;
+    // visibility: hidden;
   }
 }
 
@@ -88,18 +88,18 @@ mat-card-subtitle {
 
 .center {
   padding: 1px;
-  @include for-phone-only  {
-    display        : flex;
-    justify-content: space-evenly;
-    align-content  : space-around;
-    margin-top     : 15px;
-  }
+  // @include for-phone-only  {
+  //   display        : flex;
+  //   justify-content: space-evenly;
+  //   align-content  : space-around;
+  //   margin-top     : 15px;
+  // }
 }
 
 .date-header, .orderType, .employee-name, .time {
-  @include for-phone-only  {
-    visibility:  hidden;
-  }
+//   @include for-phone-only  {
+//     visibility:  hidden;
+//   }
 }
 
 .orderID {

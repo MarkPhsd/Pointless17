@@ -45,6 +45,7 @@ export class UserAuthorizationService {
 
   validateUser() {
     const user = this.currentUser()
+    // console.log('validate User', user)
     if (user && user.username && user.roles)  {  return true }
     return false
   }

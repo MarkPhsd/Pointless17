@@ -6,6 +6,7 @@ import { IPaymentSearchModel, IServiceType } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
+import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
@@ -16,7 +17,7 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 })
 export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
   @Input() autoPrint : boolean;
-  @Input() sheet: any;
+  @Input() sheet: IBalanceSheet;
   @Input() sheetType = '';
   @Input() disableAuditButton: boolean;
   @Output() renderComplete = new EventEmitter<any>();
@@ -31,6 +32,7 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
 
   _ordersCount    :   Subscription;
   _openOrders     :   Subscription;
+  _sheet          :   Subscription;
 
   ordersOpen      : any =   '...'
   ordersCount     : any =   '...';
@@ -43,6 +45,11 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
     this._openOrders  =  this.balanceSheetMethodsService.ordersOpen$.subscribe( data => {
       if (!data) { return }
       this.ordersOpen       = data
+    })
+
+    this._sheet = this.balanceSheetMethodsService.balanceSheet$.subscribe(data => {
+      this.sheet = data;
+      console.log('sheet updated', data.balanceSheetEmployee.lastName)
     })
   }
 
@@ -57,9 +64,9 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
   }
 
   ngOnInit(): void {
-    // console.log('ngOninit')
-    this.initValues()
+    this.initValues();
     this.initSubscriptions();
+
   }
 
   initValues() {
@@ -84,7 +91,7 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
 
   ngOnDestroy() {
     if (this._ordersCount) {this._ordersCount.unsubscribe()}
-    if (this._openOrders) {  this._openOrders.unsubscribe() }
+    if (this._openOrders)  {this._openOrders.unsubscribe() }
   }
 
   getOrderCount() {
@@ -126,6 +133,8 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
   }
 
   renderCompleted(event) {
+    console.log('sheet',this.autoPrint, this.sheet)
+
     this.renderComplete.emit('balance-sheet-header-view')
   }
 

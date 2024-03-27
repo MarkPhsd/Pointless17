@@ -12,9 +12,11 @@ export class BasicAuthInterceptor implements HttpInterceptor {
   user              : IUser;
   _user             : Subscription;
 
+
+  //introduce seting the user to the current site. 'then we just get the user from the default site or
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe( data => {
-      this.user  = data
+      this.user  = data;
     })
   }
 
@@ -39,7 +41,6 @@ export class BasicAuthInterceptor implements HttpInterceptor {
           let headers = request.headers.delete(InterceptorSkipHeader);
           headers = request.headers.delete('Content-Type')
           request =  this.setEbayOAuthHeaders(ebay, request)
-          console.log('headers', headers)
           return next.handle(request);
         } catch (error) {
           console.log(error)
@@ -102,7 +103,12 @@ export class BasicAuthInterceptor implements HttpInterceptor {
     }
 
     setUserAuthHeaders(user: IUser, request: HttpRequest<any>) {
-      user.authdata = window.btoa(user.username + ':' + user.token);
+      if (user.token && user?.token != user?.password) {
+        user.authdata = window.btoa('userToken' + ':' + user.token);
+      } else {
+      }
+      user.authdata = window.btoa(user?.username + ':' + user?.password);
+
       if (  user.authdata ) {
         request = request.clone({
           setHeaders: {

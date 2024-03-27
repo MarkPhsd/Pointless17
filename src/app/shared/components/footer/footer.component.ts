@@ -22,7 +22,8 @@ export class FooterComponent implements OnInit, OnDestroy {
   outlet              : TemplateRef<any>;
   phoneDevice : boolean;
   smallDevice: boolean;
-
+  headerBackColor: string;
+  matToolbarColor : string =  'primary'
   isStaff             =   false;
 
   isAdmin             =   false;
@@ -35,11 +36,28 @@ export class FooterComponent implements OnInit, OnDestroy {
   screenWidth         : number;
   _order        :   Subscription;
   order         :   IPOSOrder;
-
+  _user         : Subscription;
   deviceInfo      : IDeviceInfo;
+  userChecked: boolean;
   currentOrderSusbcriber() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
+    })
+  }
+
+  initUserSubscriber() {
+    this._user = this.authenticationService.user$.subscribe( data => {
+      if (this.user && (data && data.id)) {
+        if (this.user.id == data.id) {    this.userChecked = true; }
+      }
+      this.user = data
+      // this.setInterFace(data)
+      this.getUserInfo()
+      this.setHeaderBackColor(this.user?.userPreferences?.headerColor)
+      // if (!this.initUITransactions) {
+      //   this.initUITransactions = true;
+      //   this.getTransactionUI()
+      // }
     })
   }
 
@@ -57,8 +75,8 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.updateScreenSize()
     const i = 0
     this.currentOrderSusbcriber();
-    this.getUserInfo();
-
+    // this.getUserInfo();
+    this.initUserSubscriber()
     this.deviceInfo = this.authenticationService.deviceInfo;
   }
 
@@ -114,9 +132,17 @@ export class FooterComponent implements OnInit, OnDestroy {
     if (user.roles === 'manager' || user.roles === 'admin' || user.roles === 'employee' ) {
       this.isStaff = true
     }
-
   }
 
+  setHeaderBackColor(color) {
+    this.headerBackColor = ''
+    if (color) {  this.headerBackColor = `background-color:${color};` }
+    if (color) {
+      this.matToolbarColor = ''
+    } else {
+      this.matToolbarColor = 'primary'
+    }
+  }
   initUserInfo() {
     this.userName         = '';
     this.userRoles        = '';

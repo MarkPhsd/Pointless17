@@ -1,12 +1,35 @@
 <div *ngIf="(action$ | async) as action"></div>
 <mat-card *ngIf="inputForm" [formGroup]="inputForm">
   <mat-card-title>
-    Preferences (auto saves)
+    Preferences
   </mat-card-title>
   <mat-card-subtitle>
-    {{user?.roles}}
+    <!-- {{user?.roles}} -->
   </mat-card-subtitle>
   <mat-card-content>
+
+    <div  class="mat-label">
+      <mat-label>How do you want to communicate with us?</mat-label>
+      <mat-label>enable for Mobile Text Messages</mat-label>
+      <br>
+      <!-- <mat-slide-toggle
+          class="mat-label"
+          formControlName="messagingPreference">
+        <mat-label class="mat-label">Email/Text</mat-label>
+      </mat-slide-toggle> -->
+
+      <mat-radio-group formControlName="messagingPreference" aria-label="Communication Preference">
+        <div>
+          <mat-radio-button value="1">Text</mat-radio-button>
+        </div>
+        <div>
+          <mat-radio-button value="0">Email</mat-radio-button>
+        </div>
+        <div>
+          <mat-radio-button value="2">WhatsApp</mat-radio-button>
+        </div>
+      </mat-radio-group>
+    </div>
 
     <div  class="mat-label">
       <mat-slide-toggle
@@ -15,38 +38,32 @@
           formControlName="darkMode">
         <mat-label class="mat-label">Enable Dark Mode</mat-label>
       </mat-slide-toggle>
+      <div  class="mat-label">
+        <mat-slide-toggle
+            class="mat-label"
+            formControlName="swapMenuOrderPlacement">
+          <mat-label class="mat-label">Menu left/right</mat-label>
+        </mat-slide-toggle>
+      </div>
+      <app-toggle-theme></app-toggle-theme>
     </div>
 
-    <div  class="mat-label">
-      <mat-slide-toggle
-          [disabled]="true"
-          class="mat-label"
-          formControlName="swapMenuOrderPlacement">
-        <mat-label class="mat-label">Menu left/right</mat-label>
-      </mat-slide-toggle>
-    </div>
+    <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
 
-    <app-toggle-theme></app-toggle-theme>
-    <app-value-fields
-        style="width:125px"
-        [inputForm]="inputForm"
-        [fieldName]="'headerColor'">
-        Header Color
-    </app-value-fields>
   </mat-card-content>
 
-  <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
-
   <mat-card-actions>
-    <button mat-raised-button color="warn" (click)="close()">
-      <mat-icon>exit_to_app</mat-icon>Save Close
+    <button style="float:right;margin-top:10px" mat-raised-button color="warn" (click)="close()">
+      <mat-icon *ngIf="!saveDisabled">save</mat-icon> <mat-icon *ngIf="saveDisabled">exit_to_app</mat-icon>Save <div *ngIf="!saveDisabled">Close</div>
     </button>
   </mat-card-actions>
 </mat-card>
 
 <ng-template #buttonColorPicker>
-  <h3>Header color</h3>
-  <ngx-colors ngx-colors-trigger [(ngModel)]="headerColor"></ngx-colors>
+
+    <mat-label>Theme Color</mat-label>
+    <ngx-colors ngx-colors-trigger [(ngModel)]="headerColor"></ngx-colors>
+
 </ng-template>
 
 <!-- darkMode: [], //

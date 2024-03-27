@@ -19,6 +19,8 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
 
+
+  saleData = {"token":"9479792857805860","expiry":"0128","name":"SPENCER/COLBY G","batchid":"131","retref":"081935161302","avsresp":"","respproc":"RPCT","amount":"11.66","resptext":"Approval","authcode":"190817","respcode":"000","merchid":"496579811886","cvvresp":"","respstat":"A","emvTagData":"{\"TVR\":\"8080008000\",\"ARC\":\"00\",\"PIN\":\"None\",\"Signature\":\"false\",\"Mode\":\"Issuer\",\"Network Label\":\"VISA\",\"TSI\":\"6800\",\"AID\":\"A0000000031010\",\"IAD\":\"06021203A08000\",\"Entry method\":\"Chip Read\",\"Application Label\":\"VISA DEBIT\"}","orderid":"807934","entrymode":"EMV Contact","bintype":"","receiptData":{"dba":"Tappys Yogurt","address1":"2780 MacArthur Boulevard","address2":"Lewisville, TX","phone":"9723151780","header":"","orderNote":"","dateTime":"20240321170142","items":"","nameOnCard":"SPENCER/COLBY G","footer":""}}
   processingTransaction: boolean;
   action$: Observable<any>;
   toggleData: boolean;
@@ -99,15 +101,17 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
 
   _processSale(auth) {
     const site = this.siteService.getAssignedSite()
-    const void$ = this.getVoid()
+    const sale$ = this.getVoid()
     const processSale$ =  this.methodsService.processSale(auth, site.url);
 
-    void$.pipe(
+    sale$.pipe(
         switchMap(data => {
           return processSale$
         })
       )
       .subscribe(data => {
+
+        data = this.saleData
         if (data && data?.respstat.toLowerCase() == 'b') {
           const message = 'Please retry. Transaction failed to run correctly and has not been processed.'
           this.siteService.notify(message, 'close', 3000, 'red')
@@ -129,6 +133,9 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
       const order =  this.orderMethodsService.currentOrder;
       const payment = this.methodsService.payment;
       this.processCardPointResonse$ = this.paymentMethodsService.processCardPointResponse( data, payment, order).pipe(switchMap( data => {
+          if (!data) {
+            this.siteService.notify('Payment information not received properly. Please contact admin', 'close', 5000, 'red')
+          }
           this.processingTransaction = false;
           this.methodsService.initValues();
           this.dialogRef.close(null)

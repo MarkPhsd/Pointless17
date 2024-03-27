@@ -1,27 +1,25 @@
 
 .fields-values {
   width: 125px;
-  margin: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
   font-size: 1.3em;
 }
 
 .card-number {
-  width: 200px;
+  width: 225px;
   margin: 5px;
   font-size: 1.3em;
 }
 
-// input {
-//   font-size: 1.1em;
-// }
 iframe {
   height: 400px;
 }
 
-input {
-  margin: 5px;
-  padding: 1px;
-}
+// input {
+//   margin: 5px;
+//   padding: 1px;
+// }
 
 .label {
   font-size: 1em;
@@ -31,4 +29,8 @@ input {
 form {
   margin: 5px;
   padding: 1px;
+}
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
 }

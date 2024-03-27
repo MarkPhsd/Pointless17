@@ -10,9 +10,6 @@ import { LoginComponent } from 'src/app/modules/login';
 import { SitesService} from 'src/app/_services/reporting/sites.service';
 import { MatDialog } from '@angular/material/dialog';
 import { IUserAuth_Properties } from '../people/client-type.service';
-import { ThemesService } from './themes.service';
-import { UIHomePageSettings } from './settings/uisettings.service';
-import { color } from 'highcharts';
 
 export interface IUserExists {
   id:           number;
@@ -26,7 +23,6 @@ export interface IUserExists {
   message:      string;
   employeeID:   number;
 }
-
 
 // Public Property UserExists As Boolean
 // Public Property FirstInitial As String
@@ -79,7 +75,7 @@ export class AuthenticationService {
     updatePinPad(value: boolean) {
       this._setPinPad.next(value)
     }
-    
+
     get userAuths() {
 
       if (this._userAuths.value) {
@@ -110,7 +106,7 @@ export class AuthenticationService {
         localStorage.setItem('userAuthstemp', JSON.stringify(userAuths));
       }
     }
-  
+
     updateDeviceInfo(item: IDeviceInfo) {
       this._deviceInfo = item
     }
@@ -120,20 +116,25 @@ export class AuthenticationService {
     }
 
     updateUser(user: IUser) {
+
       if (!user ){
         this._user.next(null)
         this.siteSerivce._user.next(null)
         return
       }
+
       if (!user.userPreferences) {
         user.userPreferences = {} as UserPreferences;
       }
-      if ( !user.userPreferences.firstTime_FilterOrderInstruction) {
+      if ( !user.userPreferences?.firstTime_FilterOrderInstruction) {
          user.userPreferences.firstTime_FilterOrderInstruction = false
       }
-      if ( !user.userPreferences.firstTime_notifyShowAllOrders) {
+      if ( !user.userPreferences?.firstTime_notifyShowAllOrders) {
         user.userPreferences.firstTime_notifyShowAllOrders = false
       }
+
+      // console.trace('trace')
+      // console.log('new user initialized', user)
       this._user.next(user)
       this.siteSerivce._user.next(user)
     }
@@ -302,7 +303,7 @@ export class AuthenticationService {
       this.clearUserSettings();
       this.toolbarUIService.updateOrderBar(false)
       this.toolbarUIService.updateToolBarSideBar(false)
- 
+
       if (!this.platFormservice.isApp()) {
         if (!this.appInitService?.useAppGate) {
           this.router.navigate(['/login']);

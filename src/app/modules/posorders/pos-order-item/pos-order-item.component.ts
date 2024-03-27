@@ -7,7 +7,7 @@ import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of, Subscription, switchMap } from 'rxjs';
+import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPurchaseOrderItem } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
@@ -27,6 +27,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
+import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 export interface payload{
   index : number;
   item  : PosOrderItem;
@@ -47,6 +48,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
   @ViewChild('imageDisplay') imageDisplay: TemplateRef<any>;
   @ViewChild('getWeightView') getWeightView : TemplateRef<any>;
+  @ViewChild('buyAgain') buyAgain: TemplateRef<any>;
 
   @Output() outputDelete   :  EventEmitter<any> = new EventEmitter();
   @Output() outputSelectedItem : EventEmitter<any> = new EventEmitter();
@@ -81,6 +83,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   @Input() enableExitLabel : boolean;
   @Input() displayHistoryInfo: boolean;
   @Input() enableItemReOrder  : boolean = false;
+  @Input() isStaff: boolean;
   textNameLength : number = 30;
 
   @Input() cardWidth: string;
@@ -90,6 +93,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   customcard               = 'custom-card'
   orderPromptGroup        : IPromptGroup;
   menuItem$               : Observable<IMenuItem>;
+  reOrderMenuItem$        : Observable<IMenuItem>;
+  reOrderMenuItem: IMenuItem;
   printLabel$             : Observable<any>;
   isNotInSidePanel        : boolean
   sidePanelWidth          : number
@@ -148,6 +153,25 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     return false;
   }
 
+  getReOrderMenuItem() {
+
+    if (this.enableItemReOrder) {
+
+    } else {
+      if (!this.order) {
+        if (!this.userAuths.enablebuyAgain) {
+          if (!this.authenticationService.isUser) { return }
+        }
+      }
+    }
+
+
+  }
+
+
+
+
+
   //&&
   // (!this.orderItem.rewardAvailibleID || this.orderItem.rewardCounterDiscountID ==0)
   get showQuantityEdit() {
@@ -183,6 +207,34 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
       this.action$ = this.saveSub(this.orderItem, 'quantity')
      }
     }
+  }
+
+  get canReOrder() {
+    if (this.enableItemReOrder) {
+      return true
+    }
+    if (this.orderItem.completionDate) {
+      return true
+    }
+    if (!this.prepScreen && this.disableActions) {
+      return true
+    }
+  }
+
+  get buyAgainViewUser() {
+    if (this.canReOrder && !this.userAuthService.isStaff) {
+      this.getReOrderMenuItem()
+      return this.buyAgain
+    }
+    return null;
+  }
+
+  get buyAgainViewStaff() {
+    if (this.canReOrder && this.userAuthService.isStaff) {
+      this.getReOrderMenuItem()
+      return this.buyAgain
+    }
+    return null;
   }
 
 
@@ -302,14 +354,14 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
                 private siteService        : SitesService,
                 private dialog             : MatDialog,
                 private menuService        : MenuService,
-                public posOrderItemService: POSOrderItemService,
+                public  posOrderItemService: POSOrderItemService,
                 private posOrderItemMethodsService: PosOrderItemMethodsService,
                 private promptGroupservice : PromptGroupService,
                 private printingService    : PrintingService,
                 public  userAuthService    : UserAuthorizationService,
                 private fb                 : UntypedFormBuilder,
-                public authenticationService: AuthenticationService,
-                public platFormService : PlatformService,
+                public  authenticationService: AuthenticationService,
+                public  platFormService : PlatformService,
                 private orderService: OrdersService,
                 private uISettingsService: UISettingsService,
                 private requestMessageMethodsService: RequestMessageMethodsService,
@@ -353,7 +405,9 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
     this.updateCardStyle(this.mainPanel)
     this.refreshSidePanel()
-    this.packages = this.getEstPackages(this.orderItem).toString()
+    this.packages = this.getEstPackages(this.orderItem).toString();
+
+    this.getReOrderMenuItem()
   }
 
   get cashDiscount() {
@@ -629,6 +683,9 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     // }
     // console.log(width, height)
 
+    if (this.smallDevice) {
+      width = '100vw'
+    }
     // this.notifyEvent('width', width)
     dialogRef = this.dialog.open(PosOrderItemEditComponent,
       { width     : width,
@@ -861,15 +918,33 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   }
 
 
-  buyAgain(menuItem: any) {
-    // if (menuItem && menuItem.active && menuItem.webEnabled) {
-      this.listItemByID(menuItem.id);
-      // this.navigateToItem()
-    // } else {
-    //   this.siteService.notify('Item not avalible for purchase right now.', 'Close', 5000, 'red')
-    // }
-  }
+  buyAgainClick(menuItem: any) {
+    // this.listItemByID(menuItem.id);
+    if (!this.orderItem.productID) { return }
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.menuService.getMenuProduct(site,  this.orderItem.productID)
+    .pipe(switchMap(data => {
+      return of(data)
+    })).pipe(switchMap(data => {
 
+      let       pass = true
+      if (!data.active) {
+        this.notifyEvent('Sorry! Item is not avalible at this time.', 'close')
+        pass = false
+      }
+      if (data.webEnabled) {
+        if (this.userAuthService.isUser) {
+          this.notifyEvent('Sorry! Item is not avalible at this time.', 'close')
+          pass = false
+        }
+      }
+      console.log('data', data)
+      if (!pass) { return of('')}
+      return this.orderMethodsService.menuItemActionObs(this.orderMethodsService.currentOrder, data, true,
+                                                        this.orderMethodsService.assignPOSItems);
+    }));
+
+  }
   listItemByID(id:number) {
     this.router.navigate(["/menuitem/", {id:id}]);
   }

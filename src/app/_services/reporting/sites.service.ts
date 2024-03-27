@@ -13,17 +13,16 @@ import { isDevMode } from '@angular/core';
 })
 export class SitesService {
 
-
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   sites: ISite[];
   site: ISite;
   apiUrl: any;
 
-  public _user               = new BehaviorSubject<IUser>(null);
-  public  user$               = this._user.asObservable();
+  public _user     = new BehaviorSubject<IUser>(null);
+  public  user$    = this._user.asObservable();
 
-  private _sites    = new BehaviorSubject<ISite[]>(null);
-  public  sites$    = this._sites.asObservable();
+  private _sites   = new BehaviorSubject<ISite[]>(null);
+  public  sites$   = this._sites.asObservable();
 
   private _site    = new BehaviorSubject<ISite>(null);
   public  site$    = this._site.asObservable();
@@ -68,19 +67,19 @@ export class SitesService {
     }
   }
 
-
-
-  getSites():  Observable<ISite[]> {
+  getSites() :  Observable<ISite[]> {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     const endPoint = `/CCSSites/getsites`
-
-    if (!this.apiUrl) {
-      this.apiUrl = this.getAssignedSite().url
-    }
+    if (!this.apiUrl) {   this.apiUrl = this.getAssignedSite().url   }
     const url = `${this.apiUrl}${endPoint}`
+    return  this.getSitesList(url)
+  }
 
-    return this.http.get<ISite[]>(url)
-
+  getSitesList(url : string):  Observable<ISite[]> {
+    return this.http.get<ISite[]>(url).pipe(switchMap(data => {
+      this.updateLocalStorageWithSites(data)
+      return of(data)
+    }))
   }
 
   getSite(id: number):  Observable<ISite> {
@@ -155,6 +154,33 @@ export class SitesService {
     this.authentication.updateUserX(user);
     return new HttpHeaders().set(InterceptorSkipHeader, '');
   }
+  private updateLocalStorageWithSites(newSites: ISite[]): void {
+    const savedSites: ISite[] = JSON.parse(localStorage.getItem('SiteList') || '[]');
+
+    // Map for quick ID-based access
+    const savedSitesMap = new Map<number, ISite>(savedSites.map(site => [site.id, site]));
+
+    // Update or add new items
+    newSites.forEach(site => {
+      const savedSite = savedSitesMap.get(site.id);
+      if (savedSite) {
+        // Keep the user from the saved site, update other properties
+        Object.assign(savedSite, site, { user: savedSite.user });
+      } else {
+        // Add new site
+        savedSitesMap.set(site.id, site);
+      }
+    });
+
+    // Filter out items that no longer exist
+    const updatedSites = Array.from(savedSitesMap.values()).filter(savedSite =>
+      newSites.some(site => site.id === savedSite.id)
+    );
+
+    localStorage.setItem('SiteList', JSON.stringify(updatedSites));
+  }
+
+
 
    getAssignedSite(): ISite {
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { HostListener, Injectable } from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 
@@ -305,11 +305,20 @@ export class ProductEditButtonService {
     return dialogRef
   }
 
+  @HostListener("window", [])
   openPriceEditor(data: PriceCategories): MatDialogRef<PriceCategoriesEditComponent> {
     let dialogRef: any;
+    let width  = '800px'
+    if (window.innerWidth < 768) {
+      width = '100vw'
+    }
+    console.log('openPriceEditor width', width, window.innerWidth)
+    console.log('window.innerWidth', window.innerWidth)
+
+
     dialogRef = this.dialog.open(PriceCategoriesEditComponent,
-      { width:        '800px',
-        minWidth:     '800px',
+      { width:         width,
+        minWidth:      width,
         height:       '750px',
         minHeight:    '600px',
         data : data
@@ -331,15 +340,24 @@ export class ProductEditButtonService {
     return dialogRef
   }
 
-
-  editDialog(item, width,height) {
+  editDialog(item, width, height  ) {
     let dialogRef: any;
+    // console.log('width', width)
+    let minWidth = '300px'
+    let maxWidth = '100vh'
+    if (window.innerWidth < 768) {
+      width=        '100%'
+      minWidth=     '100%'
+      maxWidth=    'max-width: 100% !important'
+    }
+// console.log('openPriceEditor width', width, window.innerWidth)
+// console.log('window.innerWidth', window.innerWidth)
 
     dialogRef = this.dialog.open(PosOrderItemEditComponent,
-      { width     : '100vw',
-        minWidth  : '300px',
-        height    : '100vh',
-        minHeight : height,
+      { width     :  width,
+        minWidth  :  minWidth,
+        height    : '600px',
+        minHeight : '600px',
         data      : item
       },
     )
@@ -353,8 +371,8 @@ export class ProductEditButtonService {
     dialogRef = this.dialog.open(UnitTypeEditComponent,
       { width:        '600px',
         minWidth:     '500px',
-        height:       '420px',
-        minHeight:    '420px',
+        height:       '600px',
+        minHeight:    '600px',
         data : data
       },
     )

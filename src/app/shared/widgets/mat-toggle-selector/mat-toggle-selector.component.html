@@ -9,6 +9,7 @@
       *ngIf="toggleVertical && list; else loading">
     <div [style.height]="toggleStyleHeight">
       <mat-button-toggle-group
+          [class]      ="'toggleclass-noheight'"
           name         = "type"
           [(ngModel)]  = "id"
           (change)     = "changeSelection()"

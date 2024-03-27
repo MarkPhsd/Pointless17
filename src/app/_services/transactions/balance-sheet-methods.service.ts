@@ -170,7 +170,6 @@ export class BalanceSheetMethodsService {
         return  this.sheetService.getSheetCalculations(site, sheet)
     })).pipe(switchMap(data => {
       this.updateBalanceSheet(data)
-      // console.log('getSheetObservable', data)
       return of(data)
     }))
   }
@@ -193,6 +192,7 @@ export class BalanceSheetMethodsService {
       switchMap(
         data => {
           this.updateBalanceSheet(data)
+          console.log('update sheet', data?.balanceSheetEmployee.lastName)
           return of(data)
         }),
         catchError(err => {
@@ -206,11 +206,16 @@ export class BalanceSheetMethodsService {
 
   closeSheet(sheet: IBalanceSheet, navigateUrl: string): Observable<any> {
     if (sheet) {
+      console.log('close sheet', sheet.balanceSheetEmployee.lastName)
+
       const site = this.sitesService.getAssignedSite();
       return  this.sheetService.closeShift(site, sheet).pipe(
         switchMap( data => {
+          console.log('close sheet', data.balanceSheetEmployee.lastName)
           this.updateBalanceSheet(data)
-          this.router.navigateByUrl(navigateUrl)
+          if (navigateUrl) {
+            this.router.navigateByUrl(navigateUrl)
+          }
           return of(data)
       }))
     }

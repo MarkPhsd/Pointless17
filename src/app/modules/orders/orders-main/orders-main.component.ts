@@ -91,7 +91,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   scheduleDateEnd: string;
   showAllOrderInstructions = []  as string[];
   interval;
-
+  styleFilterHeight: string = 'max-height: 76vh;'
   // this.uiSettingService.updatePOSDevice(item)
   terminalSettings: ITerminalSettings;
   viewPrep: boolean;
@@ -289,15 +289,16 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   }
 
   getOrderItemHistory() {
-    //orderItemHistory$
+
     this.viewType = 4;
-    if (this.user && this.user.roles == 'user') {
+    if (this.user?.roles == 'user') {
       // this.posor/
+
       const site = this.siteService.getAssignedSite();
       let search = {} as IOrderItemSearchModel
       const results$ =  this.posOrderItemService.getItemsHistoryBySearch(site, search);
       this.orderItemHistory$ = results$.pipe(switchMap(data => {
-        // console.log('history items', data)
+
         return of(data)
       }))
     }
@@ -634,15 +635,28 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     }
   }
 
+
   get orderView() {
+    this.styleFilterHeight = 'max-height: 83vh;overflow:hidden'
+    if (window.innerHeight< 1000) {
+      this.styleFilterHeight = 'max-height: 70vh;overflow:hidden'
+    }
     if (this.viewType == 0 ) {
+      this.styleFilterHeight = 'max-height: 83vh;overflow:hidden'
+      if (window.innerHeight< 1000) {
+        this.styleFilterHeight = 'max-height: 70vh;overflow:hidden'
+      }
       return  this.orderList
     }
     if (this.viewType == 1) {
       return  this.orderCard
     }
     if (this.viewType == 2 ) {
-      return this.orderPanel
+      if (this.smallDevice) {
+        return  this.orderCard
+      } else {
+        return this.orderPanel
+      }
     }
     if (this.viewType == 3 ) {
       return this.orderPrep
@@ -722,6 +736,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   }
 
   filterBottomSheet() {
+    if(this.smallDevice) {
+      this.viewType = 1
+    }
     this._bottomSheet.open(OrderFilterPanelComponent);
   }
 

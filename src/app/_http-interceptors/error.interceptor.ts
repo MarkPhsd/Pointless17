@@ -3,6 +3,7 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/c
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthenticationService } from '../_services';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -10,6 +11,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     debugNotification: boolean;
 
     constructor(
+                private authenticationSerivce: AuthenticationService,
                 private _snackBar: MatSnackBar
                 ) {
       this.debugNotification = this.getdebugOnThisDevice();
@@ -26,7 +28,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
         if (request.headers.get('X-Skip-Error-Handling')) {
             // Clone the request to remove the custom header before sending it to the server
-            console.log('error handling ignored')
+            // console.log('error handling ignored')
             const newRequest = request.clone({ headers: request.headers.delete('X-Skip-Error-Handling') });
             return next.handle(newRequest);
         }
@@ -36,30 +38,36 @@ export class ErrorInterceptor implements HttpInterceptor {
           catchError(err => {
             let errorMessage =  err?.status + ' '  + err?.message + err?.messageDetail;
 
+            if (err.status === 303) {
+              this.authenticationSerivce.logout(false);
+              return;
+            }
+
             if (err.status === 400) {
               if (this.getdebugOnThisDevice()) {
-                this.notifyEvent(errorMessage, 'Some error occured.' );
+
+                this.notifyEvent(errorMessage, 'Close.' );
               }
-              console.log(errorMessage)
+              // console.log(errorMessage)
               return;
             }
             if (err.status === 401) {
               if (this.getdebugOnThisDevice()) {
-                this.notifyEvent(errorMessage, 'Some error occured.' );
+                this.notifyEvent(errorMessage, 'Close.' );
               }
-              console.log(errorMessage)
+              // console.log(errorMessage)
               return;
             }
             if (err.status === 500) {
               if (this.getdebugOnThisDevice()) {
-                this.notifyEvent(errorMessage, 'Some error occured.'  );
+                this.notifyEvent(errorMessage, 'Close.'  );
               }
-              console.log(errorMessage)
+              // console.log(errorMessage)
               return;
             }
 
             if (this.getdebugOnThisDevice()) {
-              this.notifyEvent(`${err?.message + err?.messageDetail}. Status: ${err.status} `, 'Some error occured.' );
+              this.notifyEvent(`${err?.message + err?.messageDetail}. Status: ${err.status} `, 'Close.' );
               return
             }
 

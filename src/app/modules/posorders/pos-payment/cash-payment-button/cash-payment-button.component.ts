@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { IPaymentMethod } from 'ngx-paypal';
 import { catchError, Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSPayment, IUser } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -41,7 +40,6 @@ export class CashPaymentButtonComponent implements OnInit {
   paymentMethod: IPaymentMethod;
   action$: Observable<any>;
 
-
   constructor(
     private sitesService    : SitesService,
     private paymentsMethodsService: PaymentsMethodsProcessService,
@@ -56,16 +54,16 @@ export class CashPaymentButtonComponent implements OnInit {
   }
 
   setPaymentAmount() {
-    if (this.uiTransactions.dcapMultiPrice) { 
-      if (this.paymentAmount == this.creditBalanceRemaining) { 
+    if (this.uiTransactions.dcapMultiPrice) {
+      if (this.paymentAmount == this.creditBalanceRemaining) {
             this.paymentAmount = this.cashDiscount
-            console.log('cash discount', this.cashDiscount)
+            // console.log('cash discount', this.cashDiscount)
       }
     }
   }
 
   get cashDiscount() {
-    if (this.uiTransactions.dcapMultiPrice) { 
+    if (this.uiTransactions.dcapMultiPrice) {
       if (this.uiTransactions && this.uiTransactions?.dcapDualPriceValue != 0) {
         return this.order.balanceRemaining * (1 + +this.uiTransactions.dcapDualPriceValue) // * (1 + this.uiConfig.dcapDualPriceValue)
       }

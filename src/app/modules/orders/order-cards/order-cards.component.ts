@@ -99,11 +99,11 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   _searchBar     : Subscription;
   searchBar      : boolean;
 
-  //order / cards / prep 
+  //order / cards / prep
   _viewType     : Subscription;
   viewType      : number;
 
-  
+
   prepStatus: number;
   _prepStatus: Subscription;
 
@@ -144,14 +144,14 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   initViewSubscriber() {
     this._viewType = this.orderMethodsService.viewOrderType$.subscribe(data => {
       this.viewType = data;
-      if (data == 3) { 
+      if (data == 3) {
         this.updatePreStatus()
       }
     })
   }
 
   updatePreStatus() {
-    this._prepStatus = this.printingService.prepStatus$.subscribe(data => { 
+    this._prepStatus = this.printingService.prepStatus$.subscribe(data => {
       this.prepStatus = data;
       this.setOrderSubscriber()
     })
@@ -164,7 +164,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
       return this.authenticationService.userAuths$
     })).subscribe(data => {
       this.userAuths = data;
-      if (this.viewType == 3) { 
+      if (this.viewType == 3) {
         this.setOrderSubscriber()
       }
       if (!data) {
@@ -189,7 +189,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
         repeatWhen(notifications =>
           notifications.pipe(
             tap(() =>
-              console.log('refresh', model)
+              console.log('refresh', )
             ),
             delay(this.seconds))
         ),
@@ -198,7 +198,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
         })
       )
     }
- 
+
   }
 
   setScrollBarColor(color: string) {
@@ -242,7 +242,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     this.updateItemsPerPage();
     this.site = this.siteService.getAssignedSite();
 
-    console.log('init model', this.searchModel)
+    // console.log('init model', this.searchModel)
     if (this.searchModel)  {
       const model           = this.searchModel
       this.employeeID       = model.employeeID
@@ -278,7 +278,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
         }
         this.searchModel = data
 
- 
+
 
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
@@ -452,33 +452,33 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     if (this.isUser || !this.user) {
       model.greaterThanZero = 0;
     }
-   
+
     if (this.viewType == 1 || this.viewType == 0 || this.viewType == 2) {
       // console.log('regular search' , this.viewType)
       model.prepStatus = null;
       results$    = this.orderService.getOrderBySearchPaged(site, model) //.pipe(share());
     }
-    
+
     if (this.viewType == 3) {
       model.pageNumber    = pageNumber
       model.pageSize      = pageSize
-      if (this.printingService._prepStatus.value) { 
+      if (this.printingService._prepStatus.value) {
         model.prepStatus   = this.printingService._prepStatus.value;
       }
-      results$            = this.orderService.getOrdersPrepBySearchPaged(site, model).pipe(switchMap(data => { 
+      results$            = this.orderService.getOrdersPrepBySearchPaged(site, model).pipe(switchMap(data => {
         return of(data)
       }))
     }
-    
-    if (!results$) { 
+
+    if (!results$) {
       this.loading      = false
-      this.endOfRecords = false;  
+      this.endOfRecords = false;
       return of(null)
     }
 
     // console.log('add to list', model, this.viewType, this.printingService._prepStatus.value)
     return this.getResults(results$, reset)
- 
+
   }
 
   getResults(results$: Observable<POSOrdersPaged>, reset)  {

@@ -1,7 +1,7 @@
 import {Component, OnDestroy,
   HostListener, OnInit, AfterViewInit,
   EventEmitter, Output,
-  ViewChild, ElementRef,Renderer2
+  ViewChild, ElementRef,Renderer2, Input
   }  from '@angular/core';
 import { IServiceType, ISetting, IUser,  } from 'src/app/_interfaces';
 import { IPOSOrder, IPOSOrderSearchModel,  } from 'src/app/_interfaces/transactions/posorder';
@@ -45,6 +45,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
 
+  @Input() styleHeight = ''
   printingEnabled    : boolean;
   electronEnabled    : boolean;
   printerName        : string;

@@ -11,6 +11,11 @@ mat-card {
   margin        : 4px;
 }
 
+.buy-again {
+  position: relative;
+  left:-15px;
+}
+
 .custom-card {
   padding       : 2px;
   margin        : 4px;
@@ -110,7 +115,7 @@ mat-card {
   justify-content: start;
   max-width: 280px;
   overflow: hidden;
-  
+
 }
 
 
@@ -126,7 +131,7 @@ mat-card {
   color: cornflowerblue;
   background-blend-mode: difference;
 }
-.item-info { 
+.item-info {
   word-wrap: break-word; // Allows long words to be broken and wrapped onto the next line
   overflow-wrap: break-word; // Similar to word-wrap, ensures compatibility with all browsers
   box-sizing: border-box; // Ensures padding and border are included in the element's total width and height
@@ -262,7 +267,7 @@ button {
   gap: 10px;
   grid-template-columns: .9fr 65px 65px 65px auto;
   @include for-phone-only  {
-     grid-template-columns: 1fr 65px;
+     grid-template-columns: 1fr 65px 25px 25px;
   }
 }
 

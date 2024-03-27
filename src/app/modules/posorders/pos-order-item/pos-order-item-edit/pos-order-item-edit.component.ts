@@ -41,6 +41,7 @@ export class PosOrderItemEditComponent  {
       private userAuthorizations  : UserAuthorizationService,
       private _fb                 : UntypedFormBuilder,
       private posOrderItemMethodsService: PosOrderItemMethodsService,
+      private siteService: SitesService,
       private dialogRef           : MatDialogRef<PosOrderItemEditComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -50,7 +51,7 @@ export class PosOrderItemEditComponent  {
     }
 
     this.authenticationService.userAuths$.subscribe(data => {
-      if (data.allowBuy) {
+      if (data?.allowBuy) {
         this.negativeOption = true
       }
     })
@@ -190,6 +191,11 @@ export class PosOrderItemEditComponent  {
   saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> {
     const order$ = this.posOrderItemMethodsService.saveSub(item, editField).pipe(
       switchMap(data => {
+
+        if (data?.resultMessage) {
+          this.siteService.notify(data?.resultMessage, 'Close', 3000, 'red')
+          return of(data)
+        }
         //this sets it back. we need to set back and then get preferences and clienttype.
         this.authenticationService.overRideUser(null)
         if (!data) {
@@ -274,7 +280,7 @@ export class PosOrderItemEditComponent  {
     this.closeOnEnterPress.emit('true')
   }
 
-  onClose(event) {//   
+  onClose(event) {//
     this.authenticationService.updateUserAuthstemp(null);
     this.dialogRef.close();
     this.closeOnEnterPress.emit('true')

@@ -43,7 +43,6 @@ pos-order-item {
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
-    // height: 100%;
     height: calc(100vh - 100px);
   }
 }
@@ -100,8 +99,8 @@ pos-order-item {
 
   @include for-phone-only  {
     max-width: 95vw;
-    overflow-y: visible;
-    overflow-x: visible;
+    overflow-y: scroll;
+    overflow-x: scroll;
   }
 }
 

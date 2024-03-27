@@ -29,6 +29,7 @@ export class FbClientTypesService {
       changeInventoryValue : [],
       blindClose           : [],
       buysSalesReports     : [],
+      enablebuyAgain: [],
       editEmail:    [],
       itemSalesGroupByQuantity: [],
       itemSalesGroupBySize: [],
@@ -68,6 +69,9 @@ export class FbClientTypesService {
       refundItem      : [],
       refundOrder     : [],
       refundPayment   : [],
+
+      disableSplitByItems    : [],
+      disableMultiplePayments: [],
 
       userAssignedBalanceSheet : [],
       searchBalanceSheets      : [],

@@ -525,7 +525,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       }
       return of(data)
     }),catchError(data =>{
-      console.log('error getting user', data)
+      this.authenticationService.updateUser(null)
+      this.logout()
+      console.log('error getting user', data, user)
       return of(null)
     }))
   }

@@ -5,6 +5,7 @@ import { AuthenticationService } from 'src/app/_services';
 import { IUser }  from 'src/app/_interfaces';
 import { Observable, of, switchMap} from 'rxjs'
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 @Component({
   selector: 'app-resetpassword',
   templateUrl: './resetpassword.component.html',
@@ -40,6 +41,7 @@ export class ResetpasswordComponent implements OnInit {
       private uiSettings: UISettingsService,
       private route: ActivatedRoute,
       private router: Router,
+      private siteService: SitesService,
       private authenticationService: AuthenticationService
   )
   {
@@ -86,11 +88,17 @@ export class ResetpasswordComponent implements OnInit {
       this.request$ = this.authenticationService.requestPasswordResetToken(this.f.username.value).pipe(
         switchMap(data => {
           this.processing = false
+          if (data?.userExists) { 
+            this.siteService.notify('Please check your phone or email for a reset code.', 'Close', 5000, 'green')
+            this.changePassword(this.f.username.value)
+          } else { 
+            this.initForm();
+          }
           return of(data)
         }
         )
       )
-      this.initForm();
+      
 
     } catch (error) {
       this.statusMessage = "Password reset request failed."
@@ -98,8 +106,8 @@ export class ResetpasswordComponent implements OnInit {
 
   }
 
-  changePassword() {
-    this.router.navigate(['/changepassword']);
+  changePassword(userName: string) {
+    this.router.navigate(['/changepassword', {userName: userName}]);
   }
 
 

@@ -19,12 +19,12 @@
           <div  *ngIf="accordionStep === index" class="panel-description" [innerHTML]="subGroup?.instructions"></div>
 
           <!-- item{{subGroup?.maxQuantity > 1 ? 's' : ''}}. -->
-          <div   class="panel-description"  *ngIf="accordionStep === index && subGroup.minQuantity && subGroup.minQuantity> 0">
+          <div   class="panel-description font-1-2em font-bold"  *ngIf="accordionStep === index && subGroup.minQuantity && subGroup.minQuantity> 0">
              Select at least  {{subGroup?.minQuantity}} item{{subGroup?.maxQuantity > 1 ? 's' : ''}}.
             <span *ngIf="subGroup.maxQuantity && subGroup.maxQuantity> 1"> {{subGroup?.maxQuantity}} max.  </span>
           </div>
 
-          <div  class="panel-description" class="margin-left-20px" class="margin-left-20px" *ngIf="accordionStep === index && 
+          <div  class="panel-description font-1-2em font-bold" class="margin-left-20px" class="margin-left-20px" *ngIf="accordionStep === index &&
             subGroup.minQuantity && subGroup.minQuantity == 0 && subGroup.maxQuantity && subGroup.maxQuantity> 0">
             Select up to  {{subGroup?.maxQuantity}} item{{subGroup?.maxQuantity > 1 ? 's' : ''}}.
           </div>

@@ -17,6 +17,7 @@ import { PlatformService } from '../system/platform.service';
 import { POSOrderItemService } from './posorder-item-service.service';
 import { UserAuthorizationService } from '../system/user-authorization.service';
 import { DcapRStream, DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
+import { DcapPayAPIService } from 'src/app/modules/payment-processing/services/dcap-pay-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   constructor(
     private sitesService        : SitesService,
     private paymentService      : POSPaymentService,
+    private payApiService       : DcapPayAPIService,
     private paymentMethodService: PaymentMethodsService,
     private orderService        : OrdersService,
     private platFormService     : PlatformService,
@@ -422,6 +424,28 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return null;
   }
 
+  processPayAPIVoid( payment: IPOSPayment) {
+    //once we get back the method 'Card Type'
+    //lookup the payment method.
+    //we can't get the type of payment before we get the PaymentID.
+    //so we just have to request the ID, and then we can establish everything after that.
+    const site = this.sitesService.getAssignedSite();
+    const  posPayment = {} as IPOSPayment;
+    posPayment.id = payment.id;
+    return this.payApiService.payAPiVoid(payment).pipe(switchMap(data => {
+
+      this.orderMethodsService.updateOrder(data.order)
+      if (data.result) {
+        this.sitesService.notify('Voided - this order has been re-opened if closed.', 'Close', 3000, 'green' )
+      }
+      if (!data.result) {
+        this.sitesService.notify(data.resultMessage, 'Close', 10000, 'red' )
+      }
+      return of(data)
+    }))
+
+  }
+
   processDcapCreditVoid( payment: IPOSPayment) {
     //once we get back the method 'Card Type'
     //lookup the payment method.
@@ -432,8 +456,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     posPayment.id = payment.id;
     const device = localStorage.getItem('devicename')
     return this.dCapService.voidSaleByRecordNo(device, payment.id, device).pipe(switchMap(data => {
-      // return this.processDSIEMVCreditVoid
-      console.log('response', data)
       if (data) {
         let valid =   this.validateDCAPResponse(data, posPayment)
         console.log('valid', valid)

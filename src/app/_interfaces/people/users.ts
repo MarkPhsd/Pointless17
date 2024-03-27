@@ -39,5 +39,6 @@ export interface UserPreferences {
   orderID: number;
   ebayItemJSONHidden: boolean;
   headerColor: string;
+  messagingPreference: number;
 }
 

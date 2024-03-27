@@ -144,7 +144,7 @@ export interface IBalanceSheet {
   tooniesEnd:           number;
   tooniesStart:         number;
   cashDropTotal:        number;
-  balanceSheetEmployee: BalanceSheetEmployee;
+  balanceSheetEmployee : BalanceSheetEmployee;
   cashDrops            : CashDrop[];
   message              : string;
   errorMessage         : string;

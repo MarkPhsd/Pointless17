@@ -1,16 +1,18 @@
   <ng-content></ng-content>
 
   <div  *ngIf="sheet && sheet != undefined"  class="header-grid info-width printFont-14">
+
     <div >Type</div>
-    <div class=" span-col"> {{ sheetType }}</div>
+    <div class="span-col"> {{ sheetType }}</div>
+
     <div class="">Sheet ID</div>
-    <div class=" span-col">     ({{sheet.id}})</div>
+    <div class=" span-col"> ({{sheet?.id}})</div>
 
-    <div  class="">Employee</div>
-    <div class="span-col " *ngIf="sheet?.balanceSheetEmployee" > {{sheet?.balanceSheetEmployee?.lastName}} </div>
+    <div >Employee {{sheet?.balanceSheetEmployee?.lastName}}</div>
+    <div class="span-col"> {{sheet?.balanceSheetEmployee?.lastName}} </div>
 
-    <div  class="" *ngIf="sheet.deviceName">Device </div>
-    <div class="span-col " *ngIf="sheet?.deviceName"> {{sheet?.deviceName}} </div>
+    <div  *ngIf="sheet.deviceName">Device </div>
+    <div class="span-col" > {{sheet?.deviceName}} </div>
 
     <div  class="">Started</div>
     <div class="span-col "> {{sheet?.startTime | date: 'shortDate'}} {{sheet?.startTime | date: 'shortTime'}} </div>

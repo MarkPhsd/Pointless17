@@ -90,7 +90,9 @@ button {
   .spacer {
     flex: 1;
   }
-
+  mat-checkbox {
+    margin: 5px;
+  }
   mat-sidebar {
     border-right: 1px solid #eee;
     box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
@@ -1174,7 +1176,11 @@ mat-dialog-container {
   grid-template-columns: minmax(45px, 50px) 1fr;
   margin-left: -8px;
 }
-
+.grid-toggle-medium {
+  display: grid;
+  grid-template-columns: 75px 1fr;
+  gap: 10px
+}
 .grid-container-selectors {
   display: flex;
   flex-wrap: wrap;

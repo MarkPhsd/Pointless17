@@ -4,8 +4,6 @@
 <div class="parent-container">
 
   <ng-container [ngTemplateOutlet]="filterViewFull"></ng-container>
-
-
   <ng-container [ngTemplateOutlet]="summaryEnabled"></ng-container>
 
   <div [class]="gridcontainer">
@@ -23,6 +21,7 @@
     <div *ngIf="!smallDevice && !hidePanel"
          class="filter-container" filterDiv>
       <app-order-filter-panel
+          [styleHeight]="styleFilterHeight"
           (outPutHidePanel)="hideFilterPanel($event)">
       </app-order-filter-panel>
     </div>
@@ -48,7 +47,7 @@
 <ng-template #transferOrderView>
   <button #coachingTransferOrder class="dark-theme-green " mat-button (click)="transferOrder()"
           *ngIf="auths &&  auths.allowTransferOrder">
-        <mat-icon>move_up</mat-icon><span>Transfer</span>
+      <mat-icon>move_up</mat-icon><span>Transfer</span>
   </button>
 </ng-template>
 
@@ -77,7 +76,8 @@
 </ng-template>
 
 <ng-template #allOrders>
-    <button class="button"
+    <button *ngIf="!isUser"
+            class="button"
             mat-button
             color="accent"
             (click)="showAllOpenOrders()">
@@ -188,7 +188,6 @@
 </ng-template>
 
 <ng-template #orderCard>
-
   <app-order-cards
       [cardStyle]="'block'"
       (orderOutPut)="addOrderToSelectedList($event)" >
@@ -202,7 +201,7 @@
     </div>
     <div>
       <app-orders-list
-        [height]="'80vh'">
+        [height]="'75vh'">
       </app-orders-list>
     </div>
   </div>
@@ -215,7 +214,7 @@
 </ng-template>
 
 <ng-template #orderItemPanel>
-  <div *ngIf="(orderItemHistory$ | async) as orderItems">
+  <div *ngIf="(orderItemHistory$ | async) as orderItems;else loading">
     <mat-divider></mat-divider>
     <h2>Recently Purchased Items</h2>
     <mat-label>For more items, press search to review your order history.</mat-label>
@@ -227,10 +226,14 @@
       [userAuths]           ='auths'
       [disableActions]      = "true"
       [displayHistoryInfo]  = "true"
-      [enableItemReOrder]      ="uiTransactions && uiTransactions.enableItemReOrder"
+      [enableItemReOrder]   ="uiTransactions && uiTransactions.enableItemReOrder"
       [posOrderItems]       ="orderItems">
     </pos-order-items>
   </div>
+  <ng-template #loading>
+    ...loading
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </ng-template>
 </ng-template>
 
 <ng-template #scheduledItems>
@@ -314,13 +317,12 @@
   </span>
 </ng-template>
 
-
 <ng-template #filterView>
   <div  *ngIf="!viewPrep" >
     <span>
       <span>
         <button  *ngIf="smallDevice" color="accent" mat-button (click)="filterBottomSheet()">
-          <mat-icon>search</mat-icon>
+          <mat-icon>search</mat-icon> <span *ngIf="isUser">Search</span>
         </button>
 
         <span>

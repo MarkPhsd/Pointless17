@@ -1,7 +1,8 @@
 <div *ngIf="(user$ | async) as user"></div>
-<div [id]="scrollStyle">
-  <mat-card *ngIf="uiTransactions"  class="panel" >
+<div [id]="scrollStyle" [style]="styleHeight">
+  <mat-card *ngIf="uiTransactions"  class="panel mat-card" >
     <mat-card-content
+              class="mat-card-content"
               [id]="scrollStyle"
               style="overflow-y: auto;
                     width: 300px;
@@ -82,16 +83,18 @@
       <div *ngIf="(auth?.accessHistoryReports || isUser) && toggleOpenClosedAll == '2'" class="grid-fields fields">
         <div>
           <div>
-            <button mat-raised-button
+            <button  mat-raised-button
                   class="date-filter-buttton"
                   (click)="toggleDateRangeFilter()">
                   Completed Dates<mat-icon>date_range</mat-icon>
             </button>
-            <mat-label>History</mat-label>
-            <mat-slide-toggle
-                      (change)="updateOrderSearch(searchModel)"
-                      [(ngModel)]="searchOrderHistory"  >
-            </mat-slide-toggle>
+            <span *ngIf="!isUser">
+              <mat-label>History</mat-label>
+              <mat-slide-toggle
+                        (change)="updateOrderSearch(searchModel)"
+                        [(ngModel)]="searchOrderHistory"  >
+              </mat-slide-toggle>
+            </span>
           </div>
             <mat-date-range
               [inputForm] ="completionDateForm">
@@ -131,9 +134,9 @@
             class       ="toggle-view"
             [(ngModel)] ="toggleOpenClosedAll"
             (change)    ="refreshSearch()" >
-        <mat-button-toggle value="1" >Open </mat-button-toggle>
-        <mat-button-toggle value="2">Closed</mat-button-toggle>
-        <mat-button-toggle value="0">All</mat-button-toggle>
+        <mat-button-toggle class="mat-button-toggle" value="1" >Open </mat-button-toggle>
+        <mat-button-toggle class="mat-button-toggle" value="2">Closed</mat-button-toggle>
+        <mat-button-toggle class="mat-button-toggle" value="0">All</mat-button-toggle>
       </mat-button-toggle-group>
 
       <mat-button-toggle-group
@@ -205,6 +208,7 @@
               [list$]            ="serviceTypes$"
               [toggleDimensions] ="''"
               [toggleStyleHeight] ="''"
+              [toggleClass]="'toggleclass-noheight'"
               (outPutID)="setServiceType($event)">
               Sale Type
         </app-mat-toggle-selector>

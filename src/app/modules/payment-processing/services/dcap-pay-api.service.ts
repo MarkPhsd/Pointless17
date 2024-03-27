@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { ParseSourceSpan } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPOSPayment } from 'src/app/_interfaces';
+import { IPOSPayment, IPaymentResponse, OperationWithAction } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 // src/app/models/token-response.ts
 export interface TokenResponse {
@@ -44,6 +44,7 @@ export interface SaleResponse {
   providedIn: 'root'
 })
 export class DcapPayAPIService {
+
 
 
   site = this.siteService.getAssignedSite();
@@ -103,6 +104,32 @@ export class DcapPayAPIService {
     return this.http.get<boolean>(url)
   }
 
+  payAPiVoid(payment: IPOSPayment): Observable<OperationWithAction> {
+
+    const controller = '/payAPI/'
+
+    const endPoint = "payAPiVoid"
+
+    const parameters = ``
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<OperationWithAction>(url, payment)
+  }
+
+  payAPIAdjustSale(payment: IPOSPayment) : Observable<OperationWithAction> {
+
+    const controller = '/payAPI/'
+
+    const endPoint = "payAPIAdjustSale"
+
+    const parameters = ``
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<OperationWithAction>(url, payment)
+  }
+
   getPayMID(): Observable<string> {
 
     const controller = '/payAPI/'
@@ -129,7 +156,7 @@ export class DcapPayAPIService {
     return this.http.get<KeyResponse>(url)
   }
 
-  sale(response: any, posPayment: IPOSPayment) {
+  sale(response: any, posPayment: IPOSPayment): Observable<IPaymentResponse> {
 
     const controller = '/payAPI/'
 

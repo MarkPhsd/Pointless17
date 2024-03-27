@@ -1,5 +1,9 @@
 
-<mat-toolbar *ngIf="smallDevice" color="primary">
+<mat-toolbar
+      [color]="matToolbarColor"
+      [style]="headerBackColor"
+      *ngIf="smallDevice"
+       >
   <ng-container [ngTemplateOutlet]="outlet"></ng-container>
 </mat-toolbar>
 

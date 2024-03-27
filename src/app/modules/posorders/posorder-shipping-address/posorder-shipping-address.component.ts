@@ -5,7 +5,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
-import { UntypedFormGroup,UntypedFormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup,UntypedFormBuilder, Validators, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'posorder-shipping-address',
@@ -14,7 +14,7 @@ import { UntypedFormGroup,UntypedFormBuilder, Validators } from '@angular/forms'
 })
 export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
 
-  @Input() inputForm            : UntypedFormGroup;
+  @Input() inputForm            : FormGroup;
   @Input() serviceType          : IServiceType;
   @Input() serviceTypes$        : Observable<IServiceType[]>;
   @Input() serviceType$         : Observable<IServiceType>;
@@ -22,7 +22,7 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
   _order               : Subscription;
   errorMessage         : string;
   @Output() outPutSaveAddress = new EventEmitter();
-
+  @Output() outPutBack = new EventEmitter<number>();
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
@@ -59,8 +59,8 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
       address  :['', Validators.required],
       address2 :[''],
       city     :['', Validators.required],
-      state    :['', Validators.required],
-      zip      :['', Validators.required],
+      state    :['', Validators.required, Validators.minLength(2),Validators.maxLength(2) ],
+      zip      :['', Validators.required, Validators.minLength(5), Validators.maxLength(5) ],
     })
     this.errorMessage = ''
   }
@@ -75,9 +75,9 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
     this.order.shipAddress2    = '';
     this.order.shipCity        = '';
     this.order.shipPostal      = '';
-    this.order.shipPostalCode  =  '';
+    this.order.shipPostalCode  = '';
     this.order.shipCity        = '';
-    this.order.shipState = '';
+    this.order.shipState       = '';
   }
 
   saveShippingAddress() {
@@ -100,7 +100,9 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
         this.outPutSaveAddress.emit(this.order)
       }
     }
-
   }
 
+  back() { 
+    this.outPutBack.emit(-1)
+  }
 }

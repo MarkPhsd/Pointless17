@@ -1,99 +1,105 @@
-<div *ngIf="(payMID$ | async) as key">
-  <div *ngIf="!key">
-    No MID Present
+
+<div *ngIf="payApiEnabled">
+
+  <div *ngIf="(payMID$ | async) as key">
+    <div *ngIf="!key">
+      No MID Present
+    </div>
   </div>
-</div>
-{{publicKey}}<br>
 
-4761739001010119 <br>
-12<br>
-2022<br>
-201<br>
-
-<div *ngIf="(payAPIKeyExists$ | async) as key">
-  <div *ngIf="!key">
-    No Key Present
+  <div *ngIf="(payAPIKeyExists$ | async) as key">
+    <div *ngIf="!key">
+      No Key Present
+    </div>
   </div>
-</div>
 
-<div *ngIf="(payment$ | async) as posPayment">
-  {{posPayment | json}}
-</div>
+  <div *ngIf="(payment$ | async) as data">
+    <h4>{{data?.responseMessage}}</h4>
+    <div style="margin-left:10px" class="grid-toggle-medium" >
+      <div>Status</div>
+      <div>{{data?.saleResponse?.status}}</div>
+      <div>Message</div>
+      <div>{{data?.saleResponse?.message}}</div>
+    </div>
+  </div>
 
-<div *ngIf="!publicKey">
-  ...Initializing Key
-  <mat-spinner [diameter]="50"></mat-spinner>
-</div>
+  <div *ngIf="!publicKey">
+    Prepping Credit Card Payment.
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
 
-<mat-card *ngIf="publicKey && formInitialized"
-          class="centered-2 centered-flex"
-          style="width:500px;">
-    <mat-card-title  style="border-radius:5px;padding:5px;background: rgb(68 96 210)">
-      <div class="ps-flex-group" style="background:rgb(189, 193, 219)">
-        <div>
-          <div style="margin-top:5px">
-            Payment Details
+  <mat-card *ngIf="publicKey && formInitialized"
+            style="width:390;">
+      <mat-card-title  style="border-radius:5px;padding:5px;">
+        <div class="ps-flex-group" style="">
+          <!-- background:rgb(189, 193, 219) -->
+          <div>
+            <div style="margin-top:5px">
+              Payment Details
+            </div>
+          </div>
+          <div>
+            <img src="../assets/images/accepted.png">
           </div>
         </div>
-        <div>
-          <img src="../assets/images/accepted.png">
+        <mat-divider></mat-divider>
+        <div style="margin-left:20px">
+          Amount {{order?.total | currency}}
+        </div>
+      </mat-card-title>
+
+      <mat-card-subtitle>
+
+        <div *ngIf="expInvalid">
+          <mat-icon color="warm">alert</mat-icon>Invalid EXP
+        </div>
+        <div *ngIf="cardInValid">
+          <mat-icon color="warm">alert</mat-icon> Invalid Card
+        </div>
+        <div *ngIf="cvvInvalid">
+          <mat-icon color="warm">alert</mat-icon> Invalid CVV
+        </div>
+      </mat-card-subtitle>
+
+      <mat-card-content class="flex-centered">
+        <ng-container [ngTemplateOutlet]="formView"></ng-container>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <div  class="flex-end flex-grid-row">
+          <div>
+            <button [disabled]="processing" class="payment-buttons"
+                      mat-raised-button color="primary"
+                    (click)="requestToken()">Pay
+            </button>
+          </div>
+        </div>
+        <mat-spinner [diameter]="50" *ngIf="processing"></mat-spinner>
+      </mat-card-actions>
+  </mat-card>
+</div>
+  <ng-template #formView>
+    <form  id="payment_form" style="border-radius:10px; background:rgb(255, 255, 255);color:black">
+      <div class="card-number">
+        <mat-label>Card</mat-label><br>
+        <input  style="padding:3px"  type="number"   data-token="card_number"  />
+      </div>
+
+      <div class="flex-grid-row" style="gap:0px">
+        <div class="fields-values">
+          <mat-label class="label"> Month - MM</mat-label>
+          <input style="width:125px;padding:5px"  type="number"   data-token="exp_month"  />
+        </div>
+        <div class="fields-values">
+          <mat-label class="label"> Year - YYYY</mat-label>
+          <input  style="width:125px;padding:5px" type="number"   data-token="exp_year" />
+        </div>
+        <div class="fields-values">
+          <mat-label class="label">CVV</mat-label>
+          <input style="width:125px;padding:5px"  type="number"   data-token="cvv"  />
         </div>
       </div>
-      <mat-divider></mat-divider>
-      <div style="margin-left:20px">
-        Amount {{order?.total | currency}}
-      </div>
-    </mat-card-title>
 
-    <mat-card-subtitle>
-
-      <div *ngIf="expInvalid">
-        <mat-icon color="warm">alert</mat-icon>Invalid EXP
-      </div>
-      <div *ngIf="cardInValid">
-        <mat-icon color="warm">alert</mat-icon> Invalid Card
-      </div>
-      <div *ngIf="cvvInvalid">
-        <mat-icon color="warm">alert</mat-icon> Invalid CVV
-      </div>
-    </mat-card-subtitle>
-
-    <mat-card-content class="flex-centered">
-      <ng-container [ngTemplateOutlet]="formView"></ng-container>
-    </mat-card-content>
-
-    <mat-card-actions>
-      <div  class="flex-centered flex-grid-row">
-        <div style="margin:5px;float:right">
-          <button class="payment-buttons" mat-raised-button color="primary" (click)="requestToken()">Pay</button>
-        </div>
-
-      </div>
-    </mat-card-actions>
-</mat-card>
-
-<ng-template #formView>
-  <form  id="payment_form">
-    <div class="card-number">
-      <mat-label>Card</mat-label><br>
-      <input  style="padding:3px"  type="text"   data-token="card_number"  />
-    </div>
-
-    <div class="flex-grid-row">
-      <div class="fields-values">
-        <mat-label class="label"> Month - MM</mat-label>
-        <input style="width:125px;padding:5px"  type="text"   data-token="exp_month"  />
-      </div>
-      <div class="fields-values">
-        <mat-label class="label"> Year - YYYY</mat-label>
-        <input  style="width:125px;padding:5px" type="text"   data-token="exp_year" />
-      </div>
-      <div class="fields-values">
-        <mat-label class="label">CVV</mat-label>
-        <input style="width:125px;padding:5px"  type="text"   data-token="cvv"  />
-      </div>
-    </div>
-
-  </form>
-  <input  type="hidden" id="token" />
-</ng-template>
+    </form>
+    <input  type="hidden" id="token" />
+  </ng-template>

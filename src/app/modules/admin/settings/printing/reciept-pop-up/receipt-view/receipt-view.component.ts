@@ -210,7 +210,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     return receipt$.pipe(
       switchMap(data => { return defaultReceipt$ })
           ,catchError(e => {
-                    // console.log('e 1', e)
             this.siteService.notify('Error defaultReceipt receipt view' + e, 'Alert', 2000)
             return of(null)
           })).pipe(

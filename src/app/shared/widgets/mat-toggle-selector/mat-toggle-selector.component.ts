@@ -39,6 +39,8 @@ export class MatToggleSelectorComponent implements OnChanges {
   subscribed : boolean;
   @Input() styleHeight = ''
 
+  @Input() toggleClass = 'toggle-class';
+
   constructor() {
     if (this.textLength == 0) {
       this.textLength = 20

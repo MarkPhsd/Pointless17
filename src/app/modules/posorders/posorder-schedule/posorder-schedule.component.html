@@ -1,4 +1,4 @@
-<mat-card *ngIf="order">
+<mat-card class="plan-order mat-card-class" *ngIf="order">
   <mat-card-title>
       Plan Order
       <!-- <span style="margin-left:5px" *ngIf="processingUpdate">
@@ -26,26 +26,30 @@
   </mat-card-subtitle>
 
   <mat-card-content *ngIf="serviceType">
-    <mat-tab-group  class="mat-tab-group" mat-align-tabs="start"
+    <mat-tab-group
+                    #matTabGroup [class.header-less-tabs]="matTabGroup._tabs.length <= 1"
+                    class="invisible-tabs mat-tab-group" mat-align-tabs="start"
                     [(selectedIndex)]="selectedIndex"
                     (selectedIndexChange)="selectChange()">
 
-        <mat-tab label="Choose Sale Type"
+        <mat-tab label="Sale Type"
                  class="sale-type-tab">
           <posorder-service-type
               [textLength]="100"
               (outPutSelectServiceType)='selectedServiceType($event)'>
+              Selected Type
           </posorder-service-type>
         </mat-tab>
 
         <mat-tab *ngIf="serviceType &&
                         serviceType.deliveryService"
-                 label="Delivery Information">
+                 label="Address">
           <div>
             <posorder-shipping-address
                 [serviceType]="serviceType"
                 [order]="order"
                 [inputForm]="inputForm"
+                (outPutBack)="navigate($event)"
                 (outPutSaveAddress)= "saveShippingAddress($event)">
             </posorder-shipping-address>
           </div>
@@ -53,7 +57,7 @@
 
         <mat-tab (click)="selectedIndex == 2"
                 *ngIf   ="serviceType && serviceType?.promptScheduleTime"
-                 label  ="Schedule Information">
+                 label  ="Schedule">
           <div style="margin:5px">
             <app-posorder-schedule-form
                 [inputForm]="scheduleForm"
@@ -74,7 +78,7 @@
               [inputForm]="inputFormNotes">
             </pos-order-notes>
 
-            <ng-container [ngTemplateOutlet]="payOptionView"></ng-container>
+            <!-- <ng-container [ngTemplateOutlet]="payOptionView"></ng-container> -->
           </div>
 
           <div class="instructions-small-view">

@@ -4,7 +4,7 @@ import { AWSBucketService, AuthenticationService, MenuService, OrdersService } f
 import { ActivatedRoute, Router,  } from '@angular/router';
 import * as _  from "lodash";
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
-import { Observable, Subscription, of, switchMap } from 'rxjs';
+import { Observable, Subscription, of, switchMap,concatMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Capacitor } from '@capacitor/core';
@@ -290,15 +290,12 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   altMethod(action){
-
-    // console.log('displayType', this.displayType)
-
     if (this.promptModifier) {
       this.menuItemActionObs(action)
     }
 
     if (this.displayType === 'header-category') {
-      console.log('displayType', this.displayType)
+      // console.log('displayType', this.displayType)
       this.menuItemActionObs(true, false, this.menuItem);
       return
     }
@@ -334,18 +331,16 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     }
 
     if (this.isCategory) {
-      console.log('nav category', this.menuItem.id, this.menuItem.itemType.id)
+      // console.log('nav category', this.menuItem.id, this.menuItem.itemType.id)
       this.listItems(this.menuItem?.id, this.menuItem?.itemType?.id);
       add = false;
       return;
     }
 
+
     if (plusOne) { add = true; }
-    const action$ = this.orderMethodsService.menuItemActionObs(this.order, this.menuItem, add,
+    this.action$ = this.orderMethodsService.menuItemActionObs(this.order, this.menuItem, add,
                                               this.orderMethodsService.assignPOSItems);
-    this.action$ = action$.pipe(switchMap(data => {
-      return of(data)
-    }))
   }
 
   viewItem() {

@@ -662,11 +662,16 @@ export class PrintingService {
       try {
         html2canvas(nativeElement).then(canvas => {
           var pdf = new jsPDF('p', 'pt', [canvas.width +15 , canvas.height + 25]);
-          _this.canvas.nativeElement.src = canvas.toDataURL();
-          const content = canvas.toDataURL('image/png');
-          // let imageData = this.getBase64Image(this.canvas.nativeElement);
-          pdf.addImage(content, "JPG", 10, 10, canvas.width -15,   canvas.height -25);
-          pdf.save('pointlessOutput.pdf');
+
+          console.log('canvas', canvas)
+          if (canvas) {
+            _this.canvas.nativeElement.src = canvas.toDataURL();
+            const content = canvas.toDataURL('image/png');
+            // let imageData = this.getBase64Image(this.canvas.nativeElement);
+            pdf.addImage(content, "JPG", 10, 10, canvas.width -15,   canvas.height -25);
+            pdf.save('pointlessOutput.pdf');
+          }
+
         });
       } catch (error) {
         console.log(error)

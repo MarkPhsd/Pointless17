@@ -61,9 +61,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   initSubscriptions() {
 
     const site = this.siteService.getAssignedSite();
-    // this.quickServiceTypes$ = this.serviceTypeService.getSaleTypes(site)
-
-    this.orderMethodsService.updateOrderSubscription(this.order);
+    // this.orderMethodsService.updateOrderSubscription(this.order);
 
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       if (data && data.id) {
@@ -111,28 +109,28 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   constructor(
     private siteService:            SitesService,
-    public orderService:            OrdersService,
+    public  orderService:            OrdersService,
     private authenticationService : AuthenticationService,
     private toolbarServiceUI:       ToolBarUIService,
     private router                : Router,
     private serviceTypeService: ServiceTypeService,
     private userSwitchingService: UserSwitchingService,
-    public platFormService: PlatformService,
+    public  platFormService: PlatformService,
     private uiSettings: UISettingsService,
-    public orderMethodsService: OrderMethodsService,
+    public  orderMethodsService: OrderMethodsService,
     private paymentMethodsService: PaymentsMethodsProcessService,
-    public paymentMethodsProcess: PaymentsMethodsProcessService,
+    public  paymentMethodsProcess: PaymentsMethodsProcessService,
     ) {
    }
 
   ngOnInit(): void {
     this.href = this.router.url
-    this.initSubscriptions();
     this.initOrderBarSubscription();
     this.assignCurrentOrder();
     this.refreshOrderCheck();
-    this.updateItemsPerPage();
-    this.deviceInfo = this.authenticationService.deviceInfo
+    this.initUI();
+    this.deviceInfo = this.authenticationService.deviceInfo;
+    this.initSubscriptions();
   }
 
   ngOnDestroy() {
@@ -156,7 +154,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   @HostListener("window:resize", [])
-  updateItemsPerPage() {
+  initUI() {
 
     this.smallDevice = false
     if (window.innerWidth >= 1200) {
@@ -194,6 +192,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
         return ;
       }
     }
+
     this.actionOrder$  = this.addNewOrderByType(null)
   }
 
@@ -218,10 +217,11 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     {return true}
   }
 
-  async assignCurrentOrder() {
+  assignCurrentOrder() {
     let cartEnabled = false
     if (this.isPosNameDefined()) { cartEnabled = true }
     if (this.order)              { cartEnabled = true}
+
     if ( cartEnabled ) {
       this.refreshCurrentOrderCheck = true
       if (this.isPosNameDefined()) {
@@ -252,6 +252,9 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
     const site   = this.siteService.getAssignedSite()
     const posName = localStorage.getItem('devicename')
+
+    if (!posName) { return }
+
     this._order$  =  this.orderService.getCurrentPOSOrder(site, posName )
       .pipe(
         repeatWhen(notifications =>
@@ -293,8 +296,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   refreshOrderCheck() {
     try {
-
-      console.log('timer', this.timerID)
       if (!this.refreshCurrentOrderCheck) {
         this.timerID = setInterval(
           () =>  this.refreshOrder(),
@@ -302,7 +303,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
         );
       }
     } catch (error) {
-
     }
   }
 

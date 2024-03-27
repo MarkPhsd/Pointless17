@@ -828,7 +828,7 @@ constructor(  private _snackBar              : MatSnackBar,
          comparator: myComparator,
          singleClickEdit: true,
      }
-     this.columnDefs.push(imageName)
+     this.columnDefs.push(bayName)
 
      const idField = {   headerName: 'Copy', field: "id",
          cellRenderer: "btnCellRenderer",

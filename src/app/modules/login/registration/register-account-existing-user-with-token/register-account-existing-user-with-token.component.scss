@@ -1,4 +1,13 @@
 
-mat-card {
+@import "/src/mixins.scss";
+
+.mat-card { 
+  max-width:500px;
   width: 500px;
+  @include for-phone-only  {
+   width     : 100%;
+   max-width :100vw;
+ }
+
 }
+

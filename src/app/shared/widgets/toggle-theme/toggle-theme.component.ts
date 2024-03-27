@@ -32,40 +32,48 @@ export class ToggleThemeComponent{
 
   switchTheme() {
 
-
-    // console.log(this.userAuthorizationService.user)
-    // console.log(this.userAuthorizationService.user.userPreferences, this.userAuthorizationService.user.userPreferences.darkMode)
-
-    if (this.userAuthorizationService.user ){
+    if (this.userAuthorizationService.user && this.userAuthorizationService?.user?.userPreferences ){
       const darkMode =  this.userAuthorizationService?.user?.userPreferences?.darkMode;
       if ( darkMode ) {
-        let pref =  JSON.parse(JSON.stringify(this.userAuthorizationService.user.userPreferences))
-        pref.darkMode = false
-        console.log('setfalse', this.userAuthorizationService.user.userPreferences.darkMode )
         localStorage.setItem('angularTheme', 'light-theme')
-        this.action$ =  this.savePreferences(pref, this.userAuthorizationService.user.id)
+        if (this.userAuthorizationService?.user?.userPreferences) {
+          let pref =  JSON.parse(JSON.stringify(this.userAuthorizationService?.user?.userPreferences))
+          if (pref) {
+            pref.darkMode = false
+            this.action$ =  this.savePreferences(pref, this.userAuthorizationService.user.id)
+          }
+        }
         this.renderTheme();
         return;
       }
       if (!darkMode) {
-        let pref =  JSON.parse(JSON.stringify(this.userAuthorizationService.user.userPreferences))
-        pref.darkMode = true
-        console.log('settrue', this.userAuthorizationService.user.userPreferences.darkMode )
         localStorage.setItem('angularTheme', 'dark-theme')
-        this.action$ =  this.savePreferences(pref, this.userAuthorizationService.user.id)
+        if (this.userAuthorizationService?.user?.userPreferences) {
+          let pref =  JSON.parse(JSON.stringify(this.userAuthorizationService?.user?.userPreferences))
+          if (pref){
+            pref.darkMode = true
+            this.action$ =  this.savePreferences(pref, this.userAuthorizationService.user.id)
+          }
+        }
         this.renderTheme();
         return;
       }
+      return
+    }
+    let theme = ''
+
+    if (this.toggleTheme === 'dark-theme' ) {
+      theme = 'light-theme'
+      localStorage.setItem('angularTheme', theme)
+    } else {
+      theme = 'dark-theme'
+      localStorage.setItem('angularTheme', theme)
     }
 
-    if (!this.userAuthorizationService.user) {
-      if (this.toggleTheme === 'dark-theme' ) {
-        localStorage.setItem('angularTheme', 'light-theme')
-      } else {
-        localStorage.setItem('angularTheme', 'dark-theme')
-      }
-      this.renderTheme();
-    }
+    this.toggleTheme  = theme;
+    console.log('theme', theme)
+    this.renderTheme();
+
 
   }
 

@@ -1,8 +1,12 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DcapPayAPIService, KeyResponse } from '../services/dcap-pay-api.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
+import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 // declare var DatacapWebToken : any; // This allows TypeScript to recognize the global variable
 // declare let window: any; // Broad approach, makes window accept any property
 // declare global {
@@ -25,23 +29,27 @@ export class PayAPIComponent implements OnInit {
   action$: Observable<any>;
 
   @Input() order: IPOSOrder;
+  @Input() paymentAmount: number;
+  @Input() creditBalanceRemaining: number;
+  @Input() uiTransactions: TransactionUISettings;
+  @Output() setStep = new EventEmitter<any>();
+
   formInitialized: boolean;
   publicKey: string;//"[Token Key Goes Here]"
   payAPIKeyEnabled: boolean;
   payAPIKeyExists$ : Observable<any>;
   payMID$: Observable<any>;
   payment$: Observable<any>;
+  processing: boolean;
+
   constructor(
     private fb: FormBuilder,
+    private platFormService: PlatformService,
+    private siteService: SitesService,
+    private orderMethodsService: OrderMethodsService,
     private dcapPayAPIService: DcapPayAPIService) { }
 
-  // private setTokenValue(token: string): void {
-  //   this.tokenInput.nativeElement.value = token;
-  // }
-
   ngOnInit(): void {
-    // this.initForm()
-    this.encodeUrl()
     if (!this.order) {
       this.order = {} as IPOSOrder;
       this.order.subTotal    = 1.00;
@@ -57,13 +65,6 @@ export class PayAPIComponent implements OnInit {
         return of(data)
       }
     }))
-  }
-
-  encodeUrl(){
-    const originalString = "COASTSAND0GP:41543bd14e444bc5bf3598e15b9f7a78";
-      // Encode the string
-    this.encodedString = btoa(originalString);
-    console.log(this.encodedString);
   }
 
   getPayMID() :Observable<string> {
@@ -102,6 +103,15 @@ export class PayAPIComponent implements OnInit {
     });
   }
 
+  get payApiEnabled() {
+    if ( this.uiTransactions.dcapPayAPIEnabled) {
+      if (this.platFormService.isAppElectron) {
+        return false
+      }
+      return true
+    }
+    return false
+  }
   // initForm() {
   //   this.inputForm = this.fb.group({
   //     cvv : [201],
@@ -172,14 +182,13 @@ export class PayAPIComponent implements OnInit {
 
   requestToken(): void {
 
-    console.log('request token')
+     this.processing = true;
      const tokenCallback = (response: any) => {
-         console.log('All response', response)
+          this.processing = false;
           if (response.Error) {
             alert("Token error: " + response.Error);
           } else {
 
-            console.log('response', response.Token)
             // Here, you might want to do something with the token, like sending it to your server;
             if (response.Token) {
                 let posPayment = {} as IPOSPayment;
@@ -187,17 +196,24 @@ export class PayAPIComponent implements OnInit {
                 posPayment.amountPaid = this.order.total;
                 posPayment.preAuth    = response?.Token;
                 this.payment$ = this.dcapPayAPIService.sale(response,posPayment).pipe(switchMap(data => {
+
+                    this.siteService.notify(data.responseMessage, 'close', 5000, 'green')
+                    if (data.responseMessage.toLowerCase() == 'Approved' || data.responseMessage.toLowerCase() == 'success'.toLowerCase()) {
+                      this.orderMethodsService.updateOrder(data.order)
+                      this.orderMethodsService.updateOrderSubscription(data.order)
+                    }
+                    if (data.responseMessage != 'Approved') {
+
+                    }
+                    this.processing = false;
                    return of(data)
                 }))
-
           }
         };
       }
 
-      console.log('public key', this.publicKey)
       let mid  = this.publicKey
       window.DatacapWebToken.requestToken(mid, "payment_form", tokenCallback);
-
   }
 
   payAPIKeyExists() {
@@ -206,6 +222,5 @@ export class PayAPIComponent implements OnInit {
       return of(data)
     }))
   }
-
 
 }

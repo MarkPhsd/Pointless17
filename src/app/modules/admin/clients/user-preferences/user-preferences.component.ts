@@ -1,4 +1,4 @@
-import { Component, OnInit, Optional } from '@angular/core';
+import { Component, Input, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
@@ -18,10 +18,11 @@ export class UserPreferencesComponent implements OnInit {
   action$ : Observable<any>;
   headerColor: any;
   user: IUser
+  @Input() saveDisabled: boolean;
 
   _user = this.authenticationService.user$.subscribe(user => {
+    // console.log('user.messagingService', user?.userPreferences?.messagingPreference)
     this.user = user;
-    // console.log('user', user.userPreferences)
     this.initForm()
   })
 
@@ -58,16 +59,23 @@ export class UserPreferencesComponent implements OnInit {
       orderID:  [], //number;
       ebayItemJSONHidden:  [], //boolean;
       headerColor:  [], //string;
-
+      messagingPreference: [],
     })
-
 
     this.inputForm.patchValue(this.user?.userPreferences)
     this.headerColor  = this.user?.userPreferences?.headerColor;
 
     this.inputForm.valueChanges.subscribe(data => {
+      const formValue = data;
       if (this.headerColor) {   data.headerColor = this.headerColor  }
-      this.action$ = this.savePreferences(data, this.userAuthorizationService.user.id)
+
+      this.action$ = this.savePreferences(data, this.userAuthorizationService.user.id).pipe(switchMap(formValue => {
+        console.log('formValue messagingPreference', formValue?.messagingPreference)
+        this.user.userPreferences = formValue;
+        this.authenticationService.updateUser(this.user)
+        this.authenticationService.updatePreferences(formValue);
+        return of(data)
+      }))
     })
   }
 
@@ -81,9 +89,13 @@ export class UserPreferencesComponent implements OnInit {
   close() {
     let data = this.inputForm.value as UserPreferences
     data.headerColor  = this.headerColor;
+    const formValue = data;
     this.action$ = this.savePreferences(data, this.userAuthorizationService.user.id).pipe(switchMap(data => {
-      this.authenticationService.updatePreferences(data)
+      this.userAuthorizationService.user.userPreferences = formValue;
+      this.user.userPreferences = formValue;
+      this.authenticationService.updateUser(this.user)
       setTimeout(() => {
+
           this._close()
       }, 10);
       return of(data)
@@ -91,6 +103,7 @@ export class UserPreferencesComponent implements OnInit {
   }
 
   _close() {
+    if (this.saveDisabled) { return }
     if (this.dialogRef) {
       try {
         this.dialogRef.close();

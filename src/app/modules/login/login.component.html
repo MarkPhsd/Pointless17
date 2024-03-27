@@ -7,7 +7,7 @@
 <ng-container [ngTemplateOutlet]="loginMethodView"></ng-container>
 
 <ng-template #userEntryView>
-  <div class="centered centered-flex">
+  <div class="centered centered-flex ">
     <div  class="pin-entry">
       <button  mat-raised-button
                 class="center login pin-button"
@@ -16,7 +16,7 @@
           PIN Entry
       </button>
     </div>
-    <mat-card>
+    <mat-card class="mat-card">
       <mat-card-title>
         <div (click)="setAPIAlt()">
             <div class="centered-flex">
@@ -169,7 +169,7 @@
 </ng-template>
 
 <ng-template #pinEntryView>
-  <div class="centered centered-flex">
+  <div class="centered centered-flex mat-card-pin" >
       <div *ngIf="platformService.isApp && togglePIN" >
           <div class="pin-entry">
             <button class="pin-button"
@@ -179,7 +179,7 @@
             </button>
           </div>
 
-          <mat-card class="mat-card">
+          <mat-card class="mat-card-pin">
             <div class="pin-entry">
               <app-fast-user-switch
                 (outPutLogin)="pinLogin($event)"

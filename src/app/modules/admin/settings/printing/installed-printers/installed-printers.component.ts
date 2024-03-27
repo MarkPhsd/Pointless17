@@ -153,7 +153,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     this.printOptions = {} as printOptions;
     this.platForm = this.platFormService.platForm;
     this.isElectronApp = this.icpService.isElectronApp;
- 
+
 
     this.electronLabelPrinter$ = this.getElectronLabelPrinter();
     this.getElectronPrinterAssignent().subscribe(data => {
@@ -725,7 +725,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     this.electronLabelPrinter               = event;
     this.setElectronLabel(this.electronLabelPrinterSetting);
   }
-
 
   showElectronPrinterSelection() {
     this.showElectronPrinters = true

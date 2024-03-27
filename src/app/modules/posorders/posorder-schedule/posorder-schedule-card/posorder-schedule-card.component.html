@@ -9,12 +9,7 @@
   <mat-card-content>
 
     <div class="grid-container">
-      <div *ngIf="order?.preferredScheduleDate">Schedule</div>
-
-      <div >
-        {{ this.getOrderSchedule(order) }}
-      </div>
-
+    
       <div *ngIf="order?.shipAddress"><mat-icon>delivery_dining</mat-icon>Address</div>
       <div *ngIf="order?.shipAddress">{{order?.shipAddress}} - {{order?.shipAddress2}}  </div>
 
@@ -32,8 +27,16 @@
       <div class="grid-item-span">
         {{order.productOrderMemo}}
       </div>
+
+      <div *ngIf="this.getOrderSchedule(order) != null">
+        <mat-icon>calendar</mat-icon>
+        Schedule</div>
+      <div >
+        {{ this.getOrderSchedule(order) }}
+      </div>
     </div>
 
   </mat-card-content>
 </mat-card>
+
 

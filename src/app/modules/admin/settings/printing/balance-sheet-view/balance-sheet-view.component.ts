@@ -30,6 +30,7 @@ export class BalanceSheetViewComponent implements OnInit {
   @Input() styles: any;
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   @Input() autoPrint : boolean = false;
+
   sheet : IBalanceSheet;
   _sheet: Subscription;
   cashDrop: CashDrop;
@@ -44,7 +45,7 @@ export class BalanceSheetViewComponent implements OnInit {
   gratuitySummary$: Observable<IPOSOrder>;
   //maybe set setup a chain of items that needs to be rendered.
   printReadList = []
-  sheet$: Observable<any>;
+  sheet$: Observable<IBalanceSheet>;
   serviceFeeProcessed: boolean;
   site = this.siteService.getAssignedSite()
   setPrinterWidthClass = "receipt-width-80"
@@ -57,21 +58,29 @@ export class BalanceSheetViewComponent implements OnInit {
   balanceSheetTransactionTypesChecked: boolean;
   balanceSheetCreditCardPaymentsChecked: boolean;
 
+
   initSubscriptions() {
-    this._sheet = this.sheetMethodsService.balanceSheet$.subscribe(
-       data => {
-        if (data) {
-          this.sheet     = data;
-          this.sheetType = this.sheetService.getSheetType(this.sheet);
-          this.getBalanceCalculations(data.id);
-          try {
-            const balance  = this.sheet.cashDeposit - this.sheet.cashIn - this.sheet.cashDropTotal
-            this.balance   = balance
-          } catch (error) {
-          }
+    this._sheet = this.sheetMethodsService.balanceSheet$.subscribe(data => {
+      // this.sheet$ = this.getSheet(data.id)
+      if (data) {
+        this.sheet     = data;
+        this.sheetType = this.sheetService.getSheetType(this.sheet);
+        console.log('emp', data?.balanceSheetEmployee?.lastName)
+        this.getBalanceCalculations(data.id);
+        try {
+          const balance  = this.sheet.cashDeposit - this.sheet.cashIn - this.sheet.cashDropTotal
+          this.balance   = balance
+        } catch (error) {
+        }
       }
     })
+  }
 
+  getSheet(id: number) {
+    return this.sheetMethodsService.getSheetObservable(id.toString()).pipe(switchMap(data => {
+
+      return of(data)
+    }))
   }
 
   setStyles() {

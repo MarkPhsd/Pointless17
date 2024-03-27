@@ -33,6 +33,8 @@
       </save-changes-button>
 
       <mat-divider></mat-divider>
+      <ng-container [ngTemplateOutlet]="twilio"></ng-container>
+      <mat-divider></mat-divider>
       <div  *ngIf="inputForm">
         <button mat-raised-button color="primary"
                 (click)="showEmailSettings = !showEmailSettings">
@@ -56,7 +58,6 @@
             </mat-slide-toggle>
           </div>
         </div>
-
       </div>
 
       <div
@@ -109,7 +110,7 @@
           <div class="grid-views">
 
             <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Home Page Customer View</h4>
-            
+
             <div class="toggle-fields">
               <mat-slide-toggle   formControlName="suppressMenuItems" >
                 <mat-label>Suppress Items in Categories (For Food Service)</mat-label>
@@ -530,21 +531,24 @@
         </div>
       </div>
 
-      <div  *ngIf="inputForm"
-            [formGroup]="inputForm">
-        <h4>SSMS</h4>
-        <mat-divider></mat-divider>
-        <div class="toggle-fields">
-          Requires Twilio SSMS Message account. Secret APIKey must be assigned in configuration.
-          <mat-slide-toggle
-                    formControlName="twilioEnabled"
-                    >
-            <mat-label>Twilio Enabled</mat-label>
-          </mat-slide-toggle>
-        </div>
-      </div>
+
     </mat-card-content>
   </div>
 
 
 </mat-card>
+
+<ng-template #twilio>
+  <div  *ngIf="inputForm"
+        [formGroup]="inputForm">
+    <h4>SSMS</h4>
+    <mat-divider></mat-divider>
+    <div class="toggle-fields">
+        Requires Twilio SSMS Message account. Secret APIKey must be assigned in web configuration.
+    <mat-slide-toggle
+              formControlName="twilioEnabled"   >
+      <mat-label>Twilio Enabled</mat-label>
+    </mat-slide-toggle>
+    </div>
+  </div>
+</ng-template>

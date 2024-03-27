@@ -48,7 +48,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input() enableItemReOrder  : boolean = false;
   @Input() phoneDevice: boolean;
   @Input() cardWidth: string;
-
+  @Input() isStaff: boolean;
 
   initStylesEnabled : boolean; // for initializing for griddisplay
   qrCodeStyle = ''
@@ -128,16 +128,21 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
         this.initStyles()
         this.initStylesEnabled = true
       }
-      this._order = this.orderMethodService.currentOrder$.subscribe( order => {
-        this.order = order
-        if (this.order && this.order.posOrderItems)  {
-          this.sortPOSItems(this.order.posOrderItems);
-        }
-      })
+
+
+      if (!this.displayHistoryInfo) {
+        this._order = this.orderMethodService.currentOrder$.subscribe( order => {
+          this.order = order
+          if (this.order && this.order.posOrderItems)  {
+            this.sortPOSItems(this.order.posOrderItems);
+          }
+        })
+      }
+
     }
 
     try {
-      if (!this.prepScreen) {
+      if (!this.prepScreen && !this.displayHistoryInfo) {
         if (!this.disableActions) {
           this._order = this.orderMethodService.currentOrder$.subscribe( order => {
             this.order = order
@@ -213,6 +218,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
               )
   {
     this.orderItemsPanel = 'item-list';
+    this.isStaff = this.authService.isStaff;
   }
 
   dismiss() {

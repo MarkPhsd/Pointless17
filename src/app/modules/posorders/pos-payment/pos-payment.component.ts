@@ -45,6 +45,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   @ViewChild('processingPayment') processingPayment: TemplateRef<any>;
   @ViewChild('giftCardPayButton') giftCardPayButton: TemplateRef<any>;
   @ViewChild('splitItemorders') splitItemorders: TemplateRef<any>;
+  @ViewChild('payAPI') payApi: TemplateRef<any>;
 
   //coaching
   @ViewChild('coachingPaymentsMade', {read: ElementRef}) coachingPaymentsMade: ElementRef;
@@ -118,14 +119,17 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   saleProcess$  : Observable<any>;
   user          : any;
   _user: Subscription;
-
   _orderLayout = 'order-receiptLayouts'
+
+  payApiEnabled: boolean;
 
   get isProcessingPayment() {
     if (this.processing) {
       return this.processingPayment;
     }
     return null;
+
+
   }
 
   get orderLayout() {
@@ -212,9 +216,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     return false;
   }
 
-
   constructor(private paymentService  : POSPaymentService,
-              public orderMethodsService: OrderMethodsService,
+              public  orderMethodsService: OrderMethodsService,
               private sitesService    : SitesService,
               private serviceTypeService: ServiceTypeService,
               private paymentMethodService: PaymentMethodsService,
@@ -230,7 +233,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private coachMarksService: CoachMarksService,
               private router          : Router,
               private editDialog      : ProductEditButtonService,
-              private orderService    : OrdersService,
               private fb              : UntypedFormBuilder) { }
 
   ngOnInit(): void {
@@ -266,6 +268,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       )
     );
 
+
     if (this.authenticationService.userValue) {
       this.orderAction$ = this.orderMethodsService.getLoginActions()
     }
@@ -277,6 +280,36 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
        return of(data)
     }))
   }
+
+  get payAPIEnabled() {
+    //!isApp
+    if (this.uiTransactions.dcapPayAPIEnabled && !this.isApp) {
+      return true
+    }
+    return false
+  }
+
+  get disableSplitByItems() {
+    if (this.user && this.user.userAuths?.disableSplitByItems) {
+      return false
+    }
+    return true
+  }
+
+  get multiPayments() {
+    if (this.user && this.user.userAuths?.disableMultiPayments) {
+      return false
+    }
+    return true
+  }
+
+  get payAPIView() {
+    if (!this.isApp && this.uiTransactions?.dcapPayAPIEnabled) {
+      return this.payApi
+    }
+    return null;
+  }
+  // *ngIf="!isApp && uiTransactions.dcapPayAPIEnabled && payApiEnabled"
 
   get giftCardPayButtonView() {
     let pass = false;

@@ -88,6 +88,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 @Inject(MAT_DIALOG_DATA) public data: OperationWithAction,
                 )
   {
+    console.log('void data', data)
     if (data) {
       this.deviceSettings$ = this.getDevice();
       this.settings        =  data.uiSetting;
@@ -106,7 +107,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       this.pOSPaymentService.updateItemWithAction(data);
       this.list$         = this.adjustMentService.getReasonsByFilter(site, action);
       this.payment       = data.payment;
-      this.pOSPaymentService.getPOSPayment(site,this.payment.id, false).subscribe(data => {
+      this.pOSPaymentService.getPOSPayment(site, this.payment.id, false).subscribe(data => {
         this.voidPayment = data;
       })
     }
@@ -218,6 +219,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   voidPaymentFromSelection(setting) {
 
+    console.log('voidPayment', this.voidPayment)
     if (setting) {
       const site = this.siteService.getAssignedSite();
       this.resultAction.voidReason = setting.name
@@ -280,8 +282,14 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
           }
 
           if (paymentMethod.isCreditCard) {
-            this.voidPayment.voidReason = this.resultAction.voidReason;
             this.voidPayment = this.resultAction.payment;
+            this.voidPayment.voidReason = this.resultAction.voidReason;
+
+            const payment = this.voidPayment as any
+            if (payment?.tranCode === 'PayAPISale') {
+              this.voidPayAPISale(this.voidPayment);
+              return ;
+            }
 
             if (this.settings.dsiEMVNeteEpayEnabled) {
               if (this.settings.dsiEMVNeteEpayEnabled && this.voidPayment) {
@@ -349,10 +357,10 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                     process$ = this.triPOSMethodService.reversal(site, item)
                   }
 
-                  console.log('void / Reversal result 8', item);
+                  // console.log('void / Reversal result 8', item);
 
                   this.action$ = process$.pipe(switchMap(data => {
-                    console.log('void / Reversal result', data);
+                    // console.log('void / Reversal result', data);
 
                     if (!data || !this.validateTriPOSVoid(data)) {
                         this.siteService.notify(`Reversal response failed. Run again as a void. Code: ${data?.statusCode}`, 'Close', 5000, 'red')
@@ -593,7 +601,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
 
-      // if (this.voidPayment.trancode == 'EMVPreAuth') { 
+      // if (this.voidPayment.trancode == 'EMVPreAuth') {
       //   this.action$ =  this.paymentsMethodsService.processDcapCreditVoid(voidPayment).pipe(switchMap(data => {
       //     setTimeout(() => {
       //       this.closeDialog(null, null);
@@ -611,10 +619,35 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         }))
       }
     }
-
-   
   }
 
+
+  //const device = localStorage.getItem('devicename')
+  voidPayAPISale(voidPayment) {
+      // if (this.voidPayment.trancode == 'EMVPreAuth') {
+      //   this.action$ =  this.paymentsMethodsService.processDcapCreditVoid(voidPayment).pipe(switchMap(data => {
+      //     setTimeout(() => {
+      //       this.closeDialog(null, null);
+      //     }, 50)
+      //     return of(data)
+      //   }))
+      // }
+    console.log(voidPayment.voidReason)
+    if (voidPayment) {
+      this.action$ =  this.paymentsMethodsService.processPayAPIVoid(voidPayment).pipe(switchMap(data => {
+        if (!data.result) {
+          this.siteService.notify(`Payment not voided: ${data?.resultMessage}`, 'close', 20000, 'red')
+          return of(data)
+        }
+
+        setTimeout(() => {
+          this.closeDialog(null, null);
+        }, 50)
+        return of(data)
+      }))
+    }
+
+  }
   get isDSIEmvPayment() {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;

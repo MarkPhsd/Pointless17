@@ -34,9 +34,19 @@
 
         <div>
           <app-value-fields
+                        [enabled]="auths?.editEmail"
                         [inputForm]="inputForm"
                         [fieldName]="'phone'">
             Phone
+          </app-value-fields>
+        </div>
+
+        <div>
+          <app-value-fields
+                    [enabled]="auths?.editEmail"
+                    [inputForm]="inputForm"
+                    [fieldName]="'email'">
+              Email
           </app-value-fields>
         </div>
 
@@ -45,15 +55,6 @@
                           [inputForm]="inputForm"
                           [fieldName]="'dlNumber'">
               ID #
-          </app-value-fields>
-        </div>
-
-        <div>
-          <app-value-fields
-                    [enabled]="isStaff || auths?.editEmail"
-                    [inputForm]="inputForm"
-                    [fieldName]="'email'">
-              Email
           </app-value-fields>
         </div>
       </div>

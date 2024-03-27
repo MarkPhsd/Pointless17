@@ -31,7 +31,7 @@
         </mat-card>
       </div>
 
-      <div *ngIf=" (serviceType && (serviceType.promptScheduleTime || serviceType.deliveryService ))"
+      <div *ngIf="!serviceIsScheduled && (serviceType && (serviceType.promptScheduleTime || serviceType.deliveryService ))"
             class="grid-header-item">
         <button class="payment-buttons"   color="accent" mat-button (click)="navSchedule()">
           <mat-icon>event</mat-icon>
@@ -150,6 +150,7 @@
                                                       ) &&
                                                     !splitByItem)">
 
+                    <ng-container [ngTemplateOutlet]="payApiView"></ng-container>
                     <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
                     <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
                     <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
@@ -172,8 +173,10 @@
             </div>
 
             <span #coachingPaymentPartial ></span>
-            <div *ngIf="paymentMethods.length>0"
+            <div *ngIf="paymentMethods.length>0 && !multiPayments"
                   class="margin-bottom-10">
+                  multiPayments {{multiPayments}}
+                  roles {{user?.roles}}
               <mat-card class="payment-dimensions">
                 <app-mat-toggle-selector
                     [styleHeight]      = "'calc(70vh - 300px)'"
@@ -532,6 +535,7 @@
 
 <ng-template #cardPointeButton>
   <card-pointe-card-pay-btn
+    *ngIf="isApp || isStaff"
     [order]="order"
     [devicename]="devicename"
     [uiTransactions]="uiTransactions"
@@ -547,7 +551,7 @@
 
 <ng-template #triposPayButton>
   <app-tri-poscard-pay-btn
-
+    *ngIf="isApp || isStaff"
     [order]="order"
     [devicename]="devicename"
     [uiTransactions]="uiTransactions"
@@ -563,6 +567,7 @@
 <ng-template #dsiEMVAndroidCardButton>
   <dsiemvandroid-pay-btn
     [order]="order"
+    *ngIf="(isApp || isStaff) && devicename"
     [devicename]="devicename"
     [uiTransactions]="uiTransactions"
     [platForm]="platForm"
@@ -577,6 +582,7 @@
 
 <ng-template #disEMVCardButton>
   <dsi-emvcard-pay-btn
+      *ngIf="(isApp || isStaff) && devicename"
       [autoPay]="true"
       [preAuth]="false"
       [order]="order"
@@ -592,8 +598,22 @@
   </dsi-emvcard-pay-btn>
 </ng-template>
 
+
+<ng-template #payApiView>
+  <app-pay-api
+      [order]="order"
+      [uiTransactions]="uiTransactions"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [paymentAmount]="paymentAmount"
+      (setStep) ="setStep(1)">
+    <mat-icon color="warn">credit_card</mat-icon>
+    Pay
+  </app-pay-api>
+</ng-template>
+
 <ng-template #dCApPreAuthButton>
   <dsi-emvcard-pay-btn
+      *ngIf="isApp || isStaff"
       [preAuth]="true"
       [order]="order"
       [devicename]="devicename"
@@ -648,6 +668,7 @@
 
 <ng-template #wicEBTButton>
   <wic-ebtcard-pay-btn
+    *ngIf="isApp || isStaff"
     [order]="order"
     [devicename]="devicename"
     [uiTransactions]="uiTransactions"

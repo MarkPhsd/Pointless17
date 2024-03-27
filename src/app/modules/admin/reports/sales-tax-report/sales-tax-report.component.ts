@@ -17,8 +17,9 @@ import { PrintingService, printOptions } from 'src/app/_services/system/printing
 })
 export class SalesTaxReportComponent implements OnInit, OnChanges {
 
-
+  @ViewChild('canvas')       canvas: ElementRef;
   @ViewChild('printsection') printsection: ElementRef;
+
   @Input() summaryOnly: boolean;
   //[site]="site" [dateFrom]="dateFrom" [dateTo]="dateTo"   [notifier]="childNotifier"
   @Input() site: ISite;
@@ -57,7 +58,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
     private siteService               : SitesService,
     private reportingItemsSalesService: ReportingItemsSalesService,
     //to be moved to component.
-    private platFormService: PlatformService,
+    public platFormService: PlatformService,
     private printingService: PrintingService,
     private httpClient: HttpClient,
     ) { }
@@ -176,6 +177,9 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
         this.printElectron(data)
         return of(data)
       }))
+    } else {
+      // this.printingService.savePDF(this.printsection.nativeElement, this)
+      this.printingService.convertToPDF( document.getElementById('printsection') )
     }
   }
 
@@ -194,6 +198,8 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   }
 
   printElectron(styles) {
+
+    console.log('print electron')
     this.setPrinter()
     const contents = this.getReceiptContents(styles)
     const options = {
@@ -217,6 +223,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
 
     if (contents && this.printerName, options) {
       this.printing = true;
+      console.log('print electron')
       this.printingService.printElectron( contents, this.printerName, options)
       this.printing = true;
     }

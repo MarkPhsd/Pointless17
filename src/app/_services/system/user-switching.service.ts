@@ -155,6 +155,7 @@ export class UserSwitchingService implements  OnDestroy {
     iUser.password = this.encryptionService.decrypt(appUser.width, appUser.depth)
   }
 
+
   saveAppUser(appUser: ElectronDimensions) {
     appUser.height = this.encryptionService.encrypt(appUser.height, appUser.depth)
     appUser.width  = this.encryptionService.encrypt(appUser.width, appUser.depth)
@@ -184,7 +185,10 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   userAutFailed(user) {
-    const message = user?.errorMessage;
+    let message = user?.errorMessage;
+    if (!message) {
+      message = 'User not found.'
+    }
     this.snackBar.open(message, 'Failed Login', {duration: 1500})
     const item = {message: 'failed', errorMessage: 'failed'}
     return item
@@ -193,9 +197,9 @@ export class UserSwitchingService implements  OnDestroy {
   processTimeClockLogin(user: string, password: string): Observable<any>  {
     return this.login(user,password, true)
   }
-  login(userName: string, password: string, clockInOnly: boolean): Observable<any> {
 
-    // console.log('clockInOnly', clockInOnly);
+
+  login(userName: string, password: string, clockInOnly: boolean): Observable<any> {
 
     this.clearSubscriptions();
     this.authenticationService.clearUserSettings();
@@ -203,102 +207,90 @@ export class UserSwitchingService implements  OnDestroy {
     const userLogin = { userName, password } as userLogin;
     const timeOut   = 3 * 1000;
 
-    let auth$ =  this.authenticate(userLogin)
-      .pipe(
+      let auth$ =  this.authenticate(userLogin).pipe(
         switchMap(
           user => {
-            if (user && user.errorMessage) {
-              return of(this.userAutFailed(user))
-            }
 
-            if (user) {
-              if (user?.message.toLowerCase() === 'failed') {
-                return of(this.userAutFailed(user))
-              }
-              user.message = 'success'
-              const currentUser = this.setUserInfo(user, password)
-              this.uiSettingService.initSecureSettings();
-              return of(user)
-            } else {
-              const user = {message: 'failed'} as IUser;
-              return of(user)
-            }
+          if (!user || (user?.message === 'failed' || user?.errorMessage)) {
+            return of(this.userAutFailed(user))
+          }
+
+          user.message = 'success'
+          const currentUser = this.setUserInfo(user, password)
+          this.uiSettingService.initSecureSettings();
+          return this.contactsService.getContact(site, user?.id)
 
       }), catchError(data => {
         console.log('Error login authenticate')
         return of(data)
       }))
 
-      let userAuth$ =  auth$.pipe(switchMap(data => {
-        if (data?.message === 'failed') { return of(data)}
-        return this.contactsService.getContact(site, data?.id)
+      let updateAuth$ = auth$.pipe(switchMap(data => {
+
+        if (!data || (data?.message === 'failed' || data?.errorMessage)) {
+          // console.log('no login')
+          return of(this.userAutFailed(data))
+        }
+
+        const item = localStorage.getItem('user')
+        const user = JSON.parse(item) as IUser;
+
+        if (data.clientType && data.clientType.jsonObject) {
+          this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
+        } else  {
+          this.authenticationService.updateUserAuths(null)
+        }
+        return of(user)
       }), catchError(data => {
-        console.log('Error login userAuth')
-        return of(data)
-      }))
-
-      let updateAuth$ = userAuth$.pipe(switchMap(data => {
-            if ( !data || (data && (data?.message == 'failed'))) {
-              const user = {} as IUser
-              user.message = 'failed';
-              user.errorMessage = 'failed'
-              return of( user )
-            }
-
-            const item = localStorage.getItem('user')
-            const user = JSON.parse(item) as IUser;
-
-            if (!data.auths)
-
-            if (data.clientType && data.clientType.jsonObject) {
-              this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
-            } else
-            {
-              this.authenticationService.updateUserAuths(null)
-            }
-
-            return of(user)
-          }
-      ), catchError(data => {
         console.log('Error login updateAuth')
         return of(data)
       }))
 
-      let balanceSheet$ = updateAuth$.pipe(switchMap(user =>
+      let balanceSheet$ = updateAuth$.pipe(switchMap(user => {
 
-        {
-            if (clockInOnly) {   return of(user)  }
+        if (!user || (user?.message === 'failed' || user?.errorMessage)) {
+          // console.log('no login')
+          return of(this.userAutFailed(user))
+        }
 
-            if (!user || (user && user.message == 'failed')) {   return of(user)  }
+        if (clockInOnly) {   return of(user)  }
 
-            if (user) {
-              ///this is where we prompt the balance sheet
-              if ( this.platformService.isApp()  )  {
-                // console.log('platform is app getting balance sheet')
-                return this.promptBalanceSheet(user)
-              }
-              if ( !this.platformService.isApp() )  {
-                // console.log('platform is not app')
-                return of(user)
-              }
-            }
-            return of(null)
+        if (!user || (user && user.message == 'failed')) {   return of(user)  }
+
+        if (user) {
+          ///this is where we prompt the balance sheet
+          if ( this.platformService.isApp()  )  {
+            // console.log('platform is app getting balance sheet')
+            return this.promptBalanceSheet(user)
           }
-        ), catchError(data => {
-          console.log('Error login balanceSheet')
-          return of(data)
-       }))
+          if ( !this.platformService.isApp() )  {
+            // console.log('platform is not app')
+            return of(user)
+          }
+        }
+        return of(null)
+      }
+    ), catchError(data => {
+      console.log('Error login balanceSheet')
+      return of(data)
+  }))
 
-      let result$ = balanceSheet$.pipe(
-        switchMap(data => {
-            return of(data)
-        }), catchError(data => {
-            console.log('Error login')
-            return of(data)
-      }))
+  let result$ = balanceSheet$.pipe(
+    switchMap(data => {
+      {
+        // console.log('balanceSheet user?.errorMessage', data?.errorMessage)
+      if (!data || (data?.message === 'failed' || data?.errorMessage)) {
+        return of(this.userAutFailed(data))
+      }
 
-      return result$
-  }
+    return of(data)
+  }}), catchError(data => {
+        console.log('Error login')
+        return of(data)
+  }))
+
+  return result$
+}
 
   // getAuthorization()
   setUserInfo(user: IUser, password) {
@@ -308,6 +300,7 @@ export class UserSwitchingService implements  OnDestroy {
     if (!user.firstName) { user.firstName = user.username }
 
     localStorage.setItem("ami21", 'true')
+
     currentUser.password     = password;
     currentUser.roles        = user?.roles.toLowerCase()
     currentUser.id           = user.id
@@ -315,12 +308,12 @@ export class UserSwitchingService implements  OnDestroy {
     currentUser.username     = user.username;
     currentUser.phone        = user.phone;
     currentUser.email        = user.email;
-    currentUser.token        = user.token;
     currentUser.firstName    = user?.firstName;
     currentUser.lastName     = user?.lastName;
     currentUser.errorMessage = user.errorMessage
     currentUser.message      = user.message
 
+    currentUser.token        = user.token;
     if (user.preferences) {
       currentUser.userPreferences = JSON.parse(user.preferences) as UserPreferences;
       currentUser.preferences = user.preferences;

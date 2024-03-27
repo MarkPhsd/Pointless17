@@ -46,8 +46,9 @@
   </div>
 </ng-template>
 
+
 <ng-template #searchSelector>
-  <div>
+  <div *ngIf="searchForm && (homePageSetings && !homePageSetings?.disableSearchFieldInMenu)">
     <search-debounce-input
        [searchForm]="searchForm"
        [itemNameControl]="'itemName'"

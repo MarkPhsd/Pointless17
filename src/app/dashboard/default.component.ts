@@ -736,6 +736,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (window.innerWidth <=600) {
+      this.sidebarMode = 'over'
       this.phoneDevice = true
       this.siteService.phoneDevice = true
     } else {

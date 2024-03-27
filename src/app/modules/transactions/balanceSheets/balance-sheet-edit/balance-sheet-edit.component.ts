@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
-import { Observable, of, Subscription, switchMap, switchMapTo } from 'rxjs';
+import { concatMap, Observable, of, Subscription, switchMap, switchMapTo } from 'rxjs';
 import { Capacitor, } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetSearchModel, BalanceSheetService, CashDrop, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
@@ -75,7 +75,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   inputForm       : UntypedFormGroup;
   urlPath         : string;
 
-  id              : string;
+  id              : number;
   sheet           : IBalanceSheet;
   _sheet          : Subscription;
 
@@ -160,8 +160,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private sheetMethodsService     : BalanceSheetMethodsService,
                 private sendGridService         :  SendGridService,
                 private printingService         : PrintingService,
-                public platFormService     : PlatformService,
-                public coachMarksService  : CoachMarksService,
+                public  platFormService     : PlatformService,
+                public  coachMarksService  : CoachMarksService,
                 private siteService       : SitesService,
                 private settingsService   : SettingsService,
               )
@@ -181,7 +181,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.initSubscriptions()
     this.isAuthorized  = this.userAuthorization.isUserAuthorized('admin, manager')
     this.isStaff       = this.userAuthorization.isUserAuthorized('admin, manager, employee')
-    this.id            = this.route.snapshot.paramMap.get('id');
+    this.id            = +this.route.snapshot.paramMap.get('id');
 
     if(!this.id) {
       this.newBalanceSheet();
@@ -209,7 +209,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     if (this._searchModel) { this._searchModel.unsubscribe()}
     if (this._user)        { this._user.unsubscribe()}
     if (this.posDevice$)  { this.posDevice$.unsubscribe()}
-
   }
 
   //we have to initialize the balance sheet.
@@ -218,16 +217,19 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.balanceSheet$ = this.sheetMethodsService.getCurrentBalanceSheet().pipe(
       switchMap(data => {
         this.getSheetType(data)
-        this.sheet = data;
         this.initForm(data)
         return of(data)
     }))
   }
 
-  getSheet(id: string) {
-    this.balanceSheet$ = this.sheetMethodsService.getSheetObservable(id).pipe(switchMap(data => {
+  getSheet(id: number) {
+    this.balanceSheet$ = this._getSheet(id)
+  }
+
+  _getSheet(id:number) {
+    return  this.sheetMethodsService.getSheetObservable(id.toString()).pipe(switchMap(data => {
       this.getSheetType(data);
-      this.sheet = data;
+      this.sheetMethodsService.updateBalanceSheet(data)
       this.initForm(this.sheet);
       return of(data)
     }))
@@ -237,8 +239,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     let sheet = this.inputForm.value as IBalanceSheet;
     sheet.overUnderTotal = this.getCurrentBalance();
     return this.sheetMethodsService.updateSheet(sheet, this.startShiftInt).pipe(switchMap(data => {
-      this.sheet = data;
-      return of(data)
+      return this._getSheet(data.id)
     }))
   }
 
@@ -265,7 +266,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
         data.cashDrops = data.cashDrops.sort((a, b) => (a.id > b.id ? 1 : -1));
         this.sheetMethodsService.cashDrop = data.cashDrops[data.cashDrops.length-1];
         const drop = this.sheetMethodsService.cashDrop;
-        this.printDropValues(drop )
+        this.printDropValues(drop)
       }
       return this._updateItem()
     })).pipe(switchMap(data => {
@@ -315,7 +316,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   updateItem(event) {
     this.balanceSheet$ = this._updateItem().pipe(switchMap(data => {
-      // this.router.navigate(['app-main-menu'])
       return of(data)
     }))
   }
@@ -334,22 +334,17 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   closeSheet(navigateUrl: string) {
     this.balanceSheet$ = this._updateItem()
-    const print$ = this._print(true)
-    let sheet = {} as IBalanceSheet
-    this.action$ = this.balanceSheet$.pipe(switchMap(data => {
-      sheet = data;
-      return print$
+    this.action$ = this.balanceSheet$.pipe(concatMap(data => {
+      return  this.sheetMethodsService.closeSheet(data, null)
     })).pipe(
-      switchMap( data => {
-        return this.sendGridService.sendBalanceSheet(sheet.id)
+      concatMap( data => {
+        return this._print(true);
     })).pipe(
-      switchMap( data => {
-        return  this.sheetMethodsService.closeSheet(sheet, navigateUrl)
-    })).pipe(
-      switchMap( data => {
-        // this.sheetMethodsService.updateBalanceSheet(sheet)
-        return of (data)
-    }))
+      concatMap(data => {
+        this.router.navigateByUrl(navigateUrl)
+        return of(data)
+      }
+    ))
   }
 
   setEnabledFeatures() {
@@ -459,30 +454,17 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   _print(autoPrint: boolean): Observable<any> {
-
     let printerName = ''
-    if (this.posDevice) {
-      printerName = this.posDevice.receiptPrinter;
-    }
-
-    this.printingService.updatePrintView(2);
-    const sheet = this.inputForm.value as IBalanceSheet
+    if (this.posDevice) {  printerName = this.posDevice.receiptPrinter;  }
+    const sheet = this.inputForm.value as IBalanceSheet;
     sheet.overUnderTotal = this.getCurrentBalance()
     return this.sheetMethodsService.updateSheet(sheet, this.startShiftInt).pipe(
-      switchMap(data => {
-        if (!data) {
-          this.siteService.notify('Balance Sheet not assigned for print out.', 'close', 2000, 'red')
-          return of(null)
-        }
-        return of(data)
-      }
-    )).pipe(
       switchMap(result => {
         if (!result) {
           this.siteService.notify('Balance Sheet not assigned for print out.', 'close', 2000, 'red')
           return of(null)
         }
-        this.sheetMethodsService.updateBalanceSheet(result)
+        this.printingService.updatePrintView(2);
         return this.printingService.previewReceipt(autoPrint, null, printerName)
     }));
   }

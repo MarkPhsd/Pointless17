@@ -1,5 +1,5 @@
 import { Component, OnInit, Input,OnDestroy } from '@angular/core';
-import { UntypedFormGroup,UntypedFormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup,UntypedFormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IServiceType,  } from 'src/app/_interfaces';
@@ -22,9 +22,9 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
 
   @Input() serviceType      : IServiceType;
   action$                   : Observable<any>;
-  inputFormNotes            : UntypedFormGroup;
-  inputForm                 : UntypedFormGroup;
-  scheduleForm              : UntypedFormGroup;
+  inputFormNotes            : FormGroup;
+  inputForm                 : FormGroup;
+  scheduleForm              : FormGroup;
   order                     : IPOSOrder;
   _order                    : Subscription;
   errorMessage    : string;
@@ -283,6 +283,11 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     }
   }
 
+  navigate(event) { 
+    console.log(this.selectedIndex, event, this.selectedIndex + event)
+    this.updateSelectedIndex(this.selectedIndex + event);
+  }
+
   updateSelectedIndex(index: number) {
     this.selectedIndex = index;
     const site = this.siteService.getAssignedSite();
@@ -354,13 +359,15 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     }
 
     if (this.serviceType && this.serviceType?.deliveryService) {
-      if (!this.inputForm.valid) {
-        this.messages.push('Shipping location required.');
+      const address = this.inputForm.value
+      if (address) {
+        if (!address.address || !address.city || !address.state || !address.zip) { 
+          this.messages.push('Shipping location required.');
+        }
       }
     }
 
     if (this.messages && this.messages.length >0) {
-      // console.log('this.messageslength', this.messages.length)
       return false
     }
 
