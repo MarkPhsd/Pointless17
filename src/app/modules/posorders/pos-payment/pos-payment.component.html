@@ -173,10 +173,10 @@
             </div>
 
             <span #coachingPaymentPartial ></span>
-            <div *ngIf="paymentMethods.length>0 && !multiPayments"
+
+            <div *ngIf="paymentMethods.length>0 && multiPayments"
                   class="margin-bottom-10">
-                  multiPayments {{multiPayments}}
-                  roles {{user?.roles}}
+
               <mat-card class="payment-dimensions">
                 <app-mat-toggle-selector
                     [styleHeight]      = "'calc(70vh - 300px)'"

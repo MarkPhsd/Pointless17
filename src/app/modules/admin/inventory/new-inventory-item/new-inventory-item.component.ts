@@ -28,13 +28,13 @@ import { POSOrderItemService } from 'src/app/_services/transactions/posorder-ite
 
 export class NewInventoryItemComponent implements OnInit , OnDestroy{
   saving                    : boolean;
-  inputForm:                 UntypedFormGroup;
+  inputForm:                 FormGroup;
   id:                        any;
   site:                      ISite;
   item:                      IInventoryAssignment;
   inventoryLocations:        IInventoryLocation[];
   inventoryAssignment$:      Observable<IInventoryAssignment>;
-  searchForm:                UntypedFormGroup;
+  searchForm:                FormGroup;
   quantityMoving:            number;
   locations$ :               Observable<IInventoryLocation[]>;
   locations:                 IInventoryLocation[];

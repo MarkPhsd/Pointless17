@@ -1,7 +1,7 @@
 import { Component, OnInit, Input , EventEmitter, Output, ChangeDetectorRef, ViewChild, TemplateRef} from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable, of, switchMap } from 'rxjs';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { IItemType } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { PriceCategories, IPriceCategoryPaged } from 'src/app/_interfaces/menu/price-categories';
@@ -21,13 +21,13 @@ export class PriceCategorySelectComponent implements OnInit {
   isOpenPrice: boolean;
   showMorePrices: boolean;
   @Output() itemSelect  = new EventEmitter();
-  @Input() inputForm    : UntypedFormGroup;
+  @Input() inputForm    : FormGroup;
   @Input() priceCategoryID: number;
   @Input() itemType     = {} as IItemType;
   priceCategory         :   PriceCategories;
   @Input()  isInventory : boolean;
   priceCategoriesPaged$ :   Observable<IPriceCategoryPaged>;
-  searchForm: UntypedFormGroup;
+  searchForm: FormGroup;
 
   @Input()  showAdditionalCost: boolean;
 
@@ -41,9 +41,7 @@ export class PriceCategorySelectComponent implements OnInit {
           }
 
   ngOnInit(): void {
-    if (this.inputForm) {
-
-    }
+    this.initSearchForm('')
     const site = this.sitesService.getAssignedSite();
     this.priceCategoriesPaged$ = this.menuPricingService.getPriceCategoriesNoChildrenByPage(site);
   }
@@ -79,6 +77,12 @@ export class PriceCategorySelectComponent implements OnInit {
     return false
   }
 
+  initSearchForm(value: string) {
+     this.searchForm = this.fb.group({
+          priceCategoryLookup: [value],
+      })
+   }
+
   openPriceCategory() {
     const site = this.sitesService.getAssignedSite();
     let id = this.priceCategoryID;
@@ -89,16 +93,12 @@ export class PriceCategorySelectComponent implements OnInit {
 
       if (!data) {
         this.priceCategory = data
-        this.searchForm = this.fb.group({
-          priceCategoryLookup: [''],
-        })
+        this.initSearchForm('')
         this.inputForm.patchValue({priceCategoryID: 0})
         return of(null)
       }
       this.priceCategory = data
-      this.searchForm = this.fb.group({
-        priceCategoryLookup: [data.name],
-      })
+      this.initSearchForm(data?.name)
       this.inputForm.patchValue({priceCategoryID: data.id})
       return of(data)
     }))
@@ -108,18 +108,14 @@ export class PriceCategorySelectComponent implements OnInit {
     this.priceCategoryID = 0;
 
     if (!this.isInventory) {
-      this.searchForm = this.fb.group({
-        priceCategoryLookup: '',
-      })
+      this.initSearchForm('')
       const  price = { priceCategory : 0 }
       this.inputForm.patchValue(price)
 
     }
     if (this.isInventory) {
       const item = {priceCategoryLookup: ''}
-      this.searchForm = this.fb.group({
-        priceCategoryLookup: '',
-      })
+      this.initSearchForm('')
       this.inputForm.patchValue({priceCategoryID: 0})
     }
   }

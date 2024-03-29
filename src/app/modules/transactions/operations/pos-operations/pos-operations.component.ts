@@ -88,6 +88,8 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   terminalSettings: ITerminalSettings
   dsiEmv: DSIEMVSettings
 
+  initDevice : boolean;
+
   completedReportCount: number = 0;
   printReady: boolean;
 
@@ -161,14 +163,17 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     return null;
   }
 
-
   initTerminalSettings() {
+
+    const device = localStorage.getItem('devicename');
+    if (!device) { return }
     this.terminalSettings$ = this.settingsService.terminalSettings$.pipe(concatMap(data => {
       this.terminalSettings = data;
       this.dsiEmv = data?.dsiEMVSettings;
+      if (this.initDevice) { return of(null)}
       if (!data) {
+        this.initDevice = true
         const site = this.siteService.getAssignedSite();
-        const device = localStorage.getItem('devicename');
         return this.getPOSDeviceSettings(site, device)
       }
       return of(data)
@@ -177,7 +182,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
 
   getPOSDeviceSettings(site, device) {
     return this.settingsService.getPOSDeviceSettings(site, device).pipe(concatMap(data => {
-      this.settingsService.updateTerminalSetting(data)
+      this.settingsService.updateTerminalSetting(data);
       this.dsiEmv = data?.dsiEMVSettings;
       return of(data)
     }))

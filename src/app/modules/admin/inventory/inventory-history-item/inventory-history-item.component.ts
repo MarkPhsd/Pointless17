@@ -17,12 +17,12 @@ export class InventoryHistoryItemComponent implements OnInit {
     this.getChangeCost(this.item )
   }
 
-  getChangeCost(item) { 
-    if (this.item && this.item.adjustmentNote) { 
+  getChangeCost(item) {
+    if (this.item && this.item.adjustmentNote) {
       const note =  this.item.adjustmentNote.split(';')
-      if (note[1]) { 
+      if (note[1]) {
         this.quantityChange = this.item.packageCountRemaining - +note[1]
-        console.log('quantitychange', this.quantityChange)
+        // console.log('quantitychange', this.quantityChange)
         return this.quantityChange
       }
     }

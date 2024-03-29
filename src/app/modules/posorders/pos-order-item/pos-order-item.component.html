@@ -87,7 +87,9 @@
 
               <div *ngIf="!showView && (ui && ui?.displayView) ">
                 <button mat-button class="button" color="accent" (click)="openDialog()" >
-                  <mat-icon  class="mat-icon-label">open_in_new</mat-icon> <span *ngIf="!smallDevice"> View </span>
+                  <mat-icon  class="mat-icon-label">open_in_new</mat-icon> <span *ngIf="!smallDevice">
+                    View
+                  </span>
                 </button>
               </div>
 
@@ -228,8 +230,7 @@
 </ng-template>
 
 <ng-template #exitlabelButtonView>
-
-  <div *ngIf="userAuthService?.isStaff && enableExitLabel && mainPanel && orderItem?.printLocation">
+  <div *ngIf="userAuthService?.isStaff && enableExitLabel && mainPanel  && (orderItem?.printLocation && orderItem?.printLocation>0)">
     <button mat-button  class="exit-label-button" color="accent" (click)="printLabel(orderItem)">
       <mat-icon>print</mat-icon>
       <br>
@@ -247,7 +248,7 @@
 </ng-template>
 
 <ng-template #threeDotsLabel>
-  <div *ngIf="platFormService.isAppElectron && userAuthService?.isStaff && enableExitLabel && orderItem?.printLocation">
+  <div *ngIf="platFormService.isAppElectron && userAuthService?.isStaff && enableExitLabel && (orderItem?.printLocation && orderItem?.printLocation>0)">
     <button mat-button  class="exit-label-button" color="accent" (click)="printLabel(orderItem)">
       <mat-icon>print</mat-icon>
       <br>

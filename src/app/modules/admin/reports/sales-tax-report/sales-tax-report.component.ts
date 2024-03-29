@@ -94,7 +94,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
                 scheduleDateStart: this.scheduleDateStart } as IReportingSearchModel;
 
     if (this.employeeID != 0) { item.employeeID = this.employeeID  }
-    console.log('Search', item, item.employeeID)
+    // console.log('Search', item, item.employeeID)
     if (item.scheduleDateEnd && item.scheduleDateStart) {
       this.sales$ =  this.reportingItemsSalesService.putSalesTaxReport(this.site, item ).pipe(switchMap(data => {
           this.sales = data;
@@ -179,7 +179,12 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       }))
     } else {
       // this.printingService.savePDF(this.printsection.nativeElement, this)
-      this.printingService.convertToPDF( document.getElementById('printsection') )
+      //document.getElementById('printsection')
+      if (!this.printsection.nativeElement) {
+        console.log('section is null')
+        return
+      }
+      this.printingService.convertToPDF( this.printsection.nativeElement  )
     }
   }
 
@@ -199,7 +204,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
 
   printElectron(styles) {
 
-    console.log('print electron')
+    // console.log('print electron')
     this.setPrinter()
     const contents = this.getReceiptContents(styles)
     const options = {

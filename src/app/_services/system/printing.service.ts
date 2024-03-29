@@ -128,7 +128,6 @@ export class PrintingService {
   }
 
   printReceipt(orderID: number, groupID: number)  {
-
     if (!groupID) { groupID = 0 }
     const site = this.siteService.getAssignedSite()
     return this.orderService.getPOSOrderGroupTotal(site, orderID, groupID).pipe(
@@ -143,9 +142,12 @@ export class PrintingService {
   printJoinedLabels( ) {
     let contents = ''
     this.labelContentList.forEach(data => {
-      contents =`${data} ${contents}`
+      if (data) {
+        contents =`${data} ${contents}`
+      }
     })
     if (!this.labelPrinter) { return }
+    if (!contents) { return }
     this.printLabelElectron(contents, this.labelPrinter)
     this.labelContentList = []
   }
@@ -388,21 +390,21 @@ export class PrintingService {
   }
 
    // const node = document.getElementById('printsection');
-  public convertToPDF(node: any)  {
+  public convertToPDF(node: any, fileName? : string)  {
+    let pdfName = 'invoice.pdf'
+    if (fileName) {  pdfName = `${fileName}.pdf`  }
+
+
     try {
       const options = { background: 'white', height: 845, width: 595 };
-      domtoimage.toPng(node, options).then(
-      data =>
-      {
+      domtoimage.toPng(node, options).then(data => {
         //Initialize JSPDF
         const doc = new jsPDF('p', 'mm', 'a4');
         doc.addImage(data, 'PNG', 0, 0, 250, 250);//change values to your preference
-        doc.save('invoice.pdf');
-      }, error =>
-      {
+        doc.save(fileName);
+      }, error => {
         this.siteService.notify(error.toString(), 'PNG Error error', 3000)
-      }
-      )
+      })
     } catch (error) {
       this.siteService.notify(error.toString(),  'PNG Error error', 3000)
     }
@@ -452,17 +454,14 @@ export class PrintingService {
   }
 
   printElectronForLabels(contents: string, printerName: string, options: printOptions) : any {
-
+    if (!contents) { return }
     let printWindow = new this.electronService.remote.BrowserWindow({show: false, width: 350, height: 600 })
     if (options.silent) { printWindow.hide(); }
-
     console.log('printElectronForLabels contents', contents)
     return  printWindow.loadURL(contents)
       .then( e => {
-
         if (options.silent) { printWindow.hide(); }
         if (!options) {  options = this.getdefaultOptions(printerName)  }
-
         printWindow.webContents.print(
           options,
           (success, failureReason) => {
@@ -492,8 +491,6 @@ export class PrintingService {
     let fileName = `c:\\pointless\\labels\\print${uuid}.txt`;
     try {
        this.saveContentsToFile(fileName, printString);
-      // fileName = `c:\\pointless\\print.txt`;
-      //  this.saveContentsToFile(fileName, printString);
     } catch (error) {
       this.siteService.notify(`File could not be written.
                                 Please make sure you have a writable folder ${fileName}`, 'Close', 3000, 'red')
@@ -506,7 +503,6 @@ export class PrintingService {
     } as printOptions
 
     try {
-
       this.printElectronForLabels( file, printerName, options )
     } catch (error) {
       return false
@@ -517,7 +513,6 @@ export class PrintingService {
     if (!this.platFormService.isAppElectron) { return }
     let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
     if (options.silent) { printWindow.hide(); }
-
        printWindow.loadURL(contents)
       .then( e => {
         if (options.silent) { printWindow.hide(); }

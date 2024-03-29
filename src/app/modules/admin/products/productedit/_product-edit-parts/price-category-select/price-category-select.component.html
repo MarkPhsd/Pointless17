@@ -4,15 +4,15 @@
      [formGroup]="inputForm"
      class="grid-container" >
 
-  <div class="grid-container-2col" *ngIf="itemType && !itemType.disablePriceCategory" >
-    <div style="width:250px">
-      <app-price-category-search
-          [isInventory]="isInventory"
-          [id]         ="priceCategoryID"
-          [searchForm] = "searchForm"
-          [inputForm]  ="inputForm"  >
-      </app-price-category-search>
-    </div>
+    <div class="grid-container-2col" *ngIf="itemType && !itemType.disablePriceCategory" >
+      <div style="width:250px" *ngIf="searchForm && inputForm">
+        <app-price-category-search
+            [isInventory]="isInventory"
+            [id]         ="priceCategoryID"
+            [searchForm] ="searchForm"
+            [inputForm]  ="inputForm"  >
+        </app-price-category-search>
+      </div>
 
     <div style="margin-top:5px;">
       <button mat-button
@@ -26,7 +26,8 @@
         </div>
       </button>
     </div>
-  </div>
+
+</div>
 
   <app-value-fields
       *ngIf="!isInventory && !itemType?.disableSimplePrice"
@@ -67,42 +68,19 @@
 
   <div *ngIf="showMorePricesView && inputForm">
 
-    <app-value-fields
-      [inputForm]="inputForm"
-      [fieldsClass]="'font-medium'"
-      [fieldName]="'caseWholeSale'"   >
-      Case Cost
-    </app-value-fields>
+    <ng-container [ngTemplateOutlet]="inventoryCaseView"></ng-container>
 
     <app-value-fields
-      [inputForm]="inputForm"
-      [fieldsClass]="'font-medium'"
-      [fieldName]="'caseQty'" >
-      Case Count
-    </app-value-fields>
-
-    <app-value-fields
-      *ngIf=" fbProductsService.isAlcohol(itemType) || fbProductsService.isAlcohol(itemType) || fbProductsService.isProduct(itemType)"
+                  *ngIf="!isInventory && ( fbProductsService.isAlcohol(itemType) ||
+                                           fbProductsService.isAlcohol(itemType) ||
+                                           fbProductsService.isProduct(itemType) )"
       [inputForm]="inputForm"
       [fieldsClass]="'font-medium'"
       [fieldName]="'crv'"  >
       CRV
     </app-value-fields>
-  </div>
 
-  <!-- !isInventory &&  *ngIf="!isInventory && !itemType.disableSimplePrice" -->
-  <!-- <div style="margin-top:5px;" >
-    <button class="button"
-            mat-raised-button
-            (click)="showMorePrices = !showMorePrices">
-        <div *ngIf="showMorePrices">
-          Show Less
-        </div>
-        <div *ngIf="!showMorePrices">
-          Show More Prices
-        </div>
-      </button>
-  </div> -->
+  </div>
 
   <ng-container [ngTemplateOutlet]="additionalPricesView"></ng-container>
 
@@ -118,7 +96,7 @@
   </ng-template>
 
 <ng-template #retailFields>
-  <div *ngIf="inputForm"  [formGroup]="inputForm">
+  <div *ngIf="inputForm && !isInventory"  [formGroup]="inputForm">
     <app-value-fields
       [inputForm]= "inputForm"
       [fieldName]="'priceA'">
@@ -138,8 +116,41 @@
   </div>
 </ng-template>
 
+<ng-template #inventoryCaseView>
+  <div *ngIf="isInventory">
+    <app-value-fields
+        [inputForm]="inputForm"
+        [fieldsClass]="'font-medium'"
+        [fieldName]="'caseQuantity'" >
+        Case QTY
+    </app-value-fields>
+
+    <app-value-fields
+      [inputForm]="inputForm"
+      [fieldsClass]="'font-medium'"
+      [fieldName]="'casePrice'" >
+      Case Price
+    </app-value-fields>
+  </div>
+</ng-template>
+
 <ng-template #priceFields>
-  <div *ngIf="inputForm" [formGroup]="inputForm">
+  <div  *ngIf="!isInventory && inputForm" [formGroup]="inputForm">
+
+    <app-value-fields
+      [inputForm]="inputForm"
+      [fieldsClass]="'font-medium'"
+      [fieldName]="'caseWholeSale'"   >
+      Case Cost
+    </app-value-fields>
+
+    <app-value-fields
+      [inputForm]="inputForm"
+      [fieldsClass]="'font-medium'"
+      [fieldName]="'caseQty'" >
+      Case Count
+    </app-value-fields>
+
     <app-value-fields
       [inputForm]="inputForm"
       [fieldsClass]="'font-medium'"
