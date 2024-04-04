@@ -27,7 +27,6 @@ import { InventoryEditButtonService } from 'src/app/_services/inventory/inventor
 export class StrainProductEditComponent implements OnInit {
 
   // <div *ngIf="fbProductsService.isGrouping(itemType)">
-
   @ViewChild('cannabisTemplate')     cannabisTemplate : TemplateRef<any>;
   @ViewChild('priceCategoryTemplate') priceCategoryTemplate : TemplateRef<any>;
   @ViewChild('tareValueTemplate')     tareValueTemplate : TemplateRef<any>;
@@ -35,8 +34,6 @@ export class StrainProductEditComponent implements OnInit {
   @ViewChild('gluetenFreeTemplate')   gluetenFreeTemplate : TemplateRef<any>;
   @ViewChild('liquorTemplate') liquorTemplate : TemplateRef<any>;
   @ViewChild('priceCategorySelectorTemplate') priceCategorySelectorTemplate : TemplateRef<any>;
-
-
   @ViewChild('groceryPromptTemplate') groceryPromptTemplate : TemplateRef<any>;
 
   get groceryPromptView() {
@@ -93,7 +90,6 @@ export class StrainProductEditComponent implements OnInit {
     return null;
   }
 
-
   get retailProductView() {
     const itemType = this.itemType;
    if (this.fbProductsService.isRetail(itemType)){
@@ -101,7 +97,6 @@ export class StrainProductEditComponent implements OnInit {
    }
    return null;
   }
-
 
   managerProtected     : boolean;
   productForm          : UntypedFormGroup;
@@ -152,15 +147,12 @@ export class StrainProductEditComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any
     )
   {
-
     if (data) {
       this.dialogData = data;
     }
-
     if (!data) {
       this.id = this.route.snapshot.paramMap.get('id');
     }
-
   }
 
   setInit(data) {
@@ -188,23 +180,20 @@ export class StrainProductEditComponent implements OnInit {
           if (data.itemType) {
             this.itemType = data.itemType
           }
-
         }
       }
     } catch (error) {
       console.log('error', error)
     }
-
   }
 
   ngOnInit() {
-    console.log('ngOninit data', this.dialogData)
+    // console.log('ngOninit data', this.dialogData)
     this.setInit(this.dialogData)
     if (!this.dialogData) {
       this.initializeDataAndForm()
     }
   };
-
 
   initializeDataAndForm() {
     const site = this.siteService.getAssignedSite();
@@ -218,7 +207,6 @@ export class StrainProductEditComponent implements OnInit {
         return of(this.product)
     }))
   }
-
 
   setGender(event) {
     this.productForm.patchValue({gender: event.id})
@@ -249,14 +237,22 @@ export class StrainProductEditComponent implements OnInit {
   }
 
   initJSONForm(prodJSON: string) {
+    if (!prodJSON) {}
     this.jsonForm = this.fb.group({
+       backColor: [],
+       buttonColor: [],
+       managerProtected: [],
        tareValue: [],
        pieceWeight: [],
        unitTypeSelections: [],
+       limitMultiplier: []
     })
 
+
     try {
-      const item = JSON.parse(prodJSON)
+      const item = JSON.parse(prodJSON) as menuButtonJSON
+      this.jsonForm.patchValue(item)
+
       this.unitTypeSelections = JSON.parse(this.productJSONObject.unitTypeSelections)
     } catch (error) {
 
@@ -273,6 +269,7 @@ export class StrainProductEditComponent implements OnInit {
       this.productJSONObject.pieceWeight = 0;
       this.productJSONObject.tareValue = 0;
       this.productJSONObject.unitTypeSelections = null;
+      this.productJSONObject.limitMultiplier = 1;
       return
     }
     // product.reOrderUnitTypeID
@@ -286,12 +283,20 @@ export class StrainProductEditComponent implements OnInit {
     }
   }
 
+  // backColor: string;
+  // buttonColor: string;
+  // managerProtected: boolean;
+  // tareValue: number;
+  // pieceWeight: number;
+  // unitTypeSelections: string;
+  // limitMultiplier: number;
+
   get JSONAsString() {
     if (this.product) {
       if (this.jsonForm) {
         this.productJSONObject.tareValue = this.jsonForm.controls['tareValue'].value
         this.productJSONObject.pieceWeight =  this.jsonForm.controls['pieceWeight'].value
-        // this.productJSONObject.unitTypeSelections =  this.jsonForm.controls['unitTypeSelections'].value as IItemBasic[];
+        this.productJSONObject.limitMultiplier =  this.jsonForm.controls['limitMultiplier'].value
       }
 
       try {
@@ -303,10 +308,7 @@ export class StrainProductEditComponent implements OnInit {
       }
       return this.product.json
     }
-
   }
-
-
 
   editType() {
     if (this.product.prodModifierType) {

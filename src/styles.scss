@@ -12,14 +12,15 @@
 @import '~material-icons/iconfont/material-icons.css';
 @import "./app/_material/theme";
 @import '~@mdi/font/css/materialdesignicons.css';
+
 @import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
 @import '@angular/cdk/overlay-prebuilt.css';
 
 
-@import '~@ionic/angular/css/core.css';
-@import '~@ionic/angular/css/normalize.css';
-@import '~@ionic/angular/css/structure.css';
-@import '~@ionic/angular/css/typography.css';
+// @import '~@ionic/angular/css/core.css';
+// @import '~@ionic/angular/css/normalize.css';
+// @import '~@ionic/angular/css/structure.css';
+// @import '~@ionic/angular/css/typography.css';
 
 mat-button mat-raised-button {
   @media print {
@@ -624,6 +625,7 @@ mat-dialog-container {
   transform: translate(-50%, -50%);
   margin: 0 auto;
 }
+
 .float-bottom-center-relative {
   z-index: 1000;
   position: -webkit-sticky;
@@ -632,8 +634,8 @@ mat-dialog-container {
   bottom: 20px;
   transform: translate(-50%, -50%);
   margin: 0 auto;
-
 }
+
 .button-margins .button-margin {
   margin: 5px;
 }

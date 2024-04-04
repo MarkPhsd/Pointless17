@@ -804,7 +804,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
 
   displayAllOrFilter(user) {
 
-    console.log(user?.employeeID, user?.userPreferences?.showAllOrders)
+    // console.log(user?.employeeID, user?.userPreferences?.showAllOrders)
 
     if (user?.userPreferences?.showAllOrders) {
       if (!this.orderMethodsService.posSearchModel) {

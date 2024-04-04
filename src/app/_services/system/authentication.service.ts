@@ -300,6 +300,7 @@ export class AuthenticationService {
     }
 
     logout(pinPadDefaultOnApp: boolean) {
+      console.trace('trance')
       this.clearUserSettings();
       this.toolbarUIService.updateOrderBar(false)
       this.toolbarUIService.updateToolBarSideBar(false)

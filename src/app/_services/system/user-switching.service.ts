@@ -210,7 +210,7 @@ export class UserSwitchingService implements  OnDestroy {
       let auth$ =  this.authenticate(userLogin).pipe(
         switchMap(
           user => {
-
+          // console.log('user', user?.message, user?.errorMessage)
           if (!user || (user?.message === 'failed' || user?.errorMessage)) {
             return of(this.userAutFailed(user))
           }
@@ -226,7 +226,7 @@ export class UserSwitchingService implements  OnDestroy {
       }))
 
       let updateAuth$ = auth$.pipe(switchMap(data => {
-
+        console.log('updateAuth', data?.message, data?.errorMessage)
         if (!data || (data?.message === 'failed' || data?.errorMessage)) {
           // console.log('no login')
           return of(this.userAutFailed(data))
@@ -247,7 +247,7 @@ export class UserSwitchingService implements  OnDestroy {
       }))
 
       let balanceSheet$ = updateAuth$.pipe(switchMap(user => {
-
+        // console.log('updateAuth', user?.message, user?.errorMessage)
         if (!user || (user?.message === 'failed' || user?.errorMessage)) {
           // console.log('no login')
           return of(this.userAutFailed(user))
@@ -278,12 +278,12 @@ export class UserSwitchingService implements  OnDestroy {
   let result$ = balanceSheet$.pipe(
     switchMap(data => {
       {
-        // console.log('balanceSheet user?.errorMessage', data?.errorMessage)
+      // console.log('balanceSheet user?.errorMessage', data?.errorMessage)
       if (!data || (data?.message === 'failed' || data?.errorMessage)) {
         return of(this.userAutFailed(data))
       }
-
-    return of(data)
+      // console.log('return data', data)
+      return of(data)
   }}), catchError(data => {
         console.log('Error login')
         return of(data)
@@ -293,7 +293,7 @@ export class UserSwitchingService implements  OnDestroy {
 }
 
   // getAuthorization()
-  setUserInfo(user: IUser, password) {
+setUserInfo(user: IUser, password) {
 
     const currentUser = {} as IUser;
     if (!user.roles)     { user.roles = 'user' }

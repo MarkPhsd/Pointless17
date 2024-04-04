@@ -34,6 +34,7 @@ export class FbUnitTypeService {
       grams:            [''],
       unitID:           [''],
       uid:              [''],
+      limitMultiplier : [''],
     })
   }
 

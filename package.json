@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "2.29.4",
+  "version": "2.30.1",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -15,8 +15,8 @@
     "ng": "ng",
     "start with SSL": "ng serve --configuration dev --public-host --host=192.168.0.3 --port=4400 --ssl true --ssl-key ./localhost-key.pem --ssl-cert ./localhost.pem ",
     "start with IP": "ng serve --configuration dev --public-host --host=192.168.0.3 --port=4400 ",
-    "startLocal": "ng serve --configuration dev --host=localhost --port=4200",
-    "startLocalNode": "ng serve   --configuration dev --host=localhost --port=4200",
+    "startLocal": "ng serve --configuration dev --host=localhost --port=4400",
+    "startLocalNode": "ng serve   --configuration dev --host=localhost --port=4400",
     "BuildPointless production": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build  --configuration production",
     "pointless": " npm run deploy --domain=pointlesspos",
     "club": " npm run deploy --domain=clubskyhigh",

@@ -206,8 +206,6 @@ export class BalanceSheetMethodsService {
 
   closeSheet(sheet: IBalanceSheet, navigateUrl: string): Observable<any> {
     if (sheet) {
-      console.log('close sheet', sheet.balanceSheetEmployee.lastName)
-
       const site = this.sitesService.getAssignedSite();
       return  this.sheetService.closeShift(site, sheet).pipe(
         switchMap( data => {
