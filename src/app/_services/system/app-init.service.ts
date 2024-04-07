@@ -51,9 +51,9 @@ export class AppInitService  {
   //and it can override this value.
   //this can be assigned in settings after an initial login.
 
-  async getGoogleTrackingID() { 
+  async getGoogleTrackingID() {
     const config = await this.httpClient.get('assets/app-config.json').toPromise()  as IAppConfig
-    return config.googleTrackingKey    
+    return config.googleTrackingKey
   }
 
   async init() {
@@ -208,6 +208,7 @@ export class AppInitService  {
   }
 
   clearUserSettings(){
+    console.log('clear user settings')
     localStorage.removeItem("ami21");
     localStorage.removeItem('user');
     localStorage.removeItem('userx');

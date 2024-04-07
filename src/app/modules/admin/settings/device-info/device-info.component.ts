@@ -14,7 +14,7 @@ export class DeviceInfoComponent implements OnInit {
   isTablet        : boolean;
   isDesktopDevice : boolean;
   deviceName      : string;
-  pinToken        : string;
+
 
   debugOnThisDevice: boolean;
   constructor(
@@ -25,11 +25,6 @@ export class DeviceInfoComponent implements OnInit {
     this.getDeviceInfo();
     this.deviceName = localStorage.getItem('devicename');
     this.debugOnThisDevice = this.getdebugOnThisDevice()
-  }
-
-  setAPIToken() {
-    localStorage.setItem('pinToken', this.pinToken);
-    console.log(localStorage.getItem('pinToken'))
   }
 
   getdebugOnThisDevice() {

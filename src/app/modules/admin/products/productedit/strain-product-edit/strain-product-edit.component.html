@@ -281,14 +281,16 @@
 </ng-template>
 
 <ng-template #gramCount>
-  <mat-icon class="mat-label-info"
-             color="accent"
-             [matTooltip]="labelingService.productFieldTips[0].value">info</mat-icon>
-  <app-value-fields
-        [inputForm]="productForm"
-        [fieldName]="'gramCount'" >
-        Per Unit Quantity
-  </app-value-fields>
+  <div *ngIf="fbProductsService.isCannabis(this.itemType)">
+    <mat-icon class="mat-label-info"
+               color="accent"
+               [matTooltip]="labelingService.productFieldTips[0].value">info</mat-icon>
+    <app-value-fields
+          [inputForm]="productForm"
+          [fieldName]="'gramCount'" >
+      Gram Per Unit
+    </app-value-fields>
+  </div>
 </ng-template>
 
 <ng-template #productCount>
@@ -375,6 +377,13 @@
         </button>
       </div>
   </div>
+ <!-- <div *ngIf="fbProductsService.isCannabis(itemType) & jsonForm" style="width:125px;">
+  <app-value-fields
+      [inputForm]="jsonForm"
+      [fieldName]="'limitMultiplier'">
+    Limit Multiplier
+  </app-value-fields>
+ </div> -->
 </ng-template>
 
 <ng-template #reOrderUnit>
@@ -429,6 +438,9 @@
         [searchForm]  = "unitSelectorSearchForm"
         (itemSelect)  = "getUnitSelectorItem($event)">
     </unit-type-selector>
+
+
+
   </div>
 
   <div class="meta-tags"
@@ -572,8 +584,9 @@
     </cannabis-item-edit>
   </div>
 </ng-template>
+
 <ng-template #tareValueTemplate>
-  <div *ngIf="productForm">
+  <div *ngIf="productForm && jsonForm">
     <ng-container [ngTemplateOutlet]="tareValueView"></ng-container>
   </div>
 </ng-template>

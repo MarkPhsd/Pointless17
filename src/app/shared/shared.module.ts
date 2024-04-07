@@ -246,6 +246,7 @@ import { CloseFloatingButtonComponent } from './widgets/close-floating-button/cl
 import { MenuCardCategoriesComponent } from '../modules/menu/categories/menu-card-categories/menu-card-categories.component';
 import { SortSelectorsComponent } from './widgets/sort-selectors/sort-selectors.component';
 import { PayAPIComponent } from '../modules/payment-processing/pay-api/pay-api.component';
+import { SetTokenComponent } from '../modules/admin/settings/set-token/set-token.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -425,6 +426,7 @@ import { PayAPIComponent } from '../modules/payment-processing/pay-api/pay-api.c
     StoreCreditInfoComponent,
     StrainIndicatorComponent,
     StoreCreditSearchComponent,
+    SetTokenComponent,
     SummarycardComponent,
     TagChipsProductsComponent,
     TaxFieldsComponent,
@@ -702,6 +704,7 @@ import { PayAPIComponent } from '../modules/payment-processing/pay-api/pay-api.c
     ScaleSettingsComponent,
     ScaleReaderComponent,
     SearchDebounceInputComponent,
+    SetTokenComponent,
     SidebarComponent,
     SpeciesListComponent,
     StatusLookupComponent,

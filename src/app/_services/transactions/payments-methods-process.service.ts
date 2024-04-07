@@ -152,12 +152,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   sendOrderOnExit(order: IPOSOrder) {
-    // console.log('sendOrderOnExit', order?.id);
 
     let sendOrder$ : Observable<any>;
     if (!order) {  return of(null)  }
     if (this.isApp) {
       return  sendOrder$ = this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
+        console.trace('prepOrderOnExit data', data)
         if (data) {
           if (data.prepOrderOnExit) {
             return this.sendToPrep (order, true, data, true  )

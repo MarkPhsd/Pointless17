@@ -475,7 +475,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
     getItem(id: number) {
       if (id) {
         const site = this.siteService.getAssignedSite();
-        this.contactService.getContact(site, this.id).subscribe(data => {
+        this.contactService.getContact(site, +this.id).subscribe(data => {
           this.product = data;
           }
         )

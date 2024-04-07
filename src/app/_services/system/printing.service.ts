@@ -217,6 +217,14 @@ export class PrintingService {
     }
   }
 
+  initDefaultLayoutsOBS() {
+    const site = this.siteService.getAssignedSite();
+    return this.settingService.setDefaultReceiptLayoutOBS(site).pipe(switchMap(data => {
+
+      return this.settingService.setDefaultReceiptStylesOBS(site)
+    }))
+  }
+
   async initDefaultLabel() {
     const site        = this.siteService.getAssignedSite();
     this.zplSetting   = await this.settingService.setDefaultZPLText(site);
@@ -486,7 +494,9 @@ export class PrintingService {
 
   printLabelElectron(printString: string, printerName: string) {
     const uuid = UUID.UUID().slice(0,5);
-    console.log(printString, printerName)
+
+    if (!printString || printString == undefined || printString == 'undefined') { return };
+    console.log('printLabelElectron', printerName)
     const file = `file:///c://pointless//labels//print${uuid}.txt`
     let fileName = `c:\\pointless\\labels\\print${uuid}.txt`;
     try {
@@ -940,7 +950,8 @@ export class PrintingService {
   }
 
   getDefaultReceiptPrinter()
-  { console.log('')
+  {
+    console.log('')
   }
 
   async saveContentsToFile(filePath: string, contents: string) {

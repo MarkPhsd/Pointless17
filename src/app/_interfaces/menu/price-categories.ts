@@ -173,6 +173,7 @@ export interface UnitType {
   mainUnit:         number;
   isMainUnit:       boolean;
   itemMultiplier:   number;
+  limitMulitplier:  number;
   doNotDelete:      number;
   abbreviation:     string;
   plural:           string;

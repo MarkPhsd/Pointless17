@@ -270,27 +270,32 @@ export class FastUserSwitchComponent implements OnInit {
     this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(
       switchMap(data =>
         {
+
           if (!data) {
             this.notifyEvent('Failed Login', 'Failed Login');
             return of('failed')
           }
-          let user = {} as IUserProfile
+
+          let user : IUserProfile
+
           if (data.user) {  user = data.user } else {  user = data;   }
           this._pinCode.next('');
-          if (user && user.errorMessage) {
+
+          if (user?.errorMessage) {
             this.notifyEvent(user.errorMessage, 'Failed Login');
             return of('failed')
           }
-          if (user.roles.toLowerCase() != 'admin' || user.roles.toLowerCase() != 'manager') {
+
+          if (user && user.roles && ( user.roles.toLowerCase() != 'admin' || user.roles.toLowerCase() != 'manager')) {
             if (employeeIDAllowed && employeeIDAllowed != 0) {
               if (user.id != employeeIDAllowed) {
                   this.siteService.notify(`${user.errorMessage}, You are not allowed to use this terminal until the shift is closed.`, "close", 6000 , 'red'  );
-                return of('failed')
+                  return of('failed')
               }
             }
           }
+
           if (user) {
-            // console.log('user exists')
             this.spinnerLoading = false;
             if (user.message && user.message === 'failed' ||
                 (user.errorMessage )) {
@@ -301,16 +306,9 @@ export class FastUserSwitchComponent implements OnInit {
             if (this.platformService.isApp()) {
               // console.log('log in app function next')
               this.loginApp(user)
-              // if (this.loginApp(user)) {
-                //then return getting the balance sheet. if the balance sheet is not started we'll take the user to the sheet
-              // console.log('check balance sheet')
               return this.checkBalanceSheet(user)
-              // } else {
-              //   this.router.navigate(['/app-main-menu']);
-              // }
-              // this.onCancel();
-              return of('success')
             }
+
             if (user.message && user.message.toLowerCase() === 'success') {
               if (!this.loginAction) {
                 this.userSwitchingService.assignCurrentOrder(user)
@@ -343,9 +341,13 @@ export class FastUserSwitchComponent implements OnInit {
 
   openTimeClock() {
     const dialog = this.userSwitchingService.openTimeClock()
-    dialog.afterclosed(data => {
-      this.userSwitchingService.clearLoggedInUser()
-    })
+    try {
+      dialog.afterclosed( data => {
+        this.userSwitchingService.clearLoggedInUser()
+      })
+    } catch (error) {
+      console.log('dialog ref error')
+    }
   }
 
   notifyEvent(message: string, action: string) {

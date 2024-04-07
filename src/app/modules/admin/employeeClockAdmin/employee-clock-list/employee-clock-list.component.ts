@@ -65,7 +65,7 @@ export class EmployeeClockListComponent implements OnInit {
    rowDataClicked1      = {};
    rowDataClicked2      = {};
    rowData:             any[];
-   pageSize                = 25
+   pageSize                = 100
    currentRow              = 1;
    currentPage             = 1
    numberOfPages           = 1
@@ -117,7 +117,7 @@ export class EmployeeClockListComponent implements OnInit {
     private agGridService:  AgGridService,
   )
   {
-    this.initAgGrid(25);
+    this.initAgGrid(this.pageSize);
   }
 
   ngOnInit(): void {

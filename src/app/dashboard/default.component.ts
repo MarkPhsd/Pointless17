@@ -181,9 +181,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
       send => {
         if (!send) { return of('false')}
-        console.log('subscribSendOrder', send)
+        // console.log('subscribSendOrder', send)
         if (!send?.order || send?.order == null) {
-          console.log('send on order exit dont do anything')
+          // console.log('send on order exit dont do anything')
           return of('false')  ;
         }
         return this.paymentMethodsService.sendOrderOnExit(send?.order)

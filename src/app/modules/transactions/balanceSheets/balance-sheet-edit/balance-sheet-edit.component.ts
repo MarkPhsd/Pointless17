@@ -440,7 +440,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   deleteItem(event){
-    this.sheetMethodsService.deleteItem(this.isAuthorized, this.sheet)
+    this.sheetMethodsService.deleteItem(this.auths?.accessAdmins, this.sheet)
   }
 
   print(event){

@@ -173,7 +173,6 @@ export class ClockInOutComponent implements OnInit {
     //set to time clock type.
     this.employeeClockMethodsService.clock = clock;
     this.printingService.updatePrintView(5);
-
     return this.printingService.previewReceipt(true )
   }
 
@@ -226,6 +225,7 @@ export class ClockInOutComponent implements OnInit {
       switchMap(data =>  {
         this.isOnBreak = true;
         this.siteService.notify('Break Started', 'Success', 1000);
+        this.refresh()
         return of(data)
       })
     )
@@ -238,6 +238,7 @@ export class ClockInOutComponent implements OnInit {
       switchMap(data => {
         this.isOnBreak = false;
         this.siteService.notify('Break Completed', 'Success', 1000);
+        this.refresh()
         return of(data);
       })
     )

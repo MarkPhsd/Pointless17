@@ -471,14 +471,14 @@ export class UISettingsService {
     this.getUIHomePageSettings();
   }
 
-  initSecureSettings() {
-    if (this.userAuthorizationService.currentUser()) {
+  initSecureSettings(user?: IUser) {
+    if (!user) {
       const item = this.userAuthorizationService.currentUser();
       if (!item) {return}
       this.getTransactionUISettings();
-      this.subscribeToStripedCachedConfig();
-      this.getDSSIEmvSettings();
     }
+    this.subscribeToStripedCachedConfig();
+    this.getDSSIEmvSettings();
   }
 
   getTransactionUISettings() {

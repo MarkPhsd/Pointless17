@@ -644,6 +644,13 @@ export class SettingsService {
     }
   }
 
+  setTextObs(site: ISite, setting: ISetting): Observable<ISetting>  {
+    let setting$ = this.getSettingByName(site, setting.name)
+    return setting$.pipe(switchMap(data => {
+      setting.id = data.id
+      return this.saveSettingObservable(site, setting)
+    }))
+  }
 
   //this returns the setting and adds if if it wasn't int he datbase.
   // including a default value will assign if if the setting hasn't beeen created.
@@ -699,56 +706,84 @@ export class SettingsService {
     return await this.setText(site, setting)
   }
 
-  // setDefaultReceiptLayoutObservable(site: ISite): Promise<ISetting> {
-  //   // let setting        =  {} as ISetting;
-  //   // setting.name       =  'Receipt Default'
-  //   // setting.text       =  await this.getDefaultReceiptItemLayout()
-  //   // setting.option6    =  await this.getDefaultReceiptHeaderLayout()
-  //   // setting.option5    =  await this.getDefaultReceiptFooterLayout()
-  //   // setting.option7    =  await this.getDefaultReceiptPaymentLayout()
-  //   // setting.option11   =  await this.getDefaultReceiptCreditPaymentLayout()
-  //   // setting.option10   =  await this.getDefaultReceiptWICEBTPaymentLayout()
-  //   // setting.option8    =  await this.getDefaultReceiptsubFooterLayout()
+  setDefaultReceiptLayoutOBS(site: ISite): Observable<ISetting> {
+    let setting        =  {} as ISetting;
+    setting.name       =  'Receipt Default'
+    return this.getAssetText('assets/htmlTemplates/', 'receiptTemplateItems.html').pipe(switchMap(data => {
+      setting.text     =   data
+      return this.getAssetText('assets/htmlTemplates/', 'receiptTemplateHeader.html')
+    })).pipe(switchMap(data => {
+      setting.option6     =   data
+      return this.getAssetText('assets/htmlTemplates/', 'receiptTemplateFooter.html')
+    })).pipe(switchMap(data => {
+      setting.option5     =   data
+      return this.getAssetText('assets/htmlTemplates/', 'receiptTemplatePayments.html')
+    })).pipe(switchMap(data => {
+      setting.option7     =   data
+      return this.getAssetText('assets/htmlTemplates/', 'receiptTemplatesubFooter.html')
+    })).pipe(switchMap(data => {
+      setting.option8     =   data
+      return this.getAssetText('assets/htmlTemplates/', 'receiptTemplateWICEBTPayments.html')
+    })).pipe(switchMap(data => {
+      setting.option10     =   data
+      return this.getAssetText('assets/htmlTemplates/', 'receiptTemplateCreditPayments.html')
+    })).pipe(switchMap(data => {
+      setting.option8     =   data
+      return this.getAssetText('assets/htmlTemplates/', 'receiptTemplateWICEBTPayments.html')
+    })).pipe(switchMap(data => {
+      setting.description = 'ReceiptLayouts'
+      return this.setTextObs(site, setting)
+    }))
+  }
 
-  //   // setting.description = 'ReceiptLayouts'
-  //   // return await this.setText(site, setting)
-  // }
+  getAssetText(filePath: string , fileName : string): Observable<string> {
+    return  this.http.get(`${filePath}${fileName}`, {responseType: 'text'});
+  }
 
   async getDefaultReceiptItemLayout() {
-    const oberservable$ = this.http.get('assets/htmlTemplates/receiptTemplateItems.html', {responseType: 'text'});
+    let filePath = 'assets/htmlTemplates/'
+    let fileName = 'receiptTemplateItems.html'
+    const oberservable$ =  this.getAssetText(filePath, fileName)
     return await oberservable$.pipe().toPromise()
   }
+
   async getDefaultReceiptHeaderLayout() {
-    const oberservable$ = this.http.get('assets/htmlTemplates/receiptTemplateHeader.html', {responseType: 'text'});
+    let filePath = 'assets/htmlTemplates/'
+    let fileName = 'receiptTemplateHeader.html'
+    const oberservable$ =  this.getAssetText(filePath, fileName)
     return await oberservable$.pipe().toPromise()
   }
   async getDefaultReceiptFooterLayout() {
-    const oberservable$ = this.http.get('assets/htmlTemplates/receiptTemplateFooter.html', {responseType: 'text'});
+    let filePath = 'assets/htmlTemplates/'
+    let fileName = 'receiptTemplateFooter.html'
+    const oberservable$ =  this.getAssetText(filePath, fileName)
     return await oberservable$.pipe().toPromise()
   }
   async getDefaultReceiptsubFooterLayout() {
-    const oberservable$ = this.http.get('assets/htmlTemplates/receiptTemplatesubFooter.html', {responseType: 'text'});
+    let filePath = 'assets/htmlTemplates/'
+    let fileName = 'receiptTemplatesubFooter.html'
+    const oberservable$ =  this.getAssetText(filePath, fileName)
     return await oberservable$.pipe().toPromise()
   }
   async getDefaultReceiptPaymentLayout() {
-    const oberservable$ = this.http.get('assets/htmlTemplates/receiptTemplatePayments.html', {responseType: 'text'});
+    let filePath = 'assets/htmlTemplates/'
+    let fileName = 'receiptTemplatePayments.html'
+    const oberservable$ =  this.getAssetText(filePath, fileName)
     return await oberservable$.pipe().toPromise()
   }
   async getDefaultReceiptCreditPaymentLayout() {
-    const oberservable$ = this.http.get('assets/htmlTemplates/receiptTemplateCreditPayments.html', {responseType: 'text'});
+    let filePath = 'assets/htmlTemplates/'
+    let fileName = 'receiptTemplateCreditPayments.html'
+    const oberservable$ =  this.getAssetText(filePath, fileName)
     return await oberservable$.pipe().toPromise()
   }
   async getDefaultReceiptWICEBTPaymentLayout() {
-    const oberservable$ = this.http.get('assets/htmlTemplates/receiptTemplateWICEBTPayments.html', {responseType: 'text'});
+    let filePath = 'assets/htmlTemplates/'
+    let fileName = 'receiptTemplateWICEBTPayments.html'
+    const oberservable$ =  this.getAssetText(filePath, fileName)
     return await oberservable$.pipe().toPromise()
-    // const source$ = interval(2000).pipe(take(10));
-    // // const source$ = oberservable$.pipe(take(1));
-    // const finalNumber = await lastValueFrom(source$);
   }
 
-  ////////////////
-
-  ////////////////
   async setDefaultReceiptStyles(site: ISite): Promise<ISetting> {
     let setting         = {} as ISetting;
     setting.name        = 'ReceiptStyles'
@@ -756,12 +791,29 @@ export class SettingsService {
     setting.description = 'ReceiptStyles'
     return  await this.setText(site, setting)
   }
-
   async getDefaultReceiptStyles() {
-    const oberservable$ = this.http.get('assets/htmlTemplates/receiptStyles.txt', {responseType: 'text'});
+    let filePath = 'assets/htmlTemplates/'
+    let fileName = 'receiptStyles.txt'
+    const oberservable$ =  this.getAssetText(filePath, fileName)
     return await oberservable$.pipe().toPromise()
   }
-  ////////////////
+
+  setDefaultReceiptStylesOBS(site: ISite): Observable<ISetting> {
+    let setting         = {} as ISetting;
+    return this.getDefaultReceiptStylesOBS().pipe(switchMap(data => {
+      setting.text   = data
+      setting.description = 'ReceiptStyles'
+      setting.name        = 'ReceiptStyles'
+      return   this.setText(site, setting)
+    }))
+  }
+
+  getDefaultReceiptStylesOBS() {
+    let filePath = 'assets/htmlTemplates/'
+    let fileName = 'receiptStyles.txt'
+    return this.getAssetText(filePath, fileName)
+  }
+
 
   initCacheTimeObs(site: ISite): Observable<ISetting> {
     return this.getSettingByName(site, "CacheTime").pipe(

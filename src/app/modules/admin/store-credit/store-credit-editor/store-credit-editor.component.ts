@@ -62,7 +62,7 @@ export class StoreCreditEditorComponent implements OnInit {
           }
           this.id         = data.id
           if (this.storeCredit.clientID) {
-            this.client$    = this.contactsService.getContact(site,this.storeCredit.clientID.toString())
+            this.client$    = this.contactsService.getContact(site,this.storeCredit.clientID)
           }
 
           this.inputForm.patchValue(data)
@@ -86,7 +86,7 @@ export class StoreCreditEditorComponent implements OnInit {
         this.storeCredit.clientID = user.id
         this.storeCredit.userName = user.userName;
         this.storeCredit.accountNumber = user.accountNumber;
-        this.client$ = this.contactsService.getContact(site, this.storeCredit.clientID.toString())
+        this.client$ = this.contactsService.getContact(site, this.storeCredit.clientID)
         this.storeCreditService.save(site, this.storeCredit).subscribe( data => {
           data.cardNum = data.cardNum.trim();
           data.cardData = data.cardData.trim();
@@ -102,7 +102,7 @@ export class StoreCreditEditorComponent implements OnInit {
     this.storeCredit.clientID = 0
     this.storeCredit.userName = '';
     this.storeCredit.accountNumber = '';
-    this.client$ = this.contactsService.getContact(site, this.storeCredit.clientID.toString())
+    this.client$ = this.contactsService.getContact(site, this.storeCredit.clientID)
     this.storeCreditService.save(site, this.storeCredit).subscribe( data => {
       this.inputForm.patchValue(data)
     })

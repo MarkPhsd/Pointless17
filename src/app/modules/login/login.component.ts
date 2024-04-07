@@ -461,7 +461,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.initForm();
 
           if (!result || (result && result.errorMessage)) {
-            this.notifyEvent(result?.errorMessage, 'Failed Login');
+            this.notifyEvent('Message:' + result?.errorMessage, 'Failed Login');
             this.clearUserSettings()
             return of('failed')
           }

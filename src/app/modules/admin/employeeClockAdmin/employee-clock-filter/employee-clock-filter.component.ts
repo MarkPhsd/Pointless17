@@ -16,12 +16,13 @@ export class EmployeeClockFilterComponent implements OnInit {
 
   @Output() outputRefreshSearch :   EventEmitter<any> = new EventEmitter();
 
-  pageSize = 25;
+  pageSize = 100;
   dateRangeForm: UntypedFormGroup;
   dateTo: string;
   dateFrom: string;
   employees$       :   Observable<IItemBasic[]>;
   employeeID: number;
+  orderBy: string
 
   constructor(
     private dateHelper: DateHelperService,
@@ -119,6 +120,7 @@ export class EmployeeClockFilterComponent implements OnInit {
   }
 
   setEmployee(event) {
+    console.log('event', event)
     if (!event) { return }
     this.employeeID  = event.id
     this.refreshSearch()

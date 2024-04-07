@@ -8,6 +8,19 @@
 
 </div>
 
+
+<mat-button-toggle-group
+    name        ="toggleOpenClosedAll"
+    class       ="toggle-view"
+    [(ngModel)] ="orderBy"
+    (change)    ="refreshSearch()"
+    >
+    <mat-button-toggle class="toggle-min" value="employee">Employee</mat-button-toggle>
+    <mat-button-toggle class="toggle-min" value="date">Date</mat-button-toggle>
+</mat-button-toggle-group>
+
+
+
 <div class="fields">
   <mat-form-field appearance="outline" *ngIf="dateRangeForm">
     <mat-label>Date Range (Start Time)</mat-label>
@@ -54,8 +67,6 @@
       Employee
   </app-mat-toggle-selector>
 </div>
-
-
 
 <!-- <div>
   <mat-form-field   appearance="outline">

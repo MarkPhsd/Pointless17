@@ -91,29 +91,25 @@ export class BalanceSheetMethodsService {
     if (this.platformService.isAppElectron || this.platformService.androidApp) {
       const site     = this.sitesService.getAssignedSite()
       const deviceName = this.getDeviceName();
-
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
-          // console.log('data from Prompt Balance Sheet', data)
           if (data && data.errorMessage) {
             this.sitesService.notify(`Balance sheet error. ${data.errorMessage}`, 'Close', 3000, 'red')
-            return of({sheet: null, user: user})
+            return of({sheet: null, user: user, err: null})
           }
           if (data.id == 0 )  {
-             return of({sheet: null, user: user})
+             return of({sheet: null, user: user, err: null})
           }
-          const item = {sheet: data, user: user};
+          const item = {sheet: data, user: user, err: null};
           return of(item)
         }),
         catchError( e => {
-          // console.log('no balance Sheet',deviceName)
           this.sitesService.notify('Balance sheet error. User may not have employee assigned.' + e.toString(), 'Close', 3000, 'red')
           return of({sheet: null, user: user, err: e})
         })
       )
-
-      return of('false')
     }
+    return of({sheet: null, user: user, err: null})
   }
 
   openBalanceSheet(id) {
@@ -206,8 +202,6 @@ export class BalanceSheetMethodsService {
 
   closeSheet(sheet: IBalanceSheet, navigateUrl: string): Observable<any> {
     if (sheet) {
-      console.log('close sheet', sheet.balanceSheetEmployee.lastName)
-
       const site = this.sitesService.getAssignedSite();
       return  this.sheetService.closeShift(site, sheet).pipe(
         switchMap( data => {

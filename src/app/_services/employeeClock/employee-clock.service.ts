@@ -145,16 +145,17 @@ export class EmployeeClockService {
   _isOnBreak(site, user, clock: EmployeeClock): employeeBreak {
 
     if (!clock) { return null; }
-    if ( clock.breaks.length == 0 ) {
-      return null;
+
+    if (clock.breaks.length === 0) {
+      return null; // or true, based on your logic if an empty array should return true
     }
 
-    clock.breaks.forEach(data => {
-      if (!data.timeEnd) {
-        return data;
-      }
-    })
-
+    // Access the last item directly
+    const lastBreak = clock.breaks[clock.breaks.length - 1];
+    // Check if timeEnd is not set (null, undefined, or any falsy value)
+    if (!lastBreak.timeEnd) {
+      return lastBreak
+    }
     return null;
 
   }

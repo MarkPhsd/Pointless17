@@ -77,7 +77,6 @@ export class NavigationService {
               isStaff: boolean, completionDate: string, path: string) {
     this.toolbarUIService.updateOrderBar(openOrderBar)
     this.toolbarUIService.resetOrderBar(false)
-
     this.toolbarUIService.updateSearchBarSideBar(false)
     this.toolbarUIService.updateSideBar(false)
 

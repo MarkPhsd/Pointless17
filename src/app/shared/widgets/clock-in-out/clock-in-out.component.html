@@ -33,14 +33,18 @@
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="print(clock)"><mat-icon>print</mat-icon> Print</button>
+      <button mat-raised-button
+              color="primary"
+              (click)="print(clock)">
+        <mat-icon>print</mat-icon>
+        Print
+      </button>
     </mat-card-actions>
   </mat-card>
 </ng-template>
 
 <ng-template #clockInOutEditor>
   <div *ngIf="(clock$ | async) as result; else clockInButton">
-
     <div *ngIf="!result.logOutDate">
       <div>
         <button mat-raised-button color="warn" (click)="clockOut()">

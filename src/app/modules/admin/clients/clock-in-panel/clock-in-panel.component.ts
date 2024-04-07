@@ -67,11 +67,11 @@ export class ClockInPanelComponent implements OnInit {
     const clockInOnly = true;
 
     this.loginAction$ = this.userSwitchingService.processTimeClockLogin(userName, password).pipe(
-      switchMap(result =>
-        {
-          this.message = "Retry your code."
-          // console.log('result', result)
+      switchMap(result =>  {
+          console.log('result', result)
+
           if (!result || (result && result.errorMessage)) {
+            this.message = "Retry your code."
             this.siteService.notify(result?.errorMessage, 'Close', 10000,'red' );
             this.clearUserSettings()
             return of('failed')
@@ -80,28 +80,33 @@ export class ClockInPanelComponent implements OnInit {
           //if is app then result is a combination of user and sheet
           //if is not app then result is the user.
           let user = result?.user ;
-          let sheet = result?.sheet as IBalanceSheet;
+          // let sheet = result?.sheet as IBalanceSheet;
 
-          if (result && result.username != undefined) { user = result }
+          if (!user) {
+            if (result && result.username != undefined) { user = result }
+          }
 
+          console.log('user', user)
           if (user) {
             this.spinnerLoading = false;
 
-
             if (user && user?.errorMessage === 'failed') {
+              this.message = "Retry your code."
               this.clearUserSettings()
-
               this.authenticationService.updateUser(null);
               return of('failed')
             }
 
-            if (user && user?.message && user?.message.toLowerCase() === 'success') {
-              let pass = false
-              this.user = result
+            if ((( user?.employee?.id && user?.employee?.id != 0) ||
+                   user?.message.toLowerCase() === 'success')) {
+              this.user = user
               this.message = "Success: Choose to clock in or out as applicable."
               return of('success')
             }
           }
+
+          console.log('no employee')
+          return of('null')
         }
     ))
   }

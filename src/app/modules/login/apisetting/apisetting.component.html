@@ -1,4 +1,8 @@
+
 <div class="centered centered-flex">
   <api-stored-value></api-stored-value>
+  <mat-card *ngIf="platFormservice.isApp()">
+    <app-set-token></app-set-token>
+  </mat-card>
 </div>
 

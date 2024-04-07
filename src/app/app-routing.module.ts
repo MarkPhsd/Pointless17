@@ -46,13 +46,11 @@ import { CategoriesAlternateComponent } from './modules/menu/categories/categori
 import { BarcodeScannerComponent } from './shared/widgets/barcode-scanner/barcode-scanner.component';
 import { PackageListComponent } from './modules/admin/metrc/packages/package-list.component';
 import { ItemCategoriesListComponent } from './modules/admin/metrc/items/item-categories-list/item-categories-list.component';
-import { ProductSearchSelectorComponent } from './shared/widgets/product-search-selector/product-search-selector.component'
 import { InventoryLocationsComponent } from 'src/app/modules/admin/inventory/inventory-locations/inventory-locations.component';
 import { FacilitiesListComponent } from 'src/app/modules/admin/metrc/facilities/facilities-list/facilities-list.component';
 import { InventoryListComponent } from './modules/admin/inventory/inventory-list/inventory-list/inventory-list.component';
 import { ProfileComponent } from './modules/profile/profile.component';
 import { MetrcSalesListComponent } from './modules/admin/metrc/metrc-sales-list/metrc-sales-list.component';
-import { CategoryScrollComponent } from './shared/widgets/test/category-scroll/category-scroll.component';
 import { MenuManagerComponent } from './modules/admin/settings/menus-manager/menu-manager/menu-manager.component';
 import { ItemTypeComponent } from './modules/admin/products/item-type/item-type.component';
 import { FlatRateListComponent } from './modules/admin/products/flatRate/flat-rate-list/flat-rate-list.component';
@@ -64,9 +62,7 @@ import { InstalledPrintersComponent } from './modules/admin/settings/printing/in
 import { StrainsAddComponent } from './modules/admin/metrc/packages/strains-add/strains-add.component';
 import { PriceScheduleComponent } from './modules/admin/products/price-schedule/price-schedule.component';
 import { ItemTypeCategoryAssignmentComponent } from './modules/admin/products/item-type/item-type-category-assignment/item-type-category-assignment.component';
-import { AgGridTestComponent } from './shared/widgets/ag-grid-test/ag-grid-test.component';
 import { UnitTypeListComponent } from './modules/admin/products/unit-type-list/unit-type-list.component';
-import { DsiEMVPaymentComponent } from './modules/admin/dsi-emvpayment/dsi-emvpayment.component';
 import { PriceScheduleListComponent } from './modules/admin/products/price-schedule/price-schedule-list/price-schedule-list.component';
 import { ClientTypeEditComponent } from './modules/admin/clients/client-types/client-type-edit/client-type-edit.component';
 import { ClientTypeListComponent } from './modules/admin/clients/client-types/client-type-list/client-type-list.component';
@@ -112,8 +108,6 @@ import { ManifestStatusComponent } from './modules/admin/inventory/manifest-stat
 import { ManifestTypeComponent } from './modules/admin/inventory/manifest-type/manifest-type.component';
 import { StoreCreditListComponent } from './modules/admin/store-credit/store-credit-list/store-credit-list.component';
 import { FloorPlanComponent } from './modules/floor-plan/floor-plan/floor-plan.component';
-import { QROrderComponent } from './modules/posorders/qrorder/qrorder.component';
-import { MenuBoardComponent } from './modules/tv-menu/menu-board/menu-board.component';
 import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
 import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 import { QRCodeTableComponent } from './modules/orders/qrcode-table/qrcode-table.component';
@@ -121,9 +115,7 @@ import { DisplayMenuListComponent } from './modules/display-menu/display-menu-li
 import { ThreeCXFabComponent } from './shared/widgets/three-cxfab/three-cxfab.component';
 import { AdminDisplayMenuListComponent } from './modules/admin/products/display-menu/display-menu-list/display-menu-list.component';
 import { DisplayMenuMainComponent } from './modules/display-menu/display-menu/display-menu-main/display-menu-main.component';
-import { PosPaymentsFilterComponent } from './modules/transactions/pos-payments-main/pos-payments-filter/pos-payments-filter.component';
 import { PriceScheduleMenuItemsComponent } from './modules/priceSchedule/price-schedule-menu-items/price-schedule-menu-items.component';
-import { PayPalTransactionComponent } from './modules/payment-processing/payPal/pay-pal-transaction/pay-pal-transaction.component';
 import { BlogListEditComponent } from './modules/admin/blogEditor/blog-list-edit/blog-list-edit.component';
 import { BlogPostListComponent } from './shared/widgets/blog-post-list/blog-post-list.component';
 import { DevxReportDesignerComponent } from './modules/admin/devx-reporting/devx-report-designer/devx-report-designer.component';
@@ -154,8 +146,6 @@ import { PayAPIComponent } from './modules/payment-processing/pay-api/pay-api.co
 import { PayAPIFrameComponent } from './modules/payment-processing/pay-apiiframe/pay-apiiframe.component';
 
 const routes: Routes = [
-    // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
-    //'qr-order
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
     { path: 'qr-receipt',  component: QRCodeTableComponent, data: { title: 'Order', animation: 'isLeft'} },
 

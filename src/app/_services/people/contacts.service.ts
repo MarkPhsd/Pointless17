@@ -171,7 +171,7 @@ export class ContactsService {
 
   };
 
-  getContact(site: ISite, id: string): Observable<IUserProfile> {
+  getContact(site: ISite, id: number): Observable<IUserProfile> {
 
     const  controller =  "/clients/"
 

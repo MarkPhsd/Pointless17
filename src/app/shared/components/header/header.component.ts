@@ -26,6 +26,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { CoachMarksService,CoachMarksClass } from '../../widgets/coach-marks/coach-marks.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
+import { NavigationHistoryService } from 'src/app/_services/system/navigation-history.service';
 
 interface IIsOnline {
   result: string;
@@ -260,6 +261,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
               private paymentMethodsService: PaymentsMethodsProcessService,
               private clientService         : ClientTableService,
               private settingsService: SettingsService,
+              private navHistoryService      : NavigationHistoryService,
               private fb                    : UntypedFormBuilder ) {
   }
 
@@ -426,12 +428,40 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     }
   }
 
+  // goBack() {
+  //   this.smallDeviceLimiter
+  //   const hasHistory = this.router.navigated;
+  //   console.log('this.router', this.router.navigated)
+  //   if (hasHistory) {
+  //     this.location.back();
+  //   }
+  // }
+
   goBack() {
-    this.smallDeviceLimiter
+    const lastRoute = this.navHistoryService.getLastRoute();
+    // Logic to determine if lastRoute is within the DefaultComponent's children
+    // This is application-specific and depends on your routing structure
+
+    console.log('lastRoute', lastRoute)
+    if (lastRoute === 'login') {
+      this.router.navigateByUrl('app-main-menu')
+      return;
+    }
+
+    const isWithinDefaultComponent = lastRoute.startsWith('/default'); // Example condition
+
     const hasHistory = this.router.navigated;
     if (hasHistory) {
       this.location.back();
     }
+
+    // if (isWithinDefaultComponent) {
+    //   this.location.back();
+    // } else {
+    //   // Handle the case where you don't want to navigate back
+    //   // Maybe navigate to a specific route within your app
+    //   console.log('Not navigating back because the last route is outside of the desired context.');
+    // }
   }
 
   smallDeviceLimiter() {
@@ -520,11 +550,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     const site = this.siteService.getAssignedSite()
     return this.clientService.getClient(site, user.id, true).pipe(switchMap(data => {
       if (!data) {
+        console.log('no user')
         this.user = null;
         this.authenticationService.updateUser(null)
       }
       return of(data)
     }),catchError(data =>{
+      console.log('error')
       this.authenticationService.updateUser(null)
       this.logout()
       // console.log('error getting user', data, user)
@@ -557,8 +589,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       return
     }
 
-
-
     return user
   }
 
@@ -572,16 +602,17 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
         return of(null)
       }
 
-      // console.log('is user valid', data.id == user.id);
-      if (data.apiUserName  === user.username) {
+      console.log('is user valid', data.id == user.id, data.apiUserName , user.username);
+      if ( data.id == user.id) {
         // console.log('User names match');
       } else {
+        console.log('clear user logged')
         this.userSwitchingService.clearLoggedInUser()
         // console.log('User names match');
       }
       return of(data)
     }),catchError(data => {
-      // console.log('userInitCheck error', data)
+      console.log('clear user logged')
       this.userSwitchingService.clearLoggedInUser()
       return of(data)
     }));
@@ -814,6 +845,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   postLogout() {
+    console.trace('postlogout')
     this.userSwitchingService.clearLoggedInUser();
     this.smallDeviceLimiter();
   }

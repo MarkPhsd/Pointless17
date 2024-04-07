@@ -133,6 +133,7 @@ export interface menuButtonJSON {
   tareValue: number;
   pieceWeight: number;
   unitTypeSelections: string;
+  limitMultiplier: number;
 }
 
 //also in itemtype service - should consolidate

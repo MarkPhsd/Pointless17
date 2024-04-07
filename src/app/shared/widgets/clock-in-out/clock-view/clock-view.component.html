@@ -18,11 +18,15 @@
     </div>
 
     <div *ngIf="clock.breaks">
+      <h4>Breaks</h4>
       <div *ngFor="let item of clock.breaks">
+        <mat-divider></mat-divider>
         <div class="grid-summary" >
           <div>Start</div>
-          <div>{{item?.timeStart | date: 'short'}}</div>
-          <div>{{item?.timeEnd | date: 'short'}}</div>
+          <div>
+            <div>{{item?.timeStart | date: 'short'}}</div>
+            <div>{{item?.timeEnd | date: 'short'}}</div>
+          </div>
           <div>Type:</div>
           <div>{{item?.breakIdentifierID}}</div>
         </div>

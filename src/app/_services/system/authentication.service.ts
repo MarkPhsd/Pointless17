@@ -133,8 +133,6 @@ export class AuthenticationService {
         user.userPreferences.firstTime_notifyShowAllOrders = false
       }
 
-      // console.trace('trace')
-      // console.log('new user initialized', user)
       this._user.next(user)
       this.siteSerivce._user.next(user)
     }
@@ -300,6 +298,7 @@ export class AuthenticationService {
     }
 
     logout(pinPadDefaultOnApp: boolean) {
+      // console.trace('trance')
       this.clearUserSettings();
       this.toolbarUIService.updateOrderBar(false)
       this.toolbarUIService.updateToolBarSideBar(false)
@@ -360,6 +359,7 @@ export class AuthenticationService {
     }
 
     clearUserSettings(){
+      console.trace('clear user settings')
       localStorage.removeItem("ami21");
       localStorage.removeItem('user');
       localStorage.removeItem('userx');

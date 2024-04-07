@@ -1,6 +1,6 @@
 <div *ngIf="(receiptStyles$ | async) as styles"></div>
 <div *ngIf="(receiptLayoutSetting$ | async) as setting"></div>
-
+<div *ngIf="(receipt$  | async) as item"></div>
 <div class="header">
     <h2>Print Settings </h2>
     <p>
@@ -22,7 +22,9 @@
     <div class="receipt-template" *ngIf="(receiptList$ | async) as list; else loadingDefaultReceipt">
         <div *ngIf="electronPrinter as defaultSelected">
           <div>
+
             <mat-label>Default Receipt Template # {{defaultSelected.option1}}</mat-label>
+            <button (click)="initializeReceipt()" color='primary'>Initialized Template</button>
           </div>
 
           <default-receipt-selector

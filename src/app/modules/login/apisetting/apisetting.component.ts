@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-apisetting',
@@ -7,5 +8,9 @@ import { Component } from '@angular/core';
 })
 export class APISettingComponent {
 
+  constructor(
+        public platFormservice: PlatformService
+  ) {
 
+  }
 }
