@@ -6,6 +6,7 @@
       <div *ngIf="processing">
         ... loading.
       </div>
+
       <div *ngIf="value" class="loader">
         <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
       </div>
@@ -26,9 +27,8 @@
     </div>
 
     <div class="filter-panel">
-      <app-items-filter
-          (outputRefreshSearch)="refreshSearchAny($event)">
-      </app-items-filter>
+      <!--  (outputRefreshSearch)="refreshSearchAny($event)" -->
+      <app-items-filter> </app-items-filter>
     </div>
   </div>
 

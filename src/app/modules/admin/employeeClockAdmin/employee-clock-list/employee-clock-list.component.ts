@@ -124,7 +124,6 @@ export class EmployeeClockListComponent implements OnInit {
     const i = 0;
     this.updateItemsPerPage();
     this.initNotifierSubscription();
-
     this.viewType = 0;
   }
 
@@ -253,7 +252,7 @@ export class EmployeeClockListComponent implements OnInit {
     } as any
     this.columnDefs.push(item);
 
-    item =   {headerName: 'Break Min',     field: 'breakMinutes', sortable: true,
+    item =   {headerName: 'Break Minutes',     field: 'breakMinutes', sortable: true,
           width   : 125,
           minWidth: 125,
           maxWidth: 125,
@@ -261,15 +260,15 @@ export class EmployeeClockListComponent implements OnInit {
     } as any
     this.columnDefs.push(item);
 
-    item =   {headerName: 'Break Min',     field: 'breakMinutes', sortable: true,
-          width   : 100,
-          minWidth: 200,
-          maxWidth: 200,
-          flex    : 2,
-    } as any
-    this.columnDefs.push(item);
+    // item =   {headerName: 'Break Min',     field: 'breakMinutes', sortable: true,
+    //       width   : 100,
+    //       minWidth: 200,
+    //       maxWidth: 200,
+    //       flex    : 2,
+    // } as any
+    // this.columnDefs.push(item);
 
-    item =   {headerName: 'OG CLock Out',     field: 'originalClockIn', sortable: true,
+    item =   {headerName: 'OG CLock In',     field: 'originalClockIn', sortable: true,
                 cellRenderer: this.agGridService.dateCellRendererUSD,
                 width   : 220,
                 minWidth: 220,
@@ -382,6 +381,7 @@ export class EmployeeClockListComponent implements OnInit {
       search.pageSize   = this.pageSize;
       search.startDate  = this.startDate;
       search.endDate    = this.endDate;
+      search.orderBy    = data?.orderBy;
     }
     this.searchModel = search
     // console.log(this.searchModel)

@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { sortBy } from 'lodash';
 import { Observable } from 'rxjs';
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { EmployeeService } from 'src/app/_services/people/employee-service.service';
@@ -86,7 +87,8 @@ export class EmployeeClockFilterComponent implements OnInit {
         pageSize: this.pageSize,
         employeeID:  this.employeeID,
         startDate: this.dateFrom,
-        endDate: this.dateTo
+        endDate: this.dateTo,
+        orderBy: this.orderBy
       }
     );
   }
@@ -97,7 +99,8 @@ export class EmployeeClockFilterComponent implements OnInit {
         pageSize: this.pageSize,
         employeeID:  0,
         startDate: this.dateFrom,
-        endDate: this.dateTo
+        endDate: this.dateTo,
+        orderBy: this.orderBy
       }
     );
   }

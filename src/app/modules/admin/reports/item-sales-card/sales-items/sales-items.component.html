@@ -40,9 +40,13 @@
       <div *ngIf="!autoPrint && groupBy == 'items' " class="totals">{{sale?.productCount  | number: '1.0-0' }}   </div>
       <div *ngIf="!autoPrint && (groupBy != 'transactionType' && groupBy != 'void')" class="totals">{{sale?.cost | currency }}   </div>
 
-      <div class="totals" *ngIf="groupBy === 'void' "> {{sale?.orderID }}  </div>
+      <div class="totals" *ngIf="groupBy === 'void' ">
+        <button color="accent" (click)="viewOrder(sale?.orderID)"><mat-icon>open_in_new</mat-icon> {{sale?.orderID }} </button>
+       </div>
 
-      <div class="span-columns" *ngIf="groupBy === 'void'">  {{sale?.voidReason}}  </div>
+      <div class="span-columns" *ngIf="groupBy === 'void'">  {{sale?.voidReason}}
+
+      </div>
 
       <div class="row-span-all"> <mat-divider style="width:325px"></mat-divider></div>
 

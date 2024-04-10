@@ -91,18 +91,19 @@
       </div>
 
       <mat-card-content>
-        <app-value-fields
-              style="width:125px"
-              [inputForm]="inputForm"
-              [fieldName]="'payRate'">
-          Pay Rate
-        </app-value-fields>
+        <div style="width:125px">
+          <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'payRate'">
+            Pay Rate
+          </app-value-fields>
+        </div>
       </mat-card-content>
 
       <!-- {{inputForm.controls['logInTime'].value}} <br>
       {{inputForm.controls['logInTime'].value}} -->
 
-      <div class="ps-grid-items-75-col" style="width:160px">
+      <!-- <div class="ps-grid-items-75-col" style="width:160px">
         <div *ngIf="clock?.regHours">Hours</div>
         <div *ngIf="clock?.regHours">{{clock?.regHours.toFixed(2)}}</div>
         <div *ngIf="clock?.regPay">Pay</div>
@@ -111,8 +112,14 @@
         <div *ngIf="clock?.otHours">{{clock?.otHours.toFixed(2)}}</div>
         <div *ngIf="clock?.otPay">OT Pay</div>
         <div *ngIf="clock?.otPay">{{clock?.otPay.toFixed(2) | currency }}</div>
-      </div>
+      </div> -->
+      <!-- <clock-print-view [clock]="clock"></clock-print-view> -->
+
+      <ng-container [ngTemplateOutlet]="clockView"></ng-container>
     </mat-card>
+
+
+
   </div>
 </div>
 
@@ -121,3 +128,11 @@
 </ng-template>
 
 <div *ngIf="(action$ | async) as action"></div>
+
+<ng-template #clockView>
+  <clock-in-out
+    [displayPrintView]="true"
+    [displayOnly]="true"
+    [clock]="clock"
+  ></clock-in-out>
+</ng-template>

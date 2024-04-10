@@ -187,7 +187,7 @@ export class UserSwitchingService implements  OnDestroy {
     if (user?.errorMessage) {
       user.message = 'User not found.'
     }
-    console.log('failed login',user?.errorMessage , user)
+    // console.log('failed login',user?.errorMessage , user)
     if (user?.errorMessage) {
       this.snackBar.open(`${user?.errorMessage} ${user?.message}`, 'Failed Login', {duration: 1500})
     }
@@ -209,7 +209,7 @@ export class UserSwitchingService implements  OnDestroy {
     return  this.getAuthenticatedUser(site, userLogin, clockInOnly).pipe(switchMap(client => {
 
       if (client?.errorMessage) {
-        console.log('updateAuth no login', client)
+        // console.log('updateAuth no login', client)
         return of(this.userAutFailed(client))
       }
 
@@ -217,7 +217,7 @@ export class UserSwitchingService implements  OnDestroy {
       // update auths from client
       this.updateUserAuths(client)
       currentUser =  this.getStoredUser() as IUser;
-      console.log('current user', currentUser)
+      // console.log('current user', currentUser)
 
       if (currentUser) {
         if ( this.platformService.isApp()  )  {
@@ -228,7 +228,7 @@ export class UserSwitchingService implements  OnDestroy {
     }
   )).pipe(
     switchMap(data => {
-      console.log('precheck message before submit login', data?.errorMessage)
+      // console.log('precheck message before submit login', data?.errorMessage)
       if (data?.errorMessage) {  return of(this.userAutFailed(data))  }
       return of(data)
   }))
@@ -238,7 +238,7 @@ getAuthenticatedUser(site: ISite, userLogin: userLogin, clockInOnly: boolean ) {
   return  this.authenticate(userLogin).pipe(
     switchMap( user => {
       if ( user?.message === 'failed' ) {
-        console.log('failed user')
+        // console.log('failed user')
         return of(this.userAutFailed(user))
       }
       user.message = 'success'
@@ -281,7 +281,7 @@ updateUserAuths(user) {
 
   // getAuthorization()
 setUserInfo(user: IUser, password) {
-    console.log('setUser')
+    // console.log('setUser')
     const currentUser = {} as IUser;
     if (!user.roles)     { user.roles = 'user' }
     if (!user.firstName) { user.firstName = user.username }
@@ -333,13 +333,13 @@ setUserInfo(user: IUser, password) {
     currentUser.authdata     = user?.authdata
     localStorage.setItem('user', JSON.stringify(currentUser))
     this.authenticationService.updateUser(currentUser)
-    console.log('verify stored user')
+    // console.log('verify stored user')
     this.getStoredUser()
     return currentUser
   }
 
   getStoredUser() {
-    console.log('get user info', JSON.parse(localStorage.getItem('user')))
+    // console.log('get user info', JSON.parse(localStorage.getItem('user')))
     return JSON.parse(localStorage.getItem('user'))
   }
 

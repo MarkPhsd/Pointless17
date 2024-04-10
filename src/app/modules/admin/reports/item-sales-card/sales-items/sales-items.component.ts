@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { IReportItemSaleSummary, IReportItemSales, ITaxReport } from 'src/app/_services/reporting/reporting-items-sales.service';
 import * as _ from "lodash";
 @Component({
@@ -70,5 +70,10 @@ export class SalesItemsComponent implements OnInit {
       let itemList = list as  IReportItemSales[]
       this.adjustments.results = itemList.sort((a, b) => (a.originalPrice < b.originalPrice ? 1 : -1));
     }
+  }
+
+  viewOrder(id: any) {
+    //determine if it's history or not
+    //sale?.orderID*
   }
 }

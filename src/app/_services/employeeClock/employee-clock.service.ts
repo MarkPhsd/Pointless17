@@ -23,6 +23,7 @@ export interface EmployeeClockSearchModel{
   endDate: string;
   employeeID: number;
   summary: boolean;
+  orderBy: string;
 }
 
 

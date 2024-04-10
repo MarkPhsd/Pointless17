@@ -792,6 +792,16 @@ mat-dialog-container {
   grid-template-columns: 100px 100px;
 }
 
+.grid-summary-auto {
+  font-size: 12pt;
+  font-weight: bold;
+  --gap: 3px;
+  display: grid;
+  grid-gap: 3px;
+  gap: 3px;
+  grid-template-columns: 100px auto;
+}
+
 // Reporting
 .ps-general-padding {
   margin: 5px;

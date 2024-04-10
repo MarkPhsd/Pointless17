@@ -1,13 +1,15 @@
 <div *ngIf="(break$ | async) as break"></div>
+
 <div class="container">
   <ng-container [ngTemplateOutlet]="displayResults"></ng-container>
+
   <div *ngIf="displayPrintView">
     <ng-container [ngTemplateOutlet]="clockView"></ng-container>
   </div>
 </div>
 
 <ng-template #onDisplayOnly>
-  <div *ngIf="(clock$ | async) as result">
+  <div *ngIf="(clock$ | async) as result ">
     <div *ngIf="clock">
       <div *ngIf="isOnBreak">
         <mat-label color="warn">

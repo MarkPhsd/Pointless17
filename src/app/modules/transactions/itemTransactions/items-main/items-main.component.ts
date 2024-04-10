@@ -55,13 +55,17 @@ export class ItemsMainComponent implements OnInit {
 
   // //search with debounce
   searchItems$              : Subject<IOrderItemSearchModel[]> = new Subject();
-  _searchItems$ = this.searchPhrase.pipe(
-    debounceTime(250),
-      distinctUntilChanged(),
-      switchMap(searchPhrase =>
-        this.refreshSearch()
-    )
-  )
+  // _searchItems$ = this.searchPhrase.pipe(
+  //   debounceTime(250),
+  //     distinctUntilChanged(),
+  //     switchMap(searchPhrase =>
+  //             // {
+  //             //   console.log('search')
+  //             // }
+  //       this.refreshSearch()
+
+  //   )
+  // )
 
   get platForm()         {  return Capacitor.getPlatform(); }
   get PaginationPageSize(): number {return this.pageSize;  }
@@ -122,12 +126,14 @@ export class ItemsMainComponent implements OnInit {
                 public orderMethodsService: OrderMethodsService,
               )
   {
-    this.initSubscriptions();
+
     this.initForm();
     this.initAgGrid(this.pageSize);
   }
 
   async ngOnInit() {
+
+    this.initSubscriptions();
     this.initClasses()
     this.urlPath            = await this.awsService.awsBucketURL();
     this.rowSelection       = 'multiple'
@@ -170,21 +176,20 @@ export class ItemsMainComponent implements OnInit {
     })
   }
 
-
   initSubscriptions() {
     try {
       this._searchModel = this.pOSOrderItemService.searchModel$.subscribe( data => {
-        this.searchModel            = data
-          console.log('data')
+          this.searchModel            = data
+          console.log('data', data)
           if (!this.searchModel) {
             const searchModel       = {} as IOrderItemSearchModel;
             this.currentPage        = 1
             searchModel.pageNumber  = 1;
             searchModel.pageSize    = 50;
             this.searchModel        = searchModel
-            this.refreshSearch_sub()
-            return
           }
+          // console.trace('trance')
+          this.refreshSearch_sub()
         }
       )
     } catch (error) {
@@ -286,9 +291,9 @@ export class ItemsMainComponent implements OnInit {
     this.columnDefs.push(this.getValueField('completionDate', 'Closed',  125, false, true, false));
     this.columnDefs.push(this.getValueField('orderDate','Ordered',    125, false, true, false));
 
-    this.columnDefs.push(this.getValueField('traceProductCount','Trace',     125, false, false, false));
+    this.columnDefs.push(this.getValueField('traceProductCount','Trace',    125, false, false, false));
     this.columnDefs.push(this.getValueField('productCount',     'Count',    125, false, false, false));
-    this.columnDefs.push(this.getValueField('historyItem',      'history',   125, false, false));
+    this.columnDefs.push(this.getValueField('historyItem',      'history',  125, false, false));
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
 
@@ -348,7 +353,6 @@ export class ItemsMainComponent implements OnInit {
       allColumnIds.push(column.colId);
     });
     this.gridOptions.columnApi.autoSizeColumns(allColumnIds, skipHeader);
-
   }
 
   //initialize filter each time before getting data.
@@ -360,29 +364,31 @@ export class ItemsMainComponent implements OnInit {
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
     if (this.itemName.value)  {searchModel.orderID   = this.itemName.value }
-    this.pOSOrderItemService.updateSearchModel(searchModel)
+    // this.pOSOrderItemService.updateSearchModel(searchModel)
     return searchModel
   }
 
   refreshSearchAny(event) {
-    // console.log('refresh', this.searchModel)
     this.refreshSearch();
   }
 
   //this is called from subject rxjs obversablve above constructor.
-  refreshSearch(): Observable<IOrderItemSearchModel[]> {
+  //: Observable<IOrderItemSearchModel[]>
+  refreshSearch(){
+    console.log('refreshSearch', )
     this.currentPage         = 1
     const searchModel = this.initSearchModel();
     return  this.refreshSearch_sub()
   }
 
-  refreshSearch_sub(): Observable<IOrderItemSearchModel[]> {
+  //: Observable<IOrderItemSearchModel[]>
+  refreshSearch_sub(){
     if (this.params){
       this.params.startRow     = 1;
       this.params.endRow       = this.pageSize;
     }
     this.onGridReady(this.params)
-    return this._searchItems$
+    // return this._searchItems$
   }
 
   //this doesn't change the page, but updates the properties for getting data from the server.
@@ -416,7 +422,6 @@ export class ItemsMainComponent implements OnInit {
     }
     this.processing = true
     const dataSource = this.getDataSource(params)
-
     this.setDataSource(dataSource)
   }
 
@@ -454,7 +459,7 @@ export class ItemsMainComponent implements OnInit {
       this.currentPage   = paging.currentPage
       this.numberOfPages = paging.pageCount
       this.recordCount   = paging.recordCount
-
+      this.value  = 1;
       if (this.numberOfPages !=0 && this.numberOfPages) {
         this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
       }

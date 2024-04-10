@@ -19,7 +19,7 @@ import { EmployeeClockService } from 'src/app/_services/employeeClock/employee-c
 })
 export class ClockBreaksTypesComponent implements OnInit {
   // <!-- { "name": "15 Minute Break", "id": 303, "type": null, "optionBoolean": false } -->
-     
+
   columnsToDisplay = ['id', 'name', 'optionBoolean', 'edit'];
   inputForm: UntypedFormGroup;
   action$: Observable<any>;
@@ -43,11 +43,11 @@ export class ClockBreaksTypesComponent implements OnInit {
   {  }
 
   ngOnInit(): void {
-  
+
     this.refresh()
   }
 
-  refresh() { 
+  refresh() {
     this.initForm();
     this.getBreakList();
   }
@@ -58,13 +58,13 @@ export class ClockBreaksTypesComponent implements OnInit {
       optionBoolean: ['', Validators.required],
       id: [''],
     })
- 
+
   }
 
   getBreakList(): Observable<IItemBasic[]> {
     const site         = this.siteService.getAssignedSite();
     const items$ = this.employeeClockService.getBreakList(site);
-    
+
     this.itemBreaks$ = items$.pipe(
     switchMap(data => {
         this.pageSize = 10
@@ -78,13 +78,13 @@ export class ClockBreaksTypesComponent implements OnInit {
       return of(data)
       }
     ));
-    
+
     return this.itemBreaks$;
   }
 
   addItem() {
     const site         = this.siteService.getAssignedSite();
-    const item = this.inputForm.value 
+    const item = this.inputForm.value
     let setting = {name: item.name, id: item.id, boolean: item.optionBoolean} as any;
     const item$ = this.settingService.postSetting(site, setting)
     this.action$ = this.saveUpdate(item$)
@@ -92,17 +92,17 @@ export class ClockBreaksTypesComponent implements OnInit {
 
   updateItem(id:number) {
     const site         = this.siteService.getAssignedSite();
-    const item = this.inputForm.value 
-    console.log(item)
+    const item = this.inputForm.value
+    // console.log(item)
     let setting = {name: item.name, id: item.id, boolean: item.optionBoolean, filter: 1000} as any;
 
     const item$ = this.settingService.putSetting(site, id, setting)
     this.action$ = this.saveUpdate(item$)
   }
 
-  saveUpdate(item$) { 
+  saveUpdate(item$) {
     item$.pipe(
-      switchMap(data => { 
+      switchMap(data => {
         this.inputForm.patchValue(data)
         this.refresh();
         return of(data)
@@ -112,18 +112,18 @@ export class ClockBreaksTypesComponent implements OnInit {
     return item$
   }
 
-  clear() { 
+  clear() {
     this.break = null
   }
 
-  editItem(item) { 
+  editItem(item) {
     this.inputForm.patchValue(item)
     this.break = item;
   }
 
-  deleteItem(id: number) { 
+  deleteItem(id: number) {
     const site         = this.siteService.getAssignedSite();
-    this.action$ = this.settingService.deleteSetting(site, id).pipe(switchMap(data => { 
+    this.action$ = this.settingService.deleteSetting(site, id).pipe(switchMap(data => {
       this.break = null
       return of(data)
     }))

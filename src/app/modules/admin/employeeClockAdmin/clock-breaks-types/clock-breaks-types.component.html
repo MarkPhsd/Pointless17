@@ -11,7 +11,7 @@
         <!-- { "name": "15 Minute Break", "id": 303, "type": null, "optionBoolean": false } -->
         <table mat-table #outerSort="matSort" [dataSource]="dataSource"
               multiTemplateDataRows matSort>
-           
+
           <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef> ID </th>
               <td mat-cell *matCellDef="let element"> {{element.id}} </td>
@@ -21,7 +21,7 @@
               <td mat-cell *matCellDef="let element"> {{element.name}} </td>
           </ng-container>
           <ng-container matColumnDef="optionBoolean">
-            <th mat-header-cell *matHeaderCellDef> Disable Time </th>
+            <th mat-header-cell *matHeaderCellDef> UnPaid Time </th>
             <td mat-cell *matCellDef="let element"> {{element.optionBoolean}} </td>
           </ng-container>
 
@@ -30,7 +30,7 @@
               <td mat-cell *matCellDef="let element">
               <button mat-raised-button color="primary" (click)="editItem(element)">Edit</button>
               </td>
-          </ng-container> 
+          </ng-container>
 
            <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
           <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
@@ -73,7 +73,7 @@
             name="webProduct"
             class="mat-label"
             formControlName="optionBoolean">
-          <mat-label class="mat-label">Disable Time</mat-label>
+          <mat-label class="mat-label">UnPaid Time</mat-label>
         </mat-slide-toggle>
       </div>
 
@@ -85,20 +85,20 @@
               <mat-icon>clear</mat-icon>
               Clear</button>
           </div>
-  
+
           <div *ngIf="break && (break.id != 0 && break.id != undefined)">
             <button  mat-button   color="primary" (click)="updateItem(break.id)">
               <mat-icon>save</mat-icon>
               Save
             </button>
           </div>
-    
+
           <div *ngIf="!break || (break.id == 0 || break.id == undefined) ">
             <button  mat-button  color="primary" (click)="addItem()">
               <mat-icon>add</mat-icon>
               Add</button>
           </div>
-  
+
           <div>
             <button  mat-button  color="primary" (click)="deleteItem(break.id)">
               <mat-icon>delete</mat-icon>

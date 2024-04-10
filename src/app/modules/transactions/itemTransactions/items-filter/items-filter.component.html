@@ -31,12 +31,23 @@
       </div>
     </search-debounce-input>
 
-    <mat-label>History</mat-label>
-    <mat-slide-toggle
-              *ngIf="searchModel"
-              (change)="refreshSearch()"
-              [(ngModel)]="searchModel.historyItem"  >
-    </mat-slide-toggle>
+    <span style="margin-left:5px;margin-bottom:5px">
+      <mat-label>History</mat-label>
+      <mat-slide-toggle
+                *ngIf="searchModel"
+                (change)="refreshSearch()"
+                [(ngModel)]="searchModel.historyItem"  >
+      </mat-slide-toggle>
+    </span>
+
+    <span style="margin-left:5px;margin-bottom:5px">
+      <mat-label>Voided</mat-label>
+      <mat-slide-toggle
+          *ngIf="searchModel"
+          (change)="refreshSearch()"
+          [(ngModel)]="searchModel.voidedItem"  >
+      </mat-slide-toggle>
+    </span>
 
     <div *ngIf="isAuthorized" class="dates-field ">
       <mat-form-field appearance="outline" *ngIf="dateRangeForm">
@@ -46,10 +57,10 @@
                                 >
             <input matStartDate
                     formControlName="start"
-                
+
                     (click)='emitDatePickerData()'>
             <input matEndDate formControlName="end"
-           
+
                     (click)='emitDatePickerData()'>
 
                 </mat-date-range-input >
@@ -62,13 +73,15 @@
         <mat-error *ngIf="dateRangeForm.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
         <mat-error *ngIf="dateRangeForm.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
       </mat-form-field>
-      <div class="refresh"> <button mat-raised-button (click)="emitDatePickerData()"><mat-icon>refresh</mat-icon> </button></div>
+      <div class="refresh"> <button mat-raised-button (click)="emitDatePickerData()">
+        <mat-icon>refresh</mat-icon>
+      </button></div>
     </div>
 
     <mat-button-toggle-group
-          name="toggleTypeEmployee"
+          name="listType"
           class="toggle-view"
-          [(ngModel)]="toggleTypeEmployee" >
+          [(ngModel)]="listType" >
     <mat-button-toggle value="0"
         matTooltipHideDelay="1000" > Item Type </mat-button-toggle>
     <mat-button-toggle value="1"
@@ -77,38 +90,19 @@
         matTooltipHideDelay="1000" > Employee </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <div [hidden]="toggleTypeEmployee  == 2 "
+    <div [hidden]="listType != 0"
          class="toggle-selector-employee">
-      <app-mat-toggle-selector
-              [id]="searchModel.employeeID"
-              [list$]="employees$"
-              (outPutID)="setEmployee($event)">
-              Employee
-      </app-mat-toggle-selector>
+        <ng-container [ngTemplateOutlet]="itemTypeList"></ng-container>
     </div>
 
-    <div [hidden]="toggleTypeEmployee == 2"
+    <div [hidden]="listType != 1"
          class="toggle-selector">
-      <app-mat-toggle-selector
-            *ngIf="searchModel"
-            [styleHeight]="'calc(65vh - 150px)'"
-            [id]="searchModel.serviceTypeID"
-            [list$]="serviceTypes$"
-            (outPutID)="setServiceType($event)">
-            Item Type
-      </app-mat-toggle-selector>
+      <ng-container [ngTemplateOutlet]="transactionList"></ng-container>
     </div>
 
-    <div [hidden]="toggleTypeEmployee == 0"
+    <div [hidden]="listType != 2"
          class="toggle-selector">
-      <app-mat-toggle-selector
-            *ngIf="searchModel"
-            [styleHeight]="'calc(65vh - 150px)'"
-            [id]="searchModel.itemTypeID"
-            [list$]="itemTypes$"
-            (outPutID)="setItemType($event)">
-            Item Type
-      </app-mat-toggle-selector>
+      <ng-container [ngTemplateOutlet]="employeeList"></ng-container>
     </div>
 
     <div *ngIf="electronEnabled || printingEnabled || capacitorEnabled">
@@ -127,3 +121,31 @@
   <mat-spinner></mat-spinner>
 </ng-template>
 
+<ng-template #transactionList>
+  <app-mat-toggle-selector
+      [styleHeight]="'calc(65vh - 150px)'"
+      [id]="searchModel.serviceTypeID"
+      [list$]="serviceTypes$"
+      (outPutID)="setServiceType($event)">
+      Transaction Type
+  </app-mat-toggle-selector>
+</ng-template>
+
+<ng-template #itemTypeList>
+  <app-mat-toggle-selector
+      [id]="searchModel.itemTypeID"
+      [list$]="employees$"
+      (outPutID)="setEmployee($event)">
+    Employee
+  </app-mat-toggle-selector>
+</ng-template>
+
+<ng-template #employeeList>
+  <app-mat-toggle-selector
+      [styleHeight]="'calc(65vh - 150px)'"
+      [id]="searchModel.employeeID"
+      [list$]="itemTypes$"
+      (outPutID)="setItemType($event)">
+     Item Type
+  </app-mat-toggle-selector>
+</ng-template>

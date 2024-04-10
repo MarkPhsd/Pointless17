@@ -138,6 +138,7 @@ export interface IOrderItemSearchModel {
   name                         : string;
   itemTypeID                   : number;
   historyItem                  : boolean;
+  voidedItem                   : boolean;
 }
 
 export interface ItemPostResults {
@@ -272,7 +273,7 @@ export class POSOrderItemService {
   public searchModel$           = this._searchModel.asObservable();
 
   updateSearchModel(searchModel: IOrderItemSearchModel) {
-    console.log('searchmode', searchModel)
+    // console.log('searchmode', searchModel)
     this._searchModel.next(searchModel);
   }
 

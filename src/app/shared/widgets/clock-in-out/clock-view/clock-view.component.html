@@ -1,6 +1,6 @@
 <mat-card  *ngIf="clock" >
   <mat-card-content *ngIf="clock">
-    <div class="grid-summary">
+    <div class="grid-summary-auto">
       <div>Name</div>
       <div>{{clock?.employeeName}}</div>
       <div>Position ID</div>
@@ -21,12 +21,13 @@
       <h4>Breaks</h4>
       <div *ngFor="let item of clock.breaks">
         <mat-divider></mat-divider>
-        <div class="grid-summary" >
-          <div>Start</div>
-          <div>
-            <div>{{item?.timeStart | date: 'short'}}</div>
-            <div>{{item?.timeEnd | date: 'short'}}</div>
-          </div>
+        <div class="grid-summary-auto" >
+          <div>START</div>
+          <div>{{item?.timeStart | date: 'short'}}</div>
+          <div>END</div>
+          <div>{{item?.timeEnd | date: 'short'}}</div>
+          <div>Minutes:</div>
+          <div>{{ getTimeInMinutes(item?.timeStart, item?.timeEnd) }}</div>
           <div>Type:</div>
           <div>{{item?.breakIdentifierID}}</div>
         </div>

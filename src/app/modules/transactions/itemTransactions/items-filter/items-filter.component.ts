@@ -44,11 +44,12 @@ export class ItemsFilterComponent implements OnInit {
 
     selectedEmployee            : number;
     selectedType                : number;
+    voidedItem: boolean;
     toggleOpenClosedAll            = "1";
     toggleSuspendedOrders          = "0";
     toggleOrdersGreaterThanZero    = "0";
     togglePreAuth                  = "0";
-    toggleTypeEmployee             =  0
+    listType                      =  0
     toggleIsCashCredit             =  0
     printForm          : UntypedFormGroup;
     user               = {} as IUser;
@@ -128,7 +129,7 @@ export class ItemsFilterComponent implements OnInit {
     }
 
     ngAfterViewInit() {
-      if (this.searchForm) { 
+      if (this.searchForm) {
         this.initSearchOption();
       }
     }
@@ -159,7 +160,7 @@ export class ItemsFilterComponent implements OnInit {
           tap((event:KeyboardEvent) => {
             try {
               const search  = this.input.nativeElement.value
-              this.refreshOrderItemsSearch(search);
+              // this.refreshOrderItemsSearch(search);
               this.input.nativeElement.focus();
             } catch (error) {
               console.log('error searching')
@@ -176,7 +177,7 @@ export class ItemsFilterComponent implements OnInit {
       this.toggleSuspendedOrders       = "0";
       this.toggleOrdersGreaterThanZero = "0";
       this.toggleOpenClosedAll         = "0"
-      this.toggleTypeEmployee          = 0
+      this.listType                    = 0
       this.toggleIsCashCredit          = 0
 
       if (!this.searchModel) { this.searchModel = {} as IOrderItemSearchModel}
@@ -191,6 +192,7 @@ export class ItemsFilterComponent implements OnInit {
       this.searchModel.name = null;
       this.searchModel.pageNumber       = 1;
 
+      // this.searchModel.voidedItem = this.voidedItem
       const site            = this.siteService.getAssignedSite()
       this.employees$       = this.orderService.getActiveEmployees(site)
       this.serviceTypes$    = this.serviceTypes.getSaleTypes(site)
@@ -213,16 +215,18 @@ export class ItemsFilterComponent implements OnInit {
       if (! this.searchModel) {  this.searchModel = {} as IOrderItemSearchModel }
       const searchModel = this.searchModel;
       searchModel.name = name;
+      console.log('tag')
       this.pOSOrderItemService.updateSearchModel( searchModel )
-      this.outputRefreshSearch.emit('true');
+      // this.outputRefreshSearch.emit('true');
     }
 
 
     refreshSearch() {
-      if (! this.searchModel) {  this.searchModel = {} as IOrderItemSearchModel }
+      console.log('tag')
+      if (!this.searchModel) {  this.searchModel = {} as IOrderItemSearchModel }
       const search = this.searchModel;
       this.pOSOrderItemService.updateSearchModel( this.searchModel )
-      this.outputRefreshSearch.emit('true');
+      // this.outputRefreshSearch.emit('true');
     }
 
     refreshToggleAllClosedOpen() {

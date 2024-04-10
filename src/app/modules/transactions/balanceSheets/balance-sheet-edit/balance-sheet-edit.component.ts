@@ -549,6 +549,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     total      =   (this.tensStart.value * 10) + total
     total      =   (this.fivesStart.value * 5) + total
     total      =   (this.dollarsStart.value * 1) + total
+    total      =   (this.dollarStart.value * 1) + total
 
     return total
   }

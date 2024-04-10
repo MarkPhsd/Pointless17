@@ -19,8 +19,9 @@ export class ClockInOutComponent implements OnInit {
   @ViewChild('onDisplayOnly')      onDisplayOnly: TemplateRef<any>;
   @ViewChild('clockInOutEditor')   clockInOutEditor: TemplateRef<any>;
   @Output() outPutClose = new EventEmitter()
+
   clock$ : Observable<any> | undefined;
-  clock: EmployeeClock;
+  @Input()  clock: EmployeeClock;
   break$ : Observable<any>;
   isOnBreak$: Observable<any>;
   isOnBreak: boolean;
@@ -46,17 +47,16 @@ export class ClockInOutComponent implements OnInit {
                       ) { }
 
   ngOnInit(): void {
+    if (this.clock && this.displayOnly) { return }
     this.refresh();
-
     if (this.displayOnly) {
       // this.refreshTimer();
     }
   }
 
   get displayResults() {
-    if (this.displayOnly) {
-      return this.onDisplayOnly
-    }
+    if (!this.user) { return null }
+    if (this.displayOnly) {return this.onDisplayOnly }
     return this.clockInOutEditor
   }
 

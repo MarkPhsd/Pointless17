@@ -359,7 +359,7 @@ export class AuthenticationService {
     }
 
     clearUserSettings(){
-      console.trace('clear user settings')
+      // console.trace('clear user settings')
       localStorage.removeItem("ami21");
       localStorage.removeItem('user');
       localStorage.removeItem('userx');

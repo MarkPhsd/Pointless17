@@ -582,12 +582,12 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
       })
     }
 
-    console.log('view', view)
+    // console.log('view', view)
     this.reportsListView.forEach(data => {
-      console.log('view', view, data.id, view == data.id)
+      // console.log('view', view, data.id, view == data.id)
       if (view == data.id) {
         data.visible = true
-        console.log('data', data, data.visible)
+        // console.log('data', data, data.visible)
       }
     })
   }
