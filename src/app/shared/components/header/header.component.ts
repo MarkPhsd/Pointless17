@@ -602,16 +602,16 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
         return of(null)
       }
 
-      console.log('is user valid', data.id == user.id, data.apiUserName , user.username);
+      // console.log('is user valid', data.id == user.id, data.apiUserName , user.username);
       if ( data.id == user.id) {
         // console.log('User names match');
       } else {
-        console.log('clear user logged')
+        // console.log('clear user logged')
         this.userSwitchingService.clearLoggedInUser()
         // console.log('User names match');
       }
       return of(data)
-    }),catchError(data => {
+    // }),catchError(data => {
       console.log('clear user logged')
       this.userSwitchingService.clearLoggedInUser()
       return of(data)
@@ -845,7 +845,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   postLogout() {
-    console.trace('postlogout')
+    console.log('postlogout')
     this.userSwitchingService.clearLoggedInUser();
     this.smallDeviceLimiter();
   }
@@ -881,6 +881,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   switchUser() {
     const order = this.orderMethodsService.currentOrder;
+    console.log('logout switch user')
     this.paymentMethodsService.sendOrderAndLogOut( order , true )
     this.setInterFace(null)
   }

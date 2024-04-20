@@ -66,14 +66,15 @@
       </button>
   </div>
 
-  <div *ngIf="showMorePricesView && inputForm">
+  <div *ngIf="showMorePricesView && inputForm ">
 
     <ng-container [ngTemplateOutlet]="inventoryCaseView"></ng-container>
 
     <app-value-fields
-                  *ngIf="!isInventory && ( fbProductsService.isAlcohol(itemType) ||
-                                           fbProductsService.isAlcohol(itemType) ||
-                                           fbProductsService.isProduct(itemType) )"
+                  *ngIf="!isInventory && !fbProductsService.isCannabis(itemType) &&
+                                            ( fbProductsService.isAlcohol(itemType) ||
+                                             fbProductsService.isAlcohol(itemType) ||
+                                             fbProductsService.isProduct(itemType) )"
       [inputForm]="inputForm"
       [fieldsClass]="'font-medium'"
       [fieldName]="'crv'"  >
@@ -96,7 +97,7 @@
   </ng-template>
 
 <ng-template #retailFields>
-  <div *ngIf="inputForm && !isInventory"  [formGroup]="inputForm">
+  <div *ngIf="inputForm && !isInventory && !itemType?.disablePriceCategory  && !itemType?.disableSimplePrice  "  [formGroup]="inputForm">
     <app-value-fields
       [inputForm]= "inputForm"
       [fieldName]="'priceA'">
@@ -117,7 +118,7 @@
 </ng-template>
 
 <ng-template #inventoryCaseView>
-  <div *ngIf="isInventory">
+  <div *ngIf="isInventory  && !itemType?.disablePriceCategory  &&  !itemType?.disableSimplePrice && !fbProductsService.isCannabis(itemType) " >
     <app-value-fields
         [inputForm]="inputForm"
         [fieldsClass]="'font-medium'"
@@ -135,7 +136,7 @@
 </ng-template>
 
 <ng-template #priceFields>
-  <div  *ngIf="!isInventory && inputForm" [formGroup]="inputForm">
+  <div  *ngIf="!isInventory && inputForm  && !itemType?.disablePriceCategory &&  !itemType?.disableSimplePrice && !fbProductsService.isCannabis(itemType) " [formGroup]="inputForm">
 
     <app-value-fields
       [inputForm]="inputForm"

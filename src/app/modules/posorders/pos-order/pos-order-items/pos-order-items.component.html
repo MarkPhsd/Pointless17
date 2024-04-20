@@ -14,7 +14,16 @@
   <div class="grid-phone-scroll">
     <div class="item-span">
       <button mat-button (click)="dismiss()"><mat-icon>close</mat-icon>Close</button>
+
+      <span class="item-span">
+        <button mat-button (click)="viewCart()"><mat-icon>shopping_cart</mat-icon>Cart</button>
+      </span>
+      <span class="item-span">
+        <button mat-button (click)="viewPayment()"><mat-icon>credit_card</mat-icon>Payment</button>
+      </span>
+
     </div>
+
 
     <div  #scrollMe
         [id]="scrollStyle"

@@ -1,8 +1,9 @@
 import { Component,   OnInit,
-  ViewChild ,ElementRef,  HostListener, OnDestroy, Input, TemplateRef } from '@angular/core';
+  ViewChild ,ElementRef,  HostListener, OnDestroy, Input, TemplateRef,
+  ɵɵtrustConstantResourceUrl} from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { Observable, Subject, Subscription  } from 'rxjs';
+import { Observable, Subject, Subscription, of, switchMap  } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 // import "ag-grid-community/dist/styles/ag-grid.css";
@@ -35,6 +36,8 @@ export interface rowItem {
   styleUrls: ['./employee-clock-list.component.scss']
 })
 export class EmployeeClockListComponent implements OnInit {
+
+  action$: Observable<any>;
 
   @ViewChild('taxReport') taxReport : TemplateRef<any>;
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -100,6 +103,7 @@ export class EmployeeClockListComponent implements OnInit {
 
   summary: EmployeeClock;
   employeeList$: Observable<EmployeeClockResults>;
+  _search : Subscription;
 
   get PaginationPageSize(): number {return this.pageSize;  }
   get gridAPI(): GridApi {  return this.gridApi;  }
@@ -125,6 +129,14 @@ export class EmployeeClockListComponent implements OnInit {
     this.updateItemsPerPage();
     this.initNotifierSubscription();
     this.viewType = 0;
+
+    this._search = this.employeeClockService.searchModel$.subscribe(data => {
+      this.refreshSearchAny(data)
+    })
+  }
+
+  ngOnDestroy() {
+    if (this._search) { this._search.unsubscribe()}
   }
 
   get taxReportView() {
@@ -145,6 +157,8 @@ export class EmployeeClockListComponent implements OnInit {
       search.endDate = this.endDate;
       search.startDate = this.startDate;
       this.searchModel = search;
+
+      console.log('search endDate', search.endDate)
       this.refreshSearch(search);
     })
   }
@@ -260,13 +274,13 @@ export class EmployeeClockListComponent implements OnInit {
     } as any
     this.columnDefs.push(item);
 
-    // item =   {headerName: 'Break Min',     field: 'breakMinutes', sortable: true,
-    //       width   : 100,
-    //       minWidth: 200,
-    //       maxWidth: 200,
-    //       flex    : 2,
-    // } as any
-    // this.columnDefs.push(item);
+    item =   {headerName: 'Break Min Paid',     field: 'paidBreaks', sortable: true,
+          width   : 100,
+          minWidth: 200,
+          maxWidth: 200,
+          flex    : 2,
+    } as any
+    this.columnDefs.push(item);
 
     item =   {headerName: 'OG CLock In',     field: 'originalClockIn', sortable: true,
                 cellRenderer: this.agGridService.dateCellRendererUSD,
@@ -331,8 +345,10 @@ export class EmployeeClockListComponent implements OnInit {
 
   refreshSearchAny(data:any) {
     this.startDate = this.dateHelper.format(data?.startDate, 'MM/dd/yyyy');
-    this.endDate =this.dateHelper.format(data?.endDate, 'MM/dd/yyyy');
+    this.endDate   = this.dateHelper.format(data?.endDate, 'MM/dd/yyyy');
     this.employeeID = data?.employeeID;
+
+    console.log('search endDate',data.endDate, this.endDate)
     this.refreshSearch(data)
   }
 
@@ -361,6 +377,14 @@ export class EmployeeClockListComponent implements OnInit {
     return this.currentPage
   }
 
+  reCalcList() {
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.employeeClockService.refreshCalcsEmployeesBetweenPeriod(site, this.searchModel).pipe(switchMap(data => {
+      this.refreshSearch(this.searchModel)
+      return of(data)
+    }))
+  }
+
   refreshSearch(data) {
     const search = {} as EmployeeClockSearchModel
     this.message = ''
@@ -384,7 +408,7 @@ export class EmployeeClockListComponent implements OnInit {
       search.orderBy    = data?.orderBy;
     }
     this.searchModel = search
-    // console.log(this.searchModel)
+    console.log('end Search', search)
     this.onGridReady(this.params)
   }
 
@@ -431,6 +455,7 @@ export class EmployeeClockListComponent implements OnInit {
 
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
       if (!items$) { return }
+      console.log('can subsribe')
       items$.subscribe(data =>
         {
           const resp           =  data.paging
@@ -450,18 +475,13 @@ export class EmployeeClockListComponent implements OnInit {
 
             }
             if (data.results) {
-              if (this.isfirstpage) {
-                // console.log('add first page', data.results)
-                this.jsonData = data.results
+              if (this.isfirstpage) { this.jsonData = data.results
               } else {
-                if (this.jsonData) {
-                  this.jsonData = [...this.jsonData, ...data.results]
+                if (this.jsonData)  { this.jsonData = [...this.jsonData, ...data.results]
                 } else {
                   this.jsonData = data.results;
                 }
-                // console.log('add more page', data.results)
               }
-              // console.log('jsonData', this.jsonData)
               let results  =  this.refreshImages(data.results)
               params.successCallback(results)
               this.rowData = results
@@ -471,8 +491,11 @@ export class EmployeeClockListComponent implements OnInit {
       }
     };
 
+    console.log('datasource', datasource)
     if (!datasource)   { return }
+    console.log('gridApi', this.gridApi)
     if (!this.gridApi) { return }
+    console.log('setDataSource')
     this.gridApi.setDatasource(datasource);
     this.autoSizeAll(true)
   }
@@ -482,6 +505,7 @@ export class EmployeeClockListComponent implements OnInit {
     search = this.searchModel;
     if (!this.searchModel) {  search = {} as EmployeeClockSearchModel }
     // this.currentPage          = this.setCurrentPage(1, 100)
+
     if (search) {
       search.pageNumber = this.currentPage;
       search.pageSize =   this.pageSize;
@@ -489,6 +513,7 @@ export class EmployeeClockListComponent implements OnInit {
       search.endDate   =  this.endDate;
       search.employeeID = this.employeeID
     }
+    console.log('getSearch', search)
     return search
   }
 
@@ -585,6 +610,7 @@ export class EmployeeClockListComponent implements OnInit {
     const site = this.siteService.getAssignedSite()
     const dialog = this.productEditButtonService.openClockEditor(id)
     dialog.afterClosed().subscribe(data => {
+
       this.refreshSearchAny(this.searchModel)
     })
   }

@@ -437,8 +437,11 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     return paymentMethods$.pipe(
       switchMap(data => {
       const list = data.filter( item => item.enabledOnline)
-      let list2 = list.filter( item => !item.isCreditCard)
-      list2 = list2.filter( item => item.name != 'Gift Card')
+
+      let list2 = list.filter( item => item.name != 'Gift Card')
+      if (!this.uiTransactions?.disableCreditFilter) {
+         list2 = list.filter( item => !item.isCreditCard)
+      }
 
       if (!this.isCashAuthorizedPayment) {
         list2 = list2.filter( item => !item.isCash)

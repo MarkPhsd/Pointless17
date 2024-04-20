@@ -90,8 +90,6 @@ $white: #efefef;
   }
 }
 
-
-
 .button {
   width: 150px;
   margin: 5px
@@ -127,7 +125,6 @@ mat-card {
   justify-content: center;
   height: 75px;
 }
-
 
 .grid-display-device {
   @include for-phone-only  {

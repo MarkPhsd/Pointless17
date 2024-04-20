@@ -11,22 +11,24 @@
 }
 
 .panel-description {
-  // font-size: 1.2em;
   font-weight:600;
   margin-left:20px;
+  font-size: 1.2em;
   @include for-phone-only {
-    // font-size   : 1.1em;
-    // font-weight : 400;
     margin-left:5px;
+    font-size: 1em;
   }
 }
+
+
+
 .mat-button-toggle {
   background-color: #d4beba;
   color: #140c0c;
 
   @include for-phone-only {
-    width: 15vw;
-    max-width: 40px;
+    // width: 15vw;
+    width: 65px;
   }
 }
 
@@ -48,7 +50,7 @@
 
   @include for-phone-only {
     margin-left : 10px;
-    // font-size   : 1.1em;
+    font-size   : 1.1em;
     font-weight : 400;
   }
 }

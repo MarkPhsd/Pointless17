@@ -45,9 +45,11 @@ export interface ITerminalSettings {
   dsiEMVSettings    : DSIEMVSettings;
   printServerTime    : number;
   printServerEnable  : boolean;
-  remoteReceipt   : string;
-  remotePrint     : boolean;
-  remotePrepPrint: boolean;
+  remoteReceipt    : string;
+  remotePrint      : boolean;
+  remotePrepPrint  : boolean;
+  disableImages: boolean;
+  disableMenuImages: boolean;
 }
 
 

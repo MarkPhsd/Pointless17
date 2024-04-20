@@ -67,6 +67,7 @@ export class UserSwitchingService implements  OnDestroy {
 
   //enter or chain observables here.
   promptBalanceSheet(user: IUser): Observable<any> {
+    this.setUserInfo(user, user.password)
     return this.sheetMethodsService.promptBalanceSheet(user)
   }
 
@@ -182,7 +183,7 @@ export class UserSwitchingService implements  OnDestroy {
     return this.http.post<any>(url, userLogin )
   }
 
-  userAutFailed(user) : IUser {
+  userAutFailed(user) : IUserProfile {
     let message = user?.errorMessage;
     if (user?.errorMessage) {
       user.message = 'User not found.'
@@ -199,89 +200,151 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   login(userName: string, password: string, clockInOnly: boolean): Observable<any> {
-
+    // Clear existing subscriptions and settings, get assigned site and set timeout
     this.clearSubscriptions();
     this.authenticationService.clearUserSettings();
-    const site      = this.siteService.getAssignedSite();
-    const userLogin = { userName, password } as userLogin;
-    let currentUser : IUser;
+    const site = this.siteService.getAssignedSite();
+    const userLogin = { userName, password };
+    const timeOut = 3000;
 
-    return  this.getAuthenticatedUser(site, userLogin, clockInOnly).pipe(switchMap(client => {
-
-      if (client?.errorMessage) {
-        // console.log('updateAuth no login', client)
-        return of(this.userAutFailed(client))
-      }
-
-      if (clockInOnly) {  return of( {user: client})  }
-      // update auths from client
-      this.updateUserAuths(client)
-      currentUser =  this.getStoredUser() as IUser;
-      // console.log('current user', currentUser)
-
-      if (currentUser) {
-        if ( this.platformService.isApp()  )  {
-          return this.promptBalanceSheet(currentUser)
+    // Authentication stream
+    let auth$ = this.authenticate(userLogin).pipe(
+      concatMap(user => {
+        if (!user || user.message === 'failed') {
+          console.log('Authentication failed:', user?.message);
+          return of(this.userAutFailed(user));
         }
-      }
-      return of(currentUser)
-    }
-  )).pipe(
-    switchMap(data => {
-      // console.log('precheck message before submit login', data?.errorMessage)
-      if (data?.errorMessage) {  return of(this.userAutFailed(data))  }
-      return of(data)
-  }))
-}
+        user.message = 'success';
+        const currentUser = this.setUserInfo(user, password);
+        this.uiSettingService.initSecureSettings();
+        return this.contactsService.getContact(site, user.id);
+      })
+    );
 
-getAuthenticatedUser(site: ISite, userLogin: userLogin, clockInOnly: boolean ) {
-  return  this.authenticate(userLogin).pipe(
-    switchMap( user => {
-      if ( user?.message === 'failed' ) {
-        // console.log('failed user')
-        return of(this.userAutFailed(user))
-      }
-      user.message = 'success'
-      const currentUser = this.setUserInfo(user, userLogin?.password)
+    // Authorization update stream
+    let updateAuth$ = auth$.pipe(
+      concatMap(data => {
+        if (!data || (data.errorMessage != undefined && data.errorMessage != null)) {
+          console.log('Update Authorization:', data, data.message, data.errorMessage);
+          return of(this.userAutFailed(data));
+        }
+        this.authenticationService.updateUserAuths(
+          data.clientType?.jsonObject ? JSON.parse(data.clientType.jsonObject) : null
+        );
+        const item = localStorage.getItem('user');
+        return of(JSON.parse(item));
+      })
+    );
 
-      if (!clockInOnly) {   this.uiSettingService.initSecureSettings(currentUser); }
+    // Handle balance sheet or pass through user data
+    let balanceSheet$ = updateAuth$.pipe(
+      concatMap(user => {
 
-      const userValue = this.setUserInfo(user, userLogin?.password)
+        console.log(user?.errorMessage == null)
+        if (user && user?.errorMessage !== null) {
+          console.log('Update Auths:', user);
+          return of(this.userAutFailed(user));
+        }
 
-      return this.contactsService.getContact(site, user?.id)
-  }))
-}
+        if (clockInOnly) return of(user);
 
-updateUserAuths(user) {
-  // console.log('user clienttype', user?.clientType)
-  // console.log('user.clientType.jsonObject', user.clientType?.jsonObject)
+        return this.platformService.isApp() ? this.promptBalanceSheet(user) : of(user);
+      })
+    );
 
-  if (user.clientType && user.clientType.jsonObject) {
-    this.authenticationService.updateUserAuths(JSON.parse(user?.clientType?.jsonObject))
-  } else  {
+    // Final result handling
+    let result$ = balanceSheet$.pipe(
+      concatMap(data => {
+        if (!data || data.message === 'failed') {
+          console.log('Final Data Check Failed:', data);
+          return of(this.userAutFailed(data));
+        }
+        return of(data);
+      })
+    );
 
-    this.authenticationService.updateUserAuths(null);
+    return result$;
+    // this.clearSubscriptions();
+    // this.authenticationService.clearUserSettings();
+    // const site      = this.siteService.getAssignedSite();
+    // const userLogin = { userName, password } as userLogin;
+    // const timeOut   = 3 * 1000;
 
-    if (!user) {
-      this.siteService.notify('No auths assigned to client type.', 'Close', 5000)
-      return
-    }
-    if (!user.clientType) {
-      this.siteService.notify('No client type assigned.', 'Close', 5000)
-      return
-    }
-    if (!user.clientType.jsonObject) {
-      this.siteService.notify('No auths assigned to client type.', 'Close', 5000)
-      return
-    }
+    // let auth$ =  this.authenticate(userLogin).pipe(
+    //   concatMap(  user => {
 
-  }
+    //     if (!user || (user?.message === 'failed')) {
+    //       console.log('user message',  user?.message)
+    //       return of(this.userAutFailed(user))
+    //     }
 
+    //     user.message = 'success'
+    //     const currentUser = this.setUserInfo(user, password)
+    //     this.uiSettingService.initSecureSettings();
+    //     return this.contactsService.getContact(site, user?.id)
+
+    // }))
+
+    // let updateAuth$ = auth$.pipe(concatMap(data => {
+
+    //   if (data && (data?.errorMessage != undefined && data?.errorMessage != null)) {
+    //     console.log('updateAuth$ ', data, data?.message, data.errorMessage)
+    //     if (!data || (data?.message === 'failed' )) {
+    //       return of(this.userAutFailed(data))
+    //     }
+    //   }
+
+    //   const item = localStorage.getItem('user')
+    //   const user = JSON.parse(item) as IUser;
+
+    //   if (data && data.clientType && data?.clientType?.jsonObject) {
+    //     this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
+    //   } else  {
+    //     console.log('no Auths updateAuth$', data)
+    //     this.authenticationService.updateUserAuths(null)
+    //   }
+
+    //   return of(user )
+    // }))
+
+    // let balanceSheet$ = updateAuth$.pipe(concatMap(user => {
+
+    //   if (user && (user?.errorMessage != undefined && user?.errorMessage != null)) {
+    //     console.log('balanceSheet$', user)
+    //     if (user?.message === 'failed' ) {
+    //       return of(this.userAutFailed(user))
+    //     }
+    //   }
+
+    //   console.log('update auths', user)
+    //   if (clockInOnly) {   return of(user)  }
+
+    //   if (user) {
+    //     if ( this.platformService.isApp()  )  {
+    //       return this.promptBalanceSheet(user)
+    //     }
+    //     if ( !this.platformService.isApp() )  {
+    //       return of(user)
+    //     }
+    //   }
+    //   console.log('no user no login' )
+    //   return of(null)
+    // }))
+
+    // let result$ = balanceSheet$.pipe( concatMap(data => {
+    //   if (!data || (data?.message === 'failed')) {
+    //     console.log('balance sheet Failed', data,  data?.message)
+    //     return of(this.userAutFailed(data))
+    //   }
+    //   return of(data)
+    // }))
+
+    // return result$
 }
 
   // getAuthorization()
-setUserInfo(user: IUser, password) {
-    // console.log('setUser')
+  setUserInfo(user: IUser, password) {
+
     const currentUser = {} as IUser;
     if (!user.roles)     { user.roles = 'user' }
     if (!user.firstName) { user.firstName = user.username }

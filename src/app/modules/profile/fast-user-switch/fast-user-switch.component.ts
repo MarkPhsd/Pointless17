@@ -304,7 +304,6 @@ export class FastUserSwitchComponent implements OnInit {
               return of('failed')
             }
             if (this.platformService.isApp()) {
-              // console.log('log in app function next')
               this.loginApp(user)
               return this.checkBalanceSheet(user)
             }

@@ -8,14 +8,12 @@ $white: #efefef;
   overflow-x: hidden;
   overflow-y: hidden;
   height: 95%;
-  // padding: 15px;
 }
 
 .parent-container-single-page {
   overflow-x: hidden;
   overflow-y: hidden;
   height: calc(100vh - 100px);
-  // padding: 15px;
 }
 
 .orders-list {
@@ -25,13 +23,7 @@ $white: #efefef;
   padding: 15px;
 }
 
-
 .text {
-  // text-align: center;
-  // text-overflow: ellipsis;
-  // margin: .25em;
-  // font-size: 1.4em;
-
   text-align: center;
   text-overflow: ellipsis;
   margin: 0.25em;
@@ -42,10 +34,6 @@ $white: #efefef;
   position: relative;
 
   @include for-phone-only  {
-
-    // display: grid;
-    // align-items: center;
-
     font-weight: 500;
     font-size: clamp(1.2rem, 1.4vw, 1.4rem);
     height: 100%;
@@ -83,11 +71,11 @@ $white: #efefef;
 }
 
 .grid-display-device {
-  @include for-phone-only  {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    gap: 5px;
-  }
+  // @include for-phone-only  {
+  //   display: grid;
+  //   grid-template-columns: 50% 50%;
+  //   gap: 5px;
+  // }
   z-index: 100;
 }
 
@@ -128,10 +116,8 @@ img {
   @include for-phone-only  {
     min-width: 12vh;
     min-height: 12vh;
-
     width: 12vh;
     height: 12vh;
-    // border-radius: 50%;
   }
 }
 

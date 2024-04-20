@@ -163,8 +163,9 @@
         Tip {{item?.tipAmount  | currency}}
     </div>
 
-    <div *ngIf="item.voidAmount == 0 && (!isUser && (( order.creditBalanceRemaining != 0 && totalAuthPayments > 0 ) ||
-                 item.completionDate) &&  (item?.voidReason != 0 && !item.voidReason)) "
+    <div *ngIf="  (item.voidAmount == 0 || !item.voidAmount) &&
+                  (!isUser) &&
+                  (!item.voidReason || item.voidReason == 0) "
           style="font-size:1.2em;margin-top:10px">
       <button   color="accent"
                 class="payment-buttons-sm"

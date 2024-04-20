@@ -48,13 +48,14 @@ export interface IPOSOrderSearchModel {
   description: string;
   searchOrderHistory: boolean;
   onlineOrders: boolean;
+  reportRunID: number;
+  zRunID: number;
   sortBy1: string;
   sortBy1Asc: string;
   sortBy2: string;
   sortBy2Asc: string;
   sortBy3: string;
   sortBy3Asc: string;
-
 }
 
 export interface IPOSOrder {

@@ -42,6 +42,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
   imageURL         : string;
   chosenCount      : string;
 
+  styleMatCard     : string
   _promptGroup     : Subscription;
   promptGroup      : IPromptGroup
 
@@ -91,6 +92,13 @@ export class PromptPanelMenuItemComponent implements OnInit {
     }
   }
 
+  get matCardSytleValue() {
+    if (this.phoneDevice ) {
+      return 'height:125px;'
+    }
+    return ''
+  }
+
   constructor(
      private promptGroupService        : PromptGroupService,
      private orderService              : OrdersService,
@@ -117,6 +125,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
         return of('')
       })
     )
+    this.styleMatCard = this.matCardSytleValue
   }
 
   get promptItemView() {
@@ -249,9 +258,9 @@ export class PromptPanelMenuItemComponent implements OnInit {
         //do check again after item has been added.
         orderPromptGroup = this.validateAddingItem();
 
-        if (!orderPromptGroup) { return };  
+        if (!orderPromptGroup) { return };
 
-        if (this.phoneDevice) { 
+        if (this.phoneDevice && !this.platformService.isApp) {
           this.siteService.notify(item?.menuItem?.name + ' added. See below.', '', 1000, 'green')
         }
 

@@ -3,6 +3,8 @@
 
   <div [class]="gridflow">
 
+    <!-- {{quickServiceTypes | json}} -->
+
     <div  *ngIf="(order && order.history == true || (order && order.completionDate)) || isStaff " >
 
       <div *ngIf="isStaff && quickServiceTypes" class="flex-grid-row-5px">
@@ -17,6 +19,7 @@
             </mat-icon>
           </button>
         </div>
+
       </div>
 
       <button *ngIf="!quickServiceTypes || quickServiceTypes.length == 0"

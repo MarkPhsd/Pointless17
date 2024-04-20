@@ -1,5 +1,14 @@
 @import "/src/mixins.scss";
 
+.panel-header {
+  font-size: 1.3em;
+  font-weight: 600;
+  @include for-phone-only {
+    font-size: 1.2em;
+    font-weight: 500;
+  }
+}
+
 .image {
 
   height: 75px;
@@ -38,18 +47,14 @@
   }
 }
 
-mat-card {
+.prompt-mat-card {
 
   margin: 5px;
-
+  height: 100%;
   @include for-phone-only {
+    padding: 3px;
     margin: 2px;
   }
-
-}
-
-.prompt-mat-card {
-  height: 100%;
 }
 
 .grid-list {

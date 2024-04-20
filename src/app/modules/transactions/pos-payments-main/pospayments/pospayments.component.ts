@@ -8,7 +8,7 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angul
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Observable, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-import { IGetRowsParams,  GridApi } from 'ag-grid-community';
+import { IGetRowsParams,  GridApi, AgGridEvent } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { IPaymentSearchModel, IPOSPayment, IPOSPaymentsOptimzed, IServiceType, IUser } from 'src/app/_interfaces';
@@ -74,7 +74,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   rowDataClicked1      = {};
   rowDataClicked2      = {};
   rowData:             any[];
-  pageSize                = 20
+  pageSize                = 50
   currentRow              = 1;
   currentPage             = 1
   numberOfPages           = 1
@@ -127,12 +127,16 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   {
     this.initSubscriptions();
     this.initForm();
+    if (this.searchModel) {
+      this.initAgGrid(this.searchModel.pageSize);
+      return
+    }
     this.initAgGrid(this.pageSize);
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.initClasses()
-    this.urlPath            = await this.awsService.awsBucketURL();
+    // this.urlPath            = await this.awsService.awsBucketURL();
     this.rowSelection       = 'multiple'
     this.initAuthorization();
     this.initUser();
@@ -149,28 +153,25 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
   }
 
-
   initClasses()  {
     const platForm      = this.platForm;
     let height = this.height
     this.gridDimensions = `width: 100%; height: ${height}`
     this.agtheme        = 'ag-theme-material';
-
     if (platForm === 'capacitor') { this.gridDimensions = `width: 100%; height: ${height}` }
     if (platForm === 'electron')  { this.gridDimensions = `width: 100%; height: ${height}` }
-
   }
 
-  async initForm() {
+  initForm() {
     this.searchForm = this.fb.group({
       itemName : ['']
     })
   }
 
   get summaryEnabled() {
-    // console.log(this.user?.roles)
+    // console.log('user roles' , this.user?.roles)fonc
     if (!this.user) {return null}
-    if (this.user?.roles == 'admin' || this.user?.roles == 'manager') {
+    if (this.user?.roles === 'admin' || this.user?.roles === 'manager') {
       return this.summaryView
     }
     return null;
@@ -178,9 +179,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
 
 
   setSortData(event) {
-
     if (event) {
-
       if (!this.searchModel) { return }
       this.searchModel.sortBy1 = event?.sort1;
       this.searchModel.sortBy1Asc = event?.sort1Asc;
@@ -206,9 +205,9 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
             searchModel.pageNumber  = 1;
             searchModel.pageSize    = 25;
             this.searchModel        = searchModel;
-
             return
           }
+          this.setSummary(this.searchModel )
         }
       )
     } catch (error) {
@@ -225,13 +224,15 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     const item = JSON.parse(JSON.stringify(search))
     item.summaryOnly = true;
     const site = this.siteService.getAssignedSite()
-    console.log('set summary')
     this.summary$ = this.pOSPaymentService.searchPayments(site, item)
   }
 
-
   editRowSelection(event) {
     this.editItemWithId(event.rowData)
+  }
+
+  onSortChanged(e: AgGridEvent) {
+    e.api.refreshCells();
   }
 
   //ag-grid
@@ -247,6 +248,11 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
       // minWidth: 100,
     };
     this.columnDefs =  [
+
+      {
+        headerName: "Row",
+        valueGetter: "node.rowIndex + 1"
+      },
       {
       field: 'id',
       cellRenderer: "btnCellRenderer",
@@ -357,7 +363,11 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
           }
       },
     ]
-    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
+    if (this.searchModel) {
+      this.gridOptions = this.agGridFormatingService.initGridOptions(this.searchModel.pageSize, this.columnDefs);
+    } else {
+      this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
+    }
   }
 
   listAll(){
@@ -402,7 +412,11 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   refreshSearch_sub(): Observable<IPaymentSearchModel[]> {
     if (this.params){
       this.params.startRow     = 1;
-      this.params.endRow       = this.pageSize;
+      if (this.searchModel) {
+        this.params.endRow       = this.searchModel.pageSize;
+      } else {
+        this.params.endRow       = this.pageSize;
+      }
     }
     this.onGridReady(this.params)
     return this._searchItems$
@@ -439,7 +453,12 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
 
     if (!params.startRow ||  !params.endRow) {
       params.startRow = 1
-      params.endRow = this.pageSize;
+
+      if (this.searchModel) {
+        params.endRow = this.searchModel.pageSize
+      } else {
+        params.endRow = this.pageSize;
+      }
     }
 
     let datasource =  {

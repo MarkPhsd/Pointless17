@@ -277,9 +277,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
           data = item;
         }
         this.searchModel = data
-
-
-
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
         this.nextPage(true)

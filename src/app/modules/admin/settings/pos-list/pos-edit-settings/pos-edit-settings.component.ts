@@ -190,6 +190,8 @@ export class PosEditSettingsComponent implements OnInit {
       remoteReceipt:[],//
       remotePrint: [],
       remotePrepPrint: [],
+      disableImages: [],
+      disableMenuImages: []
     })
 
     this.dsiEMVSettings = this.fb.group({

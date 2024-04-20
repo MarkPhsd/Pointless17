@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { sortBy } from 'lodash';
 import { Observable } from 'rxjs';
 import { IItemBasic, OrdersService } from 'src/app/_services';
+import { EmployeeClockSearchModel, EmployeeClockService } from 'src/app/_services/employeeClock/employee-clock.service';
 import { EmployeeService } from 'src/app/_services/people/employee-service.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -30,6 +30,7 @@ export class EmployeeClockFilterComponent implements OnInit {
     private orderService    : OrdersService,
     private siteService     : SitesService,
     private employeeService: EmployeeService,
+    private employeeClockService: EmployeeClockService,
     private router: Router,
             private fb: UntypedFormBuilder,
             ) { }
@@ -74,6 +75,7 @@ export class EmployeeClockFilterComponent implements OnInit {
       this.dateRangeForm.valueChanges.subscribe( res => {
         this.dateFrom = this.dateRangeForm.get("start").value
         this.dateTo = this.dateRangeForm.get("end").value
+        if (this.dateTo ='')
         if (this.dateRangeForm.get("start").value && this.dateRangeForm.get("end").value) {
           this.refreshSearch()
         }
@@ -81,28 +83,38 @@ export class EmployeeClockFilterComponent implements OnInit {
     }
   }
 
+  getSearch() {
+    if (this.dateTo === '12/31/1969') { return }
+
+    const dateTo = this.dateHelper.format(this.dateTo, 'MM/dd/yyyy');
+
+    console.log('dateFrom, DateTo', dateTo , this.dateTo)
+    if (dateTo === '12/31/1969') { return }
+
+    return  { summary: false,
+      pageSize: this.pageSize,
+      employeeID:  this.employeeID,
+      startDate: this.dateFrom,
+      endDate: this.dateTo,
+      orderBy: this.orderBy
+    }
+  }
+
   refreshSearch() {
-    this.outputRefreshSearch.emit(
-      { summary: false,
-        pageSize: this.pageSize,
-        employeeID:  this.employeeID,
-        startDate: this.dateFrom,
-        endDate: this.dateTo,
-        orderBy: this.orderBy
-      }
-    );
+    const search = this.getSearch() as EmployeeClockSearchModel
+    if (!search) { return }
+    this.employeeClockService.updateSearch(search)
+    // this.outputRefreshSearch.emit(
+    //   this.getSearch()
+    // );
   }
 
   reset() {
-    this.outputRefreshSearch.emit(
-      { summary: false,
-        pageSize: this.pageSize,
-        employeeID:  0,
-        startDate: this.dateFrom,
-        endDate: this.dateTo,
-        orderBy: this.orderBy
-      }
-    );
+    const search = {} as EmployeeClockSearchModel
+    this.employeeClockService.updateSearch(search)
+    // this.outputRefreshSearch.emit(
+    //   this.getSearch()
+    // );
   }
 
   emitDatePickerData(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {

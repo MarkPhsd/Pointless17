@@ -14,80 +14,74 @@
   <mat-card *ngIf="isMedPatient">
     <mat-card-subtitle>MED Info</mat-card-subtitle>
 
-    <div class="med-grid " *ngIf="isStaff">
+    <div class="med-grid " *ngIf="isStaff && inputForm"  [formGroup]="inputForm">
+      <div class="name-fields">
+        <span *ngIf="clientType">
 
-      <div *ngIf="inputForm"
-           [formGroup]="inputForm">
-
-        <div class="name-fields">
-          <span *ngIf="clientType">
-
-            <div  class="name-fields" *ngIf="clientType?.name.toLowerCase() != 'patient'">
-              <app-value-fields
-                      [inputForm] ="inputForm"
-                      [fieldName] ="'insTertiaryNum'">
-                  Patient # OOMP
-              </app-value-fields>
-            </div>
-
-            <div>
-              <app-value-fields
-                [inputForm]="inputForm"
-                [fieldName]="'medLicenseNumber'">
-                <div *ngIf="clientType?.name.toLowerCase() === 'patient'">
-                  Patient #  OOMP
-                </div>
-                <div *ngIf="clientType?.name.toLowerCase() === 'caregiver'">
-                  Caregiver  #  OOMPB
-                </div>
-              </app-value-fields>
-            </div>
-
-          </span>
-
-          <div>
-            <mat-form-field  appearance="outline">
-              <mat-label>Expiration</mat-label>
-              <input matInput
-                    [matDatepicker]="picker"
-                    formControlName="medPrescriptionExpiration">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker  #picker></mat-datepicker>
-            </mat-form-field>
+          <div  class="name-fields" *ngIf="clientType && clientType?.name.toLowerCase() != 'patient'">
+            <app-value-fields
+                    [inputForm] ="inputForm"
+                    [fieldName] ="'insTertiaryNum'">
+                Patient # OOMP
+            </app-value-fields>
           </div>
 
-        </div>
+          <div>
+            <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'medLicenseNumber'">
+              <div *ngIf="clientType?.name.toLowerCase() === 'patient'">
+                Patient #  OOMP
+              </div>
+              <div *ngIf="clientType?.name.toLowerCase() === 'caregiver'">
+                Caregiver  #  OOMPB
+              </div>
+            </app-value-fields>
+          </div>
+
+        </span>
 
         <div>
-          <mat-slide-toggle
-                  name="medPhysicianApproved"
-                  formControlName="medPhysicianApproved">
-            <mat-label >Physician Approval</mat-label>
-          </mat-slide-toggle>
-        </div>
-
-        <div>
-          <mat-slide-toggle
-                  name="medTempLicense"
-                  formControlName="medTempLicense">
-            <mat-label >Temp License</mat-label>
-          </mat-slide-toggle>
+          <mat-form-field  appearance="outline">
+            <mat-label>Expiration</mat-label>
+            <input matInput
+                  [matDatepicker]="picker"
+                  formControlName="medPrescriptionExpiration">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker  #picker></mat-datepicker>
+          </mat-form-field>
         </div>
       </div>
 
       <div>
-        <div>
-          <mat-card class="image-container">
-            <app-widget-uploader
-                [(fileNames)]="fileList"
-                (imageUrl)   ="updateFileList($event)">
-              File Uploads
-            </app-widget-uploader>
-          </mat-card>
-        </div>
+        <mat-slide-toggle
+                name="medPhysicianApproved"
+                formControlName="medPhysicianApproved">
+          <mat-label >Physician Approval</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div>
+        <mat-slide-toggle
+                name="medTempLicense"
+                formControlName="medTempLicense">
+          <mat-label >Temp License</mat-label>
+        </mat-slide-toggle>
       </div>
     </div>
 
+    <ng-container [ngTemplateOutlet]="profileImage"></ng-container>
   </mat-card>
 
 </div>
+
+
+<ng-template #profileImage>
+  <mat-card class="image-container">
+    <app-widget-uploader
+        [(fileNames)]="fileList"
+        (imageUrl)   ="updateFileList($event)">
+      File Uploads
+    </app-widget-uploader>
+  </mat-card>
+</ng-template>

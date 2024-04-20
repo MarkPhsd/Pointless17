@@ -133,7 +133,7 @@ export class OrderMethodsService implements OnDestroy {
 
   ///order Service
   posSearchModel  :IPOSOrderSearchModel
-  private _posSearchModel     = new BehaviorSubject<IPOSOrderSearchModel>(null);
+  public _posSearchModel     = new BehaviorSubject<IPOSOrderSearchModel>(null);
   public posSearchModel$      = this._posSearchModel.asObservable();
 
   private _lastItemAdded     = new BehaviorSubject<IMenuItem>(null);
@@ -1500,6 +1500,13 @@ export class OrderMethodsService implements OnDestroy {
     this.toolbarServiceUI.resetOrderBar(true)
   }
 
+  toggleOpenOrderBarSub(id: number) {
+    this.toolbarServiceUI.updateOrderBar(false)
+    this.toolbarServiceUI.resetOrderBar(true)
+    this.router.navigate(["/currentorder/", {mainPanel:true, id: id}]);
+    this.setScanner()
+  }
+
   notification(message: string, title: string)  {
     if (this.openDialogsExist()) {
       this._snackBar.open(message, title, {
@@ -2390,17 +2397,16 @@ export class OrderMethodsService implements OnDestroy {
         const orderID = orderItem.orderID
         this.posOrderItemService.deletePOSOrderItem(site, orderItem.id).subscribe(
          { next:  item => {
-          if (item) {
-            this.order.posOrderItems.splice(index, 1)
-            this.updateOrderSubscription(item.order)
-            this.updateLastItemAdded(null)
-            return;
+            if (item) {
+              this.order.posOrderItems.splice(index, 1)
+              this.updateOrderSubscription(item.order)
+              this.updateLastItemAdded(null)
+              return;
+            }
+          }, error:  data => {
+              console.log('error', data.toString)
+            }
           }
-        },
-         error:  data => {
-            console.log('error', data.toString)
-          }
-        }
         )
       }
 

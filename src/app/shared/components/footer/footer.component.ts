@@ -1,6 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, HostListener, OnDestroy } from '@angular/core';
+import { Component, OnInit,  ViewChild, TemplateRef, HostListener, OnDestroy } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { DeviceInfo } from 'ngx-device-detector';
 import { Subscription } from 'rxjs';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
 import { AuthenticationService, IDeviceInfo, OrdersService } from 'src/app/_services';
@@ -25,7 +24,6 @@ export class FooterComponent implements OnInit, OnDestroy {
   headerBackColor: string;
   matToolbarColor : string =  'primary'
   isStaff             =   false;
-
   isAdmin             =   false;
   isUser              =   false;
   user                : IUser;
@@ -33,12 +31,13 @@ export class FooterComponent implements OnInit, OnDestroy {
   userRoles:          string;
   employeeName        : string;
   showPOSFunctions    = false;
-  screenWidth         : number;
-  _order        :   Subscription;
-  order         :   IPOSOrder;
-  _user         : Subscription;
-  deviceInfo      : IDeviceInfo;
-  userChecked: boolean;
+  screenWidth       : number;
+  _order            :   Subscription;
+  order             :   IPOSOrder;
+  _user             : Subscription;
+  deviceInfo        : IDeviceInfo;
+  userChecked       : boolean;
+
   currentOrderSusbcriber() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
@@ -51,19 +50,13 @@ export class FooterComponent implements OnInit, OnDestroy {
         if (this.user.id == data.id) {    this.userChecked = true; }
       }
       this.user = data
-      // this.setInterFace(data)
       this.getUserInfo()
       this.setHeaderBackColor(this.user?.userPreferences?.headerColor)
-      // if (!this.initUITransactions) {
-      //   this.initUITransactions = true;
-      //   this.getTransactionUI()
-      // }
     })
   }
 
   constructor(
     public  toolbarUIService  : ToolBarUIService,
-    private orderService      : OrdersService,
     public orderMethodsService: OrderMethodsService,
     private  navigationService: NavigationService,
     public printingService    : PrintingService,
@@ -75,14 +68,11 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.updateScreenSize()
     const i = 0
     this.currentOrderSusbcriber();
-    // this.getUserInfo();
     this.initUserSubscriber()
     this.deviceInfo = this.authenticationService.deviceInfo;
   }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     if (this._order) { this._order.unsubscribe()}
   }
 
@@ -115,15 +105,11 @@ export class FooterComponent implements OnInit, OnDestroy {
     }
 
     if (!user) {  return null }
-
     this.isAdmin      = false;
     this.userName     = user.username
-
     if (!user.roles) { return }
-
     this.userRoles    = user.roles.toLowerCase();
     this.employeeName = user.username;
-
     if (user.roles === 'admin') {
       this.showPOSFunctions = true;
       this.isAdmin          = true
@@ -168,9 +154,11 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   toggleOpenOrderBar() {
-    this.navigationService.toggleOpenOrderBar(this.isStaff)
+    if (!this.phoneDevice) {
+      this.navigationService.toggleOpenOrderBar(this.isStaff)
+    }
     if (this.order) {
-      this.orderMethodsService.updateBottomSheetOpen(true)
+      // this.orderMethodsService.updateBottomSheetOpen(true)
       this.bottomSheet.open(PosOrderItemsComponent)
     }
   }

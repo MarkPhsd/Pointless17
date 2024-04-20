@@ -78,7 +78,7 @@ export class TransferDataService {
 
     const endPoint = `CloseByDate`
 
-    const parameters = `?startDate=${dateStart}&dateEnd=${dateEnd}`
+    const parameters = `?dateStart=${dateStart}&dateEnd=${dateEnd}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 

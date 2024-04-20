@@ -76,7 +76,8 @@ export interface TransactionUISettings {
   dcapPayAPIMultiPrice         : boolean
   dcapPayAPIDualPriceValue     : number;
 
-
+  diableDescrepencies    : boolean;
+  disableCreditFilter    : boolean;
   allowPreAuth           : boolean;
   payPalEnabled          : boolean;
   payPalClientID         : string;
@@ -326,7 +327,7 @@ export class UISettingsService {
   emailModel: EmailModel
 
   public  posDeviceInfo            : ITerminalSettings;
-  private  _posDevice               = new BehaviorSubject<ITerminalSettings>(null);
+  public  _posDevice              = new BehaviorSubject<ITerminalSettings>(null);
   public  posDevice$               = this._posDevice.asObservable();
 
   public _transactionUISettings  = new BehaviorSubject<TransactionUISettings>(null);
@@ -854,6 +855,8 @@ export class UISettingsService {
       ordersRequireCustomer  : [],
       validateCustomerLicenseID: [],
       defaultClientTypeID    : [],
+      disableDiscrepancy     : [],
+      disableCreditFilter    : [],
       enablMEDClients        : [],
       enableLimitsView       : [],
       splitCheckByItem       : [],

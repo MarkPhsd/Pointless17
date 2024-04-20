@@ -64,7 +64,13 @@ import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-l
 import { UserIdleModule } from 'angular-user-idle';
 import { DragAndDropModule } from 'angular-draggable-droppable';
 import { ResizeDirective } from './_directives/resize.directive';
+import {HammerGestureConfig, HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
 
+// export class MyHammerConfig extends HammerGestureConfig {
+//   overrides = {
+//     swipe: { direction: Hammer.DIRECTION_HORIZONTAL },
+//   };
+// }
 // Sentry.init({
 //   dsn: "https://ba163a19cdcf43ca80217e835d0f06bc@o1342227.ingest.sentry.io/6616061",
 //   debug: false,
@@ -188,6 +194,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
   ],
 
   providers: [
+    // { provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig },
     { provide: HTTP_INTERCEPTORS,  useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS,  useClass: ErrorInterceptor, multi: true },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

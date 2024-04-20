@@ -6,12 +6,12 @@
 <div *ngIf="(user$ | async) as user"></div>
 <div *ngIf="(viewType$ | async) as viewPrep"></div>
 
-<div class="getAppHeaderClass" >  
+<div class="getAppHeaderClass" >
   <app-header> </app-header>
 </div>
 
 <div *ngIf="(posDevice$ | async) as device"></div>
-
+<!-- sidebarMode{{sidebarMode}} -->
 <mat-drawer-container>
 
   <mat-drawer

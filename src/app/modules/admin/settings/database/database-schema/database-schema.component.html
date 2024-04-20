@@ -1,4 +1,4 @@
-<div *ngIf=" action$| async" ></div>
+<div *ngIf=" (action$| async) as action" ></div>
 <div *ngIf="processingVisible">
   <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
 </div>
@@ -37,21 +37,16 @@
             <mat-datepicker-toggle  matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-
         </div>
       </mat-card>
     </div>
   </div>
 
-
   <div *ngIf=" (apiVersion$ | async) as version ">
     <h4 >API Version: {{version}}</h4>
   </div>
   <h4>API Database Release: <span *ngIf="(version$ | async) as version">{{version.option1}}</span></h4>
-
-
 </div>
-
 
 <div class="results">
 

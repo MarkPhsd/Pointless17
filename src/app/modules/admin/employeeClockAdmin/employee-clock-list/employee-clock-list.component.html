@@ -1,3 +1,4 @@
+<div *ngIf="(action$ | async) as action"></div>
 <div class="container">
   <div *ngIf="smallDevice && !reportOnly">
     <button mat-button (click)="filterBottomSheet()">
@@ -12,6 +13,9 @@
   <button mat-button (click)="viewType = 1"><mat-icon>data</mat-icon>JSON
   </button>
   <button mat-button (click)="viewType = 2"><mat-icon>money</mat-icon>Sales
+  </button>
+
+  <button mat-button (click)="reCalcList()"><mat-icon>refresh</mat-icon>ReCalc
   </button>
 
   <app-list-printers-electron

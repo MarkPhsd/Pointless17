@@ -15,18 +15,20 @@
         class="grid-display-device"
         (click)= "listItems(item.id)">
 
-    <div class="text">{{item.name  | truncateText: textLength  }}</div>
+    <div>
+      <div class="text">{{item.name  | truncateText: textLength  }}</div>
 
-    <div class="grid-item">
-      <img
-          loading   = "lazy"
-          draggable = "false"
-          [src]     = "getItemSrc(imageName)"
-          err-SRC   = "getPlaceHolder()"
-          onerror   = "this.src='assets/images/placeholderimage.png'"
-          (click)   = "listItems(item.id)"
-          class     = 'item-image'
-          [alt]     = "item?.description">
+      <div class="grid-item">
+        <img
+            loading   = "lazy"
+            draggable = "false"
+            [src]     = "getItemSrc(imageName)"
+            err-SRC   = "getPlaceHolder()"
+            onerror   = "this.src='assets/images/placeholderimage.png'"
+            (click)   = "listItems(item.id)"
+            class     = 'item-image'
+            [alt]     = "item?.description">
+      </div>
     </div>
   </div>
 

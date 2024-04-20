@@ -1,6 +1,7 @@
 <div class="container" *ngIf="toggleListGrid">
   <div class="grid-list">
     <div>
+
       <ng-container [ngTemplateOutlet]="sortSelectors"></ng-container>
       <ng-container [ngTemplateOutlet]="summaryEnabled"></ng-container>
       <div *ngIf="value" class="loader">
@@ -18,6 +19,7 @@
             [rowSelection]       ="rowSelection"
             [frameworkComponents]="frameworkComponents"
             (selectionChanged)   ="onSelectionChanged($event)"
+            (sortChanged)        ="onSortChanged($event)"
             (gridReady)          ="onGridReady($event)">
       </ag-grid-angular>
     </div>

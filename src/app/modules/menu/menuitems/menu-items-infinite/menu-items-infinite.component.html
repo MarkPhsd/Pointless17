@@ -1,8 +1,7 @@
-
+<div *ngIf="(posDevice$ | async) as item"></div>
 <div *ngIf="(bucket$ | async) as bucket">
   <div  class="parent-container"
         *ngIf="(uiHomePage$ | async) as uiHomePage">
-
 
     <div  class="flex-row">
       <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
@@ -12,6 +11,7 @@
       </div>
       <ng-container  *ngIf="enableFilter" [ngTemplateOutlet]="filter"></ng-container>
     </div>
+
 
     <ng-container [ngTemplateOutlet]='divider'></ng-container>
 
@@ -23,7 +23,7 @@
       <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
     </div>
 
-    <div class="orders-container"        >
+    <div class="orders-container">
       <div  *ngIf="menuItems"
             [id]="scrollStyle"
             infiniteScroll
@@ -165,9 +165,11 @@
         [class]           ="infiniteItemClass"
         [uiHomePage]      ="uiHomePage"
         [isStaff]         ="isStaff"
+        [smallDevice]     ="smallDevice"
+        [disableEdit]     ="disableEdit"
+        [disableImages]   ="posDevice?.disableMenuImages"
         (outPutUpdateCategory)="setCategoryID($event)"
         (outputRefresh)   ="refreshFromSelection($event)"
         (outPutLoadMore)  ='moveNext($event)' >
     </app-menu-item-card>
-  <!-- </div> -->
 </ng-template>

@@ -1,8 +1,8 @@
 // import { Route } from '@angular/router';
 import { Observable, Subscription, of, switchMap, } from 'rxjs';
-import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter, OnDestroy, TemplateRef, Renderer2 } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter,
+         OnDestroy, TemplateRef, Renderer2 } from '@angular/core';
+import { ActivatedRoute} from '@angular/router';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -14,7 +14,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { AuthenticationService } from 'src/app/_services';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-
+import { NavigationService } from 'src/app/_services/system/navigation.service';
 @Component({
   selector: 'pos-order-items',
   templateUrl: './pos-order-items.component.html',
@@ -204,7 +204,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   constructor(  private platformService: PlatformService,
-                private _snackBar:    MatSnackBar,
                 public  el:            ElementRef,
                 public  route:         ActivatedRoute,
                 private siteService:  SitesService,
@@ -214,6 +213,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                 private settingService: SettingsService,
                 private authService : AuthenticationService,
                 private renderer: Renderer2,
+                private navigationService : NavigationService,
                 private _bottomSheetService  : MatBottomSheet,
               )
   {
@@ -381,10 +381,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   notifyEvent(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 1000,
-      verticalPosition: 'bottom'
-    });
+    this.siteService.notify(message, action, 3000)
   }
 
   getItemHeight() {
@@ -416,6 +413,15 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     }, 300);
   }
 
+  viewPayment() {
+    this.navigationService.makePaymentFromSidePanel(true, this.phoneDevice,this.isStaff, this.order);
+    this.dismiss();
+  }
+
+  viewCart() {
+    this.orderMethodService.toggleOpenOrderBarSub(+this.order.id);
+    this.dismiss();
+  }
   trackByFN(_, {id, unitName, unitPrice, quantity,
                 modifierNote, serialCode, printed,
                 serviceType, taxTotal , wicebt}: IPOSOrderItem): number {

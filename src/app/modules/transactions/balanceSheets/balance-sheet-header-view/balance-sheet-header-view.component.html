@@ -38,10 +38,21 @@
       {{ ordersCount }}
     </div>
 
-    <div class="item-span " *ngIf="!disableAuditButton">
-      <button mat-raised-button color="warn"
-              (click)="auditPayments()">Audit Payments<mat-icon>credit_card</mat-icon></button>
-    </div>
-
     <div class="item-span "></div>
   </div>
+
+
+  <div class="ps-grid-items" *ngIf="!disableAuditButton">
+    <div>
+      <button mat-raised-button color="warn"
+           style="margin:5px;width:150px"
+              (click)="auditPayments()">Payments<mat-icon>credit_card</mat-icon></button>
+    </div>
+    <div>
+      <button mat-raised-button color="warn"
+           style="margin:5px;width:150px"
+              (click)="auditOrders()">Orders<mat-icon>list</mat-icon></button>
+    </div>
+  </div>
+
+  <!---->

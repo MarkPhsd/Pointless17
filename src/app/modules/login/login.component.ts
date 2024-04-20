@@ -9,7 +9,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
-import { Subscription, switchMap , of, Observable} from 'rxjs';
+import { Subscription, switchMap , of, Observable, concatMap} from 'rxjs';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -238,8 +238,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
+  get tokenExists() {
+    const item =localStorage.getItem('pinToken')
+    if (item) { return true}
+    return false
+  }
+
   get loginMethodView() {
-    if (this.togglePIN) {
+    if (this.togglePIN && this.tokenExists ) {
       return this.pinEntryView;
     }
     return this.userEntryView;
@@ -447,9 +453,15 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   submitLogin(userName: string, password: string) {
     this.errorMessage = ''
-    this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(
-      switchMap(result =>
+    this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(concatMap(result =>
         {
+          console.log('result', result)
+          // if (!result || (result && result?.errorMessage && (result?.errorMessage != null && result?.errorMessage != undefined) )) {
+          //   this.notifyEvent('Message:' + result?.errorMessage, 'Failed Login');
+          //   this.clearUserSettings()
+          //   return of('failed')
+          // }
+
           //if you assign these two lines, detail here why you have done that.
           //for some reason they were here, but they prevented a login,
           //after login it would log out. but reviewing these two lines does not
@@ -459,12 +471,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.orderMethodsService.updateOrder(null)
           this.paymentMethodsservice._sendOrderAndLogOut.next(null)
           this.initForm();
-
-          if (!result || (result && result.errorMessage)) {
-            this.notifyEvent('Message:' + result?.errorMessage, 'Failed Login');
-            this.clearUserSettings()
-            return of('failed')
-          }
 
           //if is app then result is a combination of user and sheet
           //if is not app then result is the user.

@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input,OnDestroy,OnInit, Output  } from '@angul
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { IPaymentSearchModel, IServiceType } from 'src/app/_interfaces';
+import { IPOSOrderSearchModel, IPaymentSearchModel, IServiceType } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
@@ -57,6 +58,7 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
     private router                    : Router ,
     private _bottomSheet              : MatBottomSheet,
     private posOrderService           : OrdersService,
+    private orderMethodsService: OrderMethodsService,
     private sitesService              : SitesService,
     private balanceSheetMethodsService: BalanceSheetMethodsService,
     private pOSPaymentService         : POSPaymentService)
@@ -123,12 +125,29 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
       const searchModel       = {} as IPaymentSearchModel;
       this.currentPage        = 1
       searchModel.pageNumber  = 1;
-      searchModel.pageSize    = 25;
+      searchModel.pageSize    = 100;
       this.searchModel        = searchModel
       searchModel.reportRunID = this.sheet.id;
       this.pOSPaymentService.updateSearchModel(searchModel)
       this.router.navigate(['/pos-payments'])
       this._bottomSheet.dismiss()
+    }
+  }
+
+  auditOrders() {
+    if (this.sheet) {
+      const searchModel       = {} as IPOSOrderSearchModel;
+      this.currentPage        = 1
+      searchModel.pageNumber  = 1;
+      searchModel.pageSize    = 100;
+      searchModel.reportRunID = this.sheet.id;
+      this.router.navigate(['/pos-orders', {searchModel:true} ])
+      try {
+        this._bottomSheet.dismiss()
+      } catch (error) {
+      }
+      this.orderMethodsService.updateOrderSearchModel(searchModel)
+      this.orderMethodsService.updateViewOrderType(1)
     }
   }
 

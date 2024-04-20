@@ -1,0 +1,9 @@
+{
+  "apiUrl": "https://pointlessposdemo.com/api",
+  "useAppGate" : false,
+  "appGateMessage": "Are you over 21? If so press yes to continue.",
+  "company": "Pointless POS",
+  "logo"   : "https://pointlesspos.com/temp/logo.png",
+  "appUrl": "http://pointlesspos.web.app",
+  "googleTracking": "G-6BNWKZ7VY8"
+}

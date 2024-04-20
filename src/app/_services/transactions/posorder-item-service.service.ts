@@ -101,6 +101,7 @@ export interface OrderItemHistory {
     productCount?: number | null;
     historyItem: number;
     name: string;
+
     useType: string;
     categoryId?: number | null;
     departmentId?: number | null;

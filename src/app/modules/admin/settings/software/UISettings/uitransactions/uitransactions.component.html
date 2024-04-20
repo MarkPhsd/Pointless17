@@ -352,8 +352,6 @@
             </div>
 
             <!-- enableRounding -->
-
-
             <div>
               <mat-label class="mat-label-design">Minimum value of credit card payment.</mat-label>
               <app-value-fields
@@ -363,10 +361,8 @@
               </app-value-fields>
             </div>
 
-
             <div>
               <mat-label class="mat-label-design">Cash Discount - Credit Card Percentage fee. Enter as Whole Number.</mat-label>
-
               <app-value-fields
                   [inputForm]="inputForm"
                   [fieldName]="'creditCardFee'">
@@ -382,8 +378,10 @@
                   High Tip %
               </app-value-fields>
             </div>
+
+
           </div>
-          </div>
+        </div>
 
 
         </div>
@@ -847,13 +845,6 @@
           </mat-slide-toggle>
         </div>
 
-        <div class="toggle-fields">
-          <mat-slide-toggle
-                    formControlName="prepOrderOnClose"  >
-            <mat-label>Send Items for prep at order close.</mat-label>
-          </mat-slide-toggle>
-        </div>
-
         <div style="width:150px">
           <mat-label>Print Server Device</mat-label>
           <app-value-fields
@@ -1008,9 +999,34 @@
             </mat-slide-toggle>
           </div>
 
+          <div class="toggle-fields" [formGroup]="inputForm">
+            <mat-slide-toggle
+                      formControlName="disableCreditFilter"  >
+              <mat-label>Disable Credit Filter</mat-label>
+            </mat-slide-toggle>
+            <mat-label> (show all payment types)</mat-label>
+          </div>
+
         </div>
       </div>
 
+      <div class="grid-views">
+        <div class="grid-views">
+          <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Audit</h4>
+          <div class="toggle-fields" [formGroup]="inputForm">
+            <mat-slide-toggle
+                      formControlName="disableDiscrepancy"  >
+              <mat-label>Disable Discrepency View</mat-label>
+            </mat-slide-toggle>
+            <!-- <mat-label>For close of day.</mat-label> -->
+          </div>
+        </div>
+      </div>
+
+    <div>
+
+
+    </div>
 
   </mat-card-content>
 

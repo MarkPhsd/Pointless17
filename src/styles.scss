@@ -12,15 +12,15 @@
 @import '~material-icons/iconfont/material-icons.css';
 @import "./app/_material/theme";
 @import '~@mdi/font/css/materialdesignicons.css';
-
-@import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
+// @import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
 @import '@angular/cdk/overlay-prebuilt.css';
 
 
-// @import '~@ionic/angular/css/core.css';
-// @import '~@ionic/angular/css/normalize.css';
-// @import '~@ionic/angular/css/structure.css';
-// @import '~@ionic/angular/css/typography.css';
+@import '~@ionic/angular/css/core.css';
+@import '~@ionic/angular/css/normalize.css';
+@import '~@ionic/angular/css/structure.css';
+@import '~@ionic/angular/css/typography.css';
+
 
 mat-button mat-raised-button {
   @media print {
@@ -768,6 +768,22 @@ mat-dialog-container {
 .item-span {
   grid-column: 1 / span 2;
 }
+.item-span {
+  grid-column: 1 / span 2;
+}
+.grid-menu-category-flow {
+  --gap: 15px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 1fr 1fr;
+  }
+}
 
 .grid-category-flow {
   --gap: 15px;
@@ -790,16 +806,6 @@ mat-dialog-container {
   display: grid;
   gap:3px;
   grid-template-columns: 100px 100px;
-}
-
-.grid-summary-auto {
-  font-size: 12pt;
-  font-weight: bold;
-  --gap: 3px;
-  display: grid;
-  grid-gap: 3px;
-  gap: 3px;
-  grid-template-columns: 100px auto;
 }
 
 // Reporting

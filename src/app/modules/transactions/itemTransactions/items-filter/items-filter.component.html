@@ -83,11 +83,11 @@
           class="toggle-view"
           [(ngModel)]="listType" >
     <mat-button-toggle value="0"
-        matTooltipHideDelay="1000" > Item Type </mat-button-toggle>
+        matTooltipHideDelay="1000" > Employee  </mat-button-toggle>
     <mat-button-toggle value="1"
         matTooltipHideDelay="1000" > Sale Type </mat-button-toggle>
     <mat-button-toggle value="2"
-        matTooltipHideDelay="1000" > Employee </mat-button-toggle>
+        matTooltipHideDelay="1000" > Item Type </mat-button-toggle>
     </mat-button-toggle-group>
 
     <div [hidden]="listType != 0"
@@ -133,6 +133,7 @@
 
 <ng-template #itemTypeList>
   <app-mat-toggle-selector
+      [styleHeight]="'calc(65vh - 150px)'"
       [id]="searchModel.itemTypeID"
       [list$]="employees$"
       (outPutID)="setEmployee($event)">

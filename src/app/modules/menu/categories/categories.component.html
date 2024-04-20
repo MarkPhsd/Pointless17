@@ -53,7 +53,7 @@
               (scrolledUp)            ="onScrollUp()"
               [scrollWindow]          ="false">
 
-            <div  class="grid-category-flow">
+            <div  class="grid-menu-category-flow">
               <div *ngFor="let item of categories; let i = index">
                 <ng-container [ngTemplateOutlet]="categoryItemView"
                               [ngTemplateOutletContext]="{$implicit: item}"></ng-container>

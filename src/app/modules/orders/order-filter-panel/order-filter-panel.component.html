@@ -147,7 +147,7 @@
             (change)    ="refreshSearch()" >
         <mat-button-toggle  value="0" >Active </mat-button-toggle>
         <mat-button-toggle  value="1"
-                            *ngIf="auth.allowSuspendTransaction"
+                            *ngIf="auth?.allowSuspendTransaction"
                             matTooltipHideDelay="1000">Suspended</mat-button-toggle>
       </mat-button-toggle-group>
 

@@ -1,26 +1,26 @@
 
-<div class="boundary" #myContainer>
-    <ion-app>
-      <ng-container [ngTemplateOutlet]="isKeyBoardVisible"></ng-container>
-      <ng-container [ngTemplateOutlet]="splash"></ng-container>
-      <ion-router-outlet></ion-router-outlet>
-    </ion-app>
+<div class="boundary" #myContainer (swipeleft)="onSwipeLeft()">
+  <ion-app>
+    <ng-container [ngTemplateOutlet]="isKeyBoardVisible"></ng-container>
+    <ng-container [ngTemplateOutlet]="splash"></ng-container>
+    <ion-router-outlet  [swipeGesture]="true"></ion-router-outlet>
+  </ion-app>
 </div>
 
 <ng-template #keyboardView>
-  <div  #keyboardRef
-       class="example-box"
-       cdkDrag
-       [cdkDragFreeDragPosition]="keyboardPosition"
-       (cdkDragEnded)="onDragEnd($event)"
-       >
-    <app-keyboard-view></app-keyboard-view>
-  </div>
+<div  #keyboardRef
+     class="example-box"
+     cdkDrag
+     [cdkDragFreeDragPosition]="keyboardPosition"
+     (cdkDragEnded)="onDragEnd($event)"
+     >
+  <app-keyboard-view></app-keyboard-view>
+</div>
 </ng-template>
 
 <ng-template #loading>....loading.</ng-template>
 
 <ng-template #splash>
-  <app-splash-loading></app-splash-loading>
+<app-splash-loading></app-splash-loading>
 </ng-template>
 

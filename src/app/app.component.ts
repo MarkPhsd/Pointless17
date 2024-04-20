@@ -1,7 +1,9 @@
 import { Component, QueryList,  ViewChildren,ChangeDetectorRef, ElementRef,
-         TemplateRef, ViewChild, OnDestroy, AfterViewInit, ViewContainerRef, AfterContentInit, OnInit } from '@angular/core';
+         TemplateRef, ViewChild, OnDestroy, AfterViewInit, ViewContainerRef, AfterContentInit, OnInit,
+         HostListener} from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthenticationService, AWSBucketService, DevService } from './_services';
+import { Location} from '@angular/common';
 import { IUser }  from 'src/app/_interfaces';
 import { fadeInAnimation } from './_animations';
 import { UntypedFormControl } from '@angular/forms';
@@ -53,7 +55,7 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
   keyboardDimensions = 'height:300px;width:700px'
   devMode = false;
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
-
+  get platFormName() {  return Capacitor.getPlatform(); }
   initSubscription() {
     try {
       if (this.authenticationService.userValue) {
@@ -69,18 +71,14 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
 
   // private idle: Idle,
   constructor(
-      private platForm              : Platform,
-      private router:                Router,
-      private titleService          :Title,
+      private platForm             : Platform,
+      private router               : Router,
+      private titleService         : Title,
       private authenticationService: AuthenticationService,
-      private uiSettingsService: UISettingsService,
-      private statusBar:             StatusBar,
-      private awsService           : AWSBucketService,
-      private electronService      : ElectronService,
-      private appInitService       : AppInitService,
-      private inputTrackerService: InputTrackerService,
-      private balanceSheetMethodsService: BalanceSheetMethodsService,
-      private viewContainerRef: ViewContainerRef
+      private uiSettingsService    : UISettingsService,
+      private statusBar            : StatusBar,
+      private viewContainerRef     : ViewContainerRef,
+      private location             : Location,
   ) {
 
     this.setTitle();
@@ -94,6 +92,14 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
   // initializeApp() {
   //   this.appUrl = this.appInitService.apiBaseUrl()
   // }
+
+  @HostListener('swipeleft', ['$event'])
+  onSwipeLeft() {
+    if (this.platFormName.toLowerCase() === 'android') {
+      // this.siteService.notify('swipeleft', 'close', 1000)
+      this.location.back();
+    }
+  }
 
   async ngOnInit() {
     try {

@@ -1,6 +1,6 @@
 <div>
   <div>
-    {{message}} {{height}}
+    {{message}}
   </div>
   <div *ngIf="value" class="loader">
     <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
@@ -16,6 +16,7 @@
         [gridOptions]        ="gridOptions"
         [rowSelection]       ="rowSelection"
         [frameworkComponents]="frameworkComponents"
+        (sortChanged)        ="onSortChanged($event)"
         (selectionChanged)   ="onSelectionChanged($event)"
         (gridReady)          ="onGridReady($event)">
 

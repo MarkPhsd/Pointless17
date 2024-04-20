@@ -1,12 +1,9 @@
 import { Component, OnInit,Input, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { split } from 'lodash';
 import { Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { UIHomePageSettings } from 'src/app/_services/system/settings/uisettings.service';
-import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
@@ -30,9 +27,7 @@ export class PosCheckOutButtonsComponent implements OnInit, OnDestroy {
 
   _router: Subscription;
   constructor(
-    private toolbarUIService: ToolBarUIService,
     private router: Router,
-    private orderService: OrdersService,
     public orderMethodsService: OrderMethodsService,
     private navigationService : NavigationService, ) { }
 
@@ -67,18 +62,7 @@ export class PosCheckOutButtonsComponent implements OnInit, OnDestroy {
   }
 
   toggleOpenOrderBar() {
-    this.openOrderBar= false
-    // this.navigationService.toggleOpenOrderBar(this.isStaff)
-
-    let id : string = null;
-    if (this.order) {
-      id = this.order?.id.toString();
-    }
-
-    this.toolbarUIService.updateOrderBar(false)
-    this.toolbarUIService.resetOrderBar(true)
-    this.router.navigate(["/currentorder/", {mainPanel:true, id: id}]);
-    this.orderMethodsService.setScanner()
+    this.openOrderBar = false
+    this.orderMethodsService.toggleOpenOrderBarSub(+this.order.id)
   }
-
 }

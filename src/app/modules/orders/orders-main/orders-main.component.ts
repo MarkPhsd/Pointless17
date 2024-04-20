@@ -1,5 +1,5 @@
 import {Component,  OnInit, OnDestroy, AfterViewInit, HostListener, TemplateRef, ViewChild, ChangeDetectorRef, QueryList, ViewChildren, ElementRef, OnChanges,
-  }  from '@angular/core';
+}  from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { OrderFilterPanelComponent } from '../order-filter-panel/order-filter-panel.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -38,7 +38,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   @ViewChild('mergeView') mergeView: TemplateRef<any>;
   @ViewChild('filterView') filterView:TemplateRef<any>;
   @ViewChild('summaryView')  summaryView:TemplateRef<any>;
-  @ViewChild('sortSelectors') sortSelectors: TemplateRef<any>
+  @ViewChild('sortSelectors') sortSelectors: TemplateRef<any>;
+  @ViewChild('orderFilter') orderFilter: TemplateRef<any>;
+
   @ViewChildren(InstructionDirective) instructionDirectives: QueryList<InstructionDirective>;
 
   @ViewChild('coachingSearch', {read: ElementRef}) coachingSearch: ElementRef;
@@ -47,7 +49,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   @ViewChild('coachingListView', {read: ElementRef}) coachingListView: ElementRef;
   @ViewChild('coachingPrep', {read: ElementRef}) coachingPrep: ElementRef;
   @ViewChild('coachingMergeView', {read: ElementRef}) coachingMergeView: ElementRef;
-
 
   viewHouseAccountListOn: boolean;
 
@@ -66,6 +67,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   isUser       : boolean;
   listHeight   = '84vh'
   hidePanel    : boolean;
+  disableFilterUpdate: boolean =false;
 
   isMenuOpen = false;
   _user: Subscription;
@@ -211,7 +213,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     this.searchModel.suspendedOrder = 1;
     this.searchModel.clientID = id;
     this.searchModel.closedOpenAllOrders = 0;
-    // console.log('update search', this.searchModel)
     this.orderMethodsService.updateOrderSearchModelDirect(this.searchModel)
   }
 
@@ -262,7 +263,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
           this.searchModel.employeeID = 0;
         }
 
-        // console.log('this.userAuthorization.user', this.userAuthorization.user)
         if (this.userAuthorization.user) {
           if (this.userAuthorization.user?.userPreferences?.showAllOrders) {
             this.searchModel.employeeID =  0
@@ -289,16 +289,12 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   }
 
   getOrderItemHistory() {
-
     this.viewType = 4;
     if (this.user?.roles == 'user') {
-      // this.posor/
-
       const site = this.siteService.getAssignedSite();
       let search = {} as IOrderItemSearchModel
       const results$ =  this.posOrderItemService.getItemsHistoryBySearch(site, search);
       this.orderItemHistory$ = results$.pipe(switchMap(data => {
-
         return of(data)
       }))
     }
@@ -346,13 +342,13 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     private _bottomSheet     : MatBottomSheet,
     private siteService      : SitesService,
     public  userAuthorization : UserAuthorizationService,
-    public authenticationService: AuthenticationService,
+    public  authenticationService: AuthenticationService,
     private printerService   : PrinterLocationsService,
     private printingService  : PrintingService,
     private changeDetectorRef: ChangeDetectorRef,
     private uISettingsService: UISettingsService,
-    public orderMethodsService: OrderMethodsService,
-    public coachMarksService : CoachMarksService,
+    public  orderMethodsService: OrderMethodsService,
+    public  coachMarksService : CoachMarksService,
     private platFormService: PlatformService,
     private posOrderItemService: POSOrderItemService,
     private orderService     : OrdersService
@@ -360,7 +356,18 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     )
   {
     this.initAuthorization();
-    this.orderMethodsService.updateViewOrderType(1)
+    const value = this.route.snapshot.paramMap.get('searchModel');
+    this.disableFilterUpdate = false
+    if (value) {
+      this.searchModel =  this.orderMethodsService._posSearchModel.value;
+      this.disableFilterUpdate = true
+      this.viewType = 1
+      this.changeView()
+      return;
+    } else {
+      this.orderMethodsService.updateViewOrderType(1)
+    }
+
   }
 
   ngOnChanges() {
@@ -381,13 +388,18 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     this.auths = this.authenticationService.userAuths;
     this.isApp = (this.platFormService.isAppElectron || this.platFormService.androidApp)
     this.getFilterHeight()
+
     if (this.isUser) {
       localStorage.setItem('OrderFilterPanelVisible', 'true')
     }
-    // this.changeDetectorRef.detectChanges()
   }
 
-
+  get orderFilterView() {
+    if (this.disableFilterUpdate && this.disableFilterUpdate != undefined) {
+      return null
+    }
+    return this.orderFilter
+  }
 
   initCustomerView() {
     let user = this.userAuthorization.user;
@@ -553,15 +565,11 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
         // console.log(search)
         return true
       }
-
     }
-
     return filterIsSetOption;
   }
 
   showAllOpenOrders() {
-
-
     this.orderMethodsService.refreshAllOrders()
   }
 
@@ -635,7 +643,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     }
   }
 
-
   get orderView() {
     this.styleFilterHeight = 'max-height: 83vh;overflow:hidden'
     if (window.innerHeight< 1000) {
@@ -681,6 +688,12 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
 
   displayPanel(event)  {
     const show =  localStorage.getItem('OrderFilterPanelVisible')
+
+    if (this.disableFilterUpdate) {
+      this.gridcontainer = 'grid-container-full'
+      return
+    }
+
     if (show === 'false') {
       this.hidePanel = true
       this.gridcontainer = 'grid-container-full'
@@ -755,12 +768,12 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     this._bottomSheet.open(TransferOrderComponent)
   }
 
-//   <ng-template #transferOrderView>
-//   <button #coachingTransferOrder class="dark-theme-green " mat-button (click)="transferOrder()"
-//           *ngIf="auths &&  auths.allowTransferOrder">
-//         <mat-icon>accounts</mat-icon><span>House Account</span>
-//   </button>
-// </ng-template>
+  //   <ng-template #transferOrderView>
+  //   <button #coachingTransferOrder class="dark-theme-green " mat-button (click)="transferOrder()"
+  //           *ngIf="auths &&  auths.allowTransferOrder">
+  //         <mat-icon>accounts</mat-icon><span>House Account</span>
+  //   </button>
+  // </ng-template>
 
   changeView() {
 
@@ -803,9 +816,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   }
 
   displayAllOrFilter(user) {
-
-    // console.log(user?.employeeID, user?.userPreferences?.showAllOrders)
-
     if (user?.userPreferences?.showAllOrders) {
       if (!this.orderMethodsService.posSearchModel) {
         this.orderMethodsService.posSearchModel = {} as IPOSOrderSearchModel
@@ -817,16 +827,12 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
         this.orderMethodsService.posSearchModel = {} as IPOSOrderSearchModel
       }
       if (user?.employeeID) {
-        // console.log('showAllOrders', user?.userPreferences?.showAllOrders)
-        // console.log('updated',user?.employeeID, this.userAuthorization.user.employeeID)
         this.orderMethodsService.posSearchModel.employeeID =  this.userAuthorization.user.employeeID
       }
-      // console.log('model', this.orderMethodsService.posSearchModel)
     }
 
     this.authenticationService.updateUser(user)
     this.userAuthorization.setUser(user)
-    // console.log('posSearchModel show All',  user?.userPreferences?.showAllOrders, this.orderMethodsService.posSearchModel)
     this.orderMethodsService.updateOrderSearchModel(this.orderMethodsService.posSearchModel)
   }
 

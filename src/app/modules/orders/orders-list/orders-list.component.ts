@@ -9,7 +9,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Observable, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
-import { IGetRowsParams,  GridApi } from 'ag-grid-community';
+import { IGetRowsParams,  GridApi, AgGridEvent } from 'ag-grid-community';
 // import "ag-grid-community/dist/styles/ag-grid.css";
 // import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
@@ -69,7 +69,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   rowDataClicked1      = {};
   rowDataClicked2      = {};
   rowData:             any[];
-  pageSize                = 20
+  pageSize                = 50
   currentRow              = 1;
   currentPage             = 1
   numberOfPages           = 1
@@ -163,7 +163,12 @@ export class OrdersListComponent implements OnInit,OnDestroy {
 
   async ngOnInit() {
     this.initSubscriptions();
-    this.initAgGrid(this.pageSize);
+
+    if (this.searchModel) {
+      this.initAgGrid(this.searchModel.pageSize);
+    } else {
+      this.initAgGrid(this.pageSize);
+    }
     this.urlPath            = await this.awsService.awsBucketURL();
     this.rowSelection       = 'multiple'
     this.initAuthorization();
@@ -205,7 +210,9 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       }
       this.initClasses();
   }
-
+  onSortChanged(e: AgGridEvent) {
+    e.api.refreshCells();
+  }
   //ag-grid
   //standard formating for ag-grid.
   //requires addjustment of column defs, other sections can be left the same.
@@ -218,6 +225,10 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       // minWidth: 100,
     };
     this.columnDefs =  [
+      {
+        headerName: "Row",
+        valueGetter: "node.rowIndex + 1"
+      },
       {
       field: 'id',
       cellRenderer: "btnCellRenderer",
@@ -322,7 +333,12 @@ export class OrdersListComponent implements OnInit,OnDestroy {
             flex: 2,
       },
     ]
-    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
+
+    if (this.searchModel) {
+      this.gridOptions = this.agGridFormatingService.initGridOptions(this.searchModel.pageSize, this.columnDefs);
+    } else {
+      this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
+    }
   }
 
   autoSizeAll(skipHeader) {
@@ -351,7 +367,13 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   refreshSearch(): Observable<IPOSOrderSearchModel> {
     if (this.params) {
       this.params.startRow     = 1;
-      this.params.endRow       = this.pageSize;
+
+      if (this.searchModel) {
+        this.params.endRow       = this.searchModel.pageSize;
+      } else {
+        this.params.endRow       = this.pageSize;
+      }
+
     }
 
     this.onGridReady(this.params)
@@ -392,7 +414,11 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     }
     if (!params.startRow ||  !params.endRow) {
       params.startRow = 1
-      params.endRow = this.pageSize;
+      if (this.searchModel) {
+        this.params.endRow       = this.searchModel.pageSize;
+      } else {
+        this.params.endRow       = this.pageSize;
+      }
     }
 
     let datasource =  {

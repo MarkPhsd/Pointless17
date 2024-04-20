@@ -341,7 +341,7 @@
 </ng-template>
 
 <ng-template #partBuilderSelector>
-  <div class="grid-container-3Column">
+  <div *ngIf="!fbProductsService.isCannabis(itemType)" class="grid-container-3Column">
     <div>
       <field-value-selector
         [inputForm]="productForm"
@@ -454,17 +454,19 @@
 
 <ng-template #tareValueView>
   <!-- {{jsonForm.value | json}} -->
-  <app-value-fields
-      [inputForm]="jsonForm"
-      [fieldName]="'tareValue'">
-    Tare Value
-  </app-value-fields>
+  <div *ngIf="!fbProductsService.isCannabis(itemType)">
+    <app-value-fields
+        [inputForm]="jsonForm"
+        [fieldName]="'tareValue'">
+      Tare Value
+    </app-value-fields>
 
-  <app-value-fields
-      [inputForm]="jsonForm"
-      [fieldName]="'pieceWeight'">
-    Piece Weight
-  </app-value-fields>
+    <app-value-fields
+        [inputForm]="jsonForm"
+        [fieldName]="'pieceWeight'">
+      Piece Weight
+    </app-value-fields>
+  </div>
 </ng-template>
 
 <ng-template #basicsView>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { EMPTY, Observable, } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, } from 'rxjs';
 import { IClientTable, ISite, IUserProfile,employee, FlowVendor, ImportFlowVendorResults }   from  'src/app/_interfaces';
 import { IDriversLicense } from 'src/app/_interfaces/people/drivers-license';
 import { employeeBreak, EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
@@ -32,12 +32,20 @@ export interface EmployeeClockSearchModel{
 })
 export class EmployeeClockService {
 
+
+  public _searchModel       = new BehaviorSubject<EmployeeClockSearchModel>(null);
+  public  searchModel$       = this._searchModel.asObservable();
+
   pageNumber = 1;
   pageSize  = 50;
   controller = `/EmployeeClocks`
 
   constructor( private http: HttpClient, private auth: AuthenticationService) {
 
+  }
+
+  updateSearch(search:EmployeeClockSearchModel) {
+    this._searchModel.next(search)
   }
 
   listEmployeesOnClock(site:ISite) : Observable<EmployeeClock[]> {
@@ -100,8 +108,15 @@ export class EmployeeClockService {
     return this.http.get<EmployeeClock>(url)
   }
 
+  refreshCalcsEmployeesBetweenPeriod(site: ISite, searchModel: EmployeeClockSearchModel):  Observable<EmployeeClockResults> {
+    const endPoint = '/refreshCalcsEmployeesBetweenPeriod'
 
+    const parameters = ``
 
+    const url = `${site.url}${this.controller}${endPoint}${parameters}`
+
+    return this.http.post<EmployeeClockResults>(url, searchModel)
+  }
 
   clockIn(site:ISite,employeeID:number,jobID:number): Observable<EmployeeClock> {
     const endPoint = '/clockIn'

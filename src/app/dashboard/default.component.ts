@@ -208,7 +208,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
               if (!this.user) {  return of(true)  }
               const send$ = this.sendOrderOnExitAndClearOrder(send.order).pipe(switchMap(data => {
                 this.orderMethodsSevice.updateOrder(null)
-                this.processLogOut()
+                if (data) {
+                  this.processLogOut()
+                }
                 if (send && send.logOut) {
                     return  of(true)
                   }
@@ -223,7 +225,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
         // switchMap(
       )).subscribe(data => {
         if (data && data != null  && data != 'false') {
-          // console.log('preprocess second Switch', data)
           this.processLogOut()
           this.paymentMethodsService.sendOrderAndLogOut(null, null)
         }
@@ -541,7 +542,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private renderer                 : Renderer2,
     ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
-    if (!this.platFormService.isApp()) {
+    if (!this.platFormService.isApp() && this.smallDevice) {
       this.sidebarMode   =  'side'
     }
     this.devMode = isDevMode()
@@ -718,6 +719,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   refreshToolBarType() {
+    this.sidebarMode = 'side'
     if (window.innerHeight >= 750) {
       // console.log('toolbar tiny true')
       this.toolbarTiny = true
@@ -726,11 +728,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       this.toolbarTiny = false
     }
     if (window.innerWidth > 811) {
-      this.sidebarMode = 'side'
       this.smallDevice = false;
       this.siteService.smallDevice = false
     } else {
-      this.sidebarMode = 'side'
       this.smallDevice = true;
       this.siteService.smallDevice = true
     }

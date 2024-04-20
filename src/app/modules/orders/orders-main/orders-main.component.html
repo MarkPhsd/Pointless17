@@ -1,6 +1,8 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(viewType$ | async) as viewPrep"></div>
 
+<!-- {{searchModel | json}} -->
+<!-- {{viewType}} | disableFilterUpdate {{disableFilterUpdate}} -->
 <div class="parent-container">
 
   <ng-container [ngTemplateOutlet]="filterViewFull"></ng-container>
@@ -18,15 +20,21 @@
       <ng-container [ngTemplateOutlet]="orderView || orderCard"></ng-container>
     </div>
 
-    <div *ngIf="!smallDevice && !hidePanel"
-         class="filter-container" filterDiv>
-      <app-order-filter-panel
-          [styleHeight]="styleFilterHeight"
-          (outPutHidePanel)="hideFilterPanel($event)">
-      </app-order-filter-panel>
-    </div>
+    <ng-container [ngTemplateOutlet]="orderFilterView"></ng-container>
   </div>
 </div>
+
+<ng-template #orderFilter>
+  <div *ngIf="!smallDevice && !hidePanel"
+      class="filter-container" filterDiv>
+    <app-order-filter-panel
+      [styleHeight]="styleFilterHeight"
+      [disableFilterUpdate]="disableFilterUpdate"
+      (outPutHidePanel)="hideFilterPanel($event)">
+  </app-order-filter-panel>
+  <!-- -->
+  </div>
+</ng-template>
 
 <ng-template #sortSelectors>
   <app-sort-selectors

@@ -91,6 +91,8 @@ export class BalanceSheetMethodsService {
     if (this.platformService.isAppElectron || this.platformService.androidApp) {
       const site     = this.sitesService.getAssignedSite()
       const deviceName = this.getDeviceName();
+      localStorage.setItem('user', JSON.stringify(user))
+
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
           if (data && data.errorMessage) {
@@ -188,7 +190,6 @@ export class BalanceSheetMethodsService {
       switchMap(
         data => {
           this.updateBalanceSheet(data)
-          console.log('update sheet', data?.balanceSheetEmployee.lastName)
           return of(data)
         }),
         catchError(err => {
@@ -309,6 +310,7 @@ export class BalanceSheetMethodsService {
       tooniesEnd:          ['', Validators.min(0)],
       tooniesStart:        ['', Validators.min(0)],
       dollarsEnd:          ['', Validators.min(0)],
+
     })
 
     return fb

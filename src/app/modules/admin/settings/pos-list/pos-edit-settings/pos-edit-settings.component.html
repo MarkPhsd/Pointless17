@@ -135,6 +135,9 @@
           </mat-slide-toggle>
         </div>
 
+
+
+
         <div *ngIf="(serviceType$ | async) as list ">
           <mat-form-field style="width: 200px" class="fields"
               appearance="outline">
@@ -153,6 +156,26 @@
 
       </div>
 
+      <mat-divider></mat-divider>
+      <mat-card>
+        <mat-card-subtitle>
+          <h4>Optimizations</h4>
+        </mat-card-subtitle>
+        <mat-card-content>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="disableImages">
+              <mat-label>Disable Images</mat-label>
+            </mat-slide-toggle>
+          </div>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="disableMenuImages">
+              <mat-label>Disable Menu Images</mat-label>
+            </mat-slide-toggle>
+          </div>
+        </mat-card-content>
+      </mat-card>
       <mat-divider></mat-divider>
       <h2><mat-icon>printer</mat-icon>Optional Printer Settings</h2><br>
       <mat-label>Installed Windows App Only</mat-label><br>
@@ -405,11 +428,11 @@
 <ng-template #dsiEMVSettingsView>
   <mat-card  *ngIf="isDSIEnabled && dsiEMVSettings  && terminal" [formGroup]="dsiEMVSettings">
     <mat-card-subtitle>
-     <h4>DSI DCAP Processing</h4>
+     <h4>DC Direct Processing</h4>
     </mat-card-subtitle>
     <div class="grid-container">
         <div class="grid-item">
-          <app-value-fields
+           <app-value-fields
               [fieldType]     ="'text'"
               [inputForm]     ="dsiEMVSettings"
               [fieldName]     ="'MerchantID'">

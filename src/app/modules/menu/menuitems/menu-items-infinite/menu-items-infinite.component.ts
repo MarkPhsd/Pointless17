@@ -1,8 +1,8 @@
-import {Component,  HostListener, OnInit,Renderer2,OnDestroy,
-        ViewChild, ElementRef, QueryList, ViewChildren, Input, TemplateRef, ChangeDetectorRef, ChangeDetectionStrategy}  from '@angular/core';
-import {IMenuItem} from 'src/app/_interfaces/menu/menu-products';
-import {AWSBucketService, AuthenticationService, IMenuItemsResultsPaged, IProductSearchResults, MenuService} from 'src/app/_services';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component,  HostListener, OnInit,Renderer2,OnDestroy,
+  ViewChild, ElementRef, QueryList, ViewChildren, Input, TemplateRef, ChangeDetectorRef, ChangeDetectionStrategy}  from '@angular/core';
+import { IMenuItem} from 'src/app/_interfaces/menu/menu-products';
+import { AWSBucketService, AuthenticationService, IMenuItemsResultsPaged, MenuService} from 'src/app/_services';
+import { ActivatedRoute, Router} from '@angular/router';
 import { catchError, Observable, of, Subscription, switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -15,11 +15,13 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ISite } from 'src/app/_interfaces';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+
 @Component({
-  selector: 'menu-items-infinite',
-  templateUrl: './menu-items-infinite.component.html',
-  styleUrls: ['./menu-items-infinite.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'menu-items-infinite',
+    templateUrl: './menu-items-infinite.component.html',
+    styleUrls: ['./menu-items-infinite.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
   }
 )
 
@@ -43,7 +45,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   scrollContainer:   any;
   isNearBottom   :   any;
   webMode        :  boolean;
-  smallDevice: boolean;
+  smallDevice    : boolean;
   array            = [];
   sum              = 15;
   throttle         = 300;
@@ -84,11 +86,13 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   @Input() hideSubCategoryItems: boolean;
 
   categorySearchModel    : ProductSearchModel;
+  posDevice$             : Observable<ITerminalSettings>;
+  posDevice              : ITerminalSettings;
 
   _productSearchModel    : Subscription;
   productSearchModel     : ProductSearchModel;
-  bucketName        :   string;
-  scrollingInfo     :   string;
+  bucketName             : string;
+  scrollingInfo          : string;
   endofItems        :   boolean;
   loading           :   boolean = false;
   totalRecords      :   number;
@@ -110,6 +114,8 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   categoriesList
   subCategoriesList: any[];
 
+  disableEdit: boolean // for android
+
   scrollStyle = this.platformService.scrollStyleWide;
   private styleTag: HTMLStyleElement;
   private customStyleEl: HTMLStyleElement | null = null;
@@ -117,7 +123,8 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
 
   userAuths$   = this.authService.userAuths$.pipe(
     switchMap(data =>
-      { this.userAuths = data;
+      {
+        this.userAuths = data;
         return of(data)
       }
     )
@@ -132,6 +139,8 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   infiniteClassList = 'grid-flow scroller '
   infiniteItemClass = 'grid-item';
   isStaff= this.userAuthorizationService.isStaff;
+
+  getPlatForm() {  return Capacitor.getPlatform(); }
 
   setScrollBarColor(color: string) {
     if (!color) {    color = '#6475ac' }
@@ -148,9 +157,9 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
 
   initToolbarSubscription() {
     this.toolbarUIService.orderBar$.subscribe(data => {
-      this.orderBar = data
-      if (this.orderBar) {this.grid = "grid-smaller"  }
-      if (!this.orderBar) { this.grid = "grid" }
+    this.orderBar = data
+    if (this.orderBar) {this.grid = "grid-smaller"  }
+    if (!this.orderBar) { this.grid = "grid" }
     })
   }
 
@@ -168,15 +177,11 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     }
   }
 
-
   getItemHeight() {
-    if (!this.menuItemsDiv) {
-      return
-    }
+    if (!this.menuItemsDiv) {   return  }
     const divTop = this.menuItemsDiv.nativeElement.getBoundingClientRect().top;
     const viewportBottom = window.innerHeight;
     const remainingHeight = viewportBottom - divTop;
-
     // must use max height becuase of of how height spacing works with the grid
     this.menuItemsDiv.nativeElement.style.maxHeight  = `${(remainingHeight - 75).toFixed(0)}px`;
     // this.menuItemsDiv.nativeElement.style.padding  = `${5}px`;
@@ -203,26 +208,39 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     return undefined;
   }
 
-
   constructor(private menuService        : MenuService,
-              private awsBucketService : AWSBucketService,
-              private router           : Router,
-              public  route            : ActivatedRoute,
-              public siteService      : SitesService,
-              private titleService     : Title,
-              private platFormService  : PlatformService,
-              private uiSettingService: UISettingsService,
-              private toolbarUIService: ToolBarUIService,
-              public  authService: AuthenticationService,
-              private userAuthorizationService: UserAuthorizationService,
-              private fb: UntypedFormBuilder,
-              private platformService: PlatformService,
-              private cd: ChangeDetectorRef,
-              private renderer: Renderer2
-      )
+        private awsBucketService : AWSBucketService,
+        private router           : Router,
+        public  route            : ActivatedRoute,
+        public  siteService      : SitesService,
+        private titleService     : Title,
+        private platFormService  : PlatformService,
+        private uiSettingService: UISettingsService,
+        private toolbarUIService: ToolBarUIService,
+        public  authService: AuthenticationService,
+        private userAuthorizationService: UserAuthorizationService,
+        private fb: UntypedFormBuilder,
+        private platformService: PlatformService,
+        private cd: ChangeDetectorRef,
+        private renderer: Renderer2
+  )
   {
     this.isApp = this.platFormService.isApp();
     this.initStyles();
+    this.getposDeviceSettings();
+  }
+
+  getposDeviceSettings() {
+    this.posDevice = this.uiSettingService._posDevice.value
+    if (!this.posDevice) {
+      const device = localStorage.getItem('devicename')
+      this.posDevice$ =  this.uiSettingService.getPOSDevice(device).pipe(
+        switchMap(data => {
+          this.uiSettingService.updatePOSDevice(data)
+          this.posDevice = data;
+          return of(data)
+      }));
+    }
   }
 
   initStyles() {
@@ -231,7 +249,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     this.ordersListClass = 'grid-flow scroller ';
   }
 
-  toggleListView() {
+ toggleListView() {
     if (this.infiniteClassList === 'grid-flow scroller') {
       this.infiniteClassList = 'grid-flow-single';
       this.ordersListClass = 'grid-flow-single ';
@@ -241,35 +259,34 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     }
   }
 
-  saveMobileView() {
-    const item = {ordersListClass: this.ordersListClass,
-      infiniteClassList: this.infiniteClassList
-    }
-    localStorage.setItem('MobileMenuItemLayout', JSON.stringify(item));
+saveMobileView() {
+  const item = {
+    ordersListClass: this.ordersListClass,
+    infiniteClassList: this.infiniteClassList
   }
+  localStorage.setItem('MobileMenuItemLayout', JSON.stringify(item));
+}
 
-  get mobileView() {
-    const item = localStorage.getItem('MobileMenuItemLayout')
-    if (!item) {return null}
-    const view = JSON.parse(item);
-    this.infiniteClassList = view?.infiniteClassList;
-    this.ordersListClass = view?.ordersListClass;
-  }
+get mobileView() {
+  const item = localStorage.getItem('MobileMenuItemLayout')
+  if (!item) {return null}
+  const view = JSON.parse(item);
+  this.infiniteClassList = view?.infiniteClassList;
+  this.ordersListClass = view?.ordersListClass;
+}
 
-  ngOnDestroy(): void {
-    if (this._orderBar) { this._orderBar.unsubscribe(); }
-    // if (this._productSearchModel) {this._productSearchModel.unsubscribe();};
+ngOnDestroy(): void {
+  if (this._orderBar) { this._orderBar.unsubscribe(); }
+  // if (this._productSearchModel) {this._productSearchModel.unsubscribe();};
+  // console.log('ngOnDestroy current page', this.productSearchModel.currentPage)
+  // console.log('ngOnDestroy this.currentPage', this.currentPage)
+}
 
-    // console.log('ngOnDestroy current page', this.productSearchModel.currentPage)
-    // console.log('ngOnDestroy this.currentPage', this.currentPage)
-
-  }
-
-  ngOnInit()  {
-    //this is called on page refresh, or sending the person the link to this page.
-    //this should be called.
-    //the parameters can all be used, however they shouldn't/
-    //categories shouldn' display departments
+ngOnInit()  {
+  //this is called on page refresh, or sending the person the link to this page.
+  //this should be called.
+  //the parameters can all be used, however they shouldn't/
+  //categories shouldn' display departments
     //don't change the local variables based on the search model
     //change the model based on the variables.
     //for the most part : the model will be updated
@@ -284,79 +301,77 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     //but if we move back, and have a category assigned but no department, we can't be
     //sure if we should accept the model, or the parameter from the page.
     // console.log('ngOnInit')
+
+    if (this.getPlatForm()=== 'android') {
+      this.pageSize = 10
+      this.disableEdit = true
+    }
+
     this.value      = 1;
     this.currentPage = 0;
-
     const homePage$ = this.uiSettingService.homePageSetting$;
-
     this.bucket$    = this.awsBucketService.awsBucketURLOBS().pipe(switchMap(data => {
-      this.bucketName = data
-      return of(data)
+        this.bucketName = data
+        return of(data)
     }));
 
     const search$ = this.menuService.searchModel$
-
     this.productSearchModel = this.menuService._searchModel.value;
-
     // console.log('ngOninit', this.productSearchModel)
     if (this.productSearchModel) {
-      this.productSearchModel.pageNumber = 1;
+    this.productSearchModel.pageNumber = 1;
+  }
 
-      // console.log('init current page', this.productSearchModel.currentPage)
-      // console.log('this.currentPage', this.currentPage)
-    }
-
-    this.uiHomePage$ =  this.uiSettingService.UIHomePageSettings.pipe(switchMap(data => {
-      if (!data) { return this.uiSettingService.UIHomePageSettings   }
-      return of(data)
+  this.uiHomePage$ =  this.uiSettingService.UIHomePageSettings.pipe(switchMap(data => {
+  if (!data) { return this.uiSettingService.UIHomePageSettings   }
+  return of(data)
     })).pipe(switchMap(data => {
-        this.uiHomePage = data;
-        if (data.accordionMenuSideBar || data.staffAccordionMenuSideBar) {
-          this.updateSearchOnModelChange = true;
-        }
-        let doNotInitsearch = false
-        if (this.productSearchModel) { doNotInitsearch = true;}
+      this.uiHomePage = data;
+      if (data.accordionMenuSideBar || data.staffAccordionMenuSideBar) {
+        this.updateSearchOnModelChange = true;
+      }
+      let doNotInitsearch = false
+      if (this.productSearchModel) { doNotInitsearch = true;}
 
-        this.initSearchFeatures(doNotInitsearch);
-        this.initComponent();
+      this.initSearchFeatures(doNotInitsearch);
+      this.initComponent();
 
-        if (this.uiHomePage) {
-          if ( this.uiHomePage.storeNavigation) {
-            if (!this.departmentID) {
-              if (this.productSearchModel.departmentID) {
-                this.departmentID = this.productSearchModel.departmentID.toString()
-              }
+      if (this.uiHomePage) {
+        if ( this.uiHomePage.storeNavigation) {
+          if (!this.departmentID) {
+            if (this.productSearchModel.departmentID) {
+              this.departmentID = this.productSearchModel.departmentID.toString()
             }
-            this.initDepartmentViews();
           }
+          this.initDepartmentViews();
         }
-        return of(data)
-    }))
-    ,catchError(data => {
-
-      this.initComponent()
+      }
       return of(data)
-    });
+  })) ,catchError(data => {
+    this.initComponent()
+      return of(data)
+  });
 
+
+}
+
+initSearchFeatures(doNotInitSearchModel?: boolean) {
+  this.setTitle();
+  this.initSubscriptions();
+  this.initSearchForm();
+  if (!doNotInitSearchModel) {
+    this.initSearchProcess();
   }
+  this.updateUILayout();
+}
 
-  initSearchFeatures(doNotInitSearchModel?: boolean) {
-    this.setTitle();
-    this.initSubscriptions();
-    this.initSearchForm();
-    if (!doNotInitSearchModel) {
-      this.initSearchProcess();
-    }
-    this.updateUILayout();
+setTitle() {
+  if (this.productSearchModel) {
+    this.titleService.setTitle('Items Search Results')
   }
+}
 
-  setTitle() {
-    if (this.productSearchModel) {
-      this.titleService.setTitle('Items Search Results')
-    }
-  }
-
-  initComponent() {
+initComponent() {
     let subCategoryID = +this.route.snapshot.paramMap.get('subCategoryID');
     if (subCategoryID !=0) {
       this.currentPage = 1;
@@ -376,7 +391,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     }
 
     if (this.productSearchModel.departmentID == 0 && +this.departmentID != 0)  {
-      this.productSearchModel.departmentID = +this.departmentID
+    this.productSearchModel.departmentID = +this.departmentID
     }
 
     if (this.productSearchModel) {
@@ -393,689 +408,700 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
 
     let departmentID = +this.route.snapshot.paramMap.get('departmentID');
     if (departmentID != 0 ) {
-      this.currentPage = 1;
-      if (this.uiHomePage && !this.uiHomePage.storeNavigation) {
-        const model = this.initViewFromParameters();
-      }
-      this.initSearchFromModel();
-      this.initCategoryViews(true)
-      this.updateSearchResults();
-      return;
-    }
-
-    this.initSearchFromModel();
     this.currentPage = 1;
-    this.menuItems = [] as IMenuItem[]
-    this.nextPage();
-    this.initFilterOption();
+    if (this.uiHomePage && !this.uiHomePage.storeNavigation) {
+      const model = this.initViewFromParameters();
+    }
+    this.initSearchFromModel();
+    this.initCategoryViews(true)
+    this.updateSearchResults();
+    return;
   }
 
-  initViewFromParameters() {
-    let model = this.menuService.initSearchModel()
-    model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
-    model.departmentID       = +this.route.snapshot.paramMap.get('departmentID');
-    model.categoryID         = +this.route.snapshot.paramMap.get('categoryID');
-    model.brandID            = +this.route.snapshot.paramMap.get('brandID');
-    model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
-    model.itemTypeID         = +this.route.snapshot.paramMap.get('typeID');
-    if (model.departmentID != 0 || model.categoryID != 0 ||  model.subCategoryID != 0) {
-      this.menuService.updateSearchModel(model)
-    }
+  this.initSearchFromModel();
+  this.currentPage = 1;
+  this.menuItems = [] as IMenuItem[]
+  this.nextPage();
+  this.initFilterOption();
+}
+
+initViewFromParameters() {
+  let model = this.menuService.initSearchModel()
+  model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
+  model.departmentID       = +this.route.snapshot.paramMap.get('departmentID');
+  model.categoryID         = +this.route.snapshot.paramMap.get('categoryID');
+  model.brandID            = +this.route.snapshot.paramMap.get('brandID');
+  model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
+  model.itemTypeID         = +this.route.snapshot.paramMap.get('typeID');
+  if (model.departmentID != 0 || model.categoryID != 0 ||  model.subCategoryID != 0) {
+     this.menuService.updateSearchModel(model)
+  }
     return model
   }
 
   get isSearchSelectorOn() {
-    
-    if (this.uiHomePage && this.uiHomePage.disableSearchFieldInMenu && this.isApp) {
+
+  if (this.uiHomePage && this.uiHomePage.disableSearchFieldInMenu && this.isApp) {
       return null
-    }
-
-    if (this.uiHomePage?.disableSearchFieldInMenu) { 
-      return null;
-    }
-
-    if (!this.smallDevice || !this.uiHomePage.disableSearchFieldInMenu) {
-      return this.searchSelector
-    }
-
-    if ( !this.uiHomePage.disableSearchFieldInMenu) {
-      return this.searchSelector
-    }
   }
 
-  get isgridFlowOptionOn() {
-    if (this.smallDevice && !this.isApp) {
-      return this.gridFlowOptionView
-    }
+  if (this.uiHomePage?.disableSearchFieldInMenu) {
     return null;
   }
 
-  @HostListener("window:resize", [])
+  if (!this.smallDevice || !this.uiHomePage.disableSearchFieldInMenu) {
+    return this.searchSelector
+  }
+
+  if ( !this.uiHomePage.disableSearchFieldInMenu) {
+    return this.searchSelector
+  }
+}
+
+get isgridFlowOptionOn() {
+  if (this.smallDevice && !this.isApp) {
+    return this.gridFlowOptionView
+  }
+  return null;
+}
+
+@HostListener("window:resize", [])
   updateUILayout() {
-    this.smallDevice = false
-    if ( window.innerWidth < 811 ) {
-      this.smallDevice = true
-    }
+  this.smallDevice = false
+  if ( window.innerWidth < 811 ) {
+    this.smallDevice = true
   }
+}
 
-  initSearchForm() {
-    this.searchForm = this.fb.group( {
-      itemName: ''
-    })
-  }
+initSearchForm() {
+  this.searchForm = this.fb.group( {
+    itemName: ''
+  })
+}
 
-  //this is called from subject rxjs obversablve above constructor.
-  refreshSearch(itemName) {
-    try {
-      this.applyProductSearchModel(itemName);
-      this.menuItems = [];
-      this.nextPage();
-    } catch (error) {
-      console.log('error', error)
-    }
-  }
-
-  applyProductSearchModel(itemName: string) : ProductSearchModel {
-    if (!this.productSearchModel) {
-      if (this.menuService.searchModel) {
-        this.productSearchModel  = this.menuService.searchModel
-      } else {
-        this.productSearchModel = this.menuService.initSearchModel()
-      }
-    }
-
-    let productSearchModel            = this.productSearchModel
-		productSearchModel.type           = null;
-		productSearchModel.categoryID     = null;
-		productSearchModel.departmentID   = null;
-		productSearchModel.name           = null;
-		productSearchModel.barcode        = null;
-		productSearchModel.departmentName = null;
-		if (itemName) {
-		  productSearchModel.name         =  itemName;
-		  productSearchModel.useNameInAllFields = true
-		}
-		productSearchModel.barcode    = productSearchModel.name
-		productSearchModel.pageSize   = 50
-		productSearchModel.pageNumber = 1
-		this.menuService.updateSearchModel(productSearchModel)
-		return productSearchModel
-  }
-
-  initSearchProcess() {
-    try {
-        if (!this.productSearchModel) {
-          this.productSearchModel = this.menuService.initSearchModel()
-          if (this.router.url === '/filter') {
-            this.initModelParameters(this.productSearchModel)
-          }
-          if (this.updateSearchOnModelChange) {
-          }
-        }
-    } catch (error) {
-      console.log('initSearchProcess Error', error)
-    }
-  }
-
-  initModelParameters(model: ProductSearchModel): ProductSearchModel {
-
-    model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
-    model.departmentID       = +this.route.snapshot.paramMap.get('departmentID');
-    model.categoryID         = +this.route.snapshot.paramMap.get('categoryID');
-    model.brandID            = +this.route.snapshot.paramMap.get('brandID');
-    model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
-    model.itemTypeID         = +this.route.snapshot.paramMap.get('typeID');
-
-    if (this.uiHomePage && this.uiHomePage.storeNavigation) {
-      return;
-    } else {
-      this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
-      this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');
-      this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
-      this.brandID       = this.route.snapshot.paramMap.get('brandID');
-      this.typeID        = this.route.snapshot.paramMap.get('typeID');
-      this.productName   = this.route.snapshot.paramMap.get('productName');
-    }
-
-    this.hideSubCategoryItems = false;
-
-    if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) {
-      this.hideSubCategoryItems = this.route.snapshot.paramMap.get('hideSubCategoryItems') as unknown as boolean;
-        model.hideSubCategoryItems = this.hideSubCategoryItems
-    }
-    if (this.uiHomePage && this.uiHomePage.storeNavigation) {
-      this.hideSubCategoryItems = true;
-      model.hideSubCategoryItems = true
-    }
-    return model;
-
-  }
-
-  refreshFromSelection(event) {
-    this.productSearchModel = this.getListSearchModel(this.productSearchModel);
-    this.currentPage = 1;
-    this.updateSearchResults();
-  }
-
-  setDepartmentID(id) {
-    if (!id) { return}
-    if (this.productSearchModel) {
-      this.productSearchModel.departmentID = id;
-      this.productSearchModel.categoryID = null;
-    }
-    this.productSearchModel.pageNumber = 1;
-    this.departmentID = id.toString();
-    this.categoryID = '';
-
-    this.initCategoryViews(true) ;
-    this.initSubcategoryies()
-    this.productSearchModel = this.getListSearchModel(this.productSearchModel);
-    this.currentPage = 1;
-    this.updateSearchResults();
-  }
-
-  initSubcategoryies() {
-    this.subCategoriesList = null;
-    this.productSearchModel.subCategoryID  = 0
-  }
-
-  setSubcategoryID(id) {
-    if (id) {
-      this.productSearchModel.subCategoryID = id;
-    }
-    this.productSearchModel.pageNumber = 1;
-    this.productSearchModel = this.getListSearchModel(this.productSearchModel);
-    this.currentPage = 1;
-    this.updateSearchResults();
-  }
-
-  setCategoryID(id) {
-    if (!id) { return}
-    if (this.productSearchModel) {
-      // this.productSearchModel.departmentID = id;
-      this.productSearchModel.categoryID = id;
-    }
-    this.productSearchModel.pageNumber = 1;
-    this.categoryID = id.toString();
-
-    // this.initCategoryViews(true) ;
-    this.productSearchModel.subCategoryID = null;
-    this.productSearchModel = this.getListSearchModel(this.productSearchModel);
-    this.currentPage = 1;
-    this.updateSearchResults();
-    this.refreshSubCategories(id)
-  }
-
-  initSearchFromModel() {
-    this._productSearchModel = this.menuService.searchModel$.subscribe( model => {
-        this.productSearchModel = model;
-        if (!model) {  model = this.menuService.initSearchModel() }
-
-        this.productName  = model.name;
-        model.web         = this.webMode
-        model.webMode     = this.webMode;
-
-        if (!model.pageNumber) { model.pageNumber = 1}
-        this.currentPage = model.pageNumber
-        let  categoryResults = ''
-
-        if (model.categoryName && model.categoryName != undefined ) {
-          categoryResults = model.categoryName;
-        }
-
-        let  departmentName = ''
-        if (model.departmentName && model.departmentName != undefined ) {
-          departmentName = 'departments ' + model.departmentName;
-        }
-
-        let  itemTypeName = ''
-        if (model.itemTypeName && model.itemTypeName != undefined) {
-          itemTypeName = 'types ' + model.itemTypeName;
-        }
-
-        model.webMode = this.menuService.isWebModeMenu
-        model.active  = true;
-
-        this.productSearchModel = model;
-
-        if (!this.departmentID) {
-          if (this.uiHomePage && this.uiHomePage.storeNavigation) {
-          }
-        }
-
-        if (!this.updateSearchOnModelChange) { this.updateSearchOnModelChange = true}
-        if (this.updateSearchOnModelChange) {
-          model.hideSubCategoryItems = false;
-          this.productSearchModel = model;
-
-          // console.log('Product Search Model',this.productSearchModel  )
-          return model;
-          this.updateSearchResults();
-        }
-
-        this.searchDescription = `Results from ${ model.name}  ${categoryResults} ${departmentName}  ${itemTypeName}`
-        return
-      }
-    )
-  }
-
-  updateSearchResults() {
+//this is called from subject rxjs obversablve above constructor.
+refreshSearch(itemName) {
+  try {
+    this.applyProductSearchModel(itemName);
     this.menuItems = [];
     this.nextPage();
+  } catch (error) {
+    console.log('error', error)
   }
+}
 
-  getNextMenuItem() {
-    let menuItem = {} as IMenuItem
-    menuItem.id = -1;
-    menuItem.name = 'Load More'
-    return menuItem;
-  }
-
-  initDepartmentViews() {
-    if (this.uiHomePage && this.uiHomePage.storeNavigation) {
-      let  webMode = true
-      if (this.isStaff) {  webMode = false  }
-
-      const site  = this.siteService.getAssignedSite();
-      const model = {} as ProductSearchModel;
-      model.itemTypeID == 6
-      model.pageSize   = 25
-      model.pageNumber = 1
-      model.active = true;
-      model.webMode = webMode;
-      model.hideSubCategoryItems = true;
-
-      const departments$ = this.menuService.getGetDepartmentList(site).pipe(switchMap(data => {
-        this.departments = data;
-        if (this.isApp || this.isStaff) {
-          this.departments = data.filter(item => { return item.active })
-        }
-        if (!this.isApp) {
-          this.departments = data.filter(item => { return item.active && item.webProduct })
-        }
-
-        // console.log('initializing categories', this.productSearchModel.departmentID, this.departmentID)
-        this.initCategoryViews(true)
-        return of(data)
-      }))
-
-      this.departments$ = departments$;
+applyProductSearchModel(itemName: string) : ProductSearchModel {
+  if (!this.productSearchModel) {
+  if (this.menuService.searchModel) {
+       this.productSearchModel  = this.menuService.searchModel
+    } else {
+      this.productSearchModel = this.menuService.initSearchModel()
     }
   }
 
-  //used to filter top categories for grocery story style results
-  initCategoryViews(firstView?: boolean) {
-    if (this.uiHomePage.storeNavigation) {
-      const site = this.siteService.getAssignedSite();
-      let  webMode = true
-      if (this.isStaff) { webMode = false }
-
-      if (this.departments) {
-        if (this.productSearchModel.departmentID) {
-          this.departmentID = this.productSearchModel.departmentID.toString()
-        }
-        if (!this.productSearchModel.departmentID) {
-          if (this.departments[0]) {
-            this.departmentID = this.departments[0].id;
-          }
-        }
-      }
-
-      if (!this.departmentID || Number.isNaN(this.departmentID) ) {
-        return
-      }
-
-      this.categories$ = this.menuService.getCategoryListNoChildrenByDepartmentPaging(site, +this.departmentID, webMode).pipe(
-        switchMap(data => {
-          this.categories = this.removeDuplicates(data)
-          if (firstView && this.categories.length > 0) {
-            if (this.categories[0] && this.categories[0].id) {
-              this.categoryID = this.categories[0].id.toString()
-              this.refreshSubCategories( +this.categoryID )
-            }
-          }
-          return of(data)
-      }))
-
-    }
+  let productSearchModel            = this.productSearchModel
+  productSearchModel.type           = null;
+  productSearchModel.categoryID     = null;
+  productSearchModel.departmentID   = null;
+  productSearchModel.name           = null;
+  productSearchModel.barcode        = null;
+  productSearchModel.departmentName = null;
+  if (itemName) {
+    productSearchModel.name         =  itemName;
+    productSearchModel.useNameInAllFields = true
+  }
+  productSearchModel.barcode    = productSearchModel.name;
+  productSearchModel.pageSize   = 50
+  if (this.smallDevice) {
+    productSearchModel.pageSize   = 20
   }
 
-  getListSearchModel(model : ProductSearchModel) {
+  productSearchModel.pageNumber = 1
+  this.menuService.updateSearchModel(productSearchModel)
+  return productSearchModel
+}
+
+initSearchProcess() {
+  try {
+  if (!this.productSearchModel) {
+    this.productSearchModel = this.menuService.initSearchModel()
+    if (this.router.url === '/filter') {
+      this.initModelParameters(this.productSearchModel)
+    }
+    if (this.updateSearchOnModelChange) {
+    }
+  }
+  } catch (error) {
+  console.log('initSearchProcess Error', error)
+  }
+}
+
+initModelParameters(model: ProductSearchModel): ProductSearchModel {
+
+  model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
+  model.departmentID       = +this.route.snapshot.paramMap.get('departmentID');
+  model.categoryID         = +this.route.snapshot.paramMap.get('categoryID');
+  model.brandID            = +this.route.snapshot.paramMap.get('brandID');
+  model.subCategoryID      = +this.route.snapshot.paramMap.get('subCategoryID');
+  model.itemTypeID         = +this.route.snapshot.paramMap.get('typeID');
+
+  if (this.uiHomePage && this.uiHomePage.storeNavigation) {
+  return;
+  } else {
     this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
-    this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
     this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');
-    this.brandID       = this.route.snapshot.paramMap.get('brandID')
-    this.typeID       = this.route.snapshot.paramMap.get('typeID')
-    return this.updateModel(model)
+    this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
+    this.brandID       = this.route.snapshot.paramMap.get('brandID');
+    this.typeID        = this.route.snapshot.paramMap.get('typeID');
+    this.productName   = this.route.snapshot.paramMap.get('productName');
   }
 
-  updateModel(model: ProductSearchModel) {
-    if (this.updateSearchOnModelChange) {   model.hideSubCategoryItems = false; }
+  this.hideSubCategoryItems = false;
 
-    if (this.uiHomePage && this.uiHomePage.suppressMenuItems) {
-      if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) {
-        model.hideSubCategoryItems = this.route.snapshot.paramMap.get('hideSubCategoryItems') as unknown as boolean;
-      }
-    }
-    if (this.typeID) {
-      if (this.typeID) { model.itemTypeID     = +this.typeID     }
-    }
-
-    if (this.brandID) {
-      if (this.brandID) { model.brandID       = +this.brandID     }
-    }
-
-    if ( (!this.categoryID && this.categoryID != "0") ||
-      (!this.departmentID && this.departmentID != "0") ||
-      (!this.subCategoryID && this.subCategoryID != "0") ||
-      (!this.brandID && this.brandID != "0") )   {
-    }
-    model.itemTypeID = 0
-    return model;
+  if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) {
+  this.hideSubCategoryItems = this.route.snapshot.paramMap.get('hideSubCategoryItems') as unknown as boolean;
+  model.hideSubCategoryItems = this.hideSubCategoryItems
   }
-
-  setCategoryHeaders(model: ProductSearchModel) {
-    let catModel  = JSON.parse(JSON.stringify(model))
-    catModel.categoryID = 0
-    catModel.categoryName = ''
-    catModel.category = ''
-    catModel.itemTypeID = 4;
-    this.categorySearchModel = catModel
+  if (this.uiHomePage && this.uiHomePage.storeNavigation) {
+  this.hideSubCategoryItems = true;
+  model.hideSubCategoryItems = true
   }
+  return model;
 
-  setSubCategoryHeaders() {
-    //do this when there is a sub category id in the model
+}
+
+refreshFromSelection(event) {
+  this.productSearchModel = this.getListSearchModel(this.productSearchModel);
+  this.currentPage = 1;
+  this.updateSearchResults();
+}
+
+setDepartmentID(id) {
+  if (!id) { return}
+  if (this.productSearchModel) {
+    this.productSearchModel.departmentID = id;
+    this.productSearchModel.categoryID = null;
   }
+  this.productSearchModel.pageNumber = 1;
+  this.departmentID = id.toString();
+  this.categoryID = '';
 
-  changeDetect() {
-    this.loading      = false
-    this.cd.detectChanges()
-    this.updateItemsPerPage()
+  this.initCategoryViews(true) ;
+  this.initSubcategoryies()
+  this.productSearchModel = this.getListSearchModel(this.productSearchModel);
+  this.currentPage = 1;
+  this.updateSearchResults();
+}
+
+initSubcategoryies() {
+  this.subCategoriesList = null;
+  this.productSearchModel.subCategoryID  = 0
+}
+
+setSubcategoryID(id) {
+  if (id) {
+    this.productSearchModel.subCategoryID = id;
   }
+  this.productSearchModel.pageNumber = 1;
+  this.productSearchModel = this.getListSearchModel(this.productSearchModel);
+  this.currentPage = 1;
+  this.updateSearchResults();
+}
 
-  setModel(model: ProductSearchModel, pageNumber: number) {
-    let search = {} as ProductSearchModel;
-    search.active = model.active
-    search.barcode = model.barcode
-    search.categoryID = model.categoryID
-    search.departmentID = model.departmentID
-
-    search.name = model.name;
-    search.pageCount = model.pageCount;
-    search.pageSize = model.pageSize;
-    search.pageNumber = pageNumber;
-
-    search.listTypeID = model.listTypeID;
-    search.listPublisherID = model.listPublisherID;
-    search.listBrandID = model.listBrandID;
-    search.listDepartmentID = model.listDepartmentID;
-    search.listCategoryID = model.listCategoryID;
-    search.listSubCategoryID = model.listSubCategoryID;
-    search.listSpecies = model.listSpecies;
-    search.listSize = model.listSize;
-    search.listColor = model.listColor;
-    search.minQuantityFilter = model.minQuantityFilter;
-    search.gf = model.gf;
-
-    // console.log('search', pageNumber, search)
-    return search;
+setCategoryID(id) {
+  if (!id) { return}
+  if (this.productSearchModel) {
+    // this.productSearchModel.departmentID = id;
+    this.productSearchModel.categoryID = id;
   }
+  this.productSearchModel.pageNumber = 1;
+  this.categoryID = id.toString();
 
-  addToListOBS(pageSize: number, pageNumber: number) :Observable<IMenuItem[] | IMenuItemsResultsPaged>  {
+  // this.initCategoryViews(true) ;
+  this.productSearchModel.subCategoryID = null;
+  this.productSearchModel = this.getListSearchModel(this.productSearchModel);
+  this.currentPage = 1;
+  this.updateSearchResults();
+  this.refreshSubCategories(id)
+}
 
-    if (!pageNumber || pageNumber == null) {pageNumber = 1 }
-    if (!pageSize   || pageSize   == null) {pageSize   = 50}
+initSearchFromModel() {
+  this._productSearchModel = this.menuService.searchModel$.subscribe( model => {
+  this.productSearchModel = model;
+  if (!model) {  model = this.menuService.initSearchModel() }
 
-    let model   = this.productSearchModel;
-    if (!model) { model = {} as ProductSearchModel };
+  this.productName  = model.name;
+  model.web         = this.webMode
+  model.webMode     = this.webMode;
 
-    const value = this.route.snapshot.paramMap.get('value');
-    if (model && !value)  { model = this.getListSearchModel(model) }
+  if (!model.pageNumber) { model.pageNumber = 1}
+    this.currentPage = model.pageNumber
+    let  categoryResults = ''
 
-    const site  = this.siteService.getAssignedSite();
-    let displayCategories$ : Observable<IMenuItemsResultsPaged | IMenuItem[]>;
-    if (this.uiHomePage && this.uiHomePage.storeNavigation) {
-      let catModel = this.categorySearchModel;
-      if (catModel){
-        catModel.pageNumber = 1;
-        catModel.pageSize   = 50;
-        model.active        = true;
-        displayCategories$  =  this.getProcess(site, catModel);
-      }
+    if (model.categoryName && model.categoryName != undefined ) {
+      categoryResults = model.categoryName;
     }
 
-    if (pageNumber) {
-      model.pageNumber = pageNumber;
+    let  departmentName = ''
+    if (model.departmentName && model.departmentName != undefined ) {
+      departmentName = 'departments ' + model.departmentName;
     }
+
+    let  itemTypeName = ''
+    if (model.itemTypeName && model.itemTypeName != undefined) {
+      itemTypeName = 'types ' + model.itemTypeName;
+    }
+
+    model.webMode = this.menuService.isWebModeMenu
+    model.active  = true;
+
     this.productSearchModel = model;
 
-    const process$    = this.getProcess(site, model)
-    this.loading      = true
-
-    return process$.pipe(
-      switchMap(data => {
-        if (this.pagingInfo && this.pagingInfo.pageCount == 1) {
-          if (displayCategories$) {
-            return displayCategories$
-          }
-        }
-        if (pageNumber == 1) {
-          return  this.addToListOBS(this.pageSize, 2)
-        }
-        if (displayCategories$) {
-          return displayCategories$
-        }
-        return of(data)
-    })).pipe(switchMap(data => {
-      this.changeDetect()
-      return of(data)
-    }))
-  };
-
-  splitItemsIntType(itemsIn: IMenuItem[], currentItems: IMenuItem[]){
-    currentItems.push(...itemsIn);
-
-    if (this.uiHomePage.storeNavigation) {
-      if (this.departmentID && itemsIn) {
-        const categories = itemsIn.filter(item => {
-          if ( item.prodModifierType == 4 ) {
-            return   item
-          }
-        }) as IMenuItem[]
-      }
-
-      if (!this.departmentID && this.categoryID && itemsIn) {
-
-        const categories = itemsIn.filter(item => {
-          if (item.prodModifierType == 4 ) {
-            return   item
-          }
-        }) as IMenuItem[]
-      }
-
-      currentItems =  currentItems.filter( item => {
-        if (item.prodModifierType != 6 && item.prodModifierType != 5 && item.prodModifierType != 4 ) {
-          return   item
-        }
-      })
-
-    }
-    return currentItems;
-  }
-
-  removeDuplicates(array: IMenuItem[]) {
-    const uniqueArray = array.filter((obj, index, self) =>
-      index === self.findIndex((o) => o.id === obj.id && o.name === obj.name)
-    );
-    return uniqueArray;
-  }
-
-  refreshSubCategories(categoryID: number) {
-    const site             = this.siteService.getAssignedSite()
-    this.subCategoriesList = null;
-    if (categoryID == 0  || categoryID == undefined) {
-      return
-    }
-    this.categoryID = categoryID.toString();
-    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(
-      switchMap(data => {
-        this.subCategoriesList = data;
-        this.subCategoriesList = data.filter(data => {return data.categoryID == categoryID});
-        return of(data)
-      })
-    )
-  }
-
-  initFilterOption() {
-    if (this.authService.deviceInfo) {
-      const device = this.authService.deviceInfo
-      if (this.uiHomePage) {
-        if ((this.uiHomePage.staffAccordionMenuSideBar || this.uiHomePage.accordionMenuSideBar ||
-          this.uiHomePage.departmentFilter || this.uiHomePage.itemTypeFilter || this.uiHomePage.categoryFilter  )) {
-            this.enableFilter = true
-            return;
-          }
-      }
-
-      if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList) {
-        this.enableFilter = false
-        return false
-      }
-
-      if (!device.phoneDevice && !this.isApp) {
-        const url =  this.router.url
-        if (url.substring(0, 'menuitems-infinite'.length + 1 ) === '/menuitems-infinite'){
-          this.enableFilter = true
-        }
-      }
+  if (!this.departmentID) {
+    if (this.uiHomePage && this.uiHomePage.storeNavigation) {
     }
   }
 
-  gotoFilter() {
-    this.toggleSearchMenu()
+  if (!this.updateSearchOnModelChange) { this.updateSearchOnModelChange = true}
+
+  if (this.updateSearchOnModelChange) {
+    model.hideSubCategoryItems = false;
+    this.productSearchModel = model;
+
+    // console.log('Product Search Model',this.productSearchModel  )
+    return model;
+    this.updateSearchResults();
   }
 
-  toggleSearchMenu() {
-    this.toolbarUIService.switchSearchBarSideBar()
+  this.searchDescription = `Results from ${ model.name}  ${categoryResults} ${departmentName}  ${itemTypeName}`
+    return
+    }
+  )
+}
+
+updateSearchResults() {
+  this.menuItems = [];
+  this.nextPage();
+}
+
+getNextMenuItem() {
+  let menuItem = {} as IMenuItem
+  menuItem.id = -1;
+  menuItem.name = 'Load More'
+  return menuItem;
+}
+
+initDepartmentViews() {
+  if (this.uiHomePage && this.uiHomePage.storeNavigation) {
+  let  webMode = true
+  if (this.isStaff) {  webMode = false  }
+
+  const site  = this.siteService.getAssignedSite();
+  const model = {} as ProductSearchModel;
+  model.itemTypeID == 6
+  model.pageSize   = 25
+  model.pageNumber = 1
+  model.active = true;
+  model.webMode = webMode;
+  model.hideSubCategoryItems = true;
+
+const departments$ = this.menuService.getGetDepartmentList(site).pipe(switchMap(data => {
+ this.departments = data;
+  if (this.isApp || this.isStaff) {
+    this.departments = data.filter(item => { return item.active })
+  }
+  if (!this.isApp) {
+    this.departments = data.filter(item => { return item.active && item.webProduct })
   }
 
-  getProcess(site: ISite, model: ProductSearchModel) {
-    const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
-     return results$.pipe(
-        switchMap(data => {
-          this.currentPage += 1;
-          if (!data || data.results && data.results.length == 0 || data == null || (!data || !data.results)) {
-            this.value = 100;
-            this.loading = false;
-            this.endOfRecords = true
-            this.totalRecords = data?.paging?.totalRecordCount;
-            return of(null)
-          }
+  // console.log('initializing categories', this.productSearchModel.departmentID, this.departmentID)
+  this.initCategoryViews(true)
+    return of(data)
+  }))
 
-          this.itemsPerPage = this.itemsPerPage + data.results.length;
+  this.departments$ = departments$;
+  }
+}
 
-          if (this.menuItems) {
-            try {
-              if (this.menuItems[this.menuItems.length -1 ].name.toLowerCase() === 'load more') {
-                this.menuItems.splice(this.menuItems.length -1 , 1)
-              };
-            } catch (error) {
-            }
+//used to filter top categories for grocery story style results
+initCategoryViews(firstView?: boolean) {
+  if (this.uiHomePage.storeNavigation) {
+    const site = this.siteService.getAssignedSite();
+    let  webMode = true
+    if (this.isStaff) { webMode = false }
 
-            this.menuItems = this.splitItemsIntType(data.results, this.menuItems);
-
-            if (this.uiHomePage.suppressItemsInStoreNavigation) {
-              if (this.categories && this.categories.length>0) {
-                this.menuItems  = [];
-                this.endOfRecords = true;
-                this.loading = false;
-                this.value = 100;
-                return of(null)
-              }
-            }
-
-            this.totalRecords = data.paging.totalRecordCount;
-
-            let catLength = 0
-            if (this.categories && this.categories.length) {   catLength = this.categories.length }
-
-            if ( this.menuItems.length + catLength == this.totalRecords ) {
-              this.endOfRecords = true;
-              this.loading = false;
-              this.value = 100;
-            }
-
-            this.menuItems = this.removeDuplicates( this.menuItems )
-            this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
-
-            if ( !this.endOfRecords) {
-              const lastItem = this.getNextMenuItem();
-              this.loading = false;
-              this.menuItems.push(lastItem)
-            }
-
-            this.loading   = false
-            return of(this.menuItems)
-          }
-
-          this.pagingInfo = data.paging
-
-        if (data) {
-          this.menuItems = this.splitItemsIntType(data.results, this.menuItems)
-          this.loading      = false
-          this.value = 100;
-        }
-
-        return of(data);
+    if (this.departments) {
+    if (this.productSearchModel.departmentID) {
+      this.departmentID = this.productSearchModel.departmentID.toString()
+    }
+    if (!this.productSearchModel.departmentID) {
+      if (this.departments[0]) {
+        this.departmentID = this.departments[0].id;
       }
-    )).pipe(switchMap(data => {
+    }
+    }
+
+    if (!this.departmentID || Number.isNaN(this.departmentID) ) {
+    return
+    }
+
+    this.categories$ = this.menuService.getCategoryListNoChildrenByDepartmentPaging(site, +this.departmentID, webMode).pipe(
+    switchMap(data => {
+      this.categories = this.removeDuplicates(data)
+      if (firstView && this.categories.length > 0) {
+        if (this.categories[0] && this.categories[0].id) {
+          this.categoryID = this.categories[0].id.toString()
+          this.refreshSubCategories( +this.categoryID )
+        }
+      }
       return of(data)
     }))
 
-  }
+    }
+}
 
-  moveNext(event) {
-    this.menuItems.splice(this.menuItems.length, 1)
-    this.onScrollDown();
-  }
+getListSearchModel(model : ProductSearchModel) {
+  this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
+  this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
+  this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');
+  this.brandID       = this.route.snapshot.paramMap.get('brandID')
+  this.typeID       = this.route.snapshot.paramMap.get('typeID')
+  return this.updateModel(model)
+}
 
-  onScrollDown() {
-    this.scrollingInfo = 'scroll down'
-    this.nextPage();
-  }
+updateModel(model: ProductSearchModel) {
+if (this.updateSearchOnModelChange) {   model.hideSubCategoryItems = false; }
 
-  onScrollUp() {
-    this.scrollingInfo = 'scroll up'
-  }
+if (this.uiHomePage && this.uiHomePage.suppressMenuItems) {
+if (this.route.snapshot.paramMap.get('hideSubCategoryItems')) {
+ model.hideSubCategoryItems = this.route.snapshot.paramMap.get('hideSubCategoryItems') as unknown as boolean;
+}
+}
+if (this.typeID) {
+if (this.typeID) { model.itemTypeID     = +this.typeID     }
+}
 
-  nextPage() {
-    this.addToListOBS(this.pageSize, this.currentPage ).subscribe()
-  }
+if (this.brandID) {
+if (this.brandID) { model.brandID       = +this.brandID     }
+}
 
-  scrollDown() {
-    var scrollingElement = (document.scrollingElement || document.body);
-    scrollingElement.scrollTop = scrollingElement.scrollHeight;
-  }
+if ( (!this.categoryID && this.categoryID != "0") ||
+(!this.departmentID && this.departmentID != "0") ||
+(!this.subCategoryID && this.subCategoryID != "0") ||
+(!this.brandID && this.brandID != "0") )   {
+}
+model.itemTypeID = 0
+return model;
+}
 
-  getItemSrc(item:IMenuItem) {
-    return this.awsBucketService.getImageURLFromNameArray(this.bucketName, item.urlImageMain)
-  }
+setCategoryHeaders(model: ProductSearchModel) {
+let catModel  = JSON.parse(JSON.stringify(model))
+catModel.categoryID = 0
+catModel.categoryName = ''
+catModel.category = ''
+catModel.itemTypeID = 4;
+this.categorySearchModel = catModel
+}
 
-  isUserNearBottom(): boolean {
-    const threshold = 150;
-    const position = window.scrollY + window.innerHeight; // <- Measure position differently
-    const height = document.body.scrollHeight; // <- Measure height differently
-    return position > height - threshold;
-  }
+setSubCategoryHeaders() {
+//do this when there is a sub category id in the model
+}
 
-  @HostListener('window:scroll', ['$event']) // <- Add scroll listener to window
-  scrolled(event: any): void {
-    this.isNearBottom = this.isUserNearBottom();
-  }
+changeDetect() {
+this.loading      = false
+this.cd.detectChanges()
+this.updateItemsPerPage()
+}
 
-  trackByFN(_, item: IMenuItem): IMenuItem {
-    return item;
-  }
+setModel(model: ProductSearchModel, pageNumber: number) {
+let search = {} as ProductSearchModel;
+search.active = model.active
+search.barcode = model.barcode
+search.categoryID = model.categoryID
+search.departmentID = model.departmentID
+
+search.name = model.name;
+search.pageCount = model.pageCount;
+search.pageSize = model.pageSize;
+search.pageNumber = pageNumber;
+
+search.listTypeID = model.listTypeID;
+search.listPublisherID = model.listPublisherID;
+search.listBrandID = model.listBrandID;
+search.listDepartmentID = model.listDepartmentID;
+search.listCategoryID = model.listCategoryID;
+search.listSubCategoryID = model.listSubCategoryID;
+search.listSpecies = model.listSpecies;
+search.listSize = model.listSize;
+search.listColor = model.listColor;
+search.minQuantityFilter = model.minQuantityFilter;
+search.gf = model.gf;
+
+// console.log('search', pageNumber, search)
+return search;
+}
+
+addToListOBS(pageSize: number, pageNumber: number) :Observable<IMenuItem[] | IMenuItemsResultsPaged>  {
+
+// if (this.endOfRecords) { return }
+
+if (!pageNumber || pageNumber == null) {pageNumber = 1 }
+if (!pageSize   || pageSize   == null) {pageSize   = 50}
+
+let model   = this.productSearchModel;
+if (!model) { model = {} as ProductSearchModel };
+
+const value = this.route.snapshot.paramMap.get('value');
+if (model && !value)  { model = this.getListSearchModel(model) }
+
+const site  = this.siteService.getAssignedSite();
+let displayCategories$ : Observable<IMenuItemsResultsPaged | IMenuItem[]>;
+if (this.uiHomePage && this.uiHomePage.storeNavigation) {
+let catModel = this.categorySearchModel;
+if (catModel){
+ catModel.pageNumber = 1;
+ catModel.pageSize   = 50;
+ model.active        = true;
+ displayCategories$  =  this.getProcess(site, catModel);
+}
+}
+
+if (pageNumber) {
+model.pageNumber = pageNumber;
+}
+this.productSearchModel = model;
+
+this.loading      = false
+const process$    = this.getProcess(site, model)
+if (this.value != 100 ) {
+if (!this.endOfRecords) {
+ this.loading      = true
+}
+}
+
+return process$.pipe(
+switchMap(data => {
+ if (this.pagingInfo && this.pagingInfo.pageCount == 1) {
+   if (displayCategories$) {
+     return displayCategories$
+   }
+ }
+ if (pageNumber == 1) {
+   return  this.addToListOBS(this.pageSize, 2)
+ }
+ if (displayCategories$) {
+   return displayCategories$
+ }
+ return of(data)
+})).pipe(switchMap(data => {
+this.changeDetect()
+return of(data)
+}))
+};
+
+splitItemsIntType(itemsIn: IMenuItem[], currentItems: IMenuItem[]){
+currentItems.push(...itemsIn);
+
+if (this.uiHomePage.storeNavigation) {
+if (this.departmentID && itemsIn) {
+ const categories = itemsIn.filter(item => {
+   if ( item.prodModifierType == 4 ) {
+     return   item
+   }
+ }) as IMenuItem[]
+}
+
+if (!this.departmentID && this.categoryID && itemsIn) {
+
+ const categories = itemsIn.filter(item => {
+   if (item.prodModifierType == 4 ) {
+     return   item
+   }
+ }) as IMenuItem[]
+}
+
+currentItems =  currentItems.filter( item => {
+ if (item.prodModifierType != 6 && item.prodModifierType != 5 && item.prodModifierType != 4 ) {
+   return   item
+ }
+})
+
+}
+return currentItems;
+}
+
+removeDuplicates(array: IMenuItem[]) {
+const uniqueArray = array.filter((obj, index, self) =>
+index === self.findIndex((o) => o.id === obj.id && o.name === obj.name)
+);
+return uniqueArray;
+}
+
+refreshSubCategories(categoryID: number) {
+const site             = this.siteService.getAssignedSite()
+this.subCategoriesList = null;
+if (categoryID == 0  || categoryID == undefined) {
+return
+}
+this.categoryID = categoryID.toString();
+this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(
+switchMap(data => {
+ this.subCategoriesList = data;
+ this.subCategoriesList = data.filter(data => {return data.categoryID == categoryID});
+ return of(data)
+})
+)
+}
+
+initFilterOption() {
+if (this.authService.deviceInfo) {
+const device = this.authService.deviceInfo
+if (this.uiHomePage) {
+ if ((this.uiHomePage.staffAccordionMenuSideBar || this.uiHomePage.accordionMenuSideBar ||
+   this.uiHomePage.departmentFilter || this.uiHomePage.itemTypeFilter || this.uiHomePage.categoryFilter  )) {
+     this.enableFilter = true
+     return;
+   }
+}
+
+if (this.uiHomePage && this.uiHomePage.disableSearchFeaturesInItemsList) {
+ this.enableFilter = false
+ return false
+}
+
+if (!device.phoneDevice && !this.isApp) {
+ const url =  this.router.url
+ if (url.substring(0, 'menuitems-infinite'.length + 1 ) === '/menuitems-infinite'){
+   this.enableFilter = true
+ }
+}
+}
+}
+
+gotoFilter() {
+this.toggleSearchMenu()
+}
+
+toggleSearchMenu() {
+this.toolbarUIService.switchSearchBarSideBar()
+}
+
+getProcess(site: ISite, model: ProductSearchModel) {
+const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
+return results$.pipe(
+ switchMap(data => {
+   this.currentPage += 1;
+   if (!data || data.results && data.results.length == 0 || data == null || (!data || !data.results)) {
+     this.value = 100;
+     this.loading = false;
+     this.endOfRecords = true
+     this.totalRecords = data?.paging?.totalRecordCount;
+     return of(null)
+   }
+
+   this.itemsPerPage = this.itemsPerPage + data.results.length;
+
+   if (this.menuItems) {
+     try {
+       if (this.menuItems[this.menuItems.length -1 ].name.toLowerCase() === 'load more') {
+         this.menuItems.splice(this.menuItems.length -1 , 1)
+       };
+     } catch (error) {
+     }
+
+     this.menuItems = this.splitItemsIntType(data.results, this.menuItems);
+
+     if (this.uiHomePage.suppressItemsInStoreNavigation) {
+       if (this.categories && this.categories.length>0) {
+         this.menuItems  = [];
+         this.endOfRecords = true;
+         this.loading = false;
+         this.value = 100;
+         return of(null)
+       }
+     }
+
+     this.totalRecords = data.paging.totalRecordCount;
+
+     let catLength = 0
+     if (this.categories && this.categories.length) {   catLength = this.categories.length }
+
+     if ( this.menuItems.length + catLength == this.totalRecords ) {
+       this.endOfRecords = true;
+       this.loading = false;
+       this.value = 100;
+     }
+
+     this.menuItems = this.removeDuplicates( this.menuItems )
+     this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
+
+     if ( !this.endOfRecords) {
+       const lastItem = this.getNextMenuItem();
+       this.menuItems.push(lastItem)
+     }
+
+     this.loading   = false
+     return of(this.menuItems)
+   }
+
+   this.pagingInfo = data.paging
+
+ if (data) {
+   this.menuItems = this.splitItemsIntType(data.results, this.menuItems)
+   this.loading      = false
+   this.value = 100;
+ }
+
+ return of(data);
+}
+)).pipe(switchMap(data => {
+return of(data)
+}))
+
+}
+
+moveNext(event) {
+  this.menuItems.splice(this.menuItems.length, 1)
+  this.onScrollDown();
+}
+
+onScrollDown() {
+  this.scrollingInfo = 'scroll down'
+  this.nextPage();
+}
+
+onScrollUp() {
+this.scrollingInfo = 'scroll up'
+}
+
+nextPage() {
+this.addToListOBS(this.pageSize, this.currentPage ).subscribe()
+}
+
+scrollDown() {
+var scrollingElement = (document.scrollingElement || document.body);
+scrollingElement.scrollTop = scrollingElement.scrollHeight;
+}
+
+getItemSrc(item:IMenuItem) {
+return this.awsBucketService.getImageURLFromNameArray(this.bucketName, item.urlImageMain)
+}
+
+isUserNearBottom(): boolean {
+const threshold = 150;
+const position = window.scrollY + window.innerHeight; // <- Measure position differently
+const height = document.body.scrollHeight; // <- Measure height differently
+return position > height - threshold;
+}
+
+@HostListener('window:scroll', ['$event']) // <- Add scroll listener to window
+scrolled(event: any): void {
+this.isNearBottom = this.isUserNearBottom();
+}
+
+trackByFN(_, item: IMenuItem): IMenuItem {
+return item;
+}
 
 }
 

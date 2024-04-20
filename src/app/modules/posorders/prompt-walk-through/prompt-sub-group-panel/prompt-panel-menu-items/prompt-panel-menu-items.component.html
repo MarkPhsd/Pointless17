@@ -8,9 +8,9 @@
           <span *ngIf="accordionStep != index">
             <mat-icon>unfold_more</mat-icon>
           </span>
-          <h4>
-            <div class="sub-title">{{subGroup?.name}}</div>
-          </h4>
+          <div class="sub-title">{{subGroup?.name}}</div>
+          <!-- <h4>
+          </h4> -->
       </mat-panel-title>
 
       <mat-panel-description class="mat-panel-description">
@@ -18,13 +18,12 @@
         <div class="flex-grid-column">
           <div  *ngIf="accordionStep === index" class="panel-description" [innerHTML]="subGroup?.instructions"></div>
 
-          <!-- item{{subGroup?.maxQuantity > 1 ? 's' : ''}}. -->
-          <div   class="panel-description font-1-2em font-bold"  *ngIf="accordionStep === index && subGroup.minQuantity && subGroup.minQuantity> 0">
+          <div   class="panel-description font-bold"  *ngIf="accordionStep === index && subGroup.minQuantity && subGroup.minQuantity> 0">
              Select at least  {{subGroup?.minQuantity}} item{{subGroup?.maxQuantity > 1 ? 's' : ''}}.
             <span *ngIf="subGroup.maxQuantity && subGroup.maxQuantity> 1"> {{subGroup?.maxQuantity}} max.  </span>
           </div>
 
-          <div  class="panel-description font-1-2em font-bold" class="margin-left-20px" class="margin-left-20px" *ngIf="accordionStep === index &&
+          <div  class="panel-description  font-bold" class="margin-left-20px" class="margin-left-20px" *ngIf="accordionStep === index &&
             subGroup.minQuantity && subGroup.minQuantity == 0 && subGroup.maxQuantity && subGroup.maxQuantity> 0">
             Select up to  {{subGroup?.maxQuantity}} item{{subGroup?.maxQuantity > 1 ? 's' : ''}}.
           </div>

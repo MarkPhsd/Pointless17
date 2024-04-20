@@ -267,6 +267,7 @@ export class ItemsMainComponent implements OnInit {
       }
       this.columnDefs.push(item);
     this.columnDefs.push(this.getValueField('serialCode','serial',  125, false, false, false),);
+    this.columnDefs.push(this.getValueField('unitName','UOM',  125, false, false, false),);
 
     this.columnDefs.push(this.getValueField('quantity','Quantity',  125, false, false, false),);
     this.columnDefs.push(this.getValueField('unitPrice', 'Price',  125, false, false, true),);

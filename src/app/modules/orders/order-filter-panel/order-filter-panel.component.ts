@@ -36,6 +36,8 @@ const { Keyboard } = Plugins;
 })
 export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewInit {
 
+  @Input() disableFilterUpdate : boolean;
+
   @ViewChild('selectorDiv') selectorDiv: ElementRef;
   @ViewChild('selectorEmpDiv') selectorEmpDiv: ElementRef;
   @ViewChild('toggleGroup') toggleGroup: ElementRef
@@ -279,6 +281,9 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   )
   {
 
+    console.log('this.disableFilterUpdate', this.disableFilterUpdate)
+    if (this.disableFilterUpdate) { return }
+
     this.initSubscriptions();
     if ( this.terminalSetting) {
       if (this.terminalSetting.resetOrdersFilter) {
@@ -294,10 +299,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     }
     this.initAuthSubscriber();
     this.initAuthorization();
-    this.initCompletionDateForm();
-    this.initScheduledDateForm();
-    this.initForm();
-    this.getSelectorDiv();
+
     if (!this.isAuthorized) {
       this.serviceTypes$   = this.serviceTypes.getSaleTypes(site).pipe(switchMap(data => {
         this.serviceTypes.list = data;
@@ -311,18 +313,28 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
         return of(data)
       }))
     }
-
-    this.refreshSearch();
-    this.updateItemsPerPage();
-    this.subscribeToScheduledDatePicker();
-
     if (this.selectorEmpDiv) {
       this.selectorEmpDiv.nativeElement.style.maxHeight  = '275px';
     }
     if (this.selectorDiv) {
       this.selectorDiv.nativeElement.style.maxHeight = '275px';
     }
+
+    if (this.disableFilterUpdate) { return }
+
+    this.initSearchFilter();
   }
+
+  initSearchFilter() {
+    this.initCompletionDateForm();
+    this.initScheduledDateForm();
+    this.initForm();
+    this.getSelectorDiv();
+    this.refreshSearch();
+    this.updateItemsPerPage();
+    this.subscribeToScheduledDatePicker();
+  }
+
   changeToggleTypeEmployee() {
     this.getSelectorDiv()
   }
@@ -411,6 +423,9 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   resetSearch() {
+    this.initSearchFilter();
+    this.initSubscriptions();
+    this.disableFilterUpdate = false
     this.searchModel = {} as IPOSOrderSearchModel;
     this.initCompletionDateForm();
     this.initScheduledDateForm();

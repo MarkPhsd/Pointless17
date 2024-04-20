@@ -106,12 +106,14 @@ export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
     let formattedDate = this.dateHelper.format(date, 'medium').toString()
     console.log('medium', formattedDate)
     console.log('mmddyyyy', this.dateHelper.format(date, 'MM/dd/yyyy').toString())
-    //gets the selected date
-    // const closeDate = this.dateHelper.format(event, 'medium')
-    // this.action$ =  this.transferData.closeByDate(site, event, event).pipe(switchMap(data => {
-    //   this.sitesService.notify('Date has been archived', 'Close', 5000, 'green')
-    //   return of(data  )
-    // }))
+    // gets the selected date
+    const closeDate = this.dateHelper.format(date, 'MM/dd/yyyy').toString()
+    console.log('close data', closeDate)
+    this.action$ =  this.transferData.closeByDate(site, closeDate, closeDate).pipe(switchMap(data => {
+      this.sitesService.notify('Date has been archived', 'Close', 5000, 'green')
+      this.processingVisible = false
+      return of(data  )
+    }))
   }
 
   updateSchemArray() {

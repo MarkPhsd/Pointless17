@@ -129,7 +129,8 @@
           [closeDayValidation]="closing">
         </close-day-validation>
       </div>
-      <div>
+      <!-- disableDiscrepancy {{uiTransactions?.disableDiscrepancy}} -->
+      <div *ngIf="!uiTransactions?.disableDiscrepancy">
           <ng-container [ngTemplateOutlet]="paymentDiscrepancy"></ng-container>
       </div>
     </div>

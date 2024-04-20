@@ -1,6 +1,6 @@
 <div *ngIf="isApp && order">
 
-    <button 
+    <button
             [disabled]="!isAuthorizedPayment"
             [ngClass]="themeClass"
             class="buttons payment-buttons"
@@ -9,7 +9,8 @@
 
      <ng-content></ng-content>
       <span *ngIf="paymentAmount != 0">
-              {{paymentAmount | currency}}</span>
+          {{paymentAmount | currency}}
+      </span>
     </button>
 </div>
 

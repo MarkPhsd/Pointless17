@@ -1,25 +1,21 @@
-import { Component, Input, OnInit, OnDestroy, Output,EventEmitter, ElementRef, ViewChild, TemplateRef} from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output,EventEmitter, ViewChild, TemplateRef} from '@angular/core';
 import { IMenuItem, menuButtonJSON }  from 'src/app/_interfaces/menu/menu-products';
 import { AWSBucketService, AuthenticationService, MenuService, OrdersService } from 'src/app/_services';
 import { ActivatedRoute, Router,  } from '@angular/router';
-import * as _  from "lodash";
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
-import { Observable, Subscription, of, switchMap,concatMap } from 'rxjs';
+import { Observable, Subscription,  switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Capacitor } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { UIHomePageSettings} from 'src/app/_services/system/settings/uisettings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 // https://stackoverflow.com/questions/54687522/best-practice-in-angular-material-to-reuse-component-in-dialog
 export interface DialogData {
   id: string;
 }
-
 @Component({
   selector: 'app-menu-item-card',
   templateUrl:  './menu-item-card.component.html',
@@ -28,14 +24,23 @@ export interface DialogData {
 })
 export class MenuItemCardComponent implements OnInit, OnDestroy {
 
+  @ViewChild('menuItemView')  menuItemView :  TemplateRef<any> | undefined;
+  @ViewChild('seeMoreInCategory')  seeMoreInCategory :  TemplateRef<any> | undefined;
+  @ViewChild('price') price :  TemplateRef<any> | undefined;
+
   @ViewChild('loadMoreButton')  loadMoreButton :  TemplateRef<any> | undefined;
   @ViewChild('editItemView') editItemView :  TemplateRef<any> | undefined;
   @ViewChild('buyItemView') buyItemView :  TemplateRef<any> | undefined;
   @ViewChild('viewItemView') viewItemView: TemplateRef<any> | undefined;
 
+  @ViewChild('browserView') browserView :  TemplateRef<any> | undefined;
+  @ViewChild('appView')     appView: TemplateRef<any> | undefined;
+
+
   @Output() outPutLoadMore = new EventEmitter()
   @Output() outPutUpdateCategory = new EventEmitter();
   @Output() addItem = new EventEmitter();
+  @Input() smallDevice: boolean;
   @Input() allowBuy  : boolean;
   @Input() allowEdit : boolean;
   @Input() id        : number;
@@ -48,11 +53,17 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   @Input() isStaff: boolean;
   @Input() uiHomePage        : UIHomePageSettings;
   @Input() categoryIDSelected: number;
+  @Input() disableEdit: boolean;
+  @Input() disableImages: boolean;
+
+  ///for use with prompts
+  @Input() styleMatCard = ''
+
   //display type is for the department, top values for grocery
   @Input() displayType      : string ='product';
   @Input() buySell: boolean;
   @Input() promptModifier: boolean;
-  containerclass: string = 'container';
+  containerclass: string = this.containerclassValue;
 
   @Output() outputRefresh = new EventEmitter()
   placeHolderImage   : String = "assets/images/placeholderimage.png"
@@ -66,24 +77,92 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   isApp     = false;
   isProduct : boolean;
   matCardClass = 'mat-card-grid'
-  uiSettings$: Observable<any>;
-  uiSettings: TransactionUISettings;
+  // uiSettings$: Observable<any>;
+  // uiSettings: TransactionUISettings;
   noImage: boolean;
 
+  imageContainerClass = 'image-container';
 
-  getPlatForm() {  return Capacitor.getPlatform(); }
+  // descriptText = this.descriptTextClass
+  // headercontainer = this.headercontainerClass
+
+  get priceView() {
+    if (this.isProduct) {
+      return this.price
+    }
+    return null;
+  }
+  get menuItemDisplay() {
+    if (this.menuItem) {
+      return this.menuItemView
+    }
+    return null;
+  }
+
+  get seeMoreInCategoryView() {
+    if (this.isCategory  && this.displayType != 'header-category') {
+      return this.seeMoreInCategory
+    }
+    return null;
+  }
+  get imageContainer() {
+
+    if (this.isApp) {
+      return 'image-container container-app'
+    }
+    return 'image-container container-mobile'
+
+  }
+  get containerclassValue () {
+    // return 'container'
+
+    if (this.disableImages) {
+      return 'container container-app-noimage'
+    }
+
+    if (this.isApp) {
+      return 'container container-app'
+    }
+
+    return 'container container-mobile'
+  }
+
+  get buttonView() {
+    // return 'container'
+    if (this.isApp) {
+      return this.appView
+    }
+    return  this.browserView
+  }
+
+  // get headercontainerClass() {
+  //   if (this.isApp) {
+  //     return 'header-container header-container-app'
+  //   }
+  //   return 'header-container header-container-mobile'
+  // }
+
+
+  // get descriptTextClass() {
+  //   if (this.isApp) {
+  //     return 'description-text description-text-app'
+  //   }
+  //   return 'description-text description-text-mobile'
+  // }
+
+
 
   constructor(
     private awsBucket: AWSBucketService,
     public  route: ActivatedRoute,
     private orderService: OrdersService,
-    private _snackBar: MatSnackBar,
+    // private _snackBar: MatSnackBar,
     private orderMethodsService: OrderMethodsService,
     public  platFormService   : PlatformService,
     private menuService: MenuService,
     public  authenticationService: AuthenticationService,
     private productEditButtonService: ProductEditButtonService,
-    private uiSettingsService: UISettingsService,
+    // private uiSettingsService: UISettingsService,
     private siteService : SitesService,
     private router: Router,
     )
@@ -91,7 +170,8 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     this.isApp    = this.platFormService.isApp()
   }
 
- ngOnInit() {
+  ngOnInit() {
+    this.imageContainerClass = this.imageContainer
     this.initSubscriptions();
     if (!this.menuItem) {return }
     this.isProduct = this.getIsNonProduct(this.menuItem)
@@ -101,11 +181,9 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     }
     this.getMenuItemObject(this.menuItem)
     this.initLayout();
-    this.uiSettings$ = this.uiSettingsService.transactionUISettings$.pipe(data => {
-      return of(data)
-    })
-
-    // this.
+    // this.uiSettings$ = this.uiSettingsService.transactionUISettings$.pipe(data => {
+    //   return of(data)
+    // })
   };
 
   get isImageButtonView() {
@@ -117,7 +195,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   initLayout() {
     if (this.displayType === 'header-category') {
-      this.containerclass = 'header-container'
+      this.containerclass =  'header-container'
     }
   }
 
@@ -133,6 +211,13 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       const box = ''
       this.buttonColor = `background-color: #e1f5fe`
     }
+
+    if (this.buttonColor) {
+      this.buttonColor = this.buttonColor + ';' + this.styleMatCard
+    } else {
+      this.buttonColor = this.styleMatCard
+    }
+
   }
 
   get isDiscountItem() {
@@ -164,6 +249,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   get enableEditItem() {
+    if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
     if (this.authenticationService.isAdmin || this.allowEdit) {
       if (this.menuItem.id > 0) {
         return this.editItemView
@@ -188,6 +274,8 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   get enableViewItem() {
+    if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
+
     if (this.isApp && this.authenticationService.isAdmin || this.allowEdit && this.isApp) {
       if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
         return this.viewItemView
@@ -204,7 +292,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   get enableAddItemView() {
-
+    if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
     if (!this.isStaff) {
       if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
         return this.viewItemView
@@ -421,10 +509,11 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   notifyEvent(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2000,
-      verticalPosition: 'top'
-    });
+    this.siteService.notify(message, action, 5000, 'green')
+    // this.this.s.open(message, action, {
+    //   duration: 2000,
+    //   verticalPosition: 'top'
+    // });
   }
 
 }
