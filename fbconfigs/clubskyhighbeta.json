@@ -1,7 +1,8 @@
+
 {
-  "apiUrl": "https://coconutsbar.ddns.net:4443/api",
+  "apiUrl": "https://clubskyhigh.ddns.net/api",
   "useAppGate" : false,
   "appGateMessage": "Are you over 21? If so press yes to continue.",
   "company": "Pointless POS",
-  "logo"   : "https://pointlesspos.com/temp/logo.png"
+  "logo"   : "https://cafecartel.com/temp/logo.png"
 }

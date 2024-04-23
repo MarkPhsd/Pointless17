@@ -23,6 +23,7 @@ export class CacheSettingsComponent implements OnInit {
   cacheSizeCurrent  : string;
   cacheTimeSetting$ : Observable<ISetting>;
   cacheSize : number;
+  debugMode : boolean;
 
   constructor(
               private settingsService:   SettingsService,
@@ -38,11 +39,17 @@ export class CacheSettingsComponent implements OnInit {
     this.cacheSizeCurrent = this.systemService.getUsedLocalStorageSpace()
     const item = this.cacheSizeCurrent.replace('KB', '');
     this.cacheSize        = +item
+    this.debugMode = this.getdebugOnThisDevice()
+  }
+
+  getdebugOnThisDevice() {
+    const value =  localStorage.getItem('debugOnThisDevice')
+    if (value === 'true') { return true }
+    return false;
   }
 
   initCacheTime(){
     const site        = this.sitesService.getAssignedSite();
-
     this.cacheTimeSetting$ =  this.settingsService.initCacheTimeObs(site).pipe(switchMap(data => {
       this.cacheTimeSetting = data;
       if (this.cacheTimeSetting ) {
@@ -83,5 +90,11 @@ export class CacheSettingsComponent implements OnInit {
   clearCacheTime() {
 
   }
-
+  updateDebugMode() {
+    if (this.debugMode) {
+      localStorage.setItem('debugOnThisDevice', 'true')
+    } else {
+      localStorage.remove('debugOnThisDevice')
+    }
+  }
 }

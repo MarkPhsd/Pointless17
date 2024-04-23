@@ -549,6 +549,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     if (!user) { return of(null)}
     const site = this.siteService.getAssignedSite()
     return this.clientService.getClient(site, user.id, true).pipe(switchMap(data => {
+      const user = JSON.parse(localStorage.getItem('user')) as IUser
+      if (user) {
+        this.user = user;
+        console.log('user exists')
+        return of(user)
+      }
+
       if (!data) {
         console.log('no user')
         this.user = null;
@@ -556,10 +563,15 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       }
       return of(data)
     }),catchError(data =>{
-      console.log('error')
+
+      const user = JSON.parse(localStorage.getItem('user')) as IUser
+      if (user) {
+        this.user = user;
+        console.log('user exists')
+        return of (user)
+      }
       this.authenticationService.updateUser(null)
       this.logout()
-      // console.log('error getting user', data, user)
       return of(null)
     }))
   }
@@ -601,20 +613,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       if (!this.user) {
         return of(null)
       }
-
-      // console.log('is user valid', data.id == user.id, data.apiUserName , user.username);
       if ( data.id == user.id) {
-        // console.log('User names match');
       } else {
-        // console.log('clear user logged')
         this.userSwitchingService.clearLoggedInUser()
-        // console.log('User names match');
       }
       return of(data)
-    // }),catchError(data => {
-      console.log('clear user logged')
-      this.userSwitchingService.clearLoggedInUser()
-      return of(data)
+
     }));
   }
 

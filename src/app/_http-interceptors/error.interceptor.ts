@@ -45,7 +45,6 @@ export class ErrorInterceptor implements HttpInterceptor {
 
             if (err.status === 400) {
               if (this.getdebugOnThisDevice()) {
-
                 this.notifyEvent(errorMessage, 'Close.' );
               }
               // console.log(errorMessage)

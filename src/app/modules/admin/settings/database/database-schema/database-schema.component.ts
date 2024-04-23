@@ -69,16 +69,16 @@ export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
 
   updateSchema() {
     this.processingVisible = true
-    try {
-      const site = this.sitesService.getAssignedSite();
-      this.schema$ = this.systemService.getSyncDatabaseSchema(site)
-      this.schema$.subscribe(data=> {
+    const site = this.sitesService.getAssignedSite();
+    const user = JSON.parse(localStorage.getItem('user'))
+    console.log('user', user)
+    this.schema$ = this.systemService.getSyncDatabaseSchema(site).pipe(switchMap(data =>
+      {
         this.schema = data
         this.processingVisible   =  false
-      })
-    } catch (error) {
-      console.log(error)
-    }
+        return of(data)
+      }
+    ))
   }
 
   cleanData() {

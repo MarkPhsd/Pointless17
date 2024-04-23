@@ -17,7 +17,7 @@ import { Observable, of, switchMap } from 'rxjs';
 })
 export class CloseDayValidationComponent implements OnInit {
 
-  @Input()   closeDayValidation: ICanCloseOrder;
+  @Input() closeDayValidation: ICanCloseOrder;
   action$: Observable<any>;
   actionOn: boolean;
   @Output() refreshCloseCheck = new EventEmitter();

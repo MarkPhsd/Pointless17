@@ -240,9 +240,9 @@ export class UserSwitchingService implements  OnDestroy {
     let balanceSheet$ = updateAuth$.pipe(
       concatMap(user => {
 
-        console.log(user?.errorMessage == null)
+        // console.log(user?.errorMessage == null)
         if (user && user?.errorMessage !== null) {
-          console.log('Update Auths:', user);
+          // console.log('Update Auths:', user);
           return of(this.userAutFailed(user));
         }
 
@@ -256,7 +256,7 @@ export class UserSwitchingService implements  OnDestroy {
     let result$ = balanceSheet$.pipe(
       concatMap(data => {
         if (!data || data.message === 'failed') {
-          console.log('Final Data Check Failed:', data);
+          // console.log('Final Data Check Failed:', data);
           return of(this.userAutFailed(data));
         }
         return of(data);

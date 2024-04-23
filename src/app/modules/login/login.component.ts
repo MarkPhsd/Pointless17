@@ -455,7 +455,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.errorMessage = ''
     this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(concatMap(result =>
         {
-          console.log('result', result)
+          // console.log('result', result)
           // if (!result || (result && result?.errorMessage && (result?.errorMessage != null && result?.errorMessage != undefined) )) {
           //   this.notifyEvent('Message:' + result?.errorMessage, 'Failed Login');
           //   this.clearUserSettings()

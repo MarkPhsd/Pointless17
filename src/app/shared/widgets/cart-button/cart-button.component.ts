@@ -75,7 +75,14 @@ export class CartButtonComponent implements OnInit, OnDestroy {
       switchMap(user => {
       this.user = user;
       this.isStaff = false;
-      this.isUser = false
+      this.isUser = false;
+
+      if (!user) {
+        const user = JSON.parse(localStorage.getItem('user')) as IUser;
+        if (user) {
+          this.user = user;
+        }
+      }
       if (user) {
         if (user?.roles == 'admin' || user?.roles == 'manager' || user?.roles == 'employee') {
           this.isStaff      = true

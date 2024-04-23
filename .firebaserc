@@ -26,11 +26,17 @@
         "clubskyhigh": [
           "clubskyhigh"
         ],
+        "clubskyhighbeta": [
+          "clubskyhighbeta"
+        ],
         "emergencyroom": [
           "emergencyroom"
         ],
         "pointlesspos": [
           "pointlesspos"
+        ],
+        "pointlessposdemo": [
+          "pointlessposdemo"
         ],
         "liquorpointofsale": [
           "liquorpointofsale"

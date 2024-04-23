@@ -139,6 +139,21 @@
     ]
   },
   {
+    "target": "clubskyhighbeta",
+    "public": "dist/CCSApp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  {
     "target": "emergencyroom",
     "public": "dist/CCSApp",
     "ignore": [
@@ -155,6 +170,21 @@
   },
   {
     "target": "pointlesspos",
+    "public": "dist/CCSApp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  {
+    "target": "pointlessposdemo",
     "public": "dist/CCSApp",
     "ignore": [
       "firebase.json",

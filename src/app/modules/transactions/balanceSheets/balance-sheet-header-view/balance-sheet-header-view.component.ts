@@ -50,7 +50,7 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
 
     this._sheet = this.balanceSheetMethodsService.balanceSheet$.subscribe(data => {
       this.sheet = data;
-      console.log('sheet updated',data?.id, data?.balanceSheetEmployee?.lastName)
+      // console.log('sheet updated',data?.id, data?.balanceSheetEmployee?.lastName)
     })
   }
 

@@ -206,7 +206,7 @@ export class BalanceSheetMethodsService {
       const site = this.sitesService.getAssignedSite();
       return  this.sheetService.closeShift(site, sheet).pipe(
         switchMap( data => {
-          console.log('close sheet', data.balanceSheetEmployee.lastName)
+          // console.log('close sheet', data?.balanceSheetEmployee?.lastName)
           this.updateBalanceSheet(data)
           if (navigateUrl) {
             this.router.navigateByUrl(navigateUrl)
@@ -337,7 +337,7 @@ export class BalanceSheetMethodsService {
 
     //then if is app
     if (!deviceName) {
-      this.siteService.notify('Please start a balance sheet. This message will appear until one is started.', 'close', 2000, 'yellow')
+      this.siteService.notify('No device is assigned. Notify manager.', 'close', 2000, 'yellow')
       // console.log('returning no balance sheet observable, opening drawer');
       this.openDrawerOne()
       return of(null)
@@ -358,9 +358,9 @@ export class BalanceSheetMethodsService {
           return of(data)
         }
       ), catchError(data => {
-      this.siteService.notify('Balance sheet was not defined', 'close', 2000, 'yellow')
-      return of(null)
-    }))
+        this.siteService.notify('Balance sheet was not defined', 'close', 2000, 'yellow')
+        return of(null)
+      }))
     return item$;
   }
 

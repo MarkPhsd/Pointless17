@@ -246,7 +246,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       // console.log('open change', ((payment.amountReceived >= payment.amountPaid && order.completionDate) || order.balanceRemaining == 0))
       if (paymentMethod.isCash) {
         if (this.platFormService.isApp()) {
-          this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet()
+          this.balanceSheetMethodsSevice.openDrawerFromBalanceSheet().subscribe(data => {
+            console.log('')
+          })
         }
       }
 

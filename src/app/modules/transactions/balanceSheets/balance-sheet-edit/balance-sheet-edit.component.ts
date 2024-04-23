@@ -258,7 +258,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   applyDropPOST(amount) {
     this.initDepositForms();
     const site = this.siteService.getAssignedSite()
-    const deposit$ = this.sheetService.postDrop(site, this.sheet.id, amount);
+    const deposit$ = this.sheetService.postDrop(site, this.sheet?.id, amount);
 
     this.deposit$ = deposit$.pipe(switchMap(data => {
       this.sheet = data;

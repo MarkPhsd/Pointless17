@@ -526,7 +526,7 @@ export class UISettingsService {
     return this.getPOSDeviceSettings(deviceName).pipe(
       switchMap(data => {
 
-        if (data.text) {
+        if (data && data?.text) {
           try {
             const posDevice = JSON.parse(data?.text) as ITerminalSettings;
             return of(posDevice)

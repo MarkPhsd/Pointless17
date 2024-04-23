@@ -17,7 +17,6 @@
           </mat-slide-toggle>
       </div>
 
-
       <div class="fields">
         <mat-form-field  appearance="outline" class="example-form-field">
           <mat-label>Cache Time</mat-label>
@@ -31,19 +30,18 @@
         </mat-form-field>
       </div>
 
-      <div class="fields">
-        <!-- using webenabled as field until app cache converted to json -->
-        <mat-slide-toggle
-                  [(ngModel)] ="cacheTimeSetting.webEnabled"
-                  formControlName="webEnabled"
-                  (change)="updateCacheTime()">
-        <mat-label>Debug Mode</mat-label>
-        </mat-slide-toggle>
-    </div>
+
 
     </div>
   </div>
-
+  <div class="fields">
+    <!-- using webenabled as field until app cache converted to json -->
+    <mat-slide-toggle
+              [(ngModel)] ="debugMode"
+              (change)="updateDebugMode()">
+    <mat-label>Debug Mode</mat-label>
+    </mat-slide-toggle>
+  </div>
   <div>
     <div class="fields">
       <!-- Estimated cache size: {{ cacheSizeCurrent  }} -->
