@@ -50,7 +50,7 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
   ngOnInit(): void {
     const i  =0
     this.getLast30DayRatio();
-    this.clientType$ = this.getClientType();
+    // this.clientType$ = this.getClientType();
   }
 
   getLast30DayRatio() {
@@ -58,16 +58,13 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
       this.order.clients_POSOrders &&
       this.order.clients_POSOrders.client_Type &&
        ( this.order.clients_POSOrders.client_Type.name.toLowerCase() === 'patient' ||
-         this.order.clients_POSOrders.client_Type.name.toLowerCase() === 'caregiver'
-        )
-      ) {
+         this.order.clients_POSOrders.client_Type.name.toLowerCase() === 'caregiver' )
+       ) {
        const customLimit = this.order.clients_POSOrders.medGramLimit;
        const standardLimit = this.order.clients_POSOrders.client_Type.limitGram;
        let currentLimit: number;
        currentLimit = standardLimit
-       if (!customLimit || customLimit == 0) {
-        currentLimit = customLimit
-       }
+       if (!customLimit || customLimit == 0) { currentLimit = customLimit }
        const site = this.siteService.getAssignedSite()
        this.last30Days$ = this.contactService.last30DayValues(site, this.order.clientID).pipe(
         switchMap(data => {
@@ -80,31 +77,28 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
   }
 
   ngOnChanges() {
-    this.clientType$ = this.getClientType();
+    this.clientType$ = this.getClientType()
   }
 
   getClientType() {
-
     const site = this.siteService.getAssignedSite();
     if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.client_Type) {
       return of(this.order.clients_POSOrders.client_Type).pipe(switchMap(data => {
         this.clientType = data;
         this.refreshLimitProgress(this.order);
         return of(data)
-      }))
+      }));
     }
 
-    // if (this.)
+    if (this.clientType?.name === 'Consumer') {
+      return of(this.clientType);
+    }
+
     return this.clientTypeService.getClientTypeByNameCached(site, 'Consumer').pipe(switchMap(data => {
       this.clientType = data;
       this.refreshLimitProgress(this.order);
-      return of(data)
-    }))
-
-    if (this.clientType) {
-      return of(this.clientType)
-    }
-
+      return of(data);
+    }));
   }
 
   validateType(order:IPOSOrder): clientType {

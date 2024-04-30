@@ -271,6 +271,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         return of(data)
       }))
+      
     }
   }
 

@@ -15,6 +15,7 @@ import { IPaymentMethod } from './payment-methods.service';
 export class POSPaymentService {
 
 
+
   private _searchModel          = new BehaviorSubject<IPaymentSearchModel>(null);
   public searchModel$           = this._searchModel.asObservable();
 
@@ -47,6 +48,21 @@ export class POSPaymentService {
   {
 
   }
+
+  getCreditTipTotals(site: ISite, id: number): Observable<number> {
+    
+    const controller = "/POSPayments/";
+
+    const endPoint = "getCreditTipTotals";
+
+    const parameters = `?reportID=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>( url )
+
+  }
+
   processDCAPPreAuthResponse(site: ISite, paymentID: number, response, deviceName): Observable<IPaymentResponse> {
 
     const controller = "/POSPayments/";

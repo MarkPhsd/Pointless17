@@ -371,10 +371,17 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     }
     return of(null)
   }
+
   get dcapbatchClose() {
     if (this.uiTransactions?.dCapEnabled) {
       const device = localStorage.getItem('devicename')
-      return this.dcapService.batchClose(device)
+      return this.dcapService.batchClose(device).pipe(concatMap(data => { 
+          if (data) { 
+            this.siteService.notify('Batch', 'close', 3000)
+          }
+          return of(data)
+        })
+      );
     }
     return of(null)
   }
@@ -431,7 +438,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
         dcapBatch$.pipe(concatMap(data => {
           return  email$
       })).pipe(concatMap(data => {
-        return closingCheck$
+          return closingCheck$
         }
       )).pipe(concatMap( data => {
           if (!data || (data && !data.allowClose)){

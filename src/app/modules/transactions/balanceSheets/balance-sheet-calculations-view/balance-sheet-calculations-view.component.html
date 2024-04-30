@@ -24,7 +24,11 @@
   <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet?.creditIn ?? 0 | currency}} </div>
   <div *ngIf="!auths?.balanceSheetDisableBank  && !auths?.blindBalanceSheet">Remaing In Drawer </div>
   <div *ngIf="!auths?.balanceSheetDisableBank  && !auths?.blindBalanceSheet" class="calculation"> {{ sheet?.endedWith ?? 0 | currency}} </div>
-
+  <div *ngIf="!auths?.blindBalanceSheet">Deposit - Tips</div>
+  <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{cashDepositCalc ?? 0 | currency}} </div>
+ 
+  <!--    
+       -->
   <div class="item-span cashdrop-border" *ngIf="drops && !auths.balanceSheetDisableCashDrops">
     <div class="title">Cash Drops</div>
 

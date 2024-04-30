@@ -105,6 +105,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
       if (!data) { return}
       this.requireEnter = data.requireEnterTabBarcodeLookup;
       this.transactionUISettings = data;
+      this.initUISettings(data);
     })
   }
 
@@ -120,28 +121,38 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   {   }
 
   ngOnInit() {
-    const site = this.siteService.getAssignedSite()
     this.initForm();
     this.initSubscriptions();
     if (this.searchForm)  {
-      try {
-        this.settingService.getSettingByName(site, 'UITransactionSetting').subscribe( data => {
-
-          if (data && data.text) {
-              this.transactionUISettings =  JSON.parse(data.text) as  TransactionUISettings;
-              this.requireEnter = this.transactionUISettings.requireEnterTabBarcodeLookup;
-              if (!this.requireEnter) {   this.initSearchSubscription() }
-              this.hideKeyboardTimeOut();
-              if ( this.platForm != 'android') {return}
-              this.keyboardDisplayOn = true
-              if (this.platForm != 'android') {  }
-            }
-          }
-        )
-      } catch (error) {
-        console.log('search Items', error)
-      }
+      this.getUISettings()
     }
+  }
+
+  getUISettings() { 
+    try {
+      if (this.transactionUISettings) { 
+        this.initUISettings(this.transactionUISettings)
+      }
+      const site = this.siteService.getAssignedSite()
+      this.settingService.getSettingByName(site, 'UITransactionSetting').subscribe( data => {
+        if (data && data.text) {
+          this.transactionUISettings =  JSON.parse(data.text) as  TransactionUISettings;
+          this.initUISettings(this.transactionUISettings)
+          }
+        }
+      )
+    } catch (error) {
+      console.log('search Items', error)
+    }
+  }
+
+  initUISettings(ui: TransactionUISettings) { 
+    this.requireEnter = ui?.requireEnterTabBarcodeLookup;
+    if (!this.requireEnter) {   this.initSearchSubscription() }
+    this.hideKeyboardTimeOut();
+    if ( this.platForm != 'android') {return}
+    this.keyboardDisplayOn = true
+    if (this.platForm != 'android') {  }
   }
 
   ngOnDestroy(): void {
@@ -221,13 +232,9 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
   addItemToOrder(barcode: string): Observable<unknown> {
-
     this.initForm()
-
     const order$ = this.addNewOrder()
-
     const newItem$ =  this.orderMethodService.addItemToOrderFromBarcode(barcode, this.input, this.assignedItem)
-
     return order$.pipe(switchMap(data => {
       return  newItem$
     }))

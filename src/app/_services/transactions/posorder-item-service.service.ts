@@ -362,7 +362,7 @@ export class POSOrderItemService {
 
     if (newItem.productPrice) { newItem.price = newItem.productPrice}
 
-    console.log('new Item', newItem )
+    // console.log('new Item', newItem )
     const controller = "/POSOrderItems/"
 
     const endPoint  = "PostUniqueBarcodeItem"
@@ -371,7 +371,7 @@ export class POSOrderItemService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    console.log('url', url, newItem)
+    // console.log('url', url, newItem)
     return this.http.post<ItemPostResults>(url, newItem );
 
   }

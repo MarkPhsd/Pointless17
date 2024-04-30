@@ -79,10 +79,10 @@
         </div>
 
         <div  (resized)="onResizedorderSpecialsPanel($event)" >
-          <pos-order-price-schedule-info
-            (outPutDiscount)="applyDiscount($event)">
-          </pos-order-price-schedule-info>
-          <app-rewards-availible></app-rewards-availible>
+         
+
+          <ng-container [ngTemplateOutlet]="rewardsView"></ng-container>
+
         </div>
 
       </div>
@@ -709,6 +709,12 @@
   </mat-card>
 </ng-template>
 
+<ng-template #rewardsTemplate>
+  <pos-order-price-schedule-info
+    (outPutDiscount)="applyDiscount($event)">
+  </pos-order-price-schedule-info>
+  <app-rewards-availible></app-rewards-availible>
+</ng-template>
 <!-- margin  %. Add items by the case ( you don't have to open boxes or cases to scan the actual item or try to remember how many come in each box)
 Be able to see the actual inventory so I can check the inventory at the same time that I add items. -->
 <!--

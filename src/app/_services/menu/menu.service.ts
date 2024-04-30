@@ -792,6 +792,7 @@ export class MenuService {
    //for customer menu
    getMenuItemsBySearchPaged(site: ISite, productSearchModel: ProductSearchModel): Observable<IMenuItemsResultsPaged> {
 
+    productSearchModel.pageSize = 15;
     const controller =  "/MenuItems/"
 
     const endPoint = "GetMenuItemsBySearchPaged"
@@ -815,7 +816,7 @@ export class MenuService {
         let uri = {} as HttpOptions
         uri.cacheMins = +appCache.value;
         uri.url = url;
-        productSearchModel.pageSize = 50;
+        // productSearchModel.pageSize = 50;
         return this.httpCache.post<any>(uri, productSearchModel)
       }
     }

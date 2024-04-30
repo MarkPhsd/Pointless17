@@ -11,6 +11,7 @@ import { AuthenticationService } from '..';
 export class TransferDataService {
 
 
+
   constructor( private http: HttpClient,
                private auth: AuthenticationService) { }
 
@@ -23,6 +24,19 @@ export class TransferDataService {
     const endPoint = `deleteDuplicates`
 
     const parameters = `?zrunID=${zrunID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>(url);
+  }
+
+
+  applyNewZRUNID(site: ISite) {
+    const controller =  "/BalanceSheets/"
+
+    const endPoint = `ApplyNewZRUNID`
+
+    const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -61,7 +75,7 @@ export class TransferDataService {
 
     const controller =  "/TransferData/"
 
-    const endPoint = `canCloseDay`
+    const endPoint = `CanCloseDay`
 
     const parameters = ``
 

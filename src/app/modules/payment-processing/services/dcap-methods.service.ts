@@ -21,7 +21,7 @@ export class DcapMethodsService {
     private orderMethodService: OrderMethodsService,
   ) { }
 
- 
+
 
   readResult(cmdResponse: DcapRStream) {
     // console.log('readresult', cmdResponse?.TextResponse, cmdResponse)
@@ -32,9 +32,9 @@ export class DcapMethodsService {
     success = false
     processing = false
 
-    const status = cmdResponse?.CmdStatus 
-    if (status ==   "Declined") { 
-      return {success :false , message: status, processing: processing, resultMessage: status};
+    const status = cmdResponse?.CmdStatus
+    if (status ==   "Declined") {
+      return {success : false , message: status, processing: processing, resultMessage: status};
     }
     const response = cmdResponse?.TextResponse.toLowerCase();
     if (response === 'approved'.toLowerCase() || response === 'AP*'.toLowerCase() ||

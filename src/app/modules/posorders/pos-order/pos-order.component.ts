@@ -75,7 +75,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('payButton')   payButton: TemplateRef<any>;
   @ViewChild('stripePayButton')   stripePayButton: TemplateRef<any>;
   @ViewChild('roundOrder') roundOrder : TemplateRef<any>;
-
+  @ViewChild('rewardsTemplate') rewardsTemplate : TemplateRef<any>;
   @ViewChild('reconcile') reconcile : TemplateRef<any>;
 
 
@@ -261,6 +261,13 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     return null;
   }
 
+  get rewardsView() {
+    if (this.uiTransactionSettings?.rewardsEnabled) {
+      return this.rewardsTemplate
+    }
+    return null
+  }
+
   get triPOSPaymentButtonView() {
     // console.log(this.devicename, this.uiTransactionSetting?.triposEnabled, this.order.balanceRemaining, this.order?.balanceRemaining != 0)
     if ( this.devicename &&
@@ -417,13 +424,16 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   currentOrderSusbcriber() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
-      this.order = data
+
+      if (this.order?.serviceTypeID != data?.serviceTypeID) {
+        this.order = data
+        this.initPurchaseOrderOption(this.order?.serviceTypeID);
+      } else { 
+        this.order = data
+      }
+ 
       this.canRemoveClient = true;
 
-      if (this.order) {
-        // console.log(this.order.id, this.order?.serviceTypeID, this.order?.service?.id);
-        this.initPurchaseOrderOption(this.order?.serviceTypeID);
-      }
       if (this.order && this.order.posOrderItems && this.order.posOrderItems.length > 0) {
         this.canRemoveClient = false
       }
@@ -489,17 +499,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   initPurchaseOrderOption(id: number) {
-    // console.log('data.filterType', id)
+    console.log('initPurchaseOrderOption', id)
     if (!id) { return }
     this.purchaseOrderEnabled = false
     if (this.userAuthorization.isManagement || this.userAuthorization.isAdmin) {
       const site = this.siteService.getAssignedSite()
 
-
-      this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
+      this.serviceType$ = this.serviceTypeService.getTypeCached (site,id).pipe(
         switchMap(data => {
-          // console.log(id, data)
-          // console.log('data.filterType', data.filterType)
           this.listView = false;
 
           if (data && data.filterType == null) {
@@ -507,12 +514,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
           }
 
           if (data  && data.filterType) {
-            if ( data?.filterType == 1  ||  data.filterType == -1 || data?.filterType == 2 || data?.filterType == 3 ) {
+            if ( data?.filterType == 1 ||  data.filterType == -1 || 
+                 data?.filterType == 2 || data?.filterType == 3 ) {
               this.purchaseOrderEnabled = true
               this.listView = true;
             }
           }
-
           return of(data)
         })
       )
@@ -769,6 +776,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   getDeviceInfo() {
     const devicename = localStorage.getItem('devicename')
     if (devicename && this.isApp) {
+      
+      if (!this.posDevice) { 
+        this.enableExitLabel = this.posDevice?.enableExitLabel;
+        return;
+      }
       this.posDevice$ = this.uiSettingsService.getPOSDeviceSettings(devicename).pipe(
         switchMap(data => {
           try {
@@ -1147,10 +1159,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.printingService.previewReceipt()
   }
 
-  sendOrderToCustomer() { 
-    
+  sendOrderToCustomer() {
+
     this.order.clients_POSOrders.id
-    
+
   }
 
   textNotify() {

@@ -113,7 +113,9 @@ export class SettingsService {
   getDeviceSettings(deviceName: string): Observable<ISetting> {
     const site = {} as ISite;
     site.url = this.apiUrl;
-    return this.getSettingByName(site, deviceName);
+
+    return this.getSettingByNameCached(site, deviceName)
+
   }
 
   isAPIOnline(): Observable<any> {
@@ -340,29 +342,6 @@ export class SettingsService {
 
   }
 
-  // getSettingByNameCached(site: ISite, name: String):  Observable<ISetting> {
-
-  //   if (!name) { return }
-  //   const user =  JSON.parse(localStorage.getItem('user')) as IUser
-  //   if (!user || !user.roles ||  !user.username ) {
-  //     return this.getSettingByNameNoRoles(site, name)
-  //   }
-
-  //   const controller = "/settings/"
-
-  //   const endPoint = 'getSettingByName';
-
-  //   const parameters = `?name=${name}`
-
-  //   const url = `${site.url}${controller}${endPoint}${parameters}`
-
-  //   const uri = { url: url, cacheMins: 120}
-
-  //   return this.httpCache.get<ISetting>(uri);
-
-  //   return this.http.get<ISetting>(url);
-
-  // }
 
   getSettingByNameNoRoles(site: ISite, name: String):  Observable<ISetting> {
 
@@ -545,21 +524,6 @@ export class SettingsService {
   putAppCachURI(url) {
 
   }
-
-
-  // getSettingBySetting(site: ISite, setting: ISetting):  Observable<ISetting> {
-
-  //   const controller = "/settings/"
-
-  //   const endPoint = 'getSettingBySetting';
-
-  //   const parameters = ``
-
-  //   const url = `${site.url}${controller}${endPoint}${parameters}`
-
-  //   return this.http.post<ISetting>(url, setting);
-
-  // }
 
   putSetting(site: ISite, id: number, setting : ISetting):  Observable<ISetting> {
 

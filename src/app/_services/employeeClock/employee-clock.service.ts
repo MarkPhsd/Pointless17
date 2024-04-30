@@ -32,7 +32,6 @@ export interface EmployeeClockSearchModel{
 })
 export class EmployeeClockService {
 
-
   public _searchModel       = new BehaviorSubject<EmployeeClockSearchModel>(null);
   public  searchModel$       = this._searchModel.asObservable();
 
@@ -161,6 +160,10 @@ export class EmployeeClockService {
   _isOnBreak(site, user, clock: EmployeeClock): employeeBreak {
 
     if (!clock) { return null; }
+
+    if (!clock.breaks) {
+      return null; // or true, based on your logic if an empty array should return true
+    }
 
     if (clock.breaks.length === 0) {
       return null; // or true, based on your logic if an empty array should return true

@@ -42,34 +42,9 @@
             <h4>Check Device</h4>
             <mat-spinner [diameter]="50"></mat-spinner>
           </div>
-          <!--<h4 *ngIf="tipValue">Tip Amount: {{tipValue | currency}}</h4>
-           <div class="grid-tip-buttons button-grid">
-            <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(15)">15 % Tip</button></div>
-            <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(18)">18 % Tip</button></div>
-            <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(20)">20 % Tip</button></div>
-            <div>
-
-              <app-key-pad
-                [inputForm]        ="inputForm"
-                [fieldName]        ="'itemName'"
-                [inputTypeValue]   ="'decimal'"
-                [numberbuttons]    ="'number-buttons button-sized-scaled'"
-                [alternateClass]   ="'grid-keypad-alternate'"
-                (outputOnChange)   ="applyTipAmount($event)">
-                Other Tip Amount
-              </app-key-pad>
-            </div>
-            <div><button class="payment-buttons" mat-raised-button (click)="addTipPercent(0)">No Tip</button></div>
-          </div> -->
         </mat-card>
 
         <div class="button-grid">
-
-          <!-- {{posPayment.tranType}} -->
-          <!-- <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
-            <button [disabled]="processing" color="primary" mat-raised-button (click)="completeAuthorization()">Complete Payment</button>
-          </div> -->
-
           <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
             <button [disabled]="processing" color="primary" mat-raised-button (click)="reverseAuthorization()">Reverse Authorization</button>
           </div>

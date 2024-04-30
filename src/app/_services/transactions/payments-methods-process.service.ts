@@ -193,7 +193,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       sendOrder$ = this.sendToPrep(order, true, ui)
         .pipe( concatMap ( data => {
           this.orderMethodsService.updateOrderSubscription(data)
-
           return of(data)
       }))
     }else {
@@ -823,16 +822,17 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     const site = this.sitesService.getAssignedSite();
     const validate = this.validateDCAPResponse( rStream, payment)
     if (!validate) {
+      console.log('validate', validate)
       return of(null)
     }
-
-    const payment$ =   this.paymentService.processDCAPResponse(site, payment.id, rStream, deviceName)
+    const payment$ =   this.paymentService.processDCAPResponse(site, payment?.id, rStream, deviceName)
     return  payment$.pipe(
       concatMap(data => {
-        console.log('response processed', data)
         return this.finalizeTransaction(data)
       }
-    ));
+    )).pipe(concatMap(data => {
+      return of (this.orderMethodsService.order)
+    }))
   }
 
   finalizeTransaction(paymentResponse: IPaymentResponse) : Observable<IPOSOrder> {
@@ -840,11 +840,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       this.notify('No order in payment response!', 'Alert', 10000)
       return (null)
     }
+
     this.orderMethodsService.updateOrderSubscription(paymentResponse?.order)
     return  this.finalizeOrderProcesses(paymentResponse?.order).pipe(concatMap(data => {
-      paymentResponse.order = data;
+      paymentResponse.order = paymentResponse?.order;
       console.log('finalizeOrderProcesses', data)
-      this.finalizeOrder(paymentResponse, paymentResponse?.payment?.paymentMethod, paymentResponse.order);
+      this.finalizeOrder(paymentResponse, paymentResponse?.payment?.paymentMethod, paymentResponse?.order);
       return of(data);
     }))
   }

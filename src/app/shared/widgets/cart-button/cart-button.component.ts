@@ -78,9 +78,10 @@ export class CartButtonComponent implements OnInit, OnDestroy {
       this.isUser = false;
 
       if (!user) {
-        const user = JSON.parse(localStorage.getItem('user')) as IUser;
-        if (user) {
-          this.user = user;
+        const stored = JSON.parse(localStorage.getItem('user')) as IUser;
+        if (stored) {
+          this.user = stored;
+          user = stored;
         }
       }
       if (user) {

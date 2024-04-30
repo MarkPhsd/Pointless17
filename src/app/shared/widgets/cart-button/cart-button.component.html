@@ -4,6 +4,9 @@
   <div [class]="gridflow">
 
     <!-- {{quickServiceTypes | json}} -->
+    <!-- <div>
+      isStaff{{isStaff}}
+    </div> -->
 
     <div  *ngIf="(order && order.history == true || (order && order.completionDate)) || isStaff " >
 

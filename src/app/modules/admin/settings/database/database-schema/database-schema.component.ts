@@ -96,6 +96,19 @@ export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
         return of(data)
     }))
   }
+  initNewZID() {
+    this.processingVisible = true
+    const site = this.sitesService.getAssignedSite();
+
+    const date = this.closeDateForm.controls['date'].value;
+    console.log(date)
+  
+    this.action$ =  this.transferData.applyNewZRUNID(site).pipe(switchMap(data => {
+      this.sitesService.notify('New Z ID Initialized', 'Close', 5000, 'green')
+      this.processingVisible = false
+      return of(data  )
+    }))
+  }
 
   closeByDate() {
     this.processingVisible = true

@@ -116,21 +116,12 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
+    "rewrites": [  {  "source": "**", "destination": "/index.html" } ]
   },
   {
     "target": "clubskyhigh",
     "public": "dist/CCSApp",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
@@ -141,11 +132,7 @@
   {
     "target": "clubskyhighbeta",
     "public": "dist/CCSApp",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
@@ -156,11 +143,7 @@
   {
     "target": "emergencyroom",
     "public": "dist/CCSApp",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",

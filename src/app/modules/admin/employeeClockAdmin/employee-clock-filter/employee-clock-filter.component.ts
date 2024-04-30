@@ -16,7 +16,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 export class EmployeeClockFilterComponent implements OnInit {
 
   @Output() outputRefreshSearch :   EventEmitter<any> = new EventEmitter();
-
+  toggleID: number = 0
   pageSize = 100;
   dateRangeForm: UntypedFormGroup;
   dateTo: string;
@@ -24,12 +24,13 @@ export class EmployeeClockFilterComponent implements OnInit {
   employees$       :   Observable<IItemBasic[]>;
   employeeID: number;
   orderBy: string
+  dates: Date[] = [];
 
   constructor(
     private dateHelper: DateHelperService,
-    private orderService    : OrdersService,
     private siteService     : SitesService,
     private employeeService: EmployeeService,
+
     private employeeClockService: EmployeeClockService,
     private router: Router,
             private fb: UntypedFormBuilder,
@@ -41,6 +42,14 @@ export class EmployeeClockFilterComponent implements OnInit {
     this.initDateForm();
     this.emitSearchResults();
     this.employees$      = this.employeeService.getAllActiveEmployees(site);
+  }
+
+  toggleView(id) { 
+    if (id == 1) { 
+      this.toggleID = 0;
+      return
+    }
+    this.toggleID  =1
   }
 
   initDateForm() {
@@ -104,30 +113,36 @@ export class EmployeeClockFilterComponent implements OnInit {
     const search = this.getSearch() as EmployeeClockSearchModel
     if (!search) { return }
     this.employeeClockService.updateSearch(search)
-    // this.outputRefreshSearch.emit(
-    //   this.getSearch()
-    // );
+ 
   }
 
   reset() {
     const search = {} as EmployeeClockSearchModel
     this.employeeClockService.updateSearch(search)
-    // this.outputRefreshSearch.emit(
-    //   this.getSearch()
-    // );
   }
 
   emitDatePickerData(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {
     // console.log(this.dateRangeForm.value);
     if (dateRangeStart && dateRangeEnd) {
-      // if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("end").value) {
-        // this.dateFrom = dateRangeStart.value //this.dateRangeForm.get("start").value
-        // this.dateTo   = dateRangeEnd.value //this.dateRangeForm.get("end").value
         this.dateFrom = this.dateRangeForm.get("start").value
         this.dateTo   = this.dateRangeForm.get("end").value
         this.refreshSearch()
-      // }
+        this.refreshDateList(this.dateFrom, this.dateTo)
     }
+  }
+
+  refreshDateList(startDate, endDate) { 
+    if (startDate && endDate) {
+      const start = new Date(this.dateHelper.format(startDate, 'medium'))
+      const end = new Date(this.dateHelper.format(endDate, 'medium'))
+      this.dates = this.dateHelper.getDates(start, end);
+    }
+  }
+
+  setDate(value) { 
+    this.dateFrom = value;
+    this.dateTo = value;
+    this.refreshSearch()
   }
 
   emitSearchResults() {
@@ -135,7 +150,6 @@ export class EmployeeClockFilterComponent implements OnInit {
   }
 
   setEmployee(event) {
-    console.log('event', event)
     if (!event) { return }
     this.employeeID  = event.id
     this.refreshSearch()

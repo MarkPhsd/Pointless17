@@ -46,16 +46,42 @@
   </mat-form-field>
 </div>
 
-<div >
+<div>
   <button
       mat-button
       (click)="reset()">
       Reset
   </button>
+
+  <button
+    mat-button
+    (click)="toggleView(1)">
+    View Dates
+  </button>
+
+  <button
+    mat-button
+    (click)="toggleView(0)">
+    Employees
+  </button>
 </div>
 
 
-<div *ngIf="(employees$ | async) as list"
+<div *ngIf="toggleID == 0">
+  <mat-button-toggle-group
+      vertical  
+      style="max-height:650px;overflow-x:auto;width:225px">
+    <mat-button-toggle
+          *ngFor="let item of dates"
+          type="button"
+          [value]="item"
+          (click)="setDate(item)" >
+      {{ item | date: 'EEE MM/dd' }} 
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+<div *ngIf="toggleID == 1 && (employees$ | async) as list"
       class="toggle-selector">
   <app-mat-toggle-selector
       [list]   ="list"
@@ -63,16 +89,6 @@
       Employee
   </app-mat-toggle-selector>
 </div>
-
-<!-- <div>
-  <mat-form-field   appearance="outline">
-    <mat-label>Page Size</mat-label>
-     <input
-       type="number"
-       [(ngModel)]="pageSize"
-       >
-  </mat-form-field>
-</div> -->
 
 <div class="field">
   <mat-form-field appearance="outline">

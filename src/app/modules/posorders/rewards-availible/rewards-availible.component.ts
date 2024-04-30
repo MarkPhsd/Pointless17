@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DisplayMenuResults, RewardsAvailable, RewardsAvailableService } from 'src/app/_services/menu/rewards-available.service';
+import { RewardsAvailable, RewardsAvailableService } from 'src/app/_services/menu/rewards-available.service';
 import { BehaviorSubject, forkJoin, Observable, of, Subscription, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MenuService, OrdersService } from 'src/app/_services';
@@ -105,7 +105,10 @@ export class RewardsAvailibleComponent implements OnInit, OnDestroy {
     let clientID = 0
     if ( order.orderID) { orderID = order.orderID }
     if ( order.clientID) { clientID = order.clientID }
+
     const site = this.siteService.getAssignedSite()
+
+
     return this.rewardsAvailibleService.getClientAvailableItems(site, clientID, orderID).pipe(
       switchMap(rewards => {
           if (!rewards || !rewards.results) { return of(null)}
@@ -121,6 +124,7 @@ export class RewardsAvailibleComponent implements OnInit, OnDestroy {
         }
       )
     );
+
   }
 
   menuItemAction(add: boolean, item, index) {

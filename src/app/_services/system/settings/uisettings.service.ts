@@ -21,6 +21,7 @@ export interface ContactFieldOptions {
 }
 
 export interface TransactionUISettings {
+  rewardsEnabled: any;
 
   id                     : number;
   displayNotes           : boolean;
@@ -517,15 +518,12 @@ export class UISettingsService {
   }
 
   getPOSDeviceSettings(deviceName: string) {
-    // console.log('getPOSDeviceSettings',deviceName)
     return this.settingsService.getDeviceSettings(deviceName)
   }
 
   getPOSDevice(deviceName: string) {
-
     return this.getPOSDeviceSettings(deviceName).pipe(
       switchMap(data => {
-
         if (data && data?.text) {
           try {
             const posDevice = JSON.parse(data?.text) as ITerminalSettings;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders,  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { EMPTY, Observable, } from 'rxjs';
+import { EMPTY, Observable, of, } from 'rxjs';
 import {clientType, ISite }   from 'src/app/_interfaces';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 
@@ -184,7 +184,7 @@ export class ClientTypeService {
 
   getClientTypeByNameCached(site: ISite, name: any) : Observable<clientType> {
 
-    if (!name) {return EMPTY}
+    if (!name) {return of(null)}
 
     const controller =  "/clientTypes/"
 

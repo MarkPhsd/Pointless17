@@ -129,7 +129,7 @@
       <button mat-raised-button color='primary' (click)="capture(item)">
         Capture
         <br>
-        {{ order.creditBalanceRemaining | currency}}
+        {{ order?.creditBalanceRemaining | currency}}
       </button>
   </div>
 </ng-template>
@@ -254,9 +254,11 @@
 </ng-template>
 
 <ng-template #tipView let-item>
+
   <div class="amount-paid" *ngIf="(item?.tranCode && item?.tranCode.toLowerCase()  != 'EMVPreAuth'.toLowerCase()) &&
-                                  (item?.tranCode && item?.tranCode.toLowerCase()  != 'IncrementalAuth'.toLowerCase()) "
-                                  >
+                                  (item?.tranCode && item?.tranCode.toLowerCase()  != 'IncrementalAuth'.toLowerCase()) ||
+                                  item.tipAmount >0
+                                  ">
 
     <span *ngIf="item?.tranCode">
       {{item?.tranCode.replace('PreAuthCapture', 'Captured')}}

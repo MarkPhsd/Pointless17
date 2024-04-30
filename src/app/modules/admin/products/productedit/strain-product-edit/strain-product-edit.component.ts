@@ -98,6 +98,14 @@ export class StrainProductEditComponent implements OnInit {
    return null;
   }
 
+  get tareValueTemplateView() {
+   const itemType = this.itemType;
+   if (this.fbProductsService.isWeightedItem(itemType)) {
+    return this.tareValueTemplate;
+   }
+   return null;
+  }
+
   managerProtected     : boolean;
   productForm          : UntypedFormGroup;
   unitSearchForm       : UntypedFormGroup;

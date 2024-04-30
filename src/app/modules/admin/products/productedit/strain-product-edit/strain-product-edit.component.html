@@ -80,7 +80,7 @@
             <ng-container [ngTemplateOutlet]="gluetenFreeView"></ng-container>
             <ng-container [ngTemplateOutlet]="retailProductView"></ng-container>
             <ng-container [ngTemplateOutlet]="cannabisView"></ng-container>
-            <ng-container [ngTemplateOutlet]="tareValueTemplate"></ng-container>
+            <ng-container [ngTemplateOutlet]="tareValueTemplateView"></ng-container>
 
           </div>
 
@@ -453,7 +453,7 @@
 </ng-template>
 
 <ng-template #tareValueView>
-  <!-- {{jsonForm.value | json}} -->
+
   <div *ngIf="!fbProductsService.isCannabis(itemType)">
     <app-value-fields
         [inputForm]="jsonForm"
@@ -587,7 +587,7 @@
   </div>
 </ng-template>
 
-<ng-template #tareValueTemplate>
+<ng-template #tareValueTemplateView>
   <div *ngIf="productForm && jsonForm">
     <ng-container [ngTemplateOutlet]="tareValueView"></ng-container>
   </div>

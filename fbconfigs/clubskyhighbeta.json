@@ -1,6 +1,5 @@
-
 {
-  "apiUrl": "https://clubskyhigh.ddns.net/api",
+  "apiUrl": "https://clubskyhigh.ddns.net:4403/api",
   "useAppGate" : false,
   "appGateMessage": "Are you over 21? If so press yes to continue.",
   "company": "Pointless POS",
