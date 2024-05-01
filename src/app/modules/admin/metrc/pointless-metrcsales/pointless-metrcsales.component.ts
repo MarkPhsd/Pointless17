@@ -122,6 +122,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
    exceptions      :PointlessMetrcSales[]
    searchPhrase:   Subject<any> = new Subject();
    order$:  Observable<IPOSOrder>;
+   refunds: boolean;
 
    searchItems$              : Subject<PointlessMetrcSearchModel> = new Subject();
    _searchItems$ = this.searchPhrase.pipe(
@@ -468,7 +469,12 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     if (!this.searchModel) { this.searchModel = {}  as PointlessMetrcSearchModel};
     this.searchModel.pageSize   = 100000
     this.searchModel.pageNumber = 1;
-    console.log('getRowData filters report', this.searchModel)
+
+    this.searchModel.refunds = false
+    if (this.refunds) { 
+      this.searchModel.refunds = true
+    }
+
     return this.pointlessMetrcSalesReport.getSalesReport(site, this.searchModel)
   }
 
@@ -502,7 +508,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
     this.processing = true;
     if (this.searchModel.currentDay) {
-      console.log('refresh 1')
       this.pageSize = 100000;
       this.initColumnDefs(1000000);
       this.gridOptions = this.agGridFormatingService.initGridOptionsClientType(this.recordCount , this.columnDefs);
@@ -522,7 +527,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       return;
     }
 
-    console.log('refresh 2')
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
       const items$    = this.getRowData(params, params.startRow, params.endRow)
