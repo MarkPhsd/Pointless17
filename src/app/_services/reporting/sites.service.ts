@@ -6,8 +6,8 @@ import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
 import { InterceptorSkipHeader } from 'src/app/_http-interceptors/basic-auth.interceptor';
 import { AppInitService, IAppConfig } from '../system/app-init.service';
 import { PlatformService } from '../system/platform.service';
-import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { isDevMode } from '@angular/core';
+import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition } from '@angular/material/legacy-snack-bar';
+
 @Injectable({
   providedIn: 'root'
 })

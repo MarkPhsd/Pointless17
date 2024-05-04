@@ -3,7 +3,7 @@ import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.ser
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-add-item-by-type',

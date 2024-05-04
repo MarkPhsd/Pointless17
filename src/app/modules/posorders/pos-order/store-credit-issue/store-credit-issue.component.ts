@@ -9,7 +9,7 @@ import { OrdersService } from 'src/app/_services';
 import { Subscription, Observable, switchMap, of } from 'rxjs';
 import { IPOSOrder, IPurchaseOrderItem, PosOrderItem,  } from 'src/app/_interfaces';
 import { IStoreCreditSearchModel, StoreCredit, StoreCreditMethodsService, StoreCreditResultsPaged } from 'src/app/_services/storecredit/store-credit-methods.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { values } from 'lodash';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges, Inject, Output,EventEmitter} from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { FbNavMenuService } from 'src/app/_form-builder/fb-nav-menu.service';
 import { AccordionMenu, SubMenu }  from 'src/app/_interfaces/index';
 import { SitesService } from 'src/app/_services/reporting/sites.service';

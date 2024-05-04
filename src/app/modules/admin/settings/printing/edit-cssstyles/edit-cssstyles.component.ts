@@ -1,7 +1,7 @@
 import { Component, OnInit ,Input, Inject } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, switchMap } from 'rxjs';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';

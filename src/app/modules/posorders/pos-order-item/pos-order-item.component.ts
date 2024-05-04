@@ -4,7 +4,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';

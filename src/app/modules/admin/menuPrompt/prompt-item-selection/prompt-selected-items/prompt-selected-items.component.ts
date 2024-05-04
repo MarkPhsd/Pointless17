@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MenuService } from 'src/app/_services';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';

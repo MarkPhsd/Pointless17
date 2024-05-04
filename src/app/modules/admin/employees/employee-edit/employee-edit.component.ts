@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, Subscription, of } from 'rxjs';

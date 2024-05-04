@@ -2,7 +2,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { AbstractControl, UntypedFormArray, UntypedFormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { merge, Observable, of, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { FbPriceTierService } from 'src/app/_form-builder/fb-price-tier';

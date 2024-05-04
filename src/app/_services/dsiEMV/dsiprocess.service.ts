@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { IPOSPayment } from 'src/app/_interfaces';
 import { DSIEMVSettings } from '../system/settings/uisettings.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';

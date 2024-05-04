@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as _ from "lodash";
 import { ICompany, IServiceType, ISetting,  } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
-import { MatSnackBar, } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar, } from '@angular/material/legacy-snack-bar';
 import { ElectronService } from 'ngx-electron';
 import { IPOSOrder, IPOSPayment, PosPayment } from 'src/app/_interfaces/transactions/posorder';
 import { BtPrintingService } from './bt-printing.service';
@@ -12,7 +12,7 @@ import { CompanyService } from './company.service';
 import { ServiceTypeService } from '../transactions/service-type-service.service';
 import { combineLatestWith } from 'rxjs';
 import { SitesService } from '../reporting/sites.service';
-import { CurrencyPipe, DatePipe, formatCurrency, getCurrencySymbol } from '@angular/common';
+import { CurrencyPipe,  getCurrencySymbol } from '@angular/common';
 import { DateHelperService } from '../reporting/date-helper.service';
 
 @Injectable({

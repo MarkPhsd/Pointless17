@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {  UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 // import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
-// import { MatSnackBar } from '@angular/material/snack-bar';
+// import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { EMPTY, merge, Observable, of, Subject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { PriceTierPrice, PriceTiers } from 'src/app/_interfaces/menu/price-categories';

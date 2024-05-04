@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { ISetting, IUser } from 'src/app/_interfaces';

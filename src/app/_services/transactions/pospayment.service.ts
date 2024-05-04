@@ -3,7 +3,7 @@ import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable,  } from 'rxjs';
 import { IPaymentResponse, IPaymentSearchModel, IPOSOrder, IPOSPayment,
          IPOSPaymentsOptimzed, ISite, OperationWithAction }   from 'src/app/_interfaces';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { IPaymentMethod } from './payment-methods.service';
 

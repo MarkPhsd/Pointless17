@@ -1,5 +1,5 @@
 import { Component,   OnInit,} from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, Subject, of, switchMap  } from 'rxjs';
 // import "ag-grid-community/dist/styles/ag-grid.css";
 // import "ag-grid-community/dist/styles/ag-theme-alpine.css";

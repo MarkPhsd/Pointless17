@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit,OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription,Observable, of } from 'rxjs';
 import { IPOSOrder,  ProductPrice } from 'src/app/_interfaces';

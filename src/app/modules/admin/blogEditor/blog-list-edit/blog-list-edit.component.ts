@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input, Output, OnInit, Optional,
   ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';

@@ -10,7 +10,7 @@ import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 // import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 
 import { EmployeeClockService,EmployeeClockResults,EmployeeClockSearchModel } from 'src/app/_services/employeeClock/employee-clock.service';
 import {  EmployeeClock } from 'src/app/_interfaces/people/employeeClock';

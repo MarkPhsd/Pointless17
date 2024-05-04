@@ -7,7 +7,7 @@ import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, catchError,concatMap,Observable, of, Subscription, switchMap } from 'rxjs';
 import { IClientTable,  IPOSOrder, IPOSOrderSearchModel, IPOSPayment, IPurchaseOrderItem, IReconcilePayload, IServiceType, IUser, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
 import { PromptGroupService } from '../menuPrompt/prompt-group.service';

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder, OrderToFrom, employee } from 'src/app/_interfaces';

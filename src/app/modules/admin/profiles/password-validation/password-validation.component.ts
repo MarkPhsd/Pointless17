@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
 import { IClientTable } from 'src/app/_interfaces';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';

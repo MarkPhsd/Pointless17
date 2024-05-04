@@ -3,7 +3,7 @@ import { ElectronService } from 'ngx-electron';
 import { XMLParser, XMLBuilder, XMLValidator} from 'fast-xml-parser';
 import { DSIEMVSettings, UISettingsService } from '../system/settings/uisettings.service';
 import { Subscription } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 
 export interface topLevel {
   TStream: TStream;

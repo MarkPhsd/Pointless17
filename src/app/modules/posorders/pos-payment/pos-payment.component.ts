@@ -8,7 +8,7 @@ import { Component,
          ChangeDetectorRef,
          ElementRef} from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';

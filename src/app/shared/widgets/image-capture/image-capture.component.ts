@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Renderer2, Input, OnDestroy, 
 import { TextractService } from 'src/app/_services/aws/textract.service';
 import { AWSBucketService } from 'src/app/_services';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { IDriversLicense } from 'src/app/_interfaces/people/drivers-license';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { Router } from '@angular/router';

@@ -7,7 +7,7 @@ import { ITerminalSettings, SettingsService } from 'src/app/_services/system/set
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPaymentResponse, IPOSOrder, IPOSPayment, ISetting, ISite } from 'src/app/_interfaces';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';

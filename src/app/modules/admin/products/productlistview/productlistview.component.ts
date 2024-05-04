@@ -2,7 +2,7 @@ import { Component,   Input, Output, OnInit,
   EventEmitter,
   HostListener,
   OnDestroy} from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AWSBucketService, ContactsService, MenuService, OrdersService } from 'src/app/_services';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { SitesService } from 'src/app/_services/reporting/sites.service';

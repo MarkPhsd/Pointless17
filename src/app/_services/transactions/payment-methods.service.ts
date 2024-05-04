@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { Observable, of, switchMap, } from 'rxjs';
 import { ISite }   from 'src/app/_interfaces';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';

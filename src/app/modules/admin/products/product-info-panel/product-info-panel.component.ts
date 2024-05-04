@@ -10,7 +10,7 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { MenuService } from 'src/app/_services';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 

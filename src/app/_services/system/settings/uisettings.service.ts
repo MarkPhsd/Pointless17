@@ -1,6 +1,6 @@
 import { Injectable} from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { ISetting, IUser } from 'src/app/_interfaces';
 import { SitesService } from '../../reporting/sites.service';

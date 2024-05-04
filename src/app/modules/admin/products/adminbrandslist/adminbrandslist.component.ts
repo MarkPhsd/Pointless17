@@ -18,7 +18,7 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { IClientTable }   from  'src/app/_interfaces';
 

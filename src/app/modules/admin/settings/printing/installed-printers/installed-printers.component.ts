@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit,  ViewChild, Input, TemplateRef } from '@angular/core';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProduct, ISetting } from 'src/app/_interfaces';

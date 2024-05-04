@@ -2,7 +2,7 @@
 import { Component,  Inject,  Input, Output, OnInit, Optional,
   ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';

@@ -4,7 +4,7 @@ import { IUser } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeService} from 'src/app/_services/people/employee-service.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { Capacitor } from '@capacitor/core';

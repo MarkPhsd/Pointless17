@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output,EventEmitter, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, concatMap, delay, finalize, Observable, of, repeatWhen, Subject, switchMap, take, throwError, timer } from 'rxjs';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
@@ -7,7 +7,6 @@ import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
 import { IRequestMessage, IRequestMessageSearchModel, IRequestResponse, RequestMessageService } from 'src/app/_services/system/request-message.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';

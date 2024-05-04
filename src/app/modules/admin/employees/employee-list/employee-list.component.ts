@@ -1,7 +1,7 @@
 import { Component,   OnInit,
   ViewChild ,ElementRef, AfterViewInit, HostListener, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AWSBucketService,  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';

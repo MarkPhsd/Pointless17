@@ -4,7 +4,7 @@ import { AuthenticationService, AWSBucketService, IItemBasicB, MenuService, Orde
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
 import { Observable, of, Subscription } from 'rxjs';
 import { concatMap, delay,  repeatWhen, switchMap  } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';

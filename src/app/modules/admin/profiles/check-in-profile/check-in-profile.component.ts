@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, of, Subscription } from 'rxjs';

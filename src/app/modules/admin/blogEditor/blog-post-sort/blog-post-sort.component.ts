@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { catchError, Observable, of, Subject, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BlogService, IBlog, IBlogResults, ISearchBlogs } from 'src/app/_services/system/blog.service';

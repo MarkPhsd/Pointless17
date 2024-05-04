@@ -1,7 +1,7 @@
 import { O } from '@angular/cdk/keycodes';
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';

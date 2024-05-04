@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, FormArray } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MatChipList } from '@angular/material/chips';
+import { MatLegacyChipList as MatChipList } from '@angular/material/legacy-chips';
 
 export interface itemsOptions { 
   name: string;

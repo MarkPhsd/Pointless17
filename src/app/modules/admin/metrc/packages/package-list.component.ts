@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, AfterViewInit, ViewChild, Input, } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { fromEvent, Observable, of, Subject  } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';

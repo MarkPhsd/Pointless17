@@ -11,7 +11,7 @@ import { ActivatedRoute, Router} from '@angular/router';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Plugins } from '@capacitor/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';

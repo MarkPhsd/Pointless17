@@ -6,7 +6,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { NewItem } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PriceTiers,PriceTierPrice, } from 'src/app/_interfaces/menu/price-categories';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { Subscription } from 'rxjs';
 

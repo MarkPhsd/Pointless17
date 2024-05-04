@@ -3,7 +3,7 @@
 // import { TextractService } from 'src/app/_services/aws/textract.service';
 // import { AWSBucketService } from 'src/app/_services';
 // import { HttpEvent, HttpEventType } from '@angular/common/http';
-// import { MatSnackBar } from '@angular/material/snack-bar';
+// import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 // import { IDriversLicense } from 'src/app/_interfaces/people/drivers-license';
 // import { catchError } from 'rxjs/operators';
 // import { TesseractService } from 'src/app/_services/tesseract/tesseract.service';

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { of ,switchMap,BehaviorSubject, Observable, catchError } from 'rxjs';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';

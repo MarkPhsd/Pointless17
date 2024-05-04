@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import {  Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ItemTypeEditorComponent } from 'src/app/modules/admin/products/item-type/item-type-editor/item-type-editor.component';

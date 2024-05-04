@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output,EventEmitter } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ICanCloseOrder } from 'src/app/_interfaces/transactions/transferData';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';

@@ -1,7 +1,7 @@
 import { Component, Inject,  OnInit , Optional} from '@angular/core';
 import {  Observable, of, switchMap } from 'rxjs';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { OrdersService } from 'src/app/_services';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';

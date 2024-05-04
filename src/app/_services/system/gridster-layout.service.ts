@@ -6,7 +6,7 @@ import { DashBoardComponentProperties, DashboardContentModel, DashboardModel, Da
 import { GridsterDataService } from '../gridster/gridster-data.service';
 import { SitesService } from '../reporting/sites.service';
 import { BehaviorSubject, catchError, Observable, of, switchMap } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Router } from '@angular/router';
 import { StrainBoardComponent } from 'src/app/modules/tv-menu/strainBoard/strain-board/strain-board.component';
 import { CategoryItemsBoardComponent } from 'src/app/modules/tv-menu/category-items-board/category-items-board.component';

@@ -1,6 +1,6 @@
 import { Component,Input, OnInit, Optional } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';

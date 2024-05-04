@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService, OrdersService,AWSBucketService } from 'src/app/_services';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter, tap } from 'rxjs/operators';
 import { Capacitor, Plugins } from '@capacitor/core';

@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SitesService } from '../reporting/sites.service';
 import { AuthenticationService, ContactsService, OrdersService } from '..';
 import { POSPaymentService } from '../transactions/pospayment.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AppInitService } from './app-init.service';
 import { PlatformService } from './platform.service';
 import { EncryptionService } from '../encryption/encryption.service';

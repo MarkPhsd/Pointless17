@@ -1,5 +1,5 @@
 import { Component,  Inject,  Input, OnInit} from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { UntypedFormBuilder,  UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UnitType,  } from 'src/app/_interfaces/menu/price-categories';

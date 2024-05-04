@@ -1,5 +1,5 @@
 import { Component, OnInit, Input , OnDestroy, ChangeDetectorRef} from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Router } from '@angular/router';
 import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSPayment, ISite, PosPayment } from 'src/app/_interfaces';

@@ -3,7 +3,7 @@ import { ICompany, IUser }  from 'src/app/_interfaces';
 import { Component, Input, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';

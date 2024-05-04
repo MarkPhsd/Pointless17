@@ -1,5 +1,5 @@
 import { Component,  Input, TemplateRef, ViewChild} from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ResizedEvent } from 'angular-resize-event';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';

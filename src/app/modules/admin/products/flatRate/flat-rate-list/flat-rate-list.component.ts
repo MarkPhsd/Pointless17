@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { UntypedFormBuilder } from '@angular/forms';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';

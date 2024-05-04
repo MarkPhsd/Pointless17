@@ -1,7 +1,7 @@
 import { T } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ElectronService } from 'ngx-electron';
 import { catchError, Observable, of, switchMap } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';

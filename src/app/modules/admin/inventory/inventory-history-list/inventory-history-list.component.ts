@@ -15,7 +15,7 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { MenuService } from 'src/app/_services';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 import { switchMap } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
 
 @Component({

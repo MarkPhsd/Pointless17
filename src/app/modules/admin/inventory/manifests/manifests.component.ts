@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, OnInit, ViewChild, Output, HostListener } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, Subject, Subscription  } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';

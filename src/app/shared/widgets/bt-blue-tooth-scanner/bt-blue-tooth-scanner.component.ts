@@ -2,7 +2,7 @@ import { Component, OnInit, Input,OnDestroy } from '@angular/core';
 // import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 // import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import { Capacitor, Plugins } from '@capacitor/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 // import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { Observable, Subscription } from 'rxjs';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';

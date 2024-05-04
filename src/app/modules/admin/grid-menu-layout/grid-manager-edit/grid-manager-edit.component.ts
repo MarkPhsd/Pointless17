@@ -5,7 +5,7 @@ import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.se
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DashboardModel, DashBoardProperties, widgetRoles } from '../grid-models';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 
 @Component({

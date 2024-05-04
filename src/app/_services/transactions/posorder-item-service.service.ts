@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, Subscription, catchError, of, switchMap, }
 import { ISite, IUser, ProductPrice }   from 'src/app/_interfaces';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { Capacitor } from '@capacitor/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { IMenuItem } from '../../_interfaces/menu/menu-products';
 import { IPurchaseOrderItem } from '../../_interfaces/raw/purchaseorderitems';
 import { IInventoryAssignment,Serial } from '../inventory/inventory-assignment.service';

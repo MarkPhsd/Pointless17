@@ -3,23 +3,33 @@
 // display: grid;
 // grid-template-columns: repeat( auto-fit, minmax(265px, 1fr) );
 
-@use "~ag-grid-community/styles" as ag;
-@include ag.grid-styles((
-  themes: (alpine, alpine-dark, ag-theme-material),
-));
+// @use "~ag-grid-community/styles" as ag;
+// @include ag.grid-styles((
+//   themes: (alpine, alpine-dark, ag-theme-material),
+// ));
 
-@import '../node_modules/material-icons/iconfont/material-icons.scss';
-@import '~material-icons/iconfont/material-icons.css';
+// @import '../node_modules/material-icons/iconfont/material-icons.scss';
+// @import '~material-icons/iconfont/material-icons.css';
+// @import "./app/_material/theme";
+// @import '~@mdi/font/css/materialdesignicons.css';
+// // @import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
+// @import '@angular/cdk/overlay-prebuilt.css';
+
+
+// @import '~@ionic/angular/css/core.css';
+// @import '~@ionic/angular/css/normalize.css';
+// @import '~@ionic/angular/css/structure.css';
+// @import '~@ionic/angular/css/typography.css';
+@use "../node_modules/ag-grid-community/styles" as ag;
+@include ag.grid-styles(( themes: (ag-theme-material, alpine, alpine-dark), ));
+
+// @import "../node_modules/@angular/material/legacy-prebuilt-themes/legacy-deeppurple-amber.css";
+
 @import "./app/_material/theme";
-@import '~@mdi/font/css/materialdesignicons.css';
-// @import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
-@import '@angular/cdk/overlay-prebuilt.css';
-
-
-@import '~@ionic/angular/css/core.css';
-@import '~@ionic/angular/css/normalize.css';
-@import '~@ionic/angular/css/structure.css';
-@import '~@ionic/angular/css/typography.css';
+@import "../node_modules/ag-grid-community/styles/ag-grid.css";
+@import "../node_modules/material-icons/iconfont/material-icons.scss";
+@import '../node_modules/@mdi/font/css/materialdesignicons.css';
+@import '../node_modules/@angular/cdk/overlay-prebuilt.css';
 
 
 mat-button mat-raised-button {

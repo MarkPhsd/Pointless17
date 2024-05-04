@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { PriceScheduleMenuGroupService } from 'src/app/_services/menu/price-schedule-menu-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PriceMenuGroup, PriceMenuGroupItem, PSMenuGroupPaged, PSSearchModel, PS_SearchResultsPaged } from 'src/app/_interfaces/menu/price-schedule';

@@ -5,7 +5,7 @@ import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
 import { ReportDesignerService } from '../../services/report-designer.service';
 import { viewBuilder_ViewList, viewBuilder_ReportJSON, viewBuilder_View_Field_Values, viewBuilder_Where_Selector, viewBuilder_View_Builder_GroupBy, chartTypeCollection, viewBuilderList, viewBuilder_Report } from '../../interfaces/reports';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 
 @Component({
   selector: 'psReporting-designer-editor',

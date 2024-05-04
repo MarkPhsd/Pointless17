@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';

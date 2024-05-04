@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuButtonProperties, MBMenuButtonsService, mb_MenuButton } from 'src/app/_services/system/mb-menu-buttons.service';
 

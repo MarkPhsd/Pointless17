@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { IInventoryAssignment } from '../inventory/inventory-assignment.service';
 
 export interface IUnitConversion {

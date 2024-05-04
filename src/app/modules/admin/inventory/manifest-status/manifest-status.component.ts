@@ -1,5 +1,5 @@
 import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject} from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable} from 'rxjs';
 import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';

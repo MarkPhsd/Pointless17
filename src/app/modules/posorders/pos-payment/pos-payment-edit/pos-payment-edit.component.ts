@@ -8,7 +8,7 @@ import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transac
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { Observable,  Subscription, switchMap } from 'rxjs';
 import { UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialogRef } from '@angular/material/dialog';
 import { PrintingService } from 'src/app/_services/system/printing.service';

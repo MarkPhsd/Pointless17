@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { StoreCreditEditorComponent } from 'src/app/modules/admin/store-credit/store-credit-editor/store-credit-editor.component';
 import { StoreCreditPopUpComponent } from 'src/app/modules/posorders/pos-payment/store-credit-pop-up/store-credit-pop-up.component';

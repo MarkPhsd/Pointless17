@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { of, switchMap,catchError,Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';

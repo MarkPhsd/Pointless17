@@ -8,7 +8,7 @@ import { IProductCategory, ISite, TaxRate } from 'src/app/_interfaces';
 import { UseGroupsService, Taxes, UseGroupTax, UseGroups } from 'src/app/_services/menu/use-groups.service';
 import { UseGroupTaxesService } from 'src/app/_services/menu/use-group-taxes.service';
 import { TaxesService, UseGroupTaxAssigned, UseGroupTaxAssignedList } from 'src/app/_services/menu/taxes.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
 import { IPriceSchedule, PS_SearchResultsPaged } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';

@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, catchError, combineLatest, concatMap,  iif,  Observable, of, Subscription, switchMap, } from 'rxjs';
 import { IPaymentResponse, IPOSOrder,  IPOSPayment,   ISite, OperationWithAction, PosPayment,  }   from 'src/app/_interfaces';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from '../reporting/sites.service';
 import { IPaymentMethod, PaymentMethodsService } from './payment-methods.service';
 import { POSPaymentService } from './pospayment.service';

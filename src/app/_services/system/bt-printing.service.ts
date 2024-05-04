@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 // import { esc-pos-encoder} from 'esc-pos-encoder';
 // import 'esc-pos-encoder'

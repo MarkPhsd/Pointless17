@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, Subject, Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog'
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IClientTable, IPOSOrder, IUserProfile } from 'src/app/_interfaces';

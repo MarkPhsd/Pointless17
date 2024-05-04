@@ -6,7 +6,7 @@ import { InventoryAssignmentService, IInventoryAssignment } from 'src/app/_servi
 import { ISite } from 'src/app/_interfaces/site';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';

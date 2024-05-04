@@ -7,7 +7,7 @@ import { IItemBasic,  } from 'src/app/_services';
 import { OrdersService } from 'src/app/_services';
 import { ActivatedRoute, } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';

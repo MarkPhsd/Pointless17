@@ -14,7 +14,7 @@ import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { BatchClose, Transaction } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { ICanCloseOrder } from 'src/app/_interfaces/transactions/transferData';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { AuthenticationService, OrdersService, ReportingService } from 'src/app/_services';
 import { HttpClient } from '@angular/common/http';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IMenuButtonGroups, MBMenuButtonsService } from 'src/app/_services/system/mb-menu-buttons.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { Observable, of, switchMap } from 'rxjs';

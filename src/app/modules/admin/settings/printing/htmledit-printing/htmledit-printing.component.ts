@@ -2,10 +2,10 @@ import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angula
 import { ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Observable,switchMap,of } from 'rxjs';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 

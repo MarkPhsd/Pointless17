@@ -1,7 +1,7 @@
 import { Component, Output, OnInit,
          ViewChild ,ElementRef, EventEmitter,
          OnDestroy, QueryList, ViewChildren, Input, HostListener } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AWSBucketService, OrdersService, POSOrdersPaged} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UntypedFormGroup } from '@angular/forms';

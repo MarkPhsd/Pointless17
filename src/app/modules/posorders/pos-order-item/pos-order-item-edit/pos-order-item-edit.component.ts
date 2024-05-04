@@ -4,7 +4,7 @@ import { AuthenticationService, MenuService, OrdersService } from 'src/app/_serv
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IonItem } from '@ionic/angular';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';

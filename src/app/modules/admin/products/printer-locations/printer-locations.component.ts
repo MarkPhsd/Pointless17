@@ -1,5 +1,5 @@
 import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject, TemplateRef, ComponentFactoryResolver} from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, switchMap} from 'rxjs';
 import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSort } from '@angular/material/sort';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { IPrinterLocation, PrinterLocationsService, IPrinterLocationRO } from 'src/app/_services/menu/printer-locations.service';
 import { IItemBasic } from 'src/app/_services';
 import { SettingsService } from 'src/app/_services/system/settings.service';

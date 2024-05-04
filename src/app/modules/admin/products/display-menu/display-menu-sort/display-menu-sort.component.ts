@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, switchMap } from 'rxjs';
 import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
 import { DisplayMenuService } from 'src/app/_services/menu/display-menu.service';

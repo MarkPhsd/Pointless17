@@ -7,7 +7,7 @@ import { BalanceSheetSearchModel, BalanceSheetService, CashDrop, IBalanceSheet }
 import { Capacitor } from '@capacitor/core';
 import { catchError, switchMap } from 'rxjs/operators';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { PlatformService } from '../system/platform.service';

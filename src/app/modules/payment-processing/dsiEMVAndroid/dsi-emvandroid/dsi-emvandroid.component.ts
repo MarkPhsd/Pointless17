@@ -1,6 +1,6 @@
 
 import { Component,EventEmitter,Inject,Input,OnInit, Optional, Output } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Capacitor} from '@capacitor/core';
 // import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { NgxXml2jsonService } from 'ngx-xml2json';

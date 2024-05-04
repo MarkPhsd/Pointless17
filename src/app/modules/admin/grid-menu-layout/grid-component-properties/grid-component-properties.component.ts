@@ -4,7 +4,7 @@ import { Observable, of, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DashBoardComponentProperties, DashboardContentModel, DashboardModel } from '../grid-models';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { GridsterLayoutService, ValueTypeList } from 'src/app/_services/system/gridster-layout.service';
 import { MenuService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';

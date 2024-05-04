@@ -1,6 +1,6 @@
 import { Component, Output, OnInit,
   ViewChild ,ElementRef, EventEmitter, OnDestroy, Input } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AWSBucketService, OrdersService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';

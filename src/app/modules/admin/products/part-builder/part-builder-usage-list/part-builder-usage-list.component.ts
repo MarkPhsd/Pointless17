@@ -1,7 +1,7 @@
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Capacitor } from '@capacitor/core';
 import { GridApi, IGetRowsParams } from 'ag-grid-community';
 import { Observable, of, Subscription, switchMap } from 'rxjs';

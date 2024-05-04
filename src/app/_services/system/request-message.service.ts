@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ISite, Paging } from 'src/app/_interfaces';
 import { Observable, of,switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';

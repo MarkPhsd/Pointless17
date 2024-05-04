@@ -1,7 +1,7 @@
 import { Component,   Input,  OnInit,  Output, EventEmitter} from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, UntypedFormControl} from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable,  } from 'rxjs';
 import { CurrencyPipe } from '@angular/common';
 import * as numeral from 'numeral';

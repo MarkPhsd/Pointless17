@@ -7,7 +7,7 @@ import { UntypedFormBuilder, UntypedFormGroup, FormControl, FormArray, Validator
 import { Observable, Subject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
 

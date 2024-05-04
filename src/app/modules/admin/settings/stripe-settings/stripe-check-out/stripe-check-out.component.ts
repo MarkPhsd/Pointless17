@@ -6,14 +6,14 @@ import {
   StripeElementsOptions
 } from '@stripe/stripe-js';
 import { StripeAPISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IStripePaymentIntent, StripePaymentService } from 'src/app/_services/stripe/stripe-payment.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPaymentResponse, IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({

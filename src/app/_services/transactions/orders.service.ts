@@ -5,7 +5,7 @@ import { IProductPostOrderItem, IServiceType, ISite, IUserProfile }   from 'src/
 import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel, IReconcilePayload, OrderToFrom } from 'src/app/_interfaces/transactions/posorder';
 import { IPagedList } from '../system/paging.service';
 import { IItemBasic } from '../menu/menu.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Capacitor,  } from '@capacitor/core';
 import { IBalanceSheet } from './balance-sheet.service';
 import { SitesService } from '../reporting/sites.service';

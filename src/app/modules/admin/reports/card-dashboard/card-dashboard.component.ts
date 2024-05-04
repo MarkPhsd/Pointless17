@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit,Input, OnDestroy } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
