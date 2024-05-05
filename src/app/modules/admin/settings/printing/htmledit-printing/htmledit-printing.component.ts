@@ -8,11 +8,8 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Observable,switchMap,of } from 'rxjs';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
-
 import { PrintingService } from 'src/app/_services/system/printing.service';
-
 import { RenderingService } from 'src/app/_services/system/rendering.service';
-
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
 
 @Component({

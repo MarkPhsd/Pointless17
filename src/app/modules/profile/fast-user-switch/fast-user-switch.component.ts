@@ -14,7 +14,7 @@ import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactio
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
-
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 @Component({
   selector: 'app-fast-user-switch',
   templateUrl: './fast-user-switch.component.html',
@@ -54,7 +54,8 @@ export class FastUserSwitchComponent implements OnInit {
     private fb                     : UntypedFormBuilder,
     private _snackBar              : MatSnackBar,
     private router                 : Router,
-    private balanceSheetService   : BalanceSheetService,
+    private dialog                 : MatDialog,
+    private balanceSheetService    : BalanceSheetService,
     public  platformService        : PlatformService,
     private toolbarUIService       : ToolBarUIService,
     @Optional()  dialogRef         : MatDialogRef<FastUserSwitchComponent>,
