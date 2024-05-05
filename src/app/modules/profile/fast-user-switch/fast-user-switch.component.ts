@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { of ,switchMap,BehaviorSubject, Observable, catchError } from 'rxjs';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
@@ -14,6 +12,8 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { UIHomePageSettings,  } from 'src/app/_services/system/settings/uisettings.service';
 import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-fast-user-switch',
@@ -46,7 +46,7 @@ export class FastUserSwitchComponent implements OnInit {
   sheet: IBalanceSheet;
 
   constructor(
-    private dialog                 : MatDialog,
+    // private dialog                 : MatDialog,
     private userSwitchingService   : UserSwitchingService,
     private authenticationService  : AuthenticationService,
     private siteService            : SitesService,
@@ -225,7 +225,7 @@ export class FastUserSwitchComponent implements OnInit {
   onCancel() {
     this.initForm();
     try {
-      this.dialog.closeAll();
+      this.dialogRefOption.close()
     } catch (error) {
       console.log('error', error)
     }

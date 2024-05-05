@@ -7,7 +7,7 @@ import { InventoryAssignmentService, IInventoryAssignment, InventoryFilter, Inve
 import { ClientSearchModel, ISite, IUserProfile, OperationWithAction } from 'src/app/_interfaces';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { InventoryLocationsService } from 'src/app/_services/inventory/inventory-locations.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { IGetRowsParams,  GridApi,  } from '@ag-grid-community/all-modules';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';

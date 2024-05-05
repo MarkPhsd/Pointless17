@@ -7,8 +7,6 @@ import { PriceCategories, IPriceCategoryPaged, IPriceCategory2 } from 'src/app/_
 import { SearchModel } from '../system/paging.service';
 import { ProductEditButtonService } from './product-edit-button.service';
 import { SitesService } from '../reporting/sites.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { PriceCategoriesEditComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/price-categories-edit.component';
 
 export interface IItemBasic{
   name: string;

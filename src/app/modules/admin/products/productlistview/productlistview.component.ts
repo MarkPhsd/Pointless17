@@ -11,26 +11,22 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-
 import { Observable, of, switchMap } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { IGetRowsParams, GridApi } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
-
 import { ClientSearchModel, IProduct, IReconcilePayload, IUserProfile } from 'src/app/_interfaces';
-
 import { Capacitor,  } from '@capacitor/core';
 import { Subscription } from 'rxjs';
 import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { EditSelectedItemsComponent } from '../productedit/edit-selected-items/edit-selected-items.component';
-import { MatDialog } from '@angular/material/dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { A } from '@angular/cdk/keycodes';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-
+// import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
     return 0;

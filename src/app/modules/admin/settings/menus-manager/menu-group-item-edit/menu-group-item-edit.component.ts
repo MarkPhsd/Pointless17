@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, Inject, Output,EventEmitter} from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Inject, Output,EventEmitter, Optional} from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { FbNavMenuService } from 'src/app/_form-builder/fb-nav-menu.service';
@@ -6,7 +6,7 @@ import { AccordionMenu, SubMenu }  from 'src/app/_interfaces/index';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-menu-group-item-edit',
@@ -35,7 +35,7 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
     private siteService            : SitesService,
     private _snackBar              : MatSnackBar,
     private menusService           : MenusService,
-    private dialogRef              : MatDialogRef<MenuGroupItemEditComponent>,
+    @Optional() private dialogRef              : MatDialogRef<MenuGroupItemEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   )
 

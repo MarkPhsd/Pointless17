@@ -1,12 +1,10 @@
 import { Component,  Inject,  Input,  OnDestroy,  OnInit, Optional, } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
-import { InventoryAssignmentService, IInventoryAssignment, Serial } from 'src/app/_services/inventory/inventory-assignment.service';
+import { InventoryAssignmentService, IInventoryAssignment,  } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ISite } from 'src/app/_interfaces/site';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { AuthenticationService, MenuService, OrdersService } from 'src/app/_services';
@@ -17,13 +15,15 @@ import { ItemType } from 'src/app/_interfaces/menu/price-schedule';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { IPOSOrder, ISetting, IUser, PosOrderItem } from 'src/app/_interfaces';
+import { IPOSOrder, ISetting, PosOrderItem } from 'src/app/_interfaces';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 
 @Component({
   selector: 'app-add-inventory-item',
@@ -112,7 +112,6 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
 
   constructor(
     private authenticationService: AuthenticationService,
-    private _snackBar           : MatSnackBar,
     private uiSettingsService: UISettingsService,
     private siteService         : SitesService,
     public  route               : ActivatedRoute,
@@ -430,10 +429,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   }
 
   notifyEvent(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 1000,
-      verticalPosition: 'top'
-    });
+    this.siteService.notify(message, action,2000)
   }
 
 

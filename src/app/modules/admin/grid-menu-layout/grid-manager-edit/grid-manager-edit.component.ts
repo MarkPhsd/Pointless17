@@ -4,8 +4,8 @@ import { Observable, of, switchMap } from 'rxjs';
 import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DashboardModel, DashBoardProperties, widgetRoles } from '../grid-models';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 
 @Component({
@@ -47,7 +47,7 @@ export class GridManagerEditComponent implements OnInit {
               public layoutService       : GridsterLayoutService,
               private dialogRef          : MatDialogRef<GridManagerEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private dialog             : MatDialog,
+              private dialog             : MatDialogRef<GridManagerEditComponent>,
               private fb                 : UntypedFormBuilder,
 
   ) {

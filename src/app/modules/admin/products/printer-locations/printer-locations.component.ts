@@ -28,7 +28,7 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: any;
-
+  noData =true
   metrcEnabled: boolean;
   length: number;
   pageSize: number;
@@ -56,7 +56,7 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
   {  }
 
   ngOnInit(): void {
-    this.metrcEnabled = true
+
     this.pageSize = 10
     this.initForm()
     this.receiptList$ = this.refreshAll();
@@ -93,8 +93,14 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
   };
 
   getLocations(): Observable<IPrinterLocation[]> {
-      const item$ = this.printerLocationsService.getLocations().pipe(
+    return this.printerLocationsService.getLocations().pipe(
       switchMap(data => {
+
+          if (!data) { 
+            this.noData = true 
+            return of(data)
+          }
+
           let list = data as IPrinterLocationRO[];
           this.pageSize = 10
           this.length = data.length
@@ -111,17 +117,17 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
           }
-        return of(data)
+          return of(data)
         }
       ));
-      return item$
+    
   }
 
   getTemplateName(item: IPrinterLocationRO) {
     let receiptName = ''
     if (this.receiptList) {
       this.receiptList.forEach( receipt => {
-        console.log('item', item.templateID, receipt.name,  receipt.id)
+        // console.log('item', item.templateID, receipt.name,  receipt.id)
         if (item.templateID === receipt.id) {
           receiptName = receipt.name
           return receipt.name;

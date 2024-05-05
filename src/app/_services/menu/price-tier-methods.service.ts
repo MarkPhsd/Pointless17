@@ -1,14 +1,9 @@
 import { Injectable } from '@angular/core';
 import {  UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-// import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
-// import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { EMPTY, merge, Observable, of, Subject } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import {  Observable, of, } from 'rxjs';
+import {  switchMap } from 'rxjs/operators';
 import { PriceTierPrice, PriceTiers } from 'src/app/_interfaces/menu/price-categories';
-// import { map, takeUntil } from 'rxjs/operators';
-// import { FbPriceTierService } from 'src/app/_form-builder/fb-price-tier';
-// import { PriceTierPrice,PriceTiers } from 'src/app/_interfaces/menu/price-categories';
 import { PriceTierPriceService } from 'src/app/_services/menu/price-tier-price.service';
 import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -166,7 +161,7 @@ export class PriceTierMethodsService {
         }
       }
     )
-    return EMPTY;
+    return of(null);
   }
 
   addPricesWithWeightProfiles(priceTier: PriceTiers, pricesArray: UntypedFormArray): PriceTiers {

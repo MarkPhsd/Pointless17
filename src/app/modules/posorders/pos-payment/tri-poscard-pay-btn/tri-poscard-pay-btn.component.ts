@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IPaymentMethod } from 'ngx-paypal';
 import { Observable } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';

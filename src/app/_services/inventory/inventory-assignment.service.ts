@@ -10,7 +10,7 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { InventoryManifest } from './manifest-inventory.service';
 import { NewInventoryItemComponent } from 'src/app/modules/admin/inventory/new-inventory-item/new-inventory-item.component';
 import { DialogRef } from '@angular/cdk/dialog';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 export interface InventorySearchResultsPaged {
   results     : IInventoryAssignment[];
   paging      : Paging;

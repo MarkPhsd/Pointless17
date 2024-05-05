@@ -1,6 +1,6 @@
 import { E } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { catchError, concatMap, Observable, of, switchMap } from 'rxjs';
 import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
 import { IPOSOrder, ISetting, ISite, PosOrderItem } from 'src/app/_interfaces';

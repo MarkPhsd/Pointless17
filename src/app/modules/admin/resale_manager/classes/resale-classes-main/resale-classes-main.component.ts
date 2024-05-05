@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup, FormGroup, UntypedFormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { GridApi, IGetRowsParams } from 'ag-grid-community';

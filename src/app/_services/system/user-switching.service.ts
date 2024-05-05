@@ -1,15 +1,13 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient,  } from '@angular/common/http';
-import { BehaviorSubject, forkJoin, Observable, of, Subscription } from 'rxjs';
-import { catchError, concatMap, switchMap,   } from 'rxjs/operators';
+import { BehaviorSubject,  Observable, of, Subscription } from 'rxjs';
+import { concatMap, switchMap,   } from 'rxjs/operators';
 import { clientType, ISite, IUser, IUserProfile, UserPreferences } from 'src/app/_interfaces';
 import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
-import { MatDialog } from '@angular/material/dialog';
 import { SitesService } from '../reporting/sites.service';
 import { AuthenticationService, ContactsService, OrdersService } from '..';
 import { POSPaymentService } from '../transactions/pospayment.service';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AppInitService } from './app-init.service';
 import { PlatformService } from './platform.service';
 import { EncryptionService } from '../encryption/encryption.service';
@@ -22,6 +20,9 @@ import { OrderMethodsService } from '../transactions/order-methods.service';
 import { UserIdleService } from 'angular-user-idle';
 import { ClientTableService } from '../people/client-table.service';
 import { ClockInPanelComponent } from 'src/app/modules/admin/clients/clock-in-panel/clock-in-panel.component';
+
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 
 export interface ElectronDimensions {
   height: string;

@@ -1,7 +1,6 @@
 import { Component, Inject,  OnInit} from '@angular/core';
 import { EmployeeClockService } from 'src/app/_services/employeeClock/employee-clock.service';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { employeeBreak, EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
 import { Observable, of , map, switchMap, catchError } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -31,7 +30,6 @@ export class EmployeeClockEditComponent implements OnInit {
       private siteService: SitesService,
       private fb: UntypedFormBuilder,
       private dataHelper: DateHelperService,
-      private fbProductsService: FbProductsService,
       private dialogRef: MatDialogRef<EmployeeClockEditComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any
   ) {

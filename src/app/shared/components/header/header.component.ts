@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter,QueryList,
         HostBinding, Renderer2, HostListener, OnDestroy, OnChanges, TemplateRef, ViewChild, ViewChildren, ElementRef, AfterViewInit } from '@angular/core';
 import { UntypedFormBuilder,UntypedFormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { CompanyService,AuthenticationService, OrdersService, MessageService, } from 'src/app/_services';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { ICompany, IPOSOrder, ISite, IUser, IUserProfile,  }  from 'src/app/_interfaces';

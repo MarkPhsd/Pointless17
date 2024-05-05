@@ -3,14 +3,13 @@ import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { Observable, of, switchMap } from 'rxjs';
-import { IPOSOrder, OrderToFrom, employee } from 'src/app/_interfaces';
+import { IPOSOrder, OrderToFrom } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { EmployeeService } from 'src/app/_services/people/employee-service.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-
 @Component({
   selector: 'app-pos-order-editor',
   templateUrl: './pos-order-editor.component.html',

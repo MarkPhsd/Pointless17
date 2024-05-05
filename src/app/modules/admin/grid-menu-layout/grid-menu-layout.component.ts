@@ -4,7 +4,7 @@ import { DisplayGrid, GridsterConfig, GridsterItem, GridType, } from 'angular-gr
 import { DashBoardComponentProperties, DashboardContentModel, DashBoardProperties,  } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 
 // COMPONENTS
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { GridComponentPropertiesComponent } from './grid-component-properties/grid-component-properties.component';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { AuthenticationService, AWSBucketService } from 'src/app/_services';

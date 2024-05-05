@@ -7,7 +7,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { SiteEditFormComponent } from './site-edit-form/site-edit-form.component';
 
 @Component({

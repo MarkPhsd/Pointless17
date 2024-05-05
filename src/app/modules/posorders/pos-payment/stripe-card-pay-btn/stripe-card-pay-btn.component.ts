@@ -1,5 +1,4 @@
 import { Component, Input, OnInit,Output,EventEmitter } from '@angular/core';
-import { MatDialog,  } from '@angular/material/dialog';
 import { Observable,switchMap,of   } from 'rxjs';
 import { StripeCheckOutComponent } from 'src/app/modules/admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
 import { IPOSOrder } from 'src/app/_interfaces';
@@ -9,7 +8,7 @@ import { StripeAPISettings, TransactionUISettings, UISettingsService } from 'src
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
-
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 @Component({
   selector: 'stripe-card-pay-btn',
   templateUrl: './stripe-card-pay-btn.component.html',

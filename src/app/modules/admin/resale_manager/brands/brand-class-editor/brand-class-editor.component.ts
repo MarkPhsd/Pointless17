@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, Output,EventEmitter } from '@angular/core';
 import { FormGroup, UntypedFormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { Router } from '@angular/router';
 import { of, switchMap } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';

@@ -1,12 +1,10 @@
-import { Component, Inject,  OnInit, TemplateRef, ViewChild,} from '@angular/core';
+import { Component, Inject,  OnInit, Optional, TemplateRef, ViewChild,} from '@angular/core';
 import { IItemBasic, MenuService } from 'src/app/_services';
 import { FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IProduct } from 'src/app/_interfaces/raw/products';
 import { Observable, of } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatSnackBar} from '@angular/material/snack-bar';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
@@ -19,6 +17,7 @@ import { menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 @Component({
   selector: 'app-strain-product-edit',
   templateUrl: './strain-product-edit.component.html',
@@ -141,7 +140,6 @@ export class StrainProductEditComponent implements OnInit {
   constructor(private menuService: MenuService,
               public  route: ActivatedRoute,
               public  fb: UntypedFormBuilder,
-              private _snackBar: MatSnackBar,
               private itemTypeService  : ItemTypeService,
               private priceCategoryService: PriceCategoriesService,
               private siteService: SitesService,
@@ -151,7 +149,7 @@ export class StrainProductEditComponent implements OnInit {
               private unitTypeMethodsService: UnitTypeMethodsService,
               public  labelingService: LabelingService,
               private unitTypeService: UnitTypesService,
-              private dialogRef: MatDialogRef<StrainProductEditComponent>,
+              @Optional() private dialogRef: MatDialogRef<StrainProductEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any
     )
   {
@@ -520,8 +518,8 @@ export class StrainProductEditComponent implements OnInit {
   deleteItem(event) {
     const site = this.siteService.getAssignedSite()
     if (!this.product) {
-      this._snackBar.open("No Product Selected", "Success")
-       return
+      this.siteService.notify("No Product Selected", 'close', 2000, 'green')
+      return
     }
 
     this.action$ =  this.menuService.deleteProduct(site, this.product.id).pipe(
@@ -534,10 +532,7 @@ export class StrainProductEditComponent implements OnInit {
   }
 
   notifyEvent(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2000,
-      verticalPosition: 'top'
-    });
+    this.siteService.notify(message, action, 2000, 'green')
   }
 
   //image data

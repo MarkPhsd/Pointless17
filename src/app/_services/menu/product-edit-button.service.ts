@@ -35,7 +35,8 @@ export interface IBalanceDuePayload {
   paymentMethod: IPaymentMethod;
   payment: IPOSPayment;
 }
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { DSIEMVTransactionComponent } from 'src/app/modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
 import { AppWizardStatusComponent } from 'src/app/modules/admin/settings/software/app-wizard-status/app-wizard-status.component';
 import { CardpointeTransactionsComponent } from 'src/app/modules/payment-processing/cardPointe/cardpointe-transactions/cardpointe-transactions.component';
@@ -61,12 +62,12 @@ import { PosOrderEditorComponent } from 'src/app/modules/posorders/pos-order/pos
 export class ProductEditButtonService {
 
   constructor
-            (private dialog             : MatDialog,
-            private siteService         : SitesService,
-            private menuService         : MenuService,
-            private paymentMethodService:PaymentMethodsService,
-            private inventoryService    : InventoryAssignmentService,
-            private itemTypeService     : ItemTypeService,
+            ( private dialog             : MatDialog,
+              private siteService         : SitesService,
+              private menuService         : MenuService,
+              private paymentMethodService:PaymentMethodsService,
+              private inventoryService    : InventoryAssignmentService,
+              private itemTypeService     : ItemTypeService,
             ) { }
 
 
@@ -176,7 +177,6 @@ export class ProductEditButtonService {
           product.prodModifierType = 1
           return this.menuService.putProduct(site, product.id, product)
         }
-        // console.log('product', product)
         return of(product)
       }
     )).pipe(switchMap(product => {

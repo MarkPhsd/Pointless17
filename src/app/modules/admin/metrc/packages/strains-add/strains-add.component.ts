@@ -4,7 +4,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl} f
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AWSBucketService, MenuService,  } from 'src/app/_services';
 import { ISite } from 'src/app/_interfaces/site';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Observable } from 'rxjs';
 import { IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.service';
 import { InventoryAssignmentService} from 'src/app/_services/inventory/inventory-assignment.service';

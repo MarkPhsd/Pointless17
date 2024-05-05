@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit,OnDestroy } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+
 import { ActivatedRoute } from '@angular/router';
 import { Subscription,Observable, of } from 'rxjs';
 import { IPOSOrder,  ProductPrice } from 'src/app/_interfaces';
@@ -30,7 +30,6 @@ export class MenuPriceSelectionComponent  implements OnInit, OnDestroy {
           private siteService: SitesService,
           private orderService: OrdersService,
           private orderMethodsService: OrderMethodsService,
-          private matSnackBar: MatSnackBar,
           @Inject(MAT_DIALOG_DATA) public data: any,
           )
   {
@@ -76,9 +75,6 @@ export class MenuPriceSelectionComponent  implements OnInit, OnDestroy {
   }
 
   notifyEvent(message: string, title: string) {
-    this.matSnackBar.open(message, title,{
-      duration: 2000,
-      verticalPosition: 'bottom'
-    })
+    this.siteService.notify(message,title, 2000)
   }
 }

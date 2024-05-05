@@ -8,7 +8,7 @@ import { IInventoryAssignment } from './inventory-assignment.service';
 import { ManifestStatus } from './manifest-status.service';
 import { ManifestType } from './manifest-types.service';
 import { Dialog } from 'electron';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { ManifestsComponent } from 'src/app/modules/admin/inventory/manifests/manifests.component';
 import { MainfestEditorComponent } from 'src/app/modules/admin/inventory/manifests/mainfest-editor/mainfest-editor.component';
 import { DateAdapter } from '@angular/material/core';

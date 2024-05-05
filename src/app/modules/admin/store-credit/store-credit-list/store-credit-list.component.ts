@@ -19,7 +19,7 @@ import { ClientSearchModel } from 'src/app/_interfaces';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { Capacitor,  } from '@capacitor/core';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IStoreCreditSearchModel, StoreCredit, StoreCreditMethodsService, StoreCreditResultsPaged } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';

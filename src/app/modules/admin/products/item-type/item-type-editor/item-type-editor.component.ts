@@ -7,7 +7,7 @@ import { MatSnackBar} from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, Subscription, of, switchMap,  } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';

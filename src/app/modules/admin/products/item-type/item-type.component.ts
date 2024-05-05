@@ -7,7 +7,7 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import {  GridApi } from '@ag-grid-community/all-modules';
 // import {AgGridAngular} from 'ag-grid-angular';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ItemTypeEditorComponent } from './item-type-editor/item-type-editor.component';
 import { AWSBucketService, MenuService } from 'src/app/_services';

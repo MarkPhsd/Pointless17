@@ -2,7 +2,7 @@ import { Component,  OnDestroy,  OnInit, Renderer2 } from '@angular/core';
 import { GridsterLayoutService   } from 'src/app/_services/system/gridster-layout.service';
 import { DashboardModel  } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 import { GridManagerEditComponent } from '../grid-manager-edit/grid-manager-edit.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription, of, switchMap } from 'rxjs';

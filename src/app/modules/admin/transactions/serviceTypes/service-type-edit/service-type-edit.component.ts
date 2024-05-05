@@ -1,6 +1,5 @@
 
 import { Component,  Inject, OnInit } from '@angular/core';
-import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { IServiceType, IServiceTypePOSPut } from 'src/app/_interfaces';

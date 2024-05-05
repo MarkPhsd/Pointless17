@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';

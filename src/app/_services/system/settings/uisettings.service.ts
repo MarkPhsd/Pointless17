@@ -8,7 +8,7 @@ import { EmailModel } from '../../twilio/send-grid.service';
 import { SettingsService } from '../settings.service';
 import { UserAuthorizationService } from '../user-authorization.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { PosEditSettingsComponent } from 'src/app/modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
 import { ElectronService } from 'ngx-electron';
 import { PlatformService } from '../platform.service';

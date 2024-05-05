@@ -12,7 +12,7 @@ import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { Capacitor,  } from '@capacitor/core';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { BrandClassSearch, BrandClassSearchResults, BrandsResaleService, Brands_Resale } from 'src/app/_services/resale/brands-resale.service';
 import { Router } from '@angular/router';
 import { IProduct, IUserProfile } from 'src/app/_interfaces';

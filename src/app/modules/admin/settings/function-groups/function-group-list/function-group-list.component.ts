@@ -12,7 +12,7 @@ import { IGetRowsParams, GridApi } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 // import 'ag-grid-community/dist/styles/ag-theme-material.css';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Capacitor,  } from '@capacitor/core';
 import { Router } from '@angular/router';

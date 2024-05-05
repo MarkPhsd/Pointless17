@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AWSBucketService, IAWS_Temp_Key, IKey } from 'src/app/_services';
-import { MatSnackBar, } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { HttpClient, } from '@angular/common/http';
 import { EMPTY, Observable, of,  } from 'rxjs';
 

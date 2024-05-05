@@ -5,15 +5,14 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IClientTable, IPurchaseOrderItem, ISetting, ISite, IUser } from 'src/app/_interfaces';
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ElectronService } from 'ngx-electron';
-import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
+import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import  html2canvas from 'html2canvas';
 import  domtoimage from 'dom-to-image';
 import { jsPDF } from "jspdf";
 import { RenderingService } from './rendering.service';
 import { LabelaryService, zplLabel } from '../labelary/labelary.service';
 import { RecieptPopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/reciept-pop-up.component';
-import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, EMPTY, Observable, switchMap, of, catchError, forkJoin, concat, delay, concatMap } from 'rxjs';
+import { BehaviorSubject,  Observable, switchMap, of, catchError, forkJoin,  concatMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { PlatformService } from './platform.service';
 import { UserAuthorizationService } from './user-authorization.service';
@@ -27,7 +26,7 @@ import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/prin
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ClientTableService } from '../people/client-table.service';
 import { UUID } from 'angular2-uuid';
-import { PaymentsMethodsProcessService } from '../transactions/payments-methods-process.service';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 
 export interface printOptions {
   silent: boolean;

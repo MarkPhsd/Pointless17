@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { TaxesService } from 'src/app/_services/menu/taxes.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { FlatRateService } from 'src/app/_services/map-routing/flat-rate.service';
 import { FBFlatRateService } from 'src/app/_form-builder/fbflat-rate.service';
 import { group } from '@angular/animations';

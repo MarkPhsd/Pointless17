@@ -2,7 +2,7 @@ import { HostListener, Injectable, OnDestroy } from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
 import { AuthenticationService, MenuService, OrderPayload, OrdersService, TextMessagingService } from 'src/app/_services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, catchError,concatMap,Observable, of, Subscription, switchMap } from 'rxjs';

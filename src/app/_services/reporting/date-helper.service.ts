@@ -229,7 +229,7 @@ export class DateHelperService {
 	// I proxy the native formatDate() function with a partial application of the
 	// LOCALE_ID that is being used in the application.
 	public format( value: DateInput, mask: string ) : string {
-
+    if (!value) {return ""}
     // console.log('localID', this.localID )
 		return( ngFormatDate( value, mask, this.localID ) );
 

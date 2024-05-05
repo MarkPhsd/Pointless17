@@ -9,7 +9,7 @@ import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 // import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { FlatRateTax } from 'src/app/_services/menu/item-type.service';
 import { FlatRateService } from 'src/app/_services/map-routing/flat-rate.service';
 import { FlatRateEditComponent } from '../flat-rate-edit/flat-rate-edit.component';

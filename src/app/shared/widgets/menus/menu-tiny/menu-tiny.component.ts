@@ -49,7 +49,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this._user = this.authenticationService.user$.subscribe(
         user => {
 
-        if (!user || !user.token) {
+        if (!user || !user.roles) {
           this.menus = [] as AccordionMenu[];
           return
         }
@@ -165,8 +165,8 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this.initMenus();
     const user = this.authenticationService.userValue;
     this.user  = user;
-    if (!user || !user.token || !user.roles) { return}
-
+    if (!user || !user.roles) { return}
+    if (user.roles != 'admin') { return }
     const site       = this.siteService.getAssignedSite();
     const menuCheck$ = this.menusService.mainMenuExists(site);
     this.accordionMenu$ = menuCheck$.pipe(

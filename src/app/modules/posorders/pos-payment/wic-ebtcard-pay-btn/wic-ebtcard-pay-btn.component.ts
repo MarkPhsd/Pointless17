@@ -1,5 +1,4 @@
 import { Component, Input, OnInit,Output,EventEmitter } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable,switchMap,of   } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -8,7 +7,7 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
-
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 @Component({
   selector: 'wic-ebtcard-pay-btn',
   templateUrl: './wic-ebtcard-pay-btn.component.html',

@@ -10,7 +10,7 @@ import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { ItemCategoriesEditComponent } from '../item-categories-edit/item-categories-edit.component';
 import { Capacitor } from '@capacitor/core';
 

@@ -6,7 +6,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { RenderingService } from 'src/app/_services/system/rendering.service';

@@ -10,7 +10,7 @@ import { GridApi } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { TaxEditComponent } from '../tax-edit/tax-edit.component';
 import { TaxesService } from 'src/app/_services/menu/taxes.service';
 import { TaxRate } from 'src/app/_interfaces';

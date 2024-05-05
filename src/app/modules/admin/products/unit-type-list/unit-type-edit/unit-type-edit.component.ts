@@ -4,9 +4,10 @@ import { UntypedFormBuilder,  UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UnitType,  } from 'src/app/_interfaces/menu/price-categories';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FbUnitTypeService } from 'src/app/_form-builder/fb-unit-type.service';
 import { Observable, of, switchMap} from 'rxjs';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 
 @Component({
   selector: 'app-unit-type-edit',

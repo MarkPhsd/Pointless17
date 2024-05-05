@@ -4,7 +4,6 @@ import { Component, Inject, Input, OnDestroy, OnInit, Optional, Renderer2, Templ
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { fadeInAnimation } from 'src/app/_animations';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -12,12 +11,13 @@ import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { Subscription, switchMap , of, Observable, concatMap} from 'rxjs';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { ElectronService } from 'ngx-electron';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { PollingService } from 'src/app/_services/system/polling.service';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 
 @Component({
     selector   : 'login-dashboard',
@@ -116,7 +116,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       }
     )
-
   }
 
   // convenience getter for easy access to form fields
@@ -222,7 +221,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.authenticationService.updatePinPad(uiHome.pinPadDefaultOnApp)
       }
     } else {
-
     }
   }
 
@@ -541,12 +539,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     const i = 1
   }
 
-
   notifyEvent(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2000,
-      verticalPosition: 'top'
-    });
+    this.siteService.notify(message ,action , 2000)
   }
 
 }

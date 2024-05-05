@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Subscription } from 'rxjs';
 import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-reasons/adjustment-reasons.component';
 import { ISite } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 
 @Component({
   selector: 'app-manifest-editor-header',
@@ -81,8 +82,8 @@ export class ManifestEditorHeaderComponent implements OnInit {
     private fb              : UntypedFormBuilder,
     private sitesService    : SitesService,
     private manifestService : ManifestInventoryService,
+    private dialog: MatDialog,
     private dialogRef       : MatDialogRef<ManifestEditorHeaderComponent>,
-    private dialog          : MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {

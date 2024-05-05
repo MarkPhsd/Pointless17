@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit,  ViewChild, Input, TemplateRef } from '@angular/core';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProduct, ISetting } from 'src/app/_interfaces';
@@ -9,7 +8,7 @@ import * as  printJS from "print-js";
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { Observable, of, switchMap } from 'rxjs';
 import { HTMLEditPrintingComponent } from '../htmledit-printing/htmledit-printing.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
 import   domtoimage from 'dom-to-image';
@@ -133,7 +132,6 @@ export class InstalledPrintersComponent implements OnInit {
               private printingService       : PrintingService,
               private printingAndroidService: PrintingAndroidService,
               private btPrinterService      : BtPrintingService,
-              private snack                 : MatSnackBar,
               private settingService        : SettingsService,
               private siteService           : SitesService,
               private dialog                : MatDialog,
@@ -550,10 +548,10 @@ export class InstalledPrintersComponent implements OnInit {
         let img = new Image();
         img.src = data;
         this.receiptImage64 =  `${img.src}`
-        this.snack.open(img.src, 'image')
+        // this.snack.open(img.src, 'image')
         return img
       }, err => {
-        this.snack.open(err, 'Failed')
+        // this.snack.open(err, 'Failed')
       }
     )
     return null;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ProducteditComponent} from 'src/app/modules/admin/products/productedit/productedit.component';
 // import { ItemPercentageDiscountProductEditComponent } from 'src/app/modules/admin/productedit/item-percentage-discount-product-edit/item-percentage-discount-product-edit.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { NewInventoryItemComponent } from 'src/app/modules/admin/inventory/new-inventory-item/new-inventory-item.component';

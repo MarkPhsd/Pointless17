@@ -1,16 +1,14 @@
 import { Component, OnInit ,Input, Inject } from '@angular/core';
-import { FormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { UntypedFormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, of, switchMap } from 'rxjs';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { PrintingService } from 'src/app/_services/system/printing.service';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 @Component({
   selector: 'app-edit-cssstyles',
   templateUrl: './edit-cssstyles.component.html',
@@ -60,8 +58,6 @@ export class EditCSSStylesComponent implements OnInit {
   constructor(
     private settingsService  : SettingsService,
     private siteService      : SitesService,
-    private _snackBar        : MatSnackBar,
-
     private fbService        : FbSettingsService,
     private dialogRef        : MatDialogRef<EditCSSStylesComponent>,
     public  route            : ActivatedRoute,
@@ -118,7 +114,7 @@ export class EditCSSStylesComponent implements OnInit {
   }
 
   notify(message, title) {
-    this._snackBar.open(message, title, {duration: 2000})
+    this.siteService.notify(message, title,2000)
   }
 
   refreshOrderData() {

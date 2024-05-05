@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormGroup,  UntypedFormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { Observable, Subject } from 'rxjs';
 import { delay, repeatWhen  } from 'rxjs/operators';
 import * as uuid from 'uuid';

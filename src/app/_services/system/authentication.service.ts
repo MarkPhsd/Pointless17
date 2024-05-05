@@ -8,7 +8,7 @@ import { PlatformService } from './platform.service';
 import { ToolBarUIService } from './tool-bar-ui.service';
 import { LoginComponent } from 'src/app/modules/login';
 import { SitesService} from 'src/app/_services/reporting/sites.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IUserAuth_Properties } from '../people/client-type.service';
 
 export interface IUserExists {

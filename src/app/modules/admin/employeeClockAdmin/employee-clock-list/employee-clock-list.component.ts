@@ -158,7 +158,7 @@ export class EmployeeClockListComponent implements OnInit {
       search.startDate = this.startDate;
       this.searchModel = search;
 
-      console.log('search endDate', search.endDate)
+      // console.log('search endDate', search.endDate)
       this.refreshSearch(search);
     })
   }
@@ -348,7 +348,7 @@ export class EmployeeClockListComponent implements OnInit {
     this.endDate   = this.dateHelper.format(data?.endDate, 'MM/dd/yyyy');
     this.employeeID = data?.employeeID;
 
-    console.log('search endDate',data.endDate, this.endDate)
+    // console.log('search endDate',data?.endDate, this.endDate)
     this.refreshSearch(data)
   }
 
@@ -408,7 +408,7 @@ export class EmployeeClockListComponent implements OnInit {
       search.orderBy    = data?.orderBy;
     }
     this.searchModel = search
-    console.log('end Search', search)
+    // console.log('end Search', search)
     this.onGridReady(this.params)
   }
 
@@ -491,11 +491,11 @@ export class EmployeeClockListComponent implements OnInit {
       }
     };
 
-    console.log('datasource', datasource)
+    // console.log('datasource', datasource)
     if (!datasource)   { return }
-    console.log('gridApi', this.gridApi)
+    // console.log('gridApi', this.gridApi)
     if (!this.gridApi) { return }
-    console.log('setDataSource')
+    // console.log('setDataSource')
     this.gridApi.setDatasource(datasource);
     this.autoSizeAll(true)
   }
@@ -513,7 +513,7 @@ export class EmployeeClockListComponent implements OnInit {
       search.endDate   =  this.endDate;
       search.employeeID = this.employeeID
     }
-    console.log('getSearch', search)
+    // console.log('getSearch', search)
     return search
   }
 
@@ -610,7 +610,6 @@ export class EmployeeClockListComponent implements OnInit {
     const site = this.siteService.getAssignedSite()
     const dialog = this.productEditButtonService.openClockEditor(id)
     dialog.afterClosed().subscribe(data => {
-
       this.refreshSearchAny(this.searchModel)
     })
   }

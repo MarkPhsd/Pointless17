@@ -1,7 +1,6 @@
 import { Component,  EventEmitter,  Input,  OnDestroy,  OnInit, Optional, Output, } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MoveInventoryLocationComponent } from '../move-inventory-location/move-inventory-location.component';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -15,8 +14,10 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { MenuService } from 'src/app/_services';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 import { switchMap } from 'rxjs/operators';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 
 @Component({
   selector: 'app-inventory-history-list',

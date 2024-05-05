@@ -24,7 +24,7 @@ import { ITerminalSettings, SettingsService } from '../_services/system/settings
 import { UserIdleService } from 'angular-user-idle';
 import { PaymentsMethodsProcessService } from '../_services/transactions/payments-methods-process.service';
 import { OrderMethodsService } from '../_services/transactions/order-methods.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { PrintQueService } from '../_services/transactions/print-que.service';
 @Component({
   selector: 'app-default',

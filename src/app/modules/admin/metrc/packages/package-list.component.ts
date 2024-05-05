@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MetrcPackagesService, PackageSearchResultsPaged } from 'src/app/_services/metrc/metrc-packages.service';
 import { METRCPackage, PackageFilter }  from 'src/app/_interfaces/metrcs/packages';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { METRCProductsAddComponent } from 'src/app/modules/admin/metrc/packages/metrc-products-add/products-add.component';
 import { StrainsAddComponent } from 'src/app/modules/admin/metrc/packages/strains-add/strains-add.component';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
