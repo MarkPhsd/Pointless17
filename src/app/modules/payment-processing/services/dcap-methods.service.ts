@@ -22,7 +22,6 @@ export class DcapMethodsService {
   ) { }
 
 
-
   readResult(cmdResponse: DcapRStream) {
     // console.log('readresult', cmdResponse?.TextResponse, cmdResponse)
     let message: string;
@@ -32,20 +31,38 @@ export class DcapMethodsService {
     success = false
     processing = false
 
+    console.log('readResult', cmdResponse)
     const status = cmdResponse?.CmdStatus
     if (status ==   "Declined") {
       return {success : false , message: status, processing: processing, resultMessage: status};
     }
     const response = cmdResponse?.TextResponse.toLowerCase();
-    if (response === 'approved'.toLowerCase() || response === 'AP*'.toLowerCase() ||
-        response === 'captured'.toLowerCase() || response === 'approval'.toLowerCase()
-      || response === 'approved, Partial AP'.toLowerCase()
-
+    if (
+         response.toLowerCase() === 'completed'.toLowerCase() ||
+         response.toLowerCase() === 'success'.toLowerCase() ||
+         response.toLowerCase() === 'approved'.toLowerCase() ||
+         response.toLowerCase() === 'AP*'.toLowerCase() ||
+         response.toLowerCase() === 'captured'.toLowerCase() ||
+         response.toLowerCase() === 'approval'.toLowerCase() ||
+         response.toLowerCase() === 'approved, Partial AP'.toLowerCase()
     ) {
      success = true
      return {success : success , message: message, processing: processing, resultMessage: resultMessage}
     }
-
+    //CaptureStatus
+    const captureStatus = cmdResponse?.CaptureStatus.toLowerCase();
+    if (
+      captureStatus.toLowerCase() === 'completed'.toLowerCase() ||
+      captureStatus.toLowerCase() === 'success'.toLowerCase() ||
+      captureStatus.toLowerCase() === 'approved'.toLowerCase() ||
+      captureStatus.toLowerCase() === 'AP*'.toLowerCase() ||
+      captureStatus.toLowerCase() === 'captured'.toLowerCase() ||
+      captureStatus.toLowerCase() === 'approval'.toLowerCase() ||
+      captureStatus.toLowerCase() === 'approved, Partial AP'.toLowerCase()
+    ) {
+      success = true
+      return {success : success , message: message, processing: processing, resultMessage: resultMessage}
+    }
 
     if (!cmdResponse) {
       message = 'Processing failed, no command response.'
@@ -74,7 +91,6 @@ export class DcapMethodsService {
 
     return {success :false , message: message, processing: processing, resultMessage: resultMessage};
   }
-
   processVoidResults(action: any,voidPayment, response: RStream) {
     let message: string;
     let resultMessage: string;
