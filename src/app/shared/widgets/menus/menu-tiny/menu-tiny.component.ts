@@ -48,7 +48,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe(
         user => {
-
+        // console.log('user', user)
         if (!user || !user.roles) {
           this.menus = [] as AccordionMenu[];
           return
@@ -120,6 +120,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this.submenu = [] as SubMenu[];
     this.menu$ = of([])
   }
+
   setSmallMenu() {
     const result = !this.smallMenu
     this.toolbarUIService.updateBarSize(result)
@@ -136,11 +137,11 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
   expandMenu () {
     const result = false
-    console.log(result)
+    // console.log(result)
     this.toolbarUIService.updateBarSize(result)
     localStorage.setItem('barSize', String(result))
     this.updateScreenSize();
-    console.log('moust over')
+    // console.log('moust over')
   }
 
   minimizeMenu () {
@@ -196,7 +197,6 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   refreshMenu(user: IUser) {
     this.initMenu();
     if (!user) {
-
       return;
     }
     const site  = this.siteService.getAssignedSite();
@@ -261,7 +261,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   navigateMenu(routerLink: string) {
     this.router.navigate([routerLink]);
     if (this.authenticationService?.deviceInfo?.phoneDevice) {
-      console.log('hide menu')
+      // console.log('hide menu')
       this.hideMenu()
     }
   }

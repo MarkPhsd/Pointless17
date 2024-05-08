@@ -925,7 +925,7 @@ constructor(  private _snackBar              : MatSnackBar,
 
     const searchForm = this.searchForm.value;
 
-    console.log('search', this.searchForm.value, searchForm.value)
+    // console.log('search', this.searchForm.value, searchForm.value)
 
     searchModel.viewAll    = this.viewAll;
     searchModel.active     = this.active;

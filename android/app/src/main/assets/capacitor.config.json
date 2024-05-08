@@ -29,6 +29,6 @@
 		"hostname": "Pointless",
 		"iosScheme": "ionic",
 		"androidScheme": "http",
-		"url": "https://192.168.0.3:4500"
+		"url": "http://192.168.0.3:4400"
 	}
 }

@@ -1,0 +1,34 @@
+{
+	"appId": "www.pointlesspos.com",
+	"appName": "PointlessPOS",
+	"bundledWebRuntime": false,
+	"npmClient": "npm",
+	"webDir": "dist/CCSApp",
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 0,
+			"launchAutoHide": true
+		},
+		"Keyboard": {
+			"resize": "body",
+			"style": "dark"
+		}
+	},
+	"cordova": {
+		"preferences": {
+			"ScrollEnabled": "true",
+			"BackupWebStorage": "none",
+			"SplashMaintainAspectRatio": "true",
+			"FadeSplashScreenDuration": "300",
+			"SplashShowOnlyFirstTime": "false",
+			"SplashScreen": "screen",
+			"SplashScreenDelay": "3000"
+		}
+	},
+	"server": {
+		"hostname": "Pointless",
+		"iosScheme": "ionic",
+		"androidScheme": "http",
+		"url": "http://192.168.0.2:4200"
+	}
+}

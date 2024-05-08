@@ -57,7 +57,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe(user => {
         this.user = user
-        if (!user || !user.token) {
+        if (!user || !user.roles) {
           this.menus = [] as AccordionMenu[];
           return
         }
@@ -81,7 +81,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
 
     this.initMenu();
 
-    if (!user || !user.token) {
+    if (!user || !user.roles) {
       return
     }
     const site  = this.siteService.getAssignedSite();
@@ -176,7 +176,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
     this.initMenus()
     const site       = this.siteService.getAssignedSite();
 
-    if (!this.user || !this.user.token) {return}
+    if (!this.user || !this.user?.roles) {return}
     if (!this.user.roles) {return};
 
     const menuCheck$ = this.menusService.mainMenuExists(site);

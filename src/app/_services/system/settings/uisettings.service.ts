@@ -159,6 +159,7 @@ export interface DSIEMVSettings {
   DisplayTextHandle: string;
   enabled: boolean;
   partialAuth: boolean;
+  deviceValue: string;
 }
 
 

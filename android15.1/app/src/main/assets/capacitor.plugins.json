@@ -1,0 +1,38 @@
+[
+	{
+		"pkg": "@capacitor-community/barcode-scanner",
+		"classpath": "com.dutchconcepts.capacitor.barcodescanner.BarcodeScanner"
+	},
+	{
+		"pkg": "@capacitor-community/bluetooth-le",
+		"classpath": "com.capacitorjs.community.plugins.bluetoothle.BluetoothLe"
+	},
+	{
+		"pkg": "@capacitor-community/camera-preview",
+		"classpath": "com.ahm.capacitor.camera.preview.CameraPreview"
+	},
+	{
+		"pkg": "@capacitor/geolocation",
+		"classpath": "com.capacitorjs.plugins.geolocation.GeolocationPlugin"
+	},
+	{
+		"pkg": "@capacitor/keyboard",
+		"classpath": "com.capacitorjs.plugins.keyboard.KeyboardPlugin"
+	},
+	{
+		"pkg": "@capacitor/splash-screen",
+		"classpath": "com.capacitorjs.plugins.splashscreen.SplashScreenPlugin"
+	},
+	{
+		"pkg": "dsiemvandroidplugin",
+		"classpath": "com.pointlesspos.plugins.dsiemvandroid.dsiEMVAndroidinstance"
+	},
+	{
+		"pkg": "dsiemvandroidplugin",
+		"classpath": "com.pointlesspos.plugins.dsiemvandroid.dsiemvandroidPlugin"
+	},
+	{
+		"pkg": "ionic-zebra-label-printer",
+		"classpath": "nl.appcomm.zebraLabelPrinter.ZebraLabelPrinter"
+	}
+]

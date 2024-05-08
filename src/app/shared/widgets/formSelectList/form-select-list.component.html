@@ -1,52 +1,87 @@
 <ng-content></ng-content>
 
-<ng-content select="#fieldSearchDescription"></ng-content>
+<ng-container [ngTemplateOutlet]="listType"></ng-container>
 
-<div [formGroup]="searchForm"
-     class="grid-container"
-     *ngIf="searchForm">
-
+<ng-template #listTypeString>
+  <div [formGroup]="searchForm"
+        *ngIf="searchForm">
     <mat-form-field appearance="outline"
-                    class="form-fields">
-      <mat-label>
+                        class="form-fields">
+      <!-- <mat-label>
         <ng-content select="#fieldSearchDescription"></ng-content>
         <ng-content></ng-content>
-      </mat-label>
+      </mat-label> -->
 
       <mat-select
-                  type="'text'"
-                  [formControlName]   = "formFieldName"
-                  (selectionChange)   = "updateResults($event)" >
-
-        <mat-select-trigger *ngIf="inputField && inputField.value && showActiveInactive">
-          <div class="item-results">
-            <div>
-              {{inputField.value.name ? inputField.value.name : ''}}
-            </div>
-
-            <div *ngIf="showActiveInactive" class="mat-icon">
-              <span *ngIf="inputField.value.active"><mat-icon color="primary">toggle_on</mat-icon></span>
-              <span *ngIf="!inputField.value.active"><mat-icon color="warn">toggle_off</mat-icon></span>
-            </div>
-          </div>
-
-        </mat-select-trigger>
+              type="'text'"
+              [formControlName]   = "formFieldName"
+              (selectionChange)   = "updateResults($event)" >
 
         <div *ngIf="itemList">
-          <mat-option [value]="0">
+          <mat-option [value]="">
             Clear
           </mat-option>
-          <mat-option  *ngFor="let item of itemList"
-                       [value]="item">
-            {{ item.name }}
-            <span *ngIf="showActiveInactive">
-              <span *ngIf="item.active"><mat-icon color="primary">toggle_on</mat-icon></span>
-              <span *ngIf="!item.active"><mat-icon color="warn"> toggle_off</mat-icon></span>
-            </span>
+          <mat-option  *ngFor="let item of list"
+                      [value]="item">
+            {{ item }}
           </mat-option>
         </div>
       </mat-select>
     </mat-form-field>
+  </div>
+</ng-template>
 
-</div>
+<ng-template #listTypeColumn>
+  <ng-content select="#fieldSearchDescription"></ng-content>
+
+  <div [formGroup]="searchForm"
+       class="grid-container"
+       *ngIf="searchForm">
+  
+      <mat-form-field appearance="outline"
+                      class="form-fields">
+        <mat-label>
+          <ng-content select="#fieldSearchDescription"></ng-content>
+          <ng-content></ng-content>
+        </mat-label>
+  
+        <mat-select
+                    type="'text'"
+                    [formControlName]   = "formFieldName"
+                    (selectionChange)   = "updateResults($event)" >
+  
+          <mat-select-trigger *ngIf="inputField && inputField.value && showActiveInactive">
+            <div class="item-results">
+              <div>
+                {{inputField.value.name ? inputField.value.name : ''}}
+              </div>
+  
+              <div *ngIf="showActiveInactive" class="mat-icon">
+                <span *ngIf="inputField.value.active"><mat-icon color="primary">toggle_on</mat-icon></span>
+                <span *ngIf="!inputField.value.active"><mat-icon color="warn">toggle_off</mat-icon></span>
+              </div>
+            </div>
+  
+          </mat-select-trigger>
+  
+          <div *ngIf="itemList">
+            <mat-option [value]="0">
+              Clear
+            </mat-option>
+            <mat-option  *ngFor="let item of itemList"
+                         [value]="item">
+              {{ item.name }}
+              <span *ngIf="showActiveInactive">
+                <span *ngIf="item.active"><mat-icon color="primary">toggle_on</mat-icon></span>
+                <span *ngIf="!item.active"><mat-icon color="warn"> toggle_off</mat-icon></span>
+              </span>
+            </mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+  
+  </div>
+  
+</ng-template>
+
 

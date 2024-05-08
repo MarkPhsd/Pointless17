@@ -1,7 +1,6 @@
-import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input, TemplateRef , Inject} from '@angular/core';
+import { Component,  OnInit,  ViewChild,  TemplateRef , Inject} from '@angular/core';
 import { FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Observable, of, switchMap } from 'rxjs';
 import { CardPointBoltService, PointlessCCDSIEMVAndroidService } from 'src/app/modules/payment-processing/services';
@@ -27,6 +26,9 @@ export class PosEditSettingsComponent implements OnInit {
   triPOSMarkets = [{name: 'FoodRestaurant', id:7},{name: 'Retail', id:4}]
   action$ : Observable<any>;
   @ViewChild('androidPrintingTemplate') androidPrintingTemplate: TemplateRef<any>;
+  @ViewChild('androidDCapButtonView') androidDCapButtonView: TemplateRef<any>;
+  //getDcapAndroidDeviceList
+  dcapAndroidDeviceList: string[]
   inputForm: UntypedFormGroup;
   dsiEMVSettings: FormGroup;
   setting  : any;
@@ -45,7 +47,10 @@ export class PosEditSettingsComponent implements OnInit {
   uiSettings: TransactionUISettings;
   pingCardPointTerminals$: Observable<any>;
   cardPointTerminals$ : Observable<any>;
-  cardPointTerminals = [] as string[]
+  cardPointTerminals = [] as string[];
+
+  androidDisplay: any;
+
   medOrRecStoreList = [
     {id:0,name:'Any'},  {id:1,name:'Med'},  {id:2,name:'Rec'}
   ]
@@ -112,7 +117,30 @@ export class PosEditSettingsComponent implements OnInit {
   if (hsn) {
     this.pingCardPointTerminals$ = this.cardPointBoltService.ping(site.url, hsn)
   }
+ }
 
+ androidDCapButtonTemplate() { 
+  if (this.dcapAndroidDeviceList) { 
+    return this.androidDCapButtonTemplate
+  }
+  return null;
+ }
+
+ get isAndroid() { 
+  if (this.platFormService.androidApp) { 
+    return true
+  }
+  return false
+ }
+
+ async getAndroidDevices() { 
+  const list = await this.dSIEMVAndroidService.getAndroidDevices()
+  this.androidDisplay = list
+ }
+
+ async getDcapAndroidDeviceList() { 
+    const list = await this.dSIEMVAndroidService.getDeviceInfo()
+    this.dcapAndroidDeviceList = list;
  }
 
  setCardPointTermialsObservable() {
@@ -200,19 +228,20 @@ export class PosEditSettingsComponent implements OnInit {
       IpPort     :[],
       MerchantID :[],
       TerminalID :[],
-      OperatorID :[],
-      POSPackageID :[],
-      TranDeviceID :[],
-      UserTrace  :[],
-      TranCode   :[],
-      SecureDevice :[],
-      ComPort    :[],
+      OperatorID      :[],
+      POSPackageID    :['PointlessPOS/3.1'],
+      TranDeviceID    :[],
+      UserTrace       :[],
+      TranCode        :[],
+      SecureDevice    :[],
+      ComPort         :[],
       PinPadIpAddress :[],
-      PinPadIpPort :[],
-      SequenceNo :[],
+      PinPadIpPort    :[],
+      SequenceNo      :[],
       DisplayTextHandle :[],
-      enabled :[],
-      partialAuth :[],
+      enabled           :[],
+      partialAuth       :[],
+      deviceValue: [],
     })
 
     if (this.terminal) {

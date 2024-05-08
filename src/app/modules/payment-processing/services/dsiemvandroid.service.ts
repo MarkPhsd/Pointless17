@@ -12,6 +12,30 @@ import { NgxXml2jsonService } from 'ngx-xml2json';
   providedIn: 'root'
 })
 export class PointlessCCDSIEMVAndroidService {
+
+  terminals = [
+    { name: "IDTech VP3300 - Datacap E2E", id: "EMV_VP3300_DATACAP" },
+    { name: "IDTech VP3300 - Datacap E2E via RS-232", id: "EMV_VP3300_DATACAP_RS232" },
+    { name: "IDTech VP3300 - Mercury", id: "EMV_VP3300_MERCURY" },
+    { name: "IDTech VP3300 - Monetary", id: "EMV_VP3300_MONETARY" },
+    { name: "Ingenico Lane/3000", id: "EMV_LANE3000_DATACAP_E2E" },
+    { name: "Ingenico Lane/7000", id: "EMV_LANE7000_DATACAP_E2E" },
+    { name: "PAX A920Pro - Datacap E2E", id: "EMV_A920PRO_DATACAP_E2E" },
+    { name: "PAX A920MAX - Datacap E2E", id: "EMV_A920PRO_DATACAP_E2E" },
+    { name: "PAX A30 - Datacap E2E", id: "EMV_A30_DATACAP_E2E" },
+    { name: "PAX A35 - Datacap E2E", id: "EMV_A35_DATACAP_E2E" },
+    { name: "PAX A60 - Datacap E2E", id: "EMV_A60_DATACAP_E2E" },
+    { name: "PAX A77 - Datacap E2E", id: "EMV_A77_DATACAP_E2E" },
+    { name: "PAX A800 - Datacap E2E", id: "EMV_A800_DATACAP_E2E" },
+    { name: "PAX A800 - Bluefin E2E", id: "EMV_A800_DATACAP_BLUEFIN" },
+    { name: "PAX A3700 - Datacap E2E", id: "EMV_A3700_DATACAP" },
+    { name: "PAX A3700 - Bluefin E2E", id: "EMV_A3700_DATACAP_BLUEFIN" },
+    { name: "PAX Aries6 - Datacap E2E", id: "EMV_ARIES6_DATACAP_E2E" },
+    { name: "PAX Aries8 - Datacap E2E", id: "EMV_ARIES8_DATACAP_E2E" },
+    { name: "PAX IM30 - Datacap E2E", id: "EMV_IM30_DATACAP_E2E" }
+  ];
+  
+
   public transaction: Transaction;
   public saving: boolean;
 
@@ -56,7 +80,7 @@ export class PointlessCCDSIEMVAndroidService {
     return {
       merchantID: 'CROSSCHAL1GD',
       userTrace: 'User',
-      pOSPackageID: 'PointlessPOS1.54.3',
+      pOSPackageID: 'PointlessPOS/3.1',
       tranCode: 'EMVSale',
       secureDevice: 'EMV_VP3300_DATACAP',
       invoiceNo: '100',
@@ -122,30 +146,61 @@ export class PointlessCCDSIEMVAndroidService {
 
   async  listBTDevices() {
     const options = {value: 'test'};
-    const items = await dsiemvandroid.plugInSearchForBt(options)
+    // const items = await dsiemvandroid.plugInSearchForBt(options)
     // let items: any;
-    const list = items.value.replace('null', '').split(';')
-    return list;
+    // const list = items.value.replace('null', '').split(';')
+    return [];
+  }
+
+  async getDevicesInfo () {
+    if (!this.siteService.isApp) { 
+      return this.getDeviceIdList()
+    }
+ 
+    const item    = await this.getAndroidDevices()
+    if (item) { 
+      return item
+    }
+    return []
+  }
+
+  getDeviceIdList(): string[] {
+    return this.terminals.map(terminal => terminal.id);
   }
 
   async getDeviceInfo() {
-    try {
-      const options = this.transaction as Transaction;
-      options.merchantID = options.merchantID;
-      options.pinPadIpAddress = options.pinPadIpAddress;
-      options.padPort = options.padPort;
-      // let item: any;
-      const item    = await dsiemvandroid.getDeviceInfo(options);
-      const results = item as any;
-      const parser = new DOMParser();
-      results.value = results.value.replace('#', '')
-      const xml = parser.parseFromString(results.value, 'text/xml');
-      const obj = this.jsonService.xmlToJson(xml) as any;
-      return obj;
 
+    if (!this.siteService.isApp) { 
+      return this.getDeviceIdList()
+    }
+
+    try {
     } catch (error) {
       return error
     }
+  }
+
+ async getAndroidDevices() {
+    const options = this.transaction as Transaction;
+    try {
+      options.merchantID = options?.merchantID;
+      options.pinPadIpAddress = options?.pinPadIpAddress;
+      options.padPort = options?.padPort;
+    } catch (error) {
+      
+    }
+ 
+    // let item: any;
+    const item    = await dsiemvandroid.getDeviceInfo(options);
+    const results = item as any;
+    const parser = new DOMParser();
+    results.value = results.value.replace('#', '')
+    const xml = parser.parseFromString(results.value, 'text/xml');
+    const obj = this.jsonService.xmlToJson(xml) as any;
+
+    console.log('item', item)
+    console.log('obj', obj)
+    return {obj, xml}
   }
 
   async getIPAddress() {

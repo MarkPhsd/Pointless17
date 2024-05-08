@@ -38,6 +38,17 @@ export class SitesService {
     this._site.next(site)
   }
 
+
+  get isApp() {
+    if (this.platformSevice.androidApp) { 
+      return true
+    }
+    if (this.platformSevice.isAppElectron) {
+      return true
+    }
+    return false
+  }
+
   get isDev() {
     const site = this.getAssignedSite();
     if (site.url === 'https://localhost:44309/api') {

@@ -24,7 +24,7 @@
                           [showActiveInactive]="true"
                           (selectionChange) = "refreshDepartmentChange($event)">
         <div fieldSearchDescription>Department</div>
-        </form-select-list>
+      </form-select-list>
     </div>
 
     <div *ngIf="(categories$ | async) as lists">

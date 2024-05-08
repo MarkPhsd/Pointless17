@@ -36,33 +36,40 @@ export class DcapMethodsService {
     if (status ==   "Declined") {
       return {success : false , message: status, processing: processing, resultMessage: status};
     }
-    const response = cmdResponse?.TextResponse.toLowerCase();
-    if (
-         response.toLowerCase() === 'completed'.toLowerCase() ||
-         response.toLowerCase() === 'success'.toLowerCase() ||
-         response.toLowerCase() === 'approved'.toLowerCase() ||
-         response.toLowerCase() === 'AP*'.toLowerCase() ||
-         response.toLowerCase() === 'captured'.toLowerCase() ||
-         response.toLowerCase() === 'approval'.toLowerCase() ||
-         response.toLowerCase() === 'approved, Partial AP'.toLowerCase()
-    ) {
-     success = true
-     return {success : success , message: message, processing: processing, resultMessage: resultMessage}
+
+    const response = cmdResponse?.TextResponse;
+    if (response) {
+      if (
+        response.toLowerCase() === 'completed'.toLowerCase() ||
+        response.toLowerCase() === 'success'.toLowerCase() ||
+        response.toLowerCase() === 'approved'.toLowerCase() ||
+        response.toLowerCase() === 'AP*'.toLowerCase() ||
+        response.toLowerCase() === 'captured'.toLowerCase() ||
+        response.toLowerCase() === 'approval'.toLowerCase() ||
+        response.toLowerCase() === 'approved, Partial AP'.toLowerCase()
+      ) {
+        success = true
+        return {success : success , message: message, processing: processing, resultMessage: resultMessage}
+      }
     }
+
     //CaptureStatus
-    const captureStatus = cmdResponse?.CaptureStatus.toLowerCase();
-    if (
-      captureStatus.toLowerCase() === 'completed'.toLowerCase() ||
-      captureStatus.toLowerCase() === 'success'.toLowerCase() ||
-      captureStatus.toLowerCase() === 'approved'.toLowerCase() ||
-      captureStatus.toLowerCase() === 'AP*'.toLowerCase() ||
-      captureStatus.toLowerCase() === 'captured'.toLowerCase() ||
-      captureStatus.toLowerCase() === 'approval'.toLowerCase() ||
-      captureStatus.toLowerCase() === 'approved, Partial AP'.toLowerCase()
-    ) {
-      success = true
-      return {success : success , message: message, processing: processing, resultMessage: resultMessage}
+    const captureStatus = cmdResponse?.CaptureStatus;
+    if (captureStatus) {
+      if (
+        captureStatus.toLowerCase() === 'completed'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'success'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'approved'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'AP*'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'captured'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'approval'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'approved, Partial AP'.toLowerCase()
+      ) {
+        success = true
+        return {success : success , message: message, processing: processing, resultMessage: resultMessage}
+      }
     }
+
 
     if (!cmdResponse) {
       message = 'Processing failed, no command response.'

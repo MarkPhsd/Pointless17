@@ -12,7 +12,6 @@ import { EmailModel } from '../twilio/send-grid.service';
 import { UserAuthorizationService } from './user-authorization.service';
 import { ebayoAuthorization } from '../resale/ebay-api.service';
 import { PosEditSettingsComponent } from 'src/app/modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
-import { DialogRef } from '@angular/cdk/dialog';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 
 interface IIsOnline {

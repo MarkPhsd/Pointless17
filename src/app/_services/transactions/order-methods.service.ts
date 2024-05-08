@@ -68,7 +68,6 @@ export class DateValidators {
 })
 export class OrderMethodsService implements OnDestroy {
 
-
   emailSubjects = [
     {name: 'Please Complete', subject: 'Please review this order for prep. I would like it completed. I agree to pay when it the order is completed.', id: 1},
     {name: 'Please Review for Prep', subject: 'Please review this order for prep. I would like it confirmed and then please contact me.', id: 2},
@@ -577,7 +576,7 @@ export class OrderMethodsService implements OnDestroy {
     return result
   }
 
-  constructor(public route                    : ActivatedRoute,
+  constructor(public  route                   : ActivatedRoute,
               private clientTableService      : ClientTableService,
               private dialog                  : MatDialog,
               public  authenticationService   : AuthenticationService,
@@ -1048,16 +1047,11 @@ export class OrderMethodsService implements OnDestroy {
 
   addItemToOrderObs(order: IPOSOrder, item: IMenuItem, quantity: number, rewardAvailableID: number, passAlongItem: PosOrderItem[],
                     selectedProductPrice?: ProductPrice, unitTypeID?: any): Observable<ItemPostResults> {
-
-
     this.selectedProductPrice = selectedProductPrice;
-
-
     let passAlong; // = passAlongItem[0]
     if (passAlongItem && passAlongItem[0]) {
       passAlong = passAlongItem[0]
     }
-
     return this.processItemPOSObservable( order, null, item, quantity, null , 0, 0,
                                           passAlong, this.assignPOSItems, unitTypeID, selectedProductPrice )
   }
@@ -1286,7 +1280,6 @@ export class OrderMethodsService implements OnDestroy {
     const user$ = this.getUserOrCreateUser()
     // return  user$.pipe(switchMap(data => { return of(tempItem)}))
     this.initItemProcess();
-
     if (!this.validateItem(item, barcode)) {  return of(null) }
     if (this.assignedPOSItem && !passAlongItem) { passAlongItem  = this.assignedPOSItem[0]; };
     order = this.validateOrder();
@@ -1296,7 +1289,6 @@ export class OrderMethodsService implements OnDestroy {
       this.overrideClear = true
     }
 
-    // console.log('order', order?.id)
     if (order) {
       const site       = this.siteService.getAssignedSite();
       if (barcode)  {
@@ -1354,7 +1346,6 @@ export class OrderMethodsService implements OnDestroy {
             )
 
             return user$.pipe(concatMap(data => {
-              // console.log('post order add item 1', data)
               if (!data && data.id != 0) { return of(null)  }
               return newItem$
             }))
@@ -1367,9 +1358,7 @@ export class OrderMethodsService implements OnDestroy {
             }
           ))
 
-          // console.log('returning post')
           return user$.pipe(concatMap(data => {
-            // console.log('post order add item 2', data)
             if (!data) { return of(null)  }
             return postItem$
           }))
@@ -1456,7 +1445,9 @@ export class OrderMethodsService implements OnDestroy {
         this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
 
         if (this.siteService.phoneDevice) {
-          this.notifyItemAdded(data);
+          if (!this.siteService.isApp) { 
+            this.notifyItemAdded(data);
+          }
         } else {
 
           const order = data.order as IPOSOrder;
@@ -1470,8 +1461,10 @@ export class OrderMethodsService implements OnDestroy {
             this.toolbarServiceUI.updateOrderBar(true);
             return;
           }
-
-          this.notifyItemAdded(data);
+          
+          if (!this.siteService.isApp) { 
+            this.notifyItemAdded(data);
+          }
         }
 
       } else {

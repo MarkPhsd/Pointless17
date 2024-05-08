@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output , OnChanges} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output , OnChanges, ViewChild, TemplateRef} from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 @Component({
@@ -7,6 +7,10 @@ import { Observable } from 'rxjs';
   styleUrls: ['./form-select-list.component.scss']
 })
 export class FormSelectListComponent implements OnInit , OnChanges{
+
+  @ViewChild('listTypeString') listTypeString: TemplateRef<any>;
+  @ViewChild('listTypeColumn') listTypeColumn: TemplateRef<any>;
+
   @Input()  list            : any[];
   @Input()  list$           : Observable<any[]>;
   @Input()  formFieldName   : string;
@@ -15,6 +19,9 @@ export class FormSelectListComponent implements OnInit , OnChanges{
   @Input()  formValue       : any;
   @Output() selectionChange       = new EventEmitter();
   @Output() selectionChangeValue = new EventEmitter();
+
+  @Input() stringList : boolean;
+
   inputField: UntypedFormControl;
 
   itemList: any[];
@@ -25,6 +32,13 @@ export class FormSelectListComponent implements OnInit , OnChanges{
     if (this.searchForm) {
       this.inputField = this.searchForm.controls[this.formFieldName] as UntypedFormControl;
     }
+  }
+
+  get listType() { 
+    if (this.stringList) { 
+      return this.listTypeString
+    }
+    return this.listTypeColumn
   }
 
   ngOnChanges(): void {

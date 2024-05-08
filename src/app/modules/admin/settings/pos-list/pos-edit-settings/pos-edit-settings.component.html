@@ -425,101 +425,83 @@
 
 </ng-template>
 
+<ng-template #androidDCapButtonTemplate>
+  <!-- <button mat-button-rasied (click)="getDcapAndroidDeviceList()"></button> -->
+</ng-template>
+
+<div *ngiIf="androidDisplay">
+  Android Device Info:
+  <ngx-json-viewer [json]="androidDisplay"></ngx-json-viewer>
+</div>
+
 <ng-template #dsiEMVSettingsView>
   <mat-card  *ngIf="isDSIEnabled && dsiEMVSettings  && terminal" [formGroup]="dsiEMVSettings">
     <mat-card-subtitle>
-     <h4>DC Direct Processing</h4>
+      <h4>DC Direct Processing</h4>
+      <button mat-raised-button (click)="getAndroidDevices()"><mat-icon>android</mat-icon>Device list</button>
     </mat-card-subtitle>
+
     <div class="grid-container">
-        <div class="grid-item">
-           <app-value-fields
-              [fieldType]     ="'text'"
-              [inputForm]     ="dsiEMVSettings"
-              [fieldName]     ="'MerchantID'">
-              MerchantID
-          </app-value-fields>
+        <div class="grid-item" >
+          <form-select-list 
+                  [searchForm]        = "dsiEMVSettings"
+                  [formFieldName]     ="'deviceValue'"
+                  [stringList]        = 'true'
+                  [list]              = "dcapAndroidDeviceList" >
+            <div fieldSearchDescription>Device List</div>
+          </form-select-list>
         </div>
-        <!-- <div class="grid-item">
+
+        <div class="grid-item">
           <app-value-fields
               [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="dsiEMVSettings"
               [fieldName]     ="'OperatorID'">
-              OperatorID
-          </app-value-fields>
-        </div> -->
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="dsiEMVSettings"
-              [fieldName]     ="'IpPort'">
-              IpPort
+              Device Tag
           </app-value-fields>
         </div>
+  
         <div class="grid-item">
           <app-value-fields
               [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="dsiEMVSettings"
               [fieldName]     ="'POSPackageID'">
-              POSPackageID
+              POS PackageID
           </app-value-fields>
         </div>
+
         <div class="grid-item">
           <app-value-fields
               [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="dsiEMVSettings"
               [fieldName]     ="'TranDeviceID'">
-              TranDeviceID
+              Tran DeviceID
           </app-value-fields>
         </div>
-        <!-- <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="dsiEMVSettings"
-              [fieldName]     ="'UserTrace'">
-              UserTrace
-          </app-value-fields>
-        </div> -->
-        <!-- <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="dsiEMVSettings"
-              [fieldName]     ="'TranCode'">
-              TranCode
-          </app-value-fields>
-        </div> -->
+
         <div class="grid-item">
           <app-value-fields
               [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="dsiEMVSettings"
               [fieldName]     ="'SecureDevice'">
-              SecureDevice
+              Secure Device
           </app-value-fields>
         </div>
-        <!-- <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="dsiEMVSettings"
-              [fieldName]     ="'ComPort'">
-              ComPort
-          </app-value-fields>
-        </div> -->
+  
         <div class="grid-item">
           <app-value-fields
               [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="dsiEMVSettings"
               [fieldName]     ="'PinPadIpPort'">
-              PinPadIpPort
+              PinPad IpPort
           </app-value-fields>
         </div>
+
         <div class="grid-item">
           <app-value-fields
               [fieldsClass]   ="'field-small'"
@@ -527,6 +509,16 @@
               [inputForm]     ="dsiEMVSettings"
               [fieldName]     ="'HostOrIP'">
               Host Or IP
+          </app-value-fields>
+        </div>
+
+        <div class="grid-item">
+          <app-value-fields
+              [fieldsClass]   ="'field-small'"
+              [fieldType]     ="'text'"
+              [inputForm]     ="dsiEMVSettings"
+              [fieldName]     ="'IpPort'">
+              IpPort
           </app-value-fields>
         </div>
 
