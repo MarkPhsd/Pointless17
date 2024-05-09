@@ -79,12 +79,14 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
   ngOnInit(): void {
     this.site           = this.siteService.getAssignedSite()
     this.initPlatForm();
-    this.initDateForm()
+
     this.initSearchForm();
     this.initSubscriptions();
     this.initSearchForm();
     this.initFormFromSearchModel();
     this.initEmployeeList();
+    this.dateRangeForm = this.getFormRangeInitial(this.dateRangeForm );
+
   }
 
   ngOnDestroy( ) {
@@ -99,6 +101,18 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
     const platForm      = this.platForm;
     if (platForm === 'capacitor') { this.capacitorEnabled = true }
     if (platForm === 'electron')  { this.electronEnabled =  true }
+  }
+
+  getFormRangeInitial(inputForm: UntypedFormGroup) {
+    const today = new Date();
+    const month = today.getMonth();
+    const year = today.getFullYear();
+    //then set the current date range of the view
+    inputForm  =  this.fb.group({
+      start: new Date(),
+      end: new Date()
+    })
+    return inputForm;
   }
 
   initFormFromSearchModel() {
@@ -260,7 +274,7 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
     let today = new Date();
     const month = today.getMonth();
     const year = today.getFullYear();
- 
+
     const tmr =  this.dateHelper.add('d', 1, today)
 
     this.dateRangeForm =  this.fb.group({
@@ -275,17 +289,6 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
 
   subscribeToDatePicker()  {
     if (this.dateRangeForm) {
-      this.dateRangeForm.get('start').valueChanges.subscribe(res=>{
-        // console.log('res dateFrom', res)
-        if (!res) {return}
-        this.dateFrom = res //this.dateRangeForm.get("start").value
-      })
-
-      this.dateRangeForm.get('end').valueChanges.subscribe(res=>{
-        // console.log('res dateTo', res)
-        if (!res) {return}
-        this.dateTo = res
-      })
 
       this.dateRangeForm.valueChanges.subscribe( res => {
         // console.log('res dateTo', res)
@@ -297,6 +300,10 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
         }
       })
     }
+  }
+
+  refreshDateRange(event) {
+    this.refreshDateSearch()
   }
 
   emitDatePickerData(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {

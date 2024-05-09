@@ -8,6 +8,13 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISetting } from 'src/app/_interfaces';
 import { Observable, of, switchMap } from 'rxjs';
 import { NgxXml2jsonService } from 'ngx-xml2json';
+// import { parseStringPromise } from 'xml2js';
+export interface SecureDevice {
+  description: string;
+  interfaceType: string;
+  secureDeviceId: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -34,7 +41,7 @@ export class PointlessCCDSIEMVAndroidService {
     { name: "PAX Aries8 - Datacap E2E", id: "EMV_ARIES8_DATACAP_E2E" },
     { name: "PAX IM30 - Datacap E2E", id: "EMV_IM30_DATACAP_E2E" }
   ];
-  
+
 
   public transaction: Transaction;
   public saving: boolean;
@@ -153,54 +160,68 @@ export class PointlessCCDSIEMVAndroidService {
   }
 
   async getDevicesInfo () {
-    if (!this.siteService.isApp) { 
+    if (!this.siteService.isApp) {
       return this.getDeviceIdList()
     }
- 
     const item    = await this.getAndroidDevices()
-    if (item) { 
+    if (item) {
       return item
     }
-    return []
-  }
-
-  getDeviceIdList(): string[] {
-    return this.terminals.map(terminal => terminal.id);
+    let devices :  SecureDevice[] = [];
+    return devices
   }
 
   async getDeviceInfo() {
-
-    if (!this.siteService.isApp) { 
+    if (!this.siteService.isAndroid) {
       return this.getDeviceIdList()
     }
-
-    try {
-    } catch (error) {
-      return error
-    }
+    return await this.getAndroidDevices()
   }
 
  async getAndroidDevices() {
     const options = this.transaction as Transaction;
-    try {
-      options.merchantID = options?.merchantID;
-      options.pinPadIpAddress = options?.pinPadIpAddress;
-      options.padPort = options?.padPort;
-    } catch (error) {
-      
-    }
- 
     // let item: any;
     const item    = await dsiemvandroid.getDeviceInfo(options);
     const results = item as any;
     const parser = new DOMParser();
     results.value = results.value.replace('#', '')
-    const xml = parser.parseFromString(results.value, 'text/xml');
-    const obj = this.jsonService.xmlToJson(xml) as any;
 
-    console.log('item', item)
-    console.log('obj', obj)
-    return {obj, xml}
+
+    const xml = parser.parseFromString(results.value, 'text/xml');
+    // const obj = this.jsonService.xmlToJson(xml) as any;
+
+    console.log(xml)
+    const objs=  this.convertXMLToObjects( results.value)
+
+    const listValues =  objs.map(terminal => terminal.secureDeviceId);
+    console.log('listvalues', listValues)
+    return listValues;
+  }
+
+   convertXMLToObjects(xml: string): SecureDevice[] {
+    // const result = await parseStringPromise(xml);
+    const result = this.jsonService.xmlToJson(xml) as any;
+    console.log('convertXMLToObjects', result)
+    const numDevices = parseInt(result.Devices.NumSecureDevices[0]);
+    const devices: SecureDevice[] = [];
+
+    for (let i = 1; i <= numDevices; i++) {
+      const deviceKey = `SecureDevice${i}`;
+      const device = result.Devices[deviceKey][0];
+      devices.push({
+        description: device[`Description${i}`][0],
+        interfaceType: device[`Interface${i}`][0],
+        secureDeviceId: device[`SecureDeviceID${i}`][0]
+      });
+    }
+
+    return devices;
+
+  }
+
+  //gets hard coded list
+  getDeviceIdList(): string[] {
+    return this.terminals.map(terminal => terminal.id);
   }
 
   async getIPAddress() {

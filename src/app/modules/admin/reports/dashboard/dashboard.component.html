@@ -19,7 +19,8 @@ assets/htmlTemplates/salesreportStyles.html' -->
   <div class="grid-buttons">
     <div *ngIf="completionDateForm" style="margin-right:10px;width:255px">
       <mat-date-range
-        [hideRefresh]="true"
+        [hideRefresh] ="true"
+        [buttonViewEnabled] ="true"
         [inputForm] ="completionDateForm">
       </mat-date-range>
     </div>

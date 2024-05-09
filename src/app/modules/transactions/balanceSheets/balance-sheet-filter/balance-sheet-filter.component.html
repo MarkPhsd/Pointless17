@@ -19,7 +19,7 @@
     </div>
 
     <div class="fields">
-      <mat-form-field appearance="outline" *ngIf="dateRangeForm">
+      <!-- <mat-form-field appearance="outline" *ngIf="dateRangeForm">
         <mat-label>Date Range (Start Time)</mat-label>
 
         <mat-date-range-input [formGroup]="dateRangeForm"
@@ -28,8 +28,7 @@
           <input matStartDate
                  formControlName="start"
                  placeholder="Start date"
-                 #dateRangeStart
-                 >
+                 #dateRangeStart >
           <input matEndDate
                  formControlName="end"
                  placeholder="End date"
@@ -44,7 +43,13 @@
 
         <mat-error *ngIf="dateRangeForm.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
         <mat-error *ngIf="dateRangeForm.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
-      </mat-form-field>
+      </mat-form-field> -->
+      <mat-date-range
+          (outputDateRange)="refreshDateRange($event)"
+          [hideRefresh] ="true"
+          [buttonViewEnabled] ="true"
+          [inputForm] ="dateRangeForm">
+      </mat-date-range>
     </div>
 
     <mat-button-toggle-group

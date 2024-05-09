@@ -48,3 +48,13 @@
     <mat-error *ngIf="inputForm.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
   </mat-form-field>
 </ng-template>
+
+<ng-container [ngTemplateOutlet]="buttonView"></ng-container>
+
+<ng-template #nextPreviousTemplate>
+  <div class="ps-grid-items-75-col">
+    <div><button style="width:75px" mat-raised-button (click)="moveDate(-1)"><mat-icon>back</mat-icon>Back</button></div>
+    <div><button style="width:75px" mat-raised-button (click)="moveDate(0)"><mat-icon></mat-icon>Today</button></div>
+    <div><button style="width:75px" mat-raised-button (click)="moveDate(1)"><mat-icon>foward</mat-icon>Next</button></div>
+  </div>
+</ng-template>

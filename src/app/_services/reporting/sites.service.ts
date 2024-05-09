@@ -38,9 +38,12 @@ export class SitesService {
     this._site.next(site)
   }
 
+  get isAndroid() {
+    return this.platformSevice.androidApp
+  }
 
   get isApp() {
-    if (this.platformSevice.androidApp) { 
+    if (this.platformSevice.androidApp) {
       return true
     }
     if (this.platformSevice.isAppElectron) {

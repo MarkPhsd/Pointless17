@@ -119,26 +119,22 @@ export class PosEditSettingsComponent implements OnInit {
   }
  }
 
- androidDCapButtonTemplate() { 
-  if (this.dcapAndroidDeviceList) { 
+ androidDCapButtonTemplate() {
+  if (this.dcapAndroidDeviceList) {
     return this.androidDCapButtonTemplate
   }
   return null;
  }
 
- get isAndroid() { 
-  if (this.platFormService.androidApp) { 
+ get isAndroid() {
+  if (this.platFormService.androidApp) {
     return true
   }
   return false
  }
 
- async getAndroidDevices() { 
-  const list = await this.dSIEMVAndroidService.getAndroidDevices()
-  this.androidDisplay = list
- }
 
- async getDcapAndroidDeviceList() { 
+ async getDcapAndroidDeviceList() {
     const list = await this.dSIEMVAndroidService.getDeviceInfo()
     this.dcapAndroidDeviceList = list;
  }

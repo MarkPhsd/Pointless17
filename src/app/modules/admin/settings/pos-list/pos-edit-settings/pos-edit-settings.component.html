@@ -438,12 +438,12 @@
   <mat-card  *ngIf="isDSIEnabled && dsiEMVSettings  && terminal" [formGroup]="dsiEMVSettings">
     <mat-card-subtitle>
       <h4>DC Direct Processing</h4>
-      <button mat-raised-button (click)="getAndroidDevices()"><mat-icon>android</mat-icon>Device list</button>
+      <button mat-raised-button (click)="getDcapAndroidDeviceList()"><mat-icon>android</mat-icon>Device list</button>
     </mat-card-subtitle>
 
     <div class="grid-container">
         <div class="grid-item" >
-          <form-select-list 
+          <form-select-list
                   [searchForm]        = "dsiEMVSettings"
                   [formFieldName]     ="'deviceValue'"
                   [stringList]        = 'true'
@@ -461,7 +461,7 @@
               Device Tag
           </app-value-fields>
         </div>
-  
+
         <div class="grid-item">
           <app-value-fields
               [fieldsClass]   ="'field-small'"
@@ -491,7 +491,7 @@
               Secure Device
           </app-value-fields>
         </div>
-  
+
         <div class="grid-item">
           <app-value-fields
               [fieldsClass]   ="'field-small'"

@@ -252,7 +252,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   }
 
   subscribeToCompletionDatePicker() {
-    const form = this.completionDateForm //(this.completionDateForm)
+    const form = this.completionDateForm
     if (!form) {return}
     form.valueChanges.subscribe( res=> {
       if (form.get("start").value &&
