@@ -144,6 +144,7 @@ import { DisplayMenuMenuComponent } from './modules/display-menu/display-menu-me
 import { MenuSectionComponent } from './modules/display-menu/display-menu-list/menu-section/menu-section.component';
 import { PayAPIComponent } from './modules/payment-processing/pay-api/pay-api.component';
 import { PayAPIFrameComponent } from './modules/payment-processing/pay-apiiframe/pay-apiiframe.component';
+import { PosEditSettingsComponent } from './modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
 
 const routes: Routes = [
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
@@ -160,6 +161,9 @@ const routes: Routes = [
         { path: 'ebay-return-policy', component: EbayReturnPolicyComponent, canActivate: [AuthGuard], data: {title: 'Ebay Return Policy', animation: 'isLeft'}},
         { path: 'ebay-auth-redirect', component: EbayAuthRedirectComponent, canActivate: [AuthGuard], data: {title: 'Ebay Auth Redirect', animation: 'isLeft'}},
         //
+
+        { path: 'posEditSettings', component: PosEditSettingsComponent, canActivate: [AuthGuard], data: {title: 'Ebay Auth Redirect', animation: 'isLeft'}},
+        
 
         { path: 'buy-sell', component: BuySellMainComponent, canActivate: [AuthGuard], data: {title: 'Resale Brand Classes', animation: 'isLeft'}},
 

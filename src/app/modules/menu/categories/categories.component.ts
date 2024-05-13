@@ -21,7 +21,7 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-const { Keyboard } = Plugins;
+const  { Keyboard } = Plugins;
 
 // https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6
 //we are only using one section now.
@@ -122,6 +122,9 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
+
+  @Input() disableImages: boolean;
+
   textLength = 26;
   @Input()         panelHeightValue = 300;
   panelHeightStyle= ''
@@ -212,7 +215,11 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     if (this.authSevice && this.authSevice.deviceInfo && this.authSevice.deviceInfo.phoneDevice) {
       this.textLength = 24
     }
-
+    this.uiSettings.posDevice$.subscribe(data => {
+      if (data) {
+        this.disableImages = data?.disableImages;
+      }
+    })
   }
 
   getPlaceHolder() {

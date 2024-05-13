@@ -1,8 +1,6 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(viewType$ | async) as viewPrep"></div>
 
-<!-- {{searchModel | json}} -->
-<!-- {{viewType}} | disableFilterUpdate {{disableFilterUpdate}} -->
 <div class="parent-container">
 
   <ng-container [ngTemplateOutlet]="filterViewFull"></ng-container>

@@ -1,7 +1,7 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit, Input, SimpleChange, OnChanges, SimpleChanges } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { MatPaginator, PageEvent} from '@angular/material/paginator';
+import { MatLegacyTableDataSource as MatTableDataSource, MatLegacyTable as MatTable } from '@angular/material/legacy-table';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
 import {  IProductCategory, Item, }  from 'src/app/_interfaces';
 import { Subject ,Observable } from 'rxjs';
 import { MenuService } from 'src/app/_services/menu/menu.service';

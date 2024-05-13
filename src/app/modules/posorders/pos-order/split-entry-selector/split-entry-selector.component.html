@@ -1,10 +1,11 @@
 <div class="menu-buttons" *ngIf="isUserStaff &&
-                                 uiTransactionSettings.splitEntry" >
+                                 uiTransactionSettings?.splitEntry" >
   <value-from-list-selector
     [values] ="values"
-    [value] ="orderMethodsService.splitEntryValue"
-    (assignValue)="assignVaue($event)"
-  >Split</value-from-list-selector>
+    [value]  ="orderMethodsService.splitEntryValue"
+    (assignValue)="assignVaue($event)" >
+    Split
+  </value-from-list-selector>
 </div>
 
 

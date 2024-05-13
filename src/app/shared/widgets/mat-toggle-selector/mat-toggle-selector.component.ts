@@ -1,6 +1,6 @@
 import { Component, OnInit,Output, Input, EventEmitter, HostListener, ViewChild, OnChanges} from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { MatLegacyMenuTrigger as MatMenuTrigger } from '@angular/material/legacy-menu';
 import { IMenuItem, menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
 @Component({
   selector: 'app-mat-toggle-selector',

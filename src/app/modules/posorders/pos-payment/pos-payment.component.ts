@@ -31,6 +31,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 
 @Component({
   selector: 'app-pos-payment',
@@ -57,6 +58,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   process$: Observable<any>;
   @Input() order  :   IPOSOrder;
   isApp = this.platFormService.isApp();
+  androidApp = this.platFormService.androidApp;
   userAuths       :   IUserAuth_Properties;
   _userAuths      :   Subscription;
   changeDueComing :   any;
@@ -121,15 +123,36 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   _user: Subscription;
   _orderLayout = 'order-receiptLayouts'
 
+  PaxA920 : boolean;
   payApiEnabled: boolean;
 
+  posDevice$      = this.uISettingsService.posDevice$.pipe(switchMap(data => { 
+    if (!data)  { 
+      const item = localStorage.getItem('devicename')
+      return this.uISettingsService.getPOSDevice(item).pipe(switchMap(data => { 
+        this.setPaxInfo(data)
+        this.uISettingsService.updatePOSDevice(data)
+        return of(data)
+      }))
+    } else { 
+      this.setPaxInfo(data)
+    }
+ 
+    return of(data)
+  }))
   get isProcessingPayment() {
     if (this.processing) {
       return this.processingPayment;
     }
     return null;
+  }
 
-
+  setPaxInfo(data) { 
+    if (data.dsiEMVSettings) { 
+      if (data?.dsiEMVSettings?.deviceValue == 'EMV_A920PRO_DATACAP_E2E') { 
+        this.PaxA920 = true
+      } 
+    }
   }
 
   get orderLayout() {
@@ -151,9 +174,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         }
       return of(null)
     }))
-
-
-
   }
 
   initSubscriptions() {
@@ -282,7 +302,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   get payAPIEnabled() {
-    //!isApp
     if (this.uiTransactions.dcapPayAPIEnabled && !this.isApp) {
       return true
     }
@@ -309,8 +328,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
     return null;
   }
-  // *ngIf="!isApp && uiTransactions.dcapPayAPIEnabled && payApiEnabled"
-
+ 
   get giftCardPayButtonView() {
     let pass = false;
 

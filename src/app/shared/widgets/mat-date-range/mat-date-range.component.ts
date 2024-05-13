@@ -28,7 +28,7 @@ export class MatDateRangeComponent {
     }
     return null;
   }
-  
+
   emitDatePickerData() {
     this.outputDateRange.emit(true)
   }

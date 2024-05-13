@@ -208,6 +208,14 @@ export interface ITaxReport {
   completed               : boolean;
   voidReason: string;
   voidAmount: number;
+  taxRate1: number;
+  taxRate2: number;
+  taxRate3: number;
+  taxLabel1: string;
+  taxLabel2: string;
+  taxLabel3: string;
+
+
 }
 
 export interface ITaxReportOptimized {

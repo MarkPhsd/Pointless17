@@ -10,7 +10,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AvailabilityTypeEnum, Dimensions, EbayAPIService, FulfillmentTime,PackageWeightAndSize, PickupAtLocationAvailability, ProductData, TimeDurationUnitEnum, Weight, WeightUnitOfMeasureEnum, Product, ConditionDescriptor, EbayOfferRequest, EbayOfferresponse, EbayInventoryJson, ShipToLocationAvailability, condition, CategorySuggestionsResponse, CategorySuggestion } from 'src/app/_services/resale/ebay-api.service';
 import { EbayConditions } from 'src/app/_services/resale/ebayConditions';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { MatSelect } from '@angular/material/select';
+import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
 
 @Component({
   selector: 'ebay-publish-product',

@@ -1,0 +1,156 @@
+<mat-card  *ngIf="isDSIEnabled && dsiEMVSettings  && terminal" 
+          [formGroup]="dsiEMVSettings">
+  <mat-card-subtitle>
+    <h4>DC Direct Processing</h4>
+    <button mat-raised-button (click)="getDcapAndroidDeviceList()">
+      <mat-icon>android</mat-icon>Device list</button>
+  </mat-card-subtitle>
+
+  <div class="grid-container">
+      <div class="grid-item" >
+        <form-select-list
+                [searchForm]        = "dsiEMVSettings"
+                [formFieldName]     ="'deviceValue'"
+                [stringList]        = 'true'
+                [list]              = "dcapAndroidDeviceList" >
+          <div fieldSearchDescription>Device List</div>
+        </form-select-list>
+      </div>
+
+      <div class="grid-item">
+        <app-value-fields
+            [fieldsClass]   ="'field-small'"
+            [fieldType]     ="'text'"
+            [inputForm]     ="dsiEMVSettings"
+            [fieldName]     ="'OperatorID'">
+            Device Tag
+        </app-value-fields>
+      </div>
+
+      <div class="grid-item">
+        <app-value-fields
+            [fieldsClass]   ="'field-small'"
+            [fieldType]     ="'text'"
+            [inputForm]     ="dsiEMVSettings"
+            [fieldName]     ="'POSPackageID'">
+            POS PackageID
+        </app-value-fields>
+      </div>
+
+      <div class="grid-item">
+        <app-value-fields
+            [fieldsClass]   ="'field-small'"
+            [fieldType]     ="'text'"
+            [inputForm]     ="dsiEMVSettings"
+            [fieldName]     ="'TranDeviceID'">
+            Tran DeviceID
+        </app-value-fields>
+      </div>
+
+      <div class="grid-item">
+        <app-value-fields
+            [fieldsClass]   ="'field-small'"
+            [fieldType]     ="'text'"
+            [inputForm]     ="dsiEMVSettings"
+            [fieldName]     ="'SecureDevice'">
+            Secure Device
+        </app-value-fields>
+      </div>
+
+      <div class="grid-item">
+        <app-value-fields
+            [fieldsClass]   ="'field-small'"
+            [fieldType]     ="'text'"
+            [inputForm]     ="dsiEMVSettings"
+            [fieldName]     ="'PinPadIpPort'">
+            PinPad IpPort
+        </app-value-fields>
+      </div>
+
+      <div class="grid-item">
+        <app-value-fields
+            [fieldsClass]   ="'field-small'"
+            [fieldType]     ="'text'"
+            [inputForm]     ="dsiEMVSettings"
+            [fieldName]     ="'HostOrIP'">
+            Host Or IP
+        </app-value-fields>
+      </div>
+
+      <div class="grid-item">
+        <app-value-fields
+            [fieldsClass]   ="'field-small'"
+            [fieldType]     ="'text'"
+            [inputForm]     ="dsiEMVSettings"
+            [fieldName]     ="'IpPort'">
+            IpPort
+        </app-value-fields>
+      </div>
+
+      <div class="grid-item">
+        <app-value-fields
+            [fieldsClass]   ="'field-small'"
+            [fieldType]     ="'text'"
+            [inputForm]     ="dsiEMVSettings"
+            [fieldName]     ="'MerchantID'">
+            MerchantID (for A920)
+        </app-value-fields>
+      </div>
+
+      <div class="toggle-fields">
+        <div>
+          <mat-slide-toggle
+            formControlName="partialAuth">
+            <mat-label>Partial Auth</mat-label>
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="toggle-fields">
+        <div>
+          <mat-slide-toggle
+                formControlName="enabled">
+            <mat-label>Enable</mat-label>
+          </mat-slide-toggle>
+        </div>
+        <div>Enabled on each device.</div>
+      </div>
+
+      <div>
+        <!-- <button  mat-button  (click)="dCapReset()">Device Reset</button> -->
+        <button  mat-button (click)="dCapReset()">Device Reset</button>
+      </div>
+  </div>
+</mat-card> 
+
+
+<mat-card *ngIf="platFormService.androidApp">
+  <mat-card-subtitle>
+    <h4>PAX A920 Direct Testing</h4>
+    <div>
+      <button style="width:100px" class="margin-5" mat-raised-button (click)="dCapReset()">Reset</button>
+      <button style="width:100px" class="margin-5" mat-raised-button (click)="downloadParam()"><mat-icon>download</mat-icon>Params</button>
+    </div>
+    <div>
+      <button style="width:100px" class="margin-5 " mat-raised-button (click)="sale()">Sale</button>
+      <button style="width:100px" class="margin-5 " mat-raised-button (click)="refund()">Refund</button>
+    </div>
+  </mat-card-subtitle>
+
+  <div class="grid-container" *ngIf="transactionForm" [formGroup]="transactionForm">
+    
+    <div class="grid-item">
+      <app-value-fields
+          [fieldsClass]   ="'field-small'"
+          [fieldType]     ="'text'"
+          [inputForm]     = "transactionForm"
+          [fieldName]     ="'amount'">
+          Amount
+      </app-value-fields>
+    </div>
+
+  </div>
+
+</mat-card>
+
+<ngx-json-viewer *ngIf="dcapResult" [json]="dcapResult"></ngx-json-viewer>

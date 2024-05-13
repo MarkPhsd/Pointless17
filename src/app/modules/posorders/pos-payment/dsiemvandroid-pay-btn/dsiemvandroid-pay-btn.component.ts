@@ -3,13 +3,9 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IPaymentMethod } from 'ngx-paypal';
 import { Observable } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { TransactionUISettings, } from 'src/app/_services/system/settings/uisettings.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
-
 @Component({
   selector: 'dsiemvandroid-pay-btn',
   templateUrl: './dsiemvandroid-pay-btn.component.html',
@@ -42,7 +38,7 @@ export class DSIEMVAndroidPayBtnComponent implements OnInit {
     processDSIEMVAndroidCreditCardPayment(manual: boolean) {
       const order = this.order;
       if (order) {
-        this.paymentsMethodsService.processDSIEMVAndroidCreditVoid(order, this.creditBalanceRemaining, manual, this.uiTransactions)
+        this.paymentsMethodsService.processDSIEMVAndroidTransaction(order, this.creditBalanceRemaining, manual, this.uiTransactions)
       }
     }
   }

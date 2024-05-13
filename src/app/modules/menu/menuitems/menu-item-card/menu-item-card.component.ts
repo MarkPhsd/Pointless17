@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, OnDestroy, Output,EventEmitter, ViewChild, TemplateRef} from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output,EventEmitter, ViewChild, TemplateRef, ChangeDetectorRef, OnChanges} from '@angular/core';
 import { IMenuItem, menuButtonJSON }  from 'src/app/_interfaces/menu/menu-products';
-import { AWSBucketService, AuthenticationService, MenuService, OrdersService } from 'src/app/_services';
+import { AWSBucketService, AuthenticationService, MenuService } from 'src/app/_services';
 import { ActivatedRoute, Router,  } from '@angular/router';
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { Observable, Subscription,  switchMap } from 'rxjs';
@@ -11,7 +11,7 @@ import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-se
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { UIHomePageSettings} from 'src/app/_services/system/settings/uisettings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-
+// import { NgOptimizedImage } from '@angular/common'
 // https://stackoverflow.com/questions/54687522/best-practice-in-angular-material-to-reuse-component-in-dialog
 export interface DialogData {
   id: string;
@@ -24,18 +24,22 @@ export interface DialogData {
 })
 export class MenuItemCardComponent implements OnInit, OnDestroy {
 
-  @ViewChild('menuItemView')  menuItemView :  TemplateRef<any> | undefined;
-  @ViewChild('seeMoreInCategory')  seeMoreInCategory :  TemplateRef<any> | undefined;
-  @ViewChild('price') price :  TemplateRef<any> | undefined;
+  @ViewChild('menuItemView')            menuItemView :  TemplateRef<any> | undefined;
+  @ViewChild('seeMoreInCategory')       seeMoreInCategory :  TemplateRef<any> | undefined;
+  @ViewChild('priceTemplate')           priceTemplate :  TemplateRef<any> | undefined;
 
-  @ViewChild('loadMoreButton')  loadMoreButton :  TemplateRef<any> | undefined;
-  @ViewChild('editItemView') editItemView :  TemplateRef<any> | undefined;
-  @ViewChild('buyItemView') buyItemView :  TemplateRef<any> | undefined;
-  @ViewChild('viewItemView') viewItemView: TemplateRef<any> | undefined;
+  @ViewChild('loadMoreButton')          loadMoreButton :  TemplateRef<any> | undefined;
+  @ViewChild('editItemView')            editItemView :  TemplateRef<any> | undefined;
+  @ViewChild('buyItemView')             buyItemView :  TemplateRef<any> | undefined;
+  @ViewChild('viewItemView')            viewItemView: TemplateRef<any> | undefined;
 
-  @ViewChild('browserView') browserView :  TemplateRef<any> | undefined;
-  @ViewChild('appView')     appView: TemplateRef<any> | undefined;
+  @ViewChild('browserView')             browserView :  TemplateRef<any> | undefined;
+  @ViewChild('appView')                 appView: TemplateRef<any> | undefined;
+  @ViewChild('typeDisplayTemplate')     typeDisplayTemplate: TemplateRef<any> | undefined;
+  @ViewChild('menuNameTemplate')        menuNameTemplate: TemplateRef<any> | undefined;
 
+  //menuNameTemplate
+  //typeDisplayTemplate
 
   @Output() outPutLoadMore = new EventEmitter()
   @Output() outPutUpdateCategory = new EventEmitter();
@@ -63,7 +67,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   @Input() displayType      : string ='product';
   @Input() buySell: boolean;
   @Input() promptModifier: boolean;
-  containerclass: string = this.containerclassValue;
+  containerclass: string
 
   @Output() outputRefresh = new EventEmitter()
   placeHolderImage   : String = "assets/images/placeholderimage.png"
@@ -77,18 +81,14 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   isApp     = false;
   isProduct : boolean;
   matCardClass = 'mat-card-grid'
-  // uiSettings$: Observable<any>;
-  // uiSettings: TransactionUISettings;
+
   noImage: boolean;
 
   imageContainerClass = 'image-container';
 
-  // descriptText = this.descriptTextClass
-  // headercontainer = this.headercontainerClass
-
   get priceView() {
     if (this.isProduct) {
-      return this.price
+      return this.priceTemplate
     }
     return null;
   }
@@ -105,16 +105,19 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     }
     return null;
   }
-  get imageContainer() {
 
+  get imageContainer() {
     if (this.isApp) {
       return 'image-container container-app'
     }
     return 'image-container container-mobile'
-
   }
-  get containerclassValue () {
-    // return 'container'
+
+  get containerclassValue() {
+
+    if (this.smallDevice && this.platFormService.androidApp) {
+      return 'container-mobile-app'
+    }
 
     if (this.disableImages) {
       return 'container container-app-noimage'
@@ -128,46 +131,42 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   get buttonView() {
-    // return 'container'
     if (this.isApp) {
       return this.appView
     }
     return  this.browserView
   }
 
-  // get headercontainerClass() {
-  //   if (this.isApp) {
-  //     return 'header-container header-container-app'
-  //   }
-  //   return 'header-container header-container-mobile'
-  // }
+  get typeDisplayView() {
+    if (this.menuItem?.id != -1 && !this.menuItem.itemType) {
+      return this.typeDisplayTemplate
+    }
+    return null;
+  }
 
-
-  // get descriptTextClass() {
-  //   if (this.isApp) {
-  //     return 'description-text description-text-app'
-  //   }
-  //   return 'description-text description-text-mobile'
-  // }
-
-
+  get menuNameView() {
+    if (this.menuItem && this.menuItem.urlImageMain  && !this.disableImages) {
+      return this.menuNameTemplate
+    }
+    return null;
+  }
 
   constructor(
     private awsBucket: AWSBucketService,
     public  route: ActivatedRoute,
-    private orderService: OrdersService,
-    // private _snackBar: MatSnackBar,
     private orderMethodsService: OrderMethodsService,
     public  platFormService   : PlatformService,
     private menuService: MenuService,
     public  authenticationService: AuthenticationService,
     private productEditButtonService: ProductEditButtonService,
-    // private uiSettingsService: UISettingsService,
     private siteService : SitesService,
-    private router: Router,
-    )
+    private router: Router )
   {
-    this.isApp    = this.platFormService.isApp()
+    this.isApp    = this.platFormService.isApp();
+
+    if (this.platFormService.androidApp) {
+      this.matCardClass = 'mat-card-grid mat-elevation-z0'
+    }
   }
 
   ngOnInit() {
@@ -176,14 +175,10 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     if (!this.menuItem) {return }
     this.isProduct = this.getIsNonProduct(this.menuItem)
     this.imageUrl  = this.getItemSrc(this.menuItem)
-    if (!this.menuItem.urlImageMain) {
-      this.noImage = true
-    }
+    if (!this.menuItem.urlImageMain) { this.noImage = true  }
     this.getMenuItemObject(this.menuItem)
     this.initLayout();
-    // this.uiSettings$ = this.uiSettingsService.transactionUISettings$.pipe(data => {
-    //   return of(data)
-    // })
+    this.containerclass  = this.containerclassValue;
   };
 
   get isImageButtonView() {
@@ -240,7 +235,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite()
     const item$ = this.menuService.getMenuItemByID(site, this.menuItem.id)
     this.buyItem$ = item$.pipe(switchMap(data => {
-        //switch order to current order
+
         return   this.productEditButtonService.openBuyInventoryItemDialogObs(data,  this.orderMethodsService.currentOrder)
 
       }
@@ -275,7 +270,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   get enableViewItem() {
     if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
-
     if (this.isApp && this.authenticationService.isAdmin || this.allowEdit && this.isApp) {
       if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
         return this.viewItemView
@@ -305,16 +299,13 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
         return this.viewItemView
       }
     }
-
     return null;
   }
 
   getIsNonProduct(menuItem: IMenuItem): boolean {
     if (!menuItem) { return false}
     if (menuItem) {
-      if (!menuItem.itemType)   {
-        return false
-      }
+      if (!menuItem.itemType)   {  return false }
       if (menuItem.itemType.useType && menuItem.itemType.useType.toLowerCase()  === 'adjustment') { return false}
       if (menuItem.itemType.type && menuItem.itemType.type.toLowerCase()     === 'adjustment') { return false}
       if (menuItem.itemType.type && menuItem.itemType.type.toLowerCase()     === 'discounts') { return false}

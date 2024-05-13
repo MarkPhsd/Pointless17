@@ -26,6 +26,9 @@ export class OrderCardComponent implements OnInit {
   timeFormat = 'shortTime'
   tableFont = 'font-dark-green font-1-4em font-weight-500';
 
+  @Input() androidApp: boolean;
+  matCardClass : string;
+
   constructor(private serviceTypeService: ServiceTypeService,
               private uiSettingService: UISettingsService,) {
     this.updateItemsPerPage();
@@ -63,11 +66,19 @@ export class OrderCardComponent implements OnInit {
             }
           }
         }
-
       }
     }
+
     this.initTheme();
+    this.initAndroidClass()
   }
+
+  initAndroidClass() {
+    if (this.androidApp) {
+      this.matCardClass = 'mat-card-grid mat-elevation-z0'
+    }
+  }
+
 
   initTheme() {
     // console.log('theme', this.uiSettingService.theme)

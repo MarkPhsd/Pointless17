@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders,  } from '@angular/common/http';
 import { CacheClientService } from './cache-client.service';
 import { Observable, of } from 'rxjs'
 import { switchMap } from 'rxjs/operators'
-import { MatOptionSelectionChange } from '@angular/material/core';
+import { MatLegacyOptionSelectionChange as MatOptionSelectionChange } from '@angular/material/legacy-core';
 
 // https://medium.com/angular-in-depth/top-10-ways-to-use-interceptors-in-angular-db450f8a62d6
 export enum Verbs {

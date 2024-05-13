@@ -32,12 +32,12 @@
         <div  *ngIf="order.employeeName">{{order?.employeeName}}  </div>
       </div>
 
-      <div>
+      <div *ngIf="order.orderDate">
         Started  {{order.orderDate | date: 'shortDate'}} - {{order?.orderDate | date: 'shortTime'}}
       </div>
 
       <div *ngIf="order.completionDate">
-        Completed  {{order.completionDate | date: 'shortDate'}} - {{order?.completionDate | date: 'shortTime'}}
+        Completed  {{order.completionDate | date: 'shortDate'}} - {{order.completionDate | date: 'shortTime'}}
       </div>
     </div>
 
@@ -79,7 +79,8 @@
           <ng-content [ngTemplateOutlet]="qrCodeDisplayView"></ng-content>
 
           <span #coachingLabel >
-            <div   class="button-margin" *ngIf="!mainPanel && isSale && isUserStaff && (posDevice && posDevice.labelPrinter && posDevice.enableExitLabel)">
+            <div   class="button-margin" *ngIf="!mainPanel && isSale && isUserStaff && 
+                                                (posDevice && posDevice.labelPrinter && posDevice.enableExitLabel)">
               <button   class="button" color="warn" mat-raised-button
                 (click)="printLabels()">
                 <mat-icon>book</mat-icon>
@@ -89,8 +90,8 @@
         </div>
       </div>
 
-      <div #coachingSplit class="button-row" *ngIf="isUserStaff && isSale">
-        <div  class="button-margin">
+      <div #coachingSplit class="button-row" *ngIf="isUserStaff && isSale && !platFormService.androidApp">
+        <div  class="button-margin" >
           <split-entry-selector [order]="order"
                                 [isUserStaff]="isUserStaff"
                                 [uiTransactionSettings]="uiTransactionSettings">
@@ -99,7 +100,7 @@
 
         <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
 
-        <div >
+        <div>
           <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption && isSale && isUserStaff" >
             <value-from-list-selector
                 [value] ="order.priceColumn"

@@ -2,7 +2,11 @@
 <div *ngIf="(orderAction$ | async)"></div>
 <div *ngIf="(process$ | async) as process"></div>
 <div *ngIf="(paymentGiftCardsList$ | async) as giftcard"></div>
+<div *ngIf="( posDevice$ | async) as item">
 
+  SecureDevice {{item?.dsiEMVSettings?.deviceValue}}
+
+</div>
 <div *ngIf="(paymentMethods$ | async) as methods">
   <div [class]="orderLayout" *ngIf="order  && uiTransactions">
     <div class="transaction-data">
@@ -83,21 +87,19 @@
         </div>
 
         <div class="action-center">
-          <!-- || order?.balanceRemaining != order.total -->
-          <!-- isNegativePaymentAllowed{{isNegativePaymentAllowed}}
-          isZeroPaymentAllowed {{ isZeroPaymentAllowed }} -->
           <div class="action-center" *ngIf="!order.completionDate && order?.balanceRemaining != 0
                                             && platFormService.isApp()
-                                            && isCreditProcessingEnabled
-                                            ">
-                                         <!--    ((order?.balanceRemaining != 0 || isZeroPaymentAllowed) &&
-                                            ( order?.balanceRemaining < 0 ||  isNegativePaymentAllowed ))  -->
-            <!--  && !paymentsEqualTotal -->
+                                            && isCreditProcessingEnabled ">
             <div *ngIf="!splitByItem">
               <h4>Payment Amount: {{paymentAmount | currency}}</h4>
             </div>
+          </div>
 
-            <div style="margin-left: 5px" *ngIf="!splitByItem && !uiTransactions.dcapDualPriceValue">
+          <div class="grid-menu-category-flow">
+
+            <div *ngIf="!paymentsEqualTotal && !splitByItem && !uiTransactions?.dcapDualPriceValue 
+                        && platFormService.isApp()
+                        && isCreditProcessingEnabled">
               <button class="splitbutton"
                       mat-raised-button
                       color="primary"
@@ -105,23 +107,25 @@
                 <mat-icon>edit</mat-icon>Change <br>Amount
               </button>
             </div>
+
+            <div  *ngIf="!paymentsEqualTotal && (uiTransactions && uiTransactions?.splitEntry) && isStaff">
+              <button class="splitbutton"
+                      mat-raised-button
+                      color="primary"
+                      (click)="splitByItem = !splitByItem">
+                <span *ngIf="splitByItem">
+                  <mat-icon>credit_card</mat-icon> Payment <br> Methods
+                </span>
+                <span *ngIf="!splitByItem">
+                  <mat-icon>call_split</mat-icon>  Split By <br>  Items
+                </span>
+              </button>
+            </div>
+
           </div>
 
-          <div  *ngIf="!paymentsEqualTotal && (uiTransactions && uiTransactions.splitEntry) && isStaff">
-            <button class="splitbutton"
-                    mat-raised-button
-                    color="primary"
-                    (click)="splitByItem = !splitByItem">
-              <span *ngIf="splitByItem">
-                <mat-icon>credit_card</mat-icon> Payment <br> Methods
-              </span>
-              <span *ngIf="!splitByItem">
-                <mat-icon>call_split</mat-icon>  Split By <br>  Items
-              </span>
-            </button>
-          </div>
           <div style="margin-left: 5px" *ngIf="rewardsOption > 0 && (order?.balanceRemaining > 0 ||
-                                                                    (userAuths && userAuths.allowBuy))">
+                                                                    (userAuths && userAuths?.allowBuy))">
             <button class="splitbutton" style="margin-top:5px"
                     mat-raised-button
                     color="primary"
@@ -129,6 +133,7 @@
               Rewards <br>  {{ rewardsOption | currency}}
             </button>
           </div>
+
         </div>
       </mat-card>
 
@@ -565,9 +570,10 @@
 </ng-template>
 
 <ng-template #dsiEMVAndroidCardButton>
+  <!-- PaxA920{{PaxA920}} -->
   <dsiemvandroid-pay-btn
     [order]="order"
-    *ngIf="(isApp || isStaff) && devicename"
+    *ngIf="androidApp && devicename"
     [devicename]="devicename"
     [uiTransactions]="uiTransactions"
     [platForm]="platForm"
@@ -582,7 +588,7 @@
 
 <ng-template #disEMVCardButton>
   <dsi-emvcard-pay-btn
-      *ngIf="(isApp || isStaff) && devicename"
+      *ngIf="(isApp || isStaff) && devicename && !PaxA920"
       [autoPay]="true"
       [preAuth]="false"
       [order]="order"
@@ -613,7 +619,7 @@
 
 <ng-template #dCApPreAuthButton>
   <dsi-emvcard-pay-btn
-      *ngIf="isApp || isStaff"
+      *ngIf="(isApp || isStaff) && !PaxA920"
       [preAuth]="true"
       [order]="order"
       [devicename]="devicename"

@@ -228,6 +228,7 @@ import { POSSplitItemsComponent } from '../modules/posorders/pos-payment/posspli
 import { NgxCsvParserModule } from 'ngx-csv-parser';
 // import { ExportDataComponent } from '../modules/admin/settings/database/export-data/export-data.component';
 import { PosEditSettingsComponent } from '../modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
+
 import { ReceiptViewComponent } from '../modules/admin/settings/printing/reciept-pop-up/receipt-view/receipt-view.component';
 
 import { StoreCreditPopUpComponent } from '../modules/posorders/pos-payment/store-credit-pop-up/store-credit-pop-up.component';
@@ -392,6 +393,7 @@ import { CatalogScheduleInfoComponent } from '../modules/admin/products/price-sc
 import { CatalogScheduleInfoListComponent } from '../modules/admin/products/price-schedule/catalog-schedule-info-list/catalog-schedule-info-list.component';
 import { PayAPIComponent } from '../modules/payment-processing/pay-api/pay-api.component';
 import { PayAPIFrameComponent } from '../modules/payment-processing/pay-apiiframe/pay-apiiframe.component';
+import { DcDirectSettingsComponent } from '../modules/admin/settings/pos-list/pos-edit-settings/dc-direct-settings/dc-direct-settings.component';
 
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
@@ -688,6 +690,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     TVPriceTiersComponent,
     PosListComponent,
     PosEditSettingsComponent,
+    DcDirectSettingsComponent,
     PosOrderComponent,
     PosOrderItemEditComponent,
     NewOrderItemComponent,

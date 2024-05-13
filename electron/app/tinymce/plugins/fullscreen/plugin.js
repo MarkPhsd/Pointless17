@@ -4,7 +4,7 @@
  * For LGPL see License.txt in the project root for license information.
  * For commercial licenses see https://www.tiny.cloud/
  *
- * Version: 5.10.9 (2023-11-15)
+ * Version: 5.10.3 (2022-02-09)
  */
 (function () {
     'use strict';
@@ -1028,7 +1028,6 @@
 
     var fireFullscreenStateChanged = function (editor, state) {
       editor.fire('FullscreenStateChanged', { state: state });
-      editor.fire('ResizeEditor');
     };
 
     var getFullscreenNative = function (editor) {

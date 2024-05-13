@@ -94,7 +94,7 @@ export class CacheSettingsComponent implements OnInit {
     if (this.debugMode) {
       localStorage.setItem('debugOnThisDevice', 'true')
     } else {
-      localStorage.remove('debugOnThisDevice')
+      localStorage.removeItem('debugOnThisDevice')
     }
   }
 }

@@ -3,7 +3,7 @@ import { FbItemTypeService } from 'src/app/_form-builder/fb-item-type.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
 import { ActivatedRoute,  } from '@angular/router';
-import { MatSnackBar} from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import { BehaviorSubject, Observable, Subscription, of, switchMap,  } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';

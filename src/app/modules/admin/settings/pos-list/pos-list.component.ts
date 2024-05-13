@@ -1,7 +1,7 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Observable } from 'rxjs';
 import { ISetting, IUser } from 'src/app/_interfaces';
 import { AuthenticationService,  } from 'src/app/_services';
@@ -66,27 +66,35 @@ export class PosListComponent implements OnInit, OnDestroy {
     })
   }
 
-  editTerminal(event) {
+  @HostListener("window", [])
+  editTerminal(event) { 
+    // if (window.innerWidth < 768) {
+      this.editTerminalInNew(event)
+      return
+    //  }
+    this.editTerminalPop(event)
+  }
+
+  editTerminalPop(event) {
     const id = event;
     if (id) {
       const site  = this.siteService.getAssignedSite()
       const item$ = this.setingsServerice.getSetting(site, id)
       item$.subscribe(data => {
         const dialog = this.setingsServerice.editPOSDevice(data)
-        // dialog.afterClosed(data => {
-        // })
       })
+    }
+  }
+
+  editTerminalInNew(event) { 
+    const id = event;
+    if (id) {
+      this.setingsServerice.editPOSDeviceInNew(id)
     }
   }
 
 
   setPOSName(event) {
-    // if (this.platForm.isApp()) {
-    //   this.notifyEvent(`${this.posName} has not been assigned!: Is App: ${this.platForm.isApp()}`, "Failure")
-    // }
-
-    // console.log(event)
-    // return;
     if (this.orderMethodsService.setPOSName(event?.name)) {
       this.posName = event?.name;
       this.notifyEvent(`${this.posName} has been assigned.`, "success")

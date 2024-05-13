@@ -4,6 +4,7 @@
         *ngIf="(uiHomePage$ | async) as uiHomePage">
 
     <div  class="flex-row">
+  
       <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
       <ng-container [ngTemplateOutlet]='departmentsFilter'></ng-container>
       <div>
@@ -96,9 +97,6 @@
 
 <ng-template #departmentFilterView>
   <div  style="margin-left:10px" *ngIf="uiHomePage.storeNavigation && departments && departments.length>0">
-    <!--  <div *ngIf="authService.isUser && !isApp">
-      <div class="flex-row"> <h5> <mat-icon color="primary">category</mat-icon> Departments</h5></div>
-    </div> -->
     <mat-card style="padding:0px;margin-top:0px">
       <div class="flex-row">
         <div>
@@ -115,10 +113,6 @@
 </ng-template>
 
 <ng-template #categoryFilter>
-  <!-- <div *ngIf="authService.isUser && !isApp">
-    <h5><mat-icon color="primary">category</mat-icon>Categories</h5>
-  </div> -->
-  <!-- <div style="margin-top:15px;" > -->
     <div class="grid-flow-categories"
          style="margin-top:15px;"
          *ngIf="categories && categories.length>0">
@@ -129,7 +123,6 @@
           </ng-container>
       </div>
     </div>
-  <!-- </div> -->
 </ng-template>
 
 
@@ -152,8 +145,8 @@
 </ng-template>
 
 <ng-template #menuItemCard let-item let-type="type">
-    <app-menu-item-card
-        *ngIf             ="item"
+    <app-menu-item-card 
+        *ngIf="item"
         [displayType]     ="type"
         [allowEdit]       ="userAuths?.editProduct"
         [allowBuy]        ="userAuths?.allowBuy"
@@ -169,7 +162,7 @@
         [disableEdit]     ="disableEdit"
         [disableImages]   ="posDevice?.disableMenuImages"
         (outPutUpdateCategory)="setCategoryID($event)"
-        (outputRefresh)   ="refreshFromSelection($event)"
-        (outPutLoadMore)  ='moveNext($event)' >
+        (outputRefresh)       ="refreshFromSelection($event)"
+        (outPutLoadMore)      ='moveNext($event)' >
     </app-menu-item-card>
 </ng-template>

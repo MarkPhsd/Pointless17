@@ -19,6 +19,7 @@
       <ng-container [ngTemplateOutlet]="currentSite"></ng-container>
       <ng-container [ngTemplateOutlet]="networkStatus"></ng-container>
       <ng-container [ngTemplateOutlet]="siteSelectorView"></ng-container>
+      <ng-container [ngTemplateOutlet]="splitSelector"></ng-container>
       <ng-container [ngTemplateOutlet]="posPanel"></ng-container>
       <ng-container *ngIf="!phoneDevice && !isUserStaff" [ngTemplateOutlet]="userSpacer"></ng-container>
       <ng-container [ngTemplateOutlet]="wizard"></ng-container>
@@ -119,7 +120,7 @@
         <ng-container [ngTemplateOutlet]="isfloorPlan"></ng-container>
 
         <span #coachingIDScanner>
-          <li  *ngIf="platFormService.androidApp">
+          <li  *ngIf="platformService.androidApp">
             <ng-container [ngTemplateOutlet]="barcodeScanner"></ng-container>
           </li>
         </span>
@@ -133,7 +134,7 @@
           <scale-value-view></scale-value-view>
         </li>
 
-        <li #coachingLogin *ngIf="platFormService.isApp() && userSwitching">
+        <li #coachingLogin *ngIf="platformService.isApp() && userSwitching">
           <ng-container  [ngTemplateOutlet]="userSwitchingButtonView"></ng-container>
         </li>
 
@@ -168,9 +169,19 @@
 <ng-template #siteSelectorView>
   <button aria-label="location_on"
           mat-button
+          *ngIf="!platformService.isApp() && !smallDevice"
           (click)="siteSelector()">
     <mat-icon>location_on</mat-icon>
   </button>
+</ng-template>
+
+<ng-template #splitSelector>
+  <split-entry-selector 
+      *ngIf="platformService.isApp() && phoneDevice"
+      [order]="order"
+      [isUserStaff]="isUserStaff"
+      [uiTransactionSettings]="uiTransactionSetting">
+  </split-entry-selector>
 </ng-template>
 
 <ng-template #networkStatus>
@@ -196,7 +207,7 @@
   <app-keyboard-button
     *ngIf="uiTransactionSetting && uiTransactionSetting.enableOnScreenKeyboard"
     [smallDevice]="smallDevice"
-    [isApp]="platFormService.isApp()"
+    [isApp]="platformService.isApp()"
     [isUserStaff]="isUserStaff"
   ></app-keyboard-button>
 </ng-template>

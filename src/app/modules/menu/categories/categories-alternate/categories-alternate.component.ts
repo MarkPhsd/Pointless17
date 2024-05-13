@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, } from '@angular/core';
 import { ThemePalette} from '@angular/material/core';
-import { ProgressSpinnerMode} from '@angular/material/progress-spinner';
+import { LegacyProgressSpinnerMode as ProgressSpinnerMode} from '@angular/material/legacy-progress-spinner';
 import { IProductCategory }  from 'src/app/_interfaces';
 import { AWSBucketService, MenuService} from 'src/app/_services';
 import { trigger, transition, animate, style, query, stagger } from '@angular/animations';

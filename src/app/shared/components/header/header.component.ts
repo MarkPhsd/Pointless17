@@ -5,7 +5,7 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { CompanyService,AuthenticationService, OrdersService, MessageService, } from 'src/app/_services';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { ICompany, IPOSOrder, ISite, IUser, IUserProfile,  }  from 'src/app/_interfaces';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatLegacySlideToggle as MatSlideToggle } from '@angular/material/legacy-slide-toggle';
 import { catchError, Observable, of, Subject, Subscription,switchMap   } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SiteSelectorComponent } from '../../widgets/site-selector/site-selector.component';
@@ -240,7 +240,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   constructor(private authenticationService : AuthenticationService,
               private userAuthService         :UserAuthorizationService,
               private userSwitchingService  : UserSwitchingService,
-              private pollingService        : PollingService,
               private dialog:                 MatDialog,
               public  platformService       : PlatformService,
               private companyService:         CompanyService,
@@ -253,7 +252,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
               public  toolbarUIService:       ToolBarUIService,
               private location:               Location,
               private navigationService     : NavigationService,
-              public  platFormService       : PlatformService,
               private router                : Router,
               private floorPlanSevice       : FloorPlanService,
               public  uiSettings             : UISettingsService,
@@ -283,7 +281,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     this.initUIService();
     this.initSearchObservable();
     this.messageService.sendMessage('show');
-    this.platFormService.getPlatForm();
+    this.platformService.getPlatForm();
     this.initSubscriptions();
 
     this.getUserInfo();
@@ -301,7 +299,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   get isApp() {
-    return this.platFormService.isApp()
+    return this.platformService.isApp()
   }
 
   get showSearchMenuView() {
@@ -407,7 +405,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   refreshScannerOption() {
     this.scannerEnabled = false
-    if (this.platFormService.isApp()) {
+    if (this.platformService.isApp()) {
       this.scannerEnabled = true;
     }
   }
@@ -495,11 +493,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     this.widthOfWindow = window.innerWidth;
     this.updateDeviceInfo();
 
-    if (this.platFormService.androidApp) {
+    if (this.platformService.androidApp) {
       this.mattoolbar = 'mat-toolbar-android'
     }
 
-    if (this.platFormService.androidApp && !this.user) {
+    if (this.platformService.androidApp && !this.user) {
       this.mattoolbar = 'mat-toolbar-android-no-user'
     }
 

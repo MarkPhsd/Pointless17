@@ -1,7 +1,6 @@
-<span *ngIf="(platForm === 'android') &&
-    devicename &&
-    uiTransactions?.dsiEMVAndroidEnabled &&
-    (order && order?.balanceRemaining != 0)">
+<span *ngIf=" devicename &&
+             uiTransactions?.dsiEMVAndroidEnabled &&
+             (order && order?.balanceRemaining != 0)">
   <button class="payment-buttons"
           mat-raised-button
           color="primary"

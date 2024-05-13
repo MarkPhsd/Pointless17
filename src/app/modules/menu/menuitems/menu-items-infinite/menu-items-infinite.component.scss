@@ -3,8 +3,7 @@
 .parent-container {
   overflow: hidden;
   height: calc(100vh - 50px);
-  // display: flex;
-  // flex-direction: row;
+
   @include for-tablet-landscape-up {
     height: calc(100vh - 125px);
   }
@@ -28,7 +27,8 @@
   overflow-y: visible;
   grid-auto-flow: dense;
   grid-auto-flow: column;
-  max-height: calc(70vh - 125px);
+  //subracts from the nav info above the menu itemes
+  max-height: calc(100vh - 155px);
 }
 
 .grid-max-height {
@@ -118,6 +118,14 @@ div.mat-chip-list-wrapper {
   overflow-y: auto;
   overflow-x: hidden;
   padding: 5px;
+  max-height: calc(100vh - 150px);
+  @include for-phone-only {
+    max-height: calc(100vh - 200px);
+  }
+  @include for-tablet-landscape-up {
+    max-height: calc(100vh - 200px);
+  }
+
 }
 
 .grid-flow-app-margins {
@@ -136,11 +144,12 @@ div.mat-chip-list-wrapper {
 
 .orders-container {
   overflow-x   : hidden;
-  overflow-y   : auto;
+  overflow-y   : hidden;
   padding-right: 5px;
   margin       : 5px;
   padding-bottom: 10px;
 }
+
 
 .orders-list {
   overflow-x: hidden;

@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IMenuItemsResultsPaged,  } from 'src/app/_services/menu/menu.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatSort } from '@angular/material/sort';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 

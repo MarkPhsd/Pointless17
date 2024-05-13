@@ -516,7 +516,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   //lookup the payment method.
   //we can't get the type of payment before we get the PaymentID.
   //so we just have to request the ID, and then we can establish everything after that.
-  processDSIEMVAndroidCreditVoid ( order: IPOSOrder, amount: number, manualPrompt: boolean, settings: TransactionUISettings) {
+
+  processDSIEMVAndroidTransaction ( order: IPOSOrder, amount: number, manualPrompt: boolean, settings: TransactionUISettings) {
     const site = this.sitesService.getAssignedSite();
     const  posPayment = {} as IPOSPayment;
     posPayment.orderID = order.id;

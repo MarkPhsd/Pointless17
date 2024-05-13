@@ -1,4 +1,4 @@
-.boundary { 
+.boundary {
   width: 100vw;
   height: 100wh;
 }
@@ -50,15 +50,15 @@
 //     -webkit-overflow-scrolling: touch;
 // }
 
-// container { 
+// container {
 //   overflow: auto;
 // }
 
-// .container-app { 
+// .container-app {
 //   overflow: auto;
 // }
 
-// .keyboard { 
+// .keyboard {
 //   z-index: 1000;
 //   height: calc(25vh + 75px);
 //   width: 75vw;
@@ -86,5 +86,14 @@
 //   cursor: move;
 //   width: 44px;
 //   height: 44px;
+// }
+
+
+// body.android-platform mat-card {
+//   @extend .mat-elevation-z0; // Assuming .mat-elevation-z0 is a defined class
+// }
+
+// body.android-platform mat-chip {
+//   @extend .mat-elevation-z0; // Assuming .mat-elevation-z0 is a defined class
 // }
 

@@ -16,7 +16,7 @@ export class MenuCardCategoriesComponent implements OnInit {
   @Input()  imageName: string;
   @Input()  isAdmin: boolean;
   @Input()  textLength: number = 15;
-
+  @Input()  disableImages: boolean;
   constructor(private awsBucket: AWSBucketService) { }
 
   ngOnInit(): void {

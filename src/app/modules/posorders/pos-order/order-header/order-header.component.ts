@@ -126,6 +126,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
              private fbProductButtonService: ProductEditButtonService,
              private requestMessageService: RequestMessageService,
              private paymentService: POSPaymentService,
+
              private httpClient : HttpClient,
     ) {
 
@@ -138,6 +139,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   }
 
   ngOnInit() {
+    
     this.href = this.router.url;
     this. refreshPrintOption()
   }

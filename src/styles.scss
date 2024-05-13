@@ -629,7 +629,7 @@ mat-dialog-container {
   margin-left: 10px;
 }
 
-.margin5  {
+.margin5, .margin-5  {
   margin: 5px;
 }
 
@@ -1336,3 +1336,6 @@ mat-dialog-container {
 // 									   color-stop(0.86, rgb(122,153,217)));
 // }
 
+.mat-elevation-z0 {
+	box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12)
+}

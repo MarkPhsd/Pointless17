@@ -3,7 +3,7 @@ import { combineLatest, forkJoin, Observable, of, shareReplay, Subject, Subscrip
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { ReportingService} from 'src/app/_services/reporting/reporting.service';
 import { ISite,Item,IUser }  from 'src/app/_interfaces';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DatePipe } from '@angular/common'
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';

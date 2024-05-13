@@ -8,6 +8,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISetting } from 'src/app/_interfaces';
 import { Observable, of, switchMap } from 'rxjs';
 import { NgxXml2jsonService } from 'ngx-xml2json';
+import { DSIEMVSettings } from 'src/app/_services/system/settings/uisettings.service';
 // import { parseStringPromise } from 'xml2js';
 export interface SecureDevice {
   description: string;
@@ -85,7 +86,7 @@ export class PointlessCCDSIEMVAndroidService {
 
   get defaultTransaction() {
     return {
-      merchantID: 'CROSSCHAL1GD',
+      merchantID: 'COAST',
       userTrace: 'User',
       pOSPackageID: 'PointlessPOS/3.1',
       tranCode: 'EMVSale',
@@ -173,8 +174,8 @@ export class PointlessCCDSIEMVAndroidService {
 
   async getDeviceInfo() {
     if (!this.siteService.isAndroid) {
-      return this.getDeviceIdList()
     }
+    return this.getDeviceIdList()
     return await this.getAndroidDevices()
   }
 
@@ -185,7 +186,6 @@ export class PointlessCCDSIEMVAndroidService {
     const results = item as any;
     const parser = new DOMParser();
     results.value = results.value.replace('#', '')
-
 
     const xml = parser.parseFromString(results.value, 'text/xml');
     // const obj = this.jsonService.xmlToJson(xml) as any;
@@ -221,26 +221,33 @@ export class PointlessCCDSIEMVAndroidService {
 
   //gets hard coded list
   getDeviceIdList(): string[] {
-    return this.terminals.map(terminal => terminal.id);
+    // return this.terminals.map(terminal => terminal.id);
+    return [...new Set(this.terminals.map(terminal => terminal.id))];
   }
 
   async getIPAddress() {
     try {
       const options = { value: ' value.'}
       const item = await dsiemvandroid.getIPAddressPlugin(options)
-      // let item: any;
       return item?.value;
     } catch (error) {
       return error;
     }
   }
 
-  async dsiEMVReset() {
+  async dsiEMVReset(deviceSettings: DSIEMVSettings) {
     try {
       const setting = this.transaction as Transaction;
+      let prodCertMode = 'cert'
+
       let options = {} as any;
-      options =  { bluetoothDeviceName: setting.bluetoothDeviceName, secureDevice: setting.secureDevice, merchantID: setting.merchantID,
-                   pinPadIpAddress: setting.pinPadIpAddress, padPort: setting.padPort }
+      options =  {  secureDevice   : deviceSettings.deviceValue, 
+                    merchantID     : deviceSettings.MerchantID,
+                    pinPadIpAddress: deviceSettings.PinPadIpAddress, 
+                    padPort        : deviceSettings.IpPort, 
+                    pOSPackageID   : deviceSettings.POSPackageID,
+                    prodCertMode   : prodCertMode 
+                   }
       const item = await dsiemvandroid.emvPadReset(options)
       // let item: any;
       return item;
@@ -249,5 +256,24 @@ export class PointlessCCDSIEMVAndroidService {
     }
   }
 
+  async downloadParam(deviceSettings: DSIEMVSettings) {
+    try {
+
+      let prodCertMode = 'cert'
+
+      let options = {} as any;
+      options =  { 
+                   secureDevice   : deviceSettings.deviceValue, 
+                   merchantID     : deviceSettings.MerchantID,
+                   pinPadIpAddress: deviceSettings.PinPadIpAddress, 
+                   padPort        : deviceSettings.IpPort, 
+                   pOSPackageID   : deviceSettings.POSPackageID,
+                   prodCertMode   : prodCertMode 
+                  }
+      return await dsiemvandroid.emvParamDownload(options)
+    } catch (error) {
+      return error;
+    }
+  }
 
 }

@@ -1,8 +1,8 @@
 import { Component, ViewChild, ViewChildren, QueryList, ChangeDetectorRef, OnInit, Input, SimpleChange, OnChanges } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ReportingService } from 'src/app/_services';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { MatPaginator, PageEvent} from '@angular/material/paginator';
+import { MatLegacyTableDataSource as MatTableDataSource, MatLegacyTable as MatTable } from '@angular/material/legacy-table';
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { ISalesPayments, ISite }  from 'src/app/_interfaces';
 import { Subject,Observable } from 'rxjs';

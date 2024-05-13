@@ -790,7 +790,7 @@ export class MenuService {
   }
 
    //for customer menu
-   getMenuItemsBySearchPaged(site: ISite, productSearchModel: ProductSearchModel): Observable<IMenuItemsResultsPaged> {
+   getMenuItemsBySearchPaged(site: ISite, productSearchModel: ProductSearchModel, androidApp?: boolean): Observable<IMenuItemsResultsPaged> {
 
     productSearchModel.pageSize = 15;
     const controller =  "/MenuItems/"
@@ -807,18 +807,22 @@ export class MenuService {
 
     let appCache = JSON.parse(localStorage.getItem('appCache')) as ISetting;
 
-    if (productSearchModel.pageNumber > 1 || !appCache) {
-      return  this.httpClient.post<any>(url, productSearchModel )
-    }
-
+    console.log('appCache', appCache?.value && appCache?.boolean)
     if (appCache) {
       if (appCache?.value && appCache?.boolean) {
         let uri = {} as HttpOptions
         uri.cacheMins = +appCache.value;
         uri.url = url;
-        // productSearchModel.pageSize = 50;
-        return this.httpCache.post<any>(uri, productSearchModel)
+        // productSearchModel.pageSize = 25;
+        return this.httpCache.post<any>(uri, productSearchModel).pipe(switchMap(data => {
+          console.log('cache data menu item search')
+          return of(data)
+        }))
       }
+    }
+
+    if (productSearchModel.pageNumber > 1 || !appCache) {
+      return  this.httpClient.post<any>(url, productSearchModel )
     }
 
     return  this.httpClient.post<any>(url, productSearchModel )

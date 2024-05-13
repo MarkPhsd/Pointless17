@@ -4,7 +4,7 @@ import { UntypedFormBuilder, UntypedFormGroup, UntypedFormControl,  } from '@ang
 import { ActivatedRoute,  } from '@angular/router';
 import { Subject, of } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatSnackBar} from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import { IProduct } from 'src/app/_interfaces/raw/products';
 import { Observable } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';

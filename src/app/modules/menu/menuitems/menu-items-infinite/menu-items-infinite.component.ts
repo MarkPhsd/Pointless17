@@ -21,7 +21,7 @@ import { ITerminalSettings } from 'src/app/_services/system/settings.service';
     selector: 'menu-items-infinite',
     templateUrl: './menu-items-infinite.component.html',
     styleUrls: ['./menu-items-infinite.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    // changeDetection: ChangeDetectionStrategy.OnPush
   }
 )
 
@@ -54,7 +54,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   direction        = "";
   value             : any;
   currentPage       = 1 //paging component
-  pageSize          = 15;
+  pageSize          = 35;
   itemsPerPage      = 35
   modalOpen        = false;
   endOfRecords     = false;
@@ -302,8 +302,8 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
       //sure if we should accept the model, or the parameter from the page.
       // console.log('ngOnInit')
 
-      if (this.getPlatForm()=== 'android') {
-        this.pageSize = 10
+      if (this.platFormService.androidApp) {
+        this.pageSize = 25
         this.disableEdit = true
       }
 
@@ -441,7 +441,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
 
     get isSearchSelectorOn() {
 
-    if (this.uiHomePage && this.uiHomePage.disableSearchFieldInMenu && this.isApp) {
+    if (this.uiHomePage && this.uiHomePage?.disableSearchFieldInMenu && this.isApp) {
         return null
     }
 
@@ -449,7 +449,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    if (!this.smallDevice || !this.uiHomePage.disableSearchFieldInMenu) {
+    if (!this.smallDevice || !this.uiHomePage?.disableSearchFieldInMenu) {
       return this.searchSelector
     }
 
@@ -511,9 +511,9 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
       productSearchModel.useNameInAllFields = true
     }
     productSearchModel.barcode    = productSearchModel.name;
-    productSearchModel.pageSize   = 15
+    productSearchModel.pageSize   = 35
     if (this.smallDevice) {
-      productSearchModel.pageSize   = 15
+      productSearchModel.pageSize   = 35
     }
 
     productSearchModel.pageNumber = 1
@@ -611,13 +611,10 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   setCategoryID(id) {
     if (!id) { return}
     if (this.productSearchModel) {
-      // this.productSearchModel.departmentID = id;
       this.productSearchModel.categoryID = id;
     }
     this.productSearchModel.pageNumber = 1;
     this.categoryID = id.toString();
-
-    // this.initCategoryViews(true) ;
     this.productSearchModel.subCategoryID = null;
     this.productSearchModel = this.getListSearchModel(this.productSearchModel);
     this.currentPage = 1;
@@ -654,7 +651,6 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
 
       model.webMode = this.menuService.isWebModeMenu
       model.active  = true;
-
       this.productSearchModel = model;
 
     if (!this.departmentID) {
@@ -696,7 +692,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
       const site  = this.siteService.getAssignedSite();
       const model = {} as ProductSearchModel;
       model.itemTypeID == 6
-      model.pageSize   = 15
+      model.pageSize   = 35
       model.pageNumber = 1
       model.active = true;
       model.webMode = webMode;
@@ -803,8 +799,9 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   }
 
   changeDetect() {
+    console.log('change detection')
     this.loading      = false
-    this.cd.detectChanges()
+    // this.cd.detectChanges()
     this.updateItemsPerPage()
   }
 
@@ -838,10 +835,10 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
 
   addToListOBS(pageSize: number, pageNumber: number) :Observable<IMenuItem[] | IMenuItemsResultsPaged>  {
 
-    // if (this.endOfRecords) { return }
+    // console.log('add to list', pageSize, pageNumber)
 
     if (!pageNumber || pageNumber == null) {pageNumber = 1 }
-    if (!pageSize   || pageSize   == null) {pageSize   = 15}
+    if (!pageSize   || pageSize   == null) {pageSize   = 35}
 
     let model   = this.productSearchModel;
     if (!model) { model = {} as ProductSearchModel };
@@ -855,7 +852,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
       let catModel = this.categorySearchModel;
       if (catModel){
         catModel.pageNumber = 1;
-        catModel.pageSize   = 25;
+        catModel.pageSize   = 35;
         model.active        = true;
         displayCategories$  =  this.getProcess(site, catModel);
       }
@@ -875,24 +872,26 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     }
 
     return process$.pipe(
-    switchMap(data => {
-      if (this.pagingInfo && this.pagingInfo.pageCount == 1) {
-        if (displayCategories$) { return displayCategories$ }
-      }
+      switchMap(data => {
+        if (this.pagingInfo && this.pagingInfo.pageCount == 1) {
+          if (displayCategories$) { return displayCategories$ }
+        }
 
-      if (pageNumber == 1) {
-        return  this.addToListOBS(this.pageSize, 2)
-      }
-      if (displayCategories$) {
-        return displayCategories$
-      }
+        if (pageNumber == 1) {
+          console.log('menuItem', this.menuItems[0])
+          return  this.addToListOBS(this.pageSize, 2)
+        }
+        if (displayCategories$) {
+          return displayCategories$
+        }
 
-      return of(data)
-    })).pipe(switchMap(data => {
-      this.changeDetect()
-      return of(data)
-    }))
-  };
+        return of(data)
+      })).pipe(switchMap(data => {
+        // console.log('change detect', this.menuItems.length)
+        this.changeDetect()
+        return of(data)
+      }))
+    };
 
   splitItemsIntType(itemsIn: IMenuItem[], currentItems: IMenuItem[]){
     currentItems.push(...itemsIn);
@@ -1025,7 +1024,10 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
           this.value = 100;
         }
 
+        // console.log('menuItem length', this.menuItems.length)
         this.menuItems = this.removeDuplicates( this.menuItems )
+        // console.log('Post dupe removal', this.menuItems.length)
+
         this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
 
         if ( !this.endOfRecords) {

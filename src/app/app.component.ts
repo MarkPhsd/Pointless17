@@ -1,6 +1,7 @@
 import { Component, QueryList,  ViewChildren,ChangeDetectorRef, ElementRef,
          TemplateRef, ViewChild, OnDestroy, AfterViewInit, ViewContainerRef, AfterContentInit, OnInit,
-         HostListener} from '@angular/core';
+         HostListener,
+         Renderer2} from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthenticationService, AWSBucketService, DevService } from './_services';
 import { Location} from '@angular/common';
@@ -22,7 +23,7 @@ import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { BalanceSheetMethodsService } from './_services/transactions/balance-sheet-methods.service';
 // import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 import { PlatformService } from './_services/system/platform.service';
-import { SplashScreen } from '@capacitor/splash-screen';
+// import { SplashScreen } from '@capacitor/splash-screen';
 
 // LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 @Component({
@@ -79,6 +80,8 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
       private statusBar            : StatusBar,
       private viewContainerRef     : ViewContainerRef,
       private location             : Location,
+      private platformService: PlatformService,
+      private renderer: Renderer2,
   ) {
 
     this.setTitle();
@@ -101,11 +104,17 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
     }
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     try {
-      await SplashScreen.hide()
+      // await SplashScreen.hide()
     } catch (error) {
       console.log('splash screen hide error' + error.toString())
+    }
+  }
+
+  initAndroidStyles() {
+    if (this.platformService.androidApp) {
+      this.renderer.addClass(document.body, 'android-platform');
     }
   }
 

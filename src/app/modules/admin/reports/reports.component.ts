@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnChanges,  SimpleChange } from '@angular/core';
 import { ISite}  from 'src/app/_interfaces';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ReportingService,AuthenticationService} from 'src/app/_services';
 import { Subject } from 'rxjs';
 

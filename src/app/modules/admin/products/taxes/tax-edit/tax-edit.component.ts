@@ -4,7 +4,7 @@ import { FlatRateTaxValue, FlatRateTax } from 'src/app/_services/menu/item-type.
 import { UntypedFormBuilder, UntypedFormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { MatSnackBar} from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { TaxesService } from 'src/app/_services/menu/taxes.service';

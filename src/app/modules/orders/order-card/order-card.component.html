@@ -1,5 +1,5 @@
 
-<mat-card  [style]="serviceColor">
+<mat-card [class]="matCardClass"  [style]="serviceColor">
   <mat-card-content class="center">
     <div class="grid-orderproperties">
 
@@ -12,11 +12,11 @@
           {{ order.id }}
         </div>
         <ng-container [ngTemplateOutlet]="disableEditView" ></ng-container>
-     
+
         <div class="margin-top:3px" class="font-1-3em">
           {{order.orderDate |  date: timeFormat}}
         </div>
-    
+
       </div>
 
       <div class="field-height font-1-2em ">

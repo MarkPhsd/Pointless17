@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { HostListener, Injectable } from '@angular/core';
 import { HttpClient  } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, switchMap, } from 'rxjs';
 import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
@@ -13,6 +13,7 @@ import { UserAuthorizationService } from './user-authorization.service';
 import { ebayoAuthorization } from '../resale/ebay-api.service';
 import { PosEditSettingsComponent } from 'src/app/modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { Router } from '@angular/router';
 
 interface IIsOnline {
   result: string;
@@ -50,8 +51,6 @@ export interface ITerminalSettings {
   disableImages: boolean;
   disableMenuImages: boolean;
 }
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -68,17 +67,31 @@ export class SettingsService {
 
   apiUrl: any;
 
-
+  @HostListener("window", [])
   editPOSDevice(data): Observable<typeof dialogRef> {
     let dialogRef: any;
+    let width  = '800px'
+    if (window.innerWidth < 768) {
+      width = '100vw'
+    }
     dialogRef = this.dialog.open(PosEditSettingsComponent,
-      { width:        '800px',
-        minWidth:     '800px',
-        height:       '650px',
-        minHeight:    '650px',
-        data   : data
+      { width:         width,
+        minWidth:      width,
+        height:       '750px',
+        minHeight:    '600px',
+        data : data
       },
     )
+    return dialogRef;
+  }
+
+  editPOSDeviceInNew(id) {
+    let dialogRef: any;
+    let width  = '800px'
+    if (window.innerWidth < 768) {
+      width = '100vw'
+    }
+    this.router.navigate(['posEditSettings', {id:id}]);
     return dialogRef;
   }
 
@@ -92,6 +105,7 @@ export class SettingsService {
                private siteService: SitesService,
                private dialog: MatDialog,
                private appInitService  : AppInitService,
+               private router: Router,
                private userAuthorizationService     : UserAuthorizationService,
                ) {
      this.apiUrl =  this.appInitService.apiBaseUrl()

@@ -1,5 +1,5 @@
 
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ISalesPayments, ISalesReportingOrdersSummary, IUser,  } from './';
 
 export interface ISite {

@@ -40,6 +40,7 @@
             <div *ngIf="order.id && order.id != 0"  >
               <app-order-card
                 (click)="setActiveOrderObs(order)"
+                [androidApp]="platformService.androidApp"
                 [order]="order"
                 [disableEdit]="userAuths?.disableEditOtherUsersOrders && order?.employeeID != user?.employeeID"
               ></app-order-card>

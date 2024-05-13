@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, ObservableLike, of, Subscription, switchMap } from 'rxjs';
+import { Observable,  of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -38,7 +38,7 @@ export class MainMenuComponent implements OnInit  {
   @ViewChild('resaleMenu')     resaleMenu: TemplateRef<any>;
   @ViewChild('catalogScheduleMenuView')  catalogScheduleMenuView: TemplateRef<any>;
 
-
+  disableImages: boolean;
   homePage$: Observable<UIHomePageSettings>;
   homePageSetings: UIHomePageSettings;
   smoke   = "./assets/video/smoke.mp4"
@@ -122,38 +122,63 @@ export class MainMenuComponent implements OnInit  {
   }
 
   ngOnInit(): void {
+    this.updateItemsPerPage();
+    this.initSearchForm();
+    this.initSiteSubscriber();
 
-
-      this.updateItemsPerPage();
-      this.initSearchForm();
-      this.initSiteSubscriber();
-
-      this.isStaff = false;
-      this.isUser = this.userAuthorizationService.isUser;
-      this.isStaff = this.userAuthorizationService.isCurrentUserStaff()
-
-
-      this.homePage$ = this.uiSettings.UIHomePageSettings.pipe(switchMap( data => {
-        this.homePageSetings  = data as UIHomePageSettings;
-        this.setPanelHeight( this.homePageSetings )
-        if (!data) {
-          this.homePageSetings = {} as UIHomePageSettings
-          this.homePageSetings.departmentsEnabled = true;
-          this.homePageSetings.categoriesEnabled  = true;
-          this.homePageSetings.brandsEnabled      = true;
-          this.homePageSetings.tierMenuEnabled    = true;
-          this.setPanelHeight( this.homePageSetings )
-        }
-        return of(data)
-      }));
+    this.isStaff = false;
+    this.isUser = this.userAuthorizationService.isUser;
+    this.isStaff = this.userAuthorizationService.isCurrentUserStaff()
+    this.homePage$ = this.initHomePageSettings()
 
     if (this.userAuthorizationService.user) {
       this.orderAction$ = this.orderMethodsService.getLoginActions()
     }
     this.updateItemsPerPage();
-    // console.log('ngOninit')
+  }
 
+  initHomePageSettings() {
+    return this.uiSettings.UIHomePageSettings.pipe(
+      switchMap(data => {
+        // If data is not provided, set default settings
+        if (!data) {
+          this.homePageSetings = {
+            departmentsEnabled: true,
+            categoriesEnabled: true,
+            brandsEnabled: true,
+            tierMenuEnabled: true,
+          } as UIHomePageSettings;
+        } else {
+          this.homePageSetings = data;
+        }
+        // Set panel height based on current settings
+        this.setPanelHeight(this.homePageSetings);
+        // Continue the chain with the posDevice$ observable
+        return this.uiSettings.posDevice$;
+      }),
+      switchMap(deviceData => {
+        // Update disableImages based on device data if available
+        console.log('initHomePageSettings', deviceData?.name, deviceData?.disableImages)
+        if (deviceData) {
+          this.disableImages = deviceData.disableImages;
+        } else {
+          const item = localStorage.getItem('devicename')
+          if (item) {
+            return this.uiSettings.getPOSDevice(item).pipe(switchMap(data => {
+              if (data) {
+                this.disableImages = deviceData.disableImages;
+              }
+              return of(this.homePageSetings);
+            }))
+          }
+        }
+        // Wrap homePageSetings in an observable to continue the observable chain
+        return of(this.homePageSetings);
+    }))
+  }
 
+  posDevice() {
+    const device = localStorage.getItem('devicename')
   }
 
   initSearchForm() {
@@ -228,36 +253,36 @@ export class MainMenuComponent implements OnInit  {
       this.isOnlyCategoryView
       return this.categoryView
     }
-    
+
     return null;
   }
 
-  get isOnlyCategoryView() { 
-    if (this.isStaff) { 
-      // if (this.homePageSetings.staffCategoriesEnabled) { 
+  get isOnlyCategoryView() {
+    if (this.isStaff) {
+      // if (this.homePageSetings.staffCategoriesEnabled) {
       //   return false
       // }
-      if (this.homePageSetings.staffcatalogScheduleMenuEnabled) { 
+      if (this.homePageSetings.staffcatalogScheduleMenuEnabled) {
         return false
       }
-      if (this.homePageSetings.staffDepartmentsEnabled) { 
+      if (this.homePageSetings.staffDepartmentsEnabled) {
         return false
       }
-      if (this.homePageSetings.staffTierMenuEnabled) { 
+      if (this.homePageSetings.staffTierMenuEnabled) {
         return false
       }
     }
-    if (!this.isStaff) { 
-      // if (this.homePageSetings.categoriesEnabled) { 
+    if (!this.isStaff) {
+      // if (this.homePageSetings.categoriesEnabled) {
       //   return false
       // }
-      if (this.homePageSetings.departmentsEnabled) { 
+      if (this.homePageSetings.departmentsEnabled) {
         return false
       }
-      if (this.homePageSetings.catalogScheduleMenuEnabled) { 
+      if (this.homePageSetings.catalogScheduleMenuEnabled) {
         return false
       }
-      if (this.homePageSetings.tierMenuEnabled) { 
+      if (this.homePageSetings.tierMenuEnabled) {
         return false
       }
     }

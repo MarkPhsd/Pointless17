@@ -35,6 +35,7 @@ export interface Transaction {
    refNo: string;
    pinPadIpAddress: string;
    padPort: string;
+   prodCertMode: string;
 }
 
 export interface Admin {

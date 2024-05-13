@@ -14,8 +14,7 @@ import { ITerminalSettings, SettingsService } from 'src/app/_services/system/set
 import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
-import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
-
+import { ActivatedRoute, Route } from '@angular/router';
 @Component({
   selector: 'app-pos-edit-settings',
   templateUrl: './pos-edit-settings.component.html',
@@ -48,7 +47,7 @@ export class PosEditSettingsComponent implements OnInit {
   pingCardPointTerminals$: Observable<any>;
   cardPointTerminals$ : Observable<any>;
   cardPointTerminals = [] as string[];
-
+  id: any;
   androidDisplay: any;
 
   medOrRecStoreList = [
@@ -61,29 +60,46 @@ export class PosEditSettingsComponent implements OnInit {
     private settingsService     : SettingsService,
     public  deviceService       : DeviceDetectorService,
     private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
-    private dcapService         : DcapService,
     private platFormService     : PlatformService,
     private btPrinterService    : BtPrintingService,
     private printingService     : PrintingService,
     private uiSettingService    : UISettingsService,
     private fileSystemService   : FileSystemService,
     private serviceTypeService: ServiceTypeService,
-    public labelingService: LabelingService,
+    public  labelingService: LabelingService,
     private cardPointBoltService: CardPointBoltService,
-    private dialogRef           : MatDialogRef<PosEditSettingsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: number
-  )
- {
+    public route        : ActivatedRoute,
+    private dialogRef   : MatDialogRef<PosEditSettingsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: number ) {
 
+      this.initUiSettings()
+      this.id = this.route.snapshot.paramMap.get('id');
+      console.log('id',  this.id)
+      if (this.id) { 
+        const site = this.sitesService.getAssignedSite()
+        console.log('site url', site.url)
+        this.action$ = this.settingsService.getSetting(site, this.id).pipe(switchMap(data => { 
+          console.log('data', data)
+          this.initData(data)
+          return of(data)
+        }))
+        return;
+      }
+
+      this.initData(data)
+  }
+
+  initUiSettings() { 
     this.uisettings$ = this.settingsService.getUITransactionSetting().pipe(switchMap(data => {
       this.uiSettings = data;
-      // data.dsiEMVNeteEpayEnabled
       if (data.cardPointBoltEnabled) {
         this.setCardPointTermialsObservable()
       }
       return of(data)
     }))
+  }
 
+  initData(data) { 
     if (data) {
       this.setting = data
       if (!this.setting.text) {
@@ -104,52 +120,51 @@ export class PosEditSettingsComponent implements OnInit {
           this.terminal.enabled = true;
           this.terminal.resetOrdersFilter = true;
           this.terminal.medicalRecSales = 0
-          this.initForm()
         }
+        this.initForm()
       }
     }
- }
-
- pingTermialObservable() {
-  const site = this.sitesService.getAssignedSite()
-
-  const hsn = this.inputForm.controls['cardPointeHSN'].value;
-  if (hsn) {
-    this.pingCardPointTerminals$ = this.cardPointBoltService.ping(site.url, hsn)
   }
- }
 
- androidDCapButtonTemplate() {
-  if (this.dcapAndroidDeviceList) {
-    return this.androidDCapButtonTemplate
+  pingTermialObservable() {
+    const site = this.sitesService.getAssignedSite()
+
+    const hsn = this.inputForm.controls['cardPointeHSN'].value;
+    if (hsn) {
+      this.pingCardPointTerminals$ = this.cardPointBoltService.ping(site.url, hsn)
+    }
   }
-  return null;
- }
 
- get isAndroid() {
-  if (this.platFormService.androidApp) {
-    return true
+  androidDCapButtonTemplate() {
+    if (this.dcapAndroidDeviceList) {
+      return this.androidDCapButtonTemplate
+    }
+    return null;
   }
-  return false
- }
 
+  get isAndroid() {
+    if (this.platFormService.androidApp) {
+      return true
+    }
+    return false
+  }
 
- async getDcapAndroidDeviceList() {
-    const list = await this.dSIEMVAndroidService.getDeviceInfo()
-    this.dcapAndroidDeviceList = list;
- }
+  async getDcapAndroidDeviceList() {
+      const list = await this.dSIEMVAndroidService.getDeviceInfo()
+      this.dcapAndroidDeviceList = list;
+  }
 
- setCardPointTermialsObservable() {
-  const site = this.sitesService.getAssignedSite()
-  this.cardPointTerminals$ = this.cardPointBoltService.listTerminals(site.url).pipe(switchMap(data => {
-    // console.log('setCardPointTermialsObservable', data)
-    this.cardPointTerminals = []
-    data?.terminals.forEach(item => {
-      this.cardPointTerminals.push(item)
-    });
-    return of(data)
-  }))
- }
+  setCardPointTermialsObservable() {
+    const site = this.sitesService.getAssignedSite()
+    this.cardPointTerminals$ = this.cardPointBoltService.listTerminals(site.url).pipe(switchMap(data => {
+      // console.log('setCardPointTermialsObservable', data)
+      this.cardPointTerminals = []
+      data?.terminals.forEach(item => {
+        this.cardPointTerminals.push(item)
+      });
+      return of(data)
+    }))
+  }
 
   async ngOnInit() {
     this.initForm()
@@ -221,9 +236,9 @@ export class PosEditSettingsComponent implements OnInit {
     this.dsiEMVSettings = this.fb.group({
       id         :[],
       HostOrIP   :[],
-      IpPort     :[],
-      MerchantID :[],
-      TerminalID :[],
+      IpPort          :[],
+      MerchantID       :[],
+      TerminalID      :[],
       OperatorID      :[],
       POSPackageID    :['PointlessPOS/3.1'],
       TranDeviceID    :[],
@@ -267,17 +282,7 @@ export class PosEditSettingsComponent implements OnInit {
     return null
   }
 
-  dCapReset() {
-    const dsi = this.dsiEMVSettings.value as DSIEMVSettings
-    console.log('this.inputForm.value?.posDevice', this.terminal)
-    if (this.terminal.name) {
-      const name = this.terminal.name
-      this.action$ = this.dcapService.resetDevice(name).pipe(switchMap(data => {
-        this.sitesService.notify(`Response: ${JSON.stringify(data)}`, 'Close', 100000)
-        return of(data)
-      }))
-    }
-  }
+
 
   saveTerminalSetting(close: boolean) {
     const site = this.sitesService.getAssignedSite()

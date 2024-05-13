@@ -23,7 +23,7 @@ export class ProfileEditorComponent implements OnInit {
   constructor(
     private router: Router,
     public route: ActivatedRoute,
-    public fb: UntypedFormBuilder,
+    public  fb: UntypedFormBuilder,
     private clientTableService: ClientTableService,
     private sanitizer : DomSanitizer,
     private _snackBar: MatSnackBar,

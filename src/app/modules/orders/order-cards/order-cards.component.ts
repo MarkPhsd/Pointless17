@@ -226,7 +226,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     private siteService: SitesService,
     private toolbarServiceUI : ToolBarUIService,
     private authenticationService: AuthenticationService,
-    private platformService: PlatformService,
+    public platformService: PlatformService,
     private renderer: Renderer2, private el: ElementRef,
     private printingService: PrintingService,
     private userAuthorization: UserAuthorizationService,
@@ -257,6 +257,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     this.initSubscriptions();
 
   }
+
 
   ngOnChanges(changes: SimpleChanges): void {
     // if (this.isPrepViewEnabled) {

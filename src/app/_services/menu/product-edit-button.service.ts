@@ -312,9 +312,6 @@ export class ProductEditButtonService {
     if (window.innerWidth < 768) {
       width = '100vw'
     }
-    console.log('openPriceEditor width', width, window.innerWidth)
-    console.log('window.innerWidth', window.innerWidth)
-
 
     dialogRef = this.dialog.open(PriceCategoriesEditComponent,
       { width:         width,
@@ -348,10 +345,8 @@ export class ProductEditButtonService {
     if (window.innerWidth < 768) {
       width=        '100%'
       minWidth=     '100%'
-      maxWidth=    'max-width: 100% !important'
+      maxWidth=     'max-width: 100% !important'
     }
-// console.log('openPriceEditor width', width, window.innerWidth)
-// console.log('window.innerWidth', window.innerWidth)
 
     dialogRef = this.dialog.open(PosOrderItemEditComponent,
       { width     :  width,

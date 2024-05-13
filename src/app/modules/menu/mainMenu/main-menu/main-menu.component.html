@@ -46,7 +46,6 @@
   </div>
 </ng-template>
 
-
 <ng-template #searchSelector>
   <div *ngIf="searchForm && (homePageSetings && !homePageSetings?.disableSearchFieldInMenu)">
     <search-debounce-input
@@ -62,7 +61,8 @@
 <ng-template #departmentView>
   <blog-post-list *ngIf="!isStaff" [group]="'department head'" [height] ="'100%'"  [viewType]="'grid'" ></blog-post-list>
   <div [style.height]="panelHeightSize">
-    <app-categories
+  <app-categories
+        [disableImages]="disableImages"
         [uiHomePage]="homePageSetings"
         [panelHeightValue]="panelHeightValue" [itemTypeID]="6">
         Departments
@@ -75,7 +75,9 @@
   <blog-post-list *ngIf="!isStaff" [group]="'category head'"
                   [height] ="'100%'" [viewType]="'grid'" ></blog-post-list>
   <div [style.height]="panelHeightSize">
+
     <app-categories
+        [disableImages]="disableImages"
         [uiHomePage]="homePageSetings"
         [panelHeightValue]="panelHeightValue" [itemTypeID]="4">
       Categories

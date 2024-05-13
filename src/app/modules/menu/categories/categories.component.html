@@ -1,4 +1,5 @@
 <div *ngIf="(action$ | async) as action"></div>
+
 <mat-card [class]="classcontainer">
 
     <mat-card-subtitle>
@@ -78,6 +79,7 @@
     [bucket]="bucket"
     [isAdmin]="authenticationService?.isAdmin"
     [textLength]="textLength"
+    [disableImages]="disableImages"
     (outPutEditItem)="_editItem($event)"
     (outPutNextPage)="_nextPage($event)"
     (outPutlistItems)="_listItems($event)"

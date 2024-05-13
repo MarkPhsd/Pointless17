@@ -412,14 +412,6 @@
           <mat-label>Print Prep To Server</mat-label>
         </mat-slide-toggle>
       </div>
-      <!-- <div>
-        <mat-form-field appearance="outline">
-          <mat-label >Print Timer</mat-label>
-          <input matInput type="number"
-                  formControlName="remoteReceipt"
-                  class="form-control" >
-        </mat-form-field>
-      </div> -->
     </mat-card-content>
   </mat-card>
 
@@ -435,135 +427,12 @@
 </div>
 
 <ng-template #dsiEMVSettingsView>
-  <mat-card  *ngIf="isDSIEnabled && dsiEMVSettings  && terminal" [formGroup]="dsiEMVSettings">
-    <mat-card-subtitle>
-      <h4>DC Direct Processing</h4>
-      <button mat-raised-button (click)="getDcapAndroidDeviceList()"><mat-icon>android</mat-icon>Device list</button>
-    </mat-card-subtitle>
-
-    <div class="grid-container">
-        <div class="grid-item" >
-          <form-select-list
-                  [searchForm]        = "dsiEMVSettings"
-                  [formFieldName]     ="'deviceValue'"
-                  [stringList]        = 'true'
-                  [list]              = "dcapAndroidDeviceList" >
-            <div fieldSearchDescription>Device List</div>
-          </form-select-list>
-        </div>
-
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="dsiEMVSettings"
-              [fieldName]     ="'OperatorID'">
-              Device Tag
-          </app-value-fields>
-        </div>
-
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="dsiEMVSettings"
-              [fieldName]     ="'POSPackageID'">
-              POS PackageID
-          </app-value-fields>
-        </div>
-
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="dsiEMVSettings"
-              [fieldName]     ="'TranDeviceID'">
-              Tran DeviceID
-          </app-value-fields>
-        </div>
-
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="dsiEMVSettings"
-              [fieldName]     ="'SecureDevice'">
-              Secure Device
-          </app-value-fields>
-        </div>
-
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="dsiEMVSettings"
-              [fieldName]     ="'PinPadIpPort'">
-              PinPad IpPort
-          </app-value-fields>
-        </div>
-
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="dsiEMVSettings"
-              [fieldName]     ="'HostOrIP'">
-              Host Or IP
-          </app-value-fields>
-        </div>
-
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="dsiEMVSettings"
-              [fieldName]     ="'IpPort'">
-              IpPort
-          </app-value-fields>
-        </div>
-
-        <div class="toggle-fields">
-          <div>
-            <mat-slide-toggle
-              formControlName="partialAuth"
-              >
-              <mat-label>Partial Auth</mat-label>
-            </mat-slide-toggle>
-          </div>
-        </div>
-
-        <div class="toggle-fields">
-          <div>
-            <mat-slide-toggle
-                  formControlName="enabled">
-              <mat-label>Enable</mat-label>
-            </mat-slide-toggle>
-          </div>
-          <div>Enabled on each device.</div>
-        </div>
-
-        <div>
-          <!-- <button  mat-button  (click)="dCapReset()">Device Reset</button> -->
-          <button  mat-button (click)="dCapReset()">Device Reset</button>
-        </div>
-    </div>
-  </mat-card>
+  <app-dc-direct-settings
+    [isDSIEnabled]="isDSIEnabled"
+    [dsiEMVSettings]="dsiEMVSettings"
+    [inputForm]="dsiEMVSettings"
+    [terminal]="terminal">
+  </app-dc-direct-settings>
 </ng-template>
 
 
-<!-- <mat-card>
-  <mat-card-subtitle>
-    Device Info
-  </mat-card-subtitle>
-  <mat-card-content>
-      {{this.deviceService.getDeviceInfo() | json}}
-  </mat-card-content>
-</mat-card> -->
-
-      <!-- <mat-label>Select if logged directly into the computer.</mat-label>
-      <app-list-printers-electron
-              [printerName]      ="receiptPrinter"
-              [printerList]      ="electronPrinterList"
-              (outputPrinterName)="setElectronPrinterName($event)" >
-              Receipt Printer
-      </app-list-printers-electron> -->

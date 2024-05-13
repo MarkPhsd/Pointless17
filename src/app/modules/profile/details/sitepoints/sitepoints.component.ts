@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { UserService,ReportingService } from 'src/app/_services';
 import { ISite,IUser, IUserProfile}  from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
