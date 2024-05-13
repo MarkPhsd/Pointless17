@@ -12,6 +12,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPOSOrder,} from 'src/app/_interfaces';
 import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+// import  * from '@capacitor/capacitor-android-foreground-service';
 
 // https://www.npmjs.com/package/capacitor-plugin-permissions
 // https://capacitorjs.com/docs/v2/plugins/android
@@ -381,25 +382,49 @@ export class DsiEMVAndroidComponent implements OnInit {
 
     while (request === '') {
       request = await this.getRequest();
+      console.log('checkResponse', request)
       this.request = request;
     }
 
     while (responseSuccess === '') {
+
+      console.log('responseSuccess', responseSuccess);
+
       if (this.responseSuccess != '') {
         responseSuccess =  this.responseSuccess;
       }
+
+      this.bringAppToFront()
+
+      if (responseSuccess) { 
+      }
+
       const item = await this.getResponse();
+
+      console.log('response Item', item)
+
       if (item) {
         if (item.value != '' || this.cancelResponse) {
           this.cancelResponse = false;
           this.processRunning = false;
           this.hideRequest    = true;
           responseSuccess     = 'complete'
+          this.bringAppToFront()
           return;
         }
       }
+
     };
 
+  }
+
+  async bringAppToFront() {
+    try {
+     
+      console.log('App brought to the front successfully!');
+    } catch (error) {
+      console.error('Failed to bring the app to the front:', error);
+    }
   }
 
   async getResponse(){
@@ -443,23 +468,6 @@ export class DsiEMVAndroidComponent implements OnInit {
     }
     this.transactionResponse = item?.value;
   }
-
-  // async getMessageResponse() {
-  //   var timer = setInterval(
-  //     await this.checkMessageResponse,
-  //     500);
-  //   if(timer){
-  //   clearInterval(timer)
-  //   }
-  // }
-
-  // async checkMessageResponse() {
-  //   const options = {'response': '', value: ''};
-  //   // let item = await dsiemvandroid.getMessageResponse(options);
-  //   // let item: any;
-  //   // console.log('checkMessageResponse', item)
-  //   this.messageResponse  = item.value;
-  // }
 
   async getRequest() {
     const options = {'response': '', value: ''};
@@ -581,15 +589,7 @@ export class DsiEMVAndroidComponent implements OnInit {
       this.processRunning = true;
       let options  = await this.initTransaction();
       if (options) {
-        // this.transaction = options; //for display
-        // if (this.payment) {
-        //   if (this.payment.amountPaid) {
-        //     this.transaction.amount = (this.payment.amountPaid).toFixed(2);
-        //   }
-        //   if (this.payment?.tipAmount) {
-        //     this.transaction.gratuity =  this.payment?.tipAmount.toFixed(2)
-        //   }
-        // }
+
         const item = await dsiemvandroid.processSale(options);
         await  this.checkResponse();
         if (this.textResponse.toLowerCase() === 'approved') {
