@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { IPOSOrder, IPOSPayment, OperationWithAction } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
-import { CmdResponse, RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';

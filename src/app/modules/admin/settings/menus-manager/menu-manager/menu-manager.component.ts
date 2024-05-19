@@ -46,6 +46,7 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
               private menusService: MenusService,
               private siteService : SitesService,
               private authenticationService: AuthenticationService,
+
               private _snackBar   : MatSnackBar)
               {
   }
@@ -66,30 +67,29 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
 
   getMenuGroup(name: string) {
     const site  =  this.siteService.getAssignedSite();
+    console.log('this.user', this.user)
     if (!this.user) {return}
     const menu$ = this.menusService.getMainMenuByName(site, name);
-    const accordionMenu$ = menu$.pipe(
-      switchMap(data => { 
+    console.log('name',name)
+    this.accordionMenu$ = menu$.pipe(
+      switchMap(data => {
+        console.log('menu', data)
         this.currentMenu = data;
         return this.menusService.getMenuGroupByNameForEdit(site, name);
       }
-    )).pipe(switchMap(data => { 
-      if (!data) {
-        // console.log()
-        return of(null)
-      }
+    )).pipe(switchMap(data => {
+      if (!data) {  return of(null)  }
       console.log('data', data)
       this.accordionMenus = data
       return of(data)
     }));
-    this.action$ = accordionMenu$;  
   }
 
-  onToggleChange(name: string) { 
+  onToggleChange(name: string) {
     this.getMenuGroup(name)
   };
 
-  getMenuGroupList() { 
+  getMenuGroupList() {
     const site  =  this.siteService.getAssignedSite();
     this.menus$ = this.menusService.getMainMenuList(site);
   }
@@ -103,7 +103,6 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
 
   assignSubMenuItem(event) {
     this.submenuItem = event
-    // this.
   }
 
   addAccordionMenu() {

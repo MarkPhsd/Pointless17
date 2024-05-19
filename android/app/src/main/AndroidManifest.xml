@@ -37,6 +37,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
+
+        <!-- <receiver android:name="io.capawesome.capacitorjs.plugins.foregroundservice.NotificationActionBroadcastReceiver" /> -->
+        <!-- <service android:name="io.capawesome.capacitorjs.plugins.foregroundservice.AndroidForegroundService" android:foregroundServiceType="location" /> -->
     </application>
 
     <!-- Permissions -->
@@ -51,9 +54,10 @@
   <!-- Needed only if your app makes the device discoverable to Bluetooth devices. -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-    <!-- Camera, Photos, input file -->
+  <!-- <uses-permission android:name="android.permission.RECORD_AUDIO" />-->
+
+ <!-- Camera, Photos, input file -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- Geolocation API
@@ -74,5 +78,12 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
     <!-- Network API -->
+
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Required to request the manage overlay permission -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
 </manifest>

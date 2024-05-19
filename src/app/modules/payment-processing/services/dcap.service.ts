@@ -5,6 +5,79 @@ import { IPOSPayment } from 'src/app/_interfaces';
 import { CmdResponse } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
+export interface DCAPAndroidRStream {
+  CmdResponse: {
+    ResponseOrigin: string;
+    DSIXReturnCode: string;
+    CmdStatus: string;
+    TextResponse: string;
+    SequenceNo: string;
+    UserTrace: string;
+  };
+  TranResponse: {
+    MerchantID: string;
+    AcctNo: string;
+    CardType: string;
+    TranCode: string;
+    AuthCode: string;
+    CaptureStatus: string;
+    RefNo: string;
+    InvoiceNo: string;
+    Amount: {
+      Purchase: number;
+      Authorize: number;
+    };
+    AcqRefData: string;
+    ProcessData: string;
+    RecordNo: string;
+    EntryMethod: string;
+    Date: string;
+    Time: string;
+    ApplicationLabel: string;
+    AID: string;
+    TVR: string;
+    IAD: string;
+    TSI: string;
+    CVM: string;
+    PayAPI_Id: string;
+  };
+  PrintData: {
+    Line1: string;
+    LineN: string;
+
+    // Line2: string;
+    // Line3: string;
+    // Line4: string;
+    // Line5: string;
+    // Line6: string;
+    // Line7: string;
+    // Line8: string;
+    // Line9: string;
+    // Line10: string;
+    // Line11: string;
+    // Line12: string;
+    // Line13: string;
+    // Line14: string;
+    // Line15: string;
+    // Line16: string;
+    // Line17: string;
+    // Line18: string;
+    // Line19: string;
+    // Line20: string;
+    // Line21: string;
+    // Line22: string;
+    // Line23: string;
+    // Line24: string;
+    // Line25: string;
+    // Line26: string;
+    // Line27: string;
+    // Line28: string;
+    // Line29: string;
+    // Line30: string;
+  };
+}
+
+
 export interface   DcapRStream {
   CmdResponse?: CmdResponse;
   ResponseOrigin?: string;
@@ -57,7 +130,7 @@ export interface   DcapRStream {
   providedIn: 'root'
 })
 export class DcapService {
-  
+
 
   site = this.siteService.getAssignedSite()
   constructor(private http: HttpClient,

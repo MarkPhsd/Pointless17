@@ -43,6 +43,9 @@
         ],
         "restaurantpointofsale": [
           "restaurantpointofsale"
+        ],
+        "noshhouse": [
+          "noshhouse"
         ]
       }
     }

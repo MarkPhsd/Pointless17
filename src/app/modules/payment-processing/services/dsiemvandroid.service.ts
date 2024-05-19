@@ -75,8 +75,8 @@ export class PointlessCCDSIEMVAndroidService {
           this.transaction = JSON.parse(data.text)  as Transaction;
         }
         if (!data) {
-          const item = this.defaultTransaction as Transaction;
-          this.transaction = this.defaultTransaction  as Transaction;
+          const item = this.defaultTransaction  as unknown as  Transaction;
+          this.transaction = this.defaultTransaction  as unknown as Transaction;
         }
         return of(this.transaction)
       })
@@ -99,7 +99,7 @@ export class PointlessCCDSIEMVAndroidService {
       recordNo: 'RecordNumberRequested',
       refNo: '1',
       pinPadIpAddress: '',
-      padPort: '1200',
+      pinPadIpPort: '1200',
     }
   }
 
@@ -235,21 +235,28 @@ export class PointlessCCDSIEMVAndroidService {
     }
   }
 
+  
+  certProdMode(merchantID: string) {
+    if (merchantID === 'COASTSAND0GP') {return 'CERT'}
+    if (merchantID === 'COASTSAND1GP') { return 'CERT'}
+    return 'PROD'
+  }
+
+
   async dsiEMVReset(deviceSettings: DSIEMVSettings) {
     try {
       const setting = this.transaction as Transaction;
-      let prodCertMode = 'cert'
+      let prodCertMode = this.certProdMode(deviceSettings.MerchantID)
 
       let options = {} as any;
       options =  {  secureDevice   : deviceSettings.deviceValue, 
                     merchantID     : deviceSettings.MerchantID,
-                    pinPadIpAddress: deviceSettings.PinPadIpAddress, 
+                    pinPadIpAddress: deviceSettings.HostOrIP, 
                     padPort        : deviceSettings.IpPort, 
                     pOSPackageID   : deviceSettings.POSPackageID,
                     prodCertMode   : prodCertMode 
-                   }
+                  }
       const item = await dsiemvandroid.emvPadReset(options)
-      // let item: any;
       return item;
     } catch (error) {
       return error;
@@ -259,15 +266,15 @@ export class PointlessCCDSIEMVAndroidService {
   async downloadParam(deviceSettings: DSIEMVSettings) {
     try {
 
-      let prodCertMode = 'cert'
+      let prodCertMode = this.certProdMode(deviceSettings.MerchantID)
 
       let options = {} as any;
       options =  { 
-                   secureDevice   : deviceSettings.deviceValue, 
-                   merchantID     : deviceSettings.MerchantID,
-                   pinPadIpAddress: deviceSettings.PinPadIpAddress, 
-                   padPort        : deviceSettings.IpPort, 
-                   pOSPackageID   : deviceSettings.POSPackageID,
+                   secureDevice   : deviceSettings?.deviceValue, 
+                   merchantID     : deviceSettings?.MerchantID,
+                   pinPadIpAddress: deviceSettings?.HostOrIP, 
+                   padPort        : deviceSettings?.IpPort, 
+                   pOSPackageID   : deviceSettings?.POSPackageID,
                    prodCertMode   : prodCertMode 
                   }
       return await dsiemvandroid.emvParamDownload(options)

@@ -1,62 +1,63 @@
+<div *ngIf="(processCreditCardResponse$ | async) as item"></div>
 <div class="cards" *ngIf="(transaction$ | async) as transaction">
 <div *ngIf="(posDevice$  | async) as item"></div>
 
   <mat-card>
     <mat-card-title>
-      <div class="action-center" *ngIf="transaction">
-        <ng-content title></ng-content>
-        <h4>
-          {{transaction?.tranCode}} {{transaction?.amount | currency}}
-          <span *ngIf="payment && payment?.tipAmount">Tip: {{payment?.tipAmount | currency}} Total: {{payment?.amountPaid + payment?.tipAmount | currency}}</span>
-        </h4>
+      <div class="action-center"  *ngIf="payment?.amountPaid >0">
+        <h5>{{gratitude}}</h5>
+      </div>
+      <div class="action-center" >
+        <div>
+          <h4>
+            {{transaction?.tranCode}} {{transaction?.amount | currency}}
+          </h4>
+        </div>
+        <div>
+          <h4 *ngIf="payment && payment?.tipAmount">Tip: {{payment?.tipAmount | currency}} Total: {{payment?.amountPaid + payment?.tipAmount | currency}}</h4>
+        </div>
       </div>
     </mat-card-title>
 
     <mat-card-content>
       <div class="grid-buttons">
-
         <div>
           <div>
-            <button mat-raised-button (click)="emvSale()">
+            <button [disabled]="processing" *ngIf="!saleComplete" color="primary" mat-raised-button (click)="emvSale()">
                 <mat-icon>credit_card</mat-icon>Process
             </button>
           </div>
         </div>
-        <div>
-          <button mat-raised-button (click)="emvCancel()">
-            <mat-icon>cancel</mat-icon>Cancel
-          </button>
+      </div>
+
+      <div class="grid-buttons" *ngIf="saleComplete">
+        <div >
+          <button mat-raised-button (click)="print()"><mat-icon>email</mat-icon>Print</button>
         </div>
-
-        <div *ngIf="(isAdmin || isManager) && !saleOnly">
-          <div>
-            <button mat-raised-button (click)="getResponse()">Get Response</button>
-          </div>
-
-          <div>
-            <button mat-raised-button (click)="refreshInfo()"><mat-icon>refresh</mat-icon>Refresh Info</button>
-          </div>
-
+        <div>
+          <button mat-raised-button (click)="text()"><mat-icon>phone</mat-icon>Text</button>
         </div>
       </div>
     </mat-card-content>
   </mat-card>
 
+  <ngx-json-viewer *ngIf="responseData && responseData?.PrintData" [json]="responseData?.PrintData"></ngx-json-viewer>
+
   <div  [hidden]="hideRequest">
     <h3>Request:</h3> {{request | json}}
   </div>
 
-  <div class="response" *ngIf="processRunning && !textResponse">
+  <div >
     <mat-card>
-      <pointlesscc-dsi-android-results
-          [isAdmin]="isAdmin"
-          [tranResponse]="tranResponse"
-          [textResponse]="textResponse">
-        <h3>Response</h3>
-        <div *ngIf="messageResponse"> {{ messageResponse | json}}  </div>
-        <div *ngIf="message">   {{message | json}}  </div>
-        <div *ngIf="processRunning"><mat-spinner [diameter]="50"></mat-spinner></div>
-      </pointlesscc-dsi-android-results>
+      <div *ngIf="processing">Please tap or insert card</div>
+
+      <app-dcapresponse-message 
+            [errorMessage]="errorMessage"
+            [message]="message"
+            [response]="cmdResponse"
+            [resultMessage]="resultMessage">
+      </app-dcapresponse-message>
+
     </mat-card>
     <div>
       <mat-card *ngIf="isAdmin">
@@ -70,7 +71,7 @@
     <button style="width:100px" mat-raised-button (click)="enterTip = !enterTip">Enter Tip</button>
   </div>
 
-  <div class="tip-container" *ngIf="!processRunning && !textResponse && enterTip ">
+  <div class="tip-container" *ngIf="!processing && !textResponse && enterTip ">
     <tip-entry-amount
         [payment]            = "payment"
         (specifiedTipAmount) = "specifiedTip($event)"
@@ -78,7 +79,19 @@
     ></tip-entry-amount>
   </div>
 
+  <div class="grid-buttons">
+    <div>
+      <button mat-raised-button color="warn" (click)="emvCancel()">
+        Cancel
+      </button>
+    </div>
 
+    <div>
+      <button mat-raised-button color="accent" (click)="resetDeviceAsync()">
+        Reset
+      </button>
+    </div>
+  </div>
 </div>
 
 

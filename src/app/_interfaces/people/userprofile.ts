@@ -117,6 +117,7 @@ export interface clientType {
 }
 
 export interface employee {
+  errorMessage: string;
   id:                        number;
   name: string;//for lists.
   firstName:                 string;

@@ -347,6 +347,7 @@ export class UserSwitchingService implements  OnDestroy {
   setUserInfo(user: IUser, password) {
 
     const currentUser = {} as IUser;
+    if (!user) { return {}}
     if (!user.roles)     { user.roles = 'user' }
     if (!user.firstName) { user.firstName = user.username }
 

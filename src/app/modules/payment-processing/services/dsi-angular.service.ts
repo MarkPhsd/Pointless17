@@ -46,7 +46,7 @@ export class PointlessCCDsiAngularService {
         }
 
         if (padPort) {
-          newSale.padPort       = padPort
+          newSale.pinPadIpPort       = padPort
         }
 
         if (secureDevice) {

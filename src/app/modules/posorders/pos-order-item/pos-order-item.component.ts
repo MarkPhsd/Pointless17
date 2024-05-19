@@ -410,10 +410,15 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     this.getReOrderMenuItem()
   }
 
+  roundToPrecision(value: number, precision: number): number {
+    const factor = Math.pow(10, precision);
+    return Math.round(value * factor) / factor;
+  }
+
   get cashDiscount() {
     // console.log(this.ui?.dcapDualPriceValue, this.subTotal , this.subTotal * (1 + +this.ui?.dcapDualPriceValue))
     if (this.ui && this.ui.dcapDualPriceValue && this.ui?.dcapDualPriceValue != 0) {
-      return  this.subTotal * (1 + +this.ui?.dcapDualPriceValue)
+      return this.roundToPrecision(this.total * (1 + +this.ui?.dcapDualPriceValue),5)
     }
     return null
   }

@@ -9,11 +9,12 @@ install! 'cocoapods', :disable_input_output_paths => true
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
+  pod 'AnuradevCapacitorBackgroundMode', :path => '..\..\node_modules\@anuradev\capacitor-background-mode'
   pod 'CapacitorCommunityBarcodeScanner', :path => '..\..\node_modules\@capacitor-community\barcode-scanner'
   pod 'CapacitorCommunityCameraPreview', :path => '..\..\node_modules\@capacitor-community\camera-preview'
   pod 'CapacitorGeolocation', :path => '..\..\node_modules\@capacitor\geolocation'
   pod 'CapacitorKeyboard', :path => '..\..\node_modules\@capacitor\keyboard'
-  pod 'DsiemvAndroidPlugin', :path => '..\..\..\dsiEmvAndroidPlugin'
+  pod 'Dsiemvandroidplugin', :path => '..\..\..\temp\plugins\dsiemvandroidplugin'
   pod 'IonicZebraLabelPrinter', :path => '..\..\..\Zebra-Ionic-Plugin\master'
   pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
 end

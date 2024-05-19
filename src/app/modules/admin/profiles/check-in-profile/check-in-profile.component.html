@@ -169,7 +169,7 @@
                   <div class="margin-5">
                     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
 
-                      <mat-button-toggle value="Pending Orders"
+                      <mat-button-toggle  value="Pending Orders"
                                           (click)="showOnlyOpenOrders()">Pending Orders</mat-button-toggle>
 
                       <mat-button-toggle  (click)="showClosedOrders()"
@@ -209,9 +209,11 @@
                     </button>
                   </div>
                 </div>
-
+                
                 <div *ngIf="isAuthorized || isUser">
                    <app-orders-list
+                      [suspendedOrders]="suspendedOrder"
+                      [clientID]="id"
                       [height]="'47vh'"
                   ></app-orders-list>
                 </div>

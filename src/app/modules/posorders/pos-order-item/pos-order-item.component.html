@@ -318,8 +318,11 @@
       </span>
 
       <div *ngIf="ui && ui?.dcapMultiPrice && ui?.dcapDualPriceValue != 0">
-         Non-Credit Price @ {{ cashDiscount | currency }} | ({{ui.dcapDualPriceValue}}%)
+        <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue > 0 &&  !order.completionDate" > Credit  Price </span>
+        <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue < 0 && !order.completionDate" >  Discount Price </span>
+        @ {{ cashDiscount | currency }} | ({{ui.dcapDualPriceValue}}%)
       </div>
+
     </div>
 
     <div  class="quantity"   *ngIf="subTotal < 0"  style="color:crimson">

@@ -1,41 +1,115 @@
 import { Injectable } from '@angular/core';
 import { switchMap, of } from 'rxjs';
-import { OperationWithAction } from 'src/app/_interfaces';
-import { RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
-import { DcapRStream, DcapService } from './dcap.service';
+import { IPOSPayment, OperationWithAction } from 'src/app/_interfaces';
+import { CmdResponse, RStream, TranResponse } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { DCAPAndroidRStream, DcapRStream, DcapService } from './dcap.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { OrdersService } from 'src/app/_services';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { Transaction } from 'electron/main';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
+import { XMLParser } from 'fast-xml-parser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DcapMethodsService {
 
+  title = 'xml-parser-example';
+  xmlString = `<?xml version="1.0"?>`
+
+
   constructor(
     private siteService: SitesService,
     private pOSPaymentService: POSPaymentService,
     private orderService: OrdersService,
     private orderMethodService: OrderMethodsService,
+    // private xmlParserService: XmlParserService,
   ) { }
 
+  parseXml(xmlString: string): DCAPAndroidRStream {
+    const parser = new XMLParser({
+      ignoreAttributes: false,
+      attributeNamePrefix: "@_"
+    });
+    const parsedResult = parser.parse(xmlString);
+    return parsedResult.RStream as DCAPAndroidRStream;
+  }
 
-  readResult(cmdResponse: DcapRStream) {
+  convertToObject(value:string) {
+    return this.parseXml(value);
+  }
+
+  validateAndroidTransactionData(posPayment: IPOSPayment) {
+    let result = true;
+    if (!posPayment) {
+      this.siteService.notify('No Payment', 'Alert', 2000)
+       result = false
+    }
+    // if (!terminalSettings) {
+    //   this.siteService.notify('No device settings', 'Alert', 2000)
+    //    result = false
+    // }
+    // if (!ui) {
+    //   this.siteService.notify('No system settings', 'Alert', 2000)
+    //     result = false
+    // }
+    return result
+  }
+
+  validateTransactionData(posPayment: IPOSPayment, terminalSettings: ITerminalSettings, ui: TransactionUISettings) {
+    let result = true;
+    if (!posPayment) {
+      this.siteService.notify('No Payment', 'Alert', 2000)
+       result = false
+    }
+    if (!terminalSettings) {
+      this.siteService.notify('No device settings', 'Alert', 2000)
+       result = false
+    }
+    if (!ui) {
+      this.siteService.notify('No system settings', 'Alert', 2000)
+        result = false
+    }
+    return result
+  }
+
+  readAndroidResult(streamResponse: DCAPAndroidRStream) {
     // console.log('readresult', cmdResponse?.TextResponse, cmdResponse)
     let message: string;
     let resultMessage: string;
     let processing: boolean;
     let success: boolean;
     success = false
-    processing = false
+    processing = false;
 
-    console.log('readResult', cmdResponse)
-    const status = cmdResponse?.CmdStatus
+    console.log('readResult', streamResponse)
+    const status = streamResponse?.CmdResponse.CmdStatus
+
     if (status ==   "Declined") {
-      return {success : false , message: status, processing: processing, resultMessage: status};
+      return {success : false , message: status, processing: processing, resultMessage:  streamResponse?.CmdResponse?.TextResponse};
     }
+    if (status ==   "Error") {
+      return {success : false , message: status, processing: processing, resultMessage: streamResponse?.CmdResponse?.TextResponse};
+    }
+    if (status ==   "Failed") {
+      return {success : false , message: status, processing: processing, resultMessage:  streamResponse?.CmdResponse?.TextResponse};
+    }
+
+    const cmdResponse = streamResponse?.CmdResponse;
+    const tranResponse = streamResponse?.TranResponse;
+    const responseResult = this.getDCAPResponse(cmdResponse, streamResponse?.TranResponse)
+    return responseResult
+  }
+
+  getDCAPResponse(cmdResponse: CmdResponse, tranResponse: any) {
+    let message: string;
+    let resultMessage: string;
+    let processing: boolean;
+    let success: boolean;
+    success = false
+    processing = false;
 
     const response = cmdResponse?.TextResponse;
     if (response) {
@@ -54,7 +128,90 @@ export class DcapMethodsService {
     }
 
     //CaptureStatus
+    const captureStatus = tranResponse?.CaptureStatus;
+    if (captureStatus) {
+      if (
+        captureStatus.toLowerCase() === 'completed'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'success'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'approved'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'AP*'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'captured'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'approval'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'approved, Partial AP'.toLowerCase()
+      ) {
+        success = true
+        return {success : success , message: message, processing: processing, resultMessage: resultMessage}
+      }
+    }
+
+    if (!cmdResponse) {
+      message = 'Processing failed, no command response.'
+      console.log('readResult', cmdResponse,  message)
+    }
+    if (!cmdResponse.TextResponse) {
+       message = 'Processing failed, no text ressponse.'
+      console.log('readResult', cmdResponse,  message)
+    }
+    if (!cmdResponse.CmdStatus) {
+      message = 'Processing failed, no cmdStatus.'
+      console.log('readResult', cmdResponse,  message)
+    }
+
+    message        = cmdResponse?.TextResponse;
+    resultMessage  = cmdResponse?.CmdStatus;
+    processing     = false;
+
+    const len = 'Transaction rejected because the referenced original transaction is invalid'.length;
+    if (response.substring(0, len) === 'Transaction rejected because the referenced original transaction is invalid.') {
+      return {success :false , message: message, processing: processing, resultMessage: resultMessage}
+    }
+
+    return {success :false , message: message, processing: processing, resultMessage: resultMessage};
+
+  }
+
+
+
+
+
+
+  readResult(cmdResponse: DcapRStream) {
+    // console.log('readresult', cmdResponse?.TextResponse, cmdResponse)
+    let message: string;
+    let resultMessage: string;
+    let processing: boolean;
+    let success: boolean;
+    success = false
+    processing = false
+
+    console.log('readResult', cmdResponse)
+    const status = cmdResponse?.CmdStatus
+    if (status ==   "Declined") {
+      return {success : false , message: status, processing: processing, resultMessage: status};
+    }
+
+
+    //set to be removed
+    const response = cmdResponse?.TextResponse;
     const captureStatus = cmdResponse?.CaptureStatus;
+
+    if (response) {
+      if (
+        response.toLowerCase() === 'completed'.toLowerCase() ||
+        response.toLowerCase() === 'success'.toLowerCase() ||
+        response.toLowerCase() === 'approved'.toLowerCase() ||
+        response.toLowerCase() === 'AP*'.toLowerCase() ||
+        response.toLowerCase() === 'captured'.toLowerCase() ||
+        response.toLowerCase() === 'approval'.toLowerCase() ||
+        response.toLowerCase() === 'approved, Partial AP'.toLowerCase()
+      ) {
+        success = true
+        return {success : success , message: message, processing: processing, resultMessage: resultMessage}
+      }
+    }
+
+    //set to be removed
+    //CaptureStatus
     if (captureStatus) {
       if (
         captureStatus.toLowerCase() === 'completed'.toLowerCase() ||
@@ -98,6 +255,7 @@ export class DcapMethodsService {
 
     return {success :false , message: message, processing: processing, resultMessage: resultMessage};
   }
+
   processVoidResults(action: any,voidPayment, response: RStream) {
     let message: string;
     let resultMessage: string;

@@ -3,10 +3,15 @@
 <div *ngIf="(process$ | async) as process"></div>
 <div *ngIf="(paymentGiftCardsList$ | async) as giftcard"></div>
 <div *ngIf="( posDevice$ | async) as item">
+  <!-- SecureDevice {{item?.dsiEMVSettings?.deviceValue}} -->
 
-  SecureDevice {{item?.dsiEMVSettings?.deviceValue}}
-
+  <div class="action-center"  *ngIf="androidPaxA920Payment">
+    <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
+  </div>
+  
 </div>
+
+
 <div *ngIf="(paymentMethods$ | async) as methods">
   <div [class]="orderLayout" *ngIf="order  && uiTransactions">
     <div class="transaction-data">
@@ -137,6 +142,8 @@
         </div>
       </mat-card>
 
+
+    
       <span #coachingPaymentFull></span>
 
       <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady

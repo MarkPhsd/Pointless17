@@ -19,15 +19,14 @@
         <button mat-button (click)="initCustomerMenu()">Initialize Customer Menu</button>
         <button mat-button (click)="refreshMenu()"><mat-icon>refresh</mat-icon>Refresh</button>
       </div>
-      
+
       <mat-divider></mat-divider>
-      
+
       <div *ngIf="(menus$ | async) as list">
         <mat-button-toggle-group
-                
                 (change)        = "onToggleChange($event.value)"
                 [(ngModel)]     = "currentMenuName" >
-            <mat-button-toggle 
+            <mat-button-toggle
                                 style           = "width:200px;"
                                 [value]="item.name"
                                 *ngFor="let item of list" >
@@ -38,70 +37,72 @@
 
 
       <button color="primary" *ngIf="currentMenu" mat-button (click)="addAccordionMenu()">Add Menu</button>
-      <button color="primary" *ngIf="submenu"       mat-button (click)="addSubMenu()">Add Sub Item</button>
+      <button color="primary" *ngIf="submenu"     mat-button (click)="addSubMenu()">Add Sub Item</button>
     </mat-card-subtitle>
 
     <mat-divider></mat-divider>
 
-    <ng-template #action>
-      <div>
-        <mat-spinner [diameter]="50"></mat-spinner>
-        ...loading
-      </div>
-    </ng-template>
+      <ng-template #action>
+        <div *ngIf="!accordionMenus">
+          <mat-spinner [diameter]="50"></mat-spinner>
+          ...loading
+        </div>
+      </ng-template>
 
-    <div *ngIf="(action$ | async) as item; else action"></div>
+      <!-- {{accordionMenus | json}} -->
+      <div *ngIf="(accordionMenu$ | async) as accordionMenus"></div>
 
-    <div class="grid-container">
-      <div *ngIf="accordionMenus">
-        <div  cdkDropList
-              #accordionList="cdkDropList"
-              (cdkDropListDropped)="dropAccordion($event)">
-          <div *ngFor="let item of accordionMenus"
-               class="pop button"
-               cdkDrag
-               (click)="assignSubMenu(item, item.submenus)" >
-              <mat-icon>{{item.icon}}</mat-icon>
-              {{item.name}}
+        <div class="grid-container" *ngIf="currentMenu">
+          <div >
+            <div  cdkDropList
+                  #accordionList="cdkDropList"
+                  (cdkDropListDropped)="dropAccordion($event)">
+              <div *ngFor="let item of currentMenu"
+                  class="pop button"
+                  cdkDrag
+                  (click)="assignSubMenu(item, item.submenus)" >
+                  <mat-icon>{{item?.icon}}</mat-icon>
+                  {{item?.name}}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div *ngIf="submenu">
-        <div
-            cdkDropList
-            #secondList="cdkDropList"
-            (cdkDropListDropped)="drop($event)" >
-          <div  *ngFor="let item of submenu"
-                class="pop button"
-                cdkDrag
-                (click)="assignSubMenuItem(item)">
-            <mat-icon>{{item.icon}}</mat-icon>
-            {{item.name}}
+          <div *ngIf="submenu">
+            <div
+                cdkDropList
+                #secondList="cdkDropList"
+                (cdkDropListDropped)="drop($event)" >
+              <div  *ngFor="let item of submenu"
+                    class="pop button"
+                    cdkDrag
+                    (click)="assignSubMenuItem(item)">
+                <mat-icon>{{item.icon}}</mat-icon>
+                {{item.name}}
+              </div>
+            </div>
           </div>
-        </div>
+          <div class="cards">
+            <div *ngIf="(accordionMenuItem$ | async) as item">
+              {{item?.name}}
+              <app-accordion-menu-item-edit
+                  (outPutRefreshMenu)="refreshMenu()"
+                  [id]  ="item?.id"
+                  [item]="item">
+              </app-accordion-menu-item-edit>
+            </div>
+
+            <div *ngIf="submenuItem">
+              <app-menu-group-item-edit
+                  (outPutRefreshMenu)="refreshMenu()"
+                  [accordionMenu]="accordionMenu"
+                  [item]="submenuItem">
+              </app-menu-group-item-edit>
+            </div>
+          </div>
       </div>
 
-      <div class="cards">
-        <div *ngIf="(accordionMenuItem$ | async) as item">
-          {{item.name}}
-          <app-accordion-menu-item-edit
-              (outPutRefreshMenu)="refreshMenu()"
-              [id]  ="item?.id"
-              [item]="item">
-          </app-accordion-menu-item-edit>
-        </div>
 
-        <div *ngIf="submenuItem">
-          <app-menu-group-item-edit
-              (outPutRefreshMenu)="refreshMenu()"
-              [accordionMenu]="accordionMenu"
-              [item]="submenuItem">
-          </app-menu-group-item-edit>
-        </div>
 
-      </div>
-    </div>
   </mat-card>
 </div>
 

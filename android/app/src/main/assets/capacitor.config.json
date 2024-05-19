@@ -1,9 +1,9 @@
 {
 	"appId": "www.pointlesspos.com",
-	"appName": "PointlessPOS",
+	"appName": "pointlesspos",
 	"bundledWebRuntime": false,
 	"npmClient": "npm",
-	"webDir": "dist/CCSApp",
+	"webDir": "dist/ccsapp",
 	"plugins": {
 		"SplashScreen": {
 			"launchShowDuration": 0,
@@ -25,10 +25,10 @@
 			"SplashScreenDelay": "3000"
 		}
 	},
-	"server": {
-		"hostname": "Pointless",
-		"iosScheme": "ionic",
-		"androidScheme": "http",
-		"url": "http://192.168.0.3:4500"
-	}
+  "server": {
+    "hostname": "Pointless",
+    "iosScheme": "ionic",
+    "androidScheme": "http",
+    "url": "http://192.168.0.3:4500"
+  }
 }

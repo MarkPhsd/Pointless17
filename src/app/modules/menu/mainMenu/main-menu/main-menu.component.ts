@@ -158,15 +158,15 @@ export class MainMenuComponent implements OnInit  {
       }),
       switchMap(deviceData => {
         // Update disableImages based on device data if available
-        console.log('initHomePageSettings', deviceData?.name, deviceData?.disableImages)
+        // console.log('initHomePageSettings', deviceData?.name, deviceData?.disableImages)
         if (deviceData) {
-          this.disableImages = deviceData.disableImages;
+          this.disableImages = deviceData?.disableImages;
         } else {
           const item = localStorage.getItem('devicename')
           if (item) {
             return this.uiSettings.getPOSDevice(item).pipe(switchMap(data => {
               if (data) {
-                this.disableImages = deviceData.disableImages;
+                this.disableImages = deviceData?.disableImages;
               }
               return of(this.homePageSetings);
             }))

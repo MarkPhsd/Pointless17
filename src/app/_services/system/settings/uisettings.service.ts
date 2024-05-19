@@ -153,7 +153,7 @@ export interface DSIEMVSettings {
   TranCode  : string;
   SecureDevice: string;
   ComPort   : string;
-  PinPadIpAddress: string;
+  pinPadIpAddress: string;
   PinPadIpPort: string;
   SequenceNo: string;
   DisplayTextHandle: string;

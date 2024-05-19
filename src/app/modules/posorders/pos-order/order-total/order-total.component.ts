@@ -6,6 +6,7 @@ import { OrdersService } from 'src/app/_services';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
+
 @Component({
   selector: 'app-order-total',
   templateUrl: './order-total.component.html',
@@ -29,6 +30,11 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   _order: Subscription;
 
   @Input()  purchaseOrderEnabled: boolean;
+
+  roundToPrecision(value: number, precision: number): number {
+    const factor = Math.pow(10, precision);
+    return Math.round(value * factor) / factor;
+  }
 
   homePageSubscriber(){
 
@@ -71,7 +77,6 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
       this.cost = 0;
       if (data) {
         this.order = data;
-        this.cashDiscount
         this.purchaseOrderEnabled = false;
         if (this.order.serviceType && (this.order.serviceType.toLowerCase() == 'purchase order' || this.order.serviceType.toLowerCase() === 'conversion')) {
           this.purchaseOrderEnabled = true;
@@ -82,7 +87,7 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
 
   get cashDiscount() {
     if (this.ui && this.ui?.dcapDualPriceValue != 0) {
-      return this.order.total * (1 + +this.ui.dcapDualPriceValue) // * (1 + this.uiConfig.dcapDualPriceValue)
+      return this.roundToPrecision( this.order.total * (1 + +this.ui.dcapDualPriceValue) , 5)
     }
     return null
   }
@@ -91,7 +96,7 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   constructor(
       private uiSettingsService   : UISettingsService,
       private orderMethodsService : OrderMethodsService,
-      private uISettingsService: UISettingsService,
+      private uISettingsService   : UISettingsService,
       public  route               : ActivatedRoute) {
     const outPut = this.route.snapshot.paramMap.get('mainPanel');
     if (outPut) {

@@ -1,6 +1,9 @@
 <div *ngIf=" (action$ | async) as action"></div>
+
 <div *ngIf="(uiSettings$  | async) as ui">
+
   <div *ngIf="(terminalSettings$  | async) as terminalSettings; else loading">
+
     <div *ngIf="(!dsiEmv || (!dsiEmv?.TranDeviceID || dsiEmv?.TranDeviceID === '')) || !posPayment">
       <div *ngIf="!posPayment">
         <mat-icon>alert</mat-icon> No Payment Found
@@ -20,28 +23,18 @@
       </mat-card-title>
 
       <mat-card-subtitle style="font-size:1.1em;font-weight:400">
-        <div *ngIf="resultMessage">
-          Result Mesage {{resultMessage}}
-        </div>
-        <div *ngIf="message">
-          <h3>Text Response : {{response?.TextResponse}}</h3>
-          <h3>Response Origin : {{response?.ResponseOrigin}}</h3>
-          <h3>DSIX Return Code : {{response?.DSIXReturnCode}}</h3>
-          <h3>Cmd Status : {{response?.CmdStatus}}</h3>
-         <!-- Message: {{message}} -->
-        </div>
-        <div *ngIf="errorMessage">
 
-          <h3><mat-icon color="warn">warning</mat-icon>  {{errorMessage}}</h3>
-        </div>
+        <app-dcapresponse-message [errorMessage]="errorMessage"
+                                  [message]="message"
+                                  [response]="response"
+                                  [resultMessage]="resultMessage">
+        </app-dcapresponse-message>
+
       </mat-card-subtitle>
 
       <mat-card-content>
         <mat-card>
-          <div *ngIf="processing">
-            <h4>Check Device</h4>
-            <mat-spinner [diameter]="50"></mat-spinner>
-          </div>
+
         </mat-card>
 
         <div class="button-grid">
@@ -50,29 +43,26 @@
           </div>
 
           <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
-            <button [disabled]="processing" color="primary" mat-raised-button (click)="authorizeAmount()">Authorize</button>
+            <button [disabled]="processing" color="primary"    mat-raised-button (click)="authorizeAmount()">Authorize</button>
           </div>
 
           <div *ngIf="posPayment.amountPaid > 0 ">
-            <!-- Show if Authorization or if Amount>0 -->
             <button  [disabled]="processing" color="primary"   mat-raised-button (click)="payAmount()">Pay Amount</button>
           </div>
 
           <div *ngIf="posPayment.amountPaid < 0 ">
-            <!-- Show if Authorization Value Exists (or don't use here at all.) -->
-            <button [disabled]="processing"  color="warn"  mat-raised-button (click)="refundAmount()">Refund</button>
+            <button [disabled]="processing"  color="warn"      mat-raised-button (click)="refundAmount()">Refund</button>
           </div>
 
           <div *ngIf="posPayment.tranType">
-            <!-- Always show -->
             <button  color="warn"  mat-raised-button (click)="_close()">Reset & Close</button>
           </div>
+
           <div *ngIf="!posPayment.tranType">
             <button  color="warn"  mat-raised-button (click)="close()">Cancel</button>
           </div>
 
           <div *ngIf="!posPayment.tranType">
-            <!-- Always show -->
             <button  color="warn"  mat-raised-button (click)="paramDownload()">Param Download</button>
           </div>
         </div>
@@ -94,8 +84,7 @@
           <div>
             <mat-button-toggle-group
                   name         = "type"
-                  [(ngModel)]  = "manual"
-                  >
+                  [(ngModel)]  = "manual" >
                 <mat-button-toggle
                     [value]="true"
                     class="manual-toggle"

@@ -68,10 +68,10 @@ export class PosListComponent implements OnInit, OnDestroy {
 
   @HostListener("window", [])
   editTerminal(event) { 
-    // if (window.innerWidth < 768) {
+    if (window.innerWidth < 768) {
       this.editTerminalInNew(event)
       return
-    //  }
+     }
     this.editTerminalPop(event)
   }
 

@@ -75,6 +75,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   _searchModel     :   Subscription;
   searchModel      :   IPOSOrderSearchModel;
 
+  suspendedOrder: number;
   dateRangeForm     : UntypedFormGroup;
   dateFrom          : any;
   dateTo            : any;
@@ -171,6 +172,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
     this.refreshOrderSearch(null);
     this.initUserSubscriber();
+    this.suspendedOrder = 0;
   }
 
   async ngOnInit() {
@@ -433,6 +435,8 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     search.suspendedOrder       = 0;
     search.clientID             = parseInt(this.id)
     this.searchModel            = search;
+
+    this.suspendedOrder = 0;
     this.orderMethodsService.updateOrderSearchModelDirect(search)
     this.updateOrderOptionsStatus(search)
   }
@@ -445,6 +449,8 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     search.clientID             = parseInt(this.id)
     search                      = this.getClosedDates(search)
     this.searchModel            = search;
+
+    this.suspendedOrder = 0;
     this.orderMethodsService.updateOrderSearchModelDirect(search)
     this.updateOrderOptionsStatus(search)
   }
@@ -454,6 +460,8 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     search.greaterThanZero       = 1
     search.closedOpenAllOrders   = 1;
     search.suspendedOrder        = 1;
+
+    this.suspendedOrder = 1;
     search.clientID             = parseInt(this.id)
     this.searchModel            = search;
     this.orderMethodsService.updateOrderSearchModelDirect(search)

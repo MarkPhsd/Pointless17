@@ -37,6 +37,8 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   //search with debounce: also requires AfterViewInit()
   // @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
+  @Input() clientID : number;
+  @Input() suspendedOrders: number;
 
   searchPhrase:         Subject<any> = new Subject();
   // get itemName() { return this.searchForm.get("itemName") as FormControl;}
@@ -124,9 +126,12 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       clientID = this.userAuthorization.user.id;
     }
 
+    if (this.clientID != 0) { 
+      clientID = this.clientID;
+    }
+
     this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
 
-        // console.log('search update', data)
         this.searchModel            = data
         if (!this.searchModel) {
           const searchModel       = {} as IPOSOrderSearchModel;
@@ -135,11 +140,24 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           searchModel.pageSize    = 50;
           this.searchModel        = searchModel
         }
-        if (clientID) {
-          this.searchModel.clientID = clientID;
+   
+        if (clientID != 0) {
+            this.searchModel.clientID = clientID;
+        }
+    
+        if (!this.searchModel.completionDate_From) { 
+          if (this.suspendedOrders != 0) { 
+            this.searchModel.suspendedOrder = this.suspendedOrders;
+          }
+        } else { 
+          if (this.searchModel.completionDate_From) { 
+            this.searchModel.searchOrderHistory = true;
+          }
           this.searchModel.suspendedOrder = 0;
         }
-
+      
+        console.log(this.searchModel, this.clientID,this.suspendedOrders)
+    
         this.refreshSearch()
         return
       }

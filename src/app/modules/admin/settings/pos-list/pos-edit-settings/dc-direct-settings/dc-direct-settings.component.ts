@@ -16,23 +16,22 @@ import { DcapService } from 'src/app/modules/payment-processing/services/dcap.se
 export class DcDirectSettingsComponent implements OnInit {
 
   action$: Observable<any>;
-   dcapAndroidDeviceList: string[]
-   @Input() inputForm: UntypedFormGroup;
-   @Input() dsiEMVSettings: FormGroup;
-   @Input() terminal : ITerminalSettings;
-   @Input() isDSIEnabled: boolean;
-   dcapResult: any;
-   transactionForm: FormGroup;
-   constructor(
+  dcapAndroidDeviceList: string[]
+  @Input() inputForm: UntypedFormGroup;
+  @Input() dsiEMVSettings: FormGroup;
+  @Input() terminal : ITerminalSettings;
+  @Input() isDSIEnabled: boolean;
+  dcapResult: any;
+  transactionForm: FormGroup;
+
+  constructor(
     private sitesService        : SitesService,
     private dcapService         : DcapService,
     private fb                  : FormBuilder,
     public platFormService     : PlatformService,
     private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService, ) {
+  }
 
-   }
-
-   
    initForm() { 
     this.transactionForm = this.fb.group({ 
       amount: [1.00]
@@ -51,7 +50,7 @@ export class DcDirectSettingsComponent implements OnInit {
 
   dCapReset() {
     const dsi = this.dsiEMVSettings.value as DSIEMVSettings
-    console.log('this.inputForm.value?.posDevice', this.terminal)
+    // console.log('this.inputForm.value?.posDevice', this.terminal)
     if (this.terminal.name) {
       const name = this.terminal.name
       this.action$ = this.dcapService.resetDevice(name).pipe(switchMap(data => {

@@ -453,12 +453,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.errorMessage = ''
     this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(concatMap(result =>
         {
-          // console.log('result', result)
-          // if (!result || (result && result?.errorMessage && (result?.errorMessage != null && result?.errorMessage != undefined) )) {
-          //   this.notifyEvent('Message:' + result?.errorMessage, 'Failed Login');
-          //   this.clearUserSettings()
-          //   return of('failed')
-          // }
 
           //if you assign these two lines, detail here why you have done that.
           //for some reason they were here, but they prevented a login,
@@ -480,6 +474,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           if (result && result.username != undefined) { user = result }
 
           if (user) {
+            console.log('user', user?.message)
 
             if (user && user?.errorMessage === 'failed') {
               this.clearUserSettings()

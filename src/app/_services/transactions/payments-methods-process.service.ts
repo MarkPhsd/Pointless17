@@ -823,7 +823,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     const site = this.sitesService.getAssignedSite();
     const validate = this.validateDCAPResponse( rStream, payment)
     if (!validate) {
-      console.log('validate', validate)
+      // console.log('validate', validate)
       return of(null)
     }
     const payment$ =   this.paymentService.processDCAPResponse(site, payment?.id, rStream, deviceName)

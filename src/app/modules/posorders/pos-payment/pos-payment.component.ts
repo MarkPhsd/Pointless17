@@ -155,6 +155,22 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
+  get androidPaxA920Payment() { 
+    if (
+      !this.order.completionDate &&
+      (
+        (this.order?.balanceRemaining != 0 || this.isNegativePaymentAllowed || this.isZeroPaymentAllowed) ||
+        (this.order?.balanceRemaining < 0 || this.isNegativePaymentAllowed)
+      ) &&
+      !this.splitByItem
+    ) { 
+      if (this.smallDevice && this.platFormService.androidApp) { 
+        return true;
+      }
+    }
+    return false;
+  }
+
   get orderLayout() {
     if (!this._orderLayout) {
         return 'order-layout'

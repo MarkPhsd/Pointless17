@@ -2,7 +2,7 @@
 <div *ngIf="(action$ | async) as action"></div>
 
 <mat-card>
-  <mat-card-title>Edit Employee</mat-card-title>
+  <mat-card-title>Edit Employee: {{employee?.id}}</mat-card-title>
   <mat-card-subtitle>
     <div>
       <app-edit-buttons-standard
@@ -91,7 +91,7 @@
             <mat-form-field appearance="outline">
             <mat-label >PIN</mat-label>
             <input matInput
-                    type="password"
+                    type="text"
                     formControlName="password"
                     class="form-control" >
             </mat-form-field>
@@ -154,17 +154,12 @@
         </ng-template>
       </div>
 
-      <div>
-        <div
-              *ngIf="clientForm && client;
-                       else loadingclient;"
-              [formGroup]="clientForm">
+      <div  *ngIf="clientForm && client">
+        <h4>Login Info & Authorizations</h4>
+        <div [formGroup]="clientForm">
 
           <div #coachingUserName >
-            <!-- <mat-icon class="mat-label-info"
-                      color="accent"
-                      [matTooltip]="labelingService.employeeInfo[2].value">info</mat-icon> -->
-            <mat-form-field appearance="outline">
+             <mat-form-field appearance="outline">
               <mat-label >User Name</mat-label>
               <input matInput
                     type="text"
@@ -200,19 +195,13 @@
 
         <div *ngIf="clientForm">
           <div  #coachingUserAuthorized class="grid-item" >
-            <!-- <mat-icon class="mat-label-info"
-                      color="accent"
-                      [matTooltip]="labelingService.employeeInfo[2].value">info</mat-icon> -->
-            <app-profile-roles
+              <app-profile-roles
                   [isAuthorized]="isAuthorized"
                   [inputForm] ='clientForm'>
             </app-profile-roles>
           </div>
 
           <div #coachingUserType class="grid-item" [formGroup]="clientForm">
-            <!-- <mat-icon class="mat-label-info"
-                      color="accent"
-                      [matTooltip]="labelingService.employeeInfo[3].value">info</mat-icon> -->
             <mat-form-field
                 [style]="'font-size: 1.1em; width: 90%;'"
                 class="fields"
@@ -222,8 +211,7 @@
                         type              = "number"
                         ngDefaultControl
                         name              = 'clientTypeID'
-                        formControlName   = "clientTypeID"
-                      >
+                        formControlName   = "clientTypeID"  >
                 <mat-option *ngFor="let item of (clientTypes$ | async) as list"
                   [value]="item.id">
                   {{item.name}}
@@ -232,7 +220,7 @@
             </mat-form-field>
           </div>
         </div>
-
+        
         <mat-label *ngIf="(clientForm && confirmPassword)  &&
                           (clientForm.controls['apiPassword'].value!= '' &&
                           confirmPassword.controls['confirmPassword'].value != '')
@@ -247,7 +235,7 @@
               Passwords match.
         </mat-label>
 
-        <div *ngIf="client && client.id && client.id != 0">
+        <div *ngIf="client && client.id && client.id != 0 && !flagSaved">
             <button mat-raised-button
                     (click)="viewContact()">
                 <mat-icon>expand</mat-icon>View As User
@@ -255,11 +243,6 @@
           </div>
       </div>
     </div>
-
-    <ng-template #loadingclient >
-        <mat-spinner  diameter="30" ></mat-spinner>
-    </ng-template>
-
 
   </mat-card-content>
 </mat-card>

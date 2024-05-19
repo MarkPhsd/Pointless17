@@ -41,6 +41,7 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
   bucketName  :  string;
   awsBucketURL:  string;
 
+  flagSaved   : boolean;
   statuses$   : Observable<IStatuses[]>;
   employee$   : Observable<employee>;
   action$     : Observable<any>;
@@ -238,6 +239,10 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.inputForm = this.employeeService.initForm(this.inputForm)
+
+    this.inputForm.valueChanges.subscribe(data => { 
+      this.flagSaved = true;
+    })
     return this.inputForm
   };
 
@@ -277,6 +282,7 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
             return
           }
         }
+        this.flagSaved = true
         this.passwordsMatch = false
       })
     } catch (error) {
@@ -303,12 +309,19 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
 
     if (this.inputForm)  { employee = this.inputForm.value as employee; }
 
+    console.log(employee);
+
 
     if (client && employee) {
       if (employee.id == 0) {
-        let newEmployee$ = this.employeeService.postEmployee(site, employee)
+        let newEmployee$ = this.employeeService.postEmployee(site, employee);
+
         empeloyeeClient$ =  newEmployee$.pipe(switchMap(
           data => {
+            if (employee.errorMessage) { 
+              this.notifyEvent('Passwords do not match', "");
+              return of(null)
+            }
             return  this.employeeService.saveEmployeeClient(site, { message: '', employee:  data, client: client })
           }
         ))
@@ -336,6 +349,7 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
         this.action$ = empClient$.pipe(
           switchMap(data  => {
             this.notifyEvent('Saved', "Saved")
+            this.flagSaved = true;
             return of(data)
           }),catchError ( err => {
             const message = 'Adding employee failed, please input a unique PIN Code. It may need to be a be a long number';

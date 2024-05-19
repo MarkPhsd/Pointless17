@@ -313,8 +313,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   getDeviceInfo() {
     const devicename = localStorage.getItem('devicename')
     if (!devicename) { return of(null)}
+
     this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
       switchMap(data => {
+        console.log('pos Device data', data)
         if (data && data.text) {
           try {
             const posDevice = JSON.parse(data?.text) as ITerminalSettings;
@@ -323,7 +325,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
             this.posDevice = posDevice;
             this.zoom(posDevice)
             return of(posDevice)
-
           } catch (error) {
             this.siteService.notify(`Error setting device info, for device: ${devicename}` + JSON.stringify(error), 'Close', 10000, 'yellow')
           }
