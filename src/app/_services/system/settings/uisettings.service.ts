@@ -160,6 +160,7 @@ export interface DSIEMVSettings {
   enabled: boolean;
   partialAuth: boolean;
   deviceValue: string;
+  supressedForms: boolean;
 }
 
 

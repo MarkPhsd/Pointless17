@@ -105,7 +105,6 @@ export class NavigationService {
     let schedule = 'currentorder'
     if (isStaff) { schedule = '/currentorder/' }
     this.router.navigate([ schedule , {mainPanel:true}]);
-    console.log('reset order bar')
     this.toolbarUIService.updateOrderBar(false)
     this.toolbarUIService.resetOrderBar(true)
   }

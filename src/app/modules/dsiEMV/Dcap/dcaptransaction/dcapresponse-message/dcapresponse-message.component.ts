@@ -12,5 +12,6 @@ export class DCAPResponseMessageComponent {
   @Input() resultMessage: string;
   @Input() message: any;
   @Input() processing: boolean;
+  @Input() saleComplete: boolean;
 
 }

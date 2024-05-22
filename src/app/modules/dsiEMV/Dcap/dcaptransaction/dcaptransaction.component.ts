@@ -47,6 +47,7 @@ export class DCAPTransactionComponent implements OnInit {
   terminalSettings$: Observable<ITerminalSettings>;
   result: any;
   response: DcapRStream;
+  saleComplete: boolean;
 
   constructor(
     public  userAuthService       : UserAuthorizationService,
@@ -126,7 +127,7 @@ export class DCAPTransactionComponent implements OnInit {
 
       initTerminalSettings() {
         this.terminalSettings$ = this.settingsService.terminalSettings$.pipe(concatMap(data => {
-          
+
           this.terminalSettings = data;
           this.dsiEmv = data?.dsiEMVSettings;
 
@@ -324,12 +325,14 @@ export class DCAPTransactionComponent implements OnInit {
       }
 
       close() {
-        this.processing$ = this._reset().pipe(switchMap(data => {
-          setTimeout(() => {
-            this._close()
-          }, 50);
-          return of(data)
-        }))
+
+        this._close()
+        // this.processing$ = this._reset().pipe(switchMap(data => {
+        //   setTimeout(() => {
+
+        //   }, 50);
+        //   return of(data)
+        // }))
       }
 
       _close() {   this.dialogRef.close()  }
@@ -356,6 +359,7 @@ export class DCAPTransactionComponent implements OnInit {
         this.message = item?.message;
         this.resultMessage = item?.resultMessage;
         this.processing = item?.processing;
+        this.saleComplete = item?.success;
         return item;
       }
 

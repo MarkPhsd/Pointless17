@@ -8,7 +8,7 @@
   <div class="action-center"  *ngIf="androidPaxA920Payment">
     <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
   </div>
-  
+
 </div>
 
 
@@ -102,7 +102,7 @@
 
           <div class="grid-menu-category-flow">
 
-            <div *ngIf="!paymentsEqualTotal && !splitByItem && !uiTransactions?.dcapDualPriceValue 
+            <div *ngIf="!paymentsEqualTotal && !splitByItem && !uiTransactions?.dcapDualPriceValue
                         && platFormService.isApp()
                         && isCreditProcessingEnabled">
               <button class="splitbutton"
@@ -143,7 +143,7 @@
       </mat-card>
 
 
-    
+
       <span #coachingPaymentFull></span>
 
       <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady
@@ -173,6 +173,7 @@
                     <ng-container [ngTemplateOutlet]="giftCardPayButtonView"></ng-container>
                     <ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
                     <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
+
                     <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
                     <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
                     <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
@@ -406,7 +407,7 @@
         [uiTransactions]="uiTransactions"
         [platForm]="platForm"
         [creditBalanceRemaining]="creditPaymentAmount"
-        [paymentAmount] ="order.balanceRemaining"
+        [paymentAmount] ="cashpaymentRemaining"
         [isApp]         ="isApp" >
       <div>Total</div>
     </cash-payment-buttons>
@@ -433,6 +434,7 @@
 <ng-template #cashPay10>
   <ng-container class="pay-buttons"
                 *ngIf="!smallDevice && isApp">
+
     <cash-payment-buttons
         [order]="order"
         [user]="user"

@@ -1,4 +1,4 @@
-<mat-card  *ngIf="isDSIEnabled && dsiEMVSettings  && terminal" 
+<mat-card  *ngIf="isDSIEnabled && dsiEMVSettings  && terminal"
           [formGroup]="dsiEMVSettings">
   <mat-card-subtitle>
     <h4>DC Direct Processing</h4>
@@ -116,12 +116,21 @@
         <div>Enabled on each device.</div>
       </div>
 
+      <div class="toggle-fields">
+        <div>
+          <mat-slide-toggle
+                formControlName="supressedForms">
+            <mat-label>Enable</mat-label>
+          </mat-slide-toggle>
+        </div>
+        <div>Suppressed Forms.</div>
+      </div>
       <div>
         <!-- <button  mat-button  (click)="dCapReset()">Device Reset</button> -->
         <button  mat-button (click)="dCapReset()">Device Reset</button>
       </div>
   </div>
-</mat-card> 
+</mat-card>
 
 
 <mat-card *ngIf="platFormService.androidApp">
@@ -138,7 +147,7 @@
   </mat-card-subtitle>
 
   <div class="grid-container" *ngIf="transactionForm" [formGroup]="transactionForm">
-    
+
     <div class="grid-item">
       <app-value-fields
           [fieldsClass]   ="'field-small'"

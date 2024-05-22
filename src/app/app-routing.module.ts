@@ -145,6 +145,7 @@ import { MenuSectionComponent } from './modules/display-menu/display-menu-list/m
 import { PayAPIComponent } from './modules/payment-processing/pay-api/pay-api.component';
 import { PayAPIFrameComponent } from './modules/payment-processing/pay-apiiframe/pay-apiiframe.component';
 import { PosEditSettingsComponent } from './modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
+import { PosOrderItemsComponent } from './modules/posorders/pos-order/pos-order-items/pos-order-items.component';
 
 const routes: Routes = [
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
@@ -163,7 +164,7 @@ const routes: Routes = [
         //
 
         { path: 'posEditSettings', component: PosEditSettingsComponent, canActivate: [AuthGuard], data: {title: 'Ebay Auth Redirect', animation: 'isLeft'}},
-        
+
 
         { path: 'buy-sell', component: BuySellMainComponent, canActivate: [AuthGuard], data: {title: 'Resale Brand Classes', animation: 'isLeft'}},
 
@@ -209,6 +210,7 @@ const routes: Routes = [
         { path: 'pos-orders',   component: OrdersMainComponent, canActivate: [AuthGuard], data: {  title: 'Orders',  animation:  'isLeft'} },
         { path: 'currentorder', component: PosOrderComponent, canActivate: [AuthGuard], data: { title: 'Current Order', animation: 'isLeft'} },
         { path: 'pos-payment',  component: PosPaymentComponent, canActivate: [AuthGuard], data: { title: 'Payment', animation: 'isLeft'} },
+        { path: 'pos-items',  component: PosOrderItemsComponent, canActivate: [AuthGuard], data: { title: 'Order Items', animation: 'isLeft'} },
 
         //content
         { path: 'content',  component: BlogListEditComponent, canActivate: [AuthGuard], data: { title: 'Content List', animation: 'isLeft'} },

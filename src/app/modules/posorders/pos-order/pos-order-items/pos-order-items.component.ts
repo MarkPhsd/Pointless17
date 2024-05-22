@@ -15,6 +15,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { AuthenticationService } from 'src/app/_services';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
+import { Capacitor } from '@capacitor/core';
 @Component({
   selector: 'pos-order-items',
   templateUrl: './pos-order-items.component.html',
@@ -74,6 +75,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   nopadd = `nopadd`
   conditionalIndex: number;
 
+  androidApp = this.platformService.androidApp;
   _scrollStyle = this.platformService.scrollStyleWide;
   private styleTag: HTMLStyleElement;
   private customStyleEl: HTMLStyleElement | null = null;
@@ -203,7 +205,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       if (this._uiConfig) { this._uiConfig.unsubscribe()}
   }
 
-  constructor(  private platformService: PlatformService,
+  constructor(  public platformService: PlatformService,
                 public  el:            ElementRef,
                 public  route:         ActivatedRoute,
                 private siteService:  SitesService,

@@ -351,7 +351,7 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
     this.loading                   = true
 
     results$.subscribe(data => {
-      console.log('data.results', data.results)
+      // console.log('data.results', data.results)
       if (!data || data.results.length == 0 || data.results == null) {
         this.value = 100;
         this.loading = false;
@@ -382,7 +382,7 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
 
         this.value = ((this.brands.length /  data.paging.totalRecordCount ) * 100).toFixed(0)
 
-        console.log('this.endofRecords', this.endOfRecords)
+        // console.log('this.endofRecords', this.endOfRecords)
         if (!this.endOfRecords) {
           this.brands.push(this.loadMore)
         }

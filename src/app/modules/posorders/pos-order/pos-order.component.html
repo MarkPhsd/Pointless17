@@ -79,7 +79,7 @@
         </div>
 
         <div  (resized)="onResizedorderSpecialsPanel($event)" >
-         
+
 
           <ng-container [ngTemplateOutlet]="rewardsView"></ng-container>
 
@@ -141,6 +141,8 @@
                 class="payment-buttons-container">
               <ng-container [ngTemplateOutlet]="receiveOrderView"></ng-container>
               <ng-container [ngTemplateOutlet]="stripePayButtonView"></ng-container>
+              <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
+              <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
               <ng-container [ngTemplateOutlet]="dsiButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="cardPointButtonView"></ng-container>
@@ -319,6 +321,23 @@
       <br>Credit / Debit
     </dsi-emvcard-pay-btn>
   </div>
+</ng-template>
+
+<ng-template #dCApPreAuthButton>
+  <dsi-emvcard-pay-btn
+      *ngIf="(isApp || isStaff)"
+      [preAuth]="true"
+      [order]="order"
+      [devicename]="devicename"
+      [uiTransactions]="uiTransactions"
+      [platForm]="platForm"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [stripeTipValue]="0"
+      [paymentAmount]="order.balanceRemaining"
+      (setStep) ="setStep(1)">
+    <mat-icon color="warn">credit_card</mat-icon>
+    <br> Pre Auth
+  </dsi-emvcard-pay-btn>
 </ng-template>
 
 <ng-template #triPOSPaymentButton>

@@ -4,6 +4,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 import { TransactionUISettings,  UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 
@@ -24,12 +25,18 @@ export class TipEntryComponent implements OnInit  {
   @Output() specifiedTipAmount  = new EventEmitter();
   step                  = 1;
   @Input() changeDue   : any;
+  inputDisabled: boolean;
+  @Input() hideKeyPad: boolean;
 
   constructor(
               private snackBar : MatSnackBar,
+              platFormService: PlatformService
             )
   {
 
+    if (platFormService.androidApp) {
+      this.inputDisabled = true;
+    }
   }
 
   ngOnInit(): void {

@@ -1,11 +1,25 @@
 <span *ngIf=" devicename &&
-             uiTransactions?.dsiEMVAndroidEnabled &&
+             (uiTransactions?.dsiEMVAndroidEnabled || uiTransactions?.dCapEnabled ) &&
              (order && order?.balanceRemaining != 0)">
+
+  <ng-container [ngTemplateOutlet]="buttonView"></ng-container>
+</span>
+
+
+<ng-template #regularStyle>
   <button class="payment-buttons"
-          mat-raised-button
-          color="primary"
-          (click)="processDSIEMVAndroidCreditCardPayment(false)">
+      mat-raised-button
+      color="primary"
+      (click)="processDSIEMVAndroidCreditCardPayment(false)">
     <ng-content></ng-content>
   </button>
+</ng-template>
 
-</span>
+<ng-template #footerStyle>
+  <button mat-raised-button
+      fxFill
+      color="primary"
+      (click)="processDSIEMVAndroidCreditCardPayment(false)">
+      <ng-content select="[footerstyle]"></ng-content>
+    </button>
+</ng-template>

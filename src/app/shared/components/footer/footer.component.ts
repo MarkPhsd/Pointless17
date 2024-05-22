@@ -1,10 +1,14 @@
 import { Component, OnInit,  ViewChild, TemplateRef, HostListener, OnDestroy } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { Router } from '@angular/router';
+import { Capacitor } from '@capacitor/core';
 import { Subscription } from 'rxjs';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
 import { AuthenticationService, IDeviceInfo, OrdersService } from 'src/app/_services';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { OrderFilterPanelComponent } from 'src/app/modules/orders/order-filter-panel/order-filter-panel.component';
@@ -16,7 +20,8 @@ import { PosOrderItemsComponent } from 'src/app/modules/posorders/pos-order/pos-
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit, OnDestroy {
-
+  get platForm() {  return Capacitor.getPlatform(); }
+  deviceName = localStorage.getItem('devicename')
   @ViewChild('footerMenu') footerMenu: TemplateRef<any>;
   outlet              : TemplateRef<any>;
   phoneDevice : boolean;
@@ -37,6 +42,9 @@ export class FooterComponent implements OnInit, OnDestroy {
   _user             : Subscription;
   deviceInfo        : IDeviceInfo;
   userChecked       : boolean;
+  androidApp = this.platFormService.androidApp;
+  _uiConfig      : Subscription;
+  uiConfig       = {} as TransactionUISettings;
 
   currentOrderSusbcriber() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
@@ -53,14 +61,25 @@ export class FooterComponent implements OnInit, OnDestroy {
       this.getUserInfo()
       this.setHeaderBackColor(this.user?.userPreferences?.headerColor)
     })
+
+    try {
+      this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
+        if (data) {    this.uiConfig = data; }
+      })
+    } catch (error) {
+    }
   }
 
   constructor(
     public  toolbarUIService  : ToolBarUIService,
-    public orderMethodsService: OrderMethodsService,
+    public  orderMethodsService: OrderMethodsService,
     private  navigationService: NavigationService,
-    public printingService    : PrintingService,
+    public  printingService    : PrintingService,
     private bottomSheet       : MatBottomSheet,
+    private uiSettingsService: UISettingsService,
+    private platFormService: PlatformService,
+    public router:           Router,
+
     private authenticationService: AuthenticationService,
   ) { }
 
@@ -70,6 +89,18 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.currentOrderSusbcriber();
     this.initUserSubscriber()
     this.deviceInfo = this.authenticationService.deviceInfo;
+  }
+
+  get refreshCreditCardButton() {
+    const href = this.router.url;
+    if (href.startsWith('/pos-items')) {
+      if (this.androidApp) {
+        if (this.deviceInfo.phoneDevice) {
+          return true
+        }
+      }
+    }
+    return false
   }
 
   ngOnDestroy(): void {
@@ -156,9 +187,16 @@ export class FooterComponent implements OnInit, OnDestroy {
   toggleOpenOrderBar() {
     if (!this.phoneDevice) {
       this.navigationService.toggleOpenOrderBar(this.isStaff)
+      return;
+    }
+
+    if (this.phoneDevice && this.platFormService.androidApp) {
+      this.router.navigate([ 'pos-items' , {mainPanel:true}]);
+      this.toolbarUIService.updateOrderBar(false)
+      this.toolbarUIService.resetOrderBar(true)
+      return
     }
     if (this.order) {
-      // this.orderMethodsService.updateBottomSheetOpen(true)
       this.bottomSheet.open(PosOrderItemsComponent)
     }
   }

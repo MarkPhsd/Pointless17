@@ -75,10 +75,10 @@ export class PosEditSettingsComponent implements OnInit {
       this.initUiSettings()
       this.id = this.route.snapshot.paramMap.get('id');
       console.log('id',  this.id)
-      if (this.id) { 
+      if (this.id) {
         const site = this.sitesService.getAssignedSite()
         console.log('site url', site.url)
-        this.action$ = this.settingsService.getSetting(site, this.id).pipe(switchMap(data => { 
+        this.action$ = this.settingsService.getSetting(site, this.id).pipe(switchMap(data => {
           console.log('data', data)
           this.initData(data)
           return of(data)
@@ -89,7 +89,7 @@ export class PosEditSettingsComponent implements OnInit {
       this.initData(data)
   }
 
-  initUiSettings() { 
+  initUiSettings() {
     this.uisettings$ = this.settingsService.getUITransactionSetting().pipe(switchMap(data => {
       this.uiSettings = data;
       if (data.cardPointBoltEnabled) {
@@ -99,7 +99,7 @@ export class PosEditSettingsComponent implements OnInit {
     }))
   }
 
-  initData(data) { 
+  initData(data) {
     if (data) {
       this.setting = data
       if (!this.setting.text) {
@@ -248,11 +248,12 @@ export class PosEditSettingsComponent implements OnInit {
       ComPort         :[],
       PinPadIpAddress :[],
       PinPadIpPort    :[],
-      SequenceNo      :[],
+    SequenceNo      :[],
       DisplayTextHandle :[],
       enabled           :[],
       partialAuth       :[],
-      deviceValue: [],
+      deviceValue     : [],
+      supressedForms  : [],
     })
 
     if (this.terminal) {

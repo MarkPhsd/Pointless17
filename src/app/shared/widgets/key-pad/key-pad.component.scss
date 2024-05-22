@@ -2,49 +2,18 @@
 
 .mat-card-floater {
   margin: 5px;
-
-  // font-size    : large;
-  // height       : 8vw;
-  // width        : 32vw;
-
-  // @include for-phone-only {
-  //   height       : 17vw;
-  //   width        : 50vw;
-  // }
-
-  // @include for-big-desktop-up {
-  //   height       : 5vw;
-  //   width        : 24vw;
-  // }
-  // @include for-desktop-up {
-  //   height       : 5vw;
-  //   width        : 24vw;
-  // }
-
-  // border-radius: 5px;
 }
 
 .header {
   display        : flex;
   align-items    : center;
   justify-content: center;
-
-  // position       :relative;
 }
 
 .ngcontent {
   margin-bottom: 5px;
 }
 
-mat-button  {
-  border-radius: 5px;
-}
-
-mat-form-field {
-  margin-bottom: 5px;
-  height: 1em;
-  width   : 120px;
-}
 
 .header-info {
   display: flex;
@@ -80,6 +49,12 @@ mat-form-field {
 .button-sized-1 {
   width       : 100px;
   height      : 50px;
+
+  @include for-phone-only  {
+    height       : 65px;
+    width        : 30vw;
+  }
+
 }
 
 .button-sized-2 {
@@ -87,21 +62,20 @@ mat-form-field {
   height       : 85px;
   border-radius: 5px;
   @include for-phone-only  {
-    width        : 115px;
+    height       : 65px;
+    width        : 30vw;
   }
 
 }
 
 .button-sized-scaled {
-  // width        : 1.4vw;
-  // height       : 1.4vw;
   font-size    : large;
   height       : 8vw;
   width        : 10vw;
 
   @include for-phone-only {
-    height       : 17vw;
-    width        : 17vw;
+    height       : 75px;
+    width        : 75px;
   }
 
   @include for-big-desktop-up {
@@ -133,8 +107,6 @@ mat-form-field {
   margin-top  : 5px;
   padding     : 0px;
   border-radius: 5px;
-
-
 }
 
 button {
@@ -152,11 +124,7 @@ button {
   margin-right: 5px;
 }
 
-
 .item-container {
-  // display: flex;
-  // flex-wrap: wrap;
-  // width: 100%;
   align-items: center;
   justify-content: center;
   margin: 4px;
@@ -167,3 +135,13 @@ button {
 .endButton {
   grid-column-end: -1;
 }
+
+// mat-button  {
+//   border-radius: 5px;
+// }
+
+// mat-form-field {
+//   margin-bottom: 5px;
+//   height: 1em;
+//   width   : 120px;
+// }

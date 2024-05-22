@@ -85,6 +85,8 @@ export class DcapMethodsService {
     processing = false;
 
     console.log('readResult', streamResponse)
+
+    // CmdStatus
     const status = streamResponse?.CmdResponse.CmdStatus
 
     if (status ==   "Declined") {
@@ -111,7 +113,23 @@ export class DcapMethodsService {
     success = false
     processing = false;
 
-    const response = cmdResponse?.TextResponse;
+    let response = cmdResponse?.CmdStatus;
+    if (response) {
+      if (
+        response.toLowerCase() === 'completed'.toLowerCase() ||
+        response.toLowerCase() === 'success'.toLowerCase() ||
+        response.toLowerCase() === 'approved'.toLowerCase() ||
+        response.toLowerCase() === 'AP*'.toLowerCase() ||
+        response.toLowerCase() === 'captured'.toLowerCase() ||
+        response.toLowerCase() === 'approval'.toLowerCase() ||
+        response.toLowerCase() === 'approved, Partial AP'.toLowerCase()
+      ) {
+        success = true
+        return {success : success , message: message, processing: processing, resultMessage: resultMessage}
+      }
+    }
+
+    response = cmdResponse?.TextResponse;
     if (response) {
       if (
         response.toLowerCase() === 'completed'.toLowerCase() ||
@@ -170,11 +188,6 @@ export class DcapMethodsService {
 
   }
 
-
-
-
-
-
   readResult(cmdResponse: DcapRStream) {
     // console.log('readresult', cmdResponse?.TextResponse, cmdResponse)
     let message: string;
@@ -184,7 +197,7 @@ export class DcapMethodsService {
     success = false
     processing = false
 
-    console.log('readResult', cmdResponse)
+    // console.log('readResult', cmdResponse)
     const status = cmdResponse?.CmdStatus
     if (status ==   "Declined") {
       return {success : false , message: status, processing: processing, resultMessage: status};

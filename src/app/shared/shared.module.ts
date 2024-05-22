@@ -27,6 +27,7 @@ import { TiersCardComponent } from '../modules/tv-menu/tv-price-specials/tiers-c
 import { FacilitySearchSelectorComponent } from 'src/app/shared/widgets/facility-search-selector/facility-search-selector.component';
 import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
 import { ListPrintersElectronComponent } from '../modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
+import { DSIEMVAndroidPayBtnComponent } from '../modules/posorders/pos-payment/dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
 
 import { ListProductSearchInputComponent } from './widgets/search-list-selectors/list-product-search-input/list-product-search-input.component';
 import { MoveInventoryLocationComponent } from 'src/app/modules/admin/inventory/move-inventory-location/move-inventory-location.component';
@@ -314,6 +315,7 @@ import { DCAPResponseMessageComponent } from '../modules/dsiEMV/Dcap/dcaptransac
     DepartmentMenuComponent,
     DCAPResponseMessageComponent,
     DynamicAgGridComponent,
+    DSIEMVAndroidPayBtnComponent,
     EmailSettingsComponent,
     EmailEntryComponent,
     EmployeeClockListComponent,
@@ -561,6 +563,7 @@ import { DCAPResponseMessageComponent } from '../modules/dsiEMV/Dcap/dcaptransac
     CashDrawerSettingsComponent,
     CallUsSelectorComponent,
     CardComponent,
+    DSIEMVAndroidPayBtnComponent,
     TimeChartReportComponent,
     ProductChartReportComponent,
     CardDashboardComponent,

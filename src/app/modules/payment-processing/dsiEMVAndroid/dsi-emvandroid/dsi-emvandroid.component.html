@@ -2,19 +2,43 @@
 <div class="cards" *ngIf="(transaction$ | async) as transaction">
 <div *ngIf="(posDevice$  | async) as item"></div>
 
-  <mat-card>
+
+  <mat-card style="margin-top:5px">
+
     <mat-card-title>
+
+        <div *ngIf="(uiHome$ | async) as uiHome" class="action-center">
+          <div *ngIf=" !saleComplete">
+            <button mat-flat-button
+                    class="logo"
+                    (click)="displayAdmin()">
+                  <app-logo
+                    *ngIf="uiHome?.logoHomePage"
+                    [uiHomePageSetting] ="uiHomePageSetting"
+                    [logoSize]          ="'small'"
+                    [logo]              ="uiHome?.logoHomePage"></app-logo>
+                <div>
+                  <h4>{{ data?.displayCompanyName }}</h4>
+                </div>
+            </button>
+          </div>
+        </div>
+
       <div class="action-center"  *ngIf="payment?.amountPaid >0">
         <h5>{{gratitude}}</h5>
       </div>
       <div class="action-center" >
-        <div>
+
+        <div *ngIf="!saleComplete">
           <h4>
             {{transaction?.tranCode}} {{transaction?.amount | currency}}
           </h4>
         </div>
+
         <div>
-          <h4 *ngIf="payment && payment?.tipAmount">Tip: {{payment?.tipAmount | currency}} Total: {{payment?.amountPaid + payment?.tipAmount | currency}}</h4>
+          <h4 *ngIf="payment && payment?.tipAmount">
+            Tip:   {{ payment?.tipAmount | currency}}
+            Total: {{ payment?.amountPaid + payment?.tipAmount | currency}}</h4>
         </div>
       </div>
     </mat-card-title>
@@ -23,75 +47,97 @@
       <div class="grid-buttons">
         <div>
           <div>
-            <button [disabled]="processing" *ngIf="!saleComplete" color="primary" mat-raised-button (click)="emvSale()">
+            <button [disabled]="processing"
+                    *ngIf="!saleComplete" color="primary"
+                    mat-raised-button (click)="emvSale()">
                 <mat-icon>credit_card</mat-icon>Process
             </button>
           </div>
         </div>
+        <mat-icon *ngIf="saved">save</mat-icon>
       </div>
 
-      <div class="grid-buttons" *ngIf="saleComplete">
+      <div class="grid-buttons" *ngIf="saleComplete && !enterTip">
         <div >
-          <button mat-raised-button (click)="print()"><mat-icon>email</mat-icon>Print</button>
+          <button mat-raised-button color="accent" (click)="print()"><mat-icon>email</mat-icon>Print</button>
         </div>
         <div>
-          <button mat-raised-button (click)="text()"><mat-icon>phone</mat-icon>Text</button>
+          <button mat-raised-button color="accent" (click)="mssTextMessage()"><mat-icon>phone</mat-icon>Text</button>
+        </div>
+      </div>
+
+      <div class="grid-buttons" >
+        <div style="margin:5px" *ngIf="payment?.amountPaid >0 && saleComplete && !enterTip">
+          <button style="width:100px" color="accent" mat-raised-button (click)="saleComplete && enterTip = !enterTip">Add Tip</button>
+        </div>
+
+        <div style="margin:5px" *ngIf="payment?.amountPaid >0 && saleComplete">
+          <button style="width:100px" color="warn" mat-raised-button (click)="enterTip = !enterTip">Back</button>
         </div>
       </div>
     </mat-card-content>
   </mat-card>
 
-  <ngx-json-viewer *ngIf="responseData && responseData?.PrintData" [json]="responseData?.PrintData"></ngx-json-viewer>
-
-  <div  [hidden]="hideRequest">
-    <h3>Request:</h3> {{request | json}}
-  </div>
-
-  <div >
+  <div *ngIf="!enterTip">
     <mat-card>
-      <div *ngIf="processing">Please tap or insert card</div>
-
-      <app-dcapresponse-message 
+      <div >{{instructions}}</div>
+      <app-dcapresponse-message
+            [saleComplete]="saleComplete"
             [errorMessage]="errorMessage"
             [message]="message"
             [response]="cmdResponse"
             [resultMessage]="resultMessage">
       </app-dcapresponse-message>
-
     </mat-card>
-    <div>
-      <mat-card *ngIf="isAdmin">
-        Current transaction
-        <div>  {{transaction | json}} </div>
-      </mat-card>
-    </div>
   </div>
 
-  <div style="margin:5px" *ngIf="payment?.amountPaid >0">
-    <button style="width:100px" mat-raised-button (click)="enterTip = !enterTip">Enter Tip</button>
-  </div>
-
-  <div class="tip-container" *ngIf="!processing && !textResponse && enterTip ">
+  <div class="tip-container" *ngIf="enterTip">
     <tip-entry-amount
         [payment]            = "payment"
+        [hideKeyPad]         = "true"
         (specifiedTipAmount) = "specifiedTip($event)"
         (outPutTip)          = "customTipAmount($event)"
     ></tip-entry-amount>
   </div>
 
   <div class="grid-buttons">
-    <div>
+    <div  *ngIf="!saleComplete && processing">
       <button mat-raised-button color="warn" (click)="emvCancel()">
-        Cancel
+        Cancel Action
       </button>
     </div>
 
     <div>
-      <button mat-raised-button color="accent" (click)="resetDeviceAsync()">
+      <button  *ngIf="processing" mat-raised-button color="accent" (click)="resetDeviceAsync()">
         Reset
       </button>
     </div>
   </div>
-</div>
 
+  <div class="grid-buttons">
+    <div>
+      <button mat-raised-button color="warn" (click)="forceClose()">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <div class="grid-buttons"  *ngIf="isDevMode">
+    <div>
+      <button mat-raised-button color="warn" (click)="paramDownload()">
+        Param Download
+      </button>
+    </div>
+  </div>
+
+  <div  [hidden]="hideRequest" *ngIf="isDevMode">
+    <h3>Request:</h3> {{request | json}}
+    <div>
+      <mat-card>
+        <ngx-json-viewer [json]="transaction"></ngx-json-viewer>
+      </mat-card>
+    </div>
+
+  </div>
+</div>
 

@@ -54,12 +54,12 @@ export class CashPaymentButtonComponent implements OnInit {
   }
 
   setPaymentAmount() {
-    if (this.uiTransactions.dcapMultiPrice) {
-      if (this.paymentAmount == this.creditBalanceRemaining) {
-            this.paymentAmount = this.cashDiscount
-            // console.log('cash discount', this.cashDiscount)
-      }
-    }
+    // if (this.uiTransactions.dcapMultiPrice) {
+    //   if (this.paymentAmount == this.creditBalanceRemaining) {
+    //         this.paymentAmount = this.cashDiscount
+    //         // console.log('cash discount', this.cashDiscount)
+    //   }
+    // }
   }
 
   get cashDiscount() {

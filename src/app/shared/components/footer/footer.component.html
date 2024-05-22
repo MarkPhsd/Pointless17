@@ -9,7 +9,6 @@
 
 <ng-template #footerMenu>
   <div class="grid-items">
-
     <div  class="mat-item" *ngIf="isStaff">
         <button
               mat-raised-button
@@ -33,7 +32,13 @@
     </div>
 
     <div class="mat-item">
+
+      <span class="item-span" *ngIf="refreshCreditCardButton" style="margin-bottom:3px">
+        <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
+      </span>
+
       <button mat-raised-button
+        *ngIf="!refreshCreditCardButton"
         fxFill
         color="primary"
         (click)="toggleOpenOrderBar()">
@@ -62,6 +67,7 @@
         </div>
 
       </button>
+
     </div>
 
     <div class="mat-item" *ngIf="order && !smallDevice">
@@ -96,3 +102,22 @@
   </div>
 </ng-template>
 
+
+<ng-template #dsiEMVAndroidCardButton>
+
+  <dsiemvandroid-pay-btn
+    [order]="order"
+    *ngIf="androidApp && deviceName"
+    [devicename]="deviceName"
+    [uiTransactions]="uiConfig"
+    [platForm]="platForm"
+    [creditBalanceRemaining]="order?.creditBalanceRemaining"
+    [stripeTipValue]="0"
+    [footerButton]="true"
+    [paymentAmount]="order?.balanceRemaining" >
+    <div footerstyle>
+      <mat-icon color="warn">credit_card</mat-icon>
+      Credit
+    </div>
+  </dsiemvandroid-pay-btn>
+</ng-template>

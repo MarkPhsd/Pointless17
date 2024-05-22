@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IPaymentMethod } from 'ngx-paypal';
 import { Observable } from 'rxjs';
@@ -13,12 +13,17 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 })
 export class DSIEMVAndroidPayBtnComponent implements OnInit {
 
+    @ViewChild('regularStyle') regularStyle: TemplateRef<any>;
+    @ViewChild('footerStyle') footerStyle: TemplateRef<any>;
+
     @Input() order: IPOSOrder;
     @Input() uiTransactions: TransactionUISettings;
     @Input() platForm: string;
     @Input() creditBalanceRemaining: number;
     @Input() stripeTipValue: string;
     @Input() paymentAmount: number;
+    @Input() footerButton: boolean;
+
     stripeEnabled: boolean;
     paymentMethod$: Observable<IPaymentMethod>;
     @Output() setStep = new EventEmitter()
@@ -33,6 +38,7 @@ export class DSIEMVAndroidPayBtnComponent implements OnInit {
     ngOnInit(): void {
       const i = 0
       // this.uiTransactions.dsiEMVAndroidEnabled
+      // this.uiTransactions.
     }
 
     processDSIEMVAndroidCreditCardPayment(manual: boolean) {
@@ -41,4 +47,13 @@ export class DSIEMVAndroidPayBtnComponent implements OnInit {
         this.paymentsMethodsService.processDSIEMVAndroidTransaction(order, this.creditBalanceRemaining, manual, this.uiTransactions)
       }
     }
+
+
+    get  buttonView() {
+      if (this.footerButton) {
+        return this.footerStyle;
+      }
+      return this.regularStyle;
+    }
+
   }

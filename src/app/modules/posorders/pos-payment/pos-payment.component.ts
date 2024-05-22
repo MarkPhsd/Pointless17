@@ -126,18 +126,18 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   PaxA920 : boolean;
   payApiEnabled: boolean;
 
-  posDevice$      = this.uISettingsService.posDevice$.pipe(switchMap(data => { 
-    if (!data)  { 
+  posDevice$      = this.uISettingsService.posDevice$.pipe(switchMap(data => {
+    if (!data)  {
       const item = localStorage.getItem('devicename')
-      return this.uISettingsService.getPOSDevice(item).pipe(switchMap(data => { 
+      return this.uISettingsService.getPOSDevice(item).pipe(switchMap(data => {
         this.setPaxInfo(data)
         this.uISettingsService.updatePOSDevice(data)
         return of(data)
       }))
-    } else { 
+    } else {
       this.setPaxInfo(data)
     }
- 
+
     return of(data)
   }))
   get isProcessingPayment() {
@@ -147,15 +147,15 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  setPaxInfo(data) { 
-    if (data.dsiEMVSettings) { 
-      if (data?.dsiEMVSettings?.deviceValue == 'EMV_A920PRO_DATACAP_E2E') { 
+  setPaxInfo(data) {
+    if (data.dsiEMVSettings) {
+      if (data?.dsiEMVSettings?.deviceValue == 'EMV_A920PRO_DATACAP_E2E') {
         this.PaxA920 = true
-      } 
+      }
     }
   }
 
-  get androidPaxA920Payment() { 
+  get androidPaxA920Payment() {
     if (
       !this.order.completionDate &&
       (
@@ -163,8 +163,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         (this.order?.balanceRemaining < 0 || this.isNegativePaymentAllowed)
       ) &&
       !this.splitByItem
-    ) { 
-      if (this.smallDevice && this.platFormService.androidApp) { 
+    ) {
+      if (this.smallDevice && this.platFormService.androidApp) {
         return true;
       }
     }
@@ -344,7 +344,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
     return null;
   }
- 
+
   get giftCardPayButtonView() {
     let pass = false;
 
@@ -374,6 +374,20 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   setGroupID(event) {
     console.log('setgroupd', event);
     //then apply it to the split section, so it updates and shows the appropriate group for this current split
+  }
+
+  get cashpaymentRemaining() {
+    const order = this.order;
+    const ui = this.uiTransactions
+    if (ui.dcapMultiPrice) {
+      if (ui?.dcapDualPriceValue > 0) {
+        return order.total - order.cashDiscountFee
+      }
+      if (ui?.dcapDualPriceValue < 0) {
+        return order.total + order.cashDiscountFee
+      }
+    }
+    return order.balanceRemaining
   }
 
   enterRewardsAmount(amount) {

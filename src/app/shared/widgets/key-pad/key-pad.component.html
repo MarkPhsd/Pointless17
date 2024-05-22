@@ -3,11 +3,6 @@
     <ng-content select="[info]"> </ng-content>
   </div>
 
-  <div *ngIf="inputForm">
-    <!-- {{fieldName}}<br>
-    {{inputForm?.value | json}} -->
-  </div>
-
   <div class="item-container"
        *ngIf="inputForm">
     <div class="header-info"
@@ -20,7 +15,8 @@
         </div>
         <mat-form-field  appearance="outline">
             <div *ngIf="disableFocus">
-              <input  matInput
+              <input
+                      matInput
                       #input
                       [placeholder]      ="placeHolder"
                       aria-label         ="Number"

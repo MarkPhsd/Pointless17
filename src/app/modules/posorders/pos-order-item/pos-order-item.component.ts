@@ -628,8 +628,9 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
         }
 
         let width = '455px'
-        if (this.smallDevice) {
-          width = ' 100vw'
+
+        if (this.smallDevice ) {
+          width = '100vw !important'
         }
 
         let requireWholeNumber = false;
@@ -654,7 +655,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
         if (editField == 'price' || editField == 'subTotal') {
           if (!this.authenticationService.userAuths.changeItemPrice) {
             const request =  {request: 'checkAuth' , action: editField}
-            this.authorizeEdit(item, request);
+            this.authorizeEdit(item, request,  width, height);
             return;
           }
         }
@@ -668,12 +669,21 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     return  this.orderMethodsService.checkAuthDialog(item,  request)
   }
 
-  authorizeEdit(item, request) {
+  authorizeEdit(item, request, width?: string, height?: string) {
     let dialogRef = this.checkAuthDialog(item, request)
     dialogRef.afterClosed().subscribe(result => {
-      // console.log('recieving determined result is: ', result)
+
+      let sWidth = width;
+      let sHeight = height;
+      if (!sWidth) {
+        sWidth = width
+        sHeight = height;
+      } else {
+        sWidth ='100vw !important'
+        sHeight = '600px';
+      }
       if (result) {
-        this.editDialog(item,'100vw !important','600px')
+        this.editDialog(item, sWidth, sHeight)
       } else {
         this.siteService.notify('Not authorized', 'close', 1000, 'red')
       }
@@ -683,15 +693,10 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   editDialog(item, width, height) {
     let dialogRef: any;
 
-    // if (!this.platFormService.isApp()){
-    //   height =  '500px';
-    // }
-    // console.log(width, height)
-
     if (this.smallDevice) {
-      width = '100vw'
+      width = '100vw !important'
     }
-    // this.notifyEvent('width', width)
+
     dialogRef = this.dialog.open(PosOrderItemEditComponent,
       { width     : width,
         maxWidth  : width,

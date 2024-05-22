@@ -851,7 +851,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }))
   }
 
-  processCreditCardResponse(rStream: RStream,  payment: IPOSPayment, order: IPOSOrder) {
+  getCardResponse(rStream: RStream,  payment: IPOSPayment, order: IPOSOrder) {
 
     let posOrder = order;
     const site = this.sitesService.getAssignedSite();
@@ -883,25 +883,41 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         let response: IPaymentResponse;
         const payment$ =   this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod)
 
-        // return  payment$.pipe(
-        //   switchMap(data => {
-        //     this.orderMethodsService.updateOrderSubscription(data.order);
-        //     response = data;
-        //     return this.finalizeOrderProcesses(order);
-        //   })).pipe(concatMap(data => {
-        //     this.finalizeOrder(response, paymentMethod, data);
-        //     return of(cmdResponse);
-        // }))
+        return payment$
+      }
+    }
+    return of(null)
+  }
+
+
+  processCreditCardResponse(rStream: RStream,  payment: IPOSPayment, order: IPOSOrder) {
+
+    // let posOrder = order;
+    // const site = this.sitesService.getAssignedSite();
+    if (!rStream) {
+      this.sitesService.notify('No RStream resposne', 'close', 3000, 'red');
+      return of(null)
+    }
+
+    if (rStream) {
+      const validate = this.validateResponse( rStream, payment)
+      if (!validate) {
+        return of(null)
+      }
+
+        const payment$ =  this.getCardResponse(rStream, payment, order)
+
+        if (!payment$) { return of(null) }
 
         return  payment$.pipe(
           switchMap(data => {
             return this.finalizeTransaction(data)
           }
         ));
-      }
-
     }
+
     return of(null)
+
   }
 
   applyCardPointResponseToPayment(response: any, payment: IPOSPayment) {

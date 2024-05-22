@@ -49,7 +49,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   @Input() alternateClass = 'grid-keypad'
   @Input() decimals       = 0;
   @Input() requireWholeNumber: boolean;
-
+  @Input() inputDisabled: boolean;
   constructor(
     private orderMethodsService: OrderMethodsService,
     private fb: UntypedFormBuilder) {
@@ -83,6 +83,10 @@ export class KeyPadComponent implements OnInit, OnChanges {
       return of(data)
     }))
 
+    if (this.inputDisabled) {
+      const control = this.inputForm.controls['itemName'];
+      control.disable()
+    }
   }
 
   formSubscriber() {
@@ -121,8 +125,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
       this.inputForm.controls[this.fieldName].valueChanges.subscribe(data => {
 
         this.outputOnChange.emit(data)
-        // console.log(this.inputForm.value, data)
-        // console.log(this.inputForm.controls)
         if (data == '' || data == undefined) {
           this.returnEnter(data);
         }
