@@ -1,0 +1,28 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.1.3'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+task deployAarToLocalRepo(type: Copy) {
+    from('libs/DSIEMVAndroid.aar')
+    into('maven/repository/com/pointlesspos/dsiemvandroidplugin/1.0')
+    rename { "DSIEMVAndroid-1.0.aar" }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
