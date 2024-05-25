@@ -4,7 +4,7 @@
         *ngIf="(uiHomePage$ | async) as uiHomePage">
 
     <div  class="flex-row">
-  
+
       <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
       <ng-container [ngTemplateOutlet]='departmentsFilter'></ng-container>
       <div>
@@ -145,7 +145,7 @@
 </ng-template>
 
 <ng-template #menuItemCard let-item let-type="type">
-    <app-menu-item-card 
+    <app-menu-item-card
         *ngIf="item"
         [displayType]     ="type"
         [allowEdit]       ="userAuths?.editProduct"
@@ -154,13 +154,13 @@
         [retail]          ="item?.retail"
         [name]            ="item?.name"
         [menuItem]        ="item"
-        [bucketName]      ="bucketName"
-        [class]           ="infiniteItemClass"
-        [uiHomePage]      ="uiHomePage"
-        [isStaff]         ="isStaff"
-        [smallDevice]     ="smallDevice"
-        [disableEdit]     ="disableEdit"
-        [disableImages]   ="posDevice?.disableMenuImages"
+        [bucketName]          ="bucketName"
+        [class]               ="infiniteItemClass"
+        [uiHomePage]          ="uiHomePage"
+        [isStaff]             ="isStaff"
+        [smallDevice]         ="smallDevice"
+        [disableEdit]         ="disableEdit"
+        [disableImages]       ="posDevice?.disableMenuImages"
         (outPutUpdateCategory)="setCategoryID($event)"
         (outputRefresh)       ="refreshFromSelection($event)"
         (outPutLoadMore)      ='moveNext($event)' >

@@ -87,7 +87,7 @@ export class PartBuilderEditComponent implements OnInit {
     item.pB_Components.forEach(data => {
       value = this.getCostPrice(data, value)
 
-      console.log(value)
+      // console.log(value)
       if (data.pb_MainID_Associations && data.pb_MainID_Associations.length > 0) {
 
         data.pb_MainID_Associations.forEach(data => {
@@ -96,7 +96,7 @@ export class PartBuilderEditComponent implements OnInit {
             data.pB_Components.forEach(itemValue => {
 
               value = this.getCostPrice(itemValue, value)
-              console.log(value)
+              // console.log(value)
 
             })
           }
@@ -113,7 +113,7 @@ export class PartBuilderEditComponent implements OnInit {
         item.price += (data.price * data.quantity);
       }
       if (data.cost) {
-        item.price += (data.cost * data.quantity);
+        item.cost += (data.cost * data.quantity);
       }
     }
     return item;

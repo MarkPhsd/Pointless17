@@ -28,6 +28,8 @@ export class POSSplitItemsComponent implements OnInit {
     smallDevice         = false;
     @Output() outPutPaymentAmount = new EventEmitter();
     @Input() order   : IPOSOrder;
+    @Input() androidApp: boolean;
+
     order$: Observable<IPOSOrder>;
     saveAssignedItems$: Observable<any>;
     productTypes$    : Observable<IItemBasicB[]>;

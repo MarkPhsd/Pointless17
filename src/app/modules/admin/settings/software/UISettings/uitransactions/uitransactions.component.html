@@ -776,13 +776,13 @@
             <mat-label>Apply table name to order name</mat-label>
           </mat-slide-toggle>
         </div>
-        
+
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="rewardsEnabled">
             <mat-label>Enable Catalog Schedule/Rewards</mat-label>
           </mat-slide-toggle>
-        </div> 
+        </div>
 
         <div class="toggle-fields">
           <mat-slide-toggle
@@ -842,18 +842,17 @@
 
         <div style="width:150px">
           <mat-label>Print Server Device</mat-label>
-          <app-value-fields
+          <!-- <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'printServerDevice'">
               Print Server Device
-          </app-value-fields>
+          </app-value-fields> -->
 
           <div *ngIf="(posDeviceList$ | async) as list ">
             <mat-form-field style="width: 200px" class="fields"
                 appearance="outline">
-              <mat-label>Default Client Type</mat-label>
+              <mat-label>Print Server</mat-label>
                 <mat-select
-                          type              = "number"
                           formControlName   = "printServerDevice" >
                   <mat-option
                       *ngFor="let item of list"

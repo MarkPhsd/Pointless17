@@ -508,6 +508,7 @@
 
 <ng-template #splitItemsView>
   <app-possplit-items
+    [androidApp]="androidApp"
     (outPutPaymentAmount)="applyGroupPayment($event)"
     [order]="order">
   </app-possplit-items>

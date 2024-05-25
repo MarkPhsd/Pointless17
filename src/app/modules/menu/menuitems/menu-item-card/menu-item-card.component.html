@@ -13,7 +13,7 @@
 
       <div [class]="containerclassValue">
         <div [class]="imageContainer">
-          
+
           <ng-container [ngTemplateOutlet]="isImageButtonView"></ng-container>
 
           <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
@@ -86,7 +86,7 @@
 
 <ng-template #addItemView>
   <div class="view-float-button"
-    *ngIf="menuItem && menuItem.itemType">
+      *ngIf="menuItem && menuItem.itemType">
     <div *ngIf="!isCategory && displayType != 'header-category'">
      <ng-container [ngTemplateOutlet]="buttonAddItem"></ng-container>
     </div>
@@ -107,8 +107,7 @@
 </ng-template>
 
 <ng-template #menuButton>
-  <div *ngIf="menuItem?.name != 'Load More' && ((isApp && !imageUrl) ||
-              !imageUrl) && menuItem?.icon"
+  <div *ngIf="menuItem?.name != 'Load More' && ((isApp && !imageUrl) || !imageUrl) && menuItem?.icon"
         class="product-name-only" >
       <button mat-button
               class="image-button"

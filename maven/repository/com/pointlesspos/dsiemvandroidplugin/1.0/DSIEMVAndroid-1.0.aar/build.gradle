@@ -1,5 +1,0 @@
-task deployAarToLocalRepo(type: Copy) {
-    from('libs/DSIEMVAndroid.aar')
-    into('maven/repository/com/pointlesspos/dsiemvandroidplugin/1.0')
-    rename { "DSIEMVAndroid-1.0.aar" }
-}

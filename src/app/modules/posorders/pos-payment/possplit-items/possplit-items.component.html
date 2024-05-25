@@ -1,11 +1,13 @@
 <div class="grid-container">
-   <div class="toggle-group" *ngIf="!smallDevice &&  values && !savingChanges">
+   <div  *ngIf="!smallDevice && values && !savingChanges">
       <mat-button-toggle-group
+            class="toggle-group"
             name          = "type"
+            *ngIf="!smallDevice"
             vertical>
         <mat-button-toggle
               *ngFor      ="let item of values"
-              class       ="toggle-button-wide"
+              class       ="button-toggle"
               type        ="button"
               [value]     ="item"
               (click)     ="applyGroupID(item)"
@@ -13,6 +15,7 @@
           {{item.name}}
         </mat-button-toggle>
       </mat-button-toggle-group>
+
     </div>
 
     <div>
@@ -21,7 +24,7 @@
           <div class="span-column">
 
             <div *ngIf="currentGroup == '1' || currentGroupID == 1">
-              <h4>Select a group on the left to organize items.</h4>
+              <h4>Select a group to organize</h4>
             </div>
 
             <mat-label  *ngIf="currentGroup != '1'"  style="font-size:1.3em;font-weight:500">
@@ -80,56 +83,64 @@
             ...saving
           </ng-template>
 
-          <div class="span-column" *ngIf="!savingChanges; else savingChangesOn">
-            <div class="grid-dual-list">
-              <div class="col-md-6 col-lg-6 col-sm-12 dualListLeft">
-                <div class="primary-container drag-drop-container">
-                  Group 1
+          <div *ngIf="smallDevice && values && !savingChanges">
+            <mat-form-field  appearance="outline">
+              <mat-label>Group</mat-label>
+              <mat-select name="type" (selectionChange)="applyGroupID($event.value)">
+                <mat-option *ngFor="let item of values" [value]="item">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="grid-dual-list" *ngIf="!savingChanges; else savingChangesOn">
+            <!-- class="col-md-6 col-lg-6 col-sm-12 dualListLeft" -->
+
+            <div class="drag-drop-container">
+              Group 1
+              <div
+                id="availableItemsList"
+                cdkDropList
+                #availables="cdkDropList"
+                [cdkDropListData]="availableItems"
+                [cdkDropListConnectedTo]="[selects]"
+                (cdkDropListDropped)="drop($event)"
+                class="drag-drop-list">
+                <div
+                  nbButton
+                  outline
+                  status="primary"
+                  class="drag-drop-box"
+                  *ngFor="let item of availableItems"
+                  cdkDrag>
+                  {{ item.text }}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-6 col-sm-12 dualListRight" [hidden]="currentGroup == '1'">
+              <div class="drag-drop-container">
+                Group {{currentGroup}}
+                <div
+                  id="selectedItemsList"
+                  cdkDropList
+                  #selects="cdkDropList"
+                  [cdkDropListData]="selectedItems"
+                  [cdkDropListConnectedTo]="[availables]"
+                  (cdkDropListDropped)="drop($event)"
+                  class="drag-drop-list" >
                   <div
-                    id="availableItemsList"
-                    cdkDropList
-                    #availables="cdkDropList"
-                    [cdkDropListData]="availableItems"
-                    [cdkDropListConnectedTo]="[selects]"
-                    (cdkDropListDropped)="drop($event)"
-                    class="drag-drop-list">
-                    <div
-                      nbButton
-                      outline
-                      status="primary"
-                      class="drag-drop-box"
-                      *ngFor="let item of availableItems"
-                      cdkDrag>
-                      {{ item.text }}
-                    </div>
+                    nbButton
+                    outline
+                    status="primary"
+                    class="drag-drop-box"
+                    *ngFor="let item of selectedItems"
+                    cdkDrag>
+                    {{ item.text }}
                   </div>
                 </div>
               </div>
-
-              <div class="col-md-6 col-lg-6 col-sm-12 dualListRight" [hidden]="currentGroup == '1'">
-                <div class="primary-container drag-drop-container">
-                  Items in group {{currentGroup}}
-                  <div
-                    id="selectedItemsList"
-                    cdkDropList
-                    #selects="cdkDropList"
-                    [cdkDropListData]="selectedItems"
-                    [cdkDropListConnectedTo]="[availables]"
-                    (cdkDropListDropped)="drop($event)"
-                    class="drag-drop-list" >
-                    <div
-                      nbButton
-                      outline
-                      status="primary"
-                      class="drag-drop-box"
-                      *ngFor="let item of selectedItems"
-                      cdkDrag>
-                      {{ item.text }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
 

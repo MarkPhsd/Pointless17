@@ -83,6 +83,18 @@ mat-card {
   grid-column: 2;
 }
 
+
+.grid-menu-category-flow {
+  display: grid;
+  grid-template-columns: 1fr minmax(285px, 285px);
+  gap: 2px;
+
+  @include for-phone-only  {
+    display: grid;
+    grid-template-columns: auto;
+    gap: 5px;
+  }
+}
 .grid-list {
   display: grid;
   grid-template-columns: 1fr minmax(285px, 285px);

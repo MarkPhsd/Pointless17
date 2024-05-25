@@ -9,6 +9,9 @@ mat-card {
   width: 90%;
   margin: auto;
   vertical-align: top;
+  @include for-phone-only  {
+    width: 150px;
+  }
 }
 
 .drag-drop-list {
@@ -80,21 +83,20 @@ mat-card {
   }
 }
 
-
-
 .grid-dual-list {
   display: grid;
   grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
   gap: 10px;
   @include for-phone-only  {
-    width: 310px;
-    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+    // grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+    display: flex;
+    flex-direction: row;
   }
 }
 
 .span-column {
   grid-column-end: span 2;
-  max-height: 600px;
+  max-height: 800px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -118,25 +120,28 @@ mat-card {
   text-align: left;
 }
 
-.toggle-group {
-  margin-top: 10px;
-}
 
-mat-button-toggle {
-  width: 150px;
-  margin-left: 5px;
+.button-toggle {
+  // width: 150px;
+  // margin-left: 5px;
   text-align: left;
   @include for-phone-only  {
-    width: 99%;
+    // width: 50px;
+    // margin-left: 5px;
+    // text-align: left;
+
   }
 }
 
-mat-button-toggle-group {
+.toggle-group {
   width: 150px;
+  margin-top: 10px;
   margin-left: 5px;
   text-align: left ;
   @include for-phone-only  {
-    width: 99%;
+    // width: 50px;
+    // margin-left: 5px;
+    // text-align: left
   }
 }
 
@@ -155,6 +160,7 @@ button {
   flex-wrap: wrap;
 
   gap: 5px;
-  margin: 10px;
+  margin-top: 5px;
+  // margin: 10px;
 }
 

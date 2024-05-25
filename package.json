@@ -1,6 +1,6 @@
 {
   "name": "pointless3",
-  "version": "3.01.17",
+  "version": "3.01.18",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -13,8 +13,8 @@
   },
   "scripts": {
     "ng": "ng",
-    "start with SSL": " ng serve --configuration dev --public-host --host=192.168.0.3 --port=4500 --ssl true --ssl-key ./localhost-key.pem --ssl-cert ./localhost.pem ",
-    "start with IP": " ng serve --configuration dev --public-host --host=192.168.0.3 --port=4500 ",
+    "start with SSL": " ng serve --configuration dev --public-host --host=192.168.0.2 --port=4500 --ssl true --ssl-key ./localhost-key.pem --ssl-cert ./localhost.pem ",
+    "start with IP": " ng serve --configuration dev --public-host --host=192.168.0.2 --port=4500 ",
     "startLocal": "ng serve --configuration dev --host=localhost --port=4500",
     "startLocalNode": "ng serve   --configuration dev --host=localhost --port=4500",
     "BuildPointless production": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build  --configuration production",

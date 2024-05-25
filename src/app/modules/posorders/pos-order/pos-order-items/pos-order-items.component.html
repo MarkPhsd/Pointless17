@@ -1,4 +1,6 @@
 <div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="(printAction$ | async) as action"></div>
+
 <ng-container [ngTemplateOutlet]="posItemsView"></ng-container>
 
 <ng-template #posOrderItemsPrepView>
@@ -21,6 +23,10 @@
 
       <span class="item-span">
         <button  style="height:55px"  mat-button (click)="viewPayment()"><mat-icon>money</mat-icon>Payments</button>
+      </span>
+
+      <span class="item-span">
+        <button  style="height:55px"  mat-button color="warn" (click)="sendOrder()"><mat-icon>local_fire_department</mat-icon>Fire</button>
       </span>
 
     </div>

@@ -43,6 +43,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   qrCode$ : Observable<any>;
   _order: Subscription;
   _posDevice: Subscription;
+
   _uiTransactionSettings: Subscription;
   user          : any;
   _user: Subscription;
@@ -77,8 +78,6 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
     try {
       this._uiTransactionSettings = this.uiSettingsService.transactionUISettings$.pipe( switchMap(data => {
-
-
         if (!data) {
           const ui$ = this.uiSettingsService.getUITransactionSetting().pipe(switchMap(data => {
             if (data) {
@@ -88,21 +87,16 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
           }));
           return ui$
         }
-
         return of(data)
-
       })).subscribe(data => {
-
         this.uiTransactionSettings = data;
       })
     } catch (error) {
-
     }
 
     try {
       this._posDevice = this.uiSettingsService.posDevice$.subscribe(data => {
         this.posDevice = data;
-        // data?.labelPrinter
       })
     } catch (error) {
 
@@ -110,7 +104,8 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   }
 
   constructor(
-             private ordersService:   OrdersService,
+    private ordersService:   OrdersService,
+    private paymentService: POSPaymentService,
              public  router: Router,
              public  printingService: PrintingService,
              public  platFormService: PlatformService,
@@ -125,7 +120,6 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
              private paymentMethodsService: PaymentsMethodsProcessService,
              private fbProductButtonService: ProductEditButtonService,
              private requestMessageService: RequestMessageService,
-             private paymentService: POSPaymentService,
 
              private httpClient : HttpClient,
     ) {
@@ -139,7 +133,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    
+
     this.href = this.router.url;
     this. refreshPrintOption()
   }
@@ -162,17 +156,20 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   remotePrint(message:string, exitOnSend: boolean) {
     const order = this.order;
-    if (message == 'printReceipt') {
-
-    }
+    console.log('remote print', this.posDevice?.remotePrepPrint)
     if (this.posDevice) {
       let pass = false
-      if (message === 'printPrep') {
-        if (this.posDevice?.remotePrepPrint) {
+      if (this.posDevice?.remotePrepPrint) {
+        if (message === 'printPrep') {
+          pass = true
+        }
+        if (message === 'rePrintPrep') {
+          pass = true
+        }
+        if (message == 'printReceipt') {
           pass = true
         }
       }
-
       if (this.posDevice?.remotePrint || pass) {
         const serverName = this.uiTransactionSettings.printServerDevice;
         let remotePrint = {message: message, deviceName: this.posDevice.deviceName,
@@ -185,7 +182,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
             this.siteService.notify('Print Job not sent', 'Close', 3000, 'green')
           }
 
-          if (this.posDevice?.exitOrderOnFire) {
+          if (this.posDevice?.exitOrderOnFire && message != 'printReceipt') {
             //then exit the order.
             this.clearOrder()
           }
@@ -202,10 +199,13 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   printReceipt(){
     const order = this.order;
 
-    if (this.remotePrint('printReceipt', this.posDevice?.exitOrderOnFire)) {
-      return
+    const remotePrint = this.remotePrint('printReceipt', this.posDevice?.exitOrderOnFire);
+    console.log('remotePrint', remotePrint)
+    if (remotePrint) {
+      return;
     }
 
+    console.log('continue?')
     if (this.uiTransactionSettings.prepOrderOnExit) {
       this.printAction$ = this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
         const site = this.siteService.getAssignedSite()

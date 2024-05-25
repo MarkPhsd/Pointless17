@@ -9,13 +9,14 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ISite } from 'src/app/_interfaces';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
-import { SettingsService } from 'src/app/_services/system/settings.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { AuthenticationService } from 'src/app/_services';
+import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { Capacitor } from '@capacitor/core';
+import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 @Component({
   selector: 'pos-order-items',
   templateUrl: './pos-order-items.component.html',
@@ -51,6 +52,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input() cardWidth: string;
   @Input() isStaff: boolean;
 
+  printAction$: Observable<any>;
+  posDevice       :  ITerminalSettings;
   initStylesEnabled : boolean; // for initializing for griddisplay
   qrCodeStyle = ''
   mainStyle   =  ``
@@ -74,6 +77,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   nopadd = `nopadd`
   conditionalIndex: number;
+
+  _posDevice: Subscription;
 
   androidApp = this.platformService.androidApp;
   _scrollStyle = this.platformService.scrollStyleWide;
@@ -114,6 +119,15 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       })
     } catch (error) {
     }
+
+    try {
+      this._posDevice = this.uiSettingsService.posDevice$.subscribe(data => {
+        this.posDevice = data;
+      })
+    } catch (error) {
+
+    }
+
 
     try {
       this._bottomSheetOpen = this.orderMethodService.bottomSheetOpen$.subscribe(data => {
@@ -161,6 +175,12 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       this.scrollToBottom();
     }, 200);
 
+  }
+
+  sendOrder() {
+    if (this.remotePrint('printPrep', this.posDevice?.exitOrderOnFire)) {
+      return
+    }
   }
 
   setScrollBarColor(color: string, width?:number) {
@@ -215,6 +235,9 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                 private settingService: SettingsService,
                 private authService : AuthenticationService,
                 private renderer: Renderer2,
+                private orderMethodsService: OrderMethodsService,
+                private ordersService:   OrdersService,
+                private paymentService: POSPaymentService,
                 private navigationService : NavigationService,
                 private _bottomSheetService  : MatBottomSheet,
               )
@@ -428,6 +451,58 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                 modifierNote, serialCode, printed,
                 serviceType, taxTotal , wicebt}: IPOSOrderItem): number {
     return id;
+  }
+
+  remotePrint(message:string, exitOnSend: boolean) {
+    const order = this.order;
+    if (message == 'printReceipt') {
+
+    }
+    if (this.posDevice) {
+      let pass = false
+      if (message === 'printPrep') {
+        if (this.posDevice?.remotePrepPrint) {
+          pass = true
+        }
+      }
+      if (message === 'rePrintPrep') {
+        if (this.posDevice?.remotePrepPrint) {
+          pass = true
+        }
+      }
+      if (this.posDevice?.remotePrint || pass) {
+        const serverName = this.uiConfig.printServerDevice;
+        let remotePrint = {message: message, deviceName: this.posDevice.deviceName,
+                           printServer: serverName,id: order.id,history: order.history} as any;
+        const site = this.siteService.getAssignedSite()
+        this.printAction$ =  this.paymentService.remotePrintMessage(site, remotePrint).pipe(switchMap(data => {
+          if (data) {
+            this.siteService.notify('Print job sent', 'Close', 3000, 'green')
+          } else {
+            this.siteService.notify('Print Job not sent', 'Close', 3000, 'green')
+          }
+
+          if (this.posDevice?.exitOrderOnFire) {
+            //then exit the order.
+            this.clearOrder()
+          }
+          return of(data)
+        }))
+        return true;
+      }
+    }
+
+    return false
+  }
+
+  reSendOrder() {
+    if (this.remotePrint('rePrintPrep', this.posDevice?.exitOrderOnFire)) {
+      return
+    }
+  }
+
+  clearOrder() {
+    this.orderMethodsService.clearOrder()
   }
 
 }

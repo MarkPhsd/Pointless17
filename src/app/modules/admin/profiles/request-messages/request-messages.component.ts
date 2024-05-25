@@ -36,17 +36,18 @@ export class RequestMessagesComponent implements OnInit {
   messages$: Observable<IRequestMessage[]>;
   message$: Observable<IRequestResponse>;
   refreshTime: number = 1
-  order$: Observable<IPOSOrder>;
+  order$     : Observable<IPOSOrder>;
   printJobs$ : Observable<IPOSOrder>[];
-  action$ : Observable<any>;
-  user$: Observable<IUser>;
-  printServerDevice: ITerminalSettings;
+  action$    : Observable<any>;
+  user$      : Observable<IUser>;
+  printServerDevice  : ITerminalSettings;
   printServerDevice$ : Observable<ITerminalSettings>;
-  messageRefresh$: Observable<any>;
-  initRefresh: boolean;
+  messageRefresh$    : Observable<any>;
+  initRefresh        : boolean;
   private observablesQueue: Observable<any>[] = [];
   private queueSubject = new Subject<Observable<any>>();
   private isProcessing = false;
+  posDevice$: Observable<ITerminalSettings>;
 
   addObservable(newObservable: Observable<any>): void {
     const observableWithFinalize = newObservable.pipe(
@@ -99,53 +100,6 @@ export class RequestMessagesComponent implements OnInit {
     return  this._refreshMessagingService(user)
   }
 
-  // _refreshMessagingService(user) {
-  //   let retryDelay = 1000; // 30 seconds
-  //   if (!user) { return }
-  //   retryDelay = 6000 * 1 //this.refreshTime;
-  //   if (user?.id) {
-  //     this.messageRefresh$ = this.getMessages().pipe(
-  //       catchError(err => {
-  //         console.error('Error fetching order, will retry in 30 seconds', err);
-  //         // Use timer to delay the retry
-  //         return timer(retryDelay);
-  //       }),
-  //       switchMap(() => this.getMessages()),
-  //       // Repeat this process indefinitely
-  //       repeatWhen(completed => completed.pipe(delay(retryDelay)))
-  //     );
-  //   }
-  // }
-
-  // _refreshMessagingService(user) {
-  //   let retryDelay = 6000; // Assuming 6 seconds as the base retry delay
-  //   if (!user) { return; }
-
-  //   this.messageRefresh$ = this.getMessages('message A').pipe(
-  //     catchError(err => {
-  //       // console.error('Error fetching messages, will retry in 30 seconds', err);
-  //       // Use timer to delay the retry
-  //       return timer(retryDelay);
-  //     }),
-  //     switchMap(() => this.getMessages('message B ')),
-  //     // Repeat this process indefinitely, with a conditional delay based on the queue state
-  //     repeatWhen(completed => completed.pipe(
-  //       delay(retryDelay),
-  //       switchMap(() => {
-  //         // Check if the process queue is active by examining `isProcessing`
-  //         if (this.isProcessing) {
-  //           // If the queue is active, you might want to introduce an additional delay
-  //           // or handle it differently. Adjust this part as needed.
-  //           const additionalDelay = 5000; // Example: Add an extra 30 seconds delay
-  //           return timer(additionalDelay);
-  //         } else {
-  //           // If the queue is not active, proceed without additional delay
-  //           return of(null);
-  //         }
-  //       })
-  //     ))
-  //   );
-  // }
 
   _refreshMessagingService(user): void {
     if (!user) return;
@@ -228,7 +182,7 @@ export class RequestMessagesComponent implements OnInit {
 
   processMessages(list:IRequestMessage[]): Observable<IRequestMessage[]> {
     // copy the messages
-
+    console.error('print que', list);
     if (!list) { return of(null)}
 
     let messages = [... list];
@@ -289,8 +243,15 @@ export class RequestMessagesComponent implements OnInit {
 
   collectPrintOrders(printMessages: IRequestMessage[]) {
 
-    if (!this.uiTransaction.printServerDevice) { return }
-    // console.log('collectPrintOrders', printMessages)
+    // console.log(this.posDevice.name, this.uiTransaction.printServerDevice)
+    // if (!this.uiTransaction.printServerDevice) { return }
+    console.log('pposDevice name: PrintServer', this.posDevice.name, this.posDevice.printServerEnable)
+    if (!this.posDevice.printServerEnable) { return }
+
+    // const deviceName = localStorage.getItem('devicename')
+    // if (this.posDevice.name != deviceName) { return }
+
+    console.log('pposDevice PrintServer', this.posDevice.printServerEnable)
     const site = this.siteService.getAssignedSite()
     let printJobs$ : Observable<any>[]
     const cancelUpdate = true
@@ -313,11 +274,12 @@ export class RequestMessagesComponent implements OnInit {
       //   this.addObservable(order$)
       // }
       if (data.method === 'printReceipt') {
+        console.log('remote print receipt')
         if (!this.isStaff && !this.posDevice) { return }
-        const order$ = this.orderService.getOrder(site, data.orderID.toString(),false).pipe(concatMap(data => {
+        const order$ = this.orderService.getOrder(site, data.orderID.toString(), false).pipe(concatMap(data => {
            console.log('print receipt', index)
            this.printingService.printOrder = data;
-           this.printingService.previewReceipt(true, data);
+           this.printingService.previewReceipt(true, data , this.posDevice.receiptPrinter);
            return of(data)
         })).pipe(concatMap(order =>  {
           return this._archiveMessage(data)
@@ -371,6 +333,7 @@ export class RequestMessagesComponent implements OnInit {
               private userAuthService: UserAuthorizationService,
               private authenticationService: AuthenticationService,
               private router: Router,
+              private settingService: SettingsService,
               private orderMethodsService: OrderMethodsService,
               private orderService       : OrdersService,
               private platFormService: PlatformService,
@@ -392,15 +355,32 @@ export class RequestMessagesComponent implements OnInit {
   ngOnInit(): void {
     let user = this.userAuthService.user
     if (this.user) { user = this.user; }
-    // get only order messages;
 
+    this.initServices()
+  }
+
+  initServices() {
+
+    const site = this.siteService.getAssignedSite()
+    const deviceName = localStorage.getItem('devicename')
+
+
+    //we have to get these settings.
+    //and for the printing if the device here is the same as the uitransactionserver
+    //then we can use this as the print server
+    //or if this is marked as the print server.
+    this.posDevice$ = this.settingService.getPOSDeviceSettings(site, deviceName).pipe(switchMap(data => {
+      this.posDevice = data;
+      console.log('init service')
+      return of(data)
+    }))
     this.initUserSubscriber();
-
     if (this.orderID) {
       this.refreshOrderMessages()
       return;
     }
     this.processQueue();
+
   }
 
   exit() {
