@@ -5,6 +5,9 @@
   "targets": {
     "ccsapi": {
       "hosting": {
+        "androidpointlesspos": [
+          "androidpointlesspos"
+        ],
         "ockosherstore": [
           "ockosherstore"
         ],

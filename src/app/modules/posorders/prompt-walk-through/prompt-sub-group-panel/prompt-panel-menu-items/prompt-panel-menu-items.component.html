@@ -1,4 +1,4 @@
-<div *ngIf="subGroup" class="container">
+<div *ngIf="subGroup" class="container"  [@.disabled]="androidApp">
   <mat-expansion-panel  [expanded] = "accordionStep === index"
                         (opened)   = "setStep(index)"
                         hideToggle>

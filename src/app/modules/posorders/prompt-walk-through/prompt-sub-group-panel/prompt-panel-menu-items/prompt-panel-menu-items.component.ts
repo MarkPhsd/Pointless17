@@ -2,16 +2,15 @@ import { Component, OnInit, Input, Output , EventEmitter, ChangeDetectionStrateg
   ChangeDetectorRef,
   TemplateRef,
   ViewChild} from '@angular/core';
-import { IPromptSubResults, MenuSubPromptSearchModel, PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
-import { editWindowState, IPromptResults, MenuPromptSearchModel, PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
+import {PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { PromptSubGroups, SelectedPromptSubGroup } from 'src/app/_interfaces/menu/prompt-groups';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-walk-through.service';
 import { AWSBucketService, IItemBasic } from 'src/app/_services';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { Subscription } from 'rxjs';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'prompt-panel-menu-items',
@@ -52,6 +51,7 @@ export class PromptPanelMenuItemsComponent implements OnInit {
     {name: 'RT 1/2', id: 3},
     {name: 'No', id: 4},
   ]
+  androidApp: boolean;
 
   initPOSItemSubscriber() {
     this._posItem = this.posOrderItemService.posOrderItem$.subscribe(data => {
@@ -100,10 +100,12 @@ export class PromptPanelMenuItemsComponent implements OnInit {
     private posOrderItemService      : POSOrderItemService,
     private promptWalkService        : PromptWalkThroughService,
     private awsBucket                : AWSBucketService,
+    private platFormService: PlatformService,
   ) {
   }
 
   async ngOnInit() {
+    this.androidApp = this.platFormService.androidApp
     if (this.subGroup) {
 
       this.subGroup.promptMenuItems = this.subGroup.promptMenuItems.filter(data => {

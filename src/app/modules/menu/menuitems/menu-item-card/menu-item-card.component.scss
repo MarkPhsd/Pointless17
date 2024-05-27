@@ -1,5 +1,12 @@
 @import "/src/mixins.scss";
 
+:host {
+  display: block;
+  width: 100%;
+  // other styling here
+}
+
+
 .mat-card {
   padding: 3px;
   object-fit: cover;
@@ -147,31 +154,31 @@
 }
 
 #advertisement {
-    font-weight: 200;
-    font-size: 0.7em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-transform: capitalize;
+  font-weight: 200;
+  font-size: 0.7em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
 }
 
 .product-name-only {
-    object-fit: cover;
-    max-height: 100%;
-    transition: box-shadow 400ms;
-    border-radius: 5px;
-    font-weight : 475;
-    font-size   : 1em;
-    text-align  : center;
-    width       : 100%;
-    white-space : normal;
-    overflow    : hidden;
-    text-overflow: ellipsis;
-    text-transform: capitalize;
+  object-fit: cover;
+  max-height: 100%;
+  transition: box-shadow 400ms;
+  border-radius: 5px;
+  font-weight : 475;
+  font-size   : 1em;
+  text-align  : center;
+  width       : 100%;
+  white-space : normal;
+  overflow    : hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
 
-    @include for-phone-only {
-      font-size   : 1.5em;
-    }
+  @include for-phone-only {
+    font-size   : 1.3em;
+  }
  }
 
 .product-image  {
@@ -279,12 +286,10 @@
 #price {
   align-items:   baseline;
   margin-top:    .8em;
-  // line-height:   1em;
   text-align:    left;
   font-weight:   500;
   font-size:     .9em;
   float:         left;
-  // margin-top     :4px
 }
 
 .item-name-center {
@@ -293,10 +298,8 @@
   z-index: 102;
   height: 2.4em;
   font-weight:   500;
-  // overflow: hidden;
   margin-bottom: 3px;
   @supports (-webkit-touch-callout: none) {
-    /* CSS specific to iOS devices */
     font-size: .8em;
  }
 }

@@ -345,9 +345,9 @@
 
       <span>
 
-        <button mat-button  (click)="newOrder()" *ngIf="isAuthorized || isStaff">
+        <!-- <button mat-button  (click)="newOrder()" *ngIf="isAuthorized || isStaff">
           <mat-icon>receipt</mat-icon><span>New Order</span>
-        </button>
+        </button> -->
 
         <button mat-button color="accent" (click)="getOrderItemHistory()"  *ngIf="isUser">
           <mat-icon>receipt</mat-icon><span>Past Items</span>

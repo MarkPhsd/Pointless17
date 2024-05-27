@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, TemplateRef, ViewChild} from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { IPromptSubResults, MenuSubPromptSearchModel, PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
-import {  PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
-import { MenuItemsSelected, PromptSubGroups, SelectedPromptSubGroup } from 'src/app/_interfaces/menu/prompt-groups';
+import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
+import { MenuItemsSelected, PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPromptGroup, PromptMenuItem } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-walk-through.service';
@@ -17,6 +16,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 interface itemOption {
   name: string;
   quantity: number;
@@ -42,6 +42,9 @@ export class PromptPanelMenuItemComponent implements OnInit {
   imageURL         : string;
   chosenCount      : string;
 
+  posDevice$             : Observable<ITerminalSettings>;
+  posDevice              : ITerminalSettings;
+
   styleMatCard     : string
   _promptGroup     : Subscription;
   promptGroup      : IPromptGroup
@@ -61,13 +64,32 @@ export class PromptPanelMenuItemComponent implements OnInit {
   removeItem$: Observable<MenuItemsSelected>;
   isStaff= this.userAuthorizationService.isStaff;
   uiHomePage: UIHomePageSettings;
+  androidApp  = this.platformService.androidApp;
+  isApp = this.platformService.isApp();
 
   uiHomePage$ = this.uiSettingService.UIHomePageSettings.pipe(switchMap(data => {
     this.uiHomePage = data;
     return of(data)
   }));
 
+  getposDeviceSettings() {
+    this.posDevice = this.uiSettingService._posDevice.value
+    if (!this.posDevice) {
+      const device = localStorage.getItem('devicename')
+      this.posDevice$ =  this.uiSettingService.getPOSDevice(device).pipe(
+        switchMap(data => {
+          this.uiSettingService.updatePOSDevice(data)
+          this.posDevice = data;
+          return of(data)
+      }));
+    }
+  }
+
+
   intSubscriptions() {
+
+    this.getposDeviceSettings();
+
     this._order = this.orderMethodsService.currentOrder$.subscribe(data => {
       this.order = data;
     })

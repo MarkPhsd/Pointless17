@@ -30,7 +30,7 @@ import { PrintQueService } from '../_services/transactions/print-que.service';
   selector: 'app-default',
   templateUrl: './default.component.html',
   styleUrls: ['./default.component.scss'],
-  animations: [ fader ],
+  // animations: [ fader ],
 })
 
 export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -271,15 +271,16 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         return of(data)
       }))
-      
+
     }
   }
 
   initPrintServer(device:ITerminalSettings) {
     if (!this.platFormService.isAppElectron) {return }
-    if (device.printServer || device.printServer != 0) {
+    if (!device.printServer) { return}
+    if (device.printServerTime || device.printServerTime != 0) {
       const site = this.siteService.getAssignedSite();
-      const time = 1000 * 60 * device.printServer
+      const time = 1000 * 60 * +device?.printServerTime
       const orders$  = this.printQueService.getQue().pipe(concatMap(data => {
           return of(data)
         }

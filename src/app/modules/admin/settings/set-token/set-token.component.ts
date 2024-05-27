@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { of, switchMap,Observable } from 'rxjs';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { SystemService } from 'src/app/_services/system/system.service';
 
 @Component({
   selector: 'app-set-token',
@@ -7,7 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SetTokenComponent implements OnInit {
   pinToken        : string;
-  constructor() { }
+  action$: Observable<any>;
+
+  constructor(
+    private siteService: SitesService,
+    private systemService: SystemService,) { }
 
   ngOnInit(): void {
   }
@@ -18,4 +25,16 @@ export class SetTokenComponent implements OnInit {
     console.log(localStorage.getItem('pinToken'))
   }
 
+  getToken() {
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.systemService.getToken(site).pipe(switchMap(data => {
+      if (data) {
+        localStorage.setItem('pinToken', data);
+        this.siteService.notify('Token Assigned', 'close', 3000)
+      }
+      return of(data)
+    }))
+
+    }
 }
+

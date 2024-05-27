@@ -19,6 +19,21 @@
     ]
   },
   {
+    "target": "androidpointlesspos",
+    "public": "dist/CCSApp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  {
     "target": "ockosherstore",
     "public": "dist/CCSApp",
     "ignore": [

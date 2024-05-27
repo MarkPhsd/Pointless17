@@ -9,10 +9,11 @@
           (click)="assignItem()"
           [class]="customcard" >
 
-  <mat-card-content >
+  <mat-card-content>
 
     <div  [class]="gridItems">
       <div *ngIf="orderItem">
+
         <div [class]="flexGroup">
           <ng-container [ngTemplateOutlet]="itemNameView"></ng-container>
           <ng-container [ngTemplateOutlet]="quantityView"></ng-container>
@@ -318,8 +319,8 @@
       </span>
 
       <div *ngIf="ui && ui?.dcapMultiPrice && ui?.dcapDualPriceValue != 0">
-        <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue > 0 &&  !order.completionDate" > Credit  Price </span>
-        <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue < 0 && !order.completionDate" >  Discount Price </span>
+        <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue > 0 &&  !orderItem.completionDate" > Credit  Price </span>
+        <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue < 0 && !orderItem.completionDate" >  Discount Price </span>
         @ {{ cashDiscount | currency }} | ({{ui.dcapDualPriceValue}}%)
       </div>
 

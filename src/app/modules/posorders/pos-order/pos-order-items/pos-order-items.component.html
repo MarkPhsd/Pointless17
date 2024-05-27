@@ -22,13 +22,16 @@
       </span>
 
       <span class="item-span">
-        <button  style="height:55px"  mat-button (click)="viewPayment()"><mat-icon>money</mat-icon>Payments</button>
+        <button  style="height:55px"  mat-button (click)="viewPayment()"><mat-icon>money</mat-icon>Checks</button>
       </span>
 
       <span class="item-span">
         <button  style="height:55px"  mat-button color="warn" (click)="sendOrder()"><mat-icon>local_fire_department</mat-icon>Fire</button>
       </span>
 
+      <span class="item-span">
+        <button  style="height:55px"  mat-button color="warn" (click)="printOrder()"><mat-icon>print</mat-icon></button>
+      </span>
     </div>
 
 
@@ -66,6 +69,7 @@
 
       <div *ngIf="uiConfig">
         <ion-item *ngIf="item" >
+          <!--     [order]       ="order" -->
           <pos-order-item
                       [class]      ="gridScroller"
                       [index]      ="i"
@@ -85,19 +89,17 @@
                       [thc]         ="item?.posOrderMenuItem?.thc"
                       [menuItem]    ="item?.posOrderMenuItem"
                       [productID]   ="item?.productID"
-                      [order]       ="order"
                       [ui]          ="uiConfig"
                       [mainPanel]   ="mainPanel"
-                      [userAuths]   ='userAuths'
-                      [wideBar]     ="wideBar"
-                      [smallDevice]="phoneDevice"
-                      [prepScreen]  ="prepScreen"
+                      [userAuths]           ='userAuths'
+                      [wideBar]             ="wideBar"
+                      [smallDevice]         ="phoneDevice"
+                      [prepScreen]          ="prepScreen"
                       [enableExitLabel]     = "enableExitLabel"
                       [disableActions]      = "disableActions"
                       [isStaff]="isStaff"
                       [displayHistoryInfo]  = "displayHistoryInfo"
                       [enableItemReOrder]   = "enableItemReOrder"
-
                       [purchaseOrderEnabled]= "purchaseOrderEnabled"
                       [conditionalIndex]    = 'item?.conditionalIndex'
                       (outputDelete)        = "removeItemFromList($event)"

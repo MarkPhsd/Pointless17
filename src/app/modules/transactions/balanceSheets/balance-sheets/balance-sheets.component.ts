@@ -7,16 +7,12 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
-import { debounceTime, distinctUntilChanged, switchMap,filter,tap, catchError } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap,filter,tap} from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-// import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet, IBalanceSheetPagedResults } from 'src/app/_services/transactions/balance-sheet.service';
@@ -180,7 +176,7 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit, OnDestroy 
   initSubscriptions() {
     try {
       this._searchModel = this.sheetMethodsService.balanceSearchModelSheet$.subscribe( data => {
-          this.searchModel            = data
+          this.searchModel          = data
           if (!this.searchModel) {
             const searchModel       = {} as BalanceSheetSearchModel;
             this.currentPage        = 1
@@ -246,6 +242,13 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit, OnDestroy 
                   minWidth: 135,
                   maxWidth: 135,
                   flex    : 2,
+      },
+      {headerName: 'Net',     field: 'netSales', sortable: true,
+            cellRenderer: this.agGridService.currencyCellRendererUSD,
+            width   : 100,
+            minWidth: 100,
+            maxWidth: 100,
+            flex    : 2,
       },
       {headerName: 'Balance',     field: 'overUnderTotal', sortable: true,
                   cellRenderer: this.agGridService.currencyCellRendererUSD,

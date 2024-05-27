@@ -104,6 +104,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   orderBar          : boolean;
   platForm          = Capacitor.getPlatform();
   isApp             = false;
+  androidApp:       boolean;
   bucket$: Observable<string>;
 
   uiHomePage$  : Observable<any>;
@@ -225,9 +226,11 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
         private renderer: Renderer2
   )
   {
-    this.isApp = this.platFormService.isApp();
+
     this.initStyles();
     this.getposDeviceSettings();
+
+
   }
 
   getposDeviceSettings() {
@@ -243,11 +246,11 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     }
   }
 
-    initStyles() {
-      this.mobileView;
-      if (!this.isApp) { return };
-      this.ordersListClass = 'grid-flow scroller ';
-    }
+  initStyles() {
+    this.mobileView;
+    if (!this.isApp) { return };
+    this.ordersListClass = 'grid-flow scroller ';
+  }
 
   toggleListView() {
       if (this.infiniteClassList === 'grid-flow scroller') {
@@ -257,7 +260,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
         this.infiniteClassList  = 'grid-flow scroller';
         this.ordersListClass = 'grid-flow scroller ';
       }
-    }
+  }
 
   saveMobileView() {
     const item = {
@@ -301,10 +304,17 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
       //but if we move back, and have a category assigned but no department, we can't be
       //sure if we should accept the model, or the parameter from the page.
       // console.log('ngOnInit')
+      this.isApp    = this.platFormService.isApp();
+      this.androidApp = this.platFormService.androidApp;
 
-      if (this.platFormService.androidApp) {
-        this.pageSize = 25
+      if (this.androidApp && this.smallDevice) {
+        this.pageSize = 10
         this.disableEdit = true
+      } else {
+        if (this.androidApp) {
+          this.pageSize = 25
+          this.disableEdit = true
+        }
       }
 
       this.value      = 1;
@@ -317,35 +327,34 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
 
       const search$ = this.menuService.searchModel$
       this.productSearchModel = this.menuService._searchModel.value;
-      // console.log('ngOninit', this.productSearchModel)
       if (this.productSearchModel) {
       this.productSearchModel.pageNumber = 1;
     }
 
     this.uiHomePage$ =  this.uiSettingService.UIHomePageSettings.pipe(switchMap(data => {
-    if (!data) { return this.uiSettingService.UIHomePageSettings   }
-    return of(data)
-      })).pipe(switchMap(data => {
-        this.uiHomePage = data;
-        if (data.accordionMenuSideBar || data.staffAccordionMenuSideBar) {
-          this.updateSearchOnModelChange = true;
-        }
-        let doNotInitsearch = false
-        if (this.productSearchModel) { doNotInitsearch = true;}
-
-        this.initSearchFeatures(doNotInitsearch);
-        this.initComponent();
-
-        if (this.uiHomePage) {
-          if ( this.uiHomePage.storeNavigation) {
-            if (!this.departmentID) {
-              if (this.productSearchModel.departmentID) {
-                this.departmentID = this.productSearchModel.departmentID.toString()
-              }
-            }
-            this.initDepartmentViews();
+      if (!data) { return this.uiSettingService.UIHomePageSettings   }
+      return of(data)
+        })).pipe(switchMap(data => {
+          this.uiHomePage = data;
+          if (data.accordionMenuSideBar || data.staffAccordionMenuSideBar) {
+            this.updateSearchOnModelChange = true;
           }
-        }
+          let doNotInitsearch = false
+          if (this.productSearchModel) { doNotInitsearch = true;}
+
+          this.initSearchFeatures(doNotInitsearch);
+          this.initComponent();
+
+          if (this.uiHomePage) {
+            if ( this.uiHomePage.storeNavigation) {
+              if (!this.departmentID) {
+                if (this.productSearchModel.departmentID) {
+                  this.departmentID = this.productSearchModel.departmentID.toString()
+                }
+              }
+              this.initDepartmentViews();
+            }
+          }
         return of(data)
     })) ,catchError(data => {
       this.initComponent()
@@ -799,7 +808,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   }
 
   changeDetect() {
-    console.log('change detection')
+    // console.log('change detection')
     this.loading      = false
     // this.cd.detectChanges()
     this.updateItemsPerPage()
@@ -878,7 +887,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
         }
 
         if (pageNumber == 1) {
-          console.log('menuItem', this.menuItems[0])
+          // console.log('menuItem', this.menuItems[0])
           return  this.addToListOBS(this.pageSize, 2)
         }
         if (displayCategories$) {

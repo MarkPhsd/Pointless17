@@ -4,9 +4,8 @@
 
 export const environment = {
   production:  false,
-  // apiUrl: 'https://localhost:44309/api',
   logo:   '/assets/images/logo.png',
-  company: 'Pointless'
-
+  company: 'Pointless',
+  enableAnimations: false
 };
 

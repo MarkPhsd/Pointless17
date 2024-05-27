@@ -1,46 +1,72 @@
-<div *ngIf="(buyItem$ | async) as item"></div>
+<span *ngIf="(buyItem$ | async) as item"></span>
+<span *ngIf="(action$  | async) as action"></span>
 
-<ng-container [ngTemplateOutlet]="menuItemView"></ng-container>
+<!-- <ng-container  *ngIf="optimalView"></ng-container> -->
 
-<ng-template #menuItemView>
-  <mat-card   [style]="buttonColor"
-              [class]="matCardClass">
+<ng-container >
+   <mat-card [style]="buttonColor"
+             [class]="matCardClass" >
+      <ng-container [ngTemplateOutlet]="menuItemContents">
+      </ng-container>
+   </mat-card>
+</ng-container>
 
-      <ng-container [ngTemplateOutlet]="enableViewItem"></ng-container>
-      <ng-container [ngTemplateOutlet]="enableEditItem"></ng-container>
-      <ng-container [ngTemplateOutlet]="enableAddItemView"></ng-container>
-      <ng-container [ngTemplateOutlet]="enableBuyItemView"></ng-container>
+<ng-template #menuItemContents>
 
-      <div [class]="containerclassValue">
-        <div [class]="imageContainer">
+  <ng-container *ngIf="enableViewItemBol">
+    <ng-container [ngTemplateOutlet]="enableViewItem"></ng-container>
+  </ng-container>
 
-          <ng-container [ngTemplateOutlet]="isImageButtonView"></ng-container>
+  <ng-container *ngIf="enableEditItemBol">
+    <ng-container [ngTemplateOutlet]="enableEditItem"></ng-container>
+  </ng-container>
 
-          <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
+  <ng-container *ngIf="enableAddItemViewBol">
+    <ng-container [ngTemplateOutlet]="enableAddItemView"></ng-container>
+  </ng-container>
 
-          <ng-container [ngTemplateOutlet]="buttonView"></ng-container>
+  <ng-container *ngIf="enableBuyItemViewBol">
+    <ng-container [ngTemplateOutlet]="enableBuyItemView"></ng-container>
+  </ng-container>
 
-          <ng-container [ngTemplateOutlet]="menuNameView"></ng-container>
+  <div   [class]="containerclassValue">
+    <div [class]="imageContainer">
 
-          <ng-container [ngTemplateOutlet]="imageButtonInfo" ></ng-container>
-        </div>
+      <ng-container *ngIf="isImageButtonViewBol">
+        <ng-container [ngTemplateOutlet]="isImageButtonView"></ng-container>
+      </ng-container>
 
-        <ng-container [ngTemplateOutlet]="typeDisplayView"></ng-container>
-      </div>
+      <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
 
-      <div class="footer">
-        <button mat-button (click)="altMethod(true)"
-                *ngIf="isCategory && displayType === 'header-category'"
-                class="header-category-title">
-          {{menuItem?.name}}
-        </button>
+      <!-- <ng-container *ngIf="buttonViewBol"> -->
+        <ng-container [ngTemplateOutlet]="buttonView"></ng-container>
+      <!-- </ng-container> -->
 
-        <ng-container #reviews *ngIf="menuItem"></ng-container>
-        <ng-container [ngTemplateOutlet]="priceView"></ng-container>
-        <ng-container [ngTemplateOutlet]="seeMoreInCategoryView"></ng-container>
-      </div>
+      <ng-container *ngIf="menuNameViewBol">
+        <ng-container [ngTemplateOutlet]="menuNameView"></ng-container>
+      </ng-container>
 
-  </mat-card>
+      <ng-container [ngTemplateOutlet]="imageButtonInfo" ></ng-container>
+
+    </div>
+    <ng-container [ngTemplateOutlet]="typeDisplayView"></ng-container>
+  </div>
+
+  <div class="footer">
+    <button mat-button (click)="altMethod(true)"   [@.disabled]="androidApp"
+            *ngIf="isCategory && displayType === 'header-category'"
+            class="header-category-title">
+      {{menuItem?.name}}
+    </button>
+
+    <ng-container #reviews *ngIf="menuItem"></ng-container>
+
+    <ng-container *ngIf="priceViewBol">
+      <ng-container [ngTemplateOutlet]="priceView"></ng-container>
+    </ng-container>
+
+    <ng-container [ngTemplateOutlet]="seeMoreInCategoryView"></ng-container>
+  </div>
 </ng-template>
 
 <ng-template #menuNameTemplate>
@@ -48,7 +74,7 @@
 </ng-template>
 
 <ng-template #typeDisplayTemplate>
-  <div  class="product-name" *ngIf="menuItem?.id != -1 && !menuItem.itemType">
+  <div  class="product-name" *ngIf="!ignoreType && menuItem?.id != -1 && !menuItem.itemType">
     Type Required.
   </div>
 </ng-template>
@@ -65,6 +91,7 @@
 <ng-template #editItemView>
   <div class="edit-float-button">
     <button
+
         mat-mini-fab
         color="accent"
         (click)="editItem()" >
@@ -109,7 +136,11 @@
 <ng-template #menuButton>
   <div *ngIf="menuItem?.name != 'Load More' && ((isApp && !imageUrl) || !imageUrl) && menuItem?.icon"
         class="product-name-only" >
-      <button mat-button
+        <!--  [@.disabled]="androidApp" -->
+        icon button
+      <button
+
+              mat-button
               class="image-button"
               (click)="altMethod(true)">
         <ng-container [ngTemplateOutlet]="imageButtonInfo" ></ng-container>
@@ -158,7 +189,6 @@
 </ng-template>
 
 <ng-template #productImage>
-
   <img  *ngIf     ="imageUrl && bucketName &&  !isCategory && !disableImages"
         src     = {{imageUrl}}
         class     ="product-image"/>
@@ -175,9 +205,12 @@
 </ng-template>
 <!--     onerror   = "this.src='assets/images/placeholderimage.png'"
  -->
+
+ <!--  [@.disabled]="androidApp" -->
 <ng-template #buttonAddItem>
   <div *ngIf="!isApp" >
       <button
+
           mat-mini-fab
           class="add-button"
           color="warn"
@@ -217,7 +250,10 @@
 
 <ng-template #appView>
   <span >
-    <button   mat-flat-button
+    <!--  [@.disabled]="androidApp" -->
+    <button
+
+              mat-flat-button
               style="width:100%"
               class="image-button"
               (click)="altMethod(false)">
@@ -247,6 +283,7 @@
           <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
         </div>
 
+        <!-- {{menuItem?.urlImageMain }} | {{disableImages}} -->
         <div *ngIf="menuItem.urlImageMain  && !disableImages">
           <ng-container [ngTemplateOutlet]="productImage"></ng-container>
           <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
@@ -257,4 +294,4 @@
   </span>
 </ng-template>
 
-<span *ngIf="(action$  | async) as action"></span>
+

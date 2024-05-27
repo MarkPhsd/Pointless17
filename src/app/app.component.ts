@@ -1,26 +1,24 @@
 import { Component, QueryList,  ViewChildren,ChangeDetectorRef, ElementRef,
          TemplateRef, ViewChild, OnDestroy, AfterViewInit, ViewContainerRef, AfterContentInit, OnInit,
-         HostListener,
          Renderer2} from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { AuthenticationService, AWSBucketService, DevService } from './_services';
-import { Location} from '@angular/common';
+import { AuthenticationService } from './_services';
 import { IUser }  from 'src/app/_interfaces';
-import { fadeInAnimation } from './_animations';
+// import { fadeInAnimation } from './_animations';
 import { UntypedFormControl } from '@angular/forms';
 import { Platform, IonRouterOutlet } from '@ionic/angular';
 // import { LicenseManager} from "ag-grid-enterprise";
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { isDevMode } from '@angular/core';
 import { AppInitService } from './_services/system/app-init.service';
 import { Capacitor } from '@capacitor/core';
 import { UISettingsService } from './_services/system/settings/uisettings.service';
-import { InputTrackerService } from './_services/system/input-tracker.service';
+// import { InputTrackerService } from './_services/system/input-tracker.service';
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
-import { BalanceSheetMethodsService } from './_services/transactions/balance-sheet-methods.service';
+// import { BalanceSheetMethodsService } from './_services/transactions/balance-sheet-methods.service';
 // import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 import { PlatformService } from './_services/system/platform.service';
 // import { SplashScreen } from '@capacitor/splash-screen';
@@ -30,7 +28,7 @@ import { PlatformService } from './_services/system/platform.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  animations: [ fadeInAnimation ],
+  // animations: [ fadeInAnimation ],
 })
 export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterContentInit{
 
@@ -79,7 +77,6 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
       private uiSettingsService    : UISettingsService,
       private statusBar            : StatusBar,
       private viewContainerRef     : ViewContainerRef,
-      private location             : Location,
       private platformService: PlatformService,
       private renderer: Renderer2,
   ) {
@@ -96,13 +93,13 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
   //   this.appUrl = this.appInitService.apiBaseUrl()
   // }
 
-  @HostListener('swipeleft', ['$event'])
-  onSwipeLeft() {
-    if (this.platFormName.toLowerCase() === 'android') {
-      // this.siteService.notify('swipeleft', 'close', 1000)
-      this.location.back();
-    }
-  }
+  // @HostListener('swipeleft', ['$event'])
+  // onSwipeLeft() {
+  //   if (this.platFormName.toLowerCase() === 'android') {
+  //     // this.siteService.notify('swipeleft', 'close', 1000)
+  //     // this.location.back();
+  //   }
+  // }
 
   ngOnInit() {
     try {
@@ -116,6 +113,7 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
     if (this.platformService.androidApp) {
       this.renderer.addClass(document.body, 'android-platform');
     }
+    this.addAndroidGlobalStyle()
   }
 
   ngAfterContentInit() {
@@ -182,6 +180,20 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
       });
     } catch (error) {
     }
+  }
+
+
+  addAndroidGlobalStyle() {
+
+    if (!this.platformService.androidApp) { return }
+    const style = document.createElement('style');
+    style.innerHTML = `
+      mat-expansion-panel,
+      mat-expansion-panel * {
+        transition: none !important;
+      }
+    `;
+    document.head.appendChild(style);
   }
 
   setTitle() {

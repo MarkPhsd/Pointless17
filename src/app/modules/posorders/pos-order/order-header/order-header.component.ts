@@ -200,7 +200,6 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     const order = this.order;
 
     const remotePrint = this.remotePrint('printReceipt', this.posDevice?.exitOrderOnFire);
-    console.log('remotePrint', remotePrint)
     if (remotePrint) {
       return;
     }

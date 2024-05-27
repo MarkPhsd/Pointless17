@@ -59,7 +59,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   @Input() purchaseOrderEnabled : boolean;
   @Input() index          = 0;
   @Input() orderItem      : PosOrderItem;
-  @Input() order          : IPOSOrder;
+  // @Input() order          : IPOSOrder;
   @Input() menuItem       : IMenuItem;
   @Input() mainImage      : string;
   @Input() placeHolderImage = 'productPlaceHolder.jpg';
@@ -158,7 +158,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     if (this.enableItemReOrder) {
 
     } else {
-      if (!this.order) {
+      const order = this.orderMethodsService.currentOrder;
+      if (!order) {
         if (!this.userAuths.enablebuyAgain) {
           if (!this.authenticationService.isUser) { return }
         }
@@ -184,7 +185,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   }
 
   get showWeight() {
-    if (this.order && this.order.balanceRemaining != 0 &&
+    const order = this.orderMethodsService.currentOrder
+    if (order &&  order.balanceRemaining != 0 &&
                       this.orderItem.isWeightedItem &&
                       !this.prepScreen) {
       // console.log('showWeight (2)',this.userAuthService?.isStaff , this.mainPanel , this.orderItem?.printLocation)
@@ -383,7 +385,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     }
 
     if (!this.menuItem) {
-      if (this.order?.service?.filterType != 0 ) { return of(null) }
+      const order = this.orderMethodsService.currentOrder;
+      if (order?.service?.filterType != 0 ) { return of(null) }
       this.basicItem$ = this.menuService.getItemBasicImage(site, this.orderItem?.productID).pipe(
         switchMap( data => {
           this.imagePath  =  this.getImageUrl(data?.image)
@@ -442,8 +445,9 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
 
   requestPriceChange(item) {
-    if (this.order && this.userAuthService.user) {
-      const item$ = this.requestMessageMethodsService.requestPriceChange(item, this.order, this.userAuthService.user)
+    const order = this.orderMethodsService.order
+    if (order && this.userAuthService.user) {
+      const item$ = this.requestMessageMethodsService.requestPriceChange(item, order, this.userAuthService.user)
       this.action$ =  item$.pipe(switchMap(data => {
         this.siteService.notify("Request Sent", 'close', 2000, 'green')
         return of(data)
@@ -452,8 +456,9 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   }
 
   requestTotalPriceChange(item) {
-    if (!this.order || !this.userAuthService.user) { return }
-      const item$ =   this.requestMessageMethodsService.requestPriceChange(item, this.order, this.userAuthService.user)
+    const order = this.orderMethodsService.order
+    if (!order || !this.userAuthService.user) { return }
+      const item$ =   this.requestMessageMethodsService.requestPriceChange(item, order, this.userAuthService.user)
       this.action$ = item$.pipe(switchMap(data => {
         this.siteService.notify("Request Sent", 'close', 2000, 'green')
         return of(data)
@@ -462,8 +467,9 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   }
 
   requestRefundItem(item) {
-    if (!this.order || !this.userAuthService.user) { return }
-    const item$ =   this.requestMessageMethodsService.requestRefund(item, this.order, this.userAuthService.user)
+    const order = this.orderMethodsService.order
+    if (!order || !this.userAuthService.user) { return }
+    const item$ =   this.requestMessageMethodsService.requestRefund(item, order, this.userAuthService.user)
     this.action$ = item$.pipe(switchMap(data => {
       this.siteService.notify("Request Sent", 'close', 2000, 'green')
       return of(data)
@@ -471,8 +477,9 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   }
 
   requestVoidItem(item) {
-    if (!this.order || !this.userAuthService.user) { return }
-    const item$ =   this.requestMessageMethodsService.requestVoidItem(item, this.order, this.userAuthService.user)
+    const order = this.orderMethodsService.order
+    if (!order || !this.userAuthService.user) { return }
+    const item$ =   this.requestMessageMethodsService.requestVoidItem(item, order, this.userAuthService.user)
     this.action$ = item$.pipe(switchMap(data => {
       this.siteService.notify("Request Sent", 'close', 2000, 'green')
       return of(data)
@@ -794,7 +801,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
     if (this.menuItem) {
       const quantity  =  Number(1)
-      this.orderMethodsService.addItemToOrder(this.order, this.menuItem, quantity)
+      const order = this.orderMethodsService.currentOrder;
+      this.orderMethodsService.addItemToOrder(order, this.menuItem, quantity)
     }
   }
 
@@ -840,7 +848,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
   _refreshOrder() {
     const site = this.siteService.getAssignedSite()
-    return this.orderService.getOrder(site, this.order.id.toString(), this.order.history).pipe(switchMap(data => {
+    const order = this.orderMethodsService.currentOrder;
+    return this.orderService.getOrder(site, order.id.toString(), order.history).pipe(switchMap(data => {
       this.orderMethodsService.updateOrder(data)
       return of(data)
     }))
@@ -858,8 +867,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
     this.updateFlexGroup();
     // this.customcard ='custom-card';
-
-    if (this.orderItem && this.orderItem.idRef && this.orderItem.id != this.orderItem.idRef && !this.order.history) {
+    const order = this.orderMethodsService.currentOrder;
+    if (this.orderItem && this.orderItem.idRef && this.orderItem.id != this.orderItem.idRef && !order.history) {
       this.customcard       = 'custom-card-modifier';
 
       if (this.prepScreen) {
@@ -948,7 +957,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
           pass = false
         }
       }
-      console.log('data', data)
+      // console.log('data', data)
       if (!pass) { return of('')}
       return this.orderMethodsService.menuItemActionObs(this.orderMethodsService.currentOrder, data, true,
                                                         this.orderMethodsService.assignPOSItems);
@@ -960,15 +969,17 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   }
 
   printLabel(item: PosOrderItem) {
+    const order = this.orderMethodsService.currentOrder;
     this.printLabel$ = this.printingService.printItemLabel(item, this.menuItem$,
-                                                              this.order, false).pipe(switchMap(data => {
+                                                              order, false).pipe(switchMap(data => {
                                                               this.orderMethodsService.updateOrder(data)
                                                               return of(data)
                                                            }))
   }
 
   swipeOutItem(){
-    if (this.order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
+    const order = this.orderMethodsService.currentOrder;
+    if (order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
       this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
       return
     }

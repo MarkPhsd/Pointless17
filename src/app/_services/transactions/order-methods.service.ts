@@ -285,6 +285,7 @@ export class OrderMethodsService implements OnDestroy {
 
   updateOrderSubscriptionOnly(order: IPOSOrder) {
     this.currentOrder = order;
+    this.order = order;
     this._currentOrder.next(order);
   }
 
@@ -1445,7 +1446,7 @@ export class OrderMethodsService implements OnDestroy {
         this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
 
         if (this.siteService.phoneDevice) {
-          if (!this.siteService.isApp) { 
+          if (!this.siteService.isApp) {
             this.notifyItemAdded(data);
           }
         } else {
@@ -1461,8 +1462,8 @@ export class OrderMethodsService implements OnDestroy {
             this.toolbarServiceUI.updateOrderBar(true);
             return;
           }
-          
-          if (!this.siteService.isApp) { 
+
+          if (!this.siteService.isApp) {
             this.notifyItemAdded(data);
           }
         }

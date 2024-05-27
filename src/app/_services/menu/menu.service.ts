@@ -807,7 +807,7 @@ export class MenuService {
 
     let appCache = JSON.parse(localStorage.getItem('appCache')) as ISetting;
 
-    console.log('appCache', appCache?.value && appCache?.boolean)
+    // console.log('appCache', appCache?.value && appCache?.boolean)
     if (appCache) {
       if (appCache?.value && appCache?.boolean) {
         let uri = {} as HttpOptions
@@ -815,7 +815,7 @@ export class MenuService {
         uri.url = url;
         // productSearchModel.pageSize = 25;
         return this.httpCache.post<any>(uri, productSearchModel).pipe(switchMap(data => {
-          console.log('cache data menu item search')
+          // console.log('cache data menu item search')
           return of(data)
         }))
       }

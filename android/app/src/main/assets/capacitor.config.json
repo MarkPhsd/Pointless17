@@ -3,7 +3,7 @@
 	"appName": "pointlesspos",
 	"bundledWebRuntime": false,
 	"npmClient": "npm",
-	"webDir": "dist/ccsapp",
+	"webDir": "",
 	"plugins": {
 		"SplashScreen": {
 			"launchShowDuration": 0,
@@ -29,6 +29,7 @@
     "hostname": "Pointless",
     "iosScheme": "ionic",
     "androidScheme": "http",
-    "url": "http://192.168.0.2:4500"
+    "url": "https://androidpointlesspos.web.app"
   }
 }
+

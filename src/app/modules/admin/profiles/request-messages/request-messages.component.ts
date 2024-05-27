@@ -100,11 +100,10 @@ export class RequestMessagesComponent implements OnInit {
     return  this._refreshMessagingService(user)
   }
 
-
   _refreshMessagingService(user): void {
     if (!user) return;
 
-    let retryDelay = 6000; // Base retry delay
+    let retryDelay = 3000; // Base retry delay
 
     this.messageRefresh$ = this.getMessages().pipe(
       catchError(err => {
@@ -157,13 +156,13 @@ export class RequestMessagesComponent implements OnInit {
     }
 
     if (!check) {
-      console.log('no check')
+      // console.log('no check')
       return of(null)
     }
 
     return messages$.pipe(
       concatMap(data => {
-        console.log('process get messages', message, data)
+        // console.log('process get messages', message, data)
         this.processMessages(data)
         this.emitCount.emit(data?.length)
         return of(data)
@@ -182,7 +181,7 @@ export class RequestMessagesComponent implements OnInit {
 
   processMessages(list:IRequestMessage[]): Observable<IRequestMessage[]> {
     // copy the messages
-    console.error('print que', list);
+    // console.error('print que', list);
     if (!list) { return of(null)}
 
     let messages = [... list];
@@ -245,13 +244,13 @@ export class RequestMessagesComponent implements OnInit {
 
     // console.log(this.posDevice.name, this.uiTransaction.printServerDevice)
     // if (!this.uiTransaction.printServerDevice) { return }
-    console.log('pposDevice name: PrintServer', this.posDevice.name, this.posDevice.printServerEnable)
+    // console.log('pposDevice name: PrintServer', this.posDevice.name, this.posDevice.printServerEnable)
     if (!this.posDevice.printServerEnable) { return }
 
     // const deviceName = localStorage.getItem('devicename')
     // if (this.posDevice.name != deviceName) { return }
 
-    console.log('pposDevice PrintServer', this.posDevice.printServerEnable)
+    // console.log('pposDevice PrintServer', this.posDevice.printServerEnable)
     const site = this.siteService.getAssignedSite()
     let printJobs$ : Observable<any>[]
     const cancelUpdate = true

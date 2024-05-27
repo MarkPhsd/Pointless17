@@ -39,17 +39,23 @@
 <ng-template #menuItemCard let-item let-type="type">
   <app-menu-item-card
       *ngIf             ="item"
+      [isApp]           ="isApp"
+      [androidApp]      ="androidApp"
       [displayType]     ="type"
+      [ignoreType]      ='true'
       [id]              ="item?.id"
       [name]            ="item?.name"
+      [retail]          ="item?.retail"
       [menuItem]        ="item.prompt_Products"
+      [bucketName]      ="bucketName"
       [class]           ="'grid-item'"
       [uiHomePage]      ="uiHomePage"
       [isStaff]         ="isStaff"
       [promptModifier]  ="true"
-      [smallDevice]     ="phoneDevice"      [styleMatCard]    ='styleMatCard'
+      [smallDevice]     ="phoneDevice"
+      [styleMatCard]    ='styleMatCard'
+      [disableImages]   ="posDevice?.disableMenuImages"
       [bucketName]      ="bucketName"
       (addItem)         ="addItem($event)" >
   </app-menu-item-card>
-<!-- </div> -->
 </ng-template>

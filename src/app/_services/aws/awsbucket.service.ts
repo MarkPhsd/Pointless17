@@ -300,6 +300,12 @@ export class AWSBucketService {
 
   getAWSBucketObservable(): Observable<IAWS_Temp_Key> {
     const site = this.siteService.getAssignedSite();
+    const bucket = localStorage.getItem('awsbucket')
+    if (bucket) {
+      let item = {} as IAWS_Temp_Key
+      item.preassignedURL = bucket
+      return of(item)
+    }
     const controller = '/aws/'
     const parameter = "getAWSBucket"
     const url = `${site.url}${controller}${parameter}`

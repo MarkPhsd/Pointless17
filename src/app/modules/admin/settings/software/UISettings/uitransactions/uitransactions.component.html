@@ -495,6 +495,13 @@
 
               <div  style="margin-left:20px"  *ngIf="inputForm.controls['dCapEnabled'].value">
 
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="dCapSubTotal" >
+                    <mat-label>DCAP Charge  In Subtotal</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
                   <div class="toggle-fields">
                     <mat-slide-toggle
                               formControlName="dCapSurcharge" >

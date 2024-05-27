@@ -66,7 +66,7 @@ export interface TransactionUISettings {
   dcapDualPriceValue     : number;
   dsiTipPrompt           : boolean;
   dsiTipPromptValues     : string;
-
+  dCapSubTotal           : boolean;
   dcapPayAPIEnabled         : boolean;
   dcapPayAPIPreAuth         : boolean;
   dcapPayAPIZeroAuth        : boolean;
@@ -888,6 +888,7 @@ export class UISettingsService {
       dCapSurchargeValue     : [],
       dcapMultiPrice         : [],
       dcapDualPriceValue     : [],
+      dCapSubTotal           : [],
       payPalEnabled          : [ ],
       payPalClientID         : [''],
       payPalCurrency         : [ ],

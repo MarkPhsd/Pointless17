@@ -3,7 +3,7 @@ import { APP_INITIALIZER, enableProdMode, ErrorHandler, NgModule } from '@angula
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { Printer } from '@ionic-native/printer/ngx';
 import { BrowserModule, Title } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule  } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
@@ -64,7 +64,10 @@ import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-l
 import { UserIdleModule } from 'angular-user-idle';
 import { DragAndDropModule } from 'angular-draggable-droppable';
 import { ResizeDirective } from './_directives/resize.directive';
-import {HammerGestureConfig, HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
+import { environment } from '../environments/environment';
+
+
+// import {HammerGestureConfig, HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
 
 // export class MyHammerConfig extends HammerGestureConfig {
 //   overrides = {
@@ -169,7 +172,9 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     DefaultModule,
     AgGridModule,
     HttpClientModule,
+    //environment.enableAnimations ? BrowserAnimationsModule :
     BrowserAnimationsModule,
+    // NoopAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
     BrowserModule,

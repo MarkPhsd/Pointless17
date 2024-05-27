@@ -17,6 +17,7 @@ export interface SchemaUpdateResults {
 export class SystemService {
 
 
+
   // GetSyncDatabaseSchema
   // CreateAPIViews
   // CreateViews
@@ -33,6 +34,14 @@ export class SystemService {
 
               )
   { }
+
+  getToken(site:ISite) :Observable<string> {
+    const controller = "/System/"
+    const endPoint = 'getToken'
+    const parameters = ''
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+    return this.http.get<string>(url);
+  }
 
    getSyncDatabaseSchema(site:ISite):  Observable<SchemaUpdateResults[]> {
     const controller = "/System/"

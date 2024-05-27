@@ -3,7 +3,7 @@ import { formatDate as ngFormatDate } from "@angular/common";
 import { Inject } from "@angular/core";
 import { Injectable } from "@angular/core";
 import { LOCALE_ID } from "@angular/core";
-import * as moment from 'moment';
+// import * as moment from 'moment';
 // ----------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------- //
 
@@ -82,7 +82,7 @@ export class DateHelperService {
       dates.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
     }
-    
+
     return dates;
   }
 	// ---

@@ -83,7 +83,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   androidApp = this.platformService.androidApp;
   _scrollStyle = this.platformService.scrollStyleWide;
   private styleTag: HTMLStyleElement;
-  private customStyleEl: HTMLStyleElement | null = null;
+  // private customStyleEl: HTMLStyleElement | null = null;
   @ViewChild('scrollDiv') scrollDiv: ElementRef;
 
   scrollStyle = this.platformService.scrollStyleWide;
@@ -453,13 +453,17 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     return id;
   }
 
+  printOrder() {
+    this.remotePrint('printReceipt', false)
+  }
+
   remotePrint(message:string, exitOnSend: boolean) {
     const order = this.order;
+    let pass = false
     if (message == 'printReceipt') {
-
+      pass = true
     }
     if (this.posDevice) {
-      let pass = false
       if (message === 'printPrep') {
         if (this.posDevice?.remotePrepPrint) {
           pass = true
@@ -476,6 +480,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                            printServer: serverName,id: order.id,history: order.history} as any;
         const site = this.siteService.getAssignedSite()
         this.printAction$ =  this.paymentService.remotePrintMessage(site, remotePrint).pipe(switchMap(data => {
+          console.log(data)
           if (data) {
             this.siteService.notify('Print job sent', 'Close', 3000, 'green')
           } else {

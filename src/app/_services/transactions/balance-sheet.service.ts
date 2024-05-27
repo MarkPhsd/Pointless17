@@ -65,6 +65,7 @@ export interface BalanceSheetOptimized {
   depositer:         string;
   cashDropAmount:    number;
   reportName:        string;
+  netSales: number;
   balanceSheetEmployee  : BalanceSheetEmployee;
 }
 
