@@ -218,6 +218,13 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
     let  columnDefs =  [];
 
+    let rowItem = {
+        headerName: "Row",
+        valueGetter: "node.rowIndex + 1"
+    }
+
+    columnDefs.push(rowItem);
+
     let column = {
           headerName: 'ID',     field: 'id',
           sortable: true,
@@ -728,6 +735,22 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       this.id = item.id;
       const history = item.history
     }
+  }
+
+  deleteSelected() { 
+    if (this.userAuths.deleteInventory && this.selected) { 
+      const site = this.siteService.getAssignedSite()
+      this.action$ = this.posOrderItemService.deletePOSOrderItems(site, this.order.id, this.selected).pipe(switchMap(data => { 
+        if (data.resultErrorDescription) { 
+          this.siteService.notify('Not authorized:' + data?.resultErrorDescription, 'close', 6000)
+        } else { 
+          this.orderMethodsService.setActiveOrder(data.order);
+        }
+        return of(data)
+      }))
+      return;
+    }
+    this.siteService.notify('Not authorized', 'close', 3000, 'red')
   }
 
   getItem(id: number, history: boolean) {

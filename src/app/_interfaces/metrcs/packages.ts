@@ -74,6 +74,8 @@ export interface METRCPackage {
   productCategoryName:               string;
   item:                              Item;
   active                            : boolean;
+  errorMessage                      : string;
+  message                           : string;
 }
 
 export interface Item {

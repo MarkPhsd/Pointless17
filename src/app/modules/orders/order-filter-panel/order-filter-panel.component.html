@@ -4,79 +4,47 @@
     <mat-card-content
               class="mat-card-content"
               [id]="scrollStyle"
-              style="overflow-y: auto;
+              style="overflow-y: hidden;
                     width: 300px;
                     max-height: calc(100vh - 165px)">
+
       <div class="button-grid">
 
         <div>
           <button class="button"
-                  mat-button
+                  mat-raised-button
                   (click)="resetSearch()">
                   <mat-icon>refresh</mat-icon>
             <span>Reset</span>
           </button>
         </div>
 
-        <div >
+        <div>
           <button class="button"
-                  mat-button
+                  mat-raised-button
                   (click)="refreshSearch()">
                   <mat-icon>refresh</mat-icon>
             <span>Refresh</span>
           </button>
         </div>
 
-        <div  *ngIf="!smallDevice && isStaff">
-          <button class="button"
-                  mat-button
-                  (click)="newOrder()">
-            <mat-icon>receipt</mat-icon><span>New Order</span>
-          </button>
-        </div>
-
-        <div  *ngIf="!smallDevice && !isUser">
-          <button class="button"
-                  mat-button
-                  (click)="displayPanel()">
-                  <mat-icon>close_fullscreen</mat-icon>
-            <span>Hide</span>
-          </button>
-        </div>
-
-        <div  *ngIf="smallDevice">
-          <button
-                  mat-button
-                  (click)="exitBottomSheet()">
-            <mat-icon>close</mat-icon><span>Hide</span>
-          </button>
-        </div>
-
-        <div *ngIf="!smallDevice && isStaff">
-          <button class="button"
-                    mat-button
-                    (click)="newOrderOptions()">
-              <mat-icon>add</mat-icon><span>Other New</span>
-          </button>
-        </div>
-
-        <div *ngIf="isStaff">
-          <button class="button"
-                  mat-button
-                  (click)="gotoPayments()">
-            <mat-icon>credit_card</mat-icon>
-            <span>Payments</span>
-          </button>
+        <div  style="margin-left:25px"
+              *ngIf="isStaff">
+          <mat-label>Online Orders</mat-label> <br>
+          <mat-slide-toggle
+                    (change)="updateOrderSearch(searchModel)"
+                    [(ngModel)]="searchModel.onlineOrders"  >
+          </mat-slide-toggle>
         </div>
 
       </div>
 
-      <div class="center-keypad" style="margin-top:5px;">
+      <div style="margin-top:5px;margin-bottom:2px;">
         <app-key-pad
                     [inputForm]     ="searchForm"
                     [inputTypeValue]= "'text'"
+                    [placeHolder]   ="'Search Phrase'"
                     (outPutValue)   ="orderSearch($event)">
-          <h4>Enter Phrase</h4>
         </app-key-pad>
       </div>
 
@@ -100,14 +68,6 @@
               [inputForm] ="completionDateForm">
             </mat-date-range>
         </div>
-      </div>
-
-      <div class="toggle-fields" *ngIf="isStaff">
-        <mat-label>Online Orders</mat-label>
-        <mat-slide-toggle
-                  (change)="updateOrderSearch(searchModel)"
-                  [(ngModel)]="searchModel.onlineOrders"  >
-        </mat-slide-toggle>
       </div>
 
       <div class="date-filter-buttton" *ngIf="auth?.accessHistoryReports || isUser" class="fields">
@@ -134,7 +94,7 @@
             class       ="toggle-view"
             [(ngModel)] ="toggleOpenClosedAll"
             (change)    ="refreshSearch()" >
-        <mat-button-toggle class="mat-button-toggle" value="1" >Open </mat-button-toggle>
+        <mat-button-toggle class="mat-button-toggle" class="mat-button-toggle" value="1" >Open </mat-button-toggle>
         <mat-button-toggle class="mat-button-toggle" value="2">Closed</mat-button-toggle>
         <mat-button-toggle class="mat-button-toggle" value="0">All</mat-button-toggle>
       </mat-button-toggle-group>
@@ -178,26 +138,20 @@
               <mat-icon>receipt</mat-icon> </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
+
       <div *ngIf="isStaff"
             [hidden]="toggleTypeEmployee  === '0' && searchModel"
             #selectorEmpDiv
-            class="toggle-selector"  >
+            class="toggle-selector">
+
         <h4>Employees</h4>
-        <button mat-button (click)="listEmployees(1)">All</button>
-        <button [disabled]="!isAuthorized" mat-button (click)="listEmployees(2)">On Clock</button>
-        <button [disabled]="!isAuthorized" mat-button (click)="listEmployees(3)">Inactive</button><br>
-        <mat-label>Auth: {{isAuthorized}} </mat-label>
-        <div *ngIf="(employees$ | async) as list">
-          <app-mat-toggle-selector
-                  [id]      ="searchModel.employeeID"
-                  [list]   ="list"
-                  [toggleDimensions]="''"
-                  [toggleStyleHeight]="''"
-                  (outPutID)="setEmployee($event)">
-                  Employee
-          </app-mat-toggle-selector>
-        </div>
+        <button mat-raised-button (click)="listEmployees(1)">Active</button>
+        <button mat-raised-button (click)="listEmployees(2)">On Clock</button>
+        <button mat-raised-button (click)="listEmployees(3)">Terminated</button><br>
+        <h5 *ngIf="searchModel?.employeeName"><mat-icon>search</mat-icon> {{searchModel?.employeeName }}</h5>
+        <div *ngIf="employees$ | async"></div>
       </div>
+
       <div *ngIf="isStaff"
           [hidden]="toggleTypeEmployee === '1' && searchModel"
           class="toggle-selector"
@@ -217,6 +171,7 @@
     </mat-card-content>
   </mat-card>
 </div>
+
 <ng-template #loading >
   <mat-spinner></mat-spinner>
 </ng-template>

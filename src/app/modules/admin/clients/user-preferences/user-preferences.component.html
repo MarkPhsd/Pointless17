@@ -4,56 +4,74 @@
     Preferences
   </mat-card-title>
   <mat-card-subtitle>
-    <!-- {{user?.roles}} -->
+
   </mat-card-subtitle>
   <mat-card-content>
-
-    <div  class="mat-label">
-      <mat-label>How do you want to communicate with us?</mat-label>
-      <mat-label>enable for Mobile Text Messages</mat-label>
-      <br>
-      <!-- <mat-slide-toggle
-          class="mat-label"
-          formControlName="messagingPreference">
-        <mat-label class="mat-label">Email/Text</mat-label>
-      </mat-slide-toggle> -->
-
-      <mat-radio-group formControlName="messagingPreference" aria-label="Communication Preference">
+    <div class="grid-menu-category-flow">
+      
+      <div>
         <div>
-          <mat-radio-button value="1">Text</mat-radio-button>
+          <mat-label>How do you want to communicate with us?</mat-label>
+          <mat-label>enable for Mobile Text Messages</mat-label>
         </div>
-        <div>
-          <mat-radio-button value="0">Email</mat-radio-button>
-        </div>
-        <div>
-          <mat-radio-button value="2">WhatsApp</mat-radio-button>
-        </div>
-      </mat-radio-group>
-    </div>
 
-    <div  class="mat-label">
-      <mat-slide-toggle
-          [disabled]="true"
-          class="mat-label"
-          formControlName="darkMode">
-        <mat-label class="mat-label">Enable Dark Mode</mat-label>
-      </mat-slide-toggle>
-      <div  class="mat-label">
-        <mat-slide-toggle
-            class="mat-label"
-            formControlName="swapMenuOrderPlacement">
-          <mat-label class="mat-label">Menu left/right</mat-label>
-        </mat-slide-toggle>
+        <div>
+          <mat-radio-group formControlName="messagingPreference" aria-label="Communication Preference">
+            <div>
+              <mat-radio-button value="1">Text</mat-radio-button>
+            </div>
+            <div>
+              <mat-radio-button value="0">Email</mat-radio-button>
+            </div>
+            <div>
+              <mat-radio-button value="2">WhatsApp</mat-radio-button>
+            </div>
+          </mat-radio-group>
+        </div>
       </div>
-      <app-toggle-theme></app-toggle-theme>
+
+      <div>
+        <div  class="mat-label">
+          <mat-slide-toggle
+              [disabled]="true"
+              class="mat-label"
+              formControlName="darkMode">
+            <mat-label class="mat-label">Enable Dark Mode</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div  class="mat-label">
+          <mat-slide-toggle
+              class="mat-label"
+              formControlName="swapMenuOrderPlacement">
+            <mat-label class="mat-label">Menu left/right</mat-label>
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+      <div>
+        <app-toggle-theme></app-toggle-theme>
+      </div>
+
+      <div>
+        <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
+      </div>
+
+  
     </div>
 
-    <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
-
+    <div>
+      <app-value-fields
+          [inputForm]="inputForm"
+          [fieldType]="'password'"
+          [fieldName]="'metrcKey'" >
+        METRC
+      </app-value-fields>
+    </div>
   </mat-card-content>
 
   <mat-card-actions>
-    <button style="float:right;margin-top:10px" mat-raised-button color="warn" (click)="close()">
+    <button style="float:right;margin-top:15px" mat-raised-button color="warn" (click)="close()">
       <mat-icon *ngIf="!saveDisabled">save</mat-icon> <mat-icon *ngIf="saveDisabled">exit_to_app</mat-icon>Save <div *ngIf="!saveDisabled">Close</div>
     </button>
   </mat-card-actions>
@@ -65,7 +83,12 @@
     <ngx-colors ngx-colors-trigger [(ngModel)]="headerColor"></ngx-colors>
 
 </ng-template>
-
+<!-- Preferences
+<div >{{user?.userPreferences | json}}</div>
+<div>
+  Form<br>
+  {{inputForm.value | json}}
+</div> -->
 <!-- darkMode: [], //
 swapMenuOrderPlacement:  [], //boolean;
 orderFilter:  [], //IPOSOrderSearchModel

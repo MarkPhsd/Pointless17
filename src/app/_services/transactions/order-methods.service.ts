@@ -397,10 +397,12 @@ export class OrderMethodsService implements OnDestroy {
       this._posSearchModel.next(null);
       return ;
     }
-
+   
     if (!searchModel.onlineOrders) {  searchModel.onlineOrders = false }
     searchModel.clientID = this.setUserID()
-    this.updateOrderSearchModelDirect(JSON.parse(JSON.stringify(searchModel)))
+    const model = JSON.parse(JSON.stringify(searchModel)) as IPOSOrderSearchModel
+    // console.log('updateOrderSearchModel', searchModel)
+    this._posSearchModel.next(searchModel);
   }
 
   setUserID()  {

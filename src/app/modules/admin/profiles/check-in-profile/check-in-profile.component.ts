@@ -101,6 +101,28 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   //   }
   //   return false
   // }
+  
+  get isVendorProfile() { 
+    if (this.clientType && this.clientType.name ) { 
+      if (this.clientType.name.toLocaleLowerCase() == 'supplier' || this.clientType.name.toLocaleLowerCase() == 'vendor') { 
+        return true;
+      }
+    }
+    return false;
+  }
+  generatePurchaseOrder() {
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.orderService.postPurchaseOrder(site, this.clientTable?.companyName, +this.id).pipe(switchMap(data => {
+      //open the order;
+      if (data) { 
+        this.orderMethodsService.setActiveOrder(data)
+      }
+      if (!data) { 
+        this.siteService.notify ('No purchase order generated', 'close', 3000, 'red')
+      }
+      return of(data)
+    }))
+  }
 
   initSubscriptions() {
     this._currentOrder = this.orderMethodsService.currentOrder$.subscribe(data=> {
@@ -428,6 +450,17 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     }
   }
 
+  refreshTodays() {
+    const search                = {} as IPOSOrderSearchModel
+    search.greaterThanZero      = 1
+    search.closedOpenAllOrders  = 2;
+    search.suspendedOrder       = 0;
+    search.clientID             = parseInt(this.id)
+    this.searchModel            = search;
+    this.suspendedOrder         = 0;
+    this.orderMethodsService.updateOrderSearchModelDirect(search)
+    // this.updateOrderOptionsStatus(search)
+  }
   showOnlyOpenOrders() {
     const search                = {} as IPOSOrderSearchModel
     search.greaterThanZero      = 1

@@ -1,6 +1,6 @@
 {
-  "name": "pointless3",
-  "version": "3.01.22",
+  "name": "pointlesspos",
+  "version": "3.10.54",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -26,7 +26,7 @@
     "emergency": " npm run deploy --domain=emergencyroom",
     "ockosher": " npm run deploy --domain=ockosherstore",
     "noshhouse": " npm run deploy --domain=noshhouse",
-    "coconutsbeta": " npm run deploy --domain=coconutspanamacity",
+    "coconutsbeta": " npm run deploy -eletePromptSubGroups-domain=coconutspanamacity",
     "coconuts": " npm run deploy --domain=coconutsfl",
     "cannabispos": " npm run deploy --domain=cannabispos",
     "liquorpos": " npm run deploy --domain=liquorpos",

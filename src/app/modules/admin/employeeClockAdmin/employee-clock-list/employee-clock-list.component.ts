@@ -13,11 +13,11 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 
 import { EmployeeClockService,EmployeeClockResults,EmployeeClockSearchModel } from 'src/app/_services/employeeClock/employee-clock.service';
-import {  EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
+import { EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
 import { Capacitor,  } from '@capacitor/core';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
-import {Clipboard} from '@angular/cdk/clipboard';
+import { Clipboard} from '@angular/cdk/clipboard';
 export interface rowItem {
   field: string,
   cellRenderer: string,
@@ -157,18 +157,13 @@ export class EmployeeClockListComponent implements OnInit {
       search.endDate = this.endDate;
       search.startDate = this.startDate;
       this.searchModel = search;
-
-      // console.log('search endDate', search.endDate)
       this.refreshSearch(search);
     })
   }
 
   initClasses()  {
     const platForm      = this.platForm;
-    // this.gridDimensions = 'width: 100%; height: 100%;'
-    this.agtheme        = 'ag-theme-material';
-    // if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
-    // if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
+     this.agtheme        = 'ag-theme-material';
   }
 
   initAgGrid(pageSize: number) {
@@ -210,6 +205,17 @@ export class EmployeeClockListComponent implements OnInit {
       flex    : 2,
     } as any
     this.columnDefs.push(item);
+
+    item =   {headerName: 'WeekDay',     field: 'logInTime', sortable: true,
+        cellRenderer: this.agGridService.weekDayCellRendererUSD,
+        width   : 76,
+        minWidth: 76,
+        maxWidth: 76,
+        flex    : 2,
+    } as any
+    if (!this.reportOnly) {
+        this.columnDefs.push(item);
+    }
 
     item =   {headerName: 'Login',     field: 'logInTime', sortable: true,
                 cellRenderer: this.agGridService.dateCellRendererUSD,

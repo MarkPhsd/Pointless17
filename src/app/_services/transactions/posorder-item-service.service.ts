@@ -237,20 +237,8 @@ export interface ItemWithAction {
   menuItem          : IMenuItem;
   orderId           : number;
   quantity: number;
+  deviceName: string;
 }
-
-// firstPOSTCallToAPI('url', data).pipe(
-//   concatMap(result1 => secondPOSTCallToAPI('url', result1))
-//     concatMap( result2 => thirdPOSTCallToAPI('url', result2))
-//      concatMap(result3 => fourthPOSTCallToAPI('url', result3))
-//   ....
-// ).subscribe(
-//   success => { /* display success msg */ },
-//   errorData => { /* display error msg */ }
-// );
-// if your async method does not depend on return value of the precedent async call you can use
-
-//  concat(method(),method2(),method3()).subscribe(console.log)
 
 @Injectable({
   providedIn: 'root'
@@ -853,6 +841,24 @@ export class POSOrderItemService {
   }
 
 
+  deletePOSOrderItems(site: ISite, orderID: number, selected: any): Observable<ItemPostResults> {
+    const controller = "/POSOrderItems/"
+
+    const endPoint = "DeleteItems"
+
+    const parameters = `?orderID=${orderID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<ItemPostResults>(url, {list: selected} ).pipe(switchMap(data => {
+      return of(data)
+    }),catchError(data => {
+      console.log('error')
+      return of(null)
+    }))
+  }
+
+
   deletePOSOrderItem(site: ISite, id: number): Observable<ItemPostResults> {
 
     const controller = "/POSOrderItems/"
@@ -908,6 +914,8 @@ export class POSOrderItemService {
     //   return
     // }
 
+    const deviceName = localStorage.getItem('devicename')
+    item.deviceName = deviceName;
     const controller = "/POSOrderItems/"
 
     const endPoint = "VoidItem"

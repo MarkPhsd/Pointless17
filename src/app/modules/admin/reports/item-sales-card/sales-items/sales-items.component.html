@@ -1,3 +1,5 @@
+<div *ngIf="action$ | async"></div>
+
 <button *ngIf="!autoPrint && !includeDepartments"
         mat-raised-button color="accent" (click)="sortSales(sales)">Sort By Value</button>
 <button *ngIf="!autoPrint && !includeDepartments"
@@ -25,23 +27,23 @@
 
 <div *ngIf="!includeDepartments">
   <ng-container [ngTemplateOutlet]="headers"></ng-container>
-
+  <!-- {{sales | json}} -->
   <div  class="item-sales-grid-body"  *ngFor="let sale of (showAll ? sales : sales?.slice(0,10))" >
+  
+    
 
       <div class="product-name" *ngIf="groupBy === 'void' " >{{sale?.employee | truncateText : 20}}</div>
       <div class="product-name" >{{sale?.productName | truncateText : 20   }}      </div>
-      <div class="totals" *ngIf="groupBy === 'transactionType' "> {{sale?.netSales | currency }}  </div>
-      <div class="totals" *ngIf="groupBy === 'void' "> {{sale?.voidAmount | currency }}  </div>
+      <div class="totals"  *ngIf="groupBy === 'transactionType' "> {{sale?.netSales | currency }}  </div>
+      <div class="totals"  *ngIf="groupBy === 'void' ">  {{sale?.voidAmount | currency }}  </div>
+      <div  class="totals" *ngIf="groupBy != 'transactionType' && groupBy != 'void'">  {{sale?.itemTotal | currency }}</div>
+      <div class="totals"  *ngIf="groupBy != 'void'" >  {{sale?.quantity  | number: '1.0-0' }} </div>
 
-      <div  class="totals" *ngIf="groupBy != 'transactionType' && groupBy != 'void'"> {{sale?.itemTotal | currency }}</div>
-
-      <div class="totals" > {{sale?.quantity  | number: '1.0-0' }} </div>
-
-      <div *ngIf="!autoPrint && groupBy == 'items' " class="totals">{{sale?.productCount  | number: '1.0-0' }}   </div>
-      <div *ngIf="!autoPrint && (groupBy != 'transactionType' && groupBy != 'void')" class="totals">{{sale?.cost | currency }}   </div>
+      <div *ngIf="!autoPrint && groupBy == 'items' " class="totals">  {{sale?.productCount  | number: '1.0-0' }}   </div>
+      <div *ngIf="!autoPrint && (groupBy != 'transactionType' && groupBy != 'void')" class="totals">  {{sale?.cost | currency }}   </div>
 
       <div class="totals" *ngIf="groupBy === 'void' ">
-        <button color="accent" (click)="viewOrder(sale?.orderID)"><mat-icon>open_in_new</mat-icon> {{sale?.orderID }} </button>
+        <button mat-raised-button color="accent" (click)="viewOrder(sale?.orderID)"><mat-icon>open_in_new</mat-icon> </button>
        </div>
 
       <div class="span-columns" *ngIf="groupBy === 'void'">  {{sale?.voidReason}}

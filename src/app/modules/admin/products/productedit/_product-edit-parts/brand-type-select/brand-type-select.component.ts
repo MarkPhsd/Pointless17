@@ -43,7 +43,9 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
   searchList(searchPhrase):  Observable<ClientSearchResults> {
     const site  = this.siteService.getAssignedSite();
     const model = this.initSearchModel(searchPhrase)
-    // console.log('fieldname', this.fieldName)
+    if (this.fieldName == 'productSupplierCatID') {
+      return this.contactsService.getContactBySearchModel(site,model)
+    }
     if (this.fieldName != 'brandID') {
       return this.contactsService.getContactBySearchModel(site,model)
     }
@@ -82,6 +84,7 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
         if (!this.fieldName) {
           this.id = this.inputForm.controls['brandID'].value;
         }
+
       }
     }
     this.initForm();
@@ -99,9 +102,7 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
     const site  = this.siteService.getAssignedSite();
     if(site) {
       let model = this.initModel(this.id)
-
       let search$  = this.contactsService.getContactBySearch(site, this.id, 1, 10)
-
       // console.log(this.fieldName, this.id)
       search$.subscribe( data => {
         // console.log('getName ' + this.fieldName,  data?.results[0]?.company)
@@ -190,6 +191,10 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
     }
     if (fieldName === 'brandID') {
       let item =  { brandIDLookup: data  }
+      form.patchValue( item )
+    }
+    if (fieldName === 'productSupplierCatID') {
+      let item =  { productSupplierCatID: data  }
       form.patchValue( item )
     }
     // console.log('form value', form.value)

@@ -105,6 +105,12 @@ export interface IUserAuth_Properties {
   allowReconciliation: boolean;
   allowSeeItemCost: boolean;
   editEmail: boolean;
+
+  //notifications
+
+  voidNotification: boolean;
+  balanceSheetStartNotification: boolean;
+  discountNotification: boolean;
 }
 
 @Injectable({

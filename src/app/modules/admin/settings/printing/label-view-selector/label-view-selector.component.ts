@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { IProduct, ISetting } from 'src/app/_interfaces';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SettingsService } from 'src/app/_services/system/settings.service';
@@ -25,6 +25,7 @@ export class LabelViewSelectorComponent implements OnInit {
   @Input() zplSetting           : ISetting;
   @Input() labelID              : number;
   @Input() inventoryItem        : IInventoryAssignment;
+  label$ : Observable<any>;
 
   product                       : IProduct
   @Input()  labelImageHeight     = 200;
@@ -86,6 +87,7 @@ export class LabelViewSelectorComponent implements OnInit {
     const zplTemp$ = this.settingService.getSetting(site, id);
     this.outPutLabelID.emit(id)
     zplTemp$.subscribe(data => {
+      console.log('zpl data', data)
       if (!data){ return }
        this.zplSetting  = data
        this.refreshLabelImage(data);
@@ -108,13 +110,18 @@ export class LabelViewSelectorComponent implements OnInit {
   }
 
   refreshLabel(zplSetting: ISetting, item: any) {
+   
     if (!zplSetting) { return }
-    this.printingService.refreshInventoryLabel(zplSetting.text, item).then(
-      data => {
-       this.outPutLabelID.emit(zplSetting.id);
-       this.outputLabelSetting.emit(zplSetting);
-       this.labelImage64 = data
-      }
+
+    this.label$ = this.printingService.refreshInventoryLabelOBS(zplSetting.text, item).pipe(
+      switchMap(data => { 
+        console.log('refreshLabel Info', data)
+        this.outPutLabelID.emit(zplSetting.id);
+        this.outputLabelSetting.emit(zplSetting);
+        this.labelImage64 = data
+        return of(data)
+
+      })
     )
   }
 

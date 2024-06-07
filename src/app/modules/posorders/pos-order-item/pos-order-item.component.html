@@ -26,7 +26,7 @@
 
       <ng-container *ngIf="mainPanel" [ngTemplateOutlet]="buyAgainViewUser"></ng-container>
 
-      <div *ngIf="(mainPanel && !bottomSheetOpen) && !prepScreen">
+      <div *ngIf="!bottomSheetOpen  && !prepScreen">
         <ng-container [ngTemplateOutlet]="exitlabelButtonView"></ng-container>
       </div>
 
@@ -231,7 +231,9 @@
 </ng-template>
 
 <ng-template #exitlabelButtonView>
-  <div *ngIf="userAuthService?.isStaff && enableExitLabel && mainPanel  && (orderItem?.printLocation && orderItem?.printLocation>0)">
+
+  <div *ngIf="userAuthService?.isStaff && enableExitLabel && mainPanel  && orderItem?.printLocation>0">
+    <!-- {{userAuthService?.isStaff }} | {{mainPanel}} {{orderItem?.printLocation}} -->
     <button mat-button  class="exit-label-button" color="accent" (click)="printLabel(orderItem)">
       <mat-icon>print</mat-icon>
       <br>

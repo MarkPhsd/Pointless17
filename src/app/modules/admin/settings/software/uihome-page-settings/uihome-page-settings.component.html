@@ -422,7 +422,7 @@
             <mat-slide-toggle
                       formControlName="wideOrderBar"
                       >
-              <mat-label>Wide Order Bar</mat-label>
+              <mat-label class="margin-left-5">Wide Order Bar</mat-label>
             </mat-slide-toggle>
           </div>
           <div class="toggle-fields">
@@ -430,7 +430,7 @@
                       formControlName="displaySendButton"
                       >
               <mat-label>Send Order Button</mat-label>
-              <mat-hint>Show button beneath print button</mat-hint>
+              <mat-hint class="margin-left-5">Show button beneath print button</mat-hint>
             </mat-slide-toggle>
           </div>
 
@@ -438,7 +438,23 @@
             <mat-slide-toggle
                       formControlName="lockTerminalToBalanceSheet"  >
               <mat-label>Balance Sheet Lock</mat-label>
-              <mat-hint>Lock terminal to user who started balance sheet.</mat-hint>
+              <mat-hint class="margin-left-5">Lock terminal to user who started balance sheet.</mat-hint>
+            </mat-slide-toggle>
+          </div>
+
+          <div>
+            <mat-slide-toggle
+                      formControlName="employeeOnClockList"  >
+              <mat-label>Employees On Clock</mat-label>
+              <mat-hint class="margin-left-5">Shows employees on Clock on Login.</mat-hint>
+            </mat-slide-toggle>
+          </div>
+
+          <div>
+            <mat-slide-toggle
+                      formControlName="autoClockEmployeeOnLogin"  >
+              <mat-label>Auto Clock In</mat-label>
+              <mat-hint  class="margin-left-5">Auto Clock In employee On Login</mat-hint>
             </mat-slide-toggle>
           </div>
 
@@ -446,7 +462,7 @@
             <mat-slide-toggle
                       formControlName="pinPadDefaultOnApp"  >
               <mat-label>PIN Pad Default</mat-label>
-              <mat-hint>Login Shows PIN Pad Entry Default.</mat-hint>
+              <mat-hint class="margin-left-5">Login Shows PIN Pad Entry Default.</mat-hint>
             </mat-slide-toggle>
           </div>
 
@@ -454,11 +470,9 @@
             <mat-slide-toggle
                       formControlName="timeOut"  >
               <mat-label>Time Out (3 Minutes)</mat-label>
-              <mat-hint>App Only - Will log out after 3 minutes no use.</mat-hint>
+              <mat-hint class="margin-left-5">App Only - Will log out after 3 minutes no use.</mat-hint>
             </mat-slide-toggle>
           </div>
-
-
 
           <div class="toggle-fields" style="width:200px">
             <app-value-fields

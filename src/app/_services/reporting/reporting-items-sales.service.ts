@@ -63,7 +63,7 @@ export interface IReportItemSales {
   prodModifierType:        number;
   giftCardType:            number;
   orderID:                 number;
-  ID:                      number;
+  id:                      number;
   productID:               number;
   serviceFilterType:       number;
   quantity:                number;
@@ -90,6 +90,7 @@ export interface IReportItemSales {
   itemPrepped   : string;
   client        : ClientsPOSOrders;
   history: boolean;
+  
 }
 
 export interface ItemPOMetrics {
@@ -348,11 +349,11 @@ export class ReportingItemsSalesService {
 
     const controller = `/ReportItemSales/`
 
-    const endPoint = `getUOMReport`
+    const endPoint = `GETUOMReport`
 
     const url = `${site.url}${controller}${endPoint}`
 
-    return  this.http.put<IReportItemSaleSummary>(url, model )
+    return  this.http.post<IReportItemSaleSummary>(url, model )
   }
 
   getItemQuantityGroupedReport(site: ISite, model: any): Observable<IReportItemSaleSummary> {

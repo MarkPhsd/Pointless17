@@ -44,6 +44,7 @@ export class OrderCardComponent implements OnInit {
       this.orderNameLength = 12
       this.phoneDevice = true
      }
+  
    }
 
   ngOnInit() {

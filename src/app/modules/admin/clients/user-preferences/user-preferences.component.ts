@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
-import { Observable, Subscription, of, switchMap } from 'rxjs';
+import { Observable,  of, switchMap } from 'rxjs';
 import { IUser, UserPreferences } from 'src/app/_interfaces';
 import { AuthenticationService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
@@ -21,7 +21,6 @@ export class UserPreferencesComponent implements OnInit {
   @Input() saveDisabled: boolean;
 
   _user = this.authenticationService.user$.subscribe(user => {
-    // console.log('user.messagingService', user?.userPreferences?.messagingPreference)
     this.user = user;
     this.initForm()
   })
@@ -60,6 +59,7 @@ export class UserPreferencesComponent implements OnInit {
       ebayItemJSONHidden:  [], //boolean;
       headerColor:  [], //string;
       messagingPreference: [],
+      metrcKey: []
     })
 
     this.inputForm.patchValue(this.user?.userPreferences)

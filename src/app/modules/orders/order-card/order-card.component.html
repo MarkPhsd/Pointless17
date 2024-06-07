@@ -5,12 +5,14 @@
 
       <div class="field-center font-weight-600 row-span-2">
 
-        <div *ngIf="order.history && order.orderID" class="font-1-5em">
-           {{order.orderID}}
+        <div *ngIf="order.history && order.orderID_Temp" class="font-1-5em">
+           {{order?.orderID_Temp}} 
         </div>
-        <div *ngIf="!order.history || !order.orderID" class="font-1-5em">
+
+        <div *ngIf="!order.history || !order.orderID_Temp" class="font-1-5em">
           {{ order.id }}
         </div>
+        
         <ng-container [ngTemplateOutlet]="disableEditView" ></ng-container>
 
         <div class="margin-top:3px" class="font-1-3em">

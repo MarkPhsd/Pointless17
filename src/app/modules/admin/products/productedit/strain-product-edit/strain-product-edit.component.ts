@@ -251,7 +251,8 @@ export class StrainProductEditComponent implements OnInit {
        tareValue: [],
        pieceWeight: [],
        unitTypeSelections: [],
-       limitMultiplier: []
+       limitMultiplier: [],
+       requiresIDCheck: [],
     })
 
 

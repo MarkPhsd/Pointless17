@@ -226,7 +226,8 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
 
   selectItem(setting) {
 
-    if (this.itemWithAction.action == 3 || this.itemWithAction.typeOfAction.toLowerCase() === 'VoidOrder'.toLowerCase()) {
+    if (this.itemWithAction.action == 3 || 
+        this.itemWithAction.typeOfAction.toLowerCase() === 'VoidOrder'.toLowerCase()) {
       this.actionResponse$ = this.voidOrder(setting)
       return
     }

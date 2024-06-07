@@ -393,6 +393,8 @@ import { CatalogScheduleInfoListComponent } from '../modules/admin/products/pric
 import { PayAPIComponent } from '../modules/payment-processing/pay-api/pay-api.component';
 import { PayAPIFrameComponent } from '../modules/payment-processing/pay-apiiframe/pay-apiiframe.component';
 import { DcDirectSettingsComponent } from '../modules/admin/settings/pos-list/pos-edit-settings/dc-direct-settings/dc-direct-settings.component';
+import { EmployeeSelectPopUpComponent } from '../modules/admin/employees/employee-select-pop-up/employee-select-pop-up.component';
+import { LabelSelectPrinterComponent } from '../modules/admin/products/label-select-printer/label-select-printer.component';
 
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
@@ -575,6 +577,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     EmployeeListComponent,
     EmployeeMetrcKeyEntryComponent,
     ExportDataComponent,
+    EmployeeSelectPopUpComponent,
     // FacilitiesListComponent,
     // FlatRateEditComponent,
     // FlatRateListComponent,
@@ -729,6 +732,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ProducteditComponent,
     ProductlistviewComponent,
     ProductInfoPanelComponent,
+    LabelSelectPrinterComponent,
 
     PromptGroupsComponent,
     PromptGroupEditComponent,

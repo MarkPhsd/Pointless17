@@ -1,18 +1,14 @@
 import { Component, OnInit} from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { Observable, Subject  } from 'rxjs';
+import { Observable, Subject, of, switchMap  } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { GridApi } from 'ag-grid-community';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MetrcFacilitiesService } from 'src/app/_services/metrc/metrc-facilities.service';
 import { METRCFacilities }  from 'src/app/_interfaces/metrcs/facilities';
 import { ISite } from 'src/app/_interfaces';
-// import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-facilities-list',
@@ -56,6 +52,7 @@ export class FacilitiesListComponent {
   siteID  : number;
   site   : ISite;
   sites: ISite[];
+  action$: Observable<METRCFacilities[]>;
 
   constructor(  private _snackBar: MatSnackBar,
                 private router: Router,
@@ -67,32 +64,8 @@ export class FacilitiesListComponent {
   {
     this.searchItems()
     this.initGridResults()
-    this.siteService.getSites().subscribe(data => {
-      this.sites = data;
-    })
-    this.initForm();
-  }
-
-  initForm(){
-    const site = this.siteService.getAssignedSite()
-    this.searchForm =  this.fb.group( {
-      selectedSiteID: [site.id]
-    })
-  }
-
-  getAssignedSiteSelection(event) {
-    if (event) {
-      this.siteID = event.id
-      this.site = event;
-      this.assignSite(event);
-    }
-  }
-
-  assignSite(id: number){
-    if (!id) {return}
-    this.siteService.getSite(id).subscribe( data => {
-      this.site = data
-    })
+    this.site = this.siteService.getAssignedSite();
+   
   }
 
   initGridResults() {
@@ -150,24 +123,26 @@ export class FacilitiesListComponent {
   }
 
   import() {
-
-    const site = this.getValidSite()
-    // console.log('site', site)
-    if (!site) { return }
-
+     const site = this.siteService.getAssignedSite()
+     console.log('site',site)
+    if (!site?.id) { 
+      this.siteService.notify('No site identified', 'close', 3000)
+      return 
+    }
+    if (!site?.metrcURL) { 
+      this.siteService.notify('No site url identified.', 'close', 3000)
+      return 
+    }
+     
     const mETRCFacilities$ =  this.metrcFacilitiesService.importFacilities(site)
-
     this.importing = true;
-
-    mETRCFacilities$.subscribe(
-      {next: data =>{
+    this.action$ = mETRCFacilities$.pipe(
+      switchMap(data => { 
         this.searchItems();
         this.importing = false;
-       }, error: err => {
-        this.importing = false
-      }
-    })
-
+        return of(data)
+      })
+    )
   }
 
   getValidSite() {
@@ -180,14 +155,11 @@ export class FacilitiesListComponent {
   }
 
   searchItems() {
-    if (!this.site) {
-      this.site = this.siteService.getAssignedSite()
-    }
-    if (this.site) {
-      this.metrcFacilitiesService.getFacilities(this.site).subscribe(data =>  {
-        this.mETRCFacilities = data;
-      })
-    }
+    this.site = this.siteService.getAssignedSite()
+    this.metrcFacilitiesService.getFacilities(this.site).subscribe(data =>  {
+      this.mETRCFacilities = data;
+    })
+  
   }
 
   onSearchgridReady({ api } : {api: GridApi}) {
@@ -207,11 +179,6 @@ export class FacilitiesListComponent {
   }
 
   getRowData():  Observable<METRCFacilities[]>  {
-    // const packageFilter = {} as PackageFilter
-    // packageFilter.pageNumber =1
-    // packageFilter.pageSize = 100
-    // packageFilter.hasImported = false
-
     return this.metrcFacilitiesService.getFacilities(this.siteService.getAssignedSite())
   }
 

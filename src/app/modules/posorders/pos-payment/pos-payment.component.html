@@ -165,6 +165,7 @@
                     <ng-container [ngTemplateOutlet]="payApiView"></ng-container>
                     <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
                     <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
+                    <ng-container [ngTemplateOutlet]="disEMVCardManualButton"></ng-container>
                     <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
                     <ng-container [ngTemplateOutlet]="paypalButton"></ng-container>
                     <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
@@ -614,6 +615,24 @@
   </dsi-emvcard-pay-btn>
 </ng-template>
 
+<ng-template #disEMVCardManualButton>
+  <dsi-emvcard-pay-btn
+      *ngIf="(isApp || isStaff) && devicename"
+      [autoPay]="true"
+      [manual]="true"
+      [preAuth]="false"
+      [order]="order"
+      [devicename]="devicename"
+      [uiTransactions]="uiTransactions"
+      [platForm]="platForm"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [stripeTipValue]="stripeTipValue"
+      [paymentAmount]="paymentAmount"
+      (setStep) ="setStep(1)">
+    <mat-icon color="warn">credit_card</mat-icon>
+    <br> Manual Card
+  </dsi-emvcard-pay-btn>
+</ng-template>
 
 <ng-template #payApiView>
   <app-pay-api

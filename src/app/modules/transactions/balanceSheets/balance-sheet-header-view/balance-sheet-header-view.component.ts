@@ -130,7 +130,10 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
       searchModel.reportRunID = this.sheet.id;
       this.pOSPaymentService.updateSearchModel(searchModel)
       this.router.navigate(['/pos-payments'])
-      this._bottomSheet.dismiss()
+      try {
+        this._bottomSheet.dismiss()
+      } catch (error) {
+      }
     }
   }
 

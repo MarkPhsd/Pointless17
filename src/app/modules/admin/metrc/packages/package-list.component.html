@@ -1,3 +1,5 @@
+<div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="(sites$ | async) as action"></div>
 <div
       class="grid-container"
       [formGroup]="searchForm"
@@ -30,11 +32,13 @@
                 [hideClear]           = "true"
                 [inputForm]           = "searchForm"
                 [fieldName]           = "'selectedSiteID'"
-                [list$]               = "sites$"
+                [list]               = "sites"
+                [useID]               = "true"
                 (outputItem)          = "refreshFilters($event)">
            Choose Site
         </app-mat-select>
       </div>
+      <!-- {{searchForm.value | json}} -->
 
       <div class="grid-item site-select"
            *ngIf="site && facilities && !loadingFacilities">
@@ -64,8 +68,8 @@
            *ngIf="site && loadingFacilities">
            ....loading facilities</div>
 
-      <div class="grid-item"
-           *ngIf="site && facilityNumber" >
+      <!-- <div class="grid-item"
+           *ngIf="site && facilityNumber" style="width:50px" >
           <app-value-fields
               [fieldsClass]="'fields-small'"
               [fieldType]="'number'"
@@ -83,7 +87,24 @@
                 <mat-icon>download</mat-icon>
                 Packages
         </button>
-      </div>
+      </div> -->
+
+      <mat-card *ngIf="(site && facilityNumber) && !importing" >  
+
+        <mat-date-range
+            [inputForm] = "scheduleDateForm" >
+            Range
+        </mat-date-range>
+
+        <div class="grid-item">
+          <button mat-raised-button
+                  color="primary"
+                  (click)="importActiveBySearch()">
+                  <mat-icon>download</mat-icon>
+               Packages
+          </button>
+        </div>
+      </mat-card>
 
       <div class="grid-item"
             *ngIf="(site && facilityNumber) && !importing " >
@@ -91,7 +112,7 @@
                 color="warn"
                 (click)="resetImportActivePackages()">
                 <mat-icon>download</mat-icon>
-                Reset & Download
+                Reset <br> Download  Entire List
         </button>
       </div>
 
@@ -127,9 +148,21 @@
                 <mat-icon>refresh</mat-icon>
         </button>
       </div>
-
+      <div class="grid-item">
+        <button mat-button
+                mat-button
+                color="primary"
+                (click)="reset()">
+              Reset
+        </button>
+      </div>
   </div>
 </div>
+<mat-card
+  *ngIf="errorMessage || message">
+  <div><mat-icon color="warn">alert</mat-icon>{{errorMessage}}</div>
+  <div><mat-icon color="accent">information</mat-icon>{{message}}</div>
+</mat-card>
 
 <mat-divider></mat-divider>
 

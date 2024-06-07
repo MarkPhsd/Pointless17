@@ -68,7 +68,7 @@ export class UserSwitchingService implements  OnDestroy {
 
   //enter or chain observables here.
   promptBalanceSheet(user: IUser): Observable<any> {
-    this.setUserInfo(user, user.password)
+    this.setUserInfo(user, user?.password)
     return this.sheetMethodsService.promptBalanceSheet(user)
   }
 
@@ -134,8 +134,6 @@ export class UserSwitchingService implements  OnDestroy {
     return true
   }
 
-
-
   getUserTypeAuthorizations(id: number) {
     const site = this.siteService.getAssignedSite()
     return this.clientTypeService.getClientType(site, id).pipe(
@@ -181,7 +179,13 @@ export class UserSwitchingService implements  OnDestroy {
   authenticate(userLogin: userLogin): Observable<IUser> {
     const apiUrl =  this.appInitService.apiBaseUrl()
     const url = `${apiUrl}/users/authenticate`
-    return this.http.post<any>(url, userLogin )
+    return this.http.post<any>(url, userLogin ).pipe(switchMap(data => { 
+      // console.log('data', data)
+      if (data?.errorMessage) { 
+        this.siteService.notify(`${data?.message} ${data?.errorMessage}`, 'Close', 10000, 'red')
+      }
+      return of(data)
+    }))
   }
 
   userAutFailed(user) : IUserProfile {
@@ -207,12 +211,12 @@ export class UserSwitchingService implements  OnDestroy {
     const site = this.siteService.getAssignedSite();
     const userLogin = { userName, password };
     const timeOut = 3000;
-
+    this.authenticationService.authenticationInProgress = true;
     // Authentication stream
     let auth$ = this.authenticate(userLogin).pipe(
       concatMap(user => {
-        if (!user || user.message === 'failed') {
-          console.log('Authentication failed:', user?.message);
+        if (!user || (user.message === 'failed' || user.errorMessage) ) {
+          this.authenticationService.authenticationInProgress = false;
           return of(this.userAutFailed(user));
         }
         user.message = 'success';
@@ -226,7 +230,6 @@ export class UserSwitchingService implements  OnDestroy {
     let updateAuth$ = auth$.pipe(
       concatMap(data => {
         if (!data || (data.errorMessage != undefined && data.errorMessage != null)) {
-          console.log('Update Authorization:', data, data.message, data.errorMessage);
           return of(this.userAutFailed(data));
         }
         this.authenticationService.updateUserAuths(
@@ -240,15 +243,11 @@ export class UserSwitchingService implements  OnDestroy {
     // Handle balance sheet or pass through user data
     let balanceSheet$ = updateAuth$.pipe(
       concatMap(user => {
-
-        // console.log(user?.errorMessage == null)
         if (user && user?.errorMessage !== null) {
-          // console.log('Update Auths:', user);
+          this.authenticationService.authenticationInProgress = false;
           return of(this.userAutFailed(user));
         }
-
         if (clockInOnly) return of(user);
-
         return this.platformService.isApp() ? this.promptBalanceSheet(user) : of(user);
       })
     );
@@ -257,7 +256,7 @@ export class UserSwitchingService implements  OnDestroy {
     let result$ = balanceSheet$.pipe(
       concatMap(data => {
         if (!data || data.message === 'failed') {
-          // console.log('Final Data Check Failed:', data);
+          this.authenticationService.authenticationInProgress = false;
           return of(this.userAutFailed(data));
         }
         return of(data);

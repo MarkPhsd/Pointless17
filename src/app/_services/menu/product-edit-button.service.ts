@@ -55,6 +55,7 @@ import { IInventoryAssignment, InventoryAssignmentService } from '../inventory/i
 import { AddInventoryItemComponent } from 'src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component';
 import { DCAPTransactionComponent } from 'src/app/modules/dsiEMV/Dcap/dcaptransaction/dcaptransaction.component';
 import { PosOrderEditorComponent } from 'src/app/modules/posorders/pos-order/pos-order-editor/pos-order-editor.component';
+import { EmployeeSelectPopUpComponent } from 'src/app/modules/admin/employees/employee-select-pop-up/employee-select-pop-up.component';
 
 @Injectable({
   providedIn: 'root'
@@ -76,6 +77,23 @@ export class ProductEditButtonService {
       this.openProductEditor(0, productTypeID)
     }
   }
+
+  selectEmployee(selectedItems: any[]): Observable<typeof dialogRef> {
+
+    let dialogRef: any;
+    const site = this.siteService.getAssignedSite();
+
+    dialogRef = this.dialog.open(EmployeeSelectPopUpComponent,
+      { width:        '500px',
+        minWidth:     '500px',
+        height:       '550px',
+        minHeight:    '550px',
+        data   : selectedItems
+      },
+    )
+    return dialogRef;
+  }
+
 
   editTypes(selectedItems: any[]): Observable<typeof dialogRef> {
 

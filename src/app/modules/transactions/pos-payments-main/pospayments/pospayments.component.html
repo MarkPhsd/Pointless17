@@ -34,17 +34,18 @@
 </div>
 
 <ng-template #summaryView>
-  <div *ngIf="(summary$ | async) as items" style="margin-left:10px;font-weight:500;">
-    # {{items?.paging?.recordCount}} | Total: {{items?.summary?.amountPaid | currency}}
+ 
+  <div *ngIf="summary as items" style="margin-left:10px;font-weight:500;">
+    # {{recordCount}} | Total: {{items?.amountPaid | currency}}
   </div>
 </ng-template>
+
 <ng-template #sortSelectors>
   <app-sort-selectors
     (outPutSort)="setSortData($event)"
     [searchType]="'payment'"
     [sortByEmployee]="true"
     [sortByService]="true"
-    [sortByAmount]="true"
-    >
+    [sortByAmount]="true"  >
   </app-sort-selectors>
 </ng-template>

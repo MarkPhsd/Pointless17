@@ -428,10 +428,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       if (this.order?.serviceTypeID != data?.serviceTypeID) {
         this.order = data
         this.initPurchaseOrderOption(this.order?.serviceTypeID);
-      } else { 
+      } else {
         this.order = data
       }
- 
+
       this.canRemoveClient = true;
 
       if (this.order && this.order.posOrderItems && this.order.posOrderItems.length > 0) {
@@ -514,7 +514,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
           }
 
           if (data  && data.filterType) {
-            if ( data?.filterType == 1 ||  data.filterType == -1 || 
+            if ( data?.filterType == 1 ||  data.filterType == -1 ||
                  data?.filterType == 2 || data?.filterType == 3 ) {
               this.purchaseOrderEnabled = true
               this.listView = true;
@@ -776,8 +776,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   getDeviceInfo() {
     const devicename = localStorage.getItem('devicename')
     if (devicename && this.isApp) {
-      
-      if (!this.posDevice) { 
+
+      if (this.posDevice) {
         this.enableExitLabel = this.posDevice?.enableExitLabel;
         return;
       }
@@ -797,6 +797,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       ))
     }
   }
+
 
 
   initAuthorization() {

@@ -86,9 +86,18 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   }
 
   get cashDiscount() {
-    if (this.ui && this.ui?.dcapDualPriceValue != 0) {
-      return this.roundToPrecision( this.order.total * (1 + +this.ui.dcapDualPriceValue) , 5)
+    const ui = this.ui;
+
+    if (ui?.dcapSurchargeOption == 3) {
+      return this.roundToPrecision( this.order.subTotal * (1 + +ui.dcapDualPriceValue) , 5)
     }
+    if (ui?.dcapSurchargeOption == 2) {
+      return this.roundToPrecision( this.order.subTotal * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (ui?.dcapDualPriceValue == 1 ) {
+      return this.roundToPrecision( this.order.total * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+
     return null
   }
 

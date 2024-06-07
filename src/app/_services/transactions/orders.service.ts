@@ -64,6 +64,17 @@ export class OrdersService {
 
   }
 
+  postPurchaseOrder(site: ISite, name: string, id: number) :  Observable<any> {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "postPurchaseOrder"
+
+    const parameters = `?name=${name}&vendorID=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+  }
 
   applyReconciliation(site: ISite,id: number) :  Observable<any>  {
     const controller = "/POSOrderItems/"

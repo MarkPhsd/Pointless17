@@ -14,7 +14,7 @@ export class UIHomePageSettingsComponent implements OnInit {
 
   backgroundImage: string;
   logoHomePage: string;
-  tinyLogo    :     string;
+  tinyLogo    : string;
   inputForm   : UntypedFormGroup;
   uiSettings  : ISetting;
   uiSettings$ : Observable<ISetting>;

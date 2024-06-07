@@ -75,6 +75,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   uiHome$: Observable<UIHomePageSettings>;
 
   device$ : Observable<ITerminalSettings>; //this.settingService.getDeviceSettings()
+  isElectron: any;
+  androidApp: boolean;
+  smallDevice: boolean;
 
   initSubscriptions() {
     this._user = this.authenticationService.user$.subscribe( user => {
@@ -153,6 +156,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.isApp = this.platformService.isApp()
+    this.isElectron = this.platformService.isAppElectron
+    this.androidApp = this.platformService.androidApp
+
+    if (window.innerWidth > 811) {
+      this.smallDevice = false;
+      this.siteService.smallDevice = false
+    } else {
+      this.smallDevice = true;
+      this.siteService.smallDevice = true
+    }
+
     const item = localStorage.getItem('loginAction')
     this.loginAction = JSON.parse(item)
     this.bucket = await this.awsBucketService.awsBucketURL()
@@ -162,13 +176,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     this.initForm();
     this.initSubscriptions()
+
+
     if (!this.platformService.isApp())  { this.amI21 = true  }
     if ( this.platformService.isApp())  { this.amI21 = false }
     this.refreshTheme();
     this.statusMessage = ''
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.refreshUIHomePageSettings();
-    this.initDevice()
+    this.initDevice();
+
+
   }
 
   initDevice() {
@@ -477,6 +495,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             console.log('user', user?.message)
 
             if (user && user?.errorMessage === 'failed') {
+              this.authenticationService.authenticationInProgress = false;
               this.clearUserSettings()
               this.authenticationService.updateUser(null);
               return of('failed')
@@ -484,6 +503,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
             if (user && user?.message && user?.message.toLowerCase() === 'success') {
               let pass = false
+              this.authenticationService.authenticationInProgress = false;
               if (!this.loginAction) {  this.userSwitchingService.assignCurrentOrder(user) }
               if (this.loginAction?.name === 'setActiveOrder') {
                 this.userSwitchingService.processLogin(user, '/pos-payment')

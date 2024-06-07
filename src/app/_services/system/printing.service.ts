@@ -251,6 +251,39 @@ export class PrintingService {
     }
   }
 
+  refreshInventoryLabelOBS(zplText: string, data: any): Observable<any> {
+
+    const site        =  this.siteService.getAssignedSite();
+    if (!zplText) {return}
+
+    let zpl = {} as  zplLabel;
+    zpl.height = '2' // this.zplSetting.option2;
+    zpl.width  = '3' // this.zplSetting.option3;
+
+    if (!zpl) { return }
+
+    //interpolate the zpl text
+    zplText =  this.renderingService.interpolateText(data, zplText)
+    zpl.text   = zplText
+    // console.log('zpl', zpl.text)
+    if (zpl) {
+      let result = zpl as unknown as any;
+      if (result?.text?.typeError) {
+        console.log('possible error message', result?.text?.typeError)
+        // this.siteService.notify(`Label Format error ${result?.text?.typeError}`, 'Close', 5000, 'red' )
+      }
+      // console.log('zpl', zpl, );
+      // console.log('zpl error', result?.text?.typeError)
+      return  this.labelaryService.postZPL(site, zpl).pipe(
+          switchMap(data => { 
+            console.log('image data', data)
+            return  of(`data:image/jpeg;base64,${data}`)
+        })
+      )
+    }
+    return of(null)
+  }
+
   refreshInventoryLabelObs(zplText: string, data: any): Observable<string> {
     const site        =  this.siteService.getAssignedSite();
     if (!zplText) {return}
@@ -853,7 +886,7 @@ export class PrintingService {
         concatMap( results => {
 
           if (!results) {
-            this.siteService.notify('Lab or producer not found.', 'Close', 10000)
+            // this.siteService.notify('Lab or producer not found.', 'Close', 10000)
             return of(null)
           }
           const data = results[2];

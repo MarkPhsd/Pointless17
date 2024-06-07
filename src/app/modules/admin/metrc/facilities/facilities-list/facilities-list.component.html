@@ -1,3 +1,4 @@
+<div *ngIf="(action$ | async) as action"></div>
 <mat-card>
   <button mat-button
           color="primary"
@@ -15,17 +16,6 @@
       (click)="searchItems()">
       <mat-icon>refresh</mat-icon>Refresh
   </button>
-
-  <div class="grid-item" *ngIf="searchForm && sites" >
-    <app-mat-select
-        (outputItem)= "getAssignedSiteSelection($event)"
-        [list]      = "sites"
-        [fieldName] = "'selectedSiteID'"
-        [inputForm] = "searchForm"
-        >
-        Select Site
-    </app-mat-select>
-  </div>
 
 </mat-card>
 

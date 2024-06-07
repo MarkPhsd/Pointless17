@@ -89,8 +89,9 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     if (this.groupBy === 'type') {   searchModel.groupByType = true;  }
     if (this.removeGiftCard) {  }
 
-    if (this.groupBy === 'void') {
-      searchModel.groupBy = 'void'
+    if (this.groupBy === 'void' || this.groupBy === 'voiditem') {
+      searchModel.groupBy = 'voiditem'
+      searchModel.groupByProduct = true;
       searchModel.groupByType = false;
     }
 
@@ -249,7 +250,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
           this.outputComplete.emit('item setItemGroupAsPrepped')
           console.log('item setItemGroupAsPrepped')
           sales.results.filter(item => {
-            return !item.ID
+            return !item.id
           })
         }
         return of(data)

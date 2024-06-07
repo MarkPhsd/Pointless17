@@ -3,24 +3,30 @@
 
 <div class="parent-container">
 
-  <ng-container [ngTemplateOutlet]="filterViewFull"></ng-container>
-  <ng-container [ngTemplateOutlet]="summaryEnabled"></ng-container>
+  <div class="flex-grid-row-5px" >
+    <div style="width:100%">
+      <ng-container [ngTemplateOutlet]="filterViewFull"></ng-container>
+      <ng-container [ngTemplateOutlet]="summaryEnabled"></ng-container>
 
-  <div [class]="gridcontainer">
-
-    <ng-container [ngTemplateOutlet]="filterViewPhone"></ng-container>
-
-    <div>
-      <div *ngIf="scheduleDateStart && scheduleDateEnd">
-        <ng-container [ngTemplateOutlet]="scheduledItems"></ng-container>
+      <div [class]="gridcontainer">
+        <ng-container [ngTemplateOutlet]="filterViewPhone"></ng-container>
+        <div>
+          <div *ngIf="scheduleDateStart && scheduleDateEnd">
+            <ng-container [ngTemplateOutlet]="scheduledItems"></ng-container>
+          </div>
+          <ng-container [ngTemplateOutlet]="orderSelectedList"></ng-container>
+          <ng-container [ngTemplateOutlet]="orderView || orderCard"></ng-container>
+        </div>
       </div>
-      <ng-container [ngTemplateOutlet]="orderSelectedList"></ng-container>
-      <ng-container [ngTemplateOutlet]="orderView || orderCard"></ng-container>
     </div>
 
-    <ng-container [ngTemplateOutlet]="orderFilterView"></ng-container>
+    <div>
+      <ng-container [ngTemplateOutlet]="orderFilterView"></ng-container>
+    </div>
   </div>
 </div>
+
+
 
 <ng-template #orderFilter>
   <div *ngIf="!smallDevice && !hidePanel"
@@ -29,7 +35,7 @@
       [styleHeight]="styleFilterHeight"
       [disableFilterUpdate]="disableFilterUpdate"
       (outPutHidePanel)="hideFilterPanel($event)">
-  </app-order-filter-panel>
+    </app-order-filter-panel>
   <!-- -->
   </div>
 </ng-template>
@@ -97,7 +103,6 @@
     (selectClient)="selectHouseAccountClient($event)"
   ></house-accounts-list>
 </ng-template>
-
 
 <ng-template #orderPrep>
   <span *ngIf="viewType == 3 && (printerLocations$ | async) as printLocations">
@@ -258,8 +263,7 @@
 </ng-template>
 
 <ng-template #filterMyOrdersView>
-
-  <span *ngIf="!smallDevice && !isUser && userAuthorization.user
+  <span *ngIf="!isUser && userAuthorization.user
                && userAuthorization.user.userPreferences &&
                (uiTransactions && uiTransactions.toggleUserOrAllOrders)"  >
     <button mat-button (click)="toggleShowAllOrders()">

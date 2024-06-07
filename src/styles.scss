@@ -677,6 +677,11 @@ mat-dialog-container {
   width: 175px;
 }
 
+.flex-basic { 
+  display: flex;
+  gap: 20px;
+}
+
 .centered {
   position: fixed;
   top: 50%;
@@ -999,6 +1004,15 @@ mat-dialog-container {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content:flex-end;
+  gap: 20px;
+}
+
+
+.flex-grid-row-space-around {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
   gap: 20px;
 }
 

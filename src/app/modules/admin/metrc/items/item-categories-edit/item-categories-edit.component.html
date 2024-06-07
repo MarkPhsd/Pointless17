@@ -53,7 +53,92 @@
           </mat-form-field>
         </div>
 
-         <app-value-fields
+        <mat-slide-toggle formControlName="requiresStrain">
+            requires Strain
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresItemBrand">
+            requires Item Brand
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresAdministrationMethod">
+            requires Administration Method
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresUnitCbdPercent">
+            requires Unit Cbd Percent
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresUnitCbdContent">
+            requires Unit Cbd Content
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresUnitCbdContentDose">
+            requires Unit Cbd Content Dose
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresUnitThcPercent">
+            requires Unit Thc Percent
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresUnitThcContent">
+            requires Unit Thc Content
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresUnitThcContentDose">
+            requires Unit Thc ContentDose
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresUnitVolume">
+            requires Unit Volume
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresUnitWeight">
+            requires Unit Weight
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresServingSize">
+            requires Serving Size
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresSupplyDurationDays">
+            requires Supply Duration Days
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresNumberOfDoses">
+            requires Number Of Doses
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresIngredients">
+            requires Ingredients
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresDescription">
+            requires Description
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresProductPhotos">
+            requires Product Photos
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresLabelPhotos">
+            requires Label Photos
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="requiresPackagingPhotos">
+            requires Packaging Photos
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="canContainSeeds">
+            can Contain Seeds
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle formControlName="canBeRemediated">
+            can Be Remediated
+        </mat-slide-toggle>
+          
+
+        <!-- <app-value-fields
             [inputForm]="inputForm"
             [fieldName]="'requiresStrain'"
             >
@@ -212,7 +297,7 @@
             [fieldName]="'lastModified'"
             >
             last Modified
-        </app-value-fields>
+        </app-value-fields> -->
       </div>
 
       <mat-divider></mat-divider>

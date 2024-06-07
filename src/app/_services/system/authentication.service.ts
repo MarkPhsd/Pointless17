@@ -43,7 +43,7 @@ export class AuthenticationService {
 
     baseColor = '#F5F5F5'; // Starting color
     gradient: string;
-
+    authenticationInProgress: boolean;
 
     //used for ebay oAuth.
     ebayHeader: any;
@@ -122,17 +122,21 @@ export class AuthenticationService {
         this.siteSerivce._user.next(null)
         return
       }
-
+   
       if (!user.userPreferences) {
         user.userPreferences = {} as UserPreferences;
       }
-      if ( !user.userPreferences?.firstTime_FilterOrderInstruction) {
-         user.userPreferences.firstTime_FilterOrderInstruction = false
-      }
-      if ( !user.userPreferences?.firstTime_notifyShowAllOrders) {
-        user.userPreferences.firstTime_notifyShowAllOrders = false
-      }
 
+        if ( !user.userPreferences?.firstTime_FilterOrderInstruction) {
+           user.userPreferences.firstTime_FilterOrderInstruction = false
+        }
+     
+        if ( !user.userPreferences?.firstTime_notifyShowAllOrders) {
+          user.userPreferences.firstTime_notifyShowAllOrders = false
+        }
+   
+     
+      // console.log('user pref', user, user?.userPreferences)
       this._user.next(user)
       this.siteSerivce._user.next(user)
     }

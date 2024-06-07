@@ -93,7 +93,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   scheduleDateEnd: string;
   showAllOrderInstructions = []  as string[];
   interval;
-  styleFilterHeight: string = 'max-height: 76vh;'
+  styleFilterHeight: string = 'height: calc(100vh - 100px);overflow:hidden'
   // this.uiSettingService.updatePOSDevice(item)
   terminalSettings: ITerminalSettings;
   viewPrep: boolean;
@@ -253,6 +253,8 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
         data =  this.searchModel ;
       }
 
+      
+      // return;
       if (data) {
         this.searchModel = data;
         this.scheduleDateStart= null;
@@ -261,15 +263,23 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
 
         if (this.uiTransactions && !this.uiTransactions.toggleUserOrAllOrders) {
           this.searchModel.employeeID = 0;
+        } 
+
+        if (this.viewType == 3) { 
+          this.searchModel.employeeID = 0;
         }
 
-        if (this.userAuthorization.user) {
-          if (this.userAuthorization.user?.userPreferences?.showAllOrders) {
-            this.searchModel.employeeID =  0
-          } else {
-            this.searchModel.employeeID =  this.userAuthorization.user?.employeeID
-          }
-        }
+        // if (this.userAuthorization.user) {
+        //   if (this.userAuthorization.user?.userPreferences?.showAllOrders) {
+        //     this.searchModel.employeeID =  0
+        //   } else {
+        //     //if its the same as what is set, otherwise we just set it to what it was.
+        //     if (this.searchModel.employeeID == this.userAuthorization.user?.employeeID) { 
+        //       this.searchModel.employeeID =  this.userAuthorization.user?.employeeID
+        //     }
+        //   }
+        // }
+        // console.log('SearchModel', this.searchModel)
 
         if (this.searchModel.scheduleDate_From && this.searchModel.scheduleDate_To) {
           this.scheduleDateStart = this.searchModel.scheduleDate_From;
@@ -644,15 +654,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   }
 
   get orderView() {
-    this.styleFilterHeight = 'max-height: 83vh;overflow:hidden'
-    if (window.innerHeight< 1000) {
-      this.styleFilterHeight = 'max-height: 70vh;overflow:hidden'
-    }
+    this.styleFilterHeight = 'height: calc(100vh - 100px);overflow:hidden'
+
     if (this.viewType == 0 ) {
-      this.styleFilterHeight = 'max-height: 83vh;overflow:hidden'
-      if (window.innerHeight< 1000) {
-        this.styleFilterHeight = 'max-height: 70vh;overflow:hidden'
-      }
       return  this.orderList
     }
     if (this.viewType == 1) {

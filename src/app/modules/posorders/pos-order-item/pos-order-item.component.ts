@@ -79,7 +79,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   @Input() mainPanel      : boolean;
   @Input() wideBar        = false;
   @Input() disableActions = false;
-  @Input() prepScreen     : boolean;
+  @Input() prepScreen     : boolean = false;
   @Input() enableExitLabel : boolean;
   @Input() displayHistoryInfo: boolean;
   @Input() enableItemReOrder  : boolean = false;
@@ -120,7 +120,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   promptOption          : boolean;
   @Input() userAuths    : IUserAuth_Properties;
 
-  bottomSheetOpen       : boolean ;
+  bottomSheetOpen       : boolean = false;
   _bottomSheetOpen      : Subscription;
 
   assignedPOSItems      : PosOrderItem[];
@@ -834,15 +834,10 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   removeDiscount() {
     if (this.orderItem) {
       const site = this.siteService.getAssignedSite();
-      let item$ = this.posOrderItemService.removeItemDiscount(site, this.orderItem, this.menuItem);
-      item$.pipe(
+      this.action$ = this.posOrderItemService.removeItemDiscount(site, this.orderItem, this.menuItem).pipe(
         switchMap(data => {
-          this.orderMethodsService.updateOrderSubscription(data);
-          return of(data)
-      })).pipe(switchMap(data => {
-        return this._refreshOrder() //site, this.orderItem.id, false)
+          return this._refreshOrder() //
       }))
-      this.action$ = item$;
     }
   }
 

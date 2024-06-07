@@ -54,6 +54,23 @@ export class AgGridService {
 
     }
 
+    weekDayCellRendererUSD(params: any) {
+      if (!params || !params.value) {
+        return '';
+      }
+
+      const date = new Date(params.value);
+
+      if (isNaN(date.getTime())) {
+        return '';
+      }
+
+      // Get the weekday name in 3 characters
+      const weekday = date.toLocaleDateString('en-US', { weekday: 'short' });
+
+      return weekday;
+    }
+
     onCellValueChanged({ value }) {
       // console.log(typeof value);
     }

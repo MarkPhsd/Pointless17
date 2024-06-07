@@ -22,13 +22,10 @@
 
 .date-filter-buttton {
   width: 150px;
-  margin: 5px;
+  margin: 3px;
 }
 
-.mat-button-toggle-group {
-  width: 100%;
-  margin-top: 10px;
-}
+
 
 .mat-button-toggle {
   flex: 1 1 100%;
@@ -87,7 +84,7 @@ app-inventory-history-item {
   --gap       : 5px;
   display     : grid;
   gap         : var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
 }
 
 .toggle-selector {
@@ -99,6 +96,11 @@ app-inventory-history-item {
 
 .toggle-view {
   width: 275px;
+}
+
+.mat-button-toggle-group {
+  width: 100%;
+  margin-top: 2px;
 }
 
 .package-title {

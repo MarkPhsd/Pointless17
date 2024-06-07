@@ -6,7 +6,6 @@
   // other styling here
 }
 
-
 .mat-card {
   padding: 3px;
   object-fit: cover;
@@ -14,12 +13,20 @@
 }
 
 .mat-card:hover {
+
   transform: scale(1.03);
+
+  @include for-phone-only {
+    transform: scale(1);
+  }
 }
 
 .mat-card:active {
   box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
   transform: scale(1.03);
+  @include for-phone-only {
+    transform: scale(1);
+  }
 }
 
 .mat-card-row {
@@ -42,15 +49,13 @@
 .container {
   position: relative;
   height: 100%;
-  // min-height: 125px;
-  // height: 135px;
   overflow: hidden;
 }
 
 .container-mobile  {
   min-height: 125px;
   @include for-phone-only {
-    min-height: 125px;
+    min-height: 95px;
     height: 95px;
   }
 }
@@ -64,8 +69,8 @@
 .container-app  {
   height: 135px;
   @include for-phone-only {
-    height    : 100px;
-    min-height: 100px;
+    height    : 65px;
+    min-height: 65px;
   }
 }
 
@@ -102,7 +107,6 @@
   overflow  : hidden;
 }
 
-//  style="max-width:75px;max-height:2em;"
 .header-category-title {
   font-size: 1em;
   font-weight: 450;
@@ -182,12 +186,18 @@
  }
 
 .product-image  {
-  object-fit: cover;
+  object-fit  :   cover;
   border-radius: 15px;
   width       : 100%;
   white-space : normal;
   overflow    : hidden;
-  max-height: 85px;
+  max-height  : 85px;
+
+  @include for-phone-only {
+    font-size   : 1.3em;
+    max-height  : 65px;
+    height:65px;
+  }
 }
 
 .product-name {
@@ -207,7 +217,8 @@
     font-size   : .9em;
     text-align  : center;
     white-space : nowrap;
-    overflow: hidden;
+
+    overflow    : hidden;
     text-overflow: ellipsis;
     text-transform: capitalize;
   }
@@ -301,7 +312,10 @@
   margin-bottom: 3px;
   @supports (-webkit-touch-callout: none) {
     font-size: .8em;
- }
+  }
+  @include for-phone-only {
+    margin-top: -3px;
+  }
 }
 
 .uom {
@@ -335,10 +349,16 @@ button  {
 
 .category-img:hover {
   transform: scale(1.02);
+  @include for-phone-only {
+    transform: scale(1);
+  }
 }
 
 .category-img:active:hover {
   transform: scale(1.07);
+  @include for-phone-only {
+    transform: scale(1);
+  }
 }
 
 .description-text  {

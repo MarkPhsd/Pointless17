@@ -247,6 +247,7 @@ import { MenuCardCategoriesComponent } from '../modules/menu/categories/menu-car
 import { SortSelectorsComponent } from './widgets/sort-selectors/sort-selectors.component';
 import { SetTokenComponent } from '../modules/admin/settings/set-token/set-token.component';
 import { DCAPResponseMessageComponent } from '../modules/dsiEMV/Dcap/dcaptransaction/dcapresponse-message/dcapresponse-message.component';
+import { EmployeesOnClockListComponent } from '../modules/admin/employeeClockAdmin/employees-on-clock-list/employees-on-clock-list.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -318,7 +319,7 @@ import { DCAPResponseMessageComponent } from '../modules/dsiEMV/Dcap/dcaptransac
     EmailSettingsComponent,
     EmailEntryComponent,
     EmployeeClockListComponent,
-    EmployeeClockListComponent,
+    EmployeesOnClockListComponent,
     EmployeeClockEditComponent,
     EmployeeClockFilterComponent,
     ExitLabelSelectionComponent,
@@ -596,6 +597,7 @@ import { DCAPResponseMessageComponent } from '../modules/dsiEMV/Dcap/dcaptransac
     EditButtonsStandardComponent,
     EmployeeClockListComponent,
     EmployeeClockEditComponent,
+    EmployeesOnClockListComponent,
     EmployeeClockFilterComponent,
     ImageGalleryComponent,
     FacilitySearchSelectorComponent,

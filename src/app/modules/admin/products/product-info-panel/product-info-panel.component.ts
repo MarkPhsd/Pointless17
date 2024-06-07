@@ -127,13 +127,7 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
     this.productForm  = this.fbProductsService.initForm(this.productForm)
   }
 
-  getLastPrinterName(): string {
-    return this.printingService.getLastLabelPrinter()
-  }
 
-  setLastPrinterName(name: string) {
-    this.printingService.setLastLabelPrinterName(name)
-  }
 
   ngOnInit() {
     this.toggleLabelEvents = "info"
@@ -145,9 +139,7 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
       })
     }
 
-    this.electronEnabled =  this.electronService.isElectronApp
-    this.printerName = this.getLastPrinterName();
-    this.labelID = this.printingService.getLastLabelUsed();
+
   }
 
   initForm() {
@@ -165,9 +157,7 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
             this.saveProduct();
       });
 
-      this.printForm = this.fb.group({
-        printQuantity: [this.product.productCount]
-      } )
+  
     }
   }
 
@@ -200,24 +190,6 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
     }
   }
 
-  printLegal() {
-  }
-
-  printSerial() {
-  }
-
-  printSku() {
-    // const item =  this.fakeDataService.getInventoryItemTestData();
-    // const printString = this.renderingService.interpolateText(item, zplString )
-    if (this.labelSetting && this.product) {
-      const content = this.renderingService.interpolateText(this.product, this.labelSetting.text)
-      //then get the quantity from this.printQuantity
-      if(this.printQuantity == null) { this.printQuantity == 1}
-      for (let i = 0; i < this.printQuantity; i++) {
-         this.printingService.printLabelElectron(content, this.printerName)
-      }
-    }
-  }
 
   adjustmentNote(){
     // get the id if there is one
@@ -241,19 +213,27 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
     }
   }
 
-  getPrinterName(name: string) {
-    this.printerName = name
-    this.setLastPrinterName(name)
-  }
+  // getPrinterName(name: string) {
+  //   this.printerName = name
+  //   this.setLastPrinterName(name)
+  // }
 
-  getLabelSetting(labelSetting: ISetting)  {
-    this.labelSetting = labelSetting;
-    this.setLastlabelUsed(this.labelID)
-  }
+  // getLabelSetting(labelSetting: ISetting)  {
+  //   this.labelSetting = labelSetting;
+  //   this.setLastlabelUsed(this.labelID)
+  // }
 
-  setLastlabelUsed(id: number) {
-    this.printingService.setLastLabelUsed(this.labelSetting.id)
-  }
+  // setLastlabelUsed(id: number) {
+  //   this.printingService.setLastLabelUsed(this.labelSetting.id)
+  // }
+
+  // getLastPrinterName(): string {
+  //   return this.printingService.getLastLabelPrinter()
+  // }
+
+  // setLastPrinterName(name: string) {
+  //   this.printingService.setLastLabelPrinterName(name)
+  // }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

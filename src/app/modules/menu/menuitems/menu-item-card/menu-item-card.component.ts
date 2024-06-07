@@ -93,7 +93,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   imageContainerClass = 'image-container';
 
   get priceViewBol() {
-    if (this.isProduct) {
+    if (this.isProduct && ((!this.smallDevice && this.androidApp) || !this.androidApp)) {
       return true
     }
     return  false

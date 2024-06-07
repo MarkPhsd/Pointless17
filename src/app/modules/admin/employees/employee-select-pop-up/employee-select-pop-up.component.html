@@ -1,0 +1,31 @@
+<mat-card>
+
+  <mat-card-actions>
+    <div class="flex-grid-row-end">
+      <div>
+        <button mat-raised-button color="warn" (click)="close()">
+          <mat-icon>close</mat-icon>Close
+        </button>
+      </div>
+  
+      <div>
+        <button mat-raised-button color="accent" (click)="clearSetting()">
+          <mat-icon>clear</mat-icon>Clear
+        </button>
+      </div>
+    </div>
+  </mat-card-actions>
+  <h4>Employee List</h4>
+
+  <app-mat-toggle-selector
+      [id]      ="employeeID"
+      [list]    ="list"
+      [toggleDimensions]="''"
+      [textLength]="40"
+      [toggleStyleHeight]="''"
+      (outPutItem)="setEmployee($event)">
+    Employee
+  </app-mat-toggle-selector>
+
+
+</mat-card>

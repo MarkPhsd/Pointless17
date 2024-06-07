@@ -51,6 +51,11 @@ export class ErrorInterceptor implements HttpInterceptor {
               return;
             }
             if (err.status === 401) {
+              //if this is on the current api then we want to log out
+              if (this.isLocalAPI(request)) { 
+                this.authenticationSerivce.logout(false);
+              }
+              
               if (this.getdebugOnThisDevice()) {
                 this.notifyEvent(errorMessage, 'Close.' );
               }
@@ -75,6 +80,16 @@ export class ErrorInterceptor implements HttpInterceptor {
       }))
     }
 
+
+    isLocalAPI(request) { 
+      const urlA = localStorage.getItem("site.url")
+      const urlB = localStorage.getItem('storedApiUrl')
+
+      const url = request.url;
+      if (url === urlA || url === urlB ) { 
+        return true;
+      }
+    }
     notifyEvent(message: string, action: string) {
       this._snackBar.open(message, action, {
         duration: 100000,

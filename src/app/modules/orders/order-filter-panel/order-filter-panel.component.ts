@@ -27,6 +27,7 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { EmployeeSearchModel, EmployeeService } from 'src/app/_services/people/employee-service.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 const { Keyboard } = Plugins;
 
 @Component({
@@ -47,7 +48,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
 
-  @Input() styleHeight = ''
+  @Input() styleHeight = 'height: calc(100vh - 100px);overflow:hidden'
   printingEnabled    : boolean;
   electronEnabled    : boolean;
   printerName        : string;
@@ -104,6 +105,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   employeeID: number;
   serviceTypeID: any;
 
+  dialogRef: any;
+
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
 
@@ -151,6 +154,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       }
     )
   )
+  
   setScrollBarColor(color: string) {
     if (!color) {    color = '#6475ac' }
     const css = this.authService.getAppToolBarStyle(color, 25)
@@ -212,8 +216,16 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   initSearchSubscriber() {
     try {
       this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
+        // console.log('initSearchSubscriber', data)
+        if (!data) { 
+          this.initFilter(data)
+          return;
+        }
+        
+   
         this.searchModel = data
         this.searchOrderHistory = false;
+
         if (data && data.searchOrderHistory) {
           this.searchOrderHistory = true;
         }
@@ -231,7 +243,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
           }
         }
 
-        this.initFilter(data)
+        // 
       })
     } catch (error) {
     }
@@ -278,10 +290,11 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       private uISettingsService: UISettingsService,
       public  orderMethodsService: OrderMethodsService,
       private platformService: PlatformService,
+      private productEditButtonService: ProductEditButtonService,
   )
   {
 
-    console.log('this.disableFilterUpdate', this.disableFilterUpdate)
+    // console.log('this.disableFilterUpdate', this.disableFilterUpdate)
     if (this.disableFilterUpdate) { return }
 
     this.initSubscriptions();
@@ -344,7 +357,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     }
     const divTop = this.toggleGroup.nativeElement.getBoundingClientRect().top + 60 ;
     const viewportBottom = window.innerHeight;
-    const remainingHeight = viewportBottom - divTop;
+    const remainingHeight = viewportBottom - divTop - 25;
     this.selectorEmpDiv.nativeElement.style.maxHeight  = `${ remainingHeight }px`;
     this.selectorDiv.nativeElement.style.maxHeight  = `${ remainingHeight }px`;
     this.selectorDivHeight =   remainingHeight
@@ -423,6 +436,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   resetSearch() {
+    console.log('reset search')
     this.initSearchFilter();
     this.initSubscriptions();
     this.disableFilterUpdate = false
@@ -434,7 +448,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.toggleOpenClosedAll         = "1"
     this.toggleTypeEmployee          = "0"
 
-    this.employeeID = 0;
+    // this.employeeID = 0;
     this.serviceTypeID = 0;
     this.value = ''
     if (this.user.roles==='user'){  this.value = '1';  }
@@ -455,50 +469,91 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   refreshEmployees(){
     const site           = this.siteService.getAssignedSite()
-    if (!site) { return}
-    if (!this.isStaff) { return }
-    this.employees$      = this.employeeService.getAllActiveEmployees(site)
+    this.employees$      = this.employeeService.getAllActiveEmployees(site).pipe(switchMap(data => {
+        this.dialogRef = this.productEditButtonService.selectEmployee(data)
+        this.dialogRef.afterClosed().subscribe(result => {
+         
+          if (result) {
+            this.setEmployeeValue(result)
+          }
+        });
+      return of(data)
+    }))
   }
 
   refreshAllEmployees(){
     const site           = this.siteService.getAssignedSite()
-    if (!site) { return}
-    if (!this.isAuthorized) { return }
-    this.employees$      = this.employeeService.getEmployeeBySearchListOnly(site)
+    const employees$      = this.employeeService.getEmployeeBySearchListOnly(site)
+    this.employees$      = employees$.pipe(switchMap(data => {
+
+      console.log('data', data)
+        this.dialogRef = this.productEditButtonService.selectEmployee(data)
+        this.dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.setEmployeeValue(result)
+          }
+        });
+      return of(data)
+    }))
+
+  }
+
+  setEmployeeValue(event) {
+    this.employeeID = event?.id;
+    this.searchModel.employeeID = event?.id;
+    this.searchModel.employeeName =  event?.employeeName ? event?.employeeName : (event?.name || '');
+    this.uiTransactions.toggleUserOrAllOrders = true
+    if (this.userAuthorization.user.userPreferences) { 
+    }
+    const model = JSON.parse(JSON.stringify(this.searchModel)) as IPOSOrderSearchModel; 
+
+    this.updateOrderSearch(model)
   }
 
   refreshOnClockEmployees(){
     const site           = this.siteService.getAssignedSite()
-    if (!site) { return}
-    if (!this.isAuthorized) { return }
-    this.employees$      = this.employeeService.listEmployeesOnClock(site)
+    const employees$      = this.employeeService.listEmployeesOnClock(site)
+    this.employees$      = employees$.pipe(switchMap(data => {
+        this.dialogRef = this.productEditButtonService.selectEmployee(data)
+        this.dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.setEmployeeValue(result)
+          }
+        });
+      return of(data)
+    }))
+
   }
 
   refreshTerminatedEmployees(){
-    const site           = this.siteService.getAssignedSite()
-    if (!site) { return}
-    if (!this.isAuthorized) { return }
-
-    let search = {}  as EmployeeSearchModel;
+    const site        = this.siteService.getAssignedSite()
+    let search        = {}  as EmployeeSearchModel;
     search.terminated = 2
     this.employees$      = this.employeeService.getEmployeeBySearch(site, search).pipe(switchMap(data => {
-      const item = data.results
-      let list = item
-      if (list.length > 0) {
-        list.forEach(data => {
-          data.name = `${data.lastName}, ${data.firstName}`
-        })
-        list = list.sort((a, b) => {
-          if (a.name < b.name) {
-              return -1;
-          }
-          if (a.name > b.name) {
-              return 1;
-          }
-          return 0;
-      });
+        const item = data.results
+        let list = item
+        if (list.length > 0) {
+          list.forEach(data => {
+            data.name = `${data.lastName}, ${data.firstName}`
+          })
+          list = list.sort((a, b) => {
+            if (a.name < b.name) {
+                return -1;
+            }
+            if (a.name > b.name) {
+                return 1;
+            }
+            return 0;
+        });
 
       }
+      // console.log('list', list)
+      this.dialogRef = this.productEditButtonService.selectEmployee(list)
+      this.dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.setEmployeeValue(result)
+        }
+      });
       return of(list)
     }))
   }
@@ -509,11 +564,20 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       return;
     }
     if (value == 2) {
+      if (!this.isAuthorized) {
+        this.siteService.notify('Not Authorized','close', 3000)
+        return
+      }
       this.refreshOnClockEmployees()
     }
     if (value == 3) {
+      if (!this.isAuthorized) {
+        this.siteService.notify('Not Authorized','close', 3000)
+        return
+      }
       this.refreshTerminatedEmployees()
     }
+
   }
 
   updateOrderSearch(searchModel: IPOSOrderSearchModel) {
@@ -523,6 +587,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
   //check
   initFilter(search: IPOSOrderSearchModel) {
+    // console.log('initFilter search', search)
     if (!search) {
       search = {} as IPOSOrderSearchModel
       search.suspendedOrder       = 0
@@ -531,7 +596,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       this.searchModel = search;
     }
 
-    this.employeeID = 0;
+    // this.employeeID = 0;
     this.serviceTypeID = 0;
     if (this.uiTransactions && !this.uiTransactions.toggleUserOrAllOrders) {
       this.searchModel.employeeID = 0;
@@ -576,17 +641,22 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       item.printLocation      = this.printLocation;
       item.prepStatus         = 1;
     }
+
     this.orderMethodsService.orderSearchEmployeeID = this.employeeID
     item.employeeID = this.employeeID;
-    item.employeeID = this.serviceTypeID;
+    // item.employeeID = this.serviceTypeID;
+
     this.updateOrderSearch( JSON.parse(JSON.stringify(item)));
     return of('')
   }
 
   refreshOrderSearch(searchPhrase) {
     this.searchModel = {} as IPOSOrderSearchModel;
-    this.searchModel.serviceTypeID = 0
-    this.searchModel.employeeID    = 0
+
+    console.log('refreshOrderSearch')
+    // this.searchModel.serviceTypeID = 0
+    // this.searchModel.employeeID    = 0
+
     this.searchModel.orderID   = parseInt(searchPhrase)
     const search               = this.searchModel;
     search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
@@ -606,13 +676,13 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.refreshSearch()
   }
 
-  setEmployee(event) {
-    if (!event) { return }
-    this.employeeID = event.id;
-    this.searchModel.employeeID = event.id
-    console.log('employeeID', this.employeeID)
-    this.refreshSearch()
-  }
+  // setEmployee(event) {
+  //   if (!event) { return }
+  //   // this.employeeID = event.id;
+  //   this.searchModel.employeeID = event.id
+  //   console.log('employeeID', this.employeeID)
+  //   this.refreshSearch()
+  // }
 
   getPrinterName(){}
 
@@ -698,7 +768,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     }
 
     this.scheduleDateForm = this.getFormRangeInitial(this.scheduleDateForm)
-    console.log('schedule value', this.scheduleDateForm.value)
+    // console.log('schedule value', this.scheduleDateForm.value)
     this.searchModel.scheduleDate_From = this.scheduleDateForm.get("start").value;
     this.searchModel.scheduleDate_To   = this.scheduleDateForm.get("end").value;
     this.subscribeToScheduledDatePicker()

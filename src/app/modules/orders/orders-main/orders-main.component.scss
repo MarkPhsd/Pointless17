@@ -52,15 +52,15 @@ toggle-button {
 }
 
 .grid-container {
-  --gap: 10px;
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns:  auto 335px;
-  overflow: hidden;
-  position: relative;
-  @media (max-width: 815px) {
-    grid-template-columns: auto;
-  }
+  // --gap: 10px;
+  // display: grid;
+  // gap: var(--gap);
+  // grid-template-columns:  auto ;
+  // overflow: hidden;
+  // position: relative;
+  // @media (max-width: 815px) {
+  //   grid-template-columns: auto;
+  // }
 
   @include for-phone-only  {
     --gap: 5px;
@@ -95,13 +95,6 @@ toggle-button {
   gap: var(--gap);
   grid-template-columns: 60% 1fr ;
   overflow: hidden;
-
-  // @include for-phone-only  {
-  //   --gap: 5px;
-  //   display: grid;
-  //   gap: var(--gap);
-  //   grid-template-columns: auto;
-  // }
 }
 
 .grid-flow {

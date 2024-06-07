@@ -64,8 +64,6 @@ export class SiteEditFormComponent implements OnInit {
         this.sitesForm.patchValue(data)
         this.ccsSite = data
         this.imgName = data.imgName
-      }, err => {
-        console.log(err)
       }
     )
   }

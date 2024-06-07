@@ -208,6 +208,7 @@
                    <ng-container [ngTemplateOutlet]="inventoryView"></ng-container>
                    <ng-container [ngTemplateOutlet]="productView"></ng-container>
                    <ng-container [ngTemplateOutlet]="clientView"></ng-container>
+                   <ng-container [ngTemplateOutlet]="notificationsView"></ng-container>
                  </div>
         </mat-tab>
 
@@ -701,14 +702,6 @@
       </mat-slide-toggle>
     </div>
 
-    <!-- Add Auth add feature
-    <div class="toggle-fields">
-      <mat-slide-toggle
-                formControlName="allowSeeItemCost" >
-        <mat-label>Allow See Item Cost</mat-label>
-      </mat-slide-toggle>
-    </div> -->
-
   </div>
 </ng-template>
 
@@ -740,6 +733,42 @@
       <mat-slide-toggle
                 formControlName="adjustProductCount" >
         <mat-label>Adjust Product Count</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+  </div>
+</ng-template>
+
+
+<ng-template #notificationsView>
+  <div [formGroup]="jsonObjectForm">
+    <h4>Notifications</h4>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="voidNotification" >
+        <mat-label>Void</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="discountNotification" >
+        <mat-label>Discount Applied</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="balanceSheetStartNotification" >
+        <mat-label>Balance Sheet Start</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="priceChangeNotification" >
+        <mat-label>Price Change</mat-label>
       </mat-slide-toggle>
     </div>
 

@@ -1,4 +1,4 @@
-
+<div *ngIf="(action$  | async) as action"></div>
 <div *ngIf="payment as item; else loading">
   <mat-card>
     <mat-card-subtitle>
@@ -102,6 +102,19 @@
                       formControlName  ="completionDate"
                       class="form-control" >
               </mat-form-field>
+            </div>
+
+            <div *ngIf="(employees$ | async) as list">
+              <app-mat-select
+                [class]="'mat-form-regular'"
+                [hideClear]="true"
+                [inputForm]="inputForm"
+                [list]="list"
+                [useID]="true"
+                (outputItem) = "assignEmployeeID($event)"
+                [fieldName]="'employeeID'">
+                Sales Person
+              </app-mat-select>
             </div>
 
             <div>

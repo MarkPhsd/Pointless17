@@ -495,12 +495,20 @@
 
               <div  style="margin-left:20px"  *ngIf="inputForm.controls['dCapEnabled'].value">
 
-                <div class="toggle-fields">
-                  <mat-slide-toggle
-                            formControlName="dCapSubTotal" >
-                    <mat-label>DCAP Charge  In Subtotal</mat-label>
-                  </mat-slide-toggle>
-                </div>
+                  <div *ngIf="dcapSurchargeOptionList as list">
+                    <mat-form-field style="width: 200px" class="fields"
+                        appearance="outline">
+                      <mat-label>Dual Price Method</mat-label>
+                        <mat-select
+                                  formControlName   = "dcapSurchargeOption" >
+                          <mat-option
+                              *ngFor="let item of list"
+                              [value]="item?.value">
+                              {{item?.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
 
                   <div class="toggle-fields">
                     <mat-slide-toggle

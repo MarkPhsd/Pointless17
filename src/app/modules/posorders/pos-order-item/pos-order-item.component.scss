@@ -234,8 +234,14 @@ button {
 
 .grid-items {
   display: grid;
-  grid-template-columns: 1fr 65px;
+  // grid-template-columns: 1fr 65px;
+  // grid-template-columns: 1fr 25px 25px;
+  grid-template-columns: 85% 1px 15px;
   max-width: 99%;
+
+  @include for-phone-only  {
+    grid-template-columns: 85% 1px 15px;
+ }
 }
 
 .displayimage {

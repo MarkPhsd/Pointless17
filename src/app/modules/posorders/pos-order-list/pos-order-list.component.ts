@@ -42,6 +42,12 @@ export class PosOrderListComponent implements OnInit {
   initColDefs() {
 
     this.columnDefs =  [
+
+      {
+        headerName: "Row",
+        valueGetter: "node.rowIndex + 1"
+      },
+
       {
         field: "id",
         cellRenderer: "btnCellRenderer",

@@ -134,6 +134,7 @@ export interface menuButtonJSON {
   pieceWeight: number;
   unitTypeSelections: string;
   limitMultiplier: number;
+  requiresIDCheck: boolean;
 }
 
 //also in itemtype service - should consolidate

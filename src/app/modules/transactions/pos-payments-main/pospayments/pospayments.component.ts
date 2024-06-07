@@ -94,7 +94,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   agtheme         = 'ag-theme-material';
   gridDimensions
   urlPath:        string;
-
+  summary: any;
   id              : number;
   posPayment      : IPOSPayment;
 
@@ -169,7 +169,6 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   }
 
   get summaryEnabled() {
-    // console.log('user roles' , this.user?.roles)fonc
     if (!this.user) {return null}
     if (this.user?.roles === 'admin' || this.user?.roles === 'manager') {
       return this.summaryView
@@ -224,7 +223,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     const item = JSON.parse(JSON.stringify(search))
     item.summaryOnly = true;
     const site = this.siteService.getAssignedSite()
-    this.summary$ = this.pOSPaymentService.searchPayments(site, item)
+    // this.summary$ = this.pOSPaymentService.searchPayments(site, item)
   }
 
   editRowSelection(event) {
@@ -466,7 +465,10 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
       items$.subscribe(data =>
         {
-            const resp         =  data.paging
+            const resp   =  data.paging
+            this.summary = data?.summary;
+            console.log('data', data, data?.summary);
+            
             if (resp) {
               this.isfirstpage   = resp.isFirstPage
               this.islastpage    = resp.isFirstPage
@@ -483,7 +485,6 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
               let results  =  this.refreshImages(data.results)
               params.successCallback(results)
               this.rowData = results
-
             }
 
           }
@@ -571,8 +572,11 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   }
 
   async editItemWithId(payment:any) {
-      if(!payment) { return }
+    if(!payment) { return }
     if (payment && payment.rowData) {  payment = payment.rowData;}
+
+    // console.log('editItemWithId', payment)
+
     this.pOSPaymentService.updatePaymentSubscription(payment)
     this._bottomSheet.open(PosPaymentEditComponent);
   }
@@ -604,8 +608,8 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
 
   notifyEvent(message: string, action: string) {
     this.snackBar.open(message, action, {
-    duration: 2000,
-    verticalPosition: 'top'
+      duration: 2000,
+      verticalPosition: 'top'
     });
   }
 

@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, Subject  } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { GridApi } from 'ag-grid-community';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -145,18 +142,6 @@ export class ItemCategoriesListComponent implements OnInit {
     this.initGridOptions()
   }
 
-  // editFromGrid(e) {
-  //   if (e.rowData.id)  {
-  //     this.editItemWithId(e.rowData.id);
-  //   }
-  // }
-
-  // editItemWithId(id:any) {
-  //   this.openItemEditor(id);
-  // }
-
-
-
   initGridOptions()  {
     this.gridOptions = {
       pagination: true,
@@ -268,7 +253,7 @@ export class ItemCategoriesListComponent implements OnInit {
     ]
 
     const dialogRef = this.dialog.open(ItemCategoriesEditComponent,
-      { width: '700px',
+      { width: '850px',
         height: '700px',
         data : {id: id}
       },

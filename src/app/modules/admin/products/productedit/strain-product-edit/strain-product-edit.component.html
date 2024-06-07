@@ -42,6 +42,14 @@
           <ng-container [ngTemplateOutlet]="managerProtectedToggle"></ng-container>
         </div>
 
+        <div [formGroup]="jsonForm">
+          <mat-slide-toggle
+                name="requresIDCheck"
+                class="mat-label"
+                formControlName="requresIDCheck">
+            <mat-label class="mat-label">Requires ID Check</mat-label>
+          </mat-slide-toggle>
+        </div>
       </div>
     </mat-card-title>
 
@@ -454,7 +462,7 @@
 
 <ng-template #tareValueView>
 
-  <div *ngIf="!fbProductsService.isCannabis(itemType)">
+  <div *ngIf="fbProductsService.isStoreCredit(itemType) && !fbProductsService.isCannabis(itemType)">
     <app-value-fields
         [inputForm]="jsonForm"
         [fieldName]="'tareValue'">
@@ -510,6 +518,14 @@
           [fieldName]="'brandID'"
           [inputForm]="productForm">
     Brand
+  </app-brand-type-select>
+
+  <app-brand-type-select
+          [formFieldClass]="'formFieldClass-standard'"
+          [id] = "product.productSupplierCatID"
+          [fieldName]="'productSupplierCatID'"
+          [inputForm]="productForm">
+    Vendor
   </app-brand-type-select>
 
   <app-value-fields
@@ -588,7 +604,7 @@
 </ng-template>
 
 <ng-template #tareValueTemplateView>
-  <div *ngIf="productForm && jsonForm">
+  <div *ngIf="productForm && jsonForm" >
     <ng-container [ngTemplateOutlet]="tareValueView"></ng-container>
   </div>
 </ng-template>

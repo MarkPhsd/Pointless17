@@ -10,12 +10,9 @@ import { Observable, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi, AgGridEvent } from 'ag-grid-community';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces';
-// import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -142,7 +139,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
         }
    
         if (clientID != 0) {
-            this.searchModel.clientID = clientID;
+          this.searchModel.clientID = clientID;
         }
     
         if (!this.searchModel.completionDate_From) { 
@@ -413,7 +410,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     const searchModel         = this.initSearchModel();
     const site                = this.siteService.getAssignedSite()
-    // console.log(searchModel)
     return this.orderService.getOrderBySearchPaged(site, searchModel)
   }
 

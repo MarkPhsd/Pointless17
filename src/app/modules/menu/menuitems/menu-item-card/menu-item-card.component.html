@@ -220,7 +220,7 @@
            <mat-icon>open_in_new</mat-icon>
         </div>
 
-        <div *ngIf="isProduct">
+        <div *ngIf="isProduct ">
            <mat-icon>plus_one</mat-icon>
         </div>
       </button>
@@ -243,7 +243,7 @@
 <ng-template #seeMoreInCategory>
   <div class="category-open">
     <button mat-button (click)="menuItemActionObs(false)">
-       <mat-icon >open_in_new</mat-icon>
+       <mat-icon *ngIf="!androidApp && !smallDevice" >open_in_new</mat-icon>
     </button>
   </div>
 </ng-template>
@@ -283,7 +283,6 @@
           <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
         </div>
 
-        <!-- {{menuItem?.urlImageMain }} | {{disableImages}} -->
         <div *ngIf="menuItem.urlImageMain  && !disableImages">
           <ng-container [ngTemplateOutlet]="productImage"></ng-container>
           <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>

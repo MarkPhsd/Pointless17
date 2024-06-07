@@ -20,6 +20,7 @@ export interface ContactFieldOptions {
   account: boolean;
 }
 
+
 export interface TransactionUISettings {
   rewardsEnabled: any;
 
@@ -66,7 +67,7 @@ export interface TransactionUISettings {
   dcapDualPriceValue     : number;
   dsiTipPrompt           : boolean;
   dsiTipPromptValues     : string;
-  dCapSubTotal           : boolean;
+  dcapSurchargeOption    : number;
   dcapPayAPIEnabled         : boolean;
   dcapPayAPIPreAuth         : boolean;
   dcapPayAPIZeroAuth        : boolean;
@@ -203,6 +204,8 @@ export interface UIHomePageSettings {
   lockTerminalToBalanceSheet: boolean;
   gloabalSecondLanguage: boolean;
   id                : number;
+  employeeOnClockList: boolean;
+  autoClockEmployeeOnLogin: boolean;
   menuEnabled       : boolean;
   brandsEnabled     : boolean;
   categoriesEnabled : boolean;
@@ -286,6 +289,8 @@ export interface UIHomePageSettings {
 })
 
 export class UISettingsService {
+
+  dcapSurchargeOptionList = [{name: 'Total', value: 0, id: 0} , {name: 'Subt Total', value: 1, id: 1 }, {name: 'Sub Plus Total', value: 2, id: 2} ]
 
   pricingRecMed = [
     {id: 0, name: 'Both'}, {id: 1, name: 'Rec'}, {id: 2, name: 'Med'}
@@ -672,6 +677,8 @@ export class UISettingsService {
   initHomePageForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
       id                    : [''],
+      autoClockEmployeeOnLogin: [],
+      employeeOnClockList: [],
       gloabalSecondLanguage: [],
       pinPadDefaultOnApp    : [],
       lockTerminalToBalanceSheet: [],
@@ -888,7 +895,7 @@ export class UISettingsService {
       dCapSurchargeValue     : [],
       dcapMultiPrice         : [],
       dcapDualPriceValue     : [],
-      dCapSubTotal           : [],
+      dcapSurchargeOption    : [],
       payPalEnabled          : [ ],
       payPalClientID         : [''],
       payPalCurrency         : [ ],

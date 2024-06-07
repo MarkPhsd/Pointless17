@@ -142,6 +142,7 @@
               <ng-container [ngTemplateOutlet]="receiveOrderView"></ng-container>
               <ng-container [ngTemplateOutlet]="stripePayButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
+              <ng-container [ngTemplateOutlet]="disEMVCardManualButton"></ng-container>
               <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
               <ng-container [ngTemplateOutlet]="dsiButtonView"></ng-container>
               <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButtonView"></ng-container>
@@ -337,6 +338,26 @@
       (setStep) ="setStep(1)">
     <mat-icon color="warn">credit_card</mat-icon>
     <br> Pre Auth
+  </dsi-emvcard-pay-btn>
+</ng-template>
+
+<ng-template #disEMVCardManualButton>
+  <!-- Manual: -->
+  <!-- devicename {{devicename}}, {{isStaff}}, {{isApp}} -->
+  <dsi-emvcard-pay-btn
+      *ngIf="(isApp || isStaff) && devicename"
+      [autoPay]="true"
+      [manual]="true"
+      [preAuth]="false"
+      [order]="order"
+      [devicename]="devicename"
+      [uiTransactions]="uiTransactionSetting"
+      [platForm]="platForm"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [paymentAmount]="order?.balanceRemaining"
+      (setStep) ="setStep(1)">
+    <mat-icon color="warn">credit_card</mat-icon>
+    <br> Manual Card
   </dsi-emvcard-pay-btn>
 </ng-template>
 

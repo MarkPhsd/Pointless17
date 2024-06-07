@@ -17,6 +17,12 @@ export class FbClientTypesService {
 
   initUserAuthForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
+
+      //notifications
+      voidNotification: [],
+      balanceSheetStartNotification: [],
+      discountNotification: [],
+
       allowBuy             : [],
       allowTransferOrder   : [],
       voidOrder            : [],

@@ -80,7 +80,7 @@ export class FakeDataService {
   getInventoryItemTestData(): any  {
     const item = {} as any;
     item.sku         = 'MTA1234567';
-    item.productName = 'Rec The Clear  OG Elite 1G C CEll';
+    item.productName = 'Example item Data (Name)';
     item.unitPrice   = 55.00;
     item.serialCode  = '1A4FFFB303D5721000000112';
     item.menuItem = {} as IMenuItem;

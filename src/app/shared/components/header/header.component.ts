@@ -316,7 +316,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
     this.posDevice$ = this.uiSettings.getPOSDeviceSettings(devicename).pipe(
       switchMap(data => {
-        console.log('pos Device data', data)
+        // console.log('pos Device data', data)
         if (data && data.text) {
           try {
             const posDevice = JSON.parse(data?.text) as ITerminalSettings;
@@ -848,6 +848,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   postLogout() {
+    if (this.authenticationService.authenticationInProgress) { return }
     console.log('postlogout')
     this.userSwitchingService.clearLoggedInUser();
     this.smallDeviceLimiter();

@@ -164,7 +164,6 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
    }
 
   refreshEmployees() {
-    //
     if (this.site) {
       this.employees$ = this.employeeService.getAllActiveEmployees(this.site)
     }
@@ -215,6 +214,7 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
     this.toggleOpenClosedAll     = "1"
     this.toggleEmployeeDeviceAll = "0"
     this.searchModel.employeeID  = 0
+    this.searchModel.balanceSheetStatus = 0;
     this.searchModel.type        = parseInt(this.toggleEmployeeDeviceAll)
     this.searchModel.balanceSheetStatus =  parseInt(this.toggleOpenClosedAll)
     this.searchModel.pageNumber = 1;

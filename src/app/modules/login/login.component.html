@@ -7,157 +7,170 @@
 <ng-container [ngTemplateOutlet]="loginMethodView"></ng-container>
 
 <ng-template #userEntryView>
+
   <div class="centered centered-flex ">
-    <div  class="pin-entry">
-      <button  mat-raised-button
-                class="center login pin-button"
-                *ngIf="platformService.isApp() && pinToken"
-                (click)="togglePIN = !togglePIN">
-          PIN Entry
-      </button>
+
+    <div>
+      <div  class="pin-entry">
+        <button  mat-raised-button
+                  class="center login pin-button"
+                  *ngIf="platformService.isApp() && pinToken"
+                  (click)="togglePIN = !togglePIN">
+            PIN Entry
+        </button>
+      </div>
     </div>
-    <mat-card class="mat-card">
-      <mat-card-title>
-        <div (click)="setAPIAlt()">
-            <div class="centered-flex">
-              <div *ngIf="uiHomePageSetting && uiHomePageSetting.logoHomePage"
-                    class="logo"
-                    (click)="setAPIAlt()">
-                <app-logo
-                      [uiHomePageSetting] ="uiHomePageSetting"
-                      [logoSize]          ="'large'"
-                      [logo]              ="uiHomePageSetting.logoHomePage"
-                ></app-logo>
-              </div>
 
-
-            <div *ngIf="!uiHomePageSetting && logo">
-              <img  *ngIf="logo"
-                    (click)="setAPIAlt()"
-                    [src]="logo"
-                    width="125px"
-                    [alt]="company"
-                    class="logo">
-            </div>
-
-            <h2 (click)="setAPIAlt()"
-                *ngIf="uiHomePageSetting">
-                {{uiHomePageSetting.displayCompanyName}}
-            </h2>
-          </div>
-        </div>
-      </mat-card-title>
-
-      <mat-card-content>
-
-        <div  class="center"
-              *ngIf="loginForm"
-              [formGroup]="loginForm"
-              (ngSubmit)="onSubmit()" >
-            <div>
-              <mat-form-field appearance="outline">
-                <mat-label>User</mat-label>
-                <input matInput
-                      type="text"
-                      formControlName="username"
-                      class="form-control"
-                      [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-                <div *ngIf="submitted && f.username.errors"
-                    class="invalid-feedback">
-                    <div *ngIf="f.username.errors.required">Username is required</div>
-                </div>
-              </mat-form-field>
-            </div>
-
-            <div>
-              <mat-form-field appearance="outline">
-                  <mat-label>Password</mat-label>
-                  <input matInput
-                        type="password"
-                        formControlName="password"
-                        class="form-control"
-                        (keyup.enter)  = "onSubmit()"
-                        [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-                  <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                    <div *ngIf="f.password.errors.required">Password is required</div>
+    <div class="flex-basic">
+      <div>
+        <mat-card class="mat-card">
+          <mat-card-title>
+            <div (click)="setAPIAlt()">
+                <div class="centered-flex">
+                  <div *ngIf="uiHomePageSetting && uiHomePageSetting.logoHomePage"
+                        class="logo"
+                        (click)="setAPIAlt()">
+                    <app-logo
+                          [uiHomePageSetting] ="uiHomePageSetting"
+                          [logoSize]          ="'large'"
+                          [logo]              ="uiHomePageSetting.logoHomePage"
+                    ></app-logo>
                   </div>
-              </mat-form-field>
-            </div>
 
-            <div>
-              <div>
-                <div *ngIf="errorMessage">
-                  {{errorMessage}}
+
+                <div *ngIf="!uiHomePageSetting && logo">
+                  <img  *ngIf="logo"
+                        (click)="setAPIAlt()"
+                        [src]="logo"
+                        width="125px"
+                        [alt]="company"
+                        class="logo">
                 </div>
-                <api-status-display>Service may be unavalible</api-status-display>
+
+                <h2 (click)="setAPIAlt()"
+                    *ngIf="uiHomePageSetting">
+                    {{uiHomePageSetting.displayCompanyName}}
+                </h2>
+              </div>
+            </div>
+          </mat-card-title>
+
+          <mat-card-content>
+
+            <div  class="center"
+                  *ngIf="loginForm"
+                  [formGroup]="loginForm"
+                  (ngSubmit)="onSubmit()" >
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label>User</mat-label>
+                    <input matInput
+                          type="text"
+                          formControlName="username"
+                          class="form-control"
+                          [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                    <div *ngIf="submitted && f.username.errors"
+                        class="invalid-feedback">
+                        <div *ngIf="f.username.errors.required">Username is required</div>
+                    </div>
+                  </mat-form-field>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="outline">
+                      <mat-label>Password</mat-label>
+                      <input matInput
+                            type="password"
+                            formControlName="password"
+                            class="form-control"
+                            (keyup.enter)  = "onSubmit()"
+                            [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                      <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                        <div *ngIf="f.password.errors.required">Password is required</div>
+                      </div>
+                  </mat-form-field>
+                </div>
+
+                <div>
+                  <div>
+                    <div *ngIf="errorMessage">
+                      {{errorMessage}}
+                    </div>
+                    <api-status-display>Service may be unavalible</api-status-display>
+                  </div>
+
+                  <button class="login"
+                          mat-raised-button
+                          color="primary"
+                          (click)="onSubmit()">Login</button>
+
+                  <button class="login"
+                          *ngIf="isApp || smallDevice || (!isApp && !smallDevice)"
+                          mat-raised-button color="primary"
+                          (click)='browseMenu()'>Guest</button>
+                </div>
+                <div *ngIf="(action$ | async)"></div>
+            </div>
+            <div class="center">
+                <div>
+                <mat-checkbox [(ngModel)]="rememberMe"
+                              (change)="updateRememberMe($event.checked)">
+                  Remember Me
+                </mat-checkbox>
+              </div>
+              <div class="spinner"
+                    *ngIf="spinnerLoading" >
+                <mat-spinner diameter="30"></mat-spinner>
               </div>
 
-              <button class="login"
-                      mat-raised-button
-                      color="primary"
-                      (click)="onSubmit()">Login</button>
+              <div *ngIf="(platformService && !platformService.webMode) &&
+                          platformService.apiUrl.length != 0 ">
+              </div>
 
-              <button class="login"
-                      mat-raised-button color="primary"
-                      (click)='browseMenu()'>Guest</button>
+              <div>
+                  {{ statusMessage }}
+              </div>
             </div>
-            <div *ngIf="(action$ | async)"></div>
-        </div>
-        <div class="center">
-            <div>
-            <mat-checkbox [(ngModel)]="rememberMe"
-                          (change)="updateRememberMe($event.checked)">
-              Remember Me
-            </mat-checkbox>
-          </div>
-          <div class="spinner"
-                *ngIf="spinnerLoading" >
-            <mat-spinner diameter="30"></mat-spinner>
-          </div>
+            <div class="center">
+              <mat-card-subtitle>
+                <div class="registration center">
+                  <h5>Login with email or phone.</h5>
+                </div>
+              </mat-card-subtitle>
 
-          <div *ngIf="(platformService && !platformService.webMode) &&
-                      platformService.apiUrl.length != 0 ">
-          </div>
+              <app-keyboard-button
+                  [smallDevice]="false"
+                  [isApp]="true"
+                  [isUserStaff]="true"
+                >
+              </app-keyboard-button>
+              <div class="registration">
+                <mat-divider></mat-divider>
+              </div>
+              <div  *ngIf="isApp || smallDevice || (!isApp && !smallDevice)">
+                First time users please register.
+                If you have forgotten your password or user name,
+                press register or reset password below.</div>
+              <div class="registration" >
+                <button mat-raised-button  (click)='changePassword()'>Reset Password</button>
+                <button mat-raised-button  (click)='registerUser()'>Register</button>
+                <button mat-raised-button  (click)='forgetMe()'>Forget Me</button>
+              </div>
 
-          <div>
-              {{ statusMessage }}
-          </div>
-        </div>
-        <div class="center">
-          <mat-card-subtitle>
-            <div class="registration center">
-              <h5>Login with email or phone.</h5>
+              <div class="registration">
+                <mat-divider>         </mat-divider>
+              </div>
+              <div class="registration" class=" centered-flex">
+                <div>Powered by <a href="https://pointlesspos.com">pointlesspos.com</a></div>
+              </div>
             </div>
-          </mat-card-subtitle>
-
-          <app-keyboard-button
-              [smallDevice]="false"
-              [isApp]="true"
-              [isUserStaff]="true"
-            >
-          </app-keyboard-button>
-          <div class="registration">
-            <mat-divider></mat-divider>
-          </div>
-          <div>
-            First time users please register.
-            If you have forgotten your password or user name,
-            press register or reset password below.</div>
-          <div class="registration">
-            <button mat-raised-button  (click)='changePassword()'>Reset Password</button>
-            <button mat-raised-button  (click)='registerUser()'>Register</button>
-            <button mat-raised-button  (click)='forgetMe()'>Forget Me</button>
-          </div>
-
-          <div class="registration">
-            <mat-divider>         </mat-divider>
-          </div>
-          <div class="registration" class=" centered-flex">
-            <div>Powered by <a href="https://pointlesspos.com">pointlesspos.com</a></div>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div *ngIf="isElectron && uiHomePageSetting?.employeeOnClockList">
+        <employees-on-clock-list></employees-on-clock-list>
+      </div>
+    </div>
 
     <div>
       <div  class="pin-entry">
@@ -169,7 +182,14 @@
 </ng-template>
 
 <ng-template #pinEntryView>
-  <div class="centered centered-flex mat-card-pin" >
+  <!-- centered centered-flex mat-card-pin -->
+  <div class="centered centered-flex ">
+    <div class="flex-basic">
+
+      <div *ngIf="isElectron && uiHomePageSetting?.employeeOnClockList">
+        <employees-on-clock-list></employees-on-clock-list>
+      </div>
+      
       <div *ngIf="platformService.isApp && togglePIN" >
           <div class="pin-entry">
             <button class="pin-button"
@@ -179,7 +199,7 @@
             </button>
           </div>
 
-          <mat-card class="mat-card-pin">
+          <mat-card style='min-width:450px'>
             <div class="pin-entry">
               <app-fast-user-switch
                 (outPutLogin)="pinLogin($event)"
@@ -192,10 +212,12 @@
               <ng-container [ngTemplateOutlet]="enableTimeClockView"></ng-container>
             </div>
           </div>
-
       </div>
 
+    </div>
+
   </div>
+
 </ng-template>
 
 <ng-template #timeClockView>

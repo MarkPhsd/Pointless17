@@ -3,10 +3,10 @@
     <ng-content select="[info]"> </ng-content>
   </div>
 
-  <div class="item-container"
+  <div class="item-container" style="margin-bottom:-15px;"
        *ngIf="inputForm">
-    <div class="header-info"
-         [formGroup]="inputForm">
+
+    <div class="header-info"  [formGroup]="inputForm">
       <div>
         <div class="ngcontent">
             <mat-label>
@@ -50,9 +50,8 @@
     </div>
 
     <div>
-
-
-      <span class="margin-5">
+      <span class="margin-left-5" style="position: absolute;
+                                         top: 5px;">
         <button class= "keyboard-button"
                 mat-button
                 (click)="initShowInput()">
@@ -60,7 +59,9 @@
         </button>
       </span>
 
-      <span class="margin-5" *ngIf="negativeOption">
+      <span class="margin-left-5" style="position: absolute;
+                                        top: 45px;"
+                                        *ngIf="negativeOption">
         <button class= "keyboard-button"
                mat-button
                (click)="negativePositive()">
@@ -68,88 +69,89 @@
        </button>
       </span>
     </div>
-  </div>
-
-  <div class="mat-card-floater"
-            *ngIf="showInput">
-    <div>
-      <div [class]="alternateClass">
-
-        <div [class]="numberbuttons">
-          <button mat-button  (click)="enterValue(1)">1 </button>
-        </div>
-
-        <div [class]="numberbuttons">
-          <button mat-button  (click)="enterValue(2)">2
-          </button>
-        </div>
-
-        <div [class]="numberbuttons">
-          <button mat-button  (click)="enterValue(3)">3
-          </button>
-        </div>
-
-        <div [class]="numberbuttons">
-          <button mat-button  (click)="enterValue(4)">4
-          </button>
-        </div>
-
-        <div [class]="numberbuttons">
-          <button mat-button  (click)="enterValue(5)">5
-          </button>
-        </div>
-
-        <div [class]="numberbuttons">
-          <button mat-button  (click)="enterValue(6)">6
-          </button>
-        </div>
-
-        <div [class]="numberbuttons">
-          <button mat-button  (click)="enterValue(7)">7
-          </button>
-        </div>
-
-        <div [class]="numberbuttons">
-          <button mat-button  (click)="enterValue(8)">8
-          </button>
-        </div>
-
-        <div [class]="numberbuttons">
-          <button mat-button  (click)="enterValue(9)">9
-          </button>
-        </div>
-
-        <div [class]="numberbuttons">
-          <button mat-button
-                  (click)="deleteLastItem()">
-            <mat-icon>
-              arrow_back_ios_new
-            </mat-icon>
-          </button>
-        </div>
-
-        <div [class]="numberbuttons">
-          <button mat-button  (click)="enterValue(0)">0
-          </button>
-        </div>
-
-        <div *ngIf="inputTypeValue == 'decimal'"  [class]="numberbuttons">
-          <button mat-button  (click)="inputDoubleZero()">00
-          </button>
-        </div>
-
-        <div *ngIf="inputTypeValue == 'decimal'"  [class]="numberbuttons">
-          <button mat-button  (click)="inputTripleZero()">000
-          </button>
-        </div>
-
-        <div [class]="numberbuttons + 'endButton'">
-          <button mat-button  (click)="returnEnterPress()">Enter
-          </button>
-        </div>
-      </div>
-
-      <!-- formatted {{formatted}} value {{value}} cashValue {{cashValue}} -->
     </div>
-  </div>
 
+    <div class="mat-card-floater" style="margin-top:15px;margin-bottom:15px"
+              *ngIf="showInput">
+      <div>
+        <div [class]="alternateClass">
+
+          <div [class]="numberbuttons">
+            <button mat-button  (click)="enterValue(1)">1 </button>
+          </div>
+
+          <div [class]="numberbuttons">
+            <button mat-button  (click)="enterValue(2)">2
+            </button>
+          </div>
+
+          <div [class]="numberbuttons">
+            <button mat-button  (click)="enterValue(3)">3
+            </button>
+          </div>
+
+          <div [class]="numberbuttons">
+            <button mat-button  (click)="enterValue(4)">4
+            </button>
+          </div>
+
+          <div [class]="numberbuttons">
+            <button mat-button  (click)="enterValue(5)">5
+            </button>
+          </div>
+
+          <div [class]="numberbuttons">
+            <button mat-button  (click)="enterValue(6)">6
+            </button>
+          </div>
+
+          <div [class]="numberbuttons">
+            <button mat-button  (click)="enterValue(7)">7
+            </button>
+          </div>
+
+          <div [class]="numberbuttons">
+            <button mat-button  (click)="enterValue(8)">8
+            </button>
+          </div>
+
+          <div [class]="numberbuttons">
+            <button mat-button  (click)="enterValue(9)">9
+            </button>
+          </div>
+
+          <div [class]="numberbuttons">
+            <button mat-button
+                    (click)="deleteLastItem()">
+              <mat-icon>
+                arrow_back_ios_new
+              </mat-icon>
+            </button>
+          </div>
+
+          <div [class]="numberbuttons">
+            <button mat-button  (click)="enterValue(0)">0
+            </button>
+          </div>
+
+          <div *ngIf="inputTypeValue == 'decimal'"  [class]="numberbuttons">
+            <button mat-button  (click)="inputDoubleZero()">00
+            </button>
+          </div>
+
+          <div *ngIf="inputTypeValue == 'decimal'"  [class]="numberbuttons">
+            <button mat-button  (click)="inputTripleZero()">000
+            </button>
+          </div>
+
+          <div [class]="numberbuttons + 'endButton'">
+            <button mat-button  (click)="returnEnterPress()">Enter
+            </button>
+          </div>
+        </div>
+
+        <!-- formatted {{formatted}} value {{value}} cashValue {{cashValue}} -->
+      </div>
+    </div>
+
+  </div>

@@ -520,6 +520,10 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     return undefined
   }
 
+  assignItemFromDynamicGrid(event) { 
+    console.log(event)
+  }
+
   selectReport(event) {
 
     const report = +event?.id;

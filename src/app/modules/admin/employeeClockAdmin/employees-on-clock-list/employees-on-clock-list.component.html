@@ -1,0 +1,17 @@
+<mat-card style="width:325px;max-height:600px;overflow:auto">
+  <mat-card-title>
+    <h3><mat-icon>clock</mat-icon> On Clock</h3>
+    <button mat-button (click)="refreshManual()"> <mat-icon>refresh</mat-icon></button>
+  </mat-card-title>
+
+  <mat-card-content >
+    <div   *ngIf="(clocks$ | async) as clocks">
+      <div  *ngFor="let item of clocks">
+        <div class="grid-view " >
+          <div class="font-size">{{ item?.employeeName }} </div>
+          <div class="font-size">{{ item?.logInTime |  date:'short'}}</div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

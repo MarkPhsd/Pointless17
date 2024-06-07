@@ -32,7 +32,7 @@ export class MetrcItemsCategoriesService {
 
     const endPoint   = `GetImportItemCategories`
 
-    const parameters = `?siteName=${site.name}`
+    const parameters = `?id=${site.id}`
 
     const url        = `${site.url}${controller}${endPoint}${parameters}`
 

@@ -1,14 +1,13 @@
 import { Component, ElementRef, OnInit, AfterViewInit, ViewChild, Input, } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { fromEvent, Observable, of, Subject  } from 'rxjs';
+import {  catchError, Observable, of, Subject, switchMap  } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import  {GridApi, IGetRowsParams, } from '@ag-grid-community/all-modules';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MetrcPackagesService, PackageSearchResultsPaged } from 'src/app/_services/metrc/metrc-packages.service';
+import { ImportPackages, MetrcPackagesService, PackageSearchResultsPaged } from 'src/app/_services/metrc/metrc-packages.service';
 import { METRCPackage, PackageFilter }  from 'src/app/_interfaces/metrcs/packages';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { METRCProductsAddComponent } from 'src/app/modules/admin/metrc/packages/metrc-products-add/products-add.component';
@@ -47,6 +46,9 @@ export class PackageListComponent implements OnInit {
 
   //needed for search component
   searchForm:    UntypedFormGroup;
+  errorMessage: string;
+  message: string;
+
   get itemName() {
     if (this.searchForm) {
       return this.searchForm.get("itemName") as UntypedFormControl;
@@ -60,6 +62,7 @@ export class PackageListComponent implements OnInit {
 
   @ViewChild('input', {static: true}) input: ElementRef;
   get platForm() {  return Capacitor.getPlatform(); }
+  action$ : Observable<any>;
 
   params               : any;
   private gridApi      : GridApi;
@@ -88,8 +91,10 @@ export class PackageListComponent implements OnInit {
   metrcCategory  :  METRCItemsCategories;
   metrcCategoryID:  number;
   label          :  string;
-  sites$ : Observable<ISite[]>;
+ 
   siteID: number;
+  sites$: Observable<ISite[]>;
+  sites: ISite[];
   site: ISite;
   facilityNumber: string;
   facility    : METRCFacilities;
@@ -110,6 +115,12 @@ export class PackageListComponent implements OnInit {
   gridDimensions: string;
   agtheme        = 'ag-theme-material';
 
+  scheduleDateForm  : UntypedFormGroup;
+  scheduleDateFrom  : any;
+  scheduleDateTo    : any;
+
+  packageImport: ImportPackages;
+  
   urlPath : string;
   viewAll           = 1;
   viewOptions$     = of(
@@ -142,7 +153,7 @@ export class PackageListComponent implements OnInit {
                 private dialog: MatDialog,
                 private agGridService         : AgGridService,
                 private agGridFormatingService: AgGridFormatingService,
-	              public route                  : ActivatedRoute,
+	              public  route                  : ActivatedRoute,
                 private metrcPackagesService  : MetrcPackagesService,
                 private siteService           : SitesService,
                 private metrcCategoriesService: MetrcItemsCategoriesService,
@@ -153,11 +164,20 @@ export class PackageListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sites$         = this.siteService.getSites();
-    this.metrcCategory$ = this.metrcCategoriesService.getCategories();
+   
+    this.initPackageSearch()
+    this.scheduleDateForm = this.getFormRangeInitial(this.scheduleDateForm)
+
+    this.metrcCategory$ = this.metrcCategoriesService.getCategories().pipe(switchMap(data => { 
+      if (!data) { 
+        this.siteService.notify('pleae download categories', 'close', 3000)
+      }
+      return of(data)
+    }))
+  
     this.initClasses();
     this.initForm();
-    this.initGridResults();
+    this.initAGGrid()
   }
 
   initGridResults() {
@@ -177,12 +197,27 @@ export class PackageListComponent implements OnInit {
     this.searchForm = this.fb.group( {
       itemName: [''],
       metrcCategory : [''],
-      selectedSiteID: ['Select Site'],
+      selectedSiteID: [],
       facilityID    : [metrcLicenseNumber],
       active        : [''],
       hasImported   : [''],
       numberOfdays  : [10],
     });
+
+
+    this.sites$ = this.siteService.getSites()
+    .pipe(switchMap(data => { 
+      if (data) { 
+        this.selectedSiteID  = data[0].id
+        this.site = data[0]
+        this.searchForm.patchValue({selectedSiteID: this.site?.id})
+        console.log(this.searchForm.value)
+        this.packageImport.siteID = this.selectedSiteID
+        this.refreshFilters(this.site)
+      }
+      this.sites = data;
+      return of(data)
+    }))
 
   }
 
@@ -307,6 +342,16 @@ export class PackageListComponent implements OnInit {
     })
   }
 
+  reset() { 
+    this.initUI()
+    this.action$ = null;
+  }
+
+  initUI() {
+    this.errorMessage= ''
+    this.importing = false
+    this.message = ''
+  }
   refreshSearchPhrase(event) {
     // if ( !this.itemName) { return }
     // this.itemName.setValue(event)
@@ -317,18 +362,55 @@ export class PackageListComponent implements OnInit {
     this.refreshSearch();
   }
 
+  importActiveBySearch() {
+    if (this.site) {
+      const facility = this.facilityNumber
+      this.importing = true
+      this.errorMessage= ''
+
+      this.packageImport.startDate = this.scheduleDateForm.get("start").value;
+      this.packageImport.endDate   = this.scheduleDateForm.get("end").value;
+
+      let  search = this.packageImport
+      search.facility = this.facility.name;
+      if (!search.startDate || !search.endDate) { 
+        this.notify('Dates have not been set', 'Close', 5000);
+        return;
+      }
+      
+      this.action$ = this.metrcPackagesService.importActiveBySearch(this.site, search).pipe(switchMap (data => { 
+        this.importing = false
+        this.setMessage(data)
+        this.refreshSearch();
+        return of(data)
+      })),catchError(data => { 
+        this.initUI()
+        return of(data)
+      })
+    }
+  }
+
   importActivePackages() {
     if (this.site) {
       const facility = this.facilityNumber
       this.importing = true
-      const import$ = this.metrcPackagesService.importActiveByDaysBack(this.site, this.getNumberOfDays() ,facility)
-      import$.subscribe(data => {
+      this.action$ = this.metrcPackagesService.importActiveByDaysBack(this.site, this.getNumberOfDays() ,facility).pipe(switchMap (data => { 
+
         this.importing = false
-        this.refreshSearch();
-      }, err=> {
-        this.notify(`Import error occured. Check your settings and try again. ${err}`, `Please try Again`, 2000 )
-        this.importing = false
+        this.setMessage(data)
+        return of(data)
+      })),catchError(data => { 
+        this.initUI()
+        return of(data)
       })
+   
+    }
+  }
+
+  setMessage(data:PackageSearchResultsPaged) { 
+    if (data) { 
+      this.errorMessage = data?.errorMessage;
+      this.message = data?.message 
     }
   }
 
@@ -340,6 +422,8 @@ export class PackageListComponent implements OnInit {
       this.importing = true
       const import$ = this.metrcPackagesService.resetImportActivePackages(this.site, this.getNumberOfDays(), facility)
       import$.subscribe(data => {
+
+        this.setMessage(data)
         this.importing = false
         this.refreshSearch();
       }, err=> {
@@ -628,7 +712,31 @@ export class PackageListComponent implements OnInit {
     });
   }
 
+  
+  initPackageSearch() {
 
+    if (!this.packageImport) {
+      this.packageImport = {} as ImportPackages
+      this.packageImport.startDate = null;
+      this.packageImport.endDate = null;
+      return;
+    }
+
+    this.packageImport.startDate = this.scheduleDateForm.get("start").value;
+    this.packageImport.endDate   = this.scheduleDateForm.get("end").value;
+    this.packageImport.siteID = this.site.id;
+    this.packageImport.facility = this.facilityNumber;
+  } 
+
+  getFormRangeInitial(inputForm: UntypedFormGroup) {
+    const today = new Date();
+    const month = today.getMonth();
+    const year = today.getFullYear();
+    return  this.fb.group({
+      start: new Date(year, month, 1),
+      end: new Date()
+    })
+  }
 }
 
 

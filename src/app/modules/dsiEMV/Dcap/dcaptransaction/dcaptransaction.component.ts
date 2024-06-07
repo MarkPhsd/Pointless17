@@ -87,7 +87,7 @@ export class DCAPTransactionComponent implements OnInit {
       this.dataPass = data;
       this.amount =  data?.value;
       this.autoActionData = data;
-
+      this.manual = data?.manualPrompt;
     }
 
       autoActions(data) {

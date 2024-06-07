@@ -23,6 +23,7 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
   @Input() paymentAmount: number;
   @Input() preAuth: boolean;
   @Input() autoPay: boolean;
+  @Input() manual: boolean;
   stripeEnabled: boolean;
   paymentMethod$: Observable<IPaymentMethod>;
 
@@ -95,6 +96,88 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
     const response  = await this.dsiProcess.pinPadReset( );
     this.sitesService.notify('PIN Pad Reset', 'Success', 1000)
   }
+
+
+  // @Input() order: IPOSOrder;
+  // @Input() uiTransactions: TransactionUISettings;
+  // @Input() platForm: string;
+  // @Input() creditBalanceRemaining: number;
+  // @Input() stripeTipValue: string;
+  // @Input() paymentAmount: number;
+  // @Input() preAuth: boolean;
+  // @Input() autoPay: boolean;
+  // stripeEnabled: boolean;
+  // paymentMethod$: Observable<IPaymentMethod>;
+
+  // stepSelection: number;
+  // paymentMethod: IPaymentMethod;
+  // @Input() devicename : string;
+
+  // constructor(
+  //   private sitesService    : SitesService,
+  //   private dsiProcess      : DSIProcessService,
+  //   private paymentsMethodsService: PaymentsMethodsProcessService,
+  //   public  platFormService : PlatformService,) { }
+
+  // ngOnInit(): void {
+  //   const i = 0
+  // }
+
+  // processPayment(manual: boolean) {
+  //   if (this.uiTransactions && this.uiTransactions.dCapEnabled) {
+  //     if (this.preAuth) {
+  //       this.processDCAPPreAuthCardPayment(manual)
+  //       return;
+  //     }
+  //     this.processDCAPCreditCardPayment(manual)
+  //     return;
+  //   }
+  //   this.processDSICreditCardPayment(manual)
+  //   return;
+  // }
+
+  // processDSICreditCardPayment(manual: boolean) {
+  //   const order = this.order;
+  //   if (order) {
+  //     let amount = this.getValidAmount()
+  //     this.paymentsMethodsService.processSubDSIEMVCreditPayment(order, amount, manual)
+  //   }
+  // }
+
+  // processDCAPCreditCardPayment(manual: boolean) {
+  //   const order = this.order;
+  //   if (order) {
+  //     let amount = this.getValidAmount()
+  //     this.paymentsMethodsService.processDCAPVCreditPayment(order, amount, manual, this.autoPay, false)
+  //   }
+  // }
+
+  // processDCAPPreAuthCardPayment(manual: boolean) {
+  //   const order = this.order;
+  //   if (order) {
+  //     let amount = this.getValidAmount()
+  //     this.paymentsMethodsService.processDCAPVCreditPayment(order, amount, manual, false, true)
+  //   }
+  // }
+
+  // getValidAmount() {
+  //   const order = this.order;
+  //   let amount = this.creditBalanceRemaining
+  //   if (order) {
+  //     if (this.paymentAmount && this.paymentAmount !=0) {
+  //       amount = this.paymentAmount
+  //     }
+  //     if (amount > this.creditBalanceRemaining) {
+  //       amount  = this.creditBalanceRemaining
+  //     }
+  //   }
+  //   return amount
+  // }
+
+  // async dsiResetDevice() {
+  //   const response  = await this.dsiProcess.pinPadReset( );
+  //   this.sitesService.notify('PIN Pad Reset', 'Success', 1000)
+  // }
 
   // processDCAPCreditCardPaymentSub(manual: boolean) {
   //   const site = this.siteService.getAssignedSite();

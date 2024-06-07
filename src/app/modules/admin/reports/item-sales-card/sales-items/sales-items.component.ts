@@ -1,6 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IReportItemSaleSummary, IReportItemSales, ITaxReport } from 'src/app/_services/reporting/reporting-items-sales.service';
 import * as _ from "lodash";
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { OrdersService } from 'src/app/_services';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { of, switchMap, Observable } from 'rxjs';
+
 @Component({
   selector: 'app-sales-items',
   templateUrl: './sales-items.component.html',
@@ -8,6 +13,7 @@ import * as _ from "lodash";
 })
 export class SalesItemsComponent implements OnInit {
 
+  action$: Observable<any>;
   @Input() sales: IReportItemSales[] | ITaxReport[];
   @Input() includeDepartments: boolean;
   @Input() showSort = true;
@@ -17,7 +23,11 @@ export class SalesItemsComponent implements OnInit {
   @Input() groupBy: string;
 
   groupedReport: any;
-  constructor() { }
+  constructor(
+    private siteService: SitesService,
+    private orderService: OrdersService,
+    private orderMethodsService: OrderMethodsService
+  ) { }
 
   ngOnInit(): void {
     //then we group by
@@ -35,7 +45,7 @@ export class SalesItemsComponent implements OnInit {
       this.sales = list.sort((a, b) => (a.productName < b.productName ? 1 : -1));
     }
     if (this.adjustments) {
-      let itemList = list as  IReportItemSales[]
+      let itemList = list // as  IReportItemSales[]
 
       if (this.groupBy === 'void') {
         this.adjustments.results = itemList.sort((a, b) => (a.employee < b.employee ? 1 : -1));
@@ -72,8 +82,23 @@ export class SalesItemsComponent implements OnInit {
     }
   }
 
-  viewOrder(id: any) {
-    //determine if it's history or not
-    //sale?.orderID*
+  viewOrder(id: number) {
+
+    const site    = this.siteService.getAssignedSite();
+    const orderCurrent$ = this.orderService.getOrder(site, id.toString(), false );
+    const orderHistory$ = this.orderService.getOrder(site, id.toString(), true );
+    this.action$ = orderCurrent$.pipe(
+      switchMap(data =>  {
+        if (!data) {
+          return orderHistory$.pipe(switchMap(data => {
+            this.orderMethodsService.setActiveOrder( data)
+            return of(data)
+          }))
+        }
+        this.orderMethodsService.setActiveOrder( data)
+        return of(data)
+      }
+    ))
   }
+
 }

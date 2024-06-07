@@ -56,6 +56,7 @@ export interface IPOSOrderSearchModel {
   sortBy2Asc: string;
   sortBy3: string;
   sortBy3Asc: string;
+  employeeName: string;
 }
 
 export interface IPOSOrder {

@@ -648,7 +648,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       total = total -1
     }
     if (this.auths.disableItemSales ) {
-      total = total -2
+      total = total -1
     }
     if (this.auths.disableDeviceSales ) {
       total = total -1

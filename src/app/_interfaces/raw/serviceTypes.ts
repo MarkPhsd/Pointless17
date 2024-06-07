@@ -46,6 +46,7 @@ export interface IServiceType {
   headerOrder: boolean;
   json: string; //converts to serviceTypeFeatures
   serviceTypeFeatues: ServiceTypeFeatues;
+  allRequestPrep: number;
 }
 
 export interface ServiceTypeFeatues {

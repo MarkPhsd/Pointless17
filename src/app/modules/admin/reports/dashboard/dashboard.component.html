@@ -202,7 +202,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
 
     <div *ngIf="(dynamicData$ | async) as data; else loadingData">
       <dynamic-ag-grid [dataInterface]="'ReOrderList'"
-                      [data]="data">
+                       [data]="data"
+                       (outPutItem)="assignItemFromDynamicGrid($event)"
+                       >
       </dynamic-ag-grid>
     </div>
 

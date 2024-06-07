@@ -202,14 +202,17 @@
           </span>
         </div>
 
-        <div *ngIf="(!auths?.disableItemSales)">
-          <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>
-          <ng-container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container>
-          <span *ngIf="(!auths.disableUOMSales)">
-            <ng-container [ngTemplateOutlet]="uomSales"></ng-container>
-          </span>
-        </div>
+        <div>
+          
+          <ng-container -container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container>
+          <div *ngIf="(!auths?.disableItemSales)">
+            <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>
+            <span *ngIf="(!auths.disableUOMSales)">
+              <ng-container [ngTemplateOutlet]="uomSales"></ng-container>
+            </span>
+          </div>
 
+        </div>
 
       </div>
     </span>

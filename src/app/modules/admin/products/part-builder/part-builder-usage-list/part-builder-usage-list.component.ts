@@ -452,7 +452,7 @@ constructor(  private _snackBar              : MatSnackBar,
     if (this.searchForm.controls['minQuantityFilter'].value) {
       searchModel.minQuantityFilter = this.minQuantityFilterValue;
     }
-    console.log('searchmodel', searchModel)
+    // console.log('searchmodel', searchModel)
     return searchModel;
   }
 

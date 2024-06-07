@@ -86,6 +86,10 @@
                 </mat-slide-toggle>
               </div>
 
+              <div *ngIf="isVendorProfile">
+                <button color="accent" mat-raised-button (click)="generatePurchaseOrder()"><mat-icon>list</mat-icon>Generate Purchase Order</button>
+              </div>
+
             </div>
 
           </div>
@@ -165,9 +169,16 @@
                     (swipeleft)="swipe(1, $event.type)"
                      (swiperight)="swipe(1, $event.type)">
 
+
               <div class="ps-flex-group-content-start" >
+
+                  <button mat-raised-button  
+                        (click)="refreshTodays()">
+                  <mat-icon>refresh</mat-icon>Today's</button>
+
                   <div class="margin-5">
                     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+
 
                       <mat-button-toggle  value="Pending Orders"
                                           (click)="showOnlyOpenOrders()">Pending Orders</mat-button-toggle>

@@ -34,8 +34,6 @@ export class RenderingService {
           const regEx = new RegExp('</tt>', 'g');
           const regExFront = new RegExp('<tt>', 'g');
 
-          // item = this.getFormatedText(item);
-
           item = _.mapValues(item, v => _.isNil(v) ? '' : v)
 
           item = this.removeUndefined( item );

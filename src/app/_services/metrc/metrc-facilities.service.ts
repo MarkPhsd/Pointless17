@@ -57,7 +57,7 @@ export class MetrcFacilitiesService {
 
     const controller = '/MetrcFacilities/'
 
-    const parameters = `GetImportFacilities?siteName=${site.name}`
+    const parameters = `GetImportFacilities?id=${site.id}`
 
     const url = `${site.url}${controller}${parameters}`
 

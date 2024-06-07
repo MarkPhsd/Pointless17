@@ -41,7 +41,7 @@ export class UITransactionsComponent implements OnInit {
   payAPIKeyExists$ : Observable<any>;
   aquireKey$ : Observable<any>;
   payAPIKeyEnabled: boolean;
-
+  dcapSurchargeOptionList = this.uISettingsService.dcapSurchargeOptionList;
   constructor(
       private uISettingsService: UISettingsService,
       private settingService   : SettingsService,

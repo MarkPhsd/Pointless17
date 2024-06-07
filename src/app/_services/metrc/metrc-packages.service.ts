@@ -21,17 +21,24 @@ import {
   METRCPackagesRemediate
 } from '../../_interfaces/metrcs/packages';
 
-
+export interface ImportPackages {
+   siteID: number
+   facility: String; 
+   startDate: String;
+   endDate : String;
+}
 export interface PackageSearchResultsPaged {
   results     : METRCPackage[];
   paging      : Paging;
   errorMessage: string;
+  message: string;
 }
 @Injectable({
   providedIn: 'root'
 })
 
 export class MetrcPackagesService {
+  
 
   //example date range &lastModifiedStart=2021-02-26T17:30:00Z&lastModifiedEnd=2021-02-27T17:30:00Z
   activeDateRange = ``
@@ -53,6 +60,18 @@ export class MetrcPackagesService {
 
       return this.http.delete<METRCPackage>(url);
 
+    }
+
+    importActiveBySearch(site: ISite, packageImport: ImportPackages): Observable<PackageSearchResultsPaged> {
+      const controller = '/METRCPackages/'
+
+      const endPoint = `importActiveBySearch`
+
+      const parameters = ``;
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`;
+
+      return this.http.post<PackageSearchResultsPaged>(url, packageImport);
     }
 
     putPackage( site: ISite ,id:any, metrcPackage: METRCPackage): Observable<METRCPackage> {
@@ -85,7 +104,6 @@ export class MetrcPackagesService {
 
     getPackagesByLabel(site: ISite,label:string, facility: string): Observable<METRCPackage[]> {
 
-
       const controller = '/METRCPackages/'
 
       const endPoint = `GetMETRCPackageByLabel`
@@ -98,7 +116,7 @@ export class MetrcPackagesService {
 
     }
 
-    importActive(site: ISite, daysBack: number,  facility: string): Observable<METRCPackage[]> {
+    importActive(site: ISite, daysBack: number,  facility: string): Observable<PackageSearchResultsPaged> {
 
       const controller = '/METRCPackages/'
 
@@ -106,11 +124,11 @@ export class MetrcPackagesService {
 
       const url = `${site.url}${controller}${endPoint}`
 
-      return this.http.get<METRCPackage[]>(url);
+      return this.http.get<PackageSearchResultsPaged>(url);
 
     }
 
-    resetImportActivePackages(site: ISite, daysBack: number,  facility: string): Observable<METRCPackage[]> {
+    resetImportActivePackages(site: ISite, daysBack: number,  facility: string): Observable<PackageSearchResultsPaged> {
 
       const controller = '/METRCPackages/'
 
@@ -118,19 +136,19 @@ export class MetrcPackagesService {
 
       const url = `${site.url}${controller}${endPoint}`
 
-      return this.http.get<METRCPackage[]>(url);
+      return this.http.get<PackageSearchResultsPaged>(url);
 
     }
 
-    importActiveByDaysBack(site: ISite, numberOfDays: number, facility: string): Observable<METRCPackage[]> {
+    importActiveByDaysBack(site: ISite, numberOfDays: number, facility: string): Observable<PackageSearchResultsPaged> {
 
       const controller = '/METRCPackages/'
 
-      const endPoint = `ImportActivePackages?siteName=${site.name}&DaysBackCount=${numberOfDays}&facilityName=${facility}`
+      const endPoint = `ImportActivePackages?siteName=${site.name}&numberOfDays=${numberOfDays}&facilityName=${facility}`
 
       const url = `${site.url}${controller}${endPoint}`
 
-      return this.http.get<METRCPackage[]>(url);
+      return this.http.get<PackageSearchResultsPaged>(url);
 
     }
 

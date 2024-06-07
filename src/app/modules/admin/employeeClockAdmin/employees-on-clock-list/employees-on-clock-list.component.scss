@@ -1,0 +1,11 @@
+
+
+.grid-view {
+  gap: 5px;
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+}
+
+.font-size {
+  font-size: 1.2em;
+}
