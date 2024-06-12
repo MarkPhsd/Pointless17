@@ -1,28 +1,27 @@
 <div *ngIf="(processCreditCardResponse$ | async) as item"></div>
-<div class="cards" *ngIf="(transaction$ | async) as transaction">
-<div *ngIf="(posDevice$  | async) as item"></div>
 
+
+<div class="cards" *ngIf="(transaction$ | async) as transaction">
+  <div *ngIf="(posDevice$  | async) as item"></div>
 
   <mat-card style="margin-top:5px">
-
     <mat-card-title>
-
-        <div *ngIf="(uiHome$ | async) as uiHome" class="action-center">
-          <div *ngIf=" !saleComplete">
-            <button mat-flat-button
-                    class="logo"
-                    (click)="displayAdmin()">
-                  <app-logo
-                    *ngIf="uiHome?.logoHomePage"
-                    [uiHomePageSetting] ="uiHomePageSetting"
-                    [logoSize]          ="'small'"
-                    [logo]              ="uiHome?.logoHomePage"></app-logo>
-                <div>
-                  <h4>{{ data?.displayCompanyName }}</h4>
-                </div>
-            </button>
-          </div>
+      <div *ngIf="(uiHome$ | async) as uiHome" class="action-center">
+        <div *ngIf=" !saleComplete">
+          <button mat-flat-button
+                  class="logo"
+                  (click)="displayAdmin()">
+                <app-logo
+                  *ngIf="uiHome?.logoHomePage"
+                  [uiHomePageSetting] ="uiHomePageSetting"
+                  [logoSize]          ="'small'"
+                  [logo]              ="uiHome?.logoHomePage"></app-logo>
+              <div>
+                <h4>{{ data?.displayCompanyName }}</h4>
+              </div>
+          </button>
         </div>
+      </div>
 
       <div class="action-center"  *ngIf="payment?.amountPaid >0">
         <h5>{{gratitude}}</h5>
@@ -35,21 +34,29 @@
           </h4>
         </div>
 
-        <div>
-          <h4 *ngIf="payment && payment?.tipAmount">
-            Tip:   {{ payment?.tipAmount | currency}}
-            Total: {{ payment?.amountPaid + payment?.tipAmount | currency}}</h4>
+        <div class="grid-buttons">
+          <div>
+            <h4 *ngIf="payment">   Total: {{ payment?.amountPaid + payment?.tipAmount | currency}}</h4>
+            <h4 *ngIf="payment">Gratuity:   {{ payment?.tipAmount | currency}}</h4>
+          </div>
+
+          <div style="margin:5px" *ngIf="payment?.amountPaid >0 && saleComplete && enterTip">
+            <button style="width:100px" color="accent" mat-raised-button (click)="enterTip = !enterTip">Back</button>
+          </div>
         </div>
       </div>
     </mat-card-title>
 
     <mat-card-content>
+      <!-- <h3>Type: {{type}}</h3> -->
       <div class="grid-buttons">
         <div>
           <div>
             <button [disabled]="processing"
-                    *ngIf="!saleComplete" color="primary"
-                    mat-raised-button (click)="emvSale()">
+                    *ngIf="!saleComplete"
+                    color="primary"
+                    mat-raised-button
+                    (click)="emvSale()">
                 <mat-icon>credit_card</mat-icon>Process
             </button>
           </div>
@@ -71,9 +78,10 @@
           <button style="width:100px" color="accent" mat-raised-button (click)="saleComplete && enterTip = !enterTip">Add Tip</button>
         </div>
 
-        <div style="margin:5px" *ngIf="payment?.amountPaid >0 && saleComplete">
-          <button style="width:100px" color="warn" mat-raised-button (click)="enterTip = !enterTip">Back</button>
-        </div>
+        <!-- <div style="margin:5px" *ngIf="payment?.amountPaid >0 && saleComplete && enterTip">
+          <button style="width:100px" color="accent" mat-raised-button (click)="enterTip = !enterTip">Back</button>
+        </div> -->
+
       </div>
     </mat-card-content>
   </mat-card>
@@ -96,8 +104,9 @@
         [payment]            = "payment"
         [hideKeyPad]         = "true"
         (specifiedTipAmount) = "specifiedTip($event)"
-        (outPutTip)          = "customTipAmount($event)"
+
     ></tip-entry-amount>
+    <!--     (outPutTip)          = "customTipAmount($event)" -->
   </div>
 
   <div class="grid-buttons">

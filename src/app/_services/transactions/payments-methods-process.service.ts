@@ -531,7 +531,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
                                                                         type: 1});
       this._dialog.next(this.dialogRef)
     })
+  };
+
+  openPaymentDialog(posPayment: IPOSPayment, type: number) {
+    this.dialogRef = this.dialogOptions.openDSIEMVAndroidTransaction({payment: posPayment,
+                                                                     type: type});
+    this._dialog.next(this.dialogRef)
   }
+
 
   validateDCAPResponse(rStream: DcapRStream, payment: IPOSPayment) {
 
@@ -851,36 +858,84 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }))
   }
 
-  getCardResponse(rStream: RStream,  payment: IPOSPayment, order: IPOSOrder) {
 
+  adjustByRecordNoDCAP(rStream: RStream,  payment: IPOSPayment, order: IPOSOrder) {
+
+    console.log('rstream', rStream, payment, order)
     let posOrder = order;
     const site = this.sitesService.getAssignedSite();
     if (!rStream) {
       this.sitesService.notify('No RStream resposne', 'close', 3000, 'red');
-      return;
+      return of(null)
     }
 
     if (rStream) {
       const validate = this.validateResponse( rStream, payment)
+      console.log('validate', validate)
+      console.log('isApproved', this.isApproved(rStream?.CmdResponse?.CmdStatus))
       if (!validate) {
         return of(null)
       }
 
-      const cmdResponse  = rStream.CmdResponse;
-      const trans        = rStream.TranResponse;
+      const cmdResponse  = rStream?.CmdResponse;
+      const trans        = rStream?.TranResponse;
       const status       = cmdResponse?.TextResponse;
       const cmdStatus    = cmdResponse?.CmdStatus;
 
       payment   = this.applyEMVResponseToPayment(trans, payment)
+
       if (this.isApproved(cmdStatus)) {
         let cardType       = trans?.CardType;
 
         if (!cardType || cardType === '0') {  cardType = 'credit'};
-
+        payment.transactionData = JSON.stringify(rStream)
         payment.textResponse =  cmdResponse.CmdStatus.toLowerCase();
         let paymentMethod    = {} as IPaymentMethod;
         paymentMethod.name = cardType;
         let response: IPaymentResponse;
+
+        const payment$ =   this.paymentService.putPOSPayment(site, payment)
+
+        return payment$
+      }
+    }
+    return of(null)
+  }
+
+  getCardResponse(rStream: RStream,  payment: IPOSPayment, order: IPOSOrder) {
+
+
+    const site = this.sitesService.getAssignedSite();
+    if (!rStream) {
+      this.sitesService.notify('No RStream resposne', 'close', 3000, 'red');
+      return of(null)
+    }
+
+    if (rStream) {
+      const validate = this.validateResponse( rStream, payment)
+      console.log('validate', validate)
+      console.log('isApproved', this.isApproved(rStream?.CmdResponse?.CmdStatus))
+      if (!validate) {
+        return of(null)
+      }
+
+      const cmdResponse  = rStream?.CmdResponse;
+      const trans        = rStream?.TranResponse;
+      const status       = cmdResponse?.TextResponse;
+      const cmdStatus    = cmdResponse?.CmdStatus;
+
+      payment   = this.applyEMVResponseToPayment(trans, payment)
+
+      if (this.isApproved(cmdStatus)) {
+        let cardType       = trans?.CardType;
+
+        if (!cardType || cardType === '0') {  cardType = 'credit'};
+        payment.transactionData = JSON.stringify(rStream)
+        payment.textResponse =  cmdResponse.CmdStatus.toLowerCase();
+        let paymentMethod    = {} as IPaymentMethod;
+        paymentMethod.name = cardType;
+        let response: IPaymentResponse;
+
         const payment$ =   this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod)
 
         return payment$
@@ -1048,31 +1103,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   applyEMVResponseToPayment(trans: TranResponse, payment: IPOSPayment) {
-    //void =6
-    //refund = 5;
-    //preauth = 3
-    //preauth capture = 7
-    //force = 4;
-    // <MerchantID>93344</MerchantID>
-		// <AcctNo>************3907</AcctNo>
-		// <CardType>VISA</CardType>
-		// <TranCode>EMVSale</TranCode>
-		// <AuthCode>00421D</AuthCode>
-		// <CaptureStatus>Captured</CaptureStatus>
-		// <RefNo>212442535014</RefNo>
-		// <InvoiceNo>249571</InvoiceNo>
-		// <OperatorID>Clive Wolder</OperatorID>
-		// <Amount>
-		// 	<Purchase>220.76</Purchase>
-		// 	<Authorize>220.76</Authorize>
-		// </Amount>
-		// <AcqRefData>|1623410529|95985</AcqRefData>
-		// <AVSResult>Z</AVSResult>
-		// <CVVResult>M</CVVResult>
-		// <RecordNo>1623410529</RecordNo>
-		// <EntryMethod>CHIP READ/MANUAL</EntryMethod>
-		// <Date>05/04/2022</Date>
-		// <Time>15:00:14</Time>
+
     payment.accountNum    = trans?.AcctNo;
     payment.exp           = trans?.ExpDate;
     payment.cardHolder    = trans?.CardholderName;
@@ -1082,8 +1113,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     payment.dlNumber      = trans?.AcqRefData;
     payment.processData   = trans?.ProcessData;
     payment.ccNumber      = trans?.RecordNo;
-
+    payment.recordNo      = trans?.RecordNo;
     payment.approvalCode  = trans?.AuthCode;
+    payment.preAuth       = trans?.AuthCode
     payment.captureStatus = trans?.CaptureStatus;
 
     payment.amountPaid     = +trans?.Amount?.Authorize;

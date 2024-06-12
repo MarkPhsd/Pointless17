@@ -381,20 +381,24 @@ export class StrainProductEditComponent implements OnInit {
   copyItem($event) {
     //do confirm of delete some how.
     //then
-    const site = this.siteService.getAssignedSite()
+    const site = this.siteService.getAssignedSite();
+
     if (this.product) {
       this.performingAction= true;
       this.product.name = this.product.name + ' Copy'
       this.message = ''
       this.product.json = this.JSONAsString;
+
       this.action$ = this.menuService.postProduct(site, this.product).pipe(
         switchMap(data => {
           this.product = data;
           this.message = 'Saved'
+          this.productForm.patchValue(data)
           this.performingAction = false;
           return of(data)
         })
       )
+
     }
   }
 

@@ -1,6 +1,6 @@
 <div *ngIf="prompt && inputForm; else loading"
      class="container">
-  <div [formGroup]="inputForm">
+  <div [formGroup]="inputForm" *ngIf="inputForm && prompt">
 
     <mat-card class="mat-card">
       <mat-card-title >

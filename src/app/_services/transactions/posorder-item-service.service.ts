@@ -12,6 +12,7 @@ import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { ScaleInfo, ScaleService } from '../system/scale-service.service';
 import { POSItemSearchModel } from '../reporting/reporting-items-sales.service';
 import { IPagedList } from '../system/paging.service';
+import { SitesService } from '../reporting/sites.service';
 
 export interface OrderItemHistory {
     id: number;
@@ -285,6 +286,7 @@ export class POSOrderItemService {
     private http                : HttpClient,
     private _SnackBar           : MatSnackBar,
     private scaleService        : ScaleService,
+    private siteService         : SitesService,
     )
   {
 
@@ -687,12 +689,6 @@ export class POSOrderItemService {
 
   changeItemCost(site: ISite, posOrderItem: PosOrderItem): Observable<IPOSOrder> {
 
-    // const result = this.validateItemchange(posOrderItem)
-    // if (!result) {
-    //   this.notificationEvent(`Error ${result}`, 'Failure' )
-    //   return
-    // }
-
     const controller = "/POSOrderItems/";
 
     const endPoint = "changeItemCost";
@@ -701,9 +697,17 @@ export class POSOrderItemService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    // const payLoad = { posOrderItem: posOrderItem, menuItem: null}
-
-    return  this.http.post<IPOSOrder>(url, posOrderItem)
+    let order$ =  this.http.post<IPOSOrder>(url, posOrderItem).pipe(
+      switchMap(data => {
+        return of(data)
+      }),
+      catchError(data => {
+        this.siteService.notify('Error' + JSON.stringify(data), 'close', 5000)
+        let order = {} as IPOSOrder
+        order.errorMessage =  JSON.stringify(data)
+        return of(order)
+      }))
+    return order$
 
   }
 

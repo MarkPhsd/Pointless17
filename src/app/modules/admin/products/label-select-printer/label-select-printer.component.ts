@@ -1,6 +1,9 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input,OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { IProduct, ISetting } from 'src/app/_interfaces';
+import { of, switchMap , Observable} from 'rxjs';
+import { IProduct, ISetting, PosOrderItem } from 'src/app/_interfaces';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -11,10 +14,11 @@ import { RenderingService } from 'src/app/_services/system/rendering.service';
   templateUrl: './label-select-printer.component.html',
   styleUrls: ['./label-select-printer.component.scss']
 })
-export class LabelSelectPrinterComponent implements OnInit {
-  
+export class LabelSelectPrinterComponent implements OnInit, OnChanges {
+
   @Input() product : IProduct
-  
+  @Input() menuItem: IMenuItem;
+  @Input() poItem: PosOrderItem
   labelID : number;
   printerName : string;
   printQuantity : number;
@@ -22,29 +26,81 @@ export class LabelSelectPrinterComponent implements OnInit {
   isAppElectron : boolean;
   labelSetting: ISetting
   printForm: FormGroup;
-  
+  product$: any;
+
   constructor(private printingService : PrintingService,
               private siteService: SitesService,
               private fb: FormBuilder,
+              private menuService: MenuService,
               private renderingService: RenderingService,
               private platFormService: PlatformService,
-  ) { 
-    
+  ) {
+
   }
 
   ngOnInit(): void {
     this.isAppElectron =  this.platFormService.isAppElectron
     this.printerName = this.getLastPrinterName();
-    this.labelID = this.printingService.getLastLabelUsed();
-    if (this.product) { 
-      this.initForm()
-    }
+    this.refreshLabel()
+    this.initForm()
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    this.refreshLabel()
+  }
 
-  initForm() { 
+  refreshLabel() {
+    let product$: Observable<IProduct>;
+    const site = this.siteService.getAssignedSite()
+
+    if (this.poItem) {
+      product$ = this.menuService.getProduct(site, this.poItem.productID)
+      // console.log('produtID', this.poItem?.productID)
+    }
+    if (this.menuItem) {
+       product$ = this.menuService.getProduct(site, this.menuItem.id)
+    }
+
+    if (!product$) {
+      // console.log('no observable')
+      return
+    } else {
+      // console.log('observable' )
+    }
+
+    product$.pipe(switchMap(data => {
+      // console.log('product', data)
+      this.labelID = this.printingService.getLastLabelUsed();
+      this.product = data;
+      return of(data)
+    }))
+
+    this.product$ = product$;
+
+  }
+
+  initForm() {
+    let count = 0
+    if (this.poItem) {
+      count = this.poItem.quantity
+      this.printForm = this.fb.group({
+        printQuantity: [count]
+      } )
+      return;
+    }
+    if (this.product) {
+      count = this.poItem.quantity
+      this.printForm = this.fb.group({
+        printQuantity: [count]
+      } )
+      return
+    }
+    if (this.menuItem) {
+      count = this.menuItem.productCount
+    }
+
     this.printForm = this.fb.group({
-      printQuantity: [this.product.productCount]
+      printQuantity: [count]
     } )
   }
 
@@ -80,7 +136,7 @@ export class LabelSelectPrinterComponent implements OnInit {
     // const printString = this.renderingService.interpolateText(item, zplString )
     if (this.labelSetting && this.product) {
       const content = this.renderingService.interpolateText(this.product, this.labelSetting.text)
-      //then get the quantity from this.printQuantity
+      this.printQuantity = +this.printForm.controls['printQuantity'].value;
       if(this.printQuantity == null) { this.printQuantity == 1}
       for (let i = 0; i < this.printQuantity; i++) {
          this.printingService.printLabelElectron(content, this.printerName)

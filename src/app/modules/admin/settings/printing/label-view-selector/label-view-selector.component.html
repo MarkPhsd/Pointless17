@@ -1,8 +1,7 @@
-
 <div *ngIf="(label$ | async) as action"></div>
-<mat-form-field appearance="outline">
 
-  <mat-label>Label Types</mat-label>
+<mat-form-field appearance="outline">
+  <mat-label><ng-content></ng-content></mat-label>
     <mat-select
               type="text"
               [(ngModel)]="labelID"
@@ -15,9 +14,17 @@
       </mat-option>
     </div>
   </mat-select>
-
 </mat-form-field>
 
+
+<div *ngIf="labelImageHeight == 250">
+  <div *ngIf="labelImage64 != null ">
+    <img height="250px" [src]="labelImage64">
+  </div>
+</div>
+
+
+<!-- *ngIf="labelImageHeight == 250" -->
 <div *ngIf="labelImageHeight == 200">
   <div *ngIf="labelImage64 != null ">
     <img height="200px" [src]="labelImage64">
@@ -29,7 +36,6 @@
     <img height="100px" [src]="labelImage64">
   </div>
 </div>
-
 
 <div *ngIf="labelImageHeight == 125">
   <div *ngIf="labelImage64 != null ">
@@ -43,8 +49,4 @@
   </div>
 </div>
 
-<div *ngIf="labelImageHeight == 250">
-  <div *ngIf="labelImage64 != null ">
-    <img height="250px"  [src]="labelImage64">
-  </div>
-</div>
+

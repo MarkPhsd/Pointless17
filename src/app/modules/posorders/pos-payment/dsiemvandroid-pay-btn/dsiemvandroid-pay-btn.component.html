@@ -1,7 +1,6 @@
 <span *ngIf=" devicename &&
              (uiTransactions?.dsiEMVAndroidEnabled || uiTransactions?.dCapEnabled ) &&
              (order && order?.balanceRemaining != 0)">
-
   <ng-container [ngTemplateOutlet]="buttonView"></ng-container>
 </span>
 

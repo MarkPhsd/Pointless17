@@ -40,5 +40,6 @@ export interface UserPreferences {
   ebayItemJSONHidden: boolean;
   headerColor: string;
   messagingPreference: number;
+  metrcUseMetrcLabel: boolean;
 }
 

@@ -1,5 +1,3 @@
-
-
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(void$ | async) as void"></div>
 <div *ngIf="(printing$ | async) as printing"></div>
@@ -137,7 +135,7 @@
 <ng-template #dCapCaptureView  let-item>
 
   <div *ngIf="dCapViewEnabled(item) && item?.paymentMethod?.isCreditCard" >
-
+    <!-- PaxA920 {{PaxA920}} -->
     <div *ngIf="(order.creditBalanceRemaining != 0 && totalAuthPayments > 0 )">
       <button class="payment-buttons-sm" mat-raised-button color='primary' (click)="captureDCap(item, totalAuthPayments)">
           <mat-label>Complete  <br> {{ totalAuthPayments | currency }}</mat-label>
@@ -167,9 +165,14 @@
                   (!isUser) &&
                   (!item.voidReason || item.voidReason == 0) "
           style="font-size:1.2em;margin-top:10px">
+      <div *ngIf="PaxA920">
+
+        <ng-container   *ngTemplateOutlet ="dsiEMVAndroidCardButton,  context:  {$implicit: item}"></ng-container>
+      </div>
       <button   color="accent"
                 class="payment-buttons-sm"
                 style="width:125px"
+                 *ngIf="!PaxA920"
                 mat-raised-button (click)="editPayment(item)">
         <mat-icon>edit</mat-icon><br>
           Edit Tip</button>
@@ -177,6 +180,26 @@
 
   </div>
 </ng-template>
+
+<ng-template #dsiEMVAndroidCardButton let-item>
+  <dsiemvandroid-pay-btn
+    *ngIf="PaxA920  && item"
+    [order]="order"
+    [devicename]="posDevice?.name"
+    [uiTransactions]="uiTransactions"
+    [platForm]="platForm"
+    [creditBalanceRemaining]="order?.creditBalanceRemaining"
+    [stripeTipValue]="0"
+    [footerButton]="true"
+    [posPayment]="item"
+    [paymentAmount]="order?.balanceRemaining" >
+    <div footerstyle>
+      <mat-icon color="warn">credit_card</mat-icon>
+      Gratuity
+    </div>
+    </dsiemvandroid-pay-btn>
+</ng-template>
+
 
 <ng-template #triPOSCaptureView let-item>
   <div *ngIf="!qrOrder && (
@@ -286,7 +309,7 @@
 <ng-template #voidActionView let-item>
 
   <div *ngIf="(authData$ | async) as auth">
-    <div *ngIf="!qrOrder &&  auth.voidPayment && (item.completionDate || item.amountPaid != 0) &&  (item?.voidReason != 0 && !item.voidReason)">
+    <div *ngIf="!PaxA920 && !qrOrder &&  auth.voidPayment && (item.completionDate || item.amountPaid != 0) &&  (item?.voidReason != 0 && !item.voidReason)">
       <button mat-button
               [disabled]="(item.voidReason && item.voidReason != 0 && item.voidAmount == item.amountPaid)"
               class="payment-button-balance"

@@ -32,13 +32,13 @@ export class DcDirectSettingsComponent implements OnInit {
     private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService, ) {
   }
 
-   initForm() { 
-    this.transactionForm = this.fb.group({ 
+   initForm() {
+    this.transactionForm = this.fb.group({
       amount: [1.00]
     })
    }
 
-   async ngOnInit() {   
+   async ngOnInit() {
       this.initForm()
       await this.getDcapAndroidDeviceList()
    }
@@ -54,22 +54,24 @@ export class DcDirectSettingsComponent implements OnInit {
     if (this.terminal.name) {
       const name = this.terminal.name
       this.action$ = this.dcapService.resetDevice(name).pipe(switchMap(data => {
-        // this.sitesService.notify(`Response: ${JSON.stringify(data)}`, 'Close', 100000)
+        this.sitesService.notify(`Response: ${JSON.stringify(data)}`, 'Close', 100000)
         this.dcapResult = data;
         return of(data)
       }))
+    } else {
+      this.sitesService.notify(`Response: No Terminal assigned.`, 'Close', 100000)
     }
   }
 
-  async sale() { 
+  async sale() {
     return ''
   }
 
-  async refund() { 
+  async refund() {
     return ''
   }
-   
-  async downloadParam() { 
+
+  async downloadParam() {
     const device = this.inputForm.value as DSIEMVSettings;
     this.dcapResult = await this.dSIEMVAndroidService.downloadParam(device)
   }

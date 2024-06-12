@@ -1,6 +1,6 @@
 import { Component, Inject, OnDestroy, OnInit, } from '@angular/core';
 import { FbItemTypeService } from 'src/app/_form-builder/fb-item-type.service';
-import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { IItemType, ItemTypeService, ItemType_Properties } from 'src/app/_services/menu/item-type.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
 import { ActivatedRoute,  } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
@@ -21,7 +21,10 @@ import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods
   styleUrls: ['./item-type-editor.component.scss']
 })
 export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
-  searchForm:                UntypedFormGroup;
+  searchForm  : UntypedFormGroup;
+  inputForm   : UntypedFormGroup;
+  jsonForm    : UntypedFormGroup;
+
   action$: Observable<any>;
   wicEBTList        = [{id: 0, name: 'NONE'},{id: 1, name: 'WIC'},{id: 2, name: 'EBT'},{id: 2, name: 'WIC and EBT'}]
   taxesSetting      = [{id: 0, name: 'Never'},{id: 1, name: 'Taxable'},{id: 2, name: 'According To Transaction'}]
@@ -30,7 +33,7 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
   itemType          : IItemType;
   id                : any;
   selected          : any;
-  inputForm         : UntypedFormGroup;
+
   itemType$         : Observable<IItemType>;
   selectedItemsCount: number;
   itemType_PackageTypes = this.itemTypeService.packageType;
@@ -55,7 +58,7 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
   typeName         : string;
   metrcCategories$ : Observable<METRCItemsCategories[]>;
 
-
+  properties: ItemType_Properties;
   exitSubscrption: Subscription;
   private _exitSubscrption     = new BehaviorSubject<boolean>(null);
   public  exitActions$        = this._exitSubscrption.asObservable();
@@ -105,11 +108,10 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
 
   ngOnInit() {
     this.initSearchForm();
-
     this.exitSubscrption = this.exitActions$.subscribe(data => {
-      console.log('exit subscription', data)
+      // console.log('exit subscription', data)
       if (data && data != null) {
-        console.log('cancel')
+        // console.log('cancel')
         this.onCancel(true)
       }
     })
@@ -147,6 +149,7 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
         {
           next:  data => {
             this.initFormData(data)
+            this.initJSONForm(data)
           },
           error: error =>  {
             console.log(error)
@@ -170,6 +173,27 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
       this.inputForm.controls['type'].setValue(this.useType.name);
       return this.useType;
     }
+  }
+
+  initFormFields(): UntypedFormGroup {
+    this.inputForm  = this.fbItemTypeService.initForm(this.inputForm);
+    return this.inputForm;
+  }
+
+  initJSONForm(itemType: IItemType): UntypedFormGroup {
+    this.jsonForm = this.fb.group({
+      inventoryLabelID: [],
+    })
+
+    if (itemType.json) {
+      this.properties = JSON.parse(itemType.json) as ItemType_Properties;
+    } else {
+      this.properties = {} as ItemType_Properties;
+    }
+
+
+    this.jsonForm.patchValue(this.properties)
+    return this.jsonForm
   }
 
   initFormData(itemType: IItemType) {
@@ -208,10 +232,7 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
     });
   }
 
-  initFormFields(): UntypedFormGroup {
-    this.inputForm  = this.fbItemTypeService.initForm(this.inputForm);
-    return this.inputForm;
-  }
+
 
   save(event){
     this.update(false);
@@ -223,14 +244,12 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
 
   copyItem(event) {
     const site = this.siteService.getAssignedSite();
-    console.log('copy item', event, this.itemType)
+    // console.log('copy item', event, this.itemType)
     if (this.itemType) {
       this.itemType.name = 'Copy' + this.itemType?.name
       this.itemType.id = 0
       this.action$ = this.itemTypeService.postItemType(site, this.itemType).pipe(switchMap(data => {
-
         let dialogRef = this.itemTypeMethodsService.openItemEditor(data.id);
-
         this._exitSubscrption.next(true)
         return of(data)
       }))
@@ -241,7 +260,6 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
   update(optionClose: boolean) {
     let result: boolean;
     const site = this.siteService.getAssignedSite();
-
     if (!this.inputForm.valid) {
       this._snackBar.open(`Form not valid, please address issues.`, 'Oops', { duration: 2000} )
       this.validateAllFormFields(this.inputForm)
@@ -262,6 +280,9 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
       }
 
       if (itemType) {
+        const json = JSON.stringify(this.jsonForm.value);
+        itemType.json = json;
+        console.log(json, itemType)
         return  this.updateItem(site, itemType, optionClose)
       }
     }
@@ -287,7 +308,12 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
         item.type       = this.useType.name;
       }
 
+      const json = JSON.stringify(this.jsonForm.value);
+      item.json = json;
       item.autoAddJSONProductList = JSON.stringify(this.addOnItems);
+
+      console.log(json, item)
+
       const item$ = this.itemTypeService.putItemTypeNoChildren(site, item)
 
       item$.subscribe(
@@ -317,9 +343,14 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
   }
 
   setLabelID(event) {
-    // this.itemType.labelTypeID;
+
     this.itemType.labelTypeID = parseInt(event);
     this.labelTypeID = event
+  }
+
+  setInventoryLabelID(event) {
+    this.properties.inventoryLabelID = parseInt(event);
+    this.jsonForm.patchValue({inventoryLabelID: parseInt(event)})
   }
 
   setNonFormValues() {

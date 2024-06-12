@@ -34,7 +34,7 @@
 </div>
 
 <ng-template #summaryView>
- 
+
   <div *ngIf="summary as items" style="margin-left:10px;font-weight:500;">
     # {{recordCount}} | Total: {{items?.amountPaid | currency}}
   </div>
@@ -46,6 +46,8 @@
     [searchType]="'payment'"
     [sortByEmployee]="true"
     [sortByService]="true"
-    [sortByAmount]="true"  >
+    [sortByAmount]="true"
+    [sortBySheetID]="true"
+    >
   </app-sort-selectors>
 </ng-template>

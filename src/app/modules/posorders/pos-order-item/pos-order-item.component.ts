@@ -144,6 +144,15 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
      }
   }
 
+  get _unitprice() {
+    if (this.orderItem.completionDate) {
+      if (this.cashDiscount !=0) {
+        return (this.unitPrice * (1 + this.ui.dcapDualPriceValue)).toFixed(2)
+      }
+    }
+    return this.unitPrice
+  }
+
   get itemHasDiscount() {
     const item = this.orderItem
     if (item.itemOrderCashDiscount != 0 || item.itemPercentageDiscountValue != 0 || item.itemPercentageDiscountValue != 0 ||
@@ -160,7 +169,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     } else {
       const order = this.orderMethodsService.currentOrder;
       if (!order) {
-        if (!this.userAuths.enablebuyAgain) {
+        if (!this.userAuths?.enablebuyAgain) {
           if (!this.authenticationService.isUser) { return }
         }
       }
@@ -567,7 +576,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
   refundItem(item) {
     let refundAuthorized = false
-    if (this.authenticationService.userAuths && this.authenticationService.userAuths.refundItem) {
+    if (this.authenticationService?.userAuths && this.authenticationService?.userAuths?.refundItem) {
       refundAuthorized = true
     }
     if (refundAuthorized) {
@@ -660,7 +669,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
         }
 
         if (editField == 'price' || editField == 'subTotal') {
-          if (!this.authenticationService.userAuths.changeItemPrice) {
+          if (!this.authenticationService?.userAuths?.changeItemPrice) {
             const request =  {request: 'checkAuth' , action: editField}
             this.authorizeEdit(item, request,  width, height);
             return;
@@ -974,7 +983,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
   swipeOutItem(){
     const order = this.orderMethodsService.currentOrder;
-    if (order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
+    if (order.completionDate && (this.userAuths && this.userAuths?.disableVoidClosedItem)) {
       this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
       return
     }

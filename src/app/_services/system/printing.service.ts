@@ -270,13 +270,13 @@ export class PrintingService {
       let result = zpl as unknown as any;
       if (result?.text?.typeError) {
         console.log('possible error message', result?.text?.typeError)
-        // this.siteService.notify(`Label Format error ${result?.text?.typeError}`, 'Close', 5000, 'red' )
+        this.siteService.notify(`Label Format error ${result?.text?.typeError}`, 'Close', 5000, 'red' )
       }
       // console.log('zpl', zpl, );
-      // console.log('zpl error', result?.text?.typeError)
+      console.log('zpl error', result?.text?.typeError)
       return  this.labelaryService.postZPL(site, zpl).pipe(
-          switchMap(data => { 
-            console.log('image data', data)
+          switchMap(data => {
+            // console.log('image data', data)
             return  of(`data:image/jpeg;base64,${data}`)
         })
       )

@@ -2,15 +2,12 @@
 <div *ngIf="(orderAction$ | async)"></div>
 <div *ngIf="(process$ | async) as process"></div>
 <div *ngIf="(paymentGiftCardsList$ | async) as giftcard"></div>
-<div *ngIf="( posDevice$ | async) as item">
-  <!-- SecureDevice {{item?.dsiEMVSettings?.deviceValue}} -->
 
+<div *ngIf="( posDevice$ | async) as item">
   <div class="action-center"  *ngIf="androidPaxA920Payment">
     <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
   </div>
-
 </div>
-
 
 <div *ngIf="(paymentMethods$ | async) as methods">
   <div [class]="orderLayout" *ngIf="order  && uiTransactions">
@@ -21,6 +18,8 @@
         <span #coachingAdjustAuth></span>
         <app-payment-balance
           [hideButtonOptions]="!isApp"
+          [posDevice]        ="posDevice"
+          [PaxA920]="PaxA920"
           [uiTransactions]="uiTransactions"
           [mainPanel]="true"
           [order]="order">
@@ -164,9 +163,11 @@
 
                     <ng-container [ngTemplateOutlet]="payApiView"></ng-container>
                     <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
+
                     <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
                     <ng-container [ngTemplateOutlet]="disEMVCardManualButton"></ng-container>
                     <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
+
                     <ng-container [ngTemplateOutlet]="paypalButton"></ng-container>
                     <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
                     <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container>
@@ -617,7 +618,7 @@
 
 <ng-template #disEMVCardManualButton>
   <dsi-emvcard-pay-btn
-      *ngIf="(isApp || isStaff) && devicename"
+      *ngIf="(isApp || isStaff) && devicename && !PaxA920"
       [autoPay]="true"
       [manual]="true"
       [preAuth]="false"
@@ -632,18 +633,6 @@
     <mat-icon color="warn">credit_card</mat-icon>
     <br> Manual Card
   </dsi-emvcard-pay-btn>
-</ng-template>
-
-<ng-template #payApiView>
-  <app-pay-api
-      [order]="order"
-      [uiTransactions]="uiTransactions"
-      [creditBalanceRemaining]="creditPaymentAmount"
-      [paymentAmount]="paymentAmount"
-      (setStep) ="setStep(1)">
-    <mat-icon color="warn">credit_card</mat-icon>
-    Pay
-  </app-pay-api>
 </ng-template>
 
 <ng-template #dCApPreAuthButton>
@@ -661,6 +650,18 @@
     <mat-icon color="warn">credit_card</mat-icon>
     <br> Pre Auth
   </dsi-emvcard-pay-btn>
+</ng-template>
+
+<ng-template #payApiView>
+  <app-pay-api
+      [order]="order"
+      [uiTransactions]="uiTransactions"
+      [creditBalanceRemaining]="creditPaymentAmount"
+      [paymentAmount]="paymentAmount"
+      (setStep) ="setStep(1)">
+    <mat-icon color="warn">credit_card</mat-icon>
+    Pay
+  </app-pay-api>
 </ng-template>
 
 <ng-template #paypalButton>

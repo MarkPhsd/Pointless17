@@ -60,6 +60,7 @@ export interface IPOSOrderSearchModel {
 }
 
 export interface IPOSOrder {
+  errorMessage: string;
   id:                    number;
   orderTime:             string;
   orderDate:             string;
@@ -300,10 +301,10 @@ export interface PosOrderItem {
   inventoryAssignmentID       :  number;
   prodSecondLanguage          : string;
   productSortOrder            : number;
-  priceTierID             : number;
+  priceTierID                 : number;
   pizzaGroup              : number;
-  pizzaMultiplier         : number;
-  wholeSaleCost           : number;
+  pizzaMultiplier             : number;
+  wholeSaleCost            : number;
   rewardGroupApplied: number;
   baseUnitTypeID: number;
   baseUnitType: string;
@@ -625,12 +626,13 @@ export interface IPOSPayment {
   entryMethod:         string;
   trancode:            string;
   textResponse:        string;
+  transactionData     : string;
   captureStatus:       string;
   tranType:            string;
   beginDate:           string;
   endDate:             string;
   orderID:             number;
-  transactionData     : string;
+
   history           :  boolean;
   transactionIDRef : string;
   commcard: string;

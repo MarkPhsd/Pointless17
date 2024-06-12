@@ -292,10 +292,22 @@
               <div class="filterItem">
                 <app-label-view-selector
                     [labelList$]      ="labelList$"
-                    [labelID]         ="itemType.labelTypeID"
+                    [labelID]         ="itemType?.labelTypeID"
                     [labelImageHeight]="200"
                     (outPutLabelID)   ="setLabelID($event)">
                     Exit Label Selection
+                  </app-label-view-selector>
+              </div>
+
+
+              <div class="filterItem" *ngIf="jsonForm" [formGroup]="jsonForm">
+
+                <app-label-view-selector
+                    [labelList$]      ="labelList$"
+                    [labelID]         ="properties?.inventoryLabelID"
+                    [labelImageHeight]="200"
+                    (outPutLabelID)   ="setInventoryLabelID($event)">
+                    Inventory Exit Label
                   </app-label-view-selector>
               </div>
 

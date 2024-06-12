@@ -114,6 +114,11 @@ export interface IItemType {
   useDefaultPriceInApp: boolean;
   description: string;
   webStoreSimpleView: boolean; //to stop complext deli pricing view.
+  json?: string;
+}
+
+export interface ItemType_Properties {
+  inventoryLabelID: number;
 
 }
 
@@ -230,6 +235,7 @@ export interface Tax {
   providedIn: 'root'
 })
 export class ItemTypeService {
+
 
 packageType = ['Not-Specified', 'Marijuana Weighed',
                'Marijuana - Packaged', 'Medicine - Weighed',
@@ -355,6 +361,18 @@ constructor(private http: HttpClient,
 
     return  this.http.get<IItemBasicB[]>(url);
 
+  }
+
+  getItemTypeByName(site: ISite, name: string): Observable<IItemType> {
+    const controller = '/ItemTypes/';
+
+    const parameters = `?name=${name}`;
+
+    const endPoint = 'getItemTypeByName';
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`;
+
+    return  this.http.get<IItemType>(url);
   }
 
   getItemTypes(site: ISite): Observable<IItemType[]> {

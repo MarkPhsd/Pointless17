@@ -11,10 +11,8 @@
           matInput
           type             ="text"
           id               ="name"
-
           [formControlName]="itemNameControl"
-          [(ngModel)]      ="itemNameInput"
-        />
+          [(ngModel)]      ="itemNameInput" />
 
     <button   *ngIf="itemNameInput && itemNameInput.length>0"
               matSuffix
@@ -22,5 +20,6 @@
               (click)="clearInput()">
       <mat-icon>close</mat-icon>
     </button>
+
   </mat-form-field>
 </div>

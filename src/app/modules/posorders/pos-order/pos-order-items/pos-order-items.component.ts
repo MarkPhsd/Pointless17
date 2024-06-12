@@ -15,7 +15,6 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
-import { Capacitor } from '@capacitor/core';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 @Component({
   selector: 'pos-order-items',
@@ -145,10 +144,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
         this.initStylesEnabled = true
       }
 
-
       if (!this.displayHistoryInfo) {
         this._order = this.orderMethodService.currentOrder$.subscribe( order => {
           this.order = order
+          console.log('order update', this.order.posOrderItems)
           if (this.order && this.order.posOrderItems)  {
             this.sortPOSItems(this.order.posOrderItems);
           }
@@ -162,6 +161,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
         if (!this.disableActions) {
           this._order = this.orderMethodService.currentOrder$.subscribe( order => {
             this.order = order
+            console.log('order update', this.order?.posOrderItems)
             if (this.order && this.order.posOrderItems)  {
               this.sortPOSItems(this.order.posOrderItems);
             }

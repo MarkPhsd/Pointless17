@@ -59,7 +59,8 @@ export class UserPreferencesComponent implements OnInit {
       ebayItemJSONHidden:  [], //boolean;
       headerColor:  [], //string;
       messagingPreference: [],
-      metrcKey: []
+      metrcKey: [],
+      metrcUseMetrcLabel: [],
     })
 
     this.inputForm.patchValue(this.user?.userPreferences)

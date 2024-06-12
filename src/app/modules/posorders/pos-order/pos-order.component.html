@@ -14,6 +14,7 @@
               (resized)="onResizedorderHeightPanel($event)">
 
           <div>
+            <!-- filter: {{order?.service?.filterType}} | {{isNotPurchaseOrder}} -->
             <pos-order-transaction-data
                 [uiTransactionSettings]="uiTransactionSettings"
                 [purchaseOrderEnabled]="purchaseOrderEnabled"
@@ -180,6 +181,7 @@
           <ng-container [ngTemplateOutlet]="purchaseOrderItemView"></ng-container>
           <ng-container [ngTemplateOutlet]="purchaseItemHistoryView"></ng-container>
           <ng-container [ngTemplateOutlet]="importPurchaseOrderView"></ng-container>
+          <ng-container [ngTemplateOutlet]="labelPrintView"></ng-container>
         </div>
 
         <div class="grid-po-helper" >
@@ -189,8 +191,6 @@
       </div>
 
     </div>
-
-
 
     <div  [style.height]="orderItemsHeightStyle"
           class="order-items"
@@ -205,13 +205,26 @@
 </div>
 
 <ng-template #receiveOrderView>
-  <div *ngIf=" (order?.service?.filterType == -1 || order?.service?.filterType == 1) ">
+
+  <!-- showLabelPrint {{showLabelPrint}} <br>}}
+  selectedItem {{selectedItem?.productName -->
+
+  <div *ngIf=" !isNotPurchaseOrder ">
     <button mat-raised-button class="payment-buttons" color="accent" (click)="receiveOrder()">
       <mat-icon>download</mat-icon>
       <br>Receive Items
     </button>
   </div>
+
+  <div *ngIf=" !isNotPurchaseOrder ">
+    <button mat-raised-button class="payment-buttons" color="accent" (click)="showLabelPrint = !showLabelPrint">
+      <mat-icon>label</mat-icon>
+      <br>Print Labels
+    </button>
+  </div>
+
 </ng-template>
+
 
 <ng-template #itemViewType>
   <pos-order-items
@@ -275,7 +288,7 @@
 </ng-template>
 
 <ng-template #cardPointeButton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <span style="margin-top:5px">
       <card-pointe-card-pay-btn
         [order]="order"
@@ -293,7 +306,7 @@
 </ng-template>
 
 <ng-template #dsiEMVAndroidCardButton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <dsiemvandroid-pay-btn
         [order]="order"
         [devicename]="devicename"
@@ -309,8 +322,9 @@
 </ng-template>
 
 <ng-template #disEMVCardButton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <dsi-emvcard-pay-btn
+      [autoPay]="true"
       [devicename]="devicename"
       [order]="order"
       [uiTransactions]="uiTransactionSettings"
@@ -325,44 +339,47 @@
 </ng-template>
 
 <ng-template #dCApPreAuthButton>
-  <dsi-emvcard-pay-btn
-      *ngIf="(isApp || isStaff)"
-      [preAuth]="true"
-      [order]="order"
-      [devicename]="devicename"
-      [uiTransactions]="uiTransactions"
-      [platForm]="platForm"
-      [creditBalanceRemaining]="creditPaymentAmount"
-      [stripeTipValue]="0"
-      [paymentAmount]="order.balanceRemaining"
-      (setStep) ="setStep(1)">
-    <mat-icon color="warn">credit_card</mat-icon>
-    <br> Pre Auth
-  </dsi-emvcard-pay-btn>
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
+    <dsi-emvcard-pay-btn
+        *ngIf="(isApp || isStaff)"
+        [autoPay]="true"
+        [preAuth]="true"
+        [order]="order"
+        [devicename]="devicename"
+        [uiTransactions]="uiTransactions"
+        [platForm]="platForm"
+        [creditBalanceRemaining]="creditPaymentAmount"
+        [stripeTipValue]="0"
+        [paymentAmount]="order.balanceRemaining"
+        (setStep) ="setStep(1)">
+      <mat-icon color="warn">credit_card</mat-icon>
+      <br> Pre Auth
+    </dsi-emvcard-pay-btn>
+  </div>
 </ng-template>
 
 <ng-template #disEMVCardManualButton>
-  <!-- Manual: -->
-  <!-- devicename {{devicename}}, {{isStaff}}, {{isApp}} -->
-  <dsi-emvcard-pay-btn
-      *ngIf="(isApp || isStaff) && devicename"
-      [autoPay]="true"
-      [manual]="true"
-      [preAuth]="false"
-      [order]="order"
-      [devicename]="devicename"
-      [uiTransactions]="uiTransactionSetting"
-      [platForm]="platForm"
-      [creditBalanceRemaining]="creditPaymentAmount"
-      [paymentAmount]="order?.balanceRemaining"
-      (setStep) ="setStep(1)">
-    <mat-icon color="warn">credit_card</mat-icon>
-    <br> Manual Card
-  </dsi-emvcard-pay-btn>
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
+    <dsi-emvcard-pay-btn
+        *ngIf="(isApp || isStaff) && devicename"
+        [autoPay]="true"
+        [manual]="true"
+        [preAuth]="false"
+        [order]="order"
+        [devicename]="devicename"
+        [uiTransactions]="uiTransactionSetting"
+        [platForm]="platForm"
+        [creditBalanceRemaining]="creditPaymentAmount"
+        [paymentAmount]="order?.balanceRemaining"
+        (setStep) ="setStep(1)">
+      <mat-icon color="warn">credit_card</mat-icon>
+      <br> Manual Card
+    </dsi-emvcard-pay-btn>
+  </div>
 </ng-template>
 
 <ng-template #triPOSPaymentButton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <app-tri-poscard-pay-btn
       [order]="order"
       [devicename]="devicename"
@@ -378,7 +395,7 @@
 </ng-template>
 
 <ng-template #giftCardPayButton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <gift-card-pay-btn
       [order]="order"
       [devicename]="devicename"
@@ -392,7 +409,7 @@
 </ng-template>
 
 <ng-template #storeCreditPaybutton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <store-credit-info
         [order]         ="order"
         [clientID]      ="order?.clientID"
@@ -407,7 +424,7 @@
 </ng-template>
 
 <ng-template #wicEBTButton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <wic-ebtcard-pay-btn
         [order]="order"
         [devicename]="devicename"
@@ -421,8 +438,8 @@
 </ng-template>
 
 <ng-template #houseAccountButton>
-  <div *ngIf="isApp && !paymentsEqualTotal &&
-              (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !paymentsEqualTotal
+              && isNotPurchaseOrder">
     <button
           class="buttons"
           mat-raised-button
@@ -436,7 +453,7 @@
 </ng-template>
 
 <ng-template #stripePayButton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <stripe-card-pay-btn
       [order]="order"
       [uiTransactions]="uiTransactionSettings"
@@ -450,7 +467,7 @@
 </ng-template>
 
 <ng-template #cashPayCustom>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -466,7 +483,7 @@
 </ng-template>
 
 <ng-template #cashPayButtons>
-  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -482,7 +499,7 @@
 </ng-template>
 
 <ng-template #cashPay100>
-  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -497,7 +514,7 @@
 </ng-template>
 
 <ng-template #cashPay50>
-  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -512,7 +529,7 @@
 </ng-template>
 
 <ng-template #cashPay20>
-  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -527,7 +544,7 @@
 </ng-template>
 
 <ng-template #cashPay10>
-  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -542,7 +559,7 @@
 </ng-template>
 
 <ng-template #cashPay5>
-  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && (order.serviceType.toLowerCase() != 'purchase order')">
+  <div *ngIf="isApp && !smallDevice && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <cash-payment-buttons
         [order]="order"
         [uiTransactions]="uiTransactionSettings"
@@ -557,7 +574,7 @@
 </ng-template>
 
 <ng-template #payButton>
-  <div *ngIf="!isUser && order && (order?.service?.filterType != 1 && order?.service?.filterType != 2)">
+  <div *ngIf="!isUser && order && isNotPurchaseOrder">
     <span #coachingpayOptions>
       <button
           mat-raised-button
@@ -578,6 +595,10 @@
 
 <ng-template #lastImageDisplayView>
   <last-image-display></last-image-display>
+</ng-template>
+
+<ng-template #labelPrintChild>
+  <label-select-printer [poItem]="selectedItem"></label-select-printer>
 </ng-template>
 
 <ng-template #purchaseItemSales>
@@ -720,10 +741,6 @@
                 <div fieldSearchDescription>Type</div>
                 </form-select-list>
               </div>
-<!--
-              name="Scanned"
-              class="mat-label"
-              (onChange) = "refreshSearch($event)" -->
 
               <div  class="mat-label" [formGroup]="searchForm">
                 <mat-slide-toggle
@@ -755,6 +772,8 @@
   </pos-order-price-schedule-info>
   <app-rewards-availible></app-rewards-availible>
 </ng-template>
+
+
 <!-- margin  %. Add items by the case ( you don't have to open boxes or cases to scan the actual item or try to remember how many come in each box)
 Be able to see the actual inventory so I can check the inventory at the same time that I add items. -->
 <!--

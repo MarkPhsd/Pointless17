@@ -14,7 +14,7 @@ import { METRCProductsAddComponent } from 'src/app/modules/admin/metrc/packages/
 import { StrainsAddComponent } from 'src/app/modules/admin/metrc/packages/strains-add/strains-add.component';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { ISite } from 'src/app/_interfaces';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
 
 import {
   METRCItems,
@@ -91,7 +91,7 @@ export class PackageListComponent implements OnInit {
   metrcCategory  :  METRCItemsCategories;
   metrcCategoryID:  number;
   label          :  string;
- 
+
   siteID: number;
   sites$: Observable<ISite[]>;
   sites: ISite[];
@@ -120,7 +120,7 @@ export class PackageListComponent implements OnInit {
   scheduleDateTo    : any;
 
   packageImport: ImportPackages;
-  
+
   urlPath : string;
   viewAll           = 1;
   viewOptions$     = of(
@@ -164,17 +164,17 @@ export class PackageListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   
+
     this.initPackageSearch()
     this.scheduleDateForm = this.getFormRangeInitial(this.scheduleDateForm)
 
-    this.metrcCategory$ = this.metrcCategoriesService.getCategories().pipe(switchMap(data => { 
-      if (!data) { 
+    this.metrcCategory$ = this.metrcCategoriesService.getCategories().pipe(switchMap(data => {
+      if (!data) {
         this.siteService.notify('pleae download categories', 'close', 3000)
       }
       return of(data)
     }))
-  
+
     this.initClasses();
     this.initForm();
     this.initAGGrid()
@@ -206,8 +206,8 @@ export class PackageListComponent implements OnInit {
 
 
     this.sites$ = this.siteService.getSites()
-    .pipe(switchMap(data => { 
-      if (data) { 
+    .pipe(switchMap(data => {
+      if (data) {
         this.selectedSiteID  = data[0].id
         this.site = data[0]
         this.searchForm.patchValue({selectedSiteID: this.site?.id})
@@ -253,7 +253,7 @@ export class PackageListComponent implements OnInit {
          flex: 2,
        },
      },
-      {headerName: 'Label', field: 'label', sortable: true, minWidth: 175},
+      {headerName: 'Label', field: 'label', sortable: true, minWidth: 225},
       {headerName: 'Source',  sortable: true, field: 'itemFromFacilityLicenseNumber',},
       {headerName: 'Strain/Product', field: 'item.name', sortable: true},
       {headerName: 'Quantity', field: 'quantity', sortable: true},
@@ -342,7 +342,7 @@ export class PackageListComponent implements OnInit {
     })
   }
 
-  reset() { 
+  reset() {
     this.initUI()
     this.action$ = null;
   }
@@ -373,17 +373,17 @@ export class PackageListComponent implements OnInit {
 
       let  search = this.packageImport
       search.facility = this.facility.name;
-      if (!search.startDate || !search.endDate) { 
+      if (!search.startDate || !search.endDate) {
         this.notify('Dates have not been set', 'Close', 5000);
         return;
       }
-      
-      this.action$ = this.metrcPackagesService.importActiveBySearch(this.site, search).pipe(switchMap (data => { 
+
+      this.action$ = this.metrcPackagesService.importActiveBySearch(this.site, search).pipe(switchMap (data => {
         this.importing = false
         this.setMessage(data)
         this.refreshSearch();
         return of(data)
-      })),catchError(data => { 
+      })),catchError(data => {
         this.initUI()
         return of(data)
       })
@@ -394,23 +394,23 @@ export class PackageListComponent implements OnInit {
     if (this.site) {
       const facility = this.facilityNumber
       this.importing = true
-      this.action$ = this.metrcPackagesService.importActiveByDaysBack(this.site, this.getNumberOfDays() ,facility).pipe(switchMap (data => { 
+      this.action$ = this.metrcPackagesService.importActiveByDaysBack(this.site, this.getNumberOfDays() ,facility).pipe(switchMap (data => {
 
         this.importing = false
         this.setMessage(data)
         return of(data)
-      })),catchError(data => { 
+      })),catchError(data => {
         this.initUI()
         return of(data)
       })
-   
+
     }
   }
 
-  setMessage(data:PackageSearchResultsPaged) { 
-    if (data) { 
+  setMessage(data:PackageSearchResultsPaged) {
+    if (data) {
       this.errorMessage = data?.errorMessage;
-      this.message = data?.message 
+      this.message = data?.message
     }
   }
 
@@ -683,8 +683,8 @@ export class PackageListComponent implements OnInit {
       { data: { id: id } }
     ]
     const dialogRef = this.dialog.open(METRCProductsAddComponent,
-      { width:      '800px',
-        minWidth:   '800px',
+      { width:      '1000px',
+        minWidth:   '1000px',
         height:     '800px',
         minHeight:  '800px',
         data : {id: id}
@@ -712,7 +712,7 @@ export class PackageListComponent implements OnInit {
     });
   }
 
-  
+
   initPackageSearch() {
 
     if (!this.packageImport) {
@@ -726,7 +726,7 @@ export class PackageListComponent implements OnInit {
     this.packageImport.endDate   = this.scheduleDateForm.get("end").value;
     this.packageImport.siteID = this.site.id;
     this.packageImport.facility = this.facilityNumber;
-  } 
+  }
 
   getFormRangeInitial(inputForm: UntypedFormGroup) {
     const today = new Date();

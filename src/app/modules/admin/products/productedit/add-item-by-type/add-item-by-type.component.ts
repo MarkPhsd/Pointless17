@@ -41,10 +41,38 @@ export class AddItemByTypeComponent implements OnInit {
     const itemTypes$   =  this.itemTypeService.getItemTypes(site);
 
     itemTypes$.subscribe(data => {
-      this.itemTypeProducts    = data.filter(items  => items.useType === 'product' || items.useType.toLowerCase() === 'modifier')
-      this.itemTypeCategories  = data.filter(items  => items.useType === 'category')
-      this.itemTypeAdjustments = data.filter(items  => items.useType === 'adjustment')
+      this.itemTypeProducts    = data.filter(items  => items?.useType === 'product' || items?.useType.toLowerCase() === 'modifier')
+      this.itemTypeCategories  = data.filter(items  => items?.useType === 'category')
+      this.itemTypeAdjustments = data.filter(items  => items?.useType === 'adjustment')
     })
+    this.sortAlpha(1)
+  }
+
+  sortAlpha(index) {
+    if (index ==1) {
+      this.itemTypeProducts    = this.sortByName(this.itemTypeProducts)
+      this.itemTypeCategories  = this.sortByName(this.itemTypeCategories)
+      this.itemTypeAdjustments = this.sortByName(this.itemTypeAdjustments)
+    }
+    if (index == 2) {
+
+    }
+    if (index == 3) {
+
+    }
+  }
+
+  sortByName(list) {
+    list.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    });
+    return list
   }
 
   initList() {

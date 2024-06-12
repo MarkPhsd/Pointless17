@@ -307,7 +307,10 @@
 
       {{ quantity }}
 
-      {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName) }} @ {{ unitPrice | currency }}
+      {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName) }} @
+
+
+      {{ _unitprice | currency }}
 
       <span *ngIf="orderItem.baseUnitType"> / {{ orderItem?.baseUnitType }} </span> = {{ subTotal | currency}}
 
@@ -320,7 +323,7 @@
         | Tax: {{ orderItem?.taxTotal | currency }}  | Total: {{orderItem?.total | currency}}
       </span>
 
-      <div *ngIf="ui && ui?.dcapMultiPrice && ui?.dcapDualPriceValue != 0">
+      <div *ngIf="ui && ui?.dcapMultiPrice && ui?.dcapDualPriceValue != 0 && !orderItem.completionDate ">
         <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue > 0 &&  !orderItem.completionDate" > Credit  Price </span>
         <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue < 0 && !orderItem.completionDate" >  Discount Price </span>
         @ {{ cashDiscount | currency }} | ({{ui.dcapDualPriceValue}}%)

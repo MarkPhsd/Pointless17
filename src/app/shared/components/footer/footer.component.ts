@@ -42,7 +42,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   _user             : Subscription;
   deviceInfo        : IDeviceInfo;
   userChecked       : boolean;
-  androidApp = this.platFormService.androidApp;
+androidApp        = this.platFormService.androidApp;
   _uiConfig      : Subscription;
   uiConfig       = {} as TransactionUISettings;
 

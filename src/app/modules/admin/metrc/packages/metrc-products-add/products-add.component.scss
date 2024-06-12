@@ -1,5 +1,5 @@
 @import "/src/mixins.scss";
-
+.ngx-json-viewer { overflow: auto !important; }
 :host {
   display: flex;
   flex-direction: column;
@@ -27,8 +27,8 @@
   gap: var(--gap);
   // margin-top: 5px;
   grid-template-columns: repeat( auto-fit, minmax(135px, 1fr) );
-  overflow-y: auto;
-  overflow-x: hidden;
+  // overflow-y: auto;
+  // overflow-x: hidden;
   height: 500px;
 }
 

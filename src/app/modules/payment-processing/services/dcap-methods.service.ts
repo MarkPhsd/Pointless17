@@ -199,8 +199,9 @@ export class DcapMethodsService {
 
     // console.log('readResult', cmdResponse)
     const status = cmdResponse?.CmdStatus
+
     if (status ==   "Declined") {
-      return {success : false , message: status, processing: processing, resultMessage: status};
+      return {success : false , message: status, processing: processing, resultMessage: status, textResponse: cmdResponse?.TextResponse};
     }
 
 
@@ -219,7 +220,7 @@ export class DcapMethodsService {
         response.toLowerCase() === 'approved, Partial AP'.toLowerCase()
       ) {
         success = true
-        return {success : success , message: message, processing: processing, resultMessage: resultMessage}
+        return {success : success , message: message, processing: processing, resultMessage: resultMessage, textResponse: cmdResponse?.TextResponse}
       }
     }
 

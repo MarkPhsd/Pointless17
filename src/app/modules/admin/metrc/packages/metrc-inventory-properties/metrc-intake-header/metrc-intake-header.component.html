@@ -1,5 +1,6 @@
 <span *ngIf="package && intakeConversion">
-  <div class="item-info">Facility Code / Name: {{package.itemFromFacilityLicenseNumber}} / {{package.itemFromFacilityName}} </div>
-  <div class="item-info">Name: {{package.item.name}} | Intaking as {{intakeConversion.name}}  </div>
-  <div class="item-info">Testing State: {{package.labTestingState}}</div>
+  <div class="item-info">Facility Code / Name: {{package?.itemFromFacilityLicenseNumber}} / {{package?.itemFromFacilityName}} </div>
+  <div class="item-info">Name: {{package?.item?.name}} </div>
+  <div class="item-info"> Intaking as {{intakeConversion?.name}}  </div>
+  <div class="item-info">Testing State: {{package?.labTestingState}}</div>
 </span>

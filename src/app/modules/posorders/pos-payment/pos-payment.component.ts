@@ -122,7 +122,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   user          : any;
   _user: Subscription;
   _orderLayout = 'order-receiptLayouts'
-
+  posDevice: ITerminalSettings;
   PaxA920 : boolean;
   payApiEnabled: boolean;
 
@@ -130,8 +130,11 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (!data)  {
       const item = localStorage.getItem('devicename')
       return this.uISettingsService.getPOSDevice(item).pipe(switchMap(data => {
-        this.setPaxInfo(data)
-        this.uISettingsService.updatePOSDevice(data)
+        if (data) {
+          this.setPaxInfo(data)
+          this.posDevice = data;
+          this.uISettingsService.updatePOSDevice(data)
+        }
         return of(data)
       }))
     } else {

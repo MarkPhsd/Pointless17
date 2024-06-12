@@ -1,7 +1,5 @@
-
 <div [formGroup]="packageForm"
-     *ngIf="packageForm && package"
-      >
+     *ngIf="packageForm && package"  >
 
   <div >
     <mat-card>
@@ -26,8 +24,7 @@
                         type               ="text"
                         [(ngModel)]        ="inventoryLocationID"
                         formControlName    ="inventoryLocationID"
-                        (selectionChange)  ="getLocationAssignment($event.value)"
-                >
+                        (selectionChange)  ="getLocationAssignment($event.value)">
               <div *ngIf="(inventoryLocations$ | async) as list">
                 <mat-option *ngFor="let item of list" [value]="item.id">
                   {{item.name}}
@@ -42,8 +39,7 @@
                           type             ="text"
                           [(ngModel)]      ="conversionName"
                           formControlName  ="conversionName"
-                          (selectionChange)="getAvailableUnitsByConversion($event.value)"
-                          >
+                          (selectionChange)="getAvailableUnitsByConversion($event.value)" >
 
               <div *ngIf="(conversions) as list" >
                 <mat-option *ngFor="let item of list" [value]="item.name">
@@ -54,7 +50,6 @@
           </mat-form-field>
         </div>
 
-         <!-- [ngModel]="inputQuantity" -->
         <div>
           <mat-form-field appearance="outline"  class="location-assignment fields">
             <mat-label >Quantity</mat-label>
@@ -62,8 +57,7 @@
                     type            ="text"
                     [(ngModel)]     ="inputQuantity"
                     formControlName ="inputQuantity"
-                    (change)        ="getAvailableUnitsByInputQuantity($event)"
-            >
+                    (change)        ="getAvailableUnitsByInputQuantity($event)">
             </mat-form-field>
 
             <mat-form-field  appearance="outline" class="select-conversion fields">
@@ -72,12 +66,10 @@
                       type           ="text"
                       formControlName="cost"
                       (change)="transformAmount($event)"
-                      [(ngModel)]="cost"
-              >
+                      [(ngModel)]="cost" >
           </mat-form-field>
         </div>
 
-        <!-- (change)="getQuantityByJointCount($event)" -->
         <div *ngIf="unitsConverted">
           <div *ngIf="unitsConverted.unitConvertTo">
             <div *ngIf="unitsConverted.unitConvertTo.name === 'Joints'">

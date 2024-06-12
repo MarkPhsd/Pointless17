@@ -1,15 +1,12 @@
 import { Component, EventEmitter, Inject, Input, Output, } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { AuthenticationService, MenuService, OrdersService } from 'src/app/_services';
+import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { IonItem } from '@ionic/angular';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 import { Observable, of, switchMap } from 'rxjs';
-import { InputTrackerService } from 'src/app/_services/system/input-tracker.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -157,6 +154,7 @@ export class PosOrderItemEditComponent  {
     const item = this.getItemValue();
     item.quantity = event;
     this.action$ = this.saveSub(item, this.editField).pipe(switchMap(data => {
+      this.orderMethodsService.updateOrder(data)
       this.onCancel();
       return of(data)
     }))
@@ -177,33 +175,29 @@ export class PosOrderItemEditComponent  {
     if (this.posOrderItem) {
       const item = this.getItemValue();
       this.action$ = this.saveSub(item, this.editField).pipe(switchMap(data => {
-        if (!data) {
-          this.onCancel();
-          return of(null)
-        }
-        this.orderMethodsService.updateOrder(data)
-        this.onCancel();
+        this.refreshOrderAndClose(data)
         return of(data)
       }))
     }
   }
 
+
+  refreshOrderAndClose(data) {
+    if (!data) {
+      this.onCancel();
+    }
+    if (data?.resultMessage) {
+      this.siteService.notify(data?.resultMessage, 'Close', 3000, 'red')
+    }
+
+    this.orderMethodsService.updateOrder(data)
+    this.onCancel();
+  }
+
   saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> {
     const order$ = this.posOrderItemMethodsService.saveSub(item, editField).pipe(
       switchMap(data => {
-
-        if (data?.resultMessage) {
-          this.siteService.notify(data?.resultMessage, 'Close', 3000, 'red')
-          return of(data)
-        }
-        //this sets it back. we need to set back and then get preferences and clienttype.
-        this.authenticationService.overRideUser(null)
-        if (!data) {
-          this.onCancel();
-          return of(null)
-        }
-        this.orderMethodsService.updateOrder(data)
-        this.onCancel();
+        this.refreshOrderAndClose(data)
         return of(data)
       }
     ))
@@ -281,6 +275,7 @@ export class PosOrderItemEditComponent  {
   }
 
   onClose(event) {//
+    console.log('close press')
     this.authenticationService.updateUserAuthstemp(null);
     this.dialogRef.close();
     this.closeOnEnterPress.emit('true')

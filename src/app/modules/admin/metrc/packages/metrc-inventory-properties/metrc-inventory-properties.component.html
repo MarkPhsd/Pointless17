@@ -1,18 +1,35 @@
-<div *ngIf="inputForm && package"
-     [formGroup]="inputForm">
+<div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="inputForm && package"  [formGroup]="inputForm">
 
-    <div class="grid-item">
-      <app-product-search-selector
-                [formControlName]   = "'productName'"
-                [searchForm]        = "inputForm"
-                [doNotPassName]     = 'true'
-                [filter]            = 'filter'
-                (itemSelect)        = "getCatalogItem($event)">
-        <div fieldDescription>
-        <mat-icon>search</mat-icon>
-          Search
-        </div>
-      </app-product-search-selector>
+    <div class="grid-menu-search-selector">
+       <div>
+         <app-product-search-selector
+                   [formControlName]   = "'productName'"
+                   [searchForm]        = "inputForm"
+                   [doNotPassName]     = 'true'
+                   [filter]            = 'filter'
+                   (itemSelect)        = "getCatalogItem($event)">
+           <div fieldDescription>
+             <mat-icon>search</mat-icon>
+             Search
+           </div>
+         </app-product-search-selector>
+       </div>
+
+
+       <!-- ID {{package?.productID}} -->
+      <div style="margin-top: 5px;" *ngIf="inputForm.controls['productID'].value">
+        <button mat-raised-button color="accent" (click)="openProductEditor(inputForm.controls['productID'].value)">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </div>
+
+      <div style="margin-top: 5px;" *ngIf="!inputForm.controls['productID'].value">
+        <button mat-raised-button color="accent" (click)="openNewProductByType()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
     </div>
 
     <div>
@@ -38,7 +55,7 @@
       </mat-form-field>
     </div>
 
-    <div>
+    <div style="width:150px">
       <mat-form-field appearance="outline" fxFill >
       <mat-label>Expiration</mat-label>
       <input matInput
@@ -51,7 +68,7 @@
           </mat-form-field>
     </div>
 
-    <div>
+    <div style="width:150px">
       <mat-form-field appearance="outline" fxFill>
       <mat-label>Batch Date</mat-label>
         <input matInput
@@ -60,6 +77,18 @@
               [matDatepicker]="picker2">
             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
             <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div style="width:150px">
+      <mat-form-field appearance="outline" fxFill>
+      <mat-label>Test Date</mat-label>
+        <input matInput
+              type="text"
+              formControlName="testDate"
+              [matDatepicker]="picker3">
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <mat-datepicker #picker3></mat-datepicker>
       </mat-form-field>
     </div>
 

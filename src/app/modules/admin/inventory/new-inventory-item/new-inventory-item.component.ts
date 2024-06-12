@@ -303,14 +303,15 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   }
 
   updateItem(event) {
-    const item$ = this.updateWithoutNotification()
-    item$.subscribe(data => {
-      if (data) {
-        this.notifyEvent('Inventory info updated.', 'Success')
-        return true
-      }
-      this.notifyEvent('Inventory info not  updated.', 'failed')
-    })
+    this.action$ =  this.updateWithoutNotification().pipe(
+      switchMap(data => {
+        if (data) {
+          // this.notifyEvent('Inventory info updated.', 'Success')
+        }
+        this.notifyEvent('Saved.', 'close')
+        return of(data)
+      })
+    )
   }
 
   updateWithoutNotification(): Observable<IInventoryAssignment> {
@@ -333,12 +334,16 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     }
 
     return this.inventoryAssignmentService.editInventory(this.site, item.id, item).pipe(switchMap(data => {
-      return poItem$
-    })).pipe(switchMap(data => {
       if (data) {
-        data.wholeSale = this.item.cost;
-        data.wholeSaleCost = this.item.cost
-        return this.posOrderItemService.changeItemCost(site, data )
+        this.item = data;
+        let posItem = {} as PosOrderItem
+        if (!this.item?.cost) {
+          this.item.cost = 0
+        }
+        posItem.inventoryAssignmentID = data.id
+        posItem.wholeSale = this.item?.cost;
+        posItem.wholeSaleCost = this.item?.cost
+        return this.posOrderItemService.changeItemCost(site, posItem )
       }
       return of(data)
     })).pipe(switchMap(data => {
@@ -361,7 +366,6 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     this.item.metaTags  = event;
     this.inputForm.patchValue({metaTags: event})
   }
-
 
   deleteItem(event) {
     const site = this.siteService.getAssignedSite();

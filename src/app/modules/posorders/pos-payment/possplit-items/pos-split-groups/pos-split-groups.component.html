@@ -8,11 +8,11 @@
     <div *ngFor="let value of values; let i = index;">
       <div class="group" *ngIf="isGreaterThanZero(order.posOrderItems, value)">
 
-          <!-- <div *ngIf="(orderGroupTotal$[i] | async) as item; else loading"> -->
+
             <div *ngIf="(getSplitOrderTotal(value) | async) as item">
               <print-group-receipt
                       (outPutPaymentAmount)="makePayment($event)"
-                      [orderID]="item.id"
+                      [orderID]="order?.id"
                       [order]="item"
                       [groupID]="value">
                     <ng-container

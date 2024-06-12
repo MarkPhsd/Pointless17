@@ -7,8 +7,8 @@ import { AuthenticationService, IDeviceInfo, OrdersService } from 'src/app/_serv
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { SettingsService } from 'src/app/_services/system/settings.service';
-import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -20,6 +20,7 @@ import { CardPointMethodsService } from '../../payment-processing/services';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { DcapService } from '../../payment-processing/services/dcap.service';
 import { DcapMethodsService } from '../../payment-processing/services/dcap-methods.service';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-payment-balance',
@@ -27,7 +28,7 @@ import { DcapMethodsService } from '../../payment-processing/services/dcap-metho
   styleUrls: ['./payment-balance.component.scss']
 })
 export class PaymentBalanceComponent implements OnInit, OnDestroy {
-
+  get platForm() {  return Capacitor.getPlatform(); }
   @Input() hideButtonOptions: boolean;
   @Input() qrOrder :boolean;
   @Input() order : IPOSOrder;
@@ -49,8 +50,10 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   incrementalAuth: PosPayment;
   authData: IUserAuth_Properties;
   authData$: Observable<IUserAuth_Properties>;
-
-  deviceInfo: IDeviceInfo;
+  @Input()  posDevice       :  ITerminalSettings;
+  @Input()  deviceInfo: IDeviceInfo;
+  _posDevice: Subscription;
+  @Input() PaxA920 : boolean;
 
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
@@ -63,6 +66,15 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       this.posPayment = data
       this.getAuthTotalPayments();
     })
+
+
+    try {
+      this._posDevice = this.uiSettingsService.posDevice$.subscribe(data => {
+        this.posDevice = data;
+      })
+    } catch (error) {
+
+    }
   }
 
   constructor(private orderService: OrdersService,
@@ -70,6 +82,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private siteService: SitesService,
               private paymentService: POSPaymentService,
               private paymentMethodService: PaymentMethodsService,
+              private uiSettingsService: UISettingsService,
+
               private paymentMethodsProessService: PaymentsMethodsProcessService,
               public authenticationService: AuthenticationService,
               public  userAuthorization: UserAuthorizationService,
@@ -184,7 +198,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     const uiTransactions = this.uiTransactions;
     if (!this.qrOrder) {
       if (item.completionDate) { return true }
-      if ((uiTransactions && uiTransactions?.dCapEnabled && !item.completionDate) &&
+      if (this.PaxA920) { return true;}
+      if ((uiTransactions && uiTransactions?.dCapEnabled  && !item.completionDate) &&
           ((item.tranCode && item?.tranCode.toLowerCase() === 'emvpreauth') ||  (item?.tranCode && item?.tranCode.toLowerCase() === 'IncrementalAuth'.toLowerCase())) ) {
             return true
           }
@@ -384,6 +399,11 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
   editPayment(payment: IPOSPayment) {
       //get payment
+      if (this.PaxA920) {
+
+        return;
+      }
+
       const site = this.siteService.getAssignedSite();
       if (payment.paymentMethodID == 0) {
         this.editDialog.openChangeDueDialog(payment, null, this.order)

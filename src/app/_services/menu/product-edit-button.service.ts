@@ -56,6 +56,7 @@ import { AddInventoryItemComponent } from 'src/app/modules/admin/inventory/add-i
 import { DCAPTransactionComponent } from 'src/app/modules/dsiEMV/Dcap/dcaptransaction/dcaptransaction.component';
 import { PosOrderEditorComponent } from 'src/app/modules/posorders/pos-order/pos-order-editor/pos-order-editor.component';
 import { EmployeeSelectPopUpComponent } from 'src/app/modules/admin/employees/employee-select-pop-up/employee-select-pop-up.component';
+import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 
 @Injectable({
   providedIn: 'root'
@@ -154,6 +155,14 @@ export class ProductEditButtonService {
     )
     return dialogRef
   }
+
+  // openNewItemSelector(product?) {
+  //   let dialogRef: any;
+  //   const site = this.siteService.getAssignedSite();
+
+  //   dialogRef = this.openProductEditor(product?.id,  product?.prodModifierType)
+  //   return dialogRef
+  // }
 
   openPSMenuGroupEditor(id: any) {
     let dialogRef: any;
@@ -653,7 +662,7 @@ export class ProductEditButtonService {
       case 59 :
         return this.dialog.open(StrainProductEditComponent,
           { width:        '95%',
-            height:       '775px',
+            height:       '90vh',
             minHeight:    '775px',
             data : data
           },
@@ -663,7 +672,7 @@ export class ProductEditButtonService {
         {
           return  this.dialog.open(StrainProductEditComponent,
             { width:        '95%',
-              height:       '775px',
+              height:       '90vh',
               minHeight:    '775px',
               data : data
             },
@@ -827,6 +836,7 @@ export class ProductEditButtonService {
           minHeight:    '600px',
           data : itemWithAction
       })
+      return dialogRef
     }
   }
 
@@ -851,6 +861,7 @@ export class ProductEditButtonService {
           minHeight:    '600px',
           data : itemWithAction
       })
+      return dialogRef
     }
   }
 
@@ -889,6 +900,7 @@ export class ProductEditButtonService {
             data     : action
         })
       })
+      return dialogRef
     }
   }
 

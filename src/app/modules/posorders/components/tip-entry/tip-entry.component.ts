@@ -16,7 +16,7 @@ import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.s
 export class TipEntryComponent implements OnInit  {
   uiTransactions: TransactionUISettings
   uiTransactions$ : Observable<TransactionUISettings>;
-
+  customAmount: boolean;
   inputForm             : UntypedFormGroup;
   @Input()  paymentMethod: IPaymentMethod;
   @Input()  order        : IPOSOrder;
@@ -46,7 +46,8 @@ export class TipEntryComponent implements OnInit  {
   customTipAmount(amount) {
     if (this.payment) {
       const value = +amount;
-      this.tip( ( amount )  )
+      this.tip( ( +value.toFixed(value) )  )
+      this.specifiedTipAmount.emit( +value.toFixed(2))
     }
   }
 

@@ -1,3 +1,4 @@
+<div *ngIf="(action$ | async) as action"></div>
 <ng-template #loading><mat-spinner [diameter]="50"></mat-spinner></ng-template>
 
 <mat-card
@@ -29,13 +30,30 @@
                 (outputupdateonCancel)  ="onCancel($event)"
           ></app-edit-buttons-standard>
         </div>
+
+        <div>
+          <div *ngIf="!showJSONData">
+             <button mat-raised-button color="primary"  (click)="showJSONData=!showJSONData">Show Data</button>
+          </div>
+
+          <div  *ngIf="showJSONData">
+            <button mat-raised-button color="primary" (click)="showJSONData=!showJSONData">Show Form</button>
+          </div>
+        </div>
       </div>
       <mat-divider></mat-divider>
     </mat-card-subtitle>
 
-    <mat-card-content>
+    <mat-card-content style="overflow-y: scroll;
+                              height: 475px;">
+
+      <div *ngIf="showJSONData" >
+        <ngx-json-viewer  [expanded]="true" [json]="jsonData"></ngx-json-viewer>
+      </div>
+
       <div  [formGroup]="packageForm"
-            class      ="grid-container" >
+            class      ="grid-container"
+            *ngIf="!showJSONData" >
 
         <div *ngIf="filter">
           <metrc-inventory-properties
@@ -45,7 +63,7 @@
                 (outputMenuItem)="getCatalogItem($event)"
                 (outputVendor)  ="getVendor($event)">
           </metrc-inventory-properties>
-          
+
           <app-price-category-select
               *ngIf             ="filter"
               [isInventory]     ="true"

@@ -94,7 +94,7 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
     if (ui?.dcapSurchargeOption == 2) {
       return this.roundToPrecision( this.order.subTotal * (1 + +ui.dcapDualPriceValue) , 5)
     }
-    if (ui?.dcapDualPriceValue == 1 ) {
+    if (ui?.dcapSurchargeOption == 1 ) {
       return this.roundToPrecision( this.order.total * (1 + +ui.dcapDualPriceValue) , 5)
     }
 

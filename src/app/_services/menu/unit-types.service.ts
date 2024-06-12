@@ -38,6 +38,19 @@ export class UnitTypesService {
 
    }
 
+   getUnitTypeByName(site: ISite, name: string) {
+    const controller =  "/UnitTypes/"
+
+    const endPoint = "getUnitTypeByName"
+
+    const parameters = `?name=${name}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<UnitType>(url)
+  }
+
+
    getUnitTypesSearch(site: ISite, searchModel: SearchModel): Observable<IUnitTypePaged> {
 
     const controller =  "/UnitTypes/"

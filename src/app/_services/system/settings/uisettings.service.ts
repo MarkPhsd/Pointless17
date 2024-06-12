@@ -290,7 +290,7 @@ export interface UIHomePageSettings {
 
 export class UISettingsService {
 
-  dcapSurchargeOptionList = [{name: 'Total', value: 0, id: 0} , {name: 'Subt Total', value: 1, id: 1 }, {name: 'Sub Plus Total', value: 2, id: 2} ]
+  dcapSurchargeOptionList = [{name: 'None', value: 0, id: 0} , {name: 'Total', value: 1, id: 1} , {name: 'Subt Total', value: 2, id: 2 }, {name: 'Sub Plus Total', value: 3, id: 3} ]
 
   pricingRecMed = [
     {id: 0, name: 'Both'}, {id: 1, name: 'Rec'}, {id: 2, name: 'Med'}

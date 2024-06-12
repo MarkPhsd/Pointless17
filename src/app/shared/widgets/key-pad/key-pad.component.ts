@@ -357,18 +357,19 @@ export class KeyPadComponent implements OnInit, OnChanges {
   returnEnterPress(){
 
     if (!this.value && this.cashValue) {
-      // console.log('1cashvalue', this.cashValue)
+      console.log('1cashvalue', this.cashValue)
       this.outPutReturnEnter.emit(this.cashValue);
       return;
     }
 
     if (!this.formatted) {
-      // console.log('2cashvalue', this.cashValue)
+      console.log('2cashvalue', this.cashValue)
       this.outPutReturnEnter.emit(this.value)
       return
     }
 
     this.refreshDisplay()
+    console.log('formatted', this.cashValue)
     this.outPutReturnEnter.emit(this.formatted)
   }
 

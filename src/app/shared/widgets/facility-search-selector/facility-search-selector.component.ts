@@ -71,7 +71,7 @@ export class FacilitySearchSelectorComponent implements OnInit, AfterViewInit  {
     // } catch (error) {
     //   console.log(error)
     // }
-    console.log('')
+    // console.log('')
   }
 
   refreshSearch(search: any){

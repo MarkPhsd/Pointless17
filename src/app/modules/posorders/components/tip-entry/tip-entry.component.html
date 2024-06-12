@@ -1,6 +1,12 @@
-<div class="tip-button-grid">
+<div class="tip-button-grid" *ngIf="!customAmount">
 
-  <div class="action-center">
+  <div class="action-center" >
+    <button class="tip-button"
+            mat-raised-button
+            (click)="customAmount = !customAmount">Custom</button>
+</div>
+
+  <div class="action-center" >
       <button class="tip-button"
               mat-raised-button
               (click)="specifiedTip(15)">Tip 15 %  {{ payment.amountPaid * (15/100) | currency }}</button>
@@ -21,7 +27,7 @@
 </div>
 
 
-<div  *ngIf="(payment)">
+<div  *ngIf="(payment) && customAmount">
   <div class="action-center">
     <app-key-pad
         [showInput]           ="hideKeyPad"

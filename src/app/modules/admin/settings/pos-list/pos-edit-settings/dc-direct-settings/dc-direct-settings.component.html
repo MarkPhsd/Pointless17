@@ -1,3 +1,4 @@
+<div *ngIf="(action$ | async) as action"></div>
 <mat-card  *ngIf="isDSIEnabled && dsiEMVSettings  && terminal"
           [formGroup]="dsiEMVSettings">
   <mat-card-subtitle>
@@ -125,9 +126,8 @@
         </div>
         <div>Suppressed Forms.</div>
       </div>
-      <div>
-        <!-- <button  mat-button  (click)="dCapReset()">Device Reset</button> -->
-        <button  mat-button (click)="dCapReset()">Device Reset</button>
+      <div *ngIf="dsiEMVSettings.value">
+        <button   mat-raised-button color="primary" (click)="dCapReset()">Device Reset</button>
       </div>
   </div>
 </mat-card>

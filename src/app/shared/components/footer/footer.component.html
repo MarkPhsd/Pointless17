@@ -33,7 +33,7 @@
 
     <div class="mat-item">
 
-      <span class="item-span" *ngIf="refreshCreditCardButton" style="margin-bottom:3px">
+      <span class="item-span" *ngIf="refreshCreditCardButton && !order?.completionDate" style="margin-bottom:3px">
         <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
       </span>
 

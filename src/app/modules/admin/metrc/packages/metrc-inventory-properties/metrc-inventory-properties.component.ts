@@ -1,12 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { EMPTY, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
-import { ISite } from 'src/app/_interfaces';
+import { IProduct, ISite, UnitType } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { MenuService } from 'src/app/_services';
+import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import {  MetrcFacilitiesService } from 'src/app/_services/metrc/metrc-facilities.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
@@ -17,11 +20,12 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class MetrcInventoryPropertiesComponent implements OnInit {
 
-  @Input() inputForm   :      UntypedFormGroup;
-  @Input() package     :      METRCPackage;
+  action$: Observable<any>;
+  @Input()  inputForm   :      UntypedFormGroup;
+  @Input()  package     :      METRCPackage;
   @Output() outputMenuItem    = new EventEmitter<any>();
   @Output() outputVendor      = new EventEmitter<any>();
-  @Input() filter: ProductSearchModel; //productsearchModel;
+  @Input()  filter: ProductSearchModel; //productsearchModel;
 
   facilityLicenseNumber: string;
   productionBatchNumber: string;
@@ -31,6 +35,9 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
   constructor(
     private siteService           : SitesService,
     private menuService           : MenuService,
+    private unitTypeService: UnitTypesService,
+    private itemTypeService: ItemTypeService,
+    private productButtonService: ProductEditButtonService,
     private metrcFacilitiesService: MetrcFacilitiesService,
   ) { }
 
@@ -73,19 +80,19 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       const site = this.siteService.getAssignedSite();
       const searchModel = {} as ProductSearchModel;
       searchModel.name = metrcPackage.productName ;
-      searchModel.metrcCategory = metrcPackage.productCategoryName
+      // searchModel.metrcCategory = metrcPackage.productCategoryName
       searchModel.exactNameMatch = true;
+
       const list$ =  this.menuService.getItemBasicBySearch(site, searchModel ).pipe(
         switchMap(data => {
           if (data) {
             if (data.length == 0) {return of('')}
-
-            if (!data[0] == undefined || data[0].id == undefined) {return EMPTY}
+            if (!data[0] == undefined || data[0].id == undefined) {return of(null)}
             return this.menuService.getMenuItemByID( site, data[0].id)
           }}),
           catchError( data => {
             console.log('error' , data)
-            return EMPTY
+            return of(null)
           }
         ))
 
@@ -103,6 +110,11 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
                 this.outputMenuItem.emit(data)
                 return
               }
+          } else {
+            const confirm = window.confirm(`${searchModel?.name} does not exist. Do you want to create a new item?`)
+            if (confirm) {
+              this.openNewProduct(metrcPackage)
+            }
           }
         },
         error: err => {
@@ -112,6 +124,101 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       )
       this.setProductNameEmpty(this.inputForm);
     }
+  }
+
+  // searchModel.name = metrcPackage.productName ;
+  // searchModel.metrcCategory = metrcPackage.productCategoryName
+  // searchModel.exactNameMatch = true;
+
+
+  openNewProduct(met: METRCPackage) {
+    //data?:METRCPackage
+
+    let type = {} as IItemType;
+    let uom = {} as any;
+    let product = {} as IProduct;
+
+    type.name = met?.item?.productCategoryType;
+    const site = this.siteService.getAssignedSite()
+    const type$ = this.getItemType(met?.item?.productCategoryType)
+    const uom$ = this.getUnitTypeByName(met?.unitOfMeasureName)
+
+    let action$ = type$.pipe(switchMap(data => {
+      type = data;
+      return uom$
+    })).pipe(switchMap(data => {
+      uom = data;
+      product.name = met?.item.name;
+      product.active = true;
+      product.webProduct = 1;
+
+      product.fullProductName = product.name;
+      product.prodModifierType = type.id;
+      product.unitTypeID = uom.id;
+      product.productCount = 0;
+
+      return      this.menuService.postProduct(site, product)
+    })).pipe(switchMap(data => {
+      if (data && type) {
+
+        // console.log('product', product)
+        // console.log('new product', data)
+        // console.log('type', type)
+        // let dialog =  this.productButtonService.openProductEditWindow(data, type)
+        // dialog.afterClosed().subscribe(data => {
+        // })
+        this.outputMenuItem.emit(data)
+      }
+
+      return of(data)
+    }));
+
+    this.action$ = action$
+  }
+
+
+
+  private getItemType(name: string): Observable<IItemType> {
+    const site = this.siteService.getAssignedSite()
+    return this.itemTypeService.getItemTypeByName(site,name ).pipe(switchMap(data => {
+      if (!data) {
+        let type = {} as IItemType;
+        type.name = name;
+        return this.itemTypeService.postItemType(site, type)
+      }
+      return of(data)
+    }))
+   }
+
+   private getUnitTypeByName(name: string): Observable<any> {
+    const site = this.siteService.getAssignedSite()
+    let uom = {} as any;
+    return this.unitTypeService.getUnitTypeByName(site, name).pipe(switchMap(data => {
+      if (!data) {
+        uom.name = name;
+        return this.unitTypeService.post(site, uom)
+      }
+      return of(data)
+    }))
+   }
+
+  openProductEditor(productID) {
+
+    productID = this.inputForm.controls['productID'].value;
+    if (!productID) {
+      this.siteService.notify('no id', 'close', 300)
+      return
+    }
+    const site = this.siteService.getAssignedSite()
+    this.action$  = this.menuService.getProduct(site,productID).pipe(switchMap(data => {
+      return this.itemTypeService.getItemType(site,data.prodModifierType )
+    })).pipe(switchMap(data => {
+      if (data && productID) {
+        this.productButtonService.openProductEditor(productID, data.id)
+      }
+      return of(data)
+    }))
+
   }
 
   setProductNameEmpty(inputForm: UntypedFormGroup) {
@@ -136,6 +243,10 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
     }
   }
 
+  openNewProductByType() {
+    // this.productButtonService.openNewItemSelector()
+  }
+
   getCatalogItem(event) {
     const itemStrain = event
     if (itemStrain) {
@@ -143,6 +254,8 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
         this.menuService.getMenuItemByID(this.site, itemStrain.id).subscribe(data => {
             if (data) {
               this.menuItem = data
+              this.package.productID = this.menuItem?.id;
+              this.package.productName = this.menuItem?.name
               this.outputMenuItem.emit(data)
             }
           }

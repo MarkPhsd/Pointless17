@@ -25,14 +25,26 @@
                 (outputeupdateItem)     ="updateItem($event)"
                 (outputupdateItemExit)  ="updateItemExit($event)"
                 (outputupdatedeleteItem)="deleteItem($event)"
-                (outputupdateonCancel)  ="onCancel($event)"
-          ></app-edit-buttons-standard>
+                (outputupdateonCancel)  ="onCancel($event)" >
+          </app-edit-buttons-standard>
+
+          <div>
+            <div *ngIf="!showJSONData">
+               <button mat-raised-button color="primary"  (click)="showJSONData=!showJSONData">Show Data</button>
+            </div>
+
+            <div  *ngIf="showJSONData">
+              <button mat-raised-button color="primary" (click)="showJSONData=!showJSONData">Show Form</button>
+            </div>
+          </div>
         </div>
       </div>
       <mat-divider></mat-divider>
     </mat-card-subtitle>
-    <mat-card-content>
-      <div  [formGroup]="packageForm"
+
+    <mat-card-content style="overflow-y: scroll;
+                            height: 475px;">
+      <div *ngIf="!showJSONData" [formGroup]="packageForm"
             class      ="grid-container"
       >
           <div>
@@ -40,8 +52,7 @@
                   [inputForm]     ="packageForm"
                   [package]       ="package"
                   (outputMenuItem)="getCatalogItem($event)"
-                  (outputVendor)  ="getVendor($event)"
-                  >
+                  (outputVendor)  ="getVendor($event)" >
             </metrc-inventory-properties>
           </div>
 
@@ -83,8 +94,7 @@
                           [(ngModel)]="inventoryLocationID"
                           type="text"
                           formControlName="inventoryLocationID"
-                          (selectionChange)="getLocationAssignment($event.value)"
-                          >
+                          (selectionChange)="getLocationAssignment($event.value)" >
                     <div *ngIf="(inventoryLocations$ | async) as list">
                       <mat-option *ngFor="let item of list" [value]="item.id">
                         {{item.name}}
@@ -117,8 +127,7 @@
                     [(ngModel)]="inputQuantity"
                     type="text"
                     formControlName="inputQuantity"
-                    (ngModelChange)="getAvailableUnitsByQuantity()"
-                  >
+                    (ngModelChange)="getAvailableUnitsByQuantity()">
                 </mat-form-field>
 
                 <mat-form-field  appearance="outline" class="select-conversion fields"  >
@@ -160,6 +169,7 @@
 
               <div class="button-assign" *ngIf="baseUnitsRemaining != 0">
                 <button mat-raised-button
+                        [disabled]="!isPackageReady"
                         class="button"
                         color="primary"
                         type="button"
@@ -170,6 +180,7 @@
 
               <div class="btn-edit-pacakge" *ngIf="baseUnitsRemaining != 0">
                 <button mat-raised-button
+                        [disabled]="!isPackageReady"
                         class="button"
                         color="primary"
                         type="button"
@@ -179,7 +190,9 @@
               </div>
 
               <div *ngIf="baseUnitsRemaining == 0">
-                <button mat-raised-button
+                <button
+                        [disabled]="!isPackageReady"
+                        mat-raised-button
                         class="button"
                         color="primary"
                         type="button"
@@ -209,5 +222,10 @@
             </mat-card>
           </div>
       </div>
+
+      <div *ngIf="showJSONData" >
+        <ngx-json-viewer  [expanded]="true" [json]="jsonData"></ngx-json-viewer>
+      </div>
+
    </mat-card-content>
 </mat-card>

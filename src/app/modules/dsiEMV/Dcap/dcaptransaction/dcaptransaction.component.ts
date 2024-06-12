@@ -20,6 +20,7 @@ import { DcapService,DcapRStream } from 'src/app/modules/payment-processing/serv
 })
 export class DCAPTransactionComponent implements OnInit {
   resultMessage: any;
+  textResponse: string;
   get isDev() {
     return this.siteService.isDev
   }
@@ -348,6 +349,7 @@ export class DCAPTransactionComponent implements OnInit {
         this.errorMessage = ''
         this.message = ''
         this.response = null;
+        this.textResponse = null;
       }
 
       validateTransactionData() {
@@ -360,6 +362,7 @@ export class DCAPTransactionComponent implements OnInit {
         this.resultMessage = item?.resultMessage;
         this.processing = item?.processing;
         this.saleComplete = item?.success;
+        this.textResponse = item?.textResponse;
         return item;
       }
 

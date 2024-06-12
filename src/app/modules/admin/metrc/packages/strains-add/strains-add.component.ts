@@ -2,10 +2,10 @@ import { Component,  Inject,   Input,   OnInit,} from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl} from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { AWSBucketService, MenuService,  } from 'src/app/_services';
+import { AWSBucketService, AuthenticationService, MenuService,  } from 'src/app/_services';
 import { ISite } from 'src/app/_interfaces/site';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.service';
 import { InventoryAssignmentService} from 'src/app/_services/inventory/inventory-assignment.service';
 import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.service';
@@ -13,6 +13,8 @@ import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ConversionsService, IUnitConversion } from 'src/app/_services/measurement/conversions.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
+import { UserPreferences } from 'src/app/_interfaces';
+import { IInventoryLocation, InventoryLocationsService } from 'src/app/_services/inventory/inventory-locations.service';
 
 @Component({
   selector: 'app-strains-add',
@@ -24,6 +26,7 @@ export class StrainsAddComponent implements OnInit {
 
   productionBatchNumber:  string;
   facilityLicenseNumber:  string;
+  action$: Observable<any>;
 
   get f():                UntypedFormGroup  { return this.packageForm as UntypedFormGroup};
   get hasImportedControl(){ return this.packageForm.get("hasImported") as UntypedFormControl;}
@@ -41,6 +44,7 @@ export class StrainsAddComponent implements OnInit {
   facility = {} as        IItemFacilitiyBasic
   site:                   ISite;
   menuItem:               any ;
+  showJSONData: boolean; //togggles the form and viewing raw data.
 
 
   //remove
@@ -59,6 +63,8 @@ export class StrainsAddComponent implements OnInit {
           private _snackBar: MatSnackBar,
           private siteService: SitesService,
           private menuService: MenuService,
+          private authenticationService: AuthenticationService,
+          private inventoryLocationsService: InventoryLocationsService,
           private metrcPackagesService: MetrcPackagesService,
           private dialogRef: MatDialogRef<StrainsAddComponent>,
           @Inject(MAT_DIALOG_DATA) public data: any,
@@ -78,32 +84,54 @@ export class StrainsAddComponent implements OnInit {
 
   async ngOnInit() {
 
-      this.initProductSearchModel();
+    this.initProductSearchModel();
 
-      const site        = this.siteService.getAssignedSite();
-      this.site         = this.siteService.getAssignedSite();
+    const site        = this.siteService.getAssignedSite();
+    this.site         = this.siteService.getAssignedSite();
 
-      const item$       = this.metrcPackagesService.getPackagesByID(this.id, site) //.pipe().toPromise();
-      this.bucketName   =  await this.awsBucket.awsBucket();
-      this.awsBucketURL =  await this.awsBucket.awsBucketURL();
+    const item$       = this.metrcPackagesService.getPackagesByID(this.id, site) //.pipe().toPromise();
+    this.bucketName   =  await this.awsBucket.awsBucket();
+    this.awsBucketURL =  await this.awsBucket.awsBucketURL();
 
-      item$.subscribe(
-        {
-          next: data => {
-            this.package = data;
-            if (this.package) {
-              if (this.package.productID) {
-                this.assignMenItem(+this.package.productID)
-              }
-              this.initForm();
-              this.initPriceForm();
+    item$.subscribe(
+      {
+        next: data => {
+          this.package = data;
+          if (this.package) {
+            if (this.package.productID) {
+              this.assignMenItem(+this.package.productID)
             }
-         },
-          error: err => {
-            console.log('error', err)
+            this.initForm();
+            this.initPriceForm();
           }
+        },
+        error: err => {
+          console.log('error', err)
         }
-      )
+      }
+    )
+
+  }
+
+
+  get jsonData() {
+    if (this.package) {
+      if (this.package.json) {
+        return JSON.parse(this.package?.json)
+      }
+    }
+  }
+
+  get userPref() {
+    if (this.authenticationService._user.value) {
+      const user = this.authenticationService._user.value;
+      if (user) {
+        const pref = this.authenticationService._user.value.preferences;
+        const preferences = JSON.parse(pref) as UserPreferences;
+        return preferences;
+      }
+    }
+    return {} as UserPreferences;
   }
 
   initProductSearchModel() {

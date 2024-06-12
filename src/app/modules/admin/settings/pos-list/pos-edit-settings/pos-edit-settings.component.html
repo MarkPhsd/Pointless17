@@ -1,5 +1,6 @@
 <div *ngIf="(saving$ | async) as saving"></div>
 <div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="(processing$ | async) as action"></div>
 <ng-template #saving>
   ...saving
 </ng-template>

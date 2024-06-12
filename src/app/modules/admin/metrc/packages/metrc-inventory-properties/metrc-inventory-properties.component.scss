@@ -1,3 +1,11 @@
-mat-form-field {
+.mat-form-field {
   font-size: small;
+}
+
+
+.grid-menu-search-selector {
+  display: grid;
+  gap: 4px;
+  max-width: 150px;
+  grid-template-columns: auto 25px;
 }

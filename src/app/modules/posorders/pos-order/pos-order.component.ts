@@ -60,6 +60,7 @@ styleUrls: ['./pos-order.component.scss'],
 
 export class PosOrderComponent implements OnInit ,OnDestroy {
   processing: boolean;
+  showLabelPrint: any;
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('lastImageDisplayView') lastImageDisplayView: TemplateRef<any>;
   @ViewChild('listViewType')   listViewType: TemplateRef<any>;
@@ -84,7 +85,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @ViewChild('importPurchaseOrder')   importPurchaseOrder: TemplateRef<any>;
   @ViewChild('purchaseItemHistory') purchaseItemHistory: TemplateRef<any>;
   @ViewChild('poItemValues') poItemValues: TemplateRef<any>;
-
+  @ViewChild('labelPrintChild') labelPrintChild: TemplateRef<any>;
   @ViewChild('newItemEntry') newItemEntry: TemplateRef<any>;
 
   //Coaching Elements
@@ -368,7 +369,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   gettransactionUISettingsSubscriber() {
     this.uiTransactionSetting$ =  this.uiSettingsService.transactionUISettings$.pipe(switchMap(data => {
-      // console.log('enableRounding', data?.enableRounding)
       if (data) {
         return of(data)
       }
@@ -708,6 +708,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   get purchaseOrderItemView() {
+    if (!this.userAuths?.editProduct) { return }
     if (!this.smallDevice && !this.mainPanel) { return null }
     if (this.order && this.order.service && (this.order.service?.filterType == 1 || this.order.service?.name.toLowerCase() === 'purchase order')) {
       return this.purchaseItemSales;
@@ -715,8 +716,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     return null
   }
 
+
   //purchaseItemHistory
   get purchaseItemHistoryView() {
+    if (!this.userAuths?.editProduct) { return }
     if (!this.smallDevice &&  !this.mainPanel) { return null }
     if (this.order && this.order.service &&
       (this.order.service?.filterType == 1 || this.order.service?.name.toLowerCase() === 'purchase order')) {
@@ -726,17 +729,31 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   get importPurchaseOrderView() {
+    if (this.showLabelPrint) { return null}
+    if (!this.userAuths?.editProduct) { return }
     if (!this.smallDevice &&  !this.mainPanel) { return null }
-    if (this.order && this.order.service &&
-      (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
+    if (!this.isNotPurchaseOrder) {
       return this.importPurchaseOrder;
     }
     return null
   }
 
+  get labelPrintView() {
+    if (this.showLabelPrint) { return this.labelPrintChild }
+    return null;
+  }
+
+  get isNotPurchaseOrder() {
+    if ( this.order?.service?.filterType  == 1) { return false}
+    if ( this.order?.service?.filterType  == 2) { return false }
+    return true;
+  }
+
   get poItemvaluesView() {
+    if (this.showLabelPrint) { return null}
+    if (!this.userAuths?.editProduct) { return }
     if (!this.smallDevice &&  !this.mainPanel) { return null }
-    if (this.order && this.order.service && (this.order.service.filterType == 1 || this.order.service.name.toLowerCase() === 'purchase order')) {
+    if (this.order && this.order?.service && (this.order.service?.filterType == 1 || this.order?.service?.name.toLowerCase() === 'purchase order')) {
       return this.poItemValues;
     }
     return null
@@ -752,7 +769,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   get roundOrderView() {
-    if (this.uiTransactionSetting && this.uiTransactionSetting.enableRounding) {
+    if (this.uiTransactionSetting && this.uiTransactionSetting?.enableRounding) {
       if (!this.paymentsEqualTotal && (!this.order?.service?.filterType || this.order?.service?.filterType == 0)) {
         return this.roundOrder
       }

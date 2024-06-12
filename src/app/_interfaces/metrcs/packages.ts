@@ -76,6 +76,7 @@ export interface METRCPackage {
   active                            : boolean;
   errorMessage                      : string;
   message                           : string;
+  json: string;
 }
 
 export interface Item {

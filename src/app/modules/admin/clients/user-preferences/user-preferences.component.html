@@ -8,7 +8,7 @@
   </mat-card-subtitle>
   <mat-card-content>
     <div class="grid-menu-category-flow">
-      
+
       <div>
         <div>
           <mat-label>How do you want to communicate with us?</mat-label>
@@ -57,17 +57,28 @@
         <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
       </div>
 
-  
+
     </div>
 
-    <div>
-      <app-value-fields
-          [inputForm]="inputForm"
-          [fieldType]="'password'"
-          [fieldName]="'metrcKey'" >
-        METRC
-      </app-value-fields>
-    </div>
+    <mat-card>
+
+      <div>
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldType]="'password'"
+            [fieldName]="'metrcKey'" >
+          METRC
+        </app-value-fields>
+      </div>
+
+      <div  class="mat-label">
+        <mat-slide-toggle
+            class="mat-label"
+            formControlName="metrcUseMetrcLabel">
+          <mat-label class="mat-label">Use Metrc Label for Inventory</mat-label>
+        </mat-slide-toggle>
+      </div>
+    </mat-card>
   </mat-card-content>
 
   <mat-card-actions>

@@ -15,6 +15,7 @@ import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/ap
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { ActivatedRoute, Route } from '@angular/router';
+import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 @Component({
   selector: 'app-pos-edit-settings',
   templateUrl: './pos-edit-settings.component.html',
@@ -49,6 +50,7 @@ export class PosEditSettingsComponent implements OnInit {
   cardPointTerminals = [] as string[];
   id: any;
   androidDisplay: any;
+  processing$: Observable<any>;
 
   medOrRecStoreList = [
     {id:0,name:'Any'},  {id:1,name:'Med'},  {id:2,name:'Rec'}
@@ -69,6 +71,7 @@ export class PosEditSettingsComponent implements OnInit {
     public  labelingService: LabelingService,
     private cardPointBoltService: CardPointBoltService,
     public route        : ActivatedRoute,
+    private dCapService           : DcapService,
     private dialogRef   : MatDialogRef<PosEditSettingsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number ) {
 
@@ -335,4 +338,24 @@ export class PosEditSettingsComponent implements OnInit {
       })
     // }
   }
+
+  reset() {
+    this.processing$ = this._reset();
+  }
+
+  _reset() {
+    if (this.inputForm.controls['name'].value) {
+      const device = this.inputForm.controls['name'].value;
+      // this.initMessaging()
+
+      return  this.dCapService.resetDevice(device).pipe(switchMap(data => {
+        // this.processing = false;
+        // this.result = data;
+        this.sitesService.notify(JSON.stringify(data), 'close', 10000)
+        return of(data);
+      }))
+    }
+    return of(null)
+  }
+
 }

@@ -213,6 +213,7 @@ export class ChangeDueComponent implements OnInit  {
   customTipAmount(amount) {
     if (this.payment) {
       const value = +amount;
+      console.log('customTipAmount', amount, +amount.toFixed(2))
       this.tip( ( amount )  )
     }
   }
@@ -220,12 +221,19 @@ export class ChangeDueComponent implements OnInit  {
   specifiedTip(amount: number) {
     const payment = this.payment
     if (payment) {
-      const value = payment.amountPaid * (amount / 100 );
-      this.tip(  +value.toFixed(2)  )
+
+      // const value = payment.amountPaid * (amount / 100 );
+
+      console.log('specifiedTip', amount, +amount.toFixed(2))
+
+      this.tip(  +amount.toFixed(2)  )
+
     }
   }
 
   tip(amount: number) {
+
+    console.log('tip', amount, +amount.toFixed(2))
     const site = this.siteService.getAssignedSite();
     const payment = this.payment
     if (payment) {

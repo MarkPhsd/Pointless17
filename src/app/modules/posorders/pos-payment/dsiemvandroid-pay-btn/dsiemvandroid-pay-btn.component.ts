@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild 
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IPaymentMethod } from 'ngx-paypal';
 import { Observable } from 'rxjs';
-import { IPOSOrder } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { TransactionUISettings, } from 'src/app/_services/system/settings/uisettings.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
@@ -24,6 +24,7 @@ export class DSIEMVAndroidPayBtnComponent implements OnInit {
     @Input() paymentAmount: number;
     @Input() footerButton: boolean;
 
+    @Input() posPayment: IPOSPayment;
     stripeEnabled: boolean;
     paymentMethod$: Observable<IPaymentMethod>;
     @Output() setStep = new EventEmitter()
@@ -44,10 +45,14 @@ export class DSIEMVAndroidPayBtnComponent implements OnInit {
     processDSIEMVAndroidCreditCardPayment(manual: boolean) {
       const order = this.order;
       if (order) {
-        this.paymentsMethodsService.processDSIEMVAndroidTransaction(order, this.creditBalanceRemaining, manual, this.uiTransactions)
+        if (this.posPayment) {
+          this.paymentsMethodsService.openPaymentDialog(this.posPayment, 3)
+          return;
+        }
+        this.paymentsMethodsService.processDSIEMVAndroidTransaction(order, this.creditBalanceRemaining,
+                                                                    manual, this.uiTransactions)
       }
     }
-
 
     get  buttonView() {
       if (this.footerButton) {

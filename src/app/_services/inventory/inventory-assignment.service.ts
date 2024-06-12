@@ -726,7 +726,7 @@ export class InventoryAssignmentService {
         inventoryLocationID :              [''],
         expiration:                        [''],
         conversionName  :                  [''],
-
+        testDate        :                  [''],
         thc:                              [''],
         thc2:                             [''],
         thca:                             [''],

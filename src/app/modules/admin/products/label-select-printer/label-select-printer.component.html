@@ -1,36 +1,37 @@
-    
-
-    <app-label-view-selector
-              [labelID]           ="labelID"
-              (outputLabelSetting)="getLabelSetting($event)"
-              [setProduct]        ="product"
-              [labelImageHeight]  ="150"
-              >
+    <div *ngIf="(product$ | async) as product ">
+       {{product?.name}}
+       <br>
+        <app-label-view-selector
+                  [labelID]           ="labelID"
+                  (outputLabelSetting)="getLabelSetting($event)"
+                  [setProduct]        ="product"
+                  [labelImageHeight]  ="150"
+                  >
         </app-label-view-selector>
+    </div>
+    <div *ngIf="isAppElectron || printingEnabled">
+      <app-list-printers-electron
+                                [printerName]="printerName"
+                                (outputPrinterName)="getPrinterName($event)"
+                                ></app-list-printers-electron>
+      <div [formGroup]="printForm">
+        <mat-form-field appearance="outline">
+          <mat-label >Print Quantity</mat-label>
+          <input matInput
+                  type="number"
+                  [(ngModel)] = "printQuantity"
+                  formControlName="printQuantity"
+                  class="form-control" >
+        </mat-form-field>
+      </div>
+    </div>
 
-        <div *ngIf="isAppElectron || printingEnabled">
-          <app-list-printers-electron
-                                    [printerName]="printerName"
-                                    (outputPrinterName)="getPrinterName($event)"
-                                    ></app-list-printers-electron>
-          <div [formGroup]="printForm">
-            <mat-form-field appearance="outline">
-              <mat-label >Print Quantity</mat-label>
-              <input matInput
-                      type="number"
-                      [(ngModel)] = "printQuantity"
-                      formControlName="printQuantity"
-                      class="form-control" >
-            </mat-form-field>
-          </div>
-        </div>
-
-        <div *ngIf="isAppElectron || printingEnabled">
-          <div class="grid-container">
-            <button class="info-buttons"
-                    mat-raised-button color="primary"
-                    (click)="printSku()"><mat-icon>print</mat-icon>Sku </button>
-            <button class="info-buttons" mat-raised-button color="primary"
-                    (click)="printSerial()"><mat-icon>print</mat-icon>Serial </button>
-          </div>
-        </div>
+    <div *ngIf="isAppElectron || printingEnabled">
+      <div class="grid-container">
+        <button class="info-buttons"
+                mat-raised-button color="primary"
+                (click)="printSku()"><mat-icon>print</mat-icon>Sku </button>
+        <button class="info-buttons" mat-raised-button color="primary"
+                (click)="printSerial()"><mat-icon>print</mat-icon>Serial </button>
+      </div>
+    </div>

@@ -2,7 +2,7 @@ import { Component,   Input,  OnInit,  Output, EventEmitter} from '@angular/core
 import { ActivatedRoute,  } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, UntypedFormControl} from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { Observable,  } from 'rxjs';
+import { Observable, of, switchMap,  } from 'rxjs';
 import { CurrencyPipe } from '@angular/common';
 import * as numeral from 'numeral';
 import { IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.service';
@@ -85,18 +85,32 @@ export class StrainPackagesComponent implements OnInit {
   {
   }
 
-  async ngOnInit() {
+  ngOnInit() {
 
-    this.conversions =  await this.conversionService.getGramsConversions();
+    this.conversions =   this.conversionService.getGramsConversions();
     this.unitsConverted = {} as IUnitsConverted;
     this.inventoryAssignments = [];
-    this.inventoryLocations$ =  this.inventoryLocationsService.getLocations()
-    this.inventoryLocations$.subscribe(data => {  this.inventoryLocations = data })
-    this.intakeConversion = await this.getUnitConversionToGrams(this.package.unitOfMeasureName)
+    this.inventoryLocations$ =  this.setInventoryLocation()
+    this.intakeConversion =  this.getUnitConversionToGrams(this.package.unitOfMeasureName)
     this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity
     this.baseUnitsRemaining = this.intakeconversionQuantity
     this.initialQuantity = this.intakeconversionQuantity
 
+  }
+
+  setInventoryLocation() {
+    return  this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
+      this.inventoryLocations = data
+      if (data) {
+        data.forEach(item => {
+          if (item.defaultLocation) {
+            this.getLocationAssignment(item.id);
+            this.inventoryLocationID = item.id;
+          }
+        });
+      }
+      return of(data)
+    }))
   }
 
   onjointValueChange(e) {
@@ -319,8 +333,8 @@ export class StrainPackagesComponent implements OnInit {
     }
   }
 
-  getPriceValues(item: IInventoryAssignment) { 
-    if (this.priceForm && item) { 
+  getPriceValues(item: IInventoryAssignment) {
+    if (this.priceForm && item) {
       const priceCategoryID = this.priceForm.controls['priceCategoryID'].value;
       const cost = this.priceForm.controls['cost'].value;
       const price  = this.priceForm.controls['price'].value;

@@ -2,10 +2,10 @@ import { Component, Inject,  Input,  OnInit, } from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, UntypedFormControl} from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { AWSBucketService,  MenuService,  } from 'src/app/_services';
+import { AWSBucketService,  AuthenticationService,  MenuService,  } from 'src/app/_services';
 import { ISite } from 'src/app/_interfaces/site';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { CurrencyPipe } from '@angular/common';
 import * as numeral from 'numeral';
 import { IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.service';
@@ -16,6 +16,7 @@ import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.ser
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ConversionsService, IUnitConversion, IUnitsConverted } from 'src/app/_services/measurement/conversions.service';
+import { UserPreferences } from 'src/app/_interfaces';
 
 @Component({
   selector: 'app-products-add',
@@ -24,6 +25,8 @@ import { ConversionsService, IUnitConversion, IUnitsConverted } from 'src/app/_s
 })
 export class METRCProductsAddComponent implements OnInit {
   //move to inventory
+  saved: boolean;
+
   conversionName:         string;
   inputQuantity:          number;
   inventoryLocationID:    number;
@@ -48,10 +51,31 @@ export class METRCProductsAddComponent implements OnInit {
   productionBatchNumber:  string;
   facilityLicenseNumber:  string;
 
+  showJSONData: boolean; //togggles the form and viewing raw data.
+
   get f():                UntypedFormGroup  { return this.packageForm as UntypedFormGroup};
   get hasImportedControl()          { return this.packageForm.get("hasImported") as UntypedFormControl;}
   get activeControl()          { return this.packageForm.get("active") as UntypedFormControl;}
 
+  get userPref() {
+    if (this.authenticationService._user.value) {
+      const user = this.authenticationService._user.value;
+      if (user) {
+        const pref = this.authenticationService._user.value.preferences;
+        const preferences = JSON.parse(pref) as UserPreferences;
+        return preferences;
+      }
+    }
+    return {} as UserPreferences;
+  }
+
+  get jsonData() {
+    if (this.package) {
+      if (this.package.json) {
+        return JSON.parse(this.package?.json)
+      }
+    }
+  }
   bucketName:             string;
   awsBucketURL:           string;
 
@@ -95,6 +119,7 @@ export class METRCProductsAddComponent implements OnInit {
           private dialogRef: MatDialogRef<METRCProductsAddComponent>,
           @Inject(MAT_DIALOG_DATA) public data: any,
           private currencyPipe : CurrencyPipe,
+          private authenticationService: AuthenticationService,
           private inventoryAssignmentService: InventoryAssignmentService
           )
      {
@@ -105,21 +130,34 @@ export class METRCProductsAddComponent implements OnInit {
       this.id = this.route.snapshot.paramMap.get('id');
     }
     this.conversionName = 'Each'
-
   }
 
   async ngOnInit() {
-    this.bucketName =   await this.awsBucket.awsBucket();
-    this.awsBucketURL = await this.awsBucket.awsBucketURL();
+    this.bucketName     =   await this.awsBucket.awsBucket();
+    this.awsBucketURL   = await this.awsBucket.awsBucketURL();
     this.unitsConverted = {} as IUnitsConverted;
-    this.site =  this.siteService.getAssignedSite();
-    this.conversions =  await this.conversionService.getGramsConversions();
+    this.site           =  this.siteService.getAssignedSite();
+    this.conversions    =  this.conversionService.getGramsConversions();
     this.inventoryAssigments = [];
-    this.inventoryLocations$ =  this.inventoryLocationsService.getLocations()
-    this.inventoryLocations$.subscribe(data => {
-      this.inventoryLocations = data
-    })
+    this.inventoryLocations$ =  this.setInventoryLocation()
     this.initForm();
+
+  }
+
+  setInventoryLocation() {
+    return  this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
+      this.inventoryLocations = data
+      if (data) {
+        data.forEach(item => {
+          if (item.defaultLocation) {
+            this.getLocationAssignment(item.id);
+            // this.packageForm.patchValue({locationID:})
+            this.inventoryLocationID = item.id;
+          }
+        });
+       }
+      return of(data)
+    }))
   }
 
   initForm() {
@@ -138,18 +176,25 @@ export class METRCProductsAddComponent implements OnInit {
     if (data) {
         this.package = data
 
+        // console.log('initItemFormData', this.package.packageType, this.package.quantity)
+        if (this.package) {
+          if (this.package.unitOfMeasureName && this.package.unitOfMeasureName.toLocaleLowerCase() === 'each') {
+            this.inputQuantity = this.package?.quantity;
+          }
+        }
+
         if (this.package.unitOfMeasureName) {
           this.intakeConversion = this.conversionService.getConversionItemByName(this.package.unitOfMeasureName)
           //convert the package quantity to the grams quantity
-          this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity
+          this.intakeconversionQuantity = +this.intakeConversion.value * +this.package.quantity
           this.baseUnitsRemaining = this.intakeconversionQuantity
           this.initialQuantity    = this.intakeconversionQuantity
         }
 
-        this.package.labTestingState =          this.package.labTestingState.match(/[A-Z][a-z]+|[0-9]+/g).join(" ")
+        this.package.labTestingState =          this.package?.labTestingState.match(/[A-Z][a-z]+|[0-9]+/g).join(" ")
         this.facility = {} as                   IItemFacilitiyBasic
-        this.facility.displayName =             this.package.itemFromFacilityName
-        this.facility.metrcLicense =            this.package.itemFromFacilityLicenseNumber
+        this.facility.displayName =             this.package?.itemFromFacilityName
+        this.facility.metrcLicense =            this.package?.itemFromFacilityLicenseNumber
 
         this.packageForm.patchValue(data)
         this.setProductNameEmpty(this.packageForm);
@@ -157,13 +202,13 @@ export class METRCProductsAddComponent implements OnInit {
         let active = true
         if (!this.package.active)  {   active = false;   }
 
-        const facility = `${data.itemFromFacilityLicenseNumber}-${data.itemFromFacilityName}`
+        const facility = `${data?.itemFromFacilityLicenseNumber}-${data?.itemFromFacilityName}`
 
         this.packageForm.patchValue({
-          productCategoryName:              [data.item.productCategoryName],
-          productCategoryType:              [data.item.productCategoryType],
-          quantityType:                     [data.item.quantityType],
-          // productName:                      [data.item.name],
+          productCategoryName:              [data?.item?.productCategoryName],
+          productCategoryType:              [data?.item?.productCategoryType],
+          quantityType:                     [data?.item?.quantityType],
+          productName:                      [data?.item?.name],
           productname                    :  [''],
           inputQuantity:                    [0],
           inventoryLocationID:              [0],
@@ -171,8 +216,11 @@ export class METRCProductsAddComponent implements OnInit {
           price:                            [0],
           jointWeight:                      [1],
           facilityLicenseNumber:            [facility],
-          intakeConversionValue:            [this.intakeConversion.value],
+          intakeConversionValue:            [this.intakeConversion?.value],
           active                      :     [active],
+          testDate             : [data?.labTestingStateDate],
+          productionBatchNumber: [data?.productionBatchNumber],
+          // expiration           : [data?.date]
       })
 
     }
@@ -214,6 +262,12 @@ export class METRCProductsAddComponent implements OnInit {
         this.onCancel(null)
       }
     })
+
+    this.saved = true
+    this.packageForm.valueChanges.subscribe(data => {
+      this.saved = false;
+    })
+
   }
 
   deleteItem(event) {
@@ -303,6 +357,25 @@ export class METRCProductsAddComponent implements OnInit {
     return true
   }
 
+
+  get isPackageReady() {
+    //
+    // const batchNumber = this.package.productionBatchNumber
+    // const batchNumber = this.package.packagedDate;
+
+    if (this.saved) {
+      const inv = this.packageForm.value as IInventoryAssignment
+      if (inv.batchDate &&
+          inv.productionBatchNumber &&
+          inv.testDate) {
+            return true;
+          }
+      }
+
+    return false
+  }
+
+
   addInventoryAssignmentGroup() {
     const result =  this.isValidEntry()
     //validate entry first:
@@ -314,10 +387,12 @@ export class METRCProductsAddComponent implements OnInit {
 
     //assign values to inventoryAssignement
     inventoryAssignment.label = this.package.label
-
-    const index = this.inventoryAssigments.length + 1
-    inventoryAssignment.sku = this.generateSku(this.package.label, index);
-    inventoryAssignment.metrcPackageID = this.package.id
+    inventoryAssignment.sku = this.package.label
+    if (!this.userPref?.metrcUseMetrcLabel) {
+      const index = this.inventoryAssigments.length + 1
+      inventoryAssignment.sku = this.generateSku(this.package.label, index);
+      inventoryAssignment.metrcPackageID = this.package.id
+    }
 
     let inventoryLocation = this.getLocationAssignment(this.inventoryLocationID);
     inventoryAssignment.locationID                 = this.inventoryLocation.id
@@ -332,6 +407,16 @@ export class METRCProductsAddComponent implements OnInit {
     }
 
     inventoryAssignment.requiresAttention     = false
+
+    if (this.package) {
+      if (this.package.packagedDate) {
+        this.packageForm.patchValue({batchDate: this.package.packagedDate })
+      }
+      if (this.package.labTestingStateDate) {
+        this.packageForm.patchValue({testDate: this.package.labTestingStateDate })
+      }
+
+    }
 
     //unit of measure being sold or stored in.
     const unitConversion = this.conversionService.getConversionItemByName('Each')
@@ -373,6 +458,7 @@ export class METRCProductsAddComponent implements OnInit {
       inventoryAssignment.productionBatchNumber=this.getStringValue('productionBatchNumber')
       inventoryAssignment.batchDate =           this.getStringValue('batchDate')
       inventoryAssignment.expiration =          this.getStringValue('expiration')
+      inventoryAssignment.testDate =            this.getStringValue('testDate')
     } catch (error) {
       console.log(error)
     }
@@ -497,13 +583,22 @@ export class METRCProductsAddComponent implements OnInit {
 
   completePackageImport() {
     const site=  this.siteService.getAssignedSite();
-    // okay so we have to add the list of inventory assignments to a list.
+
     const inv$=  this.inventoryAssignmentService.addInventoryList(site, this.inventoryAssigments[0].label,
                                                                   this.inventoryAssigments)
     inv$.subscribe(
       {
         next: data => {
           this.onCancel(null);
+
+          if (this.userPref?.metrcUseMetrcLabel) {
+            if (this.inventoryAssigments[0].label === this.package.label) {
+              if (data) {
+                const item = data[0]
+                const dialogRef = this.inventoryAssignmentService.openInventoryItem(data[0].id)
+              }
+            }
+          }
           this.notifyEvent('Inventory Packages Imported', 'Success');
           },
         error: error => {
@@ -534,7 +629,8 @@ export class METRCProductsAddComponent implements OnInit {
     this.menuService.getMenuItemByID(this.site, id).subscribe(data => {
       if (data) {
         this.menuItem = data
-        console.log( 'results', this.menuItem, this.packageForm.value)
+        this.package.productID = data?.id.toString();
+        this.package.productName = data?.name
         const item = {productName: data.name, productID: data.id}
         this.packageForm.patchValue(item)
         return;
@@ -576,9 +672,7 @@ export class METRCProductsAddComponent implements OnInit {
     }
   }
 
-  generateSku(sku: string, index: number): any {
-    return this.metrcPackagesService.generateSku(sku, index)
-  }
+
 
   removeInventoryAssignment(i: number) {
     this.assignInventoryArray.removeAt(i)
@@ -593,6 +687,15 @@ export class METRCProductsAddComponent implements OnInit {
       verticalPosition: 'top'
     });
   }
+
+  generateSku(sku: string, index: number): any {
+    return this.metrcPackagesService.generateSku(sku, index)
+    if (this.userPref?.metrcUseMetrcLabel) {
+    } else
+      return this.metrcPackagesService.generateSku(sku, index)
+
+  }
+
 
 }
 

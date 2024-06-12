@@ -32,39 +32,24 @@ export class PromptSubGroupEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   )
   {
-
+    this.prompt  = {} as  PromptSubGroups;
     this.inputForm = this.promptService.initForm(this.inputForm)
     if (data) {
       this.id = data
-    } else {
-      this.getPrompt(0)
     }
   }
 
   ngOnInit() {
+    this.inputForm.patchValue(this.prompt)
     if (this.id) {
       const site = this.siteService.getAssignedSite();
       const prompt$ = this.promptService.getPromptSub(site, this.id)
       prompt$.subscribe (data => {
         this.prompt = data;
-        this.getPrompt(this.id)
+        this.inputForm.patchValue(data)
       })
     }
   }
-
-
-  getPrompt(id: any) {
-    this.inputForm =  this.promptService.initForm(this.inputForm)
-    if (this.inputForm) {
-      if (!id || id == 0) {
-        this.prompt  = {} as  PromptSubGroups;
-      }
-      if (this.prompt) {
-        this.inputForm.patchValue(this.prompt)
-      }
-    }
-  }
-
 
   updateItem(event) {
     if (!this.inputForm.valid) {

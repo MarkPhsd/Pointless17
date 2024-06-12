@@ -34,16 +34,8 @@ export class PrintGroupReceiptComponent implements OnInit {
 
   printReceipt()  {
     if (!this.groupID) { this.groupID = 0 }
-    // const groupID = this.groupID;
-    // const site = this.siteService.getAssignedSite()
-    // this.printReceipt$  = this.orderService.getPOSOrderGroupTotal(site, this.orderID, groupID).pipe(
-    //   switchMap(data => {
-    //     this.printingService.currentGroupID = groupID;
-    //     this.orderMethodsService.printOrder = data;
-    //     this.printingService.previewReceipt();
-    //     return of(data);
-    // }))
-    this.printReceipt$ = this.printingService.printReceipt(this.orderID, this.groupID).pipe(switchMap(data => { 
+
+    this.printReceipt$ = this.printingService.printReceipt(this.orderID, this.groupID).pipe(switchMap(data => {
       return of(data)
     }))
   }
