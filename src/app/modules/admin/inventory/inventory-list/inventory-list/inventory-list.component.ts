@@ -205,7 +205,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
     this.initSubscriptions();
     this.initClasses();
     this.sites$         = this.siteService.getSites();
@@ -265,11 +265,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   // }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    // if (this.currentManifest$) {
-    //   this.currentManifest$.unsubscribe()
-    // }
     if (this._currentManifest) {this._currentManifest.unsubscribe()}
     const i = 0;
   }

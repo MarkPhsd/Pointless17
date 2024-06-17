@@ -96,7 +96,28 @@ get rowClasses() {
     "row-male": (params) => {
       // console.log('gender male',  params.api.getValue("id", params.node),  params.api.getValue("gender", params.node))
       return params.api.getValue("gender", params.node) == 0
-    }
+    },
+
+    "row-groupNumber": (params) => {
+      // console.log('gender male',  params.api.getValue("id", params.node),  params.api.getValue("gender", params.node))
+      // return params.api.getValue("groupNumber", params.node) >= 1
+      const value = params.api.getValue("groupNumber", params.node) >= 1;
+      if (value) {
+        return true
+      }
+
+    },
+    "row-splitPayment": (params) => {
+      // console.log('gender male',  params.api.getValue("id", params.node),  params.api.getValue("gender", params.node))
+      // return params.api.getValue("groupNumber", params.node) >= 1
+      const value = params.api.getValue("splitPayment", params.node) >= 1;
+      if (value) {
+        return true
+      }
+
+    },
+
+
   }
 
 }
@@ -164,7 +185,7 @@ initGridOptionsFormated(pageSize: number, columnDefs: any) {
     productSearchModel.name = search
     productSearchModel.barcode = search
 
-    if (subCategoryID) { 
+    if (subCategoryID) {
       productSearchModel.subCategoryID = subCategoryID;
     }
 

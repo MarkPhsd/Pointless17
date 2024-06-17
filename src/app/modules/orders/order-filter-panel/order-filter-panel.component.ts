@@ -154,7 +154,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       }
     )
   )
-  
+
   setScrollBarColor(color: string) {
     if (!color) {    color = '#6475ac' }
     const css = this.authService.getAppToolBarStyle(color, 25)
@@ -217,12 +217,12 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     try {
       this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
         // console.log('initSearchSubscriber', data)
-        if (!data) { 
+        if (!data) {
           this.initFilter(data)
           return;
         }
-        
-   
+
+
         this.searchModel = data
         this.searchOrderHistory = false;
 
@@ -243,7 +243,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
           }
         }
 
-        // 
+        //
       })
     } catch (error) {
     }
@@ -472,7 +472,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.employees$      = this.employeeService.getAllActiveEmployees(site).pipe(switchMap(data => {
         this.dialogRef = this.productEditButtonService.selectEmployee(data)
         this.dialogRef.afterClosed().subscribe(result => {
-         
+
           if (result) {
             this.setEmployeeValue(result)
           }
@@ -497,15 +497,19 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     }))
 
   }
-
+  clearEmployee() {
+    this.searchModel.employeeID = 0
+    this.searchModel.employeeName = null;
+    this.refreshSearch();
+ }
   setEmployeeValue(event) {
     this.employeeID = event?.id;
     this.searchModel.employeeID = event?.id;
     this.searchModel.employeeName =  event?.employeeName ? event?.employeeName : (event?.name || '');
     this.uiTransactions.toggleUserOrAllOrders = true
-    if (this.userAuthorization.user.userPreferences) { 
+    if (this.userAuthorization.user.userPreferences) {
     }
-    const model = JSON.parse(JSON.stringify(this.searchModel)) as IPOSOrderSearchModel; 
+    const model = JSON.parse(JSON.stringify(this.searchModel)) as IPOSOrderSearchModel;
 
     this.updateOrderSearch(model)
   }

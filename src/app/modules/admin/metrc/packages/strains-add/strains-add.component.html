@@ -1,120 +1,132 @@
 <div *ngIf="(action$ | async) as action"></div>
 <ng-template #loading><mat-spinner [diameter]="50"></mat-spinner></ng-template>
 
-<mat-card
-    *ngIf="package && packageForm; else loading"
-    class="strain-card"
-    >
-    <mat-card-title>
-      <div><h3>Label: {{package.label}}</h3></div>
-    </mat-card-title>
-    <mat-card-subtitle>
+<div class="flex-grid-row-5px">
 
-      <div class="header-container">
-        <div>
-          <metrc-intake-header
-            [intakeConversion]="intakeConversion"
-            [package]="package">
-          </metrc-intake-header>
-          <div [formGroup]="packageForm">
-            <activity-toggles-metrc
+  <div style="width:260px">
+    <span *ngIf="package">
+      <metrc-requirements [name]="package?.productCategoryName"></metrc-requirements>
+    </span>
+  
+    <div *ngIf="showJSONData" style="overflow-y: scroll; max-height: 625px;">
+      <ngx-json-viewer [expanded]="true" [json]="jsonData"></ngx-json-viewer>
+    </div>
+  </div>
+
+  
+  <div style="min-width: 900px;
+              width: calc(100vw - 700px);">
+    <mat-card  *ngIf="package && packageForm; else loading"
+              class="strain-card"  >
+        <mat-card-title>
+          <div><h3>Label: {{package.label}}</h3></div>
+        </mat-card-title>
+        <mat-card-subtitle>
+
+          <div class="header-container">
+            <div>
+              <metrc-intake-header
+                [intakeConversion]="intakeConversion"
+                [package]="package">
+              </metrc-intake-header>
+              <div [formGroup]="packageForm">
+                <activity-toggles-metrc
+                    [inputForm]="packageForm">
+                </activity-toggles-metrc>
+              </div>
+            </div>
+            <div>
+              <app-edit-buttons-standard
+                    (outputeupdateItem)     ="updateItem($event)"
+                    (outputupdateItemExit)  ="updateItemExit($event)"
+                    (outputupdatedeleteItem)="deleteItem($event)"
+                    (outputupdateonCancel)  ="onCancel($event)"
+              ></app-edit-buttons-standard>
+            </div>
+
+            <div>
+              <div *ngIf="!showJSONData">
+                <button mat-raised-button color="primary"  (click)="showJSONData=!showJSONData">Show Data</button>
+              </div>
+
+              <div  *ngIf="showJSONData">
+                <button mat-raised-button color="primary" (click)="showJSONData=!showJSONData">Hide Data</button>
+              </div>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+        </mat-card-subtitle>
+
+        <mat-card-content style="overflow-y: scroll;
+                                  height: 625px;">
+
+          <div  [formGroup]="packageForm"
+                class      ="grid-container"  >
+
+            <div *ngIf="filter">
+              <metrc-inventory-properties
+                    [inputForm]     ="packageForm"
+                    [package]       ="package"
+                    [filter]        ='filter'
+                    (outputMenuItem)="getCatalogItem($event)"
+                    (outputVendor)  ="getVendor($event)">
+              </metrc-inventory-properties>
+
+              <app-price-category-select
+                  *ngIf             ="filter"
+                  [isInventory]     ="true"
+                  [priceCategoryID] ="0"
+                  [inputForm]       ="priceForm" >
+              </app-price-category-select>
+            </div>
+
+            <div class="chem-padding">
+              <app-chemical-values
                 [inputForm]="packageForm">
-            </activity-toggles-metrc>
+              </app-chemical-values>
+            </div>
+
+            <div>
+
+              <div *ngIf="packageForm.controls.inventoryLocationID.errors?.required
+                    && packageForm.controls.inventoryLocationID.touched" class="error">
+                <!-- <mat-icon color="warn">warning</mat-icon> Location required. -->
+              </div>
+
+              <div *ngIf="packageForm.controls.conversionName.errors?.required
+                    && packageForm.controls.conversionName.touched" class="error">
+                <!-- <mat-icon color="warn">warning</mat-icon> Conversion value required. -->
+              </div>
+
+              <div *ngIf="packageForm.controls.inputQuantity.errors?.required
+                    && packageForm.controls.inputQuantity.touched" class="error">
+                <!-- <mat-icon color="warn">warning</mat-icon> Quantity value required. -->
+              </div>
+
+              <div *ngIf="packageForm.controls.cost.errors?.required
+                    && packageForm.controls.cost.touched" class="error">
+                <!-- <mat-icon color="warn">warning</mat-icon> Cost value required. -->
+              </div>
+
+              <span *ngIf=" package && !package.inventoryImported">
+                <app-strain-packages
+                  (outputPackage)         ="getNewPackage($event)"
+                  (outoutClosePackage)    ="closePackage($event)"
+                  [menuItem]              ="menuItem"
+                  [facility]              ="facility"
+                  [facilityLicenseNumber] ="facilityLicenseNumber"
+                  [priceForm]             ="priceForm"
+                  [packageForm]           ="packageForm"
+                  [package]               ="package">
+                </app-strain-packages>
+              </span>
+            </div>
+
           </div>
-        </div>
-        <div>
-          <app-edit-buttons-standard
-                (outputeupdateItem)     ="updateItem($event)"
-                (outputupdateItemExit)  ="updateItemExit($event)"
-                (outputupdatedeleteItem)="deleteItem($event)"
-                (outputupdateonCancel)  ="onCancel($event)"
-          ></app-edit-buttons-standard>
-        </div>
+        </mat-card-content>
 
-        <div>
-          <div *ngIf="!showJSONData">
-             <button mat-raised-button color="primary"  (click)="showJSONData=!showJSONData">Show Data</button>
-          </div>
+    </mat-card>
 
-          <div  *ngIf="showJSONData">
-            <button mat-raised-button color="primary" (click)="showJSONData=!showJSONData">Show Form</button>
-          </div>
-        </div>
-      </div>
-      <mat-divider></mat-divider>
-    </mat-card-subtitle>
+</div>
 
-    <mat-card-content style="overflow-y: scroll;
-                              height: 475px;">
-
-      <div *ngIf="showJSONData" >
-        <ngx-json-viewer  [expanded]="true" [json]="jsonData"></ngx-json-viewer>
-      </div>
-
-      <div  [formGroup]="packageForm"
-            class      ="grid-container"
-            *ngIf="!showJSONData" >
-
-        <div *ngIf="filter">
-          <metrc-inventory-properties
-                [inputForm]     ="packageForm"
-                [package]       ="package"
-                [filter]        ='filter'
-                (outputMenuItem)="getCatalogItem($event)"
-                (outputVendor)  ="getVendor($event)">
-          </metrc-inventory-properties>
-
-          <app-price-category-select
-              *ngIf             ="filter"
-              [isInventory]     ="true"
-              [priceCategoryID] ="0"
-              [inputForm]       ="priceForm" >
-          </app-price-category-select>
-        </div>
-
-        <div class="chem-padding">
-          <app-chemical-values
-            [inputForm]="packageForm">
-          </app-chemical-values>
-        </div>
-
-        <div>
-
-          <div *ngIf="packageForm.controls.inventoryLocationID.errors?.required
-                && packageForm.controls.inventoryLocationID.touched" class="error">
-            <!-- <mat-icon color="warn">warning</mat-icon> Location required. -->
-          </div>
-
-          <div *ngIf="packageForm.controls.conversionName.errors?.required
-                && packageForm.controls.conversionName.touched" class="error">
-            <!-- <mat-icon color="warn">warning</mat-icon> Conversion value required. -->
-          </div>
-
-          <div *ngIf="packageForm.controls.inputQuantity.errors?.required
-                && packageForm.controls.inputQuantity.touched" class="error">
-            <!-- <mat-icon color="warn">warning</mat-icon> Quantity value required. -->
-          </div>
-
-          <div *ngIf="packageForm.controls.cost.errors?.required
-                && packageForm.controls.cost.touched" class="error">
-            <!-- <mat-icon color="warn">warning</mat-icon> Cost value required. -->
-          </div>
-
-          <span *ngIf=" package && !package.inventoryImported">
-            <app-strain-packages
-              (outputPackage)         ="getNewPackage($event)"
-              (outoutClosePackage)    ="closePackage($event)"
-              [menuItem]              ="menuItem"
-              [facility]              ="facility"
-              [facilityLicenseNumber] ="facilityLicenseNumber"
-              [priceForm]             ="priceForm"
-              [packageForm]           ="packageForm"
-              [package]               ="package">
-            </app-strain-packages>
-          </span>
-        </div>
-
-      </div>
-    </mat-card-content>
-
-</mat-card>
+</div>

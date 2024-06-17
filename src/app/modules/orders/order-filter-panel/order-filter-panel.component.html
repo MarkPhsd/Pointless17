@@ -149,6 +149,7 @@
         <button mat-raised-button (click)="listEmployees(2)">On Clock</button>
         <button mat-raised-button (click)="listEmployees(3)">Terminated</button><br>
         <h5 *ngIf="searchModel?.employeeName"><mat-icon>search</mat-icon> {{searchModel?.employeeName }}</h5>
+        <button mat-raised-button (click)="clearEmployee()"><mat-icon>close</mat-icon></button>
         <div *ngIf="employees$ | async"></div>
       </div>
 

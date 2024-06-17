@@ -41,6 +41,11 @@ export interface PromptSubGroups {
   maxQuantityMet   : boolean;
   hideSplitOptions : boolean;
   freePage         : boolean;
+  json: string;
+}
+
+export interface IPromptSubProperites {
+  itemModList: string;
 }
 
 export interface PromptMenuItem {

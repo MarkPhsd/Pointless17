@@ -60,3 +60,14 @@
     <div><button style="width:75px" mat-raised-button (click)="moveDate(1)"><mat-icon>foward</mat-icon>Next</button></div>
   </div>
 </ng-template>
+
+<ng-template #nextPreviousTemplateGroup>
+  <mat-button-toggle-group
+    name        ="toggleOpenClosedAll"
+    class       ="toggle-view"
+    (c)    ="moveDate($event)" >
+    <mat-button-toggle class="toggle-min" (click)="moveDate(-1)" value=-1><mat-icon>remove</mat-icon></mat-button-toggle>
+    <mat-button-toggle class="toggle-min" (click)="moveDate(0)"value=0> <mat-icon>date</mat-icon>Today</mat-button-toggle>
+    <mat-button-toggle class="toggle-min" (click)="moveDate(1)" value=1 ><mat-icon>add</mat-icon> </mat-button-toggle>
+  </mat-button-toggle-group>
+</ng-template>

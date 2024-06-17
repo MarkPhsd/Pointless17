@@ -52,6 +52,10 @@ export class OrderItemListComponent implements OnInit {
 
     this.columnDefs =  [
       {
+        headerName: "Row",
+        valueGetter: "node.rowIndex + 1"
+      },
+      {
         field: "id",
         cellRenderer: "btnCellRenderer",
         cellRendererParams: {

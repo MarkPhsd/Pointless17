@@ -29,7 +29,7 @@
   grid-template-columns: repeat( auto-fit, minmax(135px, 1fr) );
   // overflow-y: auto;
   // overflow-x: hidden;
-  height: 500px;
+  // height: 500px;
 }
 
 .mat-card-content {
@@ -153,7 +153,8 @@ mat-form-field {
 
 .button-assign {
   float: left;
-  margin: 2px 2px 2px 2px;
+  margin: 2px ;
+  margin-top: 5px;
 }
 
 .btn-edit-pacakge {

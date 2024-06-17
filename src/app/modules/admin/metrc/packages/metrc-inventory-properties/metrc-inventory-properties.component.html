@@ -16,8 +16,6 @@
          </app-product-search-selector>
        </div>
 
-
-       <!-- ID {{package?.productID}} -->
       <div style="margin-top: 5px;" *ngIf="inputForm.controls['productID'].value">
         <button mat-raised-button color="accent" (click)="openProductEditor(inputForm.controls['productID'].value)">
           <mat-icon>open_in_new</mat-icon>
@@ -32,11 +30,20 @@
 
     </div>
 
-    <div>
+    <div class="grid-menu-search-selector">
       <app-facility-search-selector
           [searchForm]="inputForm"
           (itemSelect)="getVendor($event)">
       </app-facility-search-selector>
+
+        <!-- ID {{package?.productID}} -->
+      <div style="margin-top: 5px;" *ngIf="inputForm.controls['facilityLicenseNumber'].value">
+        <button mat-raised-button color="accent" (click)="openFacility()">
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </div>
+
+
     </div>
 
     <div *ngIf="package && package.sourceHarvestName">
@@ -48,19 +55,17 @@
       <mat-form-field appearance="outline" fxFill>
       <mat-label >Batch Number</mat-label>
       <input matInput
-            [(ngModel)] ="productionBatchNumber"
             type="text"
-            formControlName="productionBatchNumber"
-             >
+            formControlName="productionBatchNumber"  >
       </mat-form-field>
     </div>
 
-    <div style="width:150px">
+    <div style="width:150px" *ngIf="inputForm" [formGroup]="inputForm">
       <mat-form-field appearance="outline" fxFill >
       <mat-label>Expiration</mat-label>
       <input matInput
             type="text"
-            formControlName="expiration"
+            formControlName="expirationDate"
             name="expiration"
             [matDatepicker]="picker">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -68,27 +73,40 @@
           </mat-form-field>
     </div>
 
-    <div style="width:150px">
+    <div style="width:150px" *ngIf="inputForm" [formGroup]="inputForm">
       <mat-form-field appearance="outline" fxFill>
-      <mat-label>Batch Date</mat-label>
+      <mat-label>Pacakged Date</mat-label>
         <input matInput
               type="text"
-              formControlName="batchDate"
+              formControlName="packagedDate"
               [matDatepicker]="picker2">
             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
             <mat-datepicker #picker2></mat-datepicker>
       </mat-form-field>
     </div>
 
-    <div style="width:150px">
+    <div style="width:150px" *ngIf="inputForm" [formGroup]="inputForm">
       <mat-form-field appearance="outline" fxFill>
       <mat-label>Test Date</mat-label>
         <input matInput
               type="text"
-              formControlName="testDate"
-              [matDatepicker]="picker3">
-            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-            <mat-datepicker #picker3></mat-datepicker>
+              formControlName="labTestingPerformedDate"
+              [matDatepicker]="picker4">
+            <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+            <mat-datepicker #picker4></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+
+    <div style="width:150px" *ngIf="inputForm" [formGroup]="inputForm">
+      <mat-form-field appearance="outline" >
+        <mat-label>Sell By Date</mat-label>
+        <input matInput
+              type="text"
+              formControlName="sellByDate"
+              [matDatepicker]="picker5">
+          <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+          <mat-datepicker #picker5></mat-datepicker>
       </mat-form-field>
     </div>
 

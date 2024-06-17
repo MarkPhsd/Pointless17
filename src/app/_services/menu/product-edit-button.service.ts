@@ -63,6 +63,7 @@ import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 })
 export class ProductEditButtonService {
 
+
   constructor
             ( private dialog             : MatDialog,
               private siteService         : SitesService,
@@ -93,6 +94,16 @@ export class ProductEditButtonService {
       },
     )
     return dialogRef;
+  }
+
+  openFacility(itemFromFacilityLicenseNumber: string) {
+    return of(this.dialog.open(StrainProductEditComponent,
+      { width:        '95%',
+        height:       '775px',
+        minHeight:    '90vh',
+        data : itemFromFacilityLicenseNumber
+      },
+    ))
   }
 
 

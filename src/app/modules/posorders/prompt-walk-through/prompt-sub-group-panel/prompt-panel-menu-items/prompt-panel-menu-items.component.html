@@ -9,8 +9,6 @@
             <mat-icon>unfold_more</mat-icon>
           </span>
           <div class="sub-title">{{subGroup?.name}}</div>
-          <!-- <h4>
-          </h4> -->
       </mat-panel-title>
 
       <mat-panel-description class="mat-panel-description">
@@ -46,21 +44,38 @@
               (click)="nextStep('true')">Next</button>
     </mat-action-row>
 
-
     <div class='grid'>
-      <div>
-        <mat-button-toggle-group
-                class="mat-button-toggle-group"
-                name="type"
-                [(ngModel)]="itemOption">
-          <mat-button-toggle
-                class="mat-button-toggle"
-                *ngFor="let item of itemOptions"
-                [value]="item.id">
-             {{ item?.name }}
-          </mat-button-toggle>
-        </mat-button-toggle-group>
+      <div class='grid'>
+        <div>
+          <mat-button-toggle-group
+                  class="mat-button-toggle-group"
+                  name="type"
+                  [(ngModel)]="itemOption">
+            <mat-button-toggle
+                  class="mat-button-toggle"
+                  *ngFor="let item of itemOptions"
+                  [value]="item.id">
+              {{ item?.name }}
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <div>
+          Features - for each item you select.
+          <div class='flex-grid-row' >
+            <div *ngFor="let item of itemPropertyList">
+              <button mat-raised-button
+                      class="mod-button"
+                      color="accent"
+                      (click)="addtoDescriptionsItems(item)" >
+                  {{ item }}
+                </button>
+            </div>
+          </div>
+        </div>
+
       </div>
+
+
       <div *ngIf="itemOption && itemSelected && itemSelected.name" >
         Selected  {{itemSelected?.name}}
       </div>
@@ -85,6 +100,9 @@
     [promptMenuItem] = "item"
     [index]          = "index"
     [itemOption]     = 'itemOption'
+
+    [itemPropertySelected]="itemPropertySelected"
+    (outPutClearSelected) ="clearSelectedItem($event)"
     (resetItemOption)= "resetItemOption($event)"
     (outputNextStep) = "nextStep('true')"
     (outputPrevStep) = "prevStep('true')">

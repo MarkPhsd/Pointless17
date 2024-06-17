@@ -125,7 +125,7 @@ export class DcapMethodsService {
         response.toLowerCase() === 'approved, Partial AP'.toLowerCase()
       ) {
         success = true
-        return {success : success , message: message, processing: processing, resultMessage: resultMessage}
+        return {success : success , message:  cmdResponse?.TextResponse, processing: processing, resultMessage: resultMessage}
       }
     }
 
@@ -141,7 +141,7 @@ export class DcapMethodsService {
         response.toLowerCase() === 'approved, Partial AP'.toLowerCase()
       ) {
         success = true
-        return {success : success , message: message, processing: processing, resultMessage: resultMessage}
+        return {success : success , message:  cmdResponse?.TextResponse, processing: processing, resultMessage: resultMessage}
       }
     }
 
@@ -155,10 +155,11 @@ export class DcapMethodsService {
         captureStatus.toLowerCase() === 'AP*'.toLowerCase() ||
         captureStatus.toLowerCase() === 'captured'.toLowerCase() ||
         captureStatus.toLowerCase() === 'approval'.toLowerCase() ||
-        captureStatus.toLowerCase() === 'approved, Partial AP'.toLowerCase()
+        captureStatus.toLowerCase() === 'approved, Partial AP'.toLowerCase() ||
+        captureStatus.toLowerCase() === 'partial ap'.toLowerCase()
       ) {
         success = true
-        return {success : success , message: message, processing: processing, resultMessage: resultMessage}
+        return {success : success , message:  cmdResponse?.TextResponse, processing: processing, resultMessage: resultMessage}
       }
     }
 
@@ -203,8 +204,6 @@ export class DcapMethodsService {
     if (status ==   "Declined") {
       return {success : false , message: status, processing: processing, resultMessage: status, textResponse: cmdResponse?.TextResponse};
     }
-
-
     //set to be removed
     const response = cmdResponse?.TextResponse;
     const captureStatus = cmdResponse?.CaptureStatus;
@@ -214,10 +213,10 @@ export class DcapMethodsService {
         response.toLowerCase() === 'completed'.toLowerCase() ||
         response.toLowerCase() === 'success'.toLowerCase() ||
         response.toLowerCase() === 'approved'.toLowerCase() ||
-        response.toLowerCase() === 'AP*'.toLowerCase() ||
+        response.toLowerCase() === 'ap*'.toLowerCase() ||
         response.toLowerCase() === 'captured'.toLowerCase() ||
         response.toLowerCase() === 'approval'.toLowerCase() ||
-        response.toLowerCase() === 'approved, Partial AP'.toLowerCase()
+        response.toLowerCase() === 'approved, partial ap'.toLowerCase()
       ) {
         success = true
         return {success : success , message: message, processing: processing, resultMessage: resultMessage, textResponse: cmdResponse?.TextResponse}

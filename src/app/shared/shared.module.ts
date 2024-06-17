@@ -365,6 +365,7 @@ import { EmployeesOnClockListComponent } from '../modules/admin/employeeClockAdm
     MenuSearchBarComponent,
     MenuTinyComponent,
     MetrcSummaryComponent,
+ 
     AverageHourlySalesLaborChartComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
@@ -645,6 +646,7 @@ import { EmployeesOnClockListComponent } from '../modules/admin/employeeClockAdm
     MenuMinimalComponent,
     MenuSearchBarComponent,
     MenuTinyComponent,
+   
     UserBarComponent,
     MetrcSummaryComponent,
     AverageHourlySalesLaborChartComponent,

@@ -13,6 +13,7 @@ export class MatDateRangeComponent {
   @ViewChild('desktopTemplate') desktopTemplate: TemplateRef<any>;
   @ViewChild('touchTemplate') touchTemplate: TemplateRef<any>;
   @ViewChild('nextPreviousTemplate') nextPreviousTemplate: TemplateRef<any>;
+  @ViewChild('nextPreviousTemplateGroup') nextPreviousTemplateGroup: TemplateRef<any>;
   @Input() buttonViewEnabled: boolean = false;
   @Input() inputForm: UntypedFormGroup;
   @Output() outputDateRange  = new EventEmitter();
@@ -24,7 +25,7 @@ export class MatDateRangeComponent {
 
   get buttonView() {
     if (this.buttonViewEnabled) {
-      return this.nextPreviousTemplate
+      return this.nextPreviousTemplateGroup
     }
     return null;
   }

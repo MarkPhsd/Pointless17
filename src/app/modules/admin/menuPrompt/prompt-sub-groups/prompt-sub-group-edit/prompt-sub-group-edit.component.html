@@ -1,16 +1,16 @@
 <div *ngIf="prompt && inputForm; else loading"
      class="container">
-  <div [formGroup]="inputForm" *ngIf="inputForm && prompt">
-
-    <mat-card class="mat-card">
+  <div>
+    <!--  [formGroup]="inputForm" *ngIf="inputForm && prompt" -->
+    <mat-card class="mat-card" >
       <mat-card-title >
         <div class="header-container" >
           <div>
             <h4>
-              <div *ngIf="prompt.id == 0">
+              <div *ngIf="prompt?.id == 0">
                 Add Item Sub Group:  {{ prompt?.name  }}
               </div>
-              <div *ngIf="prompt.id != 0">
+              <div *ngIf="prompt?.id != 0">
                 Edit Item Sub Group: {{ prompt?.name  }}
               </div>
             </h4>
@@ -29,54 +29,59 @@
 
     <mat-card-content >
 
-      <div class="info-group">
+      <div class="info-group" *ngIf="inputForm" [formGroup]="inputForm">
         <div>
             <div>
-              <mat-form-field appearance="outline">
-                <mat-label >Name</mat-label>
-                <input matInput
-                      type             ="text"
-                      formControlName  ="name"
-                      class="form-control" >
-              </mat-form-field>
+              <app-value-fields
+                [fieldType]="'text'"
+                [inputForm]="inputForm"
+                [fieldName]="'name'" >
+                 Name
+              </app-value-fields>
             </div>
 
             <div>
-              <mat-form-field appearance="outline">
-                <mat-label >Min Quantity</mat-label>
-                <input matInput
-                      type             ="number"
-                      formControlName  ="minQuantity"
-                      class="form-control" >
-              </mat-form-field>
+              <app-value-fields
+                [fieldType]="'number'"
+                [inputForm]="inputForm"
+                [fieldName]="'minQuantity'" >
+                Min Quantity
+              </app-value-fields>
             </div>
 
             <div>
-              <mat-form-field appearance="outline">
-                <mat-label >Max Quantity</mat-label>
-                <input matInput
-                      type             ="number"
-                      formControlName  ="maxQuantity"
-                      class="form-control" >
-              </mat-form-field>
+              <app-value-fields
+                [fieldType]="'number'"
+                [inputForm]="inputForm"
+                [fieldName]="'maxQuantity'" >
+                Max Quantity
+              </app-value-fields>
             </div>
 
             <div>
-              <mat-form-field appearance="outline">
-                <mat-label >Move to Next Page Quantity</mat-label>
-                <input matInput
-                      type             ="number"
-                      formControlName  ="moveOnQuantity"
-                      class="form-control" >
-              </mat-form-field>
+              <app-value-fields
+                [fieldType]="'number'"
+                [inputForm]="inputForm"
+                [fieldName]="'moveOnQuantity'" >
+                Move to Next Page Quantity
+              </app-value-fields>
             </div>
 
-            <div  class="mat-label">
+            <div  class="mat-label" >
               <mat-slide-toggle
                   class="mat-label"
                   formControlName="hideSplitOptions">
                 <mat-label class="mat-label">Hide Split Item Options</mat-label>
               </mat-slide-toggle>
+            </div>
+
+            <div *ngIf="promptPropertiesForm" [formGroup]="promptPropertiesForm" >
+              <app-value-fields
+                [fieldType]="'text'"
+                [inputForm]="promptPropertiesForm"
+                [fieldName]="'itemModList'" >
+                Item Mod List
+              </app-value-fields>
             </div>
 
 

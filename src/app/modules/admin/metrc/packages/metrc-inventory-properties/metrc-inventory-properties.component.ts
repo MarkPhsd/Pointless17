@@ -1,16 +1,17 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { EMPTY, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
-import { IProduct, ISite, UnitType } from 'src/app/_interfaces';
+import { IProduct, ISite } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { METRCFacilities } from 'src/app/_interfaces/metrcs/facilities';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { MenuService } from 'src/app/_services';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
-import {  MetrcFacilitiesService } from 'src/app/_services/metrc/metrc-facilities.service';
+import { MetrcFacilitiesService } from 'src/app/_services/metrc/metrc-facilities.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
@@ -49,14 +50,14 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
 
   assignDefaultFacility( metrcPackage: METRCPackage) {
     if (metrcPackage && metrcPackage.itemFromFacilityName) {
-      this.inputForm.patchValue({facilityLicenseNumber: [`${metrcPackage.itemFromFacilityLicenseNumber}-${metrcPackage.itemFromFacilityName}` ]});
+      this.inputForm.patchValue({facilityLicenseNumber: [`${metrcPackage?.itemFromFacilityLicenseNumber}-${metrcPackage?.itemFromFacilityName}` ]});
       const site = this.siteService.getAssignedSite();
-      this.metrcFacilitiesService.getItemsNameBySearch(site,metrcPackage.itemFromFacilityLicenseNumber).pipe(
+      this.metrcFacilitiesService.getItemsNameBySearch(site,metrcPackage?.itemFromFacilityLicenseNumber).pipe(
         switchMap(data => {
           if (data) {
             return this.metrcFacilitiesService.getFacility(data[0].id, site)
           }
-          return EMPTY
+          return this.postNewFacility( metrcPackage?.itemFromFacilityLicenseNumber,metrcPackage?.itemFromFacilityName )
       })).subscribe(data => {
         if (data && data.license) {
           this.facilityLicenseNumber = `${data.license.number}-${data.name}`
@@ -65,6 +66,19 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       })
     }
   }
+
+  //inputForm.controls['facilityLicenseNumber'].value)
+  openFacility(){
+    if (this.package.itemFromFacilityLicenseNumber) {
+      this.productButtonService.openFacility(this.package?.itemFromFacilityLicenseNumber)
+    }
+  }
+
+  postNewFacility(licenseNumber: string, name: string): Observable<METRCFacilities> {
+
+    return of(null)
+  }
+
 
   //consider maning a component or Directive.
   // @Input('menuItemNameAdd') menuItemNameAdd: string
@@ -79,8 +93,11 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       this.inputForm.patchValue({productName: [``]})
       const site = this.siteService.getAssignedSite();
       const searchModel = {} as ProductSearchModel;
+
+    //get conditional item Name
+      if (this.package.itemStrainName)
+
       searchModel.name = metrcPackage.productName ;
-      // searchModel.metrcCategory = metrcPackage.productCategoryName
       searchModel.exactNameMatch = true;
 
       const list$ =  this.menuService.getItemBasicBySearch(site, searchModel ).pipe(
@@ -126,11 +143,6 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
     }
   }
 
-  // searchModel.name = metrcPackage.productName ;
-  // searchModel.metrcCategory = metrcPackage.productCategoryName
-  // searchModel.exactNameMatch = true;
-
-
   openNewProduct(met: METRCPackage) {
     //data?:METRCPackage
 
@@ -160,13 +172,6 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       return      this.menuService.postProduct(site, product)
     })).pipe(switchMap(data => {
       if (data && type) {
-
-        // console.log('product', product)
-        // console.log('new product', data)
-        // console.log('type', type)
-        // let dialog =  this.productButtonService.openProductEditWindow(data, type)
-        // dialog.afterClosed().subscribe(data => {
-        // })
         this.outputMenuItem.emit(data)
       }
 

@@ -472,6 +472,7 @@ export interface Result {
   voidReason:          string;
   voidAmount:          number;
   orderID:             number;
+  spitPayment        : number;
   PaymentMethod:       IPaymentMethod;
 }
 
@@ -516,6 +517,7 @@ export interface OperationWithAction {
 }
 
 export interface IPaymentSearchModel {
+  employeeName: string;
   completionDate_From:         string;
   completionDate_To:           string;
   orderDate_From:              string;
@@ -632,7 +634,7 @@ export interface IPOSPayment {
   beginDate:           string;
   endDate:             string;
   orderID:             number;
-
+  splitPayment: number;
   history           :  boolean;
   transactionIDRef : string;
   commcard: string;

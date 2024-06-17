@@ -664,9 +664,9 @@ export class PackageListComponent implements OnInit {
       { data: { id: id } }
     ]
     const dialogRef = this.dialog.open(StrainsAddComponent,
-      { width:      '1000px',
+      { width:      '95vw',
         minWidth:   '1000px',
-        height:     '800px',
+        height:     '90vh',
         minHeight:  '800px',
         data : {id: id}
       },
@@ -683,9 +683,9 @@ export class PackageListComponent implements OnInit {
       { data: { id: id } }
     ]
     const dialogRef = this.dialog.open(METRCProductsAddComponent,
-      { width:      '1000px',
+      { width:      '95vw',
         minWidth:   '1000px',
-        height:     '800px',
+        height:     '90vh',
         minHeight:  '800px',
         data : {id: id}
       },

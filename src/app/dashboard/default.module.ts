@@ -56,6 +56,8 @@ import { TierMenuComponent } from '../modules/menu/tierMenu/tier-menu/tier-menu.
 import { PriceCategoriesEditComponent } from '../modules/admin/products/pricing/price-categories-edit/price-categories-edit.component';
 import { PriceCategoriesComponent } from '../modules/admin/products/pricing/price-categories/price-categories.component';
 import { PackageListComponent } from '../modules/admin/metrc/packages/package-list.component';
+import { MetrcRequirementsComponent } from '../modules/admin/metrc/packages/metrc-requirements/metrc-requirements.component';
+
 import { StrainsAddComponent } from '../modules/admin/metrc/packages/strains-add/strains-add.component';
 import { METRCProductsAddComponent } from '../modules/admin/metrc/packages/metrc-products-add/products-add.component';
 import { InventoryLocationsComponent } from '../modules/admin/inventory/inventory-locations/inventory-locations.component';
@@ -480,7 +482,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DevxReportDesignerComponent,
     ReportViewerComponent,
     InventoryMenuItemComponent,
-
+ 
     MessageEditorListComponent,
     MessageEditorComponent,
     ManifestEditorHeaderComponent,
@@ -639,7 +641,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MenuItemsInfiniteComponent,
     MetrcSalesListComponent,
     METRCProductsAddComponent,
-
+    MetrcRequirementsComponent,
+    
     MenuBoardComponent,
     MenuItemModalComponent,
     NewInventoryItemComponent,

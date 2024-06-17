@@ -405,7 +405,7 @@ export class RequestMessageService {
       switchMap(data => {
         if (data) {
           data = data.filter(item => {
-            if (item.balanceZero == true && item.type.toLowerCase() == 'oc')  {return item}
+            if (item && (item?.balanceZero == true && ( item.type && item?.type.toLowerCase() == 'oc') ))  {return item}
           })
         }
       return of(data)
@@ -418,7 +418,7 @@ export class RequestMessageService {
       switchMap(data => {
         if (data) {
           data = data.filter(item => {
-            if ((!item.balanceZero) && item.type.toLowerCase() == 'oc')  {return item}
+            if  (item && ((!item?.balanceZero) && ( item.type && item?.type.toLowerCase() == 'oc'))) {return item}
           })
         }
       return of(data)

@@ -46,6 +46,9 @@ export interface IInventoryAssignment {
   dateCreated:           string;
   expiration:            string;
   facilityLicenseNumber: string;
+  labName: string;
+  producerName: string;
+  facilityID: number;
   batchDate:             string;
   cost:                  number;
   price:                 number;
@@ -113,11 +116,16 @@ export interface IInventoryAssignment {
   departmentID: number;
   attribute: string;
   metaTags: string;
+  sellByDate: string;
+  labTestingPerformedDate: string;
+  packagedDate: string;
+  expirationDate: string;
+  sourceHarvestName: string;
   json: string; //stores info like ebay publishing.
-
 }
 
 export interface inventoryJson {
+
   ebay: string;
 }
 export interface Serial {
@@ -754,6 +762,14 @@ export class InventoryAssignmentService {
         departmentID                     : [],
         metaTags                         : [],
         attribute                        : [],
+
+        productname                      : [],
+        intakeConversionValue           : [],
+        sellByDate                      : [],
+        labTestingPerformedDate         : [],
+        expirationDate                  : [],
+        useByDate                       : [],
+
         json                             : [],
       }
     )

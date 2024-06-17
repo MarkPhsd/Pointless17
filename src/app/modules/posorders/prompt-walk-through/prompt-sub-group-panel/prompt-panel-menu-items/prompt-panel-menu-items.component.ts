@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output , EventEmitter, ChangeDetectionStrateg
   TemplateRef,
   ViewChild} from '@angular/core';
 import {PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
-import { PromptSubGroups, SelectedPromptSubGroup } from 'src/app/_interfaces/menu/prompt-groups';
+import { IPromptSubProperites, PromptSubGroups, SelectedPromptSubGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-walk-through.service';
 import { AWSBucketService, IItemBasic } from 'src/app/_services';
@@ -20,6 +20,9 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 })
 export class PromptPanelMenuItemsComponent implements OnInit {
   @ViewChild('promptMenuItemView')     promptMenuItemView: TemplateRef<any>;
+
+  // itemPropertyList : string[]
+  itemPropertySelected: string;
 
   @Input() selectedSubGroup       : SelectedPromptSubGroup;
   @Input() subGroup               : PromptSubGroups;
@@ -52,6 +55,15 @@ export class PromptPanelMenuItemsComponent implements OnInit {
     {name: 'No', id: 4},
   ]
   androidApp: boolean;
+
+  get itemPropertyList() {
+    if (this.subGroup?.json) {
+      const items  =  JSON.parse(this.subGroup?.json) as IPromptSubProperites;
+      const list   = items.itemModList.split(',')
+      return list;
+    }
+    return []
+  }
 
   initPOSItemSubscriber() {
     this._posItem = this.posOrderItemService.posOrderItem$.subscribe(data => {
@@ -96,7 +108,6 @@ export class PromptPanelMenuItemsComponent implements OnInit {
   }
 
   constructor(
-    private promptGroupService       : PromptGroupService,
     private posOrderItemService      : POSOrderItemService,
     private promptWalkService        : PromptWalkThroughService,
     private awsBucket                : AWSBucketService,
@@ -114,15 +125,21 @@ export class PromptPanelMenuItemsComponent implements OnInit {
         }
       })
       this.resetHideOptions()
-      // this.subGroup.promptSubGroups.name
-      // this.subGroup.promptSubGroups.promptMenuItems
-      // this.subGroupInfo = this.subGroup.promptSubGroups
     }
     this.bucketName =   await this.awsBucket.awsBucket();
     if (this.subGroupInfo && this.subGroupInfo.image) {
       this.imageURL = this.getItemSrc(this.subGroupInfo.image)
     }
     this.intSubscriptions();
+  }
+
+  addtoDescriptionsItems(event) {
+    if (event === 'clear') {
+      this.itemPropertySelected = null
+      return
+    }
+    if (! this.itemPropertySelected) { this.itemPropertySelected =''}
+    this.itemPropertySelected = this.itemPropertySelected + ' ' + event
   }
 
   resetHideOptions() {
@@ -182,5 +199,9 @@ export class PromptPanelMenuItemsComponent implements OnInit {
       return this.promptMenuItemView;
     }
     return null;
+  }
+
+  clearSelectedItem(event) {
+    this.itemPropertySelected = null;
   }
 }

@@ -266,7 +266,7 @@ export class StrainsAddComponent implements OnInit {
   initItemFormData(data: METRCPackage) {
     if (data) {
       try {
-        this.package = data
+        this.package = data 
         this.package.labTestingState =          this.package.labTestingState.match(/[A-Z][a-z]+|[0-9]+/g).join(" ")
         this.facility = {} as                   IItemFacilitiyBasic;
         this.facility.displayName =             this.package.itemFromFacilityName;
@@ -307,7 +307,14 @@ export class StrainsAddComponent implements OnInit {
             jointWeight:                      1,
             facilityLicenseNumber:            facility,
             active                      :     active,
+            sellByDate                  : [data?.sellByDate],
+            labTestingPerformedDate : [data?.labTestingPerformedDate],
+            packagedDate :    [data?.packagedDate],
+            expirationDate :  [data?.expirationDate],
+            useByDate       : [data?.useByDate],
+            productionBatchNumber : [data?.productionBatchNumber]
         })
+   
 
         const item = {productName :     data.productName,
                       productID   :     data.productID,}

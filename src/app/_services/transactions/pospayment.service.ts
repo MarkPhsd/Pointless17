@@ -14,8 +14,6 @@ import { IPaymentMethod } from './payment-methods.service';
 })
 export class POSPaymentService {
 
-
-
   private _searchModel          = new BehaviorSubject<IPaymentSearchModel>(null);
   public searchModel$           = this._searchModel.asObservable();
 
@@ -50,7 +48,7 @@ export class POSPaymentService {
   }
 
   getCreditTipTotals(site: ISite, id: number): Observable<number> {
-    
+
     const controller = "/POSPayments/";
 
     const endPoint = "getCreditTipTotals";

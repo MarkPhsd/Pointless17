@@ -1195,11 +1195,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   emailOrder(event) {
     this.orderMethodsService.emailOrder(this.order).subscribe(data => {
-      if (data.isSuccessStatusCode) {
+      console.log(data)
+      if (data && (data.isSuccessStatusCode || data.toString() == 'Success')) {
         this.orderMethodsService.notifyEvent('Email Sent', 'Success')
-       }
+        return;
+      }
       if (!data.isSuccessStatusCode) {
         this.orderMethodsService.notifyEvent('Email not sent. Check email settings', 'Failed')
+        return;
       }
     })
   }

@@ -57,7 +57,7 @@ export class ConversionsService {
       if (unitsConverted.unitConvertTo) {
         // const quantity = (+baseUnitsRemaining / + unitsConverted.unitConvertTo.value ) - + inputQuantity
         const quantity  = baseUnitsRemaining - inputQuantity
-        console.log('quantity.toFixed(2)', quantity.toFixed(2))
+        // console.log('quantity.toFixed(2)', quantity.toFixed(2))
         return +quantity.toFixed(2)
       }
     }

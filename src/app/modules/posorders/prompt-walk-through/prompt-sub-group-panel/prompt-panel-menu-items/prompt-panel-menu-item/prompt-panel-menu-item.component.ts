@@ -35,9 +35,11 @@ export class PromptPanelMenuItemComponent implements OnInit {
   @Input() subGroupInfo     : PromptSubGroups;
   @Input() index            : number; //this is not the index of the menu item, but of it's parent.
   @Input() itemOption       = 1;
+  @Input() itemPropertySelected: string;
   @Output() outputNextStep = new EventEmitter();
   @Output() outputPrevStep = new EventEmitter();
   @Output() resetItemOption = new EventEmitter();
+  @Output() outPutClearSelected = new EventEmitter();
   bucketName       : string;
   imageURL         : string;
   chosenCount      : string;
@@ -262,12 +264,18 @@ export class PromptPanelMenuItemComponent implements OnInit {
             item.unitTypeID = 0;
           }
 
-          if (item.menuItem && item.menuItem.name) {
-            item.menuItem.name = `${prefix} ${item.menuItem.name}`.trim()
+          if (!this.itemPropertySelected) {
+            this.itemPropertySelected =''
           } else {
-            // console.log('no menu item name');
+            this.itemPropertySelected = this.itemPropertySelected + ' '
           }
 
+          if (item.menuItem && item.menuItem.name) {
+            item.menuItem.name = `${prefix} ${this.itemPropertySelected} ${item.menuItem.name}`.trim()
+          } else {
+
+          }
+          this.outPutClearSelected.emit(true)
           currentSubPrompt.itemsSelected.push(item);
           orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected = currentSubPrompt.itemsSelected;
 

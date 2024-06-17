@@ -1,0 +1,276 @@
+<mat-card style="width:250px" *ngIf="(category$ | async) as categories">
+  <mat-card-subtitle>{{categories?.name}}</mat-card-subtitle>
+
+  <div  *ngIf="inputForm && categories" [formGroup]="inputForm">
+    
+    <div *ngIf="categories.requiresStrain" class="toggle-container">
+      <mat-slide-toggle  formControlName="requiresStrain">
+        Requires Strain 
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresItemBrand" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresItemBrand">
+        Requires Item Brand
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresAdministrationMethod" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresAdministrationMethod">
+        Requires Administration Method
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitCbdPercent" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresUnitCbdPercent">
+        Requires Unit CBD Percent
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitCbdContent" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresUnitCbdContent">
+        Requires Unit CBD Content
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitCbdContentDose" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresUnitCbdContentDose">
+        Requires Unit CBD Content Dose
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitThcPercent" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresUnitThcPercent">
+        Requires Unit THC Percent
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitThcContent" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresUnitThcContent">
+        Requires Unit THC Content
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitThcContentDose" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresUnitThcContentDose">
+        Requires Unit THC Content Dose
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitVolume" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresUnitVolume">
+        Requires Unit Volume
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitWeight" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresUnitWeight">
+        Requires Unit Weight
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresServingSize" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresServingSize">
+        Requires Serving Size
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresSupplyDurationDays" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresSupplyDurationDays">
+        Requires Supply Duration Days
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresNumberOfDoses" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresNumberOfDoses">
+        Requires Number Of Doses
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresIngredients" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresIngredients">
+        Requires Ingredients
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresDescription" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresDescription">
+        Requires Description
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresProductPhotos" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresProductPhotos">
+        Requires Product Photos
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresLabelPhotos" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresLabelPhotos">
+        Requires Label Photos
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.requiresPackagingPhotos" class="toggle-container">
+      <mat-slide-toggle formControlName="requiresPackagingPhotos">
+        Requires Packaging Photos
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.canContainSeeds" class="toggle-container">
+      <mat-slide-toggle formControlName="canContainSeeds">
+        Can Contain Seeds
+      </mat-slide-toggle>
+    </div>
+    
+    <div *ngIf="categories.canBeRemediated" class="toggle-container">
+      <mat-slide-toggle formControlName="canBeRemediated">
+        Can Be Remediated
+      </mat-slide-toggle>
+    </div>
+    
+  
+  </div>
+</mat-card>
+
+    <!-- <div *ngIf="categories.requiresItemBrand">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Item Brand</mat-label>
+        <mat-slide-toggle formControlName="requiresItemBrand"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresAdministrationMethod">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Administration Method</mat-label>
+        <mat-slide-toggle formControlName="requiresAdministrationMethod"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitCbdPercent">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Unit CBD Percent</mat-label>
+        <mat-slide-toggle formControlName="requiresUnitCbdPercent"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitCbdContent">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Unit CBD Content</mat-label>
+        <mat-slide-toggle formControlName="requiresUnitCbdContent"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitCbdContentDose">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Unit CBD Content Dose</mat-label>
+        <mat-slide-toggle formControlName="requiresUnitCbdContentDose"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitThcPercent">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Unit THC Percent</mat-label>
+        <mat-slide-toggle formControlName="requiresUnitThcPercent"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitThcContent">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Unit THC Content</mat-label>
+        <mat-slide-toggle formControlName="requiresUnitThcContent"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitThcContentDose">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Unit THC Content Dose</mat-label>
+        <mat-slide-toggle formControlName="requiresUnitThcContentDose"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitVolume">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Unit Volume</mat-label>
+        <mat-slide-toggle formControlName="requiresUnitVolume"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresUnitWeight">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Unit Weight</mat-label>
+        <mat-slide-toggle formControlName="requiresUnitWeight"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresServingSize">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Serving Size</mat-label>
+        <mat-slide-toggle formControlName="requiresServingSize"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresSupplyDurationDays">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Supply Duration Days</mat-label>
+        <mat-slide-toggle formControlName="requiresSupplyDurationDays"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresNumberOfDoses">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Number Of Doses</mat-label>
+        <mat-slide-toggle formControlName="requiresNumberOfDoses"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresIngredients">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Ingredients</mat-label>
+        <mat-slide-toggle formControlName="requiresIngredients"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresDescription">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Description</mat-label>
+        <mat-slide-toggle formControlName="requiresDescription"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresProductPhotos">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Product Photos</mat-label>
+        <mat-slide-toggle formControlName="requiresProductPhotos"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresLabelPhotos">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Label Photos</mat-label>
+        <mat-slide-toggle formControlName="requiresLabelPhotos"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.requiresPackagingPhotos">
+      <mat-form-field appearance="outline">
+        <mat-label>Requires Packaging Photos</mat-label>
+        <mat-slide-toggle formControlName="requiresPackagingPhotos"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.canContainSeeds">
+      <mat-form-field appearance="outline">
+        <mat-label>Can Contain Seeds</mat-label>
+        <mat-slide-toggle formControlName="canContainSeeds"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="categories.canBeRemediated">
+      <mat-form-field appearance="outline">
+        <mat-label>Can Be Remediated</mat-label>
+        <mat-slide-toggle formControlName="canBeRemediated"></mat-slide-toggle>
+      </mat-form-field>
+    </div>
+  </div> -->
+  

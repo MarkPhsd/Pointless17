@@ -94,10 +94,8 @@ export class EmployeeClockFilterComponent implements OnInit {
 
   getSearch() {
     if (this.dateTo === '12/31/1969') { return }
-
     const dateTo = this.dateHelper.format(this.dateTo, 'MM/dd/yyyy');
-
-    console.log('dateFrom, DateTo', dateTo , this.dateTo)
+ 
     if (dateTo === '12/31/1969') { return }
 
     return  { summary: false,
@@ -113,21 +111,24 @@ export class EmployeeClockFilterComponent implements OnInit {
     const search = this.getSearch() as EmployeeClockSearchModel
     if (!search) { return }
     this.employeeClockService.updateSearch(search)
- 
   }
 
   reset() {
-    const search = {} as EmployeeClockSearchModel
+    const search = {} as EmployeeClockSearchModel;
+
     this.employeeClockService.updateSearch(search)
   }
 
   emitDatePickerData(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {
-    // console.log(this.dateRangeForm.value);
+   
     if (dateRangeStart && dateRangeEnd) {
         this.dateFrom = this.dateRangeForm.get("start").value
         this.dateTo   = this.dateRangeForm.get("end").value
-        this.refreshSearch()
-        this.refreshDateList(this.dateFrom, this.dateTo)
+        if (this.dateFrom && this.dateTo) { 
+          this.refreshSearch()
+          this.refreshDateList(this.dateFrom, this.dateTo)
+        }
+      
     }
   }
 
@@ -142,7 +143,9 @@ export class EmployeeClockFilterComponent implements OnInit {
   setDate(value) { 
     this.dateFrom = value;
     this.dateTo = value;
-    this.refreshSearch()
+    if (this.dateFrom && this.dateTo) { 
+      this.refreshSearch()
+    }
   }
 
   emitSearchResults() {

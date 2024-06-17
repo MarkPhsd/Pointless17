@@ -7,7 +7,6 @@
   </mat-card-title>
   <mat-card-content>
 
-
     <div *ngIf="searchModel"
          class="keypad fields">
       <app-key-pad
@@ -19,31 +18,6 @@
     </div>
 
     <div class="fields">
-      <!-- <mat-form-field appearance="outline" *ngIf="dateRangeForm">
-        <mat-label>Date Range (Start Time)</mat-label>
-
-        <mat-date-range-input [formGroup]="dateRangeForm"
-                              [rangePicker]="reportRangePicker"
-                             >
-          <input matStartDate
-                 formControlName="start"
-                 placeholder="Start date"
-                 #dateRangeStart >
-          <input matEndDate
-                 formControlName="end"
-                 placeholder="End date"
-                 #dateRangeEnd
-                 (dateChange)="emitDatePickerData(dateRangeStart, dateRangeEnd)">
-        </mat-date-range-input>
-
-        <mat-datepicker-toggle matSuffix [for]="reportRangePicker"
-                               ></mat-datepicker-toggle>
-        <mat-date-range-picker touchUi #reportRangePicker
-                               ></mat-date-range-picker>
-
-        <mat-error *ngIf="dateRangeForm.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-        <mat-error *ngIf="dateRangeForm.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
-      </mat-form-field> -->
       <mat-date-range
           (outputDateRange)="refreshDateRange($event)"
           [hideRefresh] ="true"

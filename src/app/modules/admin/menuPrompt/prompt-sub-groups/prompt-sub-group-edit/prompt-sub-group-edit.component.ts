@@ -4,7 +4,7 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
+import { IPromptSubProperites, PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
@@ -16,7 +16,9 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 export class PromptSubGroupEditComponent implements OnInit {
 
   inputForm : UntypedFormGroup;
+  promptPropertiesForm: UntypedFormGroup
   @Input()   prompt         : PromptSubGroups;
+
   id:        any;
 
   instructions: string;
@@ -47,8 +49,17 @@ export class PromptSubGroupEditComponent implements OnInit {
       prompt$.subscribe (data => {
         this.prompt = data;
         this.inputForm.patchValue(data)
+        this.initPropForm()
       })
     }
+  }
+
+  initPropForm() {
+    this.promptPropertiesForm = this.fb.group( {
+      itemModList: [],
+    })
+    const props = JSON.parse(this.prompt?.json)  as IPromptSubProperites
+    this.promptPropertiesForm.patchValue(props)
   }
 
   updateItem(event) {
@@ -57,8 +68,7 @@ export class PromptSubGroupEditComponent implements OnInit {
       return null
     }
     const site = this.siteService.getAssignedSite()
-    this.prompt = this.inputForm.value
-    const prompt$ = this.promptService.save(site, this.prompt)
+    const prompt$ = this.promptService.save(site, this.getPrompt())
     this.saveItem(prompt$, false)
   };
 
@@ -68,9 +78,16 @@ export class PromptSubGroupEditComponent implements OnInit {
       return null
     }
     const site = this.siteService.getAssignedSite()
-    this.prompt = this.inputForm.value as PromptSubGroups
-    const prompt$ = this.promptService.save(site, this.prompt)
+
+    const prompt$ = this.promptService.save(site, this.getPrompt())
     this.saveItem(prompt$, event)
+  }
+
+  getPrompt(): PromptSubGroups {
+    this.prompt = this.inputForm.value as PromptSubGroups
+    const values = JSON.stringify(this.promptPropertiesForm.value)
+    this.prompt.json = values;
+    return this.prompt
   }
 
   saveItem(prompt$: Observable<PromptSubGroups>, exit: boolean ) {

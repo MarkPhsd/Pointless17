@@ -1,8 +1,8 @@
 import {Component, OnDestroy, Output,
         OnInit, AfterViewInit,
          ViewChild, ElementRef, EventEmitter, Inject, LOCALE_ID}  from '@angular/core';
-import { IServiceType, IUser } from 'src/app/_interfaces';
-import {  IPOSPayment, IPaymentSearchModel} from 'src/app/_interfaces/transactions/posorder';
+import { IServiceType, ISetting, IUser } from 'src/app/_interfaces';
+import {  IPOSOrderSearchModel, IPOSPayment, IPaymentSearchModel} from 'src/app/_interfaces/transactions/posorder';
 import { IItemBasic,  } from 'src/app/_services';
 import { OrdersService } from 'src/app/_services';
 import { ActivatedRoute, } from '@angular/router';
@@ -11,13 +11,16 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, filter,tap } from 'rxjs/operators';
-import { Observable, fromEvent, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter,switchMap,tap } from 'rxjs/operators';
+import { Observable, fromEvent, Subscription, of } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { DatePipe } from '@angular/common';
+import { EmployeeSearchModel, EmployeeService } from 'src/app/_services/people/employee-service.service';
+import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 @Component({
   selector: 'app-pos-payments-filter',
@@ -31,6 +34,7 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
     @ViewChild('input', {static: true}) input: ElementRef;
     @Output() itemSelect  = new EventEmitter();
     value : string;
+  employeeID: any;
     get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
     searchForm: UntypedFormGroup;
 
@@ -69,6 +73,11 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
     isStaff         : boolean;
     isAuthorized    : boolean;
 
+    uiTransactions  = {} as TransactionUISettings;
+    uiTransactions$  : Observable<ISetting>;
+    _UITransaction: Subscription;
+    dialogRef: any;
+
     initSubscriptions() {
       this._searchModel = this.posPaymentService.searchModel$.subscribe( data => {
         if (!data) {
@@ -98,6 +107,8 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       private matSnack             : MatSnackBar,
       private userAuthorization    : UserAuthorizationService,
       private fb:                    UntypedFormBuilder,
+      private productEditButtonService: ProductEditButtonService,
+      private employeeService: EmployeeService,
       private datePipe: DatePipe,
       private dateHelper: DateHelperService,
       @Inject(LOCALE_ID) private locale: string
@@ -198,10 +209,20 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       setInterval(this.refreshEmployees,  (60*1000) *5);
      }
 
+
      refreshEmployees(){
-        const site           = this.siteService.getAssignedSite()
-        this.employees$      = this.orderService.getActiveEmployees(site)
-     }
+      const site           = this.siteService.getAssignedSite()
+      this.employees$      = this.employeeService.getAllActiveEmployees(site).pipe(switchMap(data => {
+          this.dialogRef = this.productEditButtonService.selectEmployee(data)
+          this.dialogRef.afterClosed().subscribe(result => {
+
+            if (result) {
+              this.setEmployeeValue(result)
+            }
+          });
+        return of(data)
+      }))
+    }
 
 
 
@@ -332,7 +353,7 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       let today = new Date();
       const month = today.getMonth();
       const year = today.getFullYear();
-   
+
       const tmr =  this.dateHelper.add('d', 1, today)
 
       this.dateRangeForm =  this.fb.group({
@@ -367,21 +388,21 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
     }
 
      emitDatePickerData() {
-
       if (this.dateRangeForm) {
         if (this.dateRangeForm.get("start").value && this.dateRangeForm.get("end").value) {
-
           this.dateFrom = this.dateRangeForm.get("start").value
           this.dateTo   =  this.dateRangeForm.get("end").value
-
           this.refreshDateSearch()
         }
       }
 
     }
 
-    refreshDateSearch() {
+    refreshDateRange(event) {
+      this.refreshDateSearch()
+    }
 
+    refreshDateSearch() {
       if (! this.searchModel) {  this.searchModel = {} as IPaymentSearchModel  }
 
       if (!this.dateRangeForm || !this.dateFrom || !this.dateTo) {
@@ -393,19 +414,105 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
 
       this.dateFrom = this.dateRangeForm.get("start").value
       this.dateTo   = this.dateRangeForm.get("end").value
+      this.searchModel.completionDate_From = this.dateHelper.format(this.dateFrom.toISOString(), 'MM/dd/yyyy');
+      this.searchModel.completionDate_To = this.dateHelper.format(this.dateTo.toISOString(), 'MM/dd/yyyy');
 
-      const dateFrom = this.dateRangeForm.get("start").value;
-      const dateTo = this.dateRangeForm.get("end").value;
-      const start  = this.dateHelper.format(this.dateFrom, 'short')
-      const end = this.dateHelper.format(this.dateTo, 'short')
-
-      this.searchModel.completionDate_From = start
-      this.searchModel.completionDate_To   = end
+      // const dateFrom = this.dateRangeForm.get("start").value;
+      // const dateTo = this.dateRangeForm.get("end").value;
+      // const start  = this.dateHelper.format(this.dateFrom, 'short')
+      // const end = this.dateHelper.format(this.dateTo, 'short')
+      // this.searchModel.completionDate_From = start
+      // this.searchModel.completionDate_To   = end
       this.refreshSearch()
-
     }
 
+    clearEmployee() {
+      this.searchModel.employeeID = 0
+      this.searchModel.employeeName = null;
+      this.refreshSearch();
+   }
 
+  setEmployeeValue(event) {
+    console.log('refresh Employee', event)
+    this.employeeID = event?.id;
+    this.searchModel.employeeName  =  event?.employeeName ? event?.employeeName : (event?.name || '');
+    this.searchModel.employeeID = event?.id;
+    this.uiTransactions.toggleUserOrAllOrders = true
+    this.posPaymentService.updateSearchModel( this.searchModel )
+    this.refreshSearch();
+  }
+
+  refreshOnClockEmployees(){
+    const site           = this.siteService.getAssignedSite()
+    const employees$      = this.employeeService.listEmployeesOnClock(site)
+    this.employees$      = employees$.pipe(switchMap(data => {
+        this.dialogRef = this.productEditButtonService.selectEmployee(data)
+        this.dialogRef.afterClosed().subscribe(result => {
+
+
+          if (result) {
+            this.setEmployeeValue(result)
+          }
+        });
+      return of(data)
+    }))
+
+  }
+
+  refreshTerminatedEmployees(){
+    const site        = this.siteService.getAssignedSite()
+    let search        = {}  as EmployeeSearchModel;
+    search.terminated = 2
+    this.employees$      = this.employeeService.getEmployeeBySearch(site, search).pipe(switchMap(data => {
+        const item = data.results
+        let list = item
+        if (list.length > 0) {
+          list.forEach(data => {
+            data.name = `${data.lastName}, ${data.firstName}`
+          })
+          list = list.sort((a, b) => {
+            if (a.name < b.name) {
+                return -1;
+            }
+            if (a.name > b.name) {
+                return 1;
+            }
+            return 0;
+        });
+
+      }
+      // console.log('list', list)
+      this.dialogRef = this.productEditButtonService.selectEmployee(list)
+      this.dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.setEmployeeValue(result)
+        }
+      });
+      return of(list)
+    }))
+  }
+
+  listEmployees(value) {
+    if (value == 1) {
+      this.refreshEmployees()
+      return;
+    }
+    if (value == 2) {
+      if (!this.isAuthorized) {
+        this.siteService.notify('Not Authorized','close', 3000)
+        return
+      }
+      this.refreshOnClockEmployees()
+    }
+    if (value == 3) {
+      if (!this.isAuthorized) {
+        this.siteService.notify('Not Authorized','close', 3000)
+        return
+      }
+      this.refreshTerminatedEmployees()
+    }
+
+  }
     notifyEvent(message: string, title: string) {
       this.matSnack.open(message, title, {duration: 2000, verticalPosition: 'bottom'})
     }

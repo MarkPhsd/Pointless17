@@ -21,21 +21,9 @@
 }
 
 
-
-.mat-button-toggle {
-  background-color: #d4beba;
-  color: #140c0c;
-
-  @include for-phone-only {
-    // width: 15vw;
-    width: 65px;
-  }
-}
-
 .mat-action-row {
   place-content: start;
 }
-
 
 .mat-button-toggle-group {
   width: 95%;
@@ -55,7 +43,33 @@
   }
 }
 
+.mat-button-extra-toggle {
+  background-color: #d4beba;
+  color: #140c0c;
+  width : 105px  !important;
+  height: 60px;
+  margin: 5px;
+  font-size: 1.2em;
+  font-weight: 600;
+
+  @include for-phone-only {
+    margin-left : 10px;
+    font-weight : 400;
+  }
+}
+
+.mod-button {
+  width : 105px  !important;
+  height: 60px;
+  margin: 5px;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+
 .button-toggle, .mat-button-toggle {
+  color: #140c0c;
+  background-color: #d4beba;
   width : 85px;
   height: 60px;
   margin: 10px;
@@ -64,7 +78,6 @@
 
   @include for-phone-only {
     margin-left : 10px;
-    // font-size   : 1.1em;
     font-weight : 400;
   }
 }
@@ -102,13 +115,6 @@
   gap: 10px;
 
   @include for-phone-only {
-    // display: grid;
-    // grid-auto-flow: row;
-    // gap: 5px;
-    // overflow-y: auto;
-    // grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
-    // padding:3px;
-
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

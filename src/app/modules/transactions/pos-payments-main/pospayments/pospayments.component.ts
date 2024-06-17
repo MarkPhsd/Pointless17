@@ -244,7 +244,6 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     };
     this.defaultColDef = {
       flex: 2,
-      // minWidth: 100,
     };
     this.columnDefs =  [
 
@@ -343,6 +342,18 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
             minWidth: 100,
             maxWidth: 100,
             // flex: 2,
+      },
+      {headerName: 'Group', field: 'groupNumber', sortable: true,
+            width   : 65,
+            minWidth: 65,
+            maxWidth: 65,
+            // flex: 2,
+      },
+      {headerName: 'Split', field: 'splitPayment', sortable: true,
+        width   : 65,
+        minWidth: 65,
+        maxWidth: 65,
+        // flex: 2,
       },
       {
         headerName: "History",
@@ -468,7 +479,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
             const resp   =  data.paging
             this.summary = data?.summary;
             console.log('data', data, data?.summary);
-            
+
             if (resp) {
               this.isfirstpage   = resp.isFirstPage
               this.islastpage    = resp.isFirstPage

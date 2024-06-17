@@ -19,7 +19,7 @@
 
 
    <mat-card-content *ngIf="category$ | async; else loading"
-      [formGroup]="inputForm">
+                      [formGroup]="inputForm">
 
       <div class="grid-fields">
         <div>
@@ -49,7 +49,6 @@
                   type="text"
                   formControlName="quantityType"
                   class="form-control" >
-
           </mat-form-field>
         </div>
 

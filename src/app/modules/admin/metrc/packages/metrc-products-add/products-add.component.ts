@@ -26,7 +26,7 @@ import { UserPreferences } from 'src/app/_interfaces';
 export class METRCProductsAddComponent implements OnInit {
   //move to inventory
   saved: boolean;
-
+  action$ : Observable<any>;
   conversionName:         string;
   inputQuantity:          number;
   inventoryLocationID:    number;
@@ -40,6 +40,7 @@ export class METRCProductsAddComponent implements OnInit {
   inventoryLocations$:    Observable<IInventoryLocation[]>;
   inventoryLocations:     IInventoryLocation[];
   inventoryLocation:      IInventoryLocation;
+
 
   cost:                   any;
   costValue:              number;
@@ -73,6 +74,8 @@ export class METRCProductsAddComponent implements OnInit {
     if (this.package) {
       if (this.package.json) {
         return JSON.parse(this.package?.json)
+
+        // this.package.productCategoryName
       }
     }
   }
@@ -108,6 +111,7 @@ export class METRCProductsAddComponent implements OnInit {
 
   constructor(
           private conversionService: ConversionsService,
+     
           public  route: ActivatedRoute,
           public  fb: UntypedFormBuilder,
           private awsBucket: AWSBucketService,
@@ -133,7 +137,7 @@ export class METRCProductsAddComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.bucketName     =   await this.awsBucket.awsBucket();
+    this.bucketName     = await this.awsBucket.awsBucket();
     this.awsBucketURL   = await this.awsBucket.awsBucketURL();
     this.unitsConverted = {} as IUnitsConverted;
     this.site           =  this.siteService.getAssignedSite();
@@ -141,7 +145,6 @@ export class METRCProductsAddComponent implements OnInit {
     this.inventoryAssigments = [];
     this.inventoryLocations$ =  this.setInventoryLocation()
     this.initForm();
-
   }
 
   setInventoryLocation() {
@@ -151,7 +154,6 @@ export class METRCProductsAddComponent implements OnInit {
         data.forEach(item => {
           if (item.defaultLocation) {
             this.getLocationAssignment(item.id);
-            // this.packageForm.patchValue({locationID:})
             this.inventoryLocationID = item.id;
           }
         });
@@ -164,19 +166,25 @@ export class METRCProductsAddComponent implements OnInit {
     this.initFields()
     if (this.id) {
       this.package$ = this.metrcPackagesService.getPackagesByID(this.id, this.site)
-      this.package$.subscribe(data =>
-        {
-          this.initItemFormData(data)
+      this.action$ =  this.package$.pipe(
+        switchMap(data =>
+        { 
+          if (data) { 
+            this.initItemFormData(data) 
+          }
+          return of(data)
         }
-      )
+      ))
     }
   }
 
-  async initItemFormData(data: METRCPackage) {
+  initItemFormData(data: METRCPackage) {
     if (data) {
+
+        data = this.convertValuesToString(data)
+   
         this.package = data
 
-        // console.log('initItemFormData', this.package.packageType, this.package.quantity)
         if (this.package) {
           if (this.package.unitOfMeasureName && this.package.unitOfMeasureName.toLocaleLowerCase() === 'each') {
             this.inputQuantity = this.package?.quantity;
@@ -185,7 +193,6 @@ export class METRCProductsAddComponent implements OnInit {
 
         if (this.package.unitOfMeasureName) {
           this.intakeConversion = this.conversionService.getConversionItemByName(this.package.unitOfMeasureName)
-          //convert the package quantity to the grams quantity
           this.intakeconversionQuantity = +this.intakeConversion.value * +this.package.quantity
           this.baseUnitsRemaining = this.intakeconversionQuantity
           this.initialQuantity    = this.intakeconversionQuantity
@@ -205,24 +212,82 @@ export class METRCProductsAddComponent implements OnInit {
         const facility = `${data?.itemFromFacilityLicenseNumber}-${data?.itemFromFacilityName}`
 
         this.packageForm.patchValue({
-          productCategoryName:              [data?.item?.productCategoryName],
-          productCategoryType:              [data?.item?.productCategoryType],
-          quantityType:                     [data?.item?.quantityType],
-          productName:                      [data?.item?.name],
-          productname                    :  [''],
-          inputQuantity:                    [0],
-          inventoryLocationID:              [0],
-          cost:                             [0],
-          price:                            [0],
-          jointWeight:                      [1],
-          facilityLicenseNumber:            [facility],
-          intakeConversionValue:            [this.intakeConversion?.value],
-          active                      :     [active],
-          testDate             : [data?.labTestingStateDate],
-          productionBatchNumber: [data?.productionBatchNumber],
-          // expiration           : [data?.date]
+          productCategoryName:              data?.item?.productCategoryName,
+          productCategoryType:              data?.item?.productCategoryType,
+          quantityType:                     data?.item?.quantityType,
+          productName:                      data?.item?.name,
+          productname                    :  '',
+          inputQuantity:                    0,
+          inventoryLocationID:              0,
+          cost:                             0,
+          price:                            0,
+          jointWeight:                      1,
+          facilityLicenseNumber:            facility,
+          intakeConversionValue:            this.intakeConversion?.value,
+          active                        : active,
+          sellByDate                    : data?.sellByDate,
+          labTestingPerformedDate       : data?.labTestingPerformedDate,
+          packagedDate                  : data?.packagedDate.toString(),
+          expirationDate                : data?.expirationDate,
+          useByDate                     : data?.useByDate,
+          productionBatchNumber         : data?.productionBatchNumber
       })
+      console.log('form initialized', this.packageForm.value)
+    }
+  }
 
+  // Utility function to convert all values to strings
+ convertValuesToString(obj: any): any {
+  if (typeof obj === 'string') {
+    return obj;
+  } else if (Array.isArray(obj)) {
+    return obj.map(item => item.toString());
+  } else if (typeof obj === 'object' && obj !== null) {
+    const result: any = {};
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        result[key] = this.convertValuesToString(obj[key]);
+      }
+    }
+    return result;
+  } else {
+    if (obj) { 
+      return obj.toString();
+    }
+    return obj
+  }
+}
+
+
+   editAssignment(i: any) {
+
+    if (this.inventoryAssigments[i]) {
+      const inv =  this.inventoryAssigments[i]
+      if (inv) {
+        this.inventoryAssigments.splice(i)
+        this.initItemFormData(this.package)
+ 
+          // this.packageForm = this.fb.group({
+          //   conversionName:                   [ inv.unitConvertedtoName, Validators.required],
+          //   inputQuantity:                    [ inv.packageQuantity, Validators.required],
+          //   inventoryLocationID:              [ inv.locationID, Validators.required],
+          //   cost:                             [ inv.cost],
+          //   price:                            [ inv.price],
+          //   jointWeight:                      [ 1 ],
+          //   expiration:                       [ inv.expiration],
+          // })
+
+        const item = {converstionName: inv?.unitConvertedtoName,
+          inputQuantity: inv.packageQuantity,
+          inventoryLocationID: inv.locationID,
+          cpst: inv?.cost,
+          price: inv?.price,
+          jointWeight: 1,
+          expirationDate: inv?.expiration}
+          
+        this.packageForm.patchValue(item)
+        this.getAvailableUnitsByQuantity()
+      }
     }
   }
 
@@ -548,7 +613,7 @@ export class METRCProductsAddComponent implements OnInit {
         this.conversionService.getConversionItemByName('Grams')
 
       this.unitsConverted.unitConvertTo =
-        this.conversionService.getConversionItemByName(name)
+      this.conversionService.getConversionItemByName(name)
       this.unitsConverted.baseQuantity = this.baseUnitsRemaining
       this.unitsConverted = this.conversionService.getAvailibleQuantityByUnitType(this.unitsConverted, 0)
     }
@@ -556,7 +621,7 @@ export class METRCProductsAddComponent implements OnInit {
     this.getAvailableUnitsByQuantity();
   }
 
-  async getAvailableUnitsByQuantity() {
+  getAvailableUnitsByQuantity() {
     const site =  this.siteService.getAssignedSite();
      //base is always grams
      this.baseUnitsRemaining = this.inventoryAssignmentService.getSummaryOfGramsUsed(site, this.inventoryAssigments, this.initialQuantity );
@@ -650,27 +715,7 @@ export class METRCProductsAddComponent implements OnInit {
     await this.getAvailableUnitsByQuantity()
   }
 
-  async editAssignment(i: any) {
 
-    if (this.inventoryAssigments[i]) {
-      const inv =  this.inventoryAssigments[i]
-      if (inv) {
-        this.inventoryAssigments.splice(i)
-        this.initItemFormData(this.package)
-        //assign the values to the form .
-        this.packageForm = this.fb.group({
-          conversionName:                   [ inv.unitConvertedtoName, Validators.required],
-          inputQuantity:                    [ inv.packageQuantity, Validators.required],
-          inventoryLocationID:              [ inv.locationID, Validators.required],
-          cost:                             [ inv.cost],
-          price:                            [ inv.price],
-          jointWeight:                      [ 1 ],
-          expiration:                       [ inv.expiration],
-        })
-        await this.getAvailableUnitsByQuantity()
-      }
-    }
-  }
 
 
 

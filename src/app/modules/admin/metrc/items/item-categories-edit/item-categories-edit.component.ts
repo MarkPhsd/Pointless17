@@ -1,22 +1,14 @@
 import { Component,  Inject,  OnInit } from '@angular/core';
 import { Observable ,switchMap,of  } from 'rxjs';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute,} from '@angular/router';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import { ConversionsService } from 'src/app/_services/measurement/conversions.service';
 
 import {
-  METRCItems,
   METRCItemsCategories,
-  MetrcItemsBrands,
-  METRCItemsCreate,
-  METRCItemsUpdate
 } from 'src/app/_interfaces/metrcs/items';
-import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
-import { InvokeFunctionExpr } from '@angular/compiler';
 
 @Component({
   selector: 'app-item-categories-edit',

@@ -1,0 +1,9 @@
+.toggle-container {
+  width: 100%;
+  white-space: normal; /* Allows the text to wrap */
+  margin-bottom: 8px; /* Adds some space between each toggle */
+}
+
+mat-slide-toggle {
+  width: 100%; /* Ensures the toggle takes up the full width of the container */
+}

@@ -131,6 +131,7 @@ export class EmployeeClockListComponent implements OnInit {
     this.viewType = 0;
 
     this._search = this.employeeClockService.searchModel$.subscribe(data => {
+      console.log('refreshSearchAny', data)
       this.refreshSearchAny(data)
     })
   }
@@ -354,7 +355,6 @@ export class EmployeeClockListComponent implements OnInit {
     this.endDate   = this.dateHelper.format(data?.endDate, 'MM/dd/yyyy');
     this.employeeID = data?.employeeID;
 
-    // console.log('search endDate',data?.endDate, this.endDate)
     this.refreshSearch(data)
   }
 
@@ -414,24 +414,11 @@ export class EmployeeClockListComponent implements OnInit {
       search.orderBy    = data?.orderBy;
     }
     this.searchModel = search
-    // console.log('end Search', search)
+   
     this.onGridReady(this.params)
   }
 
-  getItem(id: number) {
-    if (id) {
-      const site = this.siteService.getAssignedSite();
-      this.employeeClockService.getEmployeeClock(site,id).subscribe(data => {
-          this.employeeClock = data;
-        }
-      )
-    }
-  }
-
-  //ag-grid standard method
-  async onGridReady(params: any) {
-    // console.log('onGridReady, params')
-    // if (!params) { return }
+  onGridReady(params: any) {
     try {
       if (params)  {
         this.params  = params
@@ -444,7 +431,7 @@ export class EmployeeClockListComponent implements OnInit {
     }
 
     this.onFirstDataRendered(this.params)
-    // if (!params) { return }
+  
     if (params == undefined) { return }
     if (!params.startRow ||  !params.endRow) {
       params.startRow = 1
@@ -456,85 +443,108 @@ export class EmployeeClockListComponent implements OnInit {
       params.endRow = 500;
     };
 
+    console.log('pre datasource', params.startRow, params.endRow)
+
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
 
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
-      if (!items$) { return }
-      console.log('can subsribe')
+
       items$.subscribe(data =>
         {
-          const resp           =  data.paging
-          this.summary         = data?.summary
-
-            if (resp) {
-              this.isfirstpage   = resp.isFirstPage
-              this.islastpage    = resp.isFirstPage
-              // console.log(this.currentPage, resp.currentPage)
-
-              this.currentPage   = resp.currentPage
-              this.numberOfPages = resp.pageCount
-              this.recordCount   = resp.recordCount
-              if (this.numberOfPages !=0 && this.numberOfPages) {
-                this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-              }
-
-            }
-            if (data.results) {
-              if (this.isfirstpage) { this.jsonData = data.results
-              } else {
-                if (this.jsonData)  { this.jsonData = [...this.jsonData, ...data.results]
-                } else {
-                  this.jsonData = data.results;
-                }
-              }
-              let results  =  this.refreshImages(data.results)
-              params.successCallback(results)
-              this.rowData = results
-            }
+            this.refreshData(data)
+            let results  =  this.refreshImages(data?.results)
+            params.successCallback(results)
+            this.rowData = results
           }
         );
       }
     };
 
-    // console.log('datasource', datasource)
-    if (!datasource)   { return }
-    // console.log('gridApi', this.gridApi)
+    console.log('data source prepared')
     if (!this.gridApi) { return }
-    // console.log('setDataSource')
     this.gridApi.setDatasource(datasource);
     this.autoSizeAll(true)
+  }
+
+  refreshData(data) { 
+    const resp           =  data?.paging
+    this.summary         = data?.summary
+
+    if (resp) {
+      this.isfirstpage   = resp.isFirstPage
+      this.islastpage    = resp.isFirstPage
+      this.currentPage   = resp.currentPage
+      this.numberOfPages = resp.pageCount
+      this.recordCount   = resp.recordCount
+      if (this.numberOfPages !=0 && this.numberOfPages) {
+        this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+      }
+
+    }
+    if (data.results) {
+      if (this.isfirstpage) { this.jsonData = data.results
+      } else {
+        if (this.jsonData)  { this.jsonData = [...this.jsonData, ...data.results]
+        } else {
+          this.jsonData = data.results;
+        }
+      }
+   
+    }
   }
 
   getSearch() : EmployeeClockSearchModel{
     let search = {} as EmployeeClockSearchModel
     search = this.searchModel;
     if (!this.searchModel) {  search = {} as EmployeeClockSearchModel }
-    // this.currentPage          = this.setCurrentPage(1, 100)
 
     if (search) {
       search.pageNumber = this.currentPage;
       search.pageSize =   this.pageSize;
-      search.startDate =  this.startDate;
-      search.endDate   =  this.endDate;
+
+      if (!this.searchModel.startDate) { 
+        search.startDate =  this.startDate;
+      }
+      if (!this.searchModel.startDate) { 
+        search.endDate   =  this.endDate;
+      }
+    
       search.employeeID = this.employeeID
     }
-    // console.log('getSearch', search)
+
     return search
   }
 
+  getItem(id: number) {
+    if (id) {
+      const site = this.siteService.getAssignedSite();
+      this.employeeClockService.getEmployeeClock(site,id).subscribe(data => {
+          this.employeeClock = data;
+        }
+      )
+    }
+  }
   //ag-grid standard method
   getRowData(params, startRow: number, endRow: number):  Observable<EmployeeClockResults>  {
 
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     const site                = this.siteService.getAssignedSite()
-    const search = this.getSearch();
+    const search     = this.getSearch();
+    search.startDate =  this.startDate;
+    search.endDate   =  this.endDate;
+
+    console.log('startDate', this.startDate)
+    console.log('endDate', this.endDate)
+
     if (search.startDate && search.endDate) {
       if (search.summary) {
         return this.employeeClockService.getTimeClockSummary(site, search)
       }
       return this.employeeClockService.listEmployeesBetweenPeriod(site, search)
     }
+
+    console.log('nothing returning. ')
   }
 
   _getRow(summary: boolean ): Observable<EmployeeClockResults> {
