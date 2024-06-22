@@ -339,6 +339,18 @@
                   </tag-chips-products>
               </div>
 
+              <div class="fields-width" *ngIf="jsonForm">
+                <app-value-fields
+                    [inputForm]="jsonForm"
+                    [fieldName]="'sellByValue'">
+                    Sell By Value
+                </app-value-fields>
+                <app-value-fields
+                    [inputForm]="jsonForm"
+                    [fieldName]="'sellByValue'">
+                    Sell By Value
+                </app-value-fields>
+              </div>
           </div>
         </div>
 

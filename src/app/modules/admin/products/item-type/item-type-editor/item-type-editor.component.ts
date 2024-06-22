@@ -183,6 +183,8 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
   initJSONForm(itemType: IItemType): UntypedFormGroup {
     this.jsonForm = this.fb.group({
       inventoryLabelID: [],
+      sellByValue: [],
+      useByValue: [],
     })
 
     if (itemType.json) {

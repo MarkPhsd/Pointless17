@@ -497,7 +497,7 @@ export class PrintingService {
     if (!contents) { return }
     let printWindow = new this.electronService.remote.BrowserWindow({show: false, width: 350, height: 600 })
     if (options.silent) { printWindow.hide(); }
-    console.log('printElectronForLabels contents', contents)
+    // console.log('printElectronForLabels contents', contents)
     return  printWindow.loadURL(contents)
       .then( e => {
         if (options.silent) { printWindow.hide(); }
