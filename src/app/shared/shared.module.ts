@@ -248,6 +248,7 @@ import { SortSelectorsComponent } from './widgets/sort-selectors/sort-selectors.
 import { SetTokenComponent } from '../modules/admin/settings/set-token/set-token.component';
 import { DCAPResponseMessageComponent } from '../modules/dsiEMV/Dcap/dcaptransaction/dcapresponse-message/dcapresponse-message.component';
 import { EmployeesOnClockListComponent } from '../modules/admin/employeeClockAdmin/employees-on-clock-list/employees-on-clock-list.component';
+import { FunctionButtonsListComponent } from '../modules/admin/settings/function-groups/function-buttons-list/function-buttons-list.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -365,7 +366,7 @@ import { EmployeesOnClockListComponent } from '../modules/admin/employeeClockAdm
     MenuSearchBarComponent,
     MenuTinyComponent,
     MetrcSummaryComponent,
- 
+    FunctionButtonsListComponent,
     AverageHourlySalesLaborChartComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
@@ -539,7 +540,8 @@ import { EmployeesOnClockListComponent } from '../modules/admin/employeeClockAdm
     BackgroundUrlPipe,
     DerpPipe,
     BrandTypeSelectComponent,
-
+    ListProductSearchInputComponent,
+    FunctionButtonsListComponent,
     AuditPaymentComponent,
     AccordionComponent,
     AdjustPaymentComponent,
@@ -646,7 +648,7 @@ import { EmployeesOnClockListComponent } from '../modules/admin/employeeClockAdm
     MenuMinimalComponent,
     MenuSearchBarComponent,
     MenuTinyComponent,
-   
+
     UserBarComponent,
     MetrcSummaryComponent,
     AverageHourlySalesLaborChartComponent,

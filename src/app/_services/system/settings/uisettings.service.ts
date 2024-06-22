@@ -20,10 +20,8 @@ export interface ContactFieldOptions {
   account: boolean;
 }
 
-
 export interface TransactionUISettings {
-  rewardsEnabled: any;
-
+  rewardsEnabled         : any;
   id                     : number;
   displayNotes           : boolean;
   displayView            : boolean;
@@ -77,7 +75,8 @@ export interface TransactionUISettings {
   dCapPayAPISurchargeValue     : string;
   dcapPayAPIMultiPrice         : boolean
   dcapPayAPIDualPriceValue     : number;
-
+  dcapDisableDualPayOptions : boolean;
+  dCapDualPayEnableDebit: boolean
   diableDescrepencies    : boolean;
   disableCreditFilter    : boolean;
   allowPreAuth           : boolean;
@@ -128,9 +127,13 @@ export interface TransactionUISettings {
   enableItemReOrder: boolean;
   resaleCostRatio: number;
   rewardPointValue: number;
-  enableOnScreenKeyboard: boolean;
-  employeeClockNotifier: number;
-  printServerDevice: string;
+  enableOnScreenKeyboard : boolean;
+  employeeClockNotifier  : number;
+  printServerDevice      : string;
+  multiButtonOrderHeader : number;
+  multiButtonOrderMain   : number;
+  multiButtonOrderPayment: number;
+  multiButtonOrderService: number;
 }
 
 export interface StripeAPISettings {
@@ -889,6 +892,8 @@ export class UISettingsService {
       dsiEMVAndroidEnabcardPointPreAuthled   : [''],
       dsiEMVNeteEpayEnabled  : [''],
       dsiEMVIP               : [''],
+      dcapDisableDualPayOptions: [],
+      dCapDualPayEnableDebit : [],
       dsiTipPrompt           : [''],
       dCapEnabled            : [],
       dCapSurcharge          : [],
@@ -947,6 +952,7 @@ export class UISettingsService {
       dsiTipPromptValues: [],
       allowPreAuth: [],
       printServerDevice: [],
+      multiButtonOrderHeader: [],
 
       dcapPayAPIEnabled         : [],
       dcapPayAPIPreAuth         : [],

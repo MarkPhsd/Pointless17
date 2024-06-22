@@ -50,6 +50,7 @@ export interface ITerminalSettings {
   remotePrepPrint  : boolean;
   disableImages: boolean;
   disableMenuImages: boolean;
+  quickScanningDevice: boolean;
 }
 @Injectable({
   providedIn: 'root'

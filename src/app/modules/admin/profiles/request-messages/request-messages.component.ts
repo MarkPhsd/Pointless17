@@ -181,17 +181,17 @@ export class RequestMessagesComponent implements OnInit {
 
   processMessages(list:IRequestMessage[]): Observable<IRequestMessage[]> {
     // copy the messages
-    // console.error('print que', list);
+    console.log('print que', list);
     if (!list) { return of(null)}
 
     let messages = [... list];
     //filter out the
-    const filteredMessages = messages.filter(data => !data.archived && data.subject === 'Printing');
+    const filteredMessages = messages.filter(data => !data?.archived && data?.subject === 'Printing');
 
     this.collectPrintOrders(filteredMessages)
 
     const resultList = list.filter(data => {
-      if (!data.archived && data.subject != 'Printing') {
+      if (!data.archived && data?.subject != 'Printing') {
         return data
       }
     })
@@ -244,12 +244,11 @@ export class RequestMessagesComponent implements OnInit {
 
     // console.log(this.posDevice.name, this.uiTransaction.printServerDevice)
     // if (!this.uiTransaction.printServerDevice) { return }
-    // console.log('pposDevice name: PrintServer', this.posDevice.name, this.posDevice.printServerEnable)
-    if (!this.posDevice.printServerEnable) { return }
+    console.log('pposDevice name: PrintServer', this.posDevice?.name, this.posDevice?.printServerEnable)
+    if (!this.posDevice?.printServerEnable) { return }
 
     // const deviceName = localStorage.getItem('devicename')
     // if (this.posDevice.name != deviceName) { return }
-
     // console.log('pposDevice PrintServer', this.posDevice.printServerEnable)
     const site = this.siteService.getAssignedSite()
     let printJobs$ : Observable<any>[]
@@ -259,7 +258,7 @@ export class RequestMessagesComponent implements OnInit {
         const order$ = this.orderService.getOrder(site, data.orderID.toString(),false).pipe(concatMap(order => {
             return this.paymentsMethodsProcessService.sendToPrep(order, true, this.uiTransaction, cancelUpdate  )
           })).pipe(concatMap(order =>  {
-            return this._archiveMessage(data)
+            return this._archiveMessage(data, true)
           }))
         this.addObservable(order$)
       }
@@ -276,12 +275,12 @@ export class RequestMessagesComponent implements OnInit {
         console.log('remote print receipt')
         if (!this.isStaff && !this.posDevice) { return }
         const order$ = this.orderService.getOrder(site, data.orderID.toString(), false).pipe(concatMap(data => {
-           console.log('print receipt', index)
+          //  console.log('print receipt', index)
            this.printingService.printOrder = data;
            this.printingService.previewReceipt(true, data , this.posDevice.receiptPrinter);
            return of(data)
         })).pipe(concatMap(order =>  {
-          return this._archiveMessage(data)
+          return this._archiveMessage(data, true)
         }))
         this.addObservable(order$)
       }
@@ -362,15 +361,13 @@ export class RequestMessagesComponent implements OnInit {
 
     const site = this.siteService.getAssignedSite()
     const deviceName = localStorage.getItem('devicename')
-
-
     //we have to get these settings.
     //and for the printing if the device here is the same as the uitransactionserver
     //then we can use this as the print server
     //or if this is marked as the print server.
     this.posDevice$ = this.settingService.getPOSDeviceSettings(site, deviceName).pipe(switchMap(data => {
       this.posDevice = data;
-      console.log('init service')
+      // console.log('init service')
       return of(data)
     }))
     this.initUserSubscriber();
@@ -410,9 +407,13 @@ export class RequestMessagesComponent implements OnInit {
     }))
   }
 
-  archiveMessage(message){
+  archiveMessage(message, archiveOverride?: boolean){
     const site = this.siteService.getAssignedSite();
     message.archived = !message.archived;
+
+    if (archiveOverride) {
+      message.archived = archiveOverride;
+    }
     this.messages$ = this.requestMessageService.saveMessage(site, message).pipe(
       switchMap(data => {
         return of(data)
@@ -422,9 +423,12 @@ export class RequestMessagesComponent implements OnInit {
     }))
   }
 
-  _archiveMessage(message){
+  _archiveMessage(message: IRequestMessage, archiveOverride?: boolean){
     const site = this.siteService.getAssignedSite();
-    message.archived = !message.archived;
+    message.archived = true;// !message.archived;
+    if (archiveOverride) {
+      message.archived = archiveOverride;
+    }
     return this.requestMessageService.saveMessage(site, message).pipe(
       switchMap(data => {
         return of(data)
@@ -434,6 +438,7 @@ export class RequestMessagesComponent implements OnInit {
 
   _openOrderFromItemMessage(event: IRequestMessage) {
     //navigate to order
+    if (!event || !event?.method) {return }
     const methods  = event?.method.split('=');
 
     if (methods[1]) {
@@ -463,6 +468,8 @@ export class RequestMessagesComponent implements OnInit {
   }
 
   _openOrderFromOrderMessage(event: IRequestMessage) {
+    console.log('event', event)
+    if (!event || !event?.method) {return }
     const methods  = event?.method.split('=');
     if (methods[1]) {
       const value =  methods[1] //event.orderID
@@ -479,37 +486,29 @@ export class RequestMessagesComponent implements OnInit {
           return of({} as IPOSOrder)
         }
       )).pipe(switchMap(data => {
-
         return of({} as IPOSOrder)
       }))
     }
 
     return of({} as IPOSOrder);
-
   }
 
   activeEvent(event: IRequestMessage) {
     if (!event) { return  }
     if (!event.type) { return  }
-
-    // console.log('event', event?.type, event)
     if (event.type.toLocaleLowerCase()  === "ir") {
       this.router.navigate(['menuitems',{id: event.method}])
     }
-
     if (event.type.toLocaleLowerCase()  === "csr") {
       //navigate to order
       this.archiveMessage(event)
     }
-
     if (event.type.toLocaleLowerCase()  === "oc") {
       this.order$ =   this._openOrderFromOrderMessage(event)
     }
-
     if (event.type.toLocaleLowerCase() === "pc") {
       this.order$ =   this._openOrderFromItemMessage(event)
     }
-
     if (event.type.toLocaleLowerCase()  === "payment") {
       //navigate to order
       const site = this.siteService.getAssignedSite()

@@ -8,6 +8,7 @@ import { AuthenticationService, IItemBasic, MenuService } from 'src/app/_service
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { IMenuButtonGroups, MBMenuButtonsService } from 'src/app/_services/system/mb-menu-buttons.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
@@ -41,6 +42,9 @@ export class UITransactionsComponent implements OnInit {
   payAPIKeyExists$ : Observable<any>;
   aquireKey$ : Observable<any>;
   payAPIKeyEnabled: boolean;
+
+  menuButtonList$ : Observable<IMenuButtonGroups[]>;
+
   dcapSurchargeOptionList = this.uISettingsService.dcapSurchargeOptionList;
   constructor(
       private uISettingsService: UISettingsService,
@@ -54,6 +58,7 @@ export class UITransactionsComponent implements OnInit {
       public labelingService: LabelingService,
       private paymentService: DcapPayAPIService,
       private authenticationService: AuthenticationService,
+      private mbMenuGroupService: MBMenuButtonsService,
   ) {
   }
 
@@ -71,6 +76,7 @@ export class UITransactionsComponent implements OnInit {
 
     this.categories$     = this.menuService.getCategoryListNoChildren(site);
 
+    this.menuButtonList$ = this.mbMenuGroupService.getGroups(site);
     this.payAPIKeyExists();
     this.initUITransactionSettings()
     this.saving$  = null;

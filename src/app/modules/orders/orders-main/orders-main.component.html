@@ -27,13 +27,13 @@
 </div>
 
 
-
 <ng-template #orderFilter>
   <div *ngIf="!smallDevice && !hidePanel"
       class="filter-container" filterDiv>
     <app-order-filter-panel
       [styleHeight]="styleFilterHeight"
       [disableFilterUpdate]="disableFilterUpdate"
+      [user]="user"
       (outPutHidePanel)="hideFilterPanel($event)">
     </app-order-filter-panel>
   <!-- -->
@@ -310,8 +310,7 @@
                                            (isApp &&
                                             (terminalSettings && terminalSettings.enablePrepView)
                                            )
-                                          )
-                                             ">
+                                          )  ">
 
     <button  class="dark-theme-green " mat-button (click)="setViewType(3)">
       <mat-icon>countertops</mat-icon> View Prep
@@ -349,10 +348,6 @@
 
       <span>
 
-        <!-- <button mat-button  (click)="newOrder()" *ngIf="isAuthorized || isStaff">
-          <mat-icon>receipt</mat-icon><span>New Order</span>
-        </button> -->
-
         <button mat-button color="accent" (click)="getOrderItemHistory()"  *ngIf="isUser">
           <mat-icon>receipt</mat-icon><span>Past Items</span>
         </button>
@@ -383,7 +378,6 @@
     <ng-container [ngTemplateOutlet]="transferOrderView"></ng-container>
     <ng-container [ngTemplateOutlet]="filterMyOrdersView"></ng-container>
     <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
-
     <ng-container [ngTemplateOutlet]="sortSelectorsView"></ng-container>
   </div>
 </ng-template>

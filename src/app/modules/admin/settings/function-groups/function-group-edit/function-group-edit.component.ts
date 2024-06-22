@@ -1,11 +1,11 @@
 import { Component, OnInit,OnDestroy, OnChanges } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute,  Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuButtonGroups, MBMenuButtonsService, mb_MenuButton } from 'src/app/_services/system/mb-menu-buttons.service';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Subscription, switchMap } from 'rxjs';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Subscription } from 'rxjs';
 import { IUser } from 'src/app/_interfaces';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
@@ -63,13 +63,12 @@ constructor(
   initFormFields() {
   if (!this.menuButtonGroup) { return }
    this.inputForm = this.fb.group({
-     id          : [''],
-     name        : [''],
-     description : [''],
+     id          : [],
+     name        : [],
+     description : [],
    })
    this.inputForm.patchValue(this.menuButtonGroup)
-   console.log('init Form fields', this.menuButtonGroup)
-  }
+   }
 
   saveGroup() {
     const site  =  this.siteService.getAssignedSite();
@@ -186,7 +185,8 @@ constructor(
     if (!this.mb_MenuButton || !this.menuButtonGroup?.name) { return }
     if (this.mb_MenuButton) {
       const name =  this.menuButtonGroup.name.trimEnd()
-      this.menusService.postButtonList(site, this.menuButtonGroup.mb_MenuButtons, name, true).subscribe( data=> {
+      this.menusService.postButtonList(site, this.menuButtonGroup.mb_MenuButtons,
+                                      name, true).subscribe( data=> {
       })
     }
   }

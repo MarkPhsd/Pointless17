@@ -3,15 +3,11 @@ import { IMenuButtonGroups, MBMenuButtonsService } from 'src/app/_services/syste
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { Observable, of, switchMap } from 'rxjs';
+import { Observable,  switchMap } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams, GridApi } from 'ag-grid-community';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-// import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Capacitor,  } from '@capacitor/core';
@@ -66,21 +62,19 @@ export class FunctionGroupListComponent implements OnInit {
   datasource: any;
   constructor(
               private _snackBar              : MatSnackBar,
-              private agGridService          : AgGridService,
               private fb                     : UntypedFormBuilder,
               private siteService            : SitesService,
-              private productEditButtonService: ProductEditButtonService,
               private agGridFormatingService : AgGridFormatingService,
-              private dialog: MatDialog,
-              private router: Router,
-             private mbMenuGroupService: MBMenuButtonsService) {
+              private router                 : Router,
+               private mbMenuGroupService: MBMenuButtonsService) {
 
-      this.initForm();
-      this.initAgGrid(this.pageSize);
-      this.initClasses();
-    }
+  }
 
   ngOnInit(): void {
+    this.initForm();
+    this.initAgGrid(this.pageSize);
+    this.initClasses();
+    this.buttonName = 'Edit'
     const i = 0
     if (this.editOff) {
       this.buttonName = 'Assign'
@@ -89,11 +83,11 @@ export class FunctionGroupListComponent implements OnInit {
   }
 
   initClasses()  {
-    const platForm      = this.platForm;
-    this.gridDimensions =  'width: 100%; height: 600px;'
+
+    this.gridDimensions =  'width: 100%; height: calc(95vh - 100px);'
     this.agtheme  = 'ag-theme-material';
-    if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
-    if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
+  //   if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
+  //   if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
   }
 
 
@@ -116,24 +110,31 @@ export class FunctionGroupListComponent implements OnInit {
 
     this.defaultColDef = {
       flex: 2,
-      // minWidth: 100,
     };
-
     this.columnDefs =  [
+      {
+        headerName: "Row",
+        valueGetter: "node.rowIndex + 1",
+        minWidth: 125,
+        maxWidth: 125,
+        flex: 2,
+      },
 
       {
-      field: 'id',
-      cellRenderer: "btnCellRenderer",
-                    cellRendererParams: {
-                        onClick: this.editItemFromGrid.bind(this),
-                        label: this.buttonName,
-                        getLabelFunction: this.getLabel.bind(this),
-                        btnClass: 'btn btn-primary btn-sm'
-                      },
-                      minWidth: 125,
-                      maxWidth: 125,
-                      flex: 2,
-      },
+        headerName: 'Edit', field: 'id',
+        cellRenderer: "btnCellRenderer",
+                      cellRendererParams: {
+                          onClick: this.editItemFromGrid.bind(this),
+                          label: 'Edit',
+                          getLabelFunction: this.getLabel.bind(this),
+                          btnClass: 'btn btn-primary btn-sm'
+                        },
+                        minWidth: 125,
+                        maxWidth: 125,
+                        flex: 2,
+        },
+
+
       {headerName: 'Name',     field: 'name',         sortable: true,
                   width   : 175,
                   minWidth: 175,
@@ -286,7 +287,6 @@ export class FunctionGroupListComponent implements OnInit {
   {
     if(rowData && rowData.hasIndicator)
       return this.buttonName
-      else return this.buttonName
   }
 
   onBtnClick1(e) {

@@ -4,6 +4,9 @@
     <div  class="parent-container">
       <div  class="flex-row">
 
+        <div *ngIf="posDevice?.quickScanningDevice">
+          <list-product-search-input></list-product-search-input>
+        </div>
         <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
         <ng-container [ngTemplateOutlet]='departmentsFilter'></ng-container>
         <div>

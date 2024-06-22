@@ -45,11 +45,20 @@ export interface IMenuButtonProperties {
 })
 export class MBMenuButtonsService {
 
+  functions = [
+    {id: 0, name:'DRW 1', icon: 'register', function: 'openDrawer1',group: 'drawer'},
+    {id: 1, name:'DRW 2', icon: 'register', function: 'openDrawer2',group: 'drawer'},
+    {id: 2, name:'DRW 3', icon: 'register', function: 'openDrawer3',group: 'drawer'},
+    {id: 3, name:'Suspend', icon: 'hold', function: 'suspendOrder',group: 'order'},
+    {id: 4, name:'EmailOrder', icon: '', function: 'emailOrder',group: 'order'},
+    {id: 5, name:'TextOrder', icon: '', function: 'textOrder',group: 'order'},
+    {id: 5, name:'QRLink', icon: '', function: 'qrLink',group: 'order'},
+  ]
+//
   constructor(
     private http: HttpClient,
     private httpCache: HttpClientCacheService,
     private auth: AuthenticationService,
-    private sitesService: SitesService,
    )
 { }
 

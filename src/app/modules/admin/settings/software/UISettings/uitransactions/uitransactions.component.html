@@ -40,6 +40,8 @@
           class="grid-view-sections" >
 
       <div class="grid-views">
+
+
         <div class="grid-views">
           <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Item Options</h4>
 
@@ -136,6 +138,34 @@
                       >
               <mat-label>Require Enter/Tab to Lookup</mat-label>
             </mat-slide-toggle>
+          </div>
+
+        </div>
+
+        <div class="grid-views">
+          <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Multi Function Button Lists</h4>
+
+          <!-- <mat-label>These are options that display during the order to modify the item.</mat-label>
+          <div class="toggle-fields">
+            <mat-slide-toggle  formControlName="displayNotes"  >
+              <mat-label>Enable Multi Button</mat-label>
+            </mat-slide-toggle>
+          </div> -->
+
+          <div *ngIf="(menuButtonList$ | async) as list ">
+            <mat-form-field style="width: 200px" class="fields"
+                appearance="outline">
+              <mat-label>Order Header</mat-label>
+                <mat-select
+                          type              = "number"
+                          formControlName   = "multiButtonOrderHeader" >
+                  <mat-option
+                      *ngFor="let item of list"
+                      [value]="item?.id">
+                      {{item?.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
           </div>
 
         </div>
@@ -268,7 +298,6 @@
               </app-value-fields>
             </div>
 
-
             <div>
               <mat-icon class="mat-label-info"
                     color="accent"
@@ -282,8 +311,7 @@
 
             <div class="toggle-fields">
               <mat-slide-toggle
-                        formControlName="remove100thDecimalForPrice"
-                        >
+                        formControlName="remove100thDecimalForPrice" >
                 <mat-label>Charge to the first decimal, no rounding.</mat-label>
               </mat-slide-toggle>
             </div>
@@ -351,7 +379,6 @@
               </app-value-fields>
             </div>
 
-            <!-- enableRounding -->
             <div>
               <mat-label class="mat-label-design">Minimum value of credit card payment.</mat-label>
               <app-value-fields
@@ -545,8 +572,21 @@
                     <mat-divider></mat-divider>
                   </div>
 
-                  <div class="toggle-fields" >
+                  <div class="toggle-fields">
+                    <mat-slide-toggle
+                              formControlName="dcapDisableDualPayOptions" >
+                      <mat-label>Disable Options</mat-label>
+                    </mat-slide-toggle>
+                  </div>
+                  <div class="toggle-fields">
+                    <mat-slide-toggle
+                              formControlName="dCapDualPayEnableDebit" >
+                      <mat-label>Enable Debit</mat-label>
+                    </mat-slide-toggle>
+                  </div>
+                  <!-- //dCapDualPayEnableDebit -->
 
+              <div class="toggle-fields">
                   <mat-divider></mat-divider>
 
                       <div class="toggle-fields">
@@ -584,7 +624,7 @@
                   <div  style="margin:5px">
                     <h3><mat-icon>key</mat-icon>Key Exists: {{payAPIKeyEnabled}}</h3>
                     <button *ngIf="!payAPIKeyEnabled" class="payment-buttons" mat-raised-button color="primary" (click)="acquireInitialApiKey()">Init Key</button>
-                    <button *ngIf="payAPIKeyEnabled" class="payment-buttons" mat-raised-button color="primary" (click)="acquireApiKey()">Replace Key</button>
+                    <button *ngIf="payAPIKeyEnabled" class="payment-buttons" mat-raised-button color="primary" (click)="acquireApiKey()">Refresh Key</button>
                     <button *ngIf="payAPIKeyEnabled" class="payment-buttons" mat-raised-button color="primary" (click)="deleteKey()">Delete Key</button>
                   </div>
                 </div>

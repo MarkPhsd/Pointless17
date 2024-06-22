@@ -164,7 +164,36 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     return ""
   }
+  get leftSideBar() {
+    if (this.swapMenuWithOrder) {
+      if (this.toolBarUIService.orderBar) {
+        return this.appOrderBar
+      }
 
+      if (this.user &&  this.user.roles && this.user?.roles.toLowerCase() === 'user') {
+        return this.userBarView
+      }
+      return this.menuBarView
+
+    }
+    return this.appMenuSearchBar
+  }
+  get rightSideBar() {
+    if (this.swapMenuWithOrder) {
+      return this.appMenuSearchBar
+    }
+    return this.appOrderBar
+  }
+
+  get menuOrOrderBar() {
+    if (this.swapMenuWithOrder) {
+      return
+    }
+    if (this.user &&  this.user.roles && this.user?.roles.toLowerCase() === 'user') {
+      return this.userBarView;
+    }
+    return this.menuBarView;
+  }
 
   processLogOut() {
     // console.trace('processLogOut')
@@ -243,37 +272,53 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }));
   }
 
-  initDeviceSubscriber() {
-    if (this.platFormService.isApp()) {
-      const device = localStorage.getItem('devicename');
-      const site = this.siteService.getAssignedSite()
+  initDevice() {
+    const site = this.siteService.getAssignedSite();
+    const devicename = localStorage.getItem('devicename');
 
-      this.posDevice$ = this.settingService.getPOSDeviceBYName(site, device).pipe(switchMap(data => {
-        if (!data || data.text) { return of(null)}
-        const device = JSON.parse(data?.text) as ITerminalSettings;
-        this.initPrintServer(device)
-        return of(device)
-      }))
+    if (!devicename) { return ;}
+    // if (this.platFormService.isApp()) {
+    this.posDevice$ = this.settingService.getPOSDeviceBYName(site, devicename).pipe(switchMap(data => {
+      if (!data) { return of(null)}
+      const device = JSON.parse(data.text) as ITerminalSettings;
+      this.settingService.updateTerminalSetting(device)
+      this.initPrintServer(device)
+      if (device.enableScale) {
+      }
+      return of(device)
+    }))
+    // }
+  }
 
-      if (!device) { return }
 
-      this.uiSettingsService.homePageSetting$.pipe(switchMap(data => {
-        this.uiSettings = data;
-        return this.posDevice$
-      })).pipe(switchMap(data => {
-        if (!data) {
-          this.stopWatching()
-          return of(null)
+
+  homePageSubscriber(){
+    try {
+      this.matorderBar = 'mat-orderBar-wide'
+      this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
+        if (data) {
+          this.uiSettings = data;
+          this.initIdle();
+          if (this.phoneDevice)  {
+            this.matorderBar = 'mat-orderBar-wide'
+            return
+          }
+          this.matorderBar = 'mat-orderBar-wide'
         }
-        if (!data.ignoreTimer) {
-          this.uiSettings.timeOut = false
-          this.stopWatching()
-        }
-        return of(data)
-      }))
+      })
+    } catch (error) {
 
     }
   }
+
+  // if (!data) {
+  //   this.stopWatching()
+  //   return of(null)
+  // }
+  // if (!data.ignoreTimer) {
+  //   this.uiSettings.timeOut = false
+  //   this.stopWatching()
+  // }
 
   initPrintServer(device:ITerminalSettings) {
     if (!this.platFormService.isAppElectron) {return }
@@ -298,24 +343,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  homePageSubscriber(){
-    try {
-      this.matorderBar = 'mat-orderBar-wide'
-      this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
-        if (data) {
-          this.uiSettings = data;
-          this.initIdle();
-          if (this.phoneDevice)  {
-            this.matorderBar = 'mat-orderBar-wide'
-            return
-          }
-          this.matorderBar = 'mat-orderBar-wide'
-        }
-      })
-    } catch (error) {
-
-    }
-  }
 
   swapMenuWithOrderSubscriber() {
     this._swapMenuWithOrder = this.userSwitchingService.swapMenuWithOrder$.subscribe(data =>  {
@@ -461,7 +488,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   initSubscriptions() {
     try {
-      this.initDeviceSubscriber();
+      this.initDevice();
     } catch (error) {
       console.log('device subscriber', error)
     }
@@ -557,7 +584,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initSettings();
     const site = this.siteService.getAssignedSite();
     this.splashLoader.stop();
-    this.initDevice();
+    // this.initDevice();
     this.userIdle.resetTimer();
     this.initUITransactionSettings();
     this.initLoginStatus();
@@ -567,22 +594,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
 
-  initDevice() {
-    const site = this.siteService.getAssignedSite();
-    const devicename = localStorage.getItem('devicename');
-
-    if (!devicename) { return ;}
-    if (this.platFormService.isApp()) {
-      this.posDevice$ = this.settingService.getPOSDeviceBYName(site, devicename).pipe(switchMap(data => {
-        if (!data) { return of(null)}
-        const device = JSON.parse(data.text) as ITerminalSettings;
-        this.settingService.updateTerminalSetting(device)
-        if (device.enableScale) {
-        }
-        return of(device)
-      }))
-    }
-  }
 
   getHelp() {
     this.router.navigateByUrl(this.chatURL)
@@ -622,38 +633,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           }
           return of(null)
     }))
-  }
-
-  get leftSideBar() {
-    if (this.swapMenuWithOrder) {
-      if (this.toolBarUIService.orderBar) {
-        return this.appOrderBar
-      }
-
-      if (this.user &&  this.user.roles && this.user?.roles.toLowerCase() === 'user') {
-        return this.userBarView
-      }
-      return this.menuBarView
-
-    }
-    return this.appMenuSearchBar
-  }
-
-  get rightSideBar() {
-    if (this.swapMenuWithOrder) {
-      return this.appMenuSearchBar
-    }
-    return this.appOrderBar
-  }
-
-  get menuOrOrderBar() {
-    if (this.swapMenuWithOrder) {
-      return
-    }
-    if (this.user &&  this.user.roles && this.user?.roles.toLowerCase() === 'user') {
-      return this.userBarView;
-    }
-    return this.menuBarView;
   }
 
   initUI() {

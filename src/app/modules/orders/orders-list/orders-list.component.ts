@@ -8,7 +8,6 @@ import { UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Observable, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi, AgGridEvent } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
@@ -123,13 +122,18 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       clientID = this.userAuthorization.user.id;
     }
 
-    if (this.clientID != 0) { 
+    if (this.clientID != 0) {
       clientID = this.clientID;
     }
 
     this._searchModel = this.orderMethodsService.posSearchModel$.subscribe( data => {
 
         this.searchModel            = data
+
+        console.log('search model', data?.clientID,  data)
+        if (data?.clientID !=0) {  clientID =  data?.clientID  }
+        if (data?.suspendedOrder && data.suspendedOrder != 0 )  {this.suspendedOrders = data?.suspendedOrder }
+
         if (!this.searchModel) {
           const searchModel       = {} as IPOSOrderSearchModel;
           this.currentPage        = 1
@@ -137,24 +141,24 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           searchModel.pageSize    = 50;
           this.searchModel        = searchModel
         }
-   
+
         if (clientID != 0) {
           this.searchModel.clientID = clientID;
         }
-    
-        if (!this.searchModel.completionDate_From) { 
-          if (this.suspendedOrders != 0) { 
+
+        if (!this.searchModel.completionDate_From) {
+          if (this.suspendedOrders != 0) {
             this.searchModel.suspendedOrder = this.suspendedOrders;
           }
-        } else { 
-          if (this.searchModel.completionDate_From) { 
+        } else {
+          if (this.searchModel.completionDate_From) {
             this.searchModel.searchOrderHistory = true;
           }
           this.searchModel.suspendedOrder = 0;
         }
-      
+
         console.log(this.searchModel, this.clientID,this.suspendedOrders)
-    
+
         this.refreshSearch()
         return
       }
@@ -237,8 +241,8 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     };
     this.defaultColDef = {
       flex: 2,
-      // minWidth: 100,
     };
+
     this.columnDefs =  [
       {
         headerName: "Row",

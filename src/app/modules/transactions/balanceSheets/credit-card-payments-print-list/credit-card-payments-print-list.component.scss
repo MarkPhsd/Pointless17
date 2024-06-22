@@ -49,3 +49,25 @@
     grid-template-columns: 100px 100px;
   }
 }
+
+.grid-summary-3-column{
+  --gap: 3px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 100px 100px  100px;
+  @media print {
+    font-size: 12pt;
+   font-weight: bold !important;
+    --gap: 3px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 100px 100px  100px;
+  }
+}
+.item-span-3 {
+  grid-column-end: span 3;
+}
+
+.item-span-2 {
+  grid-column-end: span 2;
+}

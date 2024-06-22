@@ -16,6 +16,8 @@ export class FunctionGroupButtonEditComponent implements OnInit,OnChanges {
   @Input() inputForm    : UntypedFormGroup;
   propForm              : UntypedFormGroup;
 
+  functionList = []
+
   constructor(
     private _snackBar   : MatSnackBar,
     private siteService : SitesService,
@@ -27,6 +29,16 @@ export class FunctionGroupButtonEditComponent implements OnInit,OnChanges {
     if (!this.menuButton) { return }
     this.initFormFields();
     // console.log(this.menuButton)
+
+    this.functionList = this.menuService.functions.sort((a, b) => {
+      if (a.function < b.function) {
+        return -1;
+      } else if (a.function > b.function) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
   }
 
   ngOnChanges(): void {

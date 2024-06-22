@@ -459,6 +459,31 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this._user) { this._user.unsubscribe()}
   }
 
+  emailOrder(event) {
+    this.orderMethodsService.emailOrder(this.order).subscribe(data => {
+      if (data && (data.isSuccessStatusCode || data.toString() == 'Success')) {
+        this.orderMethodsService.notifyEvent('Email Sent', 'Success')
+        return;
+      }
+      if (!data.isSuccessStatusCode) {
+        this.orderMethodsService.notifyEvent('Email not sent. Check email settings', 'Failed')
+        return;
+      }
+    })
+  }
+
+  isToday(dateString: string): boolean {
+    const date = new Date(dateString);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const inputDate = new Date(date);
+    inputDate.setHours(0, 0, 0, 0);
+
+    return today.getTime() === inputDate.getTime();
+  }
+
   getPaymentMethods(site: ISite) {
     const paymentMethods$ = this.paymentMethodService.getCacheList(site);
     if (this.userAuthorization?.user?.roles === 'user') {

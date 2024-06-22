@@ -44,7 +44,7 @@ export class PayAPIComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private platFormService: PlatformService,
+    public platFormService: PlatformService,
     private siteService: SitesService,
     private orderMethodsService: OrderMethodsService,
     private dcapPayAPIService: DcapPayAPIService) { }
@@ -58,6 +58,7 @@ export class PayAPIComponent implements OnInit {
       this.order.id          = 871919
     }
 
+
     this.payAPIKeyExists()
     this.payMID$ = this.getPayMID().pipe(switchMap(data => {
       if (this.publicKey) {
@@ -65,6 +66,8 @@ export class PayAPIComponent implements OnInit {
         return of(data)
       }
     }))
+
+    // this.payApiEnabled = this.uiTransactions?.dcapPayAPIEnabled
   }
 
   getPayMID() :Observable<string> {
@@ -104,10 +107,8 @@ export class PayAPIComponent implements OnInit {
   }
 
   get payApiEnabled() {
-    if ( this.uiTransactions.dcapPayAPIEnabled) {
-      if (this.platFormService.isAppElectron) {
-        return false
-      }
+    if ( this.uiTransactions?.dcapPayAPIEnabled) {
+      if (this.platFormService.isApp()) {  return false  }
       return true
     }
     return false
@@ -198,13 +199,12 @@ export class PayAPIComponent implements OnInit {
                 this.payment$ = this.dcapPayAPIService.sale(response,posPayment).pipe(switchMap(data => {
 
                     this.siteService.notify(data.responseMessage, 'close', 5000, 'green')
-                    if (data.responseMessage.toLowerCase() == 'Approved' || data.responseMessage.toLowerCase() == 'success'.toLowerCase()) {
-                      this.orderMethodsService.updateOrder(data.order)
-                      this.orderMethodsService.updateOrderSubscription(data.order)
-                    }
-                    if (data.responseMessage != 'Approved') {
+                    // if (data.responseMessage.toLowerCase() == 'Approved' || data.responseMessage.toLowerCase() == 'success'.toLowerCase()) {
 
-                    }
+                    // }
+                    this.orderMethodsService.updateOrder(data?.order)
+                    this.orderMethodsService.updateOrderSubscription(data?.order)
+
                     this.processing = false;
                    return of(data)
                 }))

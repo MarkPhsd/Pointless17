@@ -1,6 +1,7 @@
 <mat-card *ngIf="order">
   <mat-card-subtitle>
      <button mat-raised-button
+             [disabled]="order.completionDate"
              color="primary"
              (click)="schedule()">
       <mat-icon>edit</mat-icon>Schedule
@@ -9,7 +10,7 @@
   <mat-card-content>
 
     <div class="grid-container">
-    
+
       <div *ngIf="order?.shipAddress"><mat-icon>delivery_dining</mat-icon>Address</div>
       <div *ngIf="order?.shipAddress">{{order?.shipAddress}} - {{order?.shipAddress2}}  </div>
 

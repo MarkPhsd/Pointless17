@@ -1,6 +1,6 @@
 {
-  "name": "pointlesspos",
-  "version": "3.10.64",
+  "name": "pointlessposbeta",
+  "version": "3.11.78",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -13,7 +13,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "start with SSL": " ng serve --configuration dev --public-host --host=192.168.0.2 --port=4500 --ssl true --ssl-key ./localhost-key.pem --ssl-cert ./localhost.pem ",
+    "start with SSL": " ng serve --configuration dev --public-host --host=192.168.0.2 --port=4600 --ssl true --ssl-key ./localhost-key.pem --ssl-cert ./localhost.pem ",
     "start with IP": " ng serve --configuration dev --public-host --host=192.168.0.2 --port=4500 ",
     "startLocal": "ng serve --configuration dev --host=localhost --port=4500",
     "startLocalNode": "ng serve   --configuration dev --host=localhost --port=4500",

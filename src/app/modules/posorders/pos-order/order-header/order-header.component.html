@@ -51,8 +51,18 @@
               <mat-icon>qr_code</mat-icon>QR Link
             </button>
           </div>
-          <div>
+          <div style="margin-left:3px" class="button-row-55">
             <ng-container [ngTemplateOutlet]="editOrderView"></ng-container>
+            <div *ngIf="(menuButtonList$ | async) as list">
+              <function-buttons-list
+                    [list]="list"
+                    [order]="order"
+                    [isAdmin]="isAdmin"
+                    [isUser] ="isUserStaff"
+                    [buttonSize]="'button-small'"
+                    [isStaff]="isStaff">
+              </function-buttons-list>
+            </div>
           </div>
         </span>
 
@@ -79,7 +89,7 @@
           <ng-content [ngTemplateOutlet]="qrCodeDisplayView"></ng-content>
 
           <span #coachingLabel >
-            <div   class="button-margin" *ngIf="!mainPanel && isSale && isUserStaff && 
+            <div   class="button-margin" *ngIf="!mainPanel && isSale && isUserStaff &&
                                                 (posDevice && posDevice.labelPrinter && posDevice.enableExitLabel)">
               <button   class="button" color="warn" mat-raised-button
                 (click)="printLabels()">

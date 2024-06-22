@@ -26,6 +26,7 @@ export class BalanceSheetCalculationsViewComponent implements OnInit,OnDestroy {
   cashDepositCalc: number;
 
   _sheet          : Subscription;
+  depositDescription: string;
   // (renderComplete)="renderCompleted($event)"
   initSubscriptions() {
     const site = this.siteService.getAssignedSite()
@@ -34,18 +35,31 @@ export class BalanceSheetCalculationsViewComponent implements OnInit,OnDestroy {
       this.dropTotal = 0
       this.getDropsValue(data)
       return this.paymentService.getCreditTipTotals(site,this.sheet.id)
-    })).pipe(switchMap(data => { 
-      /// now we can calculate the amount of cash a server cashier should deposit. 
+    })).pipe(switchMap(data => {
+      /// now we can calculate the amount of cash a server cashier should deposit.
       //CashDeposit = CashSales - CreditTips
+      // console.log('credit Tips', data)
       const creditTips = +data;
-      this.cashDepositCalc = this.sheet.cashDeposit - creditTips
+      this.cashDepositCalc =  this.sheet?.cashIn - this.sheet?.creditTips
+      this.depositDescription = 'Cash - Credit Tip'
+
+      if (this.userAuth._userAuths.value) {
+        const auths = this.userAuth._userAuths.value
+        if (auths.userAssignedBalanceSheet)  {
+          if (auths.balanceSheetDisableBank) {
+            this.depositDescription = 'Cash - Credit Tip'
+            this.cashDepositCalc = +this.sheet?.cashIn -  this.sheet?.creditTips
+          }
+        }
+      }
+
       this.renderComplete.emit('balance-sheet-calcuations-view')
       return of(data)
     }))
     this._sheet = sheet$.subscribe()
   }
 
-  getDropsValue(sheet: IBalanceSheet) { 
+  getDropsValue(sheet: IBalanceSheet) {
   // console.log('sheet data', data)
     try {
       if (sheet && sheet.cashDrops) {
@@ -55,7 +69,7 @@ export class BalanceSheetCalculationsViewComponent implements OnInit,OnDestroy {
         })
       }
     } catch (error) {
-      
+
     }
   }
 
@@ -76,6 +90,7 @@ export class BalanceSheetCalculationsViewComponent implements OnInit,OnDestroy {
     }
   }
 }
+
 function switchmap(arg0: (data: any) => void): any {
   throw new Error('Function not implemented.');
 }

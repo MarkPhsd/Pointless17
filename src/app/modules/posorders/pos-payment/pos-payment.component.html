@@ -61,9 +61,18 @@
                 (click)="exitOrder()"><mat-icon>exit_to_app</mat-icon>Leave Order</button>
       </div>
 
+      <div  class="button-margin-10">
+        <button class="button-margin-10 button-width-175 button-height-75"
+                color="accent"
+                mat-raised-button
+                (click)="emailOrder('event')">
+          <mat-icon>email</mat-icon>Email
+        </button>
+      </div>
+
       <div *ngIf="isUser && paymentsEqualTotal && !isStaff" class="button-margin-10">
         <h5>If you would like to enter a tip, please do so before the end of day.</h5>
-        <button class="button-margin-10 button-width-175 button-height-75"
+        <button *ngIf="isToday(order?.completionDate)"  class="button-margin-10 button-width-175 button-height-75"
                 color="accent"
                 mat-raised-button
                 (click)="editPayment()"><mat-icon>edit</mat-icon>Enter Tip</button>
@@ -78,6 +87,8 @@
                   (click)="exitOrder()">Leave Order</button>
         </div>
 
+
+
         <div  class="order-completed"
               *ngIf="(paymentsEqualTotal || order.completionDate)">
             <ng-container [ngTemplateOutlet]="receiptShowTemplate"></ng-container>
@@ -87,7 +98,8 @@
           <div>
             <h4>Payment Amount: {{groupPaymentAmount | currency}}</h4>
           </div>
-          <div class="margin-5"><button style="height: 50px;" mat-raised-button color="warn" (click)="clearGroupSelection()">Clear Selection</button></div>
+          <div class="margin-5"><button style="height: 50px;" mat-raised-button color="warn"
+            (click)="clearGroupSelection()">Clear Selection</button></div>
         </div>
 
         <div class="action-center">
@@ -161,27 +173,30 @@
                                                       ) &&
                                                     !splitByItem)">
 
-                    <ng-container [ngTemplateOutlet]="payApiView"></ng-container>
-                    <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
+                      <ng-container [ngTemplateOutlet]="payApiView"></ng-container>
 
-                    <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
-                    <ng-container [ngTemplateOutlet]="disEMVCardManualButton"></ng-container>
-                    <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
 
-                    <ng-container [ngTemplateOutlet]="paypalButton"></ng-container>
-                    <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
-                    <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container>
-                    <ng-container [ngTemplateOutlet]="triposPayButton"></ng-container>
-                    <ng-container [ngTemplateOutlet]="giftCardPayButtonView"></ng-container>
-                    <ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
-                    <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
 
-                    <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
-                    <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
-                    <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
-                    <ng-container [ngTemplateOutlet]="cashPay20"></ng-container>
-                    <ng-container [ngTemplateOutlet]="cashPay50"></ng-container>
-                    <ng-container [ngTemplateOutlet]="cashPay100"></ng-container>
+                        <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="disEMVCardManualButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
+
+                        <ng-container [ngTemplateOutlet]="paypalButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cardPointeButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="stripePayButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="triposPayButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="giftCardPayButtonView"></ng-container>
+                        <ng-container [ngTemplateOutlet]="houseAccountButton"></ng-container>
+                        <ng-container [ngTemplateOutlet]="storeCreditPaybutton"></ng-container>
+
+                        <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cashPay20"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cashPay50"></ng-container>
+                        <ng-container [ngTemplateOutlet]="cashPay100"></ng-container>
+
                   </div>
                 </mat-card-content>
               </mat-card>
@@ -192,23 +207,25 @@
             <div *ngIf="paymentMethods.length>0 && multiPayments"
                   class="margin-bottom-10">
 
-              <mat-card class="payment-dimensions">
-                <app-mat-toggle-selector
-                    [styleHeight]      = "'calc(70vh - 300px)'"
-                    class              = "card-height"
-                    [list]             = "paymentMethods"
-                    [hideAllOption]    = "'true'"
-                    [toggleDimensions] = "'toggle-group-tall'"
-                    [buttonDimensions] = "'button-dimensions-tall'"
-                    (outPutItem)       = "getPaymentMethod($event)">
-                  <div *ngIf="groupPaymentGroupID != 0">
-                    Apply Payment Amount
-                  </div>
-                  <div *ngIf="groupPaymentGroupID == 0">
-                    Enter Partial Payments
-                  </div>
-                </app-mat-toggle-selector>
-              </mat-card>
+              <span *ngIf="!isUser">
+                <mat-card class="payment-dimensions">
+                  <app-mat-toggle-selector
+                      [styleHeight]      = "'calc(70vh - 300px)'"
+                      class              = "card-height"
+                      [list]             = "paymentMethods"
+                      [hideAllOption]    = "'true'"
+                      [toggleDimensions] = "'toggle-group-tall'"
+                      [buttonDimensions] = "'button-dimensions-tall'"
+                      (outPutItem)       = "getPaymentMethod($event)">
+                    <div *ngIf="groupPaymentGroupID != 0">
+                      Apply Payment Amount
+                    </div>
+                    <div *ngIf="groupPaymentGroupID == 0">
+                      Enter Partial Payments
+                    </div>
+                  </app-mat-toggle-selector>
+                </mat-card>
+              </span>
             </div>
           </div>
 

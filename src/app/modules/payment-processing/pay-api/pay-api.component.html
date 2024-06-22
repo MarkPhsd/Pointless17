@@ -1,5 +1,5 @@
 
-<div *ngIf="payApiEnabled">
+<div *ngIf="payApiEnabled && order?.balanceRemaining !=0">
 
   <div *ngIf="(payMID$ | async) as key">
     <div *ngIf="!key">

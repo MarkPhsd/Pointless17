@@ -1,6 +1,7 @@
 h4 {
   font-size: medium !important;
 }
+
 mat-card {
   padding: 3px !important;
 }
@@ -22,9 +23,14 @@ mat-card {
   display: grid;
   grid-template-columns:  repeat( auto-fit, minmax(45px, 1fr) );
   gap: 5px;
-  // margin-left: 5px;
   margin-bottom: 5px;
   max-width: 135px;
 }
 
-
+.button-row-55 {
+  display: grid;
+  grid-template-columns:  repeat( auto-fit, minmax(55px, 1fr) );
+  gap: 5px;
+  margin-bottom: 5px;
+  max-width: 135px;
+}

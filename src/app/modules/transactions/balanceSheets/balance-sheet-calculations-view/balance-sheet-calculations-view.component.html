@@ -20,15 +20,23 @@
   <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet?.salesTotal ?? 0 | currency}} </div>
   <div *ngIf="!auths?.blindBalanceSheet">Cash</div>
   <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet?.cashIn ?? 0 | currency}} </div>
+
   <div *ngIf="!auths?.blindBalanceSheet">Credit</div>
   <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet?.creditIn ?? 0 | currency}} </div>
+
+  <div *ngIf="!auths?.blindBalanceSheet">Credit Tips</div>
+  <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet?.creditTips ?? 0 | currency}} </div>
+
+
   <div *ngIf="!auths?.balanceSheetDisableBank  && !auths?.blindBalanceSheet">Remaing In Drawer </div>
   <div *ngIf="!auths?.balanceSheetDisableBank  && !auths?.blindBalanceSheet" class="calculation"> {{ sheet?.endedWith ?? 0 | currency}} </div>
-  <div *ngIf="!auths?.blindBalanceSheet">Deposit - Tips</div>
+
+  <div>Deposit:</div>
+  <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> </div>
+
+  <div>{{depositDescription}}</div>
   <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{cashDepositCalc ?? 0 | currency}} </div>
- 
-  <!--    
-       -->
+
   <div class="item-span cashdrop-border" *ngIf="drops && !auths.balanceSheetDisableCashDrops">
     <div class="title">Cash Drops</div>
 

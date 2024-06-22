@@ -38,7 +38,6 @@
       <div *ngIf="inputForm && inputForm.controls?.name.errors?.['maxlength']">
         <mat-icon color="warn">warning</mat-icon>   Name must be 5 or less characters long.
       </div>
-
     </div>
     <mat-icon class="mat-label-info"
               color="accent"
@@ -133,6 +132,13 @@
           <mat-slide-toggle
                     formControlName="enablePrepView">
             <mat-label>Enable Prep View</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="quickScanningDevice">
+            <mat-label>Quick Scanning Device</mat-label>
           </mat-slide-toggle>
         </div>
 

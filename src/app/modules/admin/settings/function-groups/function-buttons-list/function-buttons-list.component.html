@@ -1,0 +1,38 @@
+<div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="list" style="margin-left:2px">
+
+    <button aria-label="user menu"
+            mat-raised-button
+            color="accent"
+            [class]="buttonSize"
+            [matMenuTriggerFor]="menu"
+            #menuTrigger="matMenuTrigger"
+            (click)="menuTrigger.openMenu()" >
+      <mat-icon >tune</mat-icon>
+       {{list.name}}
+    </button>
+
+    <mat-menu class="mat-menu-panel"
+              [overlapTrigger]="false"
+              #menu="matMenu">
+      <div *ngFor="let item of list.mb_MenuButtons">
+        <ng-container [ngTemplateOutlet]="buttonView"
+                      [ngTemplateOutletContext]="{$implicit: item}">
+        </ng-container>
+      </div>
+  </mat-menu>
+
+</div>
+
+<ng-template #buttonView let-item>
+      <!-- this is the list of buttons, not the list of menus -->
+  <div *ngIf="isVisible(item)">
+    <button   [class]="buttonSizeMenu"
+               mat-raised-button
+        (click)="functionCall(item)">
+        <mat-icon>{{item?.icon}}</mat-icon>
+        {{item?.name}}
+    </button>
+  </div>
+</ng-template>
+

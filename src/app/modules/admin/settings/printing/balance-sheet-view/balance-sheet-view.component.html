@@ -69,6 +69,12 @@
                 <div  *ngIf="serviceFee.gratuity != 0">
                   {{ serviceFee?.gratuity ?? 0 | currency }}
                 </div>
+                <!-- <div *ngIf="serviceFee.gratuity != 0">
+                  Credit Tips + Other Charges
+                </div>
+                <div  *ngIf="serviceFee.gratuity != 0">
+                  {{ (sheet?.creditTips + serviceFee?.gratuity) ?? 0 | currency }}
+                </div> -->
               </div>
             </div>
 

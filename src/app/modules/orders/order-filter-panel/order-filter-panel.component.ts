@@ -61,7 +61,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   toggleOrdersGreaterThanZero    = "0";
   toggleTypeEmployee             = "0"
   printForm          : UntypedFormGroup;
-  user               = {} as IUser;
+  @Input() user               = {} as IUser;
 
   completionDateForm     : UntypedFormGroup;
   dateFrom          : any;
@@ -106,6 +106,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   serviceTypeID: any;
 
   dialogRef: any;
+
 
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
@@ -625,6 +626,19 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.updateOrderSearch(this.searchModel)
   }
 
+  refreshAllOrMyOrders(searchModel: IPOSOrderSearchModel) {
+
+    if (this.user?.userPreferences?.showAllOrders) {
+
+    } else {
+      if (this.user?.employeeID) {
+        searchModel.employeeID =  this.userAuthorization.user.employeeID
+      }
+    }
+    return searchModel;
+
+  }
+
   refreshSearch() {
     if (! this.searchModel) {   this.searchModel = {} as IPOSOrderSearchModel  }
 
@@ -646,9 +660,11 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       item.prepStatus         = 1;
     }
 
+
+
     this.orderMethodsService.orderSearchEmployeeID = this.employeeID
     item.employeeID = this.employeeID;
-    // item.employeeID = this.serviceTypeID;
+    this.refreshAllOrMyOrders(item);
 
     this.updateOrderSearch( JSON.parse(JSON.stringify(item)));
     return of('')

@@ -8,6 +8,7 @@ import { PrinterLocationsService } from 'src/app/_services/menu/printer-location
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IAppConfig } from 'src/app/_services/system/app-init.service';
+import { IMenuButtonGroups, MBMenuButtonsService } from 'src/app/_services/system/mb-menu-buttons.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -33,7 +34,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   @Input() mainPanel : boolean;
   @Input() order: IPOSOrder
   @Input() isUserStaff = false
-
+  menuButtonList$: Observable<IMenuButtonGroups>;
   @ViewChild('coachingSplit', {read: ElementRef}) coachingSplit: ElementRef;
   @ViewChild('coachingFire', {read: ElementRef}) coachingFire: ElementRef;
   @ViewChild('coachingLabel', {read: ElementRef}) coachingLabel: ElementRef;
@@ -62,6 +63,8 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   site = this.siteService.getAssignedSite();
   locations$ = this.locationsService.getLocationsCached();
 
+  isStaff: boolean;
+  isAdmin: boolean;
   currentOrderSusbcriber() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
@@ -71,6 +74,12 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   userSubscriber() {
     this._user = this.authenticationService.user$.subscribe(data => {
       this.user = data;
+      if (data?.roles == 'admin' || data?.roles == 'manager') {
+        this.isAdmin = true
+      }
+      if (data?.roles == 'employee') {
+        this.isStaff = true
+      }
     })
   }
 
@@ -82,6 +91,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
           const ui$ = this.uiSettingsService.getUITransactionSetting().pipe(switchMap(data => {
             if (data) {
               this.uiSettingsService.updateUISubscription(data)
+
             }
             return of(data)
           }));
@@ -89,6 +99,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
         }
         return of(data)
       })).subscribe(data => {
+        this.initMenuButtonList(data)
         this.uiTransactionSettings = data;
       })
     } catch (error) {
@@ -120,7 +131,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
              private paymentMethodsService: PaymentsMethodsProcessService,
              private fbProductButtonService: ProductEditButtonService,
              private requestMessageService: RequestMessageService,
-
+             private mbMenuGroupService: MBMenuButtonsService,
              private httpClient : HttpClient,
     ) {
 
@@ -149,6 +160,17 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     this.refreshPrintOption()
   }
 
+  initMenuButtonList(ui:TransactionUISettings) {
+    const site = this.siteService.getAssignedSite()
+    if (ui?.multiButtonOrderHeader && ui.multiButtonOrderHeader != 0) {
+      this.menuButtonList$ = this.mbMenuGroupService.getGroupByID(site, ui.multiButtonOrderHeader).pipe(switchMap(
+        data => {
+        console.log(data)
+        return of(data)
+      }))
+    }
+  }
+
   editOrder() {
     if (!this.order) { return }
     const diag = this.fbProductButtonService.openOrderEditor(this.order)
@@ -156,7 +178,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   remotePrint(message:string, exitOnSend: boolean) {
     const order = this.order;
-    console.log('remote print', this.posDevice?.remotePrepPrint)
+    // console.log('remote print', this.posDevice?.remotePrepPrint)
     if (this.posDevice) {
       let pass = false
       if (this.posDevice?.remotePrepPrint) {
@@ -172,10 +194,15 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
       }
       if (this.posDevice?.remotePrint || pass) {
         const serverName = this.uiTransactionSettings.printServerDevice;
-        let remotePrint = {message: message, deviceName: this.posDevice.deviceName,
-                           printServer: serverName,id: order.id,history: order.history} as any;
+        let remotePrint = {message: message,
+                           deviceName:   this.posDevice?.deviceName,
+                           printServer: serverName,
+                           id: order.id,
+                           history: order.history} as any;
         const site = this.siteService.getAssignedSite()
         this.printAction$ =  this.paymentService.remotePrintMessage(site, remotePrint).pipe(switchMap(data => {
+
+          console.log('print job message', data)
           if (data) {
             this.siteService.notify('Print job sent', 'Close', 3000, 'green')
           } else {

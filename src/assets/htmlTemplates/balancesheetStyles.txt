@@ -25,7 +25,7 @@
 
   .header-grid {
     display: grid;
-    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+    grid-template-columns: 160px 125px;
     gap: 5px;
     margin: 3px;
     white-space   : nowrap;
@@ -35,10 +35,6 @@
     overflow-wrap: break-word;
     font-size: 12pt;
     font-weight: bold ;
-    display: grid;
-    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-    gap: 5px;
-    margin: 3px;
   }
 
   .grid-payment-report-card-header {
@@ -77,7 +73,7 @@
   }
 
   .info-width {
-    width: 305px;
+    width: 350px;
   }
 
   .button-items {
@@ -168,6 +164,23 @@
     font-weight: bold ;
     justify-content: right;
     text-align: right;
+  }
+
+  .grid-summary-3-column {
+      font-size: 12pt;
+      font-weight: bold ;
+      --gap: 3px;
+      display: grid;
+      gap:3px;
+      grid-template-columns: 100px 100px 100px;
+  }
+
+  .item-span-3 {
+    grid-column-end: span 3;
+  }
+
+  .item-span-2 {
+    grid-column-end: span 2;
   }
 
   .grid-summary {
