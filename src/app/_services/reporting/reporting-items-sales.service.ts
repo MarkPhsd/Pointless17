@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { Observable, of, } from 'rxjs';
-import { ClientsPOSOrders, IClientTable, ISite }   from 'src/app/_interfaces';
+import { ClientsPOSOrders,  ISite }   from 'src/app/_interfaces';
 import { SitesService } from './sites.service';
 import { saveAs } from 'file-saver'
 import { Papa, UnparseConfig } from 'ngx-papaparse';
@@ -37,6 +37,7 @@ export interface  ReportItemSalesOptimized {
   category: string
   voidAmount: number;
   voidReason: string;
+
 }
 
 export interface IReportItemSales {
@@ -90,7 +91,7 @@ export interface IReportItemSales {
   itemPrepped   : string;
   client        : ClientsPOSOrders;
   history: boolean;
-  
+
 }
 
 export interface ItemPOMetrics {

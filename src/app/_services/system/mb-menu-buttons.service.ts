@@ -94,6 +94,23 @@ export class MBMenuButtonsService {
 
   };
 
+  getGroupByIDCache(site: ISite, id: number) : Observable<IMenuButtonGroups> {
+
+    const controller = "/MB_MenuButtonGroups/"
+
+    const endPoint = "GetGroup"
+
+    const parameters = `?id=${id}`
+
+    const uri = `${site.url}${controller}${endPoint}${parameters}`
+
+    const options = { url: uri, cacheMins: 30}
+
+    return  this.httpCache.get<IMenuButtonGroups>(options)
+
+  };
+
+
   getGroupByID(site: ISite, id: number): Observable<IMenuButtonGroups> {
 
     const controller = "/MB_MenuButtonGroups/"

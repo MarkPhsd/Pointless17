@@ -381,7 +381,10 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
 
         this.dateRangeForm.valueChanges.subscribe(res=>{
           if (this.dateRangeForm.get("start").value && this.dateRangeForm.get("end").value) {
-            this.refreshDateSearch()
+            if (this.dateFrom && this.dateTo) {
+              // console.log('datefromtoo', this.dateFrom,this.dateTo)
+              this.refreshDateSearch()
+            }
           }
         })
       }
@@ -433,7 +436,7 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
    }
 
   setEmployeeValue(event) {
-    console.log('refresh Employee', event)
+    // console.log('refresh Employee', event)
     this.employeeID = event?.id;
     this.searchModel.employeeName  =  event?.employeeName ? event?.employeeName : (event?.name || '');
     this.searchModel.employeeID = event?.id;

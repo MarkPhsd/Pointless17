@@ -11,7 +11,7 @@ import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-form
 import { IGetRowsParams,  GridApi, AgGridEvent } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import { IPaymentSearchModel, IPOSPayment, IPOSPaymentsOptimzed, IServiceType, IUser } from 'src/app/_interfaces';
+import { IPaymentSearchModel, IPOSPayment, IPOSPaymentsOptimzed, IServiceType, IUser, Paging } from 'src/app/_interfaces';
 import { Capacitor } from '@capacitor/core';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -43,6 +43,8 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   @Output() itemSelect  = new EventEmitter();
   @Input()  height = "80vh"
   searchPhrase:         Subject<any> = new Subject();
+  totalItemCount: any;
+  totalRecordCount: number;
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
   summary$
@@ -447,68 +449,156 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     const searchModel         = this.initSearchModel();
     const site                = this.siteService.getAssignedSite()
+
+    console.log('getRowData', params)
     return this.pOSPaymentService.searchPayments(site, searchModel)
   }
 
-  //ag-grid standard method
-  async onGridReady(params: any) {
-    if (params == undefined) { return }
+  // // ag-grid standard method
+  // onGridReady(params: any) {
+  //   if (!params) {
+  //     console.error('Params are undefined');
+  //     return;
+  //   }
 
-    if (params)  {
-      this.params  = params
-      this.gridApi = params.api;
-      // this.gridColumnApi = params.columnApi;
-      params.api.sizeColumnsToFit();
-    }
+  //   this.params = params;
+  //   if (!this.gridApi) {
+  //     this.gridApi = params.api;
+  //   }
 
-    if (!params.startRow ||  !params.endRow) {
-      params.startRow = 1
+  //   params.api.sizeColumnsToFit();
 
-      if (this.searchModel) {
-        params.endRow = this.searchModel.pageSize
-      } else {
-        params.endRow = this.pageSize;
+  //   if (!params.startRow || !params.endRow) {
+  //     params.startRow = 1;
+  //     params.endRow = this.searchModel ? this.searchModel.pageSize : this.pageSize;
+  //   }
+
+  //   const datasource = {
+  //     getRows: (params: IGetRowsParams) => {
+  //       console.log('getRows called with params:', params);
+
+  //       const items$ = this.getRowData(params, params.startRow, params.endRow);
+  //       items$.subscribe(data => {
+  //         const resp = data.paging;
+  //         this.summary = data?.summary;
+  //         console.log('data', data, data?.summary);
+
+  //         if (resp) {
+  //           this.isfirstpage = resp.isFirstPage;
+  //           this.islastpage = resp.isLastPage;
+  //           this.currentPage = resp.currentPage;
+  //           this.numberOfPages = resp.pageCount;
+  //           this.recordCount = resp.recordCount;
+  //           if (this.numberOfPages) {
+  //             this.value = ((this.currentPage / this.numberOfPages) * 100).toFixed(0);
+  //           }
+  //         }
+
+  //         if (data.results) {
+  //           // Not applicable to all lists, but leave for ease of use.
+  //           let results = this.refreshImages(data.results);
+  //           params.successCallback(results);
+  //           this.rowData = results;
+  //         }
+  //       }, error => {
+  //         console.error('Error fetching data:', error);
+  //         params.failCallback();
+  //       });
+  //     }
+  //   };
+
+  //   if (!datasource) {
+  //     console.error('Datasource is undefined');
+  //     return;
+  //   }
+
+  //   if (!this.gridApi) {
+  //     console.error('Grid API is not working', this.gridApi);
+  //     return;
+  //   }
+
+  //   console.log('Setting grid API source', datasource, params.startRow, params.endRow);
+  //   this.gridApi.setDatasource(datasource);
+  //   this.autoSizeAll(true);
+  // }
+
+
+    //ag-grid standard method
+    async onGridReady(params: any) {
+
+      // console.log('grid read', params)
+      if (params == undefined) { return }
+
+      if (params)  {
+        this.params  = params
+        this.gridApi = params.api;
+        // this.gridColumnApi = params.columnApi;
+        params.api.sizeColumnsToFit();
       }
-    }
 
-    let datasource =  {
-      getRows: (params: IGetRowsParams) => {
-      const items$ =  this.getRowData(params, params.startRow, params.endRow)
-      items$.subscribe(data =>
-        {
-            const resp   =  data.paging
-            this.summary = data?.summary;
-            console.log('data', data, data?.summary);
+      if (!params.startRow ||  !params.endRow) {
+        params.startRow = 1
 
-            if (resp) {
-              this.isfirstpage   = resp.isFirstPage
-              this.islastpage    = resp.isFirstPage
-              this.currentPage   = resp.currentPage
-              this.numberOfPages = resp.pageCount
-              this.recordCount   = resp.recordCount
-              if (this.numberOfPages !=0 && this.numberOfPages) {
-                this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+        if (this.searchModel) {
+          params.endRow = this.searchModel.pageSize
+        } else {
+          params.endRow = this.pageSize;
+        }
+      }
+
+      let datasource =  {
+        getRows: (params: IGetRowsParams) => {
+        const items$ =  this.getRowData(params, params.startRow, params.endRow)
+        items$.subscribe(data => {
+
+              let resp   =  data?.paging as Paging
+              this.summary =  data?.summary;
+
+              if (!resp) { resp = {} as Paging}
+
+              let alt = data as unknown as any;
+
+              if (alt?.result?.paging) {
+                resp =  alt?.result?.paging
               }
+              if (alt?.result?.results) {
+                resp =  alt?.result?.paging
+              }
+
+              if (resp) {
+                this.isfirstpage   = resp.isFirstPage
+                this.islastpage    = resp.isFirstPage
+                this.currentPage   = resp.currentPage
+                this.numberOfPages = resp.pageCount
+                this.recordCount   = resp.recordCount
+                this.totalRecordCount = resp.totalRecordCount
+
+                if (this.numberOfPages !=0 && this.numberOfPages) {
+                  this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+                }
+              }
+
+              if (data.results) {
+                if (alt?.result?.results) {
+                  params.successCallback(alt?.result?.results)
+                  this.rowData = alt?.result?.results
+                  return;
+                }
+                let results  =  this.refreshImages(data.results)
+                params.successCallback(results)
+                this.rowData = results
+              }
+
             }
+          );
+        }
+      };
 
-            if (data.results) {
-              //not applicable to all lists, but leave for ease of use.
-              let results  =  this.refreshImages(data.results)
-              params.successCallback(results)
-              this.rowData = results
-            }
-
-          }
-        );
-      }
-    };
-
-    if (!datasource)   { return }
-    if (!this.gridApi) { return }
-    this.gridApi.setDatasource(datasource);
-    this.autoSizeAll(true)
-  }
-
+      if (!datasource)   { return }
+      if (!this.gridApi) { return }
+      this.gridApi.setDatasource(datasource);
+      this.autoSizeAll(true)
+    }
   //not called on all lists, but leave for functional use.
   refreshImages(data) {
     const urlPath = this.urlPath

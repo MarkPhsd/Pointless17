@@ -37,12 +37,15 @@ export class PaymentReportDataComponent implements OnInit {
   constructor(
     private popOutService: ProductEditButtonService,
     private reportingItemsSalesService: ReportingItemsSalesService,
-    //to be moved to component.
     private platFormService: PlatformService,
     private printingService: PrintingService,
     private httpClient: HttpClient,
     )
-     { }
+     {
+
+
+      }
+
 
 
   get groupByPayment() {

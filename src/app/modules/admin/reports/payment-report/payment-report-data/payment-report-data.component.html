@@ -153,7 +153,7 @@
         <div class="header-grid"  *ngIf="payments">
           <div >Total</div>
           <div >
-            {{sales.total | currency }}
+            {{sales?.total ?? 0 | currency }}
           </div>
 
           <div *ngIf="surCharge">Avg</div>
@@ -163,22 +163,46 @@
 
           <div >Avg</div>
           <div *ngIf=" sales.count != 0">
-            {{sales.total / sales.count | currency }}
+            {{sales.total  / sales.count | currency }}
           </div>
 
           <div >#</div>
           <div >
-            {{sales.count }}
+            {{sales?.count }}
+          </div>
+
+        </div>
+        <div class="header-grid"  *ngIf="payments">
+          <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
+            Credit Sales
+          </div>
+          <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
+            {{sales?.creditTotal | currency }}
+          </div>
+
+          <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
+            TIP Total
+          </div>
+          <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
+            {{sales?.tipAmount ?? 0 | currency }}
           </div>
 
           <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
             Credit Total
           </div>
-          <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
-            {{sales.creditTotal | currency }}
-          </div>
-        </div>
 
+          <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
+            {{ (+(sales?.tipAmount ?? 0)) + (+(sales?.creditTotal ?? 0)) + (+(sales?.surChargeAmount ?? 0)) | currency }}
+          </div>
+
+          <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
+            All Total
+          </div>
+          <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
+            {{ (+(sales?.tipAmount ?? 0)) + (+(sales?.total ?? 0)) + (+(sales?.surChargeAmount ?? 0)) | currency }}
+          </div>
+
+        </div>
       </ng-template>
 
     </div>

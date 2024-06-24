@@ -399,7 +399,6 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit, OnDestroy 
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
       items$.subscribe(data =>
         {
-
             console.log('data')
             if (data.toString() === "Not Authorized.") {
               this.siteService.notify('Not authorized for balance sheet audit.','Close', 3000, 'red')

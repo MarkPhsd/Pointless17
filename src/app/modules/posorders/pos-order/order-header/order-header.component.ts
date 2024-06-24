@@ -163,9 +163,9 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   initMenuButtonList(ui:TransactionUISettings) {
     const site = this.siteService.getAssignedSite()
     if (ui?.multiButtonOrderHeader && ui.multiButtonOrderHeader != 0) {
-      this.menuButtonList$ = this.mbMenuGroupService.getGroupByID(site, ui.multiButtonOrderHeader).pipe(switchMap(
+      this.menuButtonList$ = this.mbMenuGroupService.getGroupByIDCache(site, ui.multiButtonOrderHeader).pipe(switchMap(
         data => {
-        console.log(data)
+        // console.log(data)
         return of(data)
       }))
     }

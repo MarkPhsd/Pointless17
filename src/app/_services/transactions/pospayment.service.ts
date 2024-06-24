@@ -27,6 +27,7 @@ export class POSPaymentService {
 
 
   updateSearchModel(searchModel: IPaymentSearchModel) {
+    // console.log('searchModel', searchModel)
     this._searchModel.next(searchModel);
   }
 
