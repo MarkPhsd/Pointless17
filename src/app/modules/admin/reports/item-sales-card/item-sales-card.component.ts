@@ -32,6 +32,10 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
   @Input() taxFilter = 0;
   @Input() includeDepartments: boolean;
   @Input() autoPrint : boolean;
+  @Input() prepView: boolean;
+  @Input() locationID : number;
+  @Input() prepStatus : number;
+
   printReadyList = []
   @Output() renderComplete = new EventEmitter<any>();
   @Output() outputComplete = new EventEmitter<any>()
@@ -39,6 +43,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
   adjustments: IReportItemSaleSummary;
   action$ :  Observable<unknown>;
   sales$:  Observable<unknown>;
+  prepSummary$:  Observable<unknown>;
   showAll: boolean;
   sales: IReportItemSaleSummary | TaxSalesReportResults
   hideList = false;
@@ -110,6 +115,10 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
       return
     }
 
+    if (this.prepView) { 
+      this.getPrepSummary()
+    }
+
     if (this.site) {
       if (this.groupBy === 'transactionType') {
         searchModel.groupBy = this.groupBy
@@ -138,6 +147,18 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
       }))
     }
     return
+  }
+
+  getPrepSummary() { 
+    let search = {}  as IReportingSearchModel
+    search.itemsPrepped = this.prepStatus;
+    search.locationID   = this.locationID
+    search.itemsPrinted = 1;
+    // locationID : this.locationID, prepStatus: this.prepStatus, itemsPrinted : 1
+    this.prepSummary$ = this.reportingItemsSalesService.getItemsToPrep(this.site, search ).pipe(switchMap(data => { 
+      this.sales = data;
+      return of(data)
+    }))
   }
 
   getSpecialReports(name: string, model: any) {

@@ -181,7 +181,7 @@ export class RequestMessagesComponent implements OnInit {
 
   processMessages(list:IRequestMessage[]): Observable<IRequestMessage[]> {
     // copy the messages
-    console.log('print que', list);
+    // console.log('print que', list);
     if (!list) { return of(null)}
 
     let messages = [... list];
@@ -244,7 +244,7 @@ export class RequestMessagesComponent implements OnInit {
 
     // console.log(this.posDevice.name, this.uiTransaction.printServerDevice)
     // if (!this.uiTransaction.printServerDevice) { return }
-    console.log('pposDevice name: PrintServer', this.posDevice?.name, this.posDevice?.printServerEnable)
+    // console.log('pposDevice name: PrintServer', this.posDevice?.name, this.posDevice?.printServerEnable)
     if (!this.posDevice?.printServerEnable) { return }
 
     // const deviceName = localStorage.getItem('devicename')

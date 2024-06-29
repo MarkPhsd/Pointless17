@@ -81,8 +81,7 @@
       <div class="payment-grid"
             *ngIf=" getPaymentViewA(item) ||
                     getPaymentViewB(item) ||
-                    emvDataCap(item)
-                  ">
+                    emvDataCap(item)  ">
 
         <ng-container *ngTemplateOutlet="tranTypeInfoView, context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="editPaymentView,  context: {$implicit: item}"></ng-container>
@@ -309,7 +308,7 @@
 <ng-template #voidActionView let-item>
 
   <div *ngIf="(authData$ | async) as auth">
-    <div *ngIf="!PaxA920 && !qrOrder &&  auth.voidPayment && (item.completionDate || item.amountPaid != 0) &&  (item?.voidReason != 0 && !item.voidReason)">
+    <div *ngIf="!PaxA920 && isPaxEnabledTerminal && !qrOrder &&  auth.voidPayment && (item.completionDate || item.amountPaid != 0) &&  (item?.voidReason != 0 && !item.voidReason)">
       <button mat-button
               [disabled]="(item.voidReason && item.voidReason != 0 && item.voidAmount == item.amountPaid)"
               class="payment-button-balance"

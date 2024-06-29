@@ -732,7 +732,19 @@ export class OrdersService {
 
   }
 
+  getQROrderAnon(site: ISite, orderCode: string): Observable<IPOSOrder> {
 
+    const controller = '/POSOrders/'
+
+    const endPoint  = 'getQROrderAnon'
+
+    const parameters = `?orderCode=${orderCode}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url)
+
+  }
   getOrdersPrepBySearchPaged(site: ISite, POSOrderSearchModel: IPOSOrderSearchModel): Observable<POSOrdersPaged> {
 
     const controller =  '/POSOrders/'

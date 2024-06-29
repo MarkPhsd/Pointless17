@@ -1,16 +1,12 @@
-
+<!-- {{payApiEnabled}} | {{order?.balanceRemaining}} -->
 <div *ngIf="payApiEnabled && order?.balanceRemaining !=0">
 
   <div *ngIf="(payMID$ | async) as key">
-    <div *ngIf="!key">
-      No MID Present
-    </div>
+    <div *ngIf="!key"> No MID Present  </div>
   </div>
 
   <div *ngIf="(payAPIKeyExists$ | async) as key">
-    <div *ngIf="!key">
-      No Key Present
-    </div>
+    <div *ngIf="!key">  No Key Present  </div>
   </div>
 
   <div *ngIf="(payment$ | async) as data">
@@ -79,7 +75,7 @@
   </mat-card>
 </div>
   <ng-template #formView>
-    <form  id="payment_form" style="border-radius:10px; background:rgb(255, 255, 255);color:black">
+    <form  id="payment_form" style="border-radius:3px;padding:10px; background:rgb(255, 255, 255);color:black">
       <div class="card-number">
         <mat-label>Card</mat-label><br>
         <input  style="padding:3px"  type="number"   data-token="card_number"  />

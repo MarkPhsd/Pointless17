@@ -218,7 +218,8 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
 
   refreshPrep() {
     this.searchModel.printLocation = this.printLocation;
-    this.searchModel.prepStatus = this.prepStatus
+    this.searchModel.prepStatus = this.prepStatus;
+    this.searchModel.closedOpenAllOrders = 0;
     this.printingService.updatePrepStatus(this.prepStatus)
     this.orderMethodsService.updateOrderSearchModel(this.searchModel)
   }
@@ -491,6 +492,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   }
 
   refreshSearch() {
+    if (this.viewPrep) { 
+      this.searchModel.closedOpenAllOrders = 0
+    }
     this.orderMethodsService.updateOrderSearchModel(this.searchModel)
   }
 

@@ -12,6 +12,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
 import { DcapService,DcapRStream } from 'src/app/modules/payment-processing/services/dcap.service';
+import { LoggerService } from 'src/app/modules/payment-processing/services/logger.service';
 
 @Component({
   selector: 'app-dcaptransaction',
@@ -62,6 +63,7 @@ export class DCAPTransactionComponent implements OnInit {
     private fb                    : UntypedFormBuilder,
     private dCapService           : DcapService,
     private dcapMethodsService : DcapMethodsService,
+    private loggerService       : LoggerService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     @Optional() private dialogRef  : MatDialogRef<DCAPTransactionComponent>)
     {
@@ -92,7 +94,7 @@ export class DCAPTransactionComponent implements OnInit {
     }
 
       autoActions(data) {
-        console.log('auto pay', data?.autoPay, data?.value)
+        // console.log('auto pay', data?.autoPay, data?.value)
         if (data?.autoPay) {
           if (data?.value> 0 ) {
             this.payAmount();
@@ -107,7 +109,7 @@ export class DCAPTransactionComponent implements OnInit {
 
         if (data?.autoAuth) {
           if (data?.value>0) {
-            console.log('auto auth', data?.value )
+            // console.log('auto auth', data?.value )
             this.preAuth();
             return;
           }
@@ -222,6 +224,8 @@ export class DCAPTransactionComponent implements OnInit {
 
       processResults(response: DcapRStream): Observable<any> {
         if (!response) {
+
+          this.loggerService.publishObject('Credit processResults No Response', response)
           this.processing = false;
           this.message = 'Processing failed, reason unknown.';
           return of(null);
@@ -357,6 +361,7 @@ export class DCAPTransactionComponent implements OnInit {
       }
 
       readResult(cmdResponse: DcapRStream) {
+        this.loggerService.publishObject('Credit', cmdResponse)
         const item = this.dcapMethodsService.readResult(cmdResponse);
         this.message = item?.message;
         this.resultMessage = item?.resultMessage;

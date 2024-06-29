@@ -87,6 +87,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
       const control = this.inputForm.controls['itemName'];
       control.disable()
     }
+    this._showInput(this.showInput)
   }
 
   formSubscriber() {
@@ -149,7 +150,11 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
   initShowInput() {
     this.showInput = !this.showInput
-    if (this.showInput) {
+    this._showInput(this.showInput)
+  }
+
+  _showInput(option: boolean) { 
+    if (option) {
       this.initForm()
       this.initSearchOption();
     }
@@ -160,7 +165,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
     let change: SimpleChange = changes['data'];
     this.value     = ''
     this.formatted = ''
-
   }
 
   initSearchOption() {

@@ -26,6 +26,8 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
   jsonForm    : UntypedFormGroup;
 
   action$: Observable<any>;
+
+  prepList          = this.itemTypeService.prepList
   wicEBTList        = [{id: 0, name: 'NONE'},{id: 1, name: 'WIC'},{id: 2, name: 'EBT'},{id: 2, name: 'WIC and EBT'}]
   taxesSetting      = [{id: 0, name: 'Never'},{id: 1, name: 'Taxable'},{id: 2, name: 'According To Transaction'}]
   something         : any;
@@ -33,7 +35,7 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
   itemType          : IItemType;
   id                : any;
   selected          : any;
-
+  itemRowColor: string =''
   itemType$         : Observable<IItemType>;
   selectedItemsCount: number;
   itemType_PackageTypes = this.itemTypeService.packageType;
@@ -167,7 +169,7 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
 
   getUseType(id: any) {
     this.useType = this.itemType_Types.filter(data => data.id.toString() === id.toString())[0]
-    console.log('getUseType', this.useType)
+    // console.log('getUseType', this.useType)
     if (this.useType) {
       this.inputForm.controls['useGroupID'].setValue(this.useType.id);
       this.inputForm.controls['type'].setValue(this.useType.name);
@@ -209,13 +211,14 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
         console.log(error)
       }
       try {
-        this.labelTypeID     = this.itemType.labelTypeID
-        this.printerName     = this.itemType.printerName
-        this.prepTicketID    = this.itemType.prepTicketID
-        this.printLocationID = this.itemType.printLocationID
-        this.packageType     = this.itemType.packageType;
-        this.typeName        = this.itemType.type;
-        this.addOnItems      = JSON.parse(this.itemType.autoAddJSONProductList) as IItemBasic[];
+        this.labelTypeID     = this.itemType?.labelTypeID
+        this.printerName     = this.itemType?.printerName
+        this.prepTicketID    = this.itemType?.prepTicketID
+        this.printLocationID = this.itemType?.printLocationID
+        this.packageType     = this.itemType?.packageType;
+        this.typeName        = this.itemType?.type;
+        this.itemRowColor    = this.itemType?.itemRowColor
+        this.addOnItems      = JSON.parse(this.itemType?.autoAddJSONProductList) as IItemBasic[];
 
       } catch (error) {
         console.log(error)
@@ -233,8 +236,6 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
       }
     });
   }
-
-
 
   save(event){
     this.update(false);
@@ -270,7 +271,8 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
 
     if (this.inputForm.valid) {
       const itemType =  this.setNonFormValues();
-
+      console.log('update', itemType, this.itemRowColor)
+    
       if (this.itemTypes) {
         this.itemTypes.forEach( item => {
           const id = item.id;
@@ -364,6 +366,8 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
       item.labelTypeID  = this.labelTypeID;
       item.printerName  = this.printerName;
       item.prepTicketID = this.prepTicketID;
+      item.itemRowColor = this.itemRowColor
+      
       this.itemType     = item;
       return item;
     }

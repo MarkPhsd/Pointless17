@@ -188,18 +188,21 @@
                   <br>
               </div>
 
-              <div >
-                <div>
-                  <mat-form-field appearance="outline">
-                    <mat-label>Minumum Age Required</mat-label>
-                        <input matInput
-                        type             ="number"
-                        name             ="ageRequirement"
-                        formControlName  ="ageRequirement"
-                      class="form-control" >
-                  </mat-form-field>
-                </div>
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label>Minumum Age Required</mat-label>
+                      <input matInput
+                      type             ="number"
+                      name             ="ageRequirement"
+                      formControlName  ="ageRequirement"
+                    class="form-control" >
+                </mat-form-field>
               </div>
+
+              <!-- // itemRowColor: [],
+              sidePrepList: [], -->
+     
+            
 
               <div>
                 <mat-form-field appearance="outline">
@@ -262,6 +265,32 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
+              
+                <div >
+                  <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
+
+                  <!-- <h3>Prep Line Color</h3>
+                  buttonColorPicker
+                  <ngx-colors ngx-colors-trigger [(ngModel)]="itemRowColor"></ngx-colors>
+                  <mat-form-field>
+                    <input matInput  [(ngModel)]="itemRowColor" >
+                  </mat-form-field> -->
+                </div>
+
+                <!-- {{prepList |json}} -->
+                <div *ngIf="prepList">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Prep List</mat-label>
+                    <mat-select
+                          type="text"
+                          formControlName = "sidePrepList">
+                        <mat-option *ngFor="let item of prepList" [value]="item.id">
+                          {{ item.name }}
+                        </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
               </div>
 
               <ng-template #loadingPrep>
@@ -397,3 +426,12 @@
               <!-- -<app-tax-rate-list [inputForm]="inputForm" [formControlName]="tax2id"></app-tax-rate-list>
               <app-tax-rate-list [inputForm]="inputForm" [formControlName]="tax3id"></app-tax-rate-list> -->
               <!-- <app-flat-tax-rate-list [inputForm]="inputForm"></app-flat-tax-rate-list> -->
+<ng-template #buttonColorPicker>
+  <div >
+    <h3>Prep Line Color</h3>
+    <ngx-colors ngx-colors-trigger [(ngModel)]="itemRowColor"></ngx-colors>
+    <mat-form-field>
+      <input matInput [(ngModel)]="itemRowColor">
+    </mat-form-field>
+  </div>
+</ng-template>

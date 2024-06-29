@@ -195,12 +195,12 @@
             {{ (+(sales?.tipAmount ?? 0)) + (+(sales?.creditTotal ?? 0)) + (+(sales?.surChargeAmount ?? 0)) | currency }}
           </div>
 
-          <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
+          <!-- <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
             All Total
           </div>
           <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
             {{ (+(sales?.tipAmount ?? 0)) + (+(sales?.total ?? 0)) + (+(sales?.surChargeAmount ?? 0)) | currency }}
-          </div>
+          </div> -->
 
         </div>
       </ng-template>

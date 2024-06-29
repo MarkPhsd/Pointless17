@@ -18,6 +18,7 @@ import { POSOrderItemService } from './posorder-item-service.service';
 import { UserAuthorizationService } from '../system/user-authorization.service';
 import { DcapRStream, DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 import { DcapPayAPIService } from 'src/app/modules/payment-processing/services/dcap-pay-api.service';
+import { LoggerService } from 'src/app/modules/payment-processing/services/logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -63,8 +64,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     private balanceSheetMethodsSevice: BalanceSheetMethodsService,
     private userAuthorizationService: UserAuthorizationService,
     private editDialog              : ProductEditButtonService,
-    private dCapService           : DcapService,
-    private matSnackBar         : MatSnackBar) {
+    private dCapService             : DcapService,
+    private loggerService           : LoggerService,
+    private matSnackBar             : MatSnackBar) {
   }
 
   get DSIEmvSettings(): DSIEMVSettings {
@@ -542,30 +544,35 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   validateDCAPResponse(rStream: DcapRStream, payment: IPOSPayment) {
 
-    console.log('rstream', rStream)
+    // console.log('rstream', rStream)
     if (!rStream) {
       console.log('no rstream')
+      this.loggerService.publishObject('Credit No Rstream', payment)
       this.sitesService.notify('No RStream resposne', 'close', 3000, 'red');
       return false
     }
 
     console.log('rStream?.CmdStatus', rStream?.CmdStatus)
     if (!this.isApproved(rStream?.CmdStatus)) {
+      this.loggerService.publishObject('Credit Rstream No Approved', rStream)
       this.sitesService.notify(`${rStream?.CmdStatus}  - ${rStream?.TextResponse}`, 'close', 3000, 'red');
       return false
     }
 
     if (!rStream?.CmdStatus) {
+      this.loggerService.publishObject('Credit No Command Status', rStream)
       this.notify(`No command Status`, `Transaction not Complete`, 3000);
       return false
     }
 
     if (rStream?.CmdStatus.toLowerCase() === 'TimeOut'.toLowerCase() ) {
+      this.loggerService.publishObject('Credit Time Out', rStream)
       this.sitesService.notify(`Error: ${rStream.CmdResponse} - ${rStream?.TextResponse} `,'Close' , 3000, 'Red');
       return false
     }
 
     if (rStream?.CmdStatus.toLowerCase() === 'Error'.toLowerCase() ) {
+      this.loggerService.publishObject('Credit Error', rStream)
       this.sitesService.notify(`${rStream.CmdResponse}  ${rStream.TextResponse} `,'Close' , 3000, 'Red');
       return false
     }
@@ -585,16 +592,19 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }
 
     if (!trans) {
+      this.loggerService.publishObject('Credit No Trans', rStream)
       this.notify(`Error no transaction response`, 'Transaction not Complete', 3000);
       return false
     }
 
     if (cmdResponse.CmdStatus.toLowerCase() === 'TimeOut'.toLowerCase() ) {
+      this.loggerService.publishObject('Credit Time Out', rStream)
       this.notify(`Error: ${cmdResponse}, ${trans}  `, `Transaction not Complete`, 3000);
       return false
     }
 
     if (cmdResponse.CmdStatus.toLowerCase() === 'Error'.toLowerCase() ) {
+      this.loggerService.publishObject('Credit Error', rStream)
       this.notify(`Error: ${'error'} , `, `Transaction not Complete`, 3000);
       return false
     }
@@ -830,7 +840,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     const site = this.sitesService.getAssignedSite();
     const validate = this.validateDCAPResponse( rStream, payment)
     if (!validate) {
-      // console.log('validate', validate)
+      this.loggerService.publishObject('Credit Validate', validate)
       return of(null)
     }
     const payment$ =   this.paymentService.processDCAPResponse(site, payment?.id, rStream, deviceName)

@@ -30,17 +30,15 @@
 <div  *ngIf="(payment) && customAmount">
   <div class="action-center">
     <app-key-pad
-        [showInput]           ="hideKeyPad"
-        [inputForm]           ="inputForm"
+        [showInput]           = "true"
+        [inputForm]           = "inputForm"
         [inputTypeValue]      = "'decimal'"
-        [inputDisabled]       ='inputDisabled'
+        [inputDisabled]       = 'inputDisabled'
         [numberbuttons]       = "'number-buttons button-sized-2'"
         (outPutReturnEnter)   ="customTipAmount($event)">
         Enter tip amount.
     </app-key-pad>
   </div>
-
-
 </div>
 
 

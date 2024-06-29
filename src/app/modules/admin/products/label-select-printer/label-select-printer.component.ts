@@ -81,22 +81,25 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
 
   initForm() {
     let count = 0
+
     if (this.poItem) {
-      count = this.poItem.quantity
+      count = +this.poItem?.quantity
       this.printForm = this.fb.group({
         printQuantity: [count]
       } )
       return;
     }
+
     if (this.product) {
-      count = this.poItem.quantity
+      count = +this.product?.productCount
       this.printForm = this.fb.group({
         printQuantity: [count]
       } )
       return
     }
+
     if (this.menuItem) {
-      count = this.menuItem.productCount
+      count = +this.menuItem?.productCount
     }
 
     this.printForm = this.fb.group({

@@ -78,7 +78,8 @@
         <span (mouseleave)="menuTrigger.closeMenu()">
           <div class="button-list">
 
-              <ng-container *ngIf="!mainPanel || isStaff"  [ngTemplateOutlet]="buyAgainViewStaff"></ng-container>
+              <ng-container *ngIf="!mainPanel || isStaff"  
+                            [ngTemplateOutlet]="buyAgainViewStaff"></ng-container>
 
               <div *ngIf="!showEdit && (ui?.displayAdd)">
                 <button mat-raised-button    class="button"  color="accent" (click)="addItemToOrder()">
@@ -189,6 +190,14 @@
                 </button>
               </div>
 
+              <div *ngIf="userAuthService &&  userAuths?.editProduct ">
+                <button mat-raised-button  color="accent" (click)="editCatalogItem()">
+                  Edit<br>
+                  Edit Catalog
+                </button>
+              </div>
+
+
             <div>
 
             </div>
@@ -279,7 +288,8 @@
 </ng-template>
 
 <ng-template #itemNameView>
-  <div [class]="productnameClass" >
+
+  <div [class]="productnameClass" [style]='itemTypeFontColor' >
 
     <span  class="index" *ngIf="!isModifier && !prepScreen && orderItem.conditionalIndex">
       {{orderItem.conditionalIndex }}

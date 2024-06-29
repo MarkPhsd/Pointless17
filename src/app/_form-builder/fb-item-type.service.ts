@@ -51,6 +51,8 @@ export class FbItemTypeService {
       description: [''],
       webStoreSimpleView: [],
       requireProductCount: [],
+      itemRowColor: [],
+      sidePrepList: [],
     })
     return inputForm
   }

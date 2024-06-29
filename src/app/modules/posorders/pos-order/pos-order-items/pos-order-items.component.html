@@ -17,23 +17,24 @@
     <div class="item-span">
       <button *ngIf="!androidApp" style="height:55px" mat-button (click)="dismiss()"><mat-icon>close</mat-icon>Close</button>
 
-      <span class="item-span">
+      <span class="item-span" *ngIf="!isNoPaymentPage">
         <button  style="height:55px"  mat-button (click)="viewCart()"><mat-icon>shopping_cart</mat-icon>Cart</button>
       </span>
 
-      <span class="item-span">
-        <button  style="height:55px"  mat-button (click)="viewPayment()"><mat-icon>money</mat-icon>Checks</button>
+      <span class="item-span" *ngIf="isNoPaymentPage">
+        <button  style="height:55px"  mat-button (click)="viewPayment()"><mat-icon>money</mat-icon>
+          <span *ngIf="order?.balanceRemaining == 0"> Receipt</span>
+          <span *ngIf="order?.balanceRemaining != 0"> Pay</span> </button>
       </span>
 
-      <span class="item-span">
+      <span class="item-span" *ngIf="isStaff">
         <button  style="height:55px"  mat-button color="warn" (click)="sendOrder()"><mat-icon>local_fire_department</mat-icon>Fire</button>
       </span>
 
-      <span class="item-span">
+      <span class="item-span"  *ngIf="isStaff">
         <button  style="height:55px"  mat-button color="warn" (click)="printOrder()"><mat-icon>print</mat-icon></button>
       </span>
     </div>
-
 
     <div  #scrollMe
         [id]="scrollStyle"

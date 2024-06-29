@@ -26,6 +26,7 @@ import { PaymentsMethodsProcessService } from '../_services/transactions/payment
 import { OrderMethodsService } from '../_services/transactions/order-methods.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { PrintQueService } from '../_services/transactions/print-que.service';
+import { IItemType, ItemTypeService } from '../_services/menu/item-type.service';
 @Component({
   selector: 'app-default',
   templateUrl: './default.component.html',
@@ -43,7 +44,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('appSiteFooter')  appSiteFooter: TemplateRef<any>;
   @ViewChild("footer") footer: ElementRef;
 
-  printOrders$: Observable<IPOSOrder[]>;
+  itemTypeList$: Observable<IItemType[]>;
+  printOrders$ : Observable<IPOSOrder[]>;
   departmentID     =0
   get platForm() {  return Capacitor.getPlatform(); }
   toggleControl     = new UntypedFormControl(false);
@@ -486,7 +488,14 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  setItemTypeList() { 
+    const site = this.siteService.getAssignedSite()
+    this.itemTypeList$ = this.itemTypeService.getTypeList(site)
+    // 
+  }
+
   initSubscriptions() {
+    this.setItemTypeList()
     try {
       this.initDevice();
     } catch (error) {
@@ -550,6 +559,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                public  toolBarUIService: ToolBarUIService,
                private _renderer       : Renderer2,
                private cd              : ChangeDetectorRef,
+               private itemTypeService : ItemTypeService,
                private appInitService          : AppInitService,
                private authorizationService    : AuthenticationService,
                public  toolbarUIService        : ToolBarUIService,

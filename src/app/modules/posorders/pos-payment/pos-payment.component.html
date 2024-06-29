@@ -53,15 +53,15 @@
     </div>
 
     <div>
-
+      <!-- class="flex-grid-row" -->
       <div *ngIf="paymentsEqualTotal && !isStaff" class="button-margin-10">
-        <button class="button-margin-10 button-width-175 button-height-75"
+        <button class="button-width-175 button-height-75"
                 color="accent"
                 mat-raised-button
                 (click)="exitOrder()"><mat-icon>exit_to_app</mat-icon>Leave Order</button>
       </div>
 
-      <div  class="button-margin-10">
+      <div class="button-margin-10">
         <button class="button-margin-10 button-width-175 button-height-75"
                 color="accent"
                 mat-raised-button
@@ -75,7 +75,10 @@
         <button *ngIf="isToday(order?.completionDate)"  class="button-margin-10 button-width-175 button-height-75"
                 color="accent"
                 mat-raised-button
-                (click)="editPayment()"><mat-icon>edit</mat-icon>Enter Tip</button>
+                (click)="editPayment()">
+              <mat-icon>edit</mat-icon>
+              Enter Tip
+        </button>
       </div>
 
       <mat-card class="margin-bottom-10" *ngIf="isStaff">
@@ -86,8 +89,6 @@
                   mat-raised-button
                   (click)="exitOrder()">Leave Order</button>
         </div>
-
-
 
         <div  class="order-completed"
               *ngIf="(paymentsEqualTotal || order.completionDate)">
@@ -175,9 +176,7 @@
 
                       <ng-container [ngTemplateOutlet]="payApiView"></ng-container>
 
-
                         <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
-
                         <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
                         <ng-container [ngTemplateOutlet]="disEMVCardManualButton"></ng-container>
                         <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>

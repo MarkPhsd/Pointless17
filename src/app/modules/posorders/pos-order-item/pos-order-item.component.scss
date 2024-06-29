@@ -6,14 +6,18 @@ h3, .h3 {
   margin-bottom: -1px;
 }
 
-mat-card {
-  padding       : 2px;
-  margin        : 4px;
-}
+// mat-card {
+//   padding       : 2px;
+//   margin        : 4px;
+// }
 
 .buy-again {
   position: relative;
   left:-15px;
+  @include for-phone-only  {
+    width: 45px;
+    left:25px
+  }
 }
 
 .custom-card {

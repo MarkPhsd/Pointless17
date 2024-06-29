@@ -180,6 +180,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
       model.pageNumber    = 1
       model.pageSize      = 50
       model.prepStatus    = +this.prepStatus;
+      model.closedOpenAllOrders = 0;
       // console.log('setOrderSubscriber', model)
       const site    = this.siteService.getAssignedSite()
       let results$ = this.orderService.getOrdersPrepBySearchPaged(site, model)

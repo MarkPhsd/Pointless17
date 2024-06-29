@@ -9,7 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPurchaseOrderItem } from 'src/app/_interfaces';
-import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { IMenuItem, ItemType } from 'src/app/_interfaces/menu/menu-products';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
@@ -28,6 +28,8 @@ import { RequestMessageMethodsService } from 'src/app/_services/system/request-m
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 export interface payload{
   index : number;
   item  : PosOrderItem;
@@ -135,6 +137,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   imageBaseCCS          = 'image'
   action$: Observable<any>;
 
+
+  itemTypeFontColor = ' '
   panel  ='string'
   @HostListener("window:resize", [])
    updateItemsPerPage() {
@@ -365,6 +369,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
                 private siteService        : SitesService,
                 private dialog             : MatDialog,
                 private menuService        : MenuService,
+                private itemTypeService    : ItemTypeService,
                 public  posOrderItemService: POSOrderItemService,
                 private posOrderItemMethodsService: PosOrderItemMethodsService,
                 private promptGroupservice : PromptGroupService,
@@ -375,6 +380,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
                 public  platFormService : PlatformService,
                 private orderService: OrdersService,
                 private uISettingsService: UISettingsService,
+                private productButtonService: ProductEditButtonService,
                 private requestMessageMethodsService: RequestMessageMethodsService,
               )
   {
@@ -382,6 +388,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   }
 
   async ngOnInit() {
+    // console.log('prepScreen ', this.orderItem?.prodModifierType, this.prepScreen)
     this.initSubscriptions();
     this.initTransactionUISettings()
     const site = this.siteService.getAssignedSite();
@@ -392,6 +399,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
       this.itemName   =  this.getItemName(this.menuItem?.name)
       this.imagePath  =  this.getImageUrl(this.menuItem?.urlImageMain)
     }
+ 
+    this.refreshItemType();
 
     if (!this.menuItem) {
       const order = this.orderMethodsService.currentOrder;
@@ -403,6 +412,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
         })
       )
     }
+ 
 
     const item = this.orderItem;
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
@@ -420,6 +430,22 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     this.packages = this.getEstPackages(this.orderItem).toString();
 
     this.getReOrderMenuItem()
+  }
+
+  refreshItemType() { 
+  if (this.prepScreen) { 
+     
+      if ( this.orderItem.prodModifierType) { 
+        const item =  this.itemTypeService.getItemTypeFromList( this.orderItem.prodModifierType) as unknown as ItemType
+        if (!this.orderItem.menuItem) { this.orderItem.menuItem = {} as IMenuItem}
+        if (!this.menuItem) { this.menuItem = { } as IMenuItem}
+        this.menuItem.itemType = item 
+        this.orderItem.menuItem.itemType = item;
+        if ( item?.itemRowColor) { 
+          this.itemTypeFontColor = `color: ${item?.itemRowColor}`
+        }
+      }
+    }
   }
 
   roundToPrecision(value: number, precision: number): number {
@@ -798,6 +824,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     let payload = {} as payload
     payload.index = index;
     payload.item  = orderItem;
+    console.log('cancel item')
     this.outputDelete.emit(payload)
   }
 
@@ -872,7 +899,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     this.updateFlexGroup();
     // this.customcard ='custom-card';
     const order = this.orderMethodsService.currentOrder;
-    if (this.orderItem && this.orderItem.idRef && this.orderItem.id != this.orderItem.idRef && !order.history) {
+    if (this.orderItem && this.orderItem?.idRef && this.orderItem?.id != this.orderItem?.idRef && !order?.history) {
       this.customcard       = 'custom-card-modifier';
 
       if (this.prepScreen) {
@@ -981,12 +1008,33 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
                                                            }))
   }
 
+  editCatalogItem() { 
+    this.orderItem.menuItem;
+    const site = this.siteService.getAssignedSite()
+    const product$  =   this.menuService.getProduct(site, this.orderItem?.menuItem?.id)
+    const item$ = this.itemTypeService.getItemType(site, this.orderItem.menuItem?.itemType?.id);
+    this.action$    =   this.productButtonService._openProductEditorOBS( product$, item$)
+  }
+
   swipeOutItem(){
     const order = this.orderMethodsService.currentOrder;
     if (order.completionDate && (this.userAuths && this.userAuths?.disableVoidClosedItem)) {
       this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
       return
     }
+    console.log('cancel item', this.disableActions)
+    const currentUrl = this.router.url.split('?')[0].split('/').pop();
+    // console.log('currentUrl', currentUrl)
+    if (currentUrl == 'qr-receipt') { 
+      this.cancelItem(this.index,  this.orderItem)
+      return;
+    }
+    if (currentUrl == 'qr-table') { 
+      this.cancelItem(this.index,  this.orderItem)
+      return;
+    }
+
+
     if (this.disableActions) {return}
     this.cancelItem(this.index,  this.orderItem)
   }

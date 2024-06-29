@@ -2,7 +2,7 @@
 import { Observable, Subscription, of, switchMap, } from 'rxjs';
 import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter,
          OnDestroy, TemplateRef, Renderer2 } from '@angular/core';
-import { ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -78,7 +78,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   conditionalIndex: number;
 
   _posDevice: Subscription;
-
+  currentRoute: string;
   androidApp = this.platformService.androidApp;
   _scrollStyle = this.platformService.scrollStyleWide;
   private styleTag: HTMLStyleElement;
@@ -95,6 +95,23 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     return of(data)
   }))
 
+  get isNoPaymentPage() {
+    if (this.currentRoute === 'pos-payment') {
+      return false
+    }
+    return true
+  }
+
+
+  routSubscriber() {
+    
+    this.currentRoute = this.router.url.split('?')[0].split('/').pop();
+    this.router.events.subscribe(event => {
+      if (event.constructor.name === "NavigationEnd") {
+        this.currentRoute = this.router.url.split('?')[0].split('/').pop();
+      }
+    });
+  }
   get posItemsView() {
     if (this.prepScreen) {
       return this.posOrderItemsPrepView
@@ -219,6 +236,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     return items;
   }
 
+
   ngOnDestroy(): void {
       if (this._bottomSheetOpen) { this._bottomSheetOpen.unsubscribe()}
       if (this._order) { this._order.unsubscribe()}
@@ -236,10 +254,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                 private authService : AuthenticationService,
                 private renderer: Renderer2,
                 private orderMethodsService: OrderMethodsService,
-                private ordersService:   OrdersService,
                 private paymentService: POSPaymentService,
                 private navigationService : NavigationService,
                 private _bottomSheetService  : MatBottomSheet,
+                private router: Router
               )
   {
     this.orderItemsPanel = 'item-list';
@@ -256,6 +274,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.routSubscriber();
     if (window.innerWidth < 599) {   this.phoneDevice = true  }
     let uiHomePage = this.uiSettingService.homePageSetting;
     this.wideBar   = true;
@@ -360,6 +379,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   removeItemFromList(payload: any) {
+    console.log('remove item from list', payload)
     if (this.order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
       this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
       return

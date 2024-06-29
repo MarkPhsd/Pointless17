@@ -190,7 +190,10 @@ export class DcapMethodsService {
   }
 
   readResult(cmdResponse: DcapRStream) {
-    // console.log('readresult', cmdResponse?.TextResponse, cmdResponse)
+    console.log('readresult', cmdResponse?.TextResponse, cmdResponse)
+    
+
+
     let message: string;
     let resultMessage: string;
     let processing: boolean;

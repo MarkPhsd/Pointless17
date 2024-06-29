@@ -52,8 +52,12 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getUser();
     this.uiHomePageSetting$ = this.settingsService.getUIHomePageSettings();
-    this.order$ = this.navigateToOrder();
-    this.action$ = null;
+  
+    this.order$ = this.getOrder().pipe(switchMap(data => { 
+      // this.order = data;
+      return of(data)
+    }))
+  
   }
 
   ngOnDestroy() {
@@ -61,7 +65,7 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   }
 
   navigateToLogin(){
-    console.log('navigateToLogin clear user settings')
+    // console.log('navigateToLogin clear user settings')
     localStorage.removeItem('user')
     this.uiHomePageSetting$.subscribe(data => {
       this.authenticationService.logout(data.pinPadDefaultOnApp)
@@ -133,17 +137,31 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   }
 
   getOrder(): Observable<IPOSOrder> {
-    let item$: Observable<IPOSOrder>;
     const id = this.route.snapshot.paramMap.get('id');
     const orderCode = this.route.snapshot.paramMap.get('orderCode');
     const site = this.siteService.getAssignedSite();
-    if (id) {
-      item$ = this.orderService.getQRCodeOrder(site, id);
+
+    this.action$ = null;
+
+    const user = this.getUser()
+    if (user) { 
+      if (orderCode) {
+        return this.orderService.getQROrder(site, orderCode);
+      }
+      if (id) {
+        return this.orderService.getQRCodeOrder(site, id);
+      }
     }
-    if (orderCode) {
-      item$ = this.orderService.getQROrder(site, orderCode);
+    if (!user) { 
+      if (orderCode) {
+        return this.orderService.getQROrder(site, orderCode);
+      }
+      if (id) {
+        return this.orderService.getQRCodeOrder(site, id);
+      }
     }
-    return item$;
+
+    return this.navigateToOrder();
   }
 
   navigateToOrder() {

@@ -21,6 +21,10 @@
     </div>
 
     <div>
+      <!-- viewType {{viewType}} -->
+      <div *ngIf="viewType == 3">
+        <ng-container [ngTemplateOutlet]="prepSummary"></ng-container>
+      </div>
       <ng-container [ngTemplateOutlet]="orderFilterView"></ng-container>
     </div>
   </div>
@@ -52,7 +56,7 @@
 
 <ng-template #summaryView>
   <div *ngIf="(summary$ | async) as items" style="margin-left:10px;font-weight:500;">
-    # {{items?.paging?.recordCount}} | Total: {{items?.summary?.total | currency}}
+    # {{items?.paging?.totalRecordCount}} | Total: {{items?.summary?.total | currency}}
   </div>
 </ng-template>
 
@@ -245,6 +249,23 @@
     ...loading
     <mat-spinner [diameter]="50"></mat-spinner>
   </ng-template>
+</ng-template>
+
+<ng-template #prepSummary>
+  <div *ngIf="viewType ==3">
+    <!-- prepStatus {{prepStatus}} |  {{printLocation}} -->
+    <item-sales-card
+          [site]="site"
+          [viewType]="'activeReportViewSummary'"
+          [removeGiftCard]="true"
+          [prepView]="true"
+          [locationID]="printLocation"
+          [prepStatus]="prepStatus"
+          [groupBy]="'items'">
+        <mat-icon>menu</mat-icon> Scheduled Items
+        <mat-divider></mat-divider>
+    </item-sales-card>
+  </div>
 </ng-template>
 
 <ng-template #scheduledItems>

@@ -172,8 +172,19 @@ export interface ItemType {
   wicebt             : number;
   requireWholeNumber : boolean;
   pricePrompt        : boolean;
-  promptQuantity     : boolean;
-  webStoreSimpleView : boolean;
+
+  autoAddJSONProductList: string;
+  unitName:             string;
+  disablePriceCategory  :  boolean;
+  disableSimplePrice    : boolean;
+  promptQuantity: false,
+  useDefaultPriceInApp: boolean;
+  description: string;
+  webStoreSimpleView: boolean; //to stop complext deli pricing view.
+  itemRowColor?: string;
+  sidePrepList?: number;
+  json?: string;
+  
 }
 
 export interface ItemTypeCategory {

@@ -1,14 +1,26 @@
 <div *ngIf="action$ && (action$ | async) as action"></div>
 
-<div class="mat-card-container"
-      *ngIf="site && (sales$ | async) as summary; else loading">
+<div *ngIf="!prepView">
+  <div class="mat-card-container"
+    *ngIf="site && (sales$ | async) as summary; else loading">
 
-  <ng-container
+    <ng-container
                 [ngTemplateOutlet]="reportView"
                 [ngTemplateOutletContext]="{$implicit: summary}">
-  </ng-container>
+    </ng-container>
+  </div>
 </div>
 
+<div *ngIf="prepView">
+  <div class="mat-card-container"
+        *ngIf="site && (prepSummary$ | async) as summary; else loading">
+    <button mat-raised-button color="accent" (click)="refreshSales()"><mat-icon>refresh</mat-icon></button>      
+    <ng-container
+                  [ngTemplateOutlet]="activeReportViewCurrentPrep"
+                  [ngTemplateOutletContext]="{$implicit: summary}">
+    </ng-container>
+  </div>
+</div>
 <ng-template #headerView>
   <div class="header-margin">
     <ng-content select=".header"></ng-content>
@@ -21,40 +33,64 @@
 </ng-template>
 
 <ng-template #activeReportView let-summary>
-  <div><button mat-raised-button (click)="hideList = !hideList">Toggle List</button></div>
+  <div *ngIf="prepView"><button mat-raised-button (click)="hideList = !hideList">Toggle List</button></div>
   <div *ngIf="!hideList">
     <div *ngIf="sales.results as sales">
       <mat-card >
         <mat-card-title>
-          Scheduled Items <br>
+           Scheduled Items <br>
            {{scheduleDateStart | date : 'shortDate'}} - {{scheduleDateEnd | date : 'shortDate'}}
           <div  class="totals_label">
             <ng-container [ngTemplateOutlet]="buttonsView"></ng-container>
           </div>
         </mat-card-title>
         <mat-card-content>
-          <div class="grid-body">
-            <div class="totalslabel">Item :    </div>
-            <div class="totals">     #         </div>
-            <div class="totals">     Dismiss        </div>
-          </div>
-          <div  class="grid-body"
-                *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
-              <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
-              <div class="totals">{{sale?.quantity }}               </div>
-              <div class="totals"><button mat-raised-button
-                                          (click)="setItemGroupAsPrepped(sale.id)">Dismiss
-                                  </button>
-              </div>
-          </div>
+          <ng-container
+              [ngTemplateOutlet]="activeReportViewSummary"
+              [ngTemplateOutletContext]="{$implicit: sales}">
+            </ng-container>
         </mat-card-content>
       </mat-card>
     </div>
   </div>
 </ng-template>
 
-<ng-template #salesView let-summary>
+<ng-template #activeReportViewCurrentPrep let-summary>
+  <div><button mat-raised-button (click)="hideList = !hideList">Toggle List</button></div>
+  <div *ngIf="!hideList && sales">
+    <div *ngIf="sales.results as sales">
+      <mat-card >
+        <mat-card-content>
+          <ng-container
+              [ngTemplateOutlet]="activeReportViewSummary"
+              [ngTemplateOutletContext]="{$implicit: sales}">
+            </ng-container>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</ng-template>
 
+<ng-template #activeReportViewSummary let-sales>
+  <div class="grid-body">
+    <div class="totalslabel">Item :    </div>
+    <div class="totals">     #         </div>
+    <div class="totals">     Dismiss        </div>
+  </div>
+  <div  class="grid-body"
+        *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
+      <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
+      <div class="totals">{{sale?.quantity }}               </div>
+      <div class="totals">
+        <button mat-raised-button
+                (click)="setItemGroupAsPrepped(sale.id)">
+            Dismiss
+        </button>
+      </div>
+  </div>
+</ng-template>
+
+<ng-template #salesView let-summary>
   <div *ngIf="sales.results as sales">
     <ng-template #headerTemplate>
       <div class="header-grid info-width">

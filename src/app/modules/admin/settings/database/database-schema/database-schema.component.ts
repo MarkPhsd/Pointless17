@@ -7,6 +7,7 @@ import { ISetting } from 'src/app/_interfaces';
 import { TransferDataService } from 'src/app/_services/transactions/transfer-data.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { LoggerService } from 'src/app/modules/payment-processing/services/logger.service';
 
 @Component({
   selector: 'app-database-schema',
@@ -34,6 +35,7 @@ export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
               private sitesService:      SitesService,
               private settingService: SettingsService,
               private dateHelper : DateHelperService,
+              private loggerService : LoggerService,
               private fb: FormBuilder,
               private transferData: TransferDataService,
              )
@@ -48,7 +50,10 @@ export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
     this.initDateForm()
   }
 
-
+  exportLogsToTxt() { 
+    this.loggerService.exportLogsToTxt()
+  }
+  
   initDateForm() {
     this.closeDateForm = this.fb.group({
       date: []

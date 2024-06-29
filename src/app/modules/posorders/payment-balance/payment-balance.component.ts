@@ -77,6 +77,13 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     }
   }
 
+  get isPaxEnabledTerminal() {
+    if  (this.posDevice.dsiEMVSettings?.TranDeviceID) { 
+      return true
+    }
+    return false
+  }
+
   constructor(private orderService: OrdersService,
               private orderMethodsService: OrderMethodsService,
               private siteService: SitesService,
@@ -399,6 +406,11 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
   editPayment(payment: IPOSPayment) {
       //get payment
+
+      if (!this.isPaxEnabledTerminal)  { 
+        this.siteService.notify("Please use a terminal with a credit card machine.", 'Close', 1000);
+        return;
+      }
       if (this.PaxA920) {
 
         return;
