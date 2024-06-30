@@ -72,10 +72,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   get DSIEmvSettings(): DSIEMVSettings {
     const item = localStorage.getItem('DSIEMVSettings');
     if (!item) { return }
-  const EMVSettings = JSON.parse(item)
-  return EMVSettings
+    const EMVSettings = JSON.parse(item)
+    return EMVSettings
   }
-
 
   newOrderWithPayloadMethod(site, serviceType){
     let sendOrder$ = of('true')

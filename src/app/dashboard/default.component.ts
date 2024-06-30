@@ -47,6 +47,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   itemTypeList$: Observable<IItemType[]>;
   printOrders$ : Observable<IPOSOrder[]>;
   departmentID     =0
+  posDevice: ITerminalSettings;
   get platForm() {  return Capacitor.getPlatform(); }
   toggleControl     = new UntypedFormControl(false);
   isSafari        : any;
@@ -287,6 +288,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       this.initPrintServer(device)
       if (device.enableScale) {
       }
+      this.posDevice = device;
       return of(device)
     }))
     // }
@@ -816,6 +818,12 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.userIdle.onTimerStart().subscribe(count => {
         if (count) {
           // console.log( count)
+          if (this.posDevice) { 
+            if (this.posDevice?.ignoreTimer) { 
+              return;
+            }
+          }
+
           if (count >= 4) {
             this.userIdle.resetTimer();
             this.signOutUser();

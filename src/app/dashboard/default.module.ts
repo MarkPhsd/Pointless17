@@ -777,22 +777,14 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     SearchResultsComponent,
 
     SettingsComponent,
-    // SimpleTinyComponent,
     SitepointsComponent,
     SitepurchasesComponent,
 
     SitesComponent,
-
-    // StrainsAddComponent,
-    // StrainPackagesComponent,
-    // StrainProductEditComponent,
-
     StrainBoardComponent,
     StrainCardComponent,
 
     StickyHeaderComponent,
-    // StoreCreditListComponent,
-    // StoreCreditEditorComponent,
     StoreCreditIssueComponent,
 
     StoreCreditPopUpComponent,
@@ -820,18 +812,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     TypeResultsSelectorComponent,
     TypeBoardComponent,
     TypeBoardItemsComponent,
-    //price categories first before moving to admin
-    // PriceCategoriesEditComponent,
-    // PriceCategoryPriceFieldsComponent,
-    // PriceCategoryConversionsComponent,
-    // PriceCategoryTimeFiltersComponent,
-    // PriceCategoriesComponent,
-
-    // UnitTypeListComponent,
-    // UnitTypeEditComponent,
-    // UnitTypePromptComponent,
-    // UnitTypeSelectComponent,
-
 
     UsermessagesComponent,
     UseGroupTaxAssignmentComponent,
