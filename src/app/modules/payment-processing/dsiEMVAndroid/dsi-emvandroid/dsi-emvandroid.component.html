@@ -32,18 +32,17 @@
           <h4>
             {{transaction?.tranCode}} {{transaction?.amount | currency}}
           </h4>
-        </div>
 
-        <div class="grid-buttons">
           <div>
-            <h4 *ngIf="payment">   Total: {{ payment?.amountPaid + payment?.tipAmount | currency}}</h4>
-            <h4 *ngIf="payment">Gratuity:   {{ payment?.tipAmount | currency}}</h4>
-          </div>
-
-          <div style="margin:5px" *ngIf="payment?.amountPaid >0 && saleComplete && enterTip">
-            <button style="width:100px" color="accent" mat-raised-button (click)="enterTip = !enterTip">Back</button>
+            <h4 *ngIf="payment">Total:     {{ +payment?.amountPaid + +payment?.tipAmount | currency}}</h4>
+            <h4 *ngIf="payment">Gratuity:  {{ +payment?.tipAmount ?? 0 | currency}}</h4>
           </div>
         </div>
+
+        <div style="margin:5px" *ngIf="payment?.amountPaid >0 && saleComplete && enterTip">
+          <button style="width:100px" color="accent" mat-raised-button (click)="enterTip = !enterTip">Back</button>
+        </div>
+
       </div>
     </mat-card-title>
 

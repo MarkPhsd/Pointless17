@@ -46,6 +46,7 @@ export interface PointlessMetrcSales {
   completionDate    : string;
   history           : number;
   exceptionNote     : string;
+  netrcPOSID
 }
 
 export interface METRCSalesReportPaged {

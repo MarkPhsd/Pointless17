@@ -473,6 +473,7 @@ export interface Result {
   voidAmount:          number;
   orderID:             number;
   spitPayment        : number;
+  totalReceived      : number;
   PaymentMethod:       IPaymentMethod;
 }
 
@@ -484,6 +485,7 @@ export interface Summary {
   amountPaid:       number;
   balanceRemaining: number;
   tipAmount:        number;
+  totalReceived   : number;
 }
 
 export interface IPaymentResponse {

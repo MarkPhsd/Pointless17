@@ -339,6 +339,13 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
                   maxWidth: 100,
                   // flex: 2,
       },
+      {headerName: 'Total', field: 'totalReceived', sortable: true,
+              cellRenderer: this.agGridService.currencyCellRendererUSD,
+              width   : 100,
+              minWidth: 100,
+              maxWidth: 100,
+              // flex: 2,
+      },
       {headerName: 'Auth', field: 'preAuth', sortable: true,
             width   : 100,
             minWidth: 100,
@@ -551,7 +558,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
         const items$ =  this.getRowData(params, params.startRow, params.endRow)
         items$.subscribe(data => {
 
-              let resp   =  data?.paging as Paging
+              let resp     =  data?.paging as Paging
               this.summary =  data?.summary;
 
               if (!resp) { resp = {} as Paging}
@@ -579,6 +586,11 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
               }
 
               if (data.results) {
+
+                let itemTotal = data?.results;
+                // itemTotal.forEach(data => {
+                //   data.totalReceived = +data.amountReceived + +data.tipAmount
+                // })
                 if (alt?.result?.results) {
                   params.successCallback(alt?.result?.results)
                   this.rowData = alt?.result?.results

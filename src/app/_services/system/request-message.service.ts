@@ -122,6 +122,22 @@ export class RequestMessageService {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
   }
 
+  archiveMessageVoids(site: ISite): Observable<IRequestResponse> {
+    //this should perform the operation on the backend via the api.
+    const item = {type: 'voids/requests'};
+
+    const controller = "/RequestMessages/"
+
+    const endPoint = "ArchiveMessagesByType"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IRequestResponse>(url, item)
+
+  }
+
   archiveMessages(site: ISite, list: IRequestMessage[]): Observable<IRequestResponse> {
     //this should perform the operation on the backend via the api.
     const controller = "/RequestMessages/"
@@ -277,7 +293,14 @@ export class RequestMessageService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.post<IRequestMessage[]>(url,searchModel)
+    return  this.http.post<IRequestMessage[]>(url,searchModel).pipe(switchMap(data => { 
+      if (data && data.length == 0) { 
+        if (!data[0]?.id) { 
+          return of(null)
+        }
+      }
+      return of(data)
+    } ))
 
   }
 
@@ -292,7 +315,14 @@ export class RequestMessageService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.post<IRequestMessage[]>(url,searchModel)
+    return  this.http.post<IRequestMessage[]>(url,searchModel).pipe(switchMap(data => { 
+      if (data && data.length == 0) { 
+        if (!data[0]?.id) { 
+          return of(null)
+        }
+      }
+      return of(data)
+    } ))
 
   }
 

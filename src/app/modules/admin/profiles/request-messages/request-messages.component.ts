@@ -48,6 +48,7 @@ export class RequestMessagesComponent implements OnInit {
   private queueSubject = new Subject<Observable<any>>();
   private isProcessing = false;
   posDevice$: Observable<ITerminalSettings>;
+  archiveAllMessagesVisible: boolean;
 
   addObservable(newObservable: Observable<any>): void {
     const observableWithFinalize = newObservable.pipe(
@@ -89,8 +90,14 @@ export class RequestMessagesComponent implements OnInit {
     const site     = this.siteService.getAssignedSite();
     const search   = {}   as IRequestMessageSearchModel;
     search.orderID = this.orderID;
+    this.archiveAllMessagesVisible = false
+    
     const messages$ = this.requestMessageService.getOpenRequestMessagesByOrder(site, search);
     this.messages$ = messages$.pipe(switchMap(data => {
+      
+      if (data && data.length>0) { 
+        this.archiveAllMessagesVisible = true
+      }
       return of(data)
     }))
     this.hideshowMessages = true;
@@ -162,7 +169,6 @@ export class RequestMessagesComponent implements OnInit {
 
     return messages$.pipe(
       concatMap(data => {
-        // console.log('process get messages', message, data)
         this.processMessages(data)
         this.emitCount.emit(data?.length)
         return of(data)
@@ -179,14 +185,23 @@ export class RequestMessagesComponent implements OnInit {
     }))
   }
 
+  archiveAll() { 
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.requestMessageService.archiveMessageVoids(site).pipe(switchMap(data => { 
+      this.refreshOrderMessages()
+      return of(data)
+    }))
+  }
+
   processMessages(list:IRequestMessage[]): Observable<IRequestMessage[]> {
-    // copy the messages
-    // console.log('print que', list);
+ 
     if (!list) { return of(null)}
 
     let messages = [... list];
     //filter out the
+ 
     const filteredMessages = messages.filter(data => !data?.archived && data?.subject === 'Printing');
+    // console.log('request messages', filteredMessages)
 
     this.collectPrintOrders(filteredMessages)
 
@@ -196,6 +211,7 @@ export class RequestMessagesComponent implements OnInit {
       }
     })
 
+    // console.log('request messages', resultList)
     return of(resultList)
   }
 

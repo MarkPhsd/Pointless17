@@ -1,3 +1,4 @@
+<div *ngIf="(ccsSite$ | async) as item"></div>
 <div [formGroup]="sitesForm" class="container" >
   <mat-card>
     <mat-card-title>
@@ -152,7 +153,7 @@
                         class="form-control" >
                 </mat-form-field>
               </div>-->
-            </div> 
+            </div>
 
 
         </div>

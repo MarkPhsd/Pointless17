@@ -260,14 +260,15 @@
 </ng-template>
 
 <ng-template #editPaymentView let-item>
-  <div *ngIf="  !qrOrder && (item?.paymentMethod?.isCreditCard && (item?.tranCode != 'EMVSale' && item?.tranCode != 'EMVPreAuth')) &&
+  <div *ngIf="  !qrOrder &&
+              ( item?.paymentMethod?.isCreditCard && (item?.tranCode != 'EMVSale' && item?.tranCode != 'EMVPreAuth')) &&
               ( !isUser &&
               ( item?.paymentMethod?.isCreditCard &&
               ( item.tranType  != 'refundResponse' )) ||
                 item?.paymentMethod?.name.toLowerCase() != 'stripe' &&
                 item?.paymentMethod?.name.toLowerCase() != 'paypal' &&
-              (item.account && !item.completionDate && uiTransactions?.cardPointPreAuth))
-              && !getPaymentViewB(item)
+              (item.account && !item.completionDate && uiTransactions?.cardPointPreAuth)) && !getPaymentViewB(item)
+              && disableIfNotCredit
               " >
       <button [disabled]="item.voidReason" color="warn"
           mat-button (click)="editPayment(item)">

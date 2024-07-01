@@ -125,6 +125,7 @@ export interface TransactionUISettings {
   exitOrderOnPrintReceipt: boolean;
   preferredMargin: number;
   enableItemReOrder: boolean;
+  disableNonCrediTip: boolean;
   resaleCostRatio: number;
   rewardPointValue: number;
   enableOnScreenKeyboard : boolean;
@@ -953,7 +954,7 @@ export class UISettingsService {
       allowPreAuth: [],
       printServerDevice: [],
       multiButtonOrderHeader: [],
-
+      disableNonCrediTip: [],
       dcapPayAPIEnabled         : [],
       dcapPayAPIPreAuth         : [],
       dcapPayAPIZeroAuth        : [],

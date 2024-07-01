@@ -42,6 +42,7 @@ export class UITransactionsComponent implements OnInit {
   payAPIKeyExists$ : Observable<any>;
   aquireKey$ : Observable<any>;
   payAPIKeyEnabled: boolean;
+  disableNonCrediTip: boolean;
 
   menuButtonList$ : Observable<IMenuButtonGroups[]>;
 

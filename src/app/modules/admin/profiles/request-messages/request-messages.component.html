@@ -23,6 +23,16 @@
 </ng-template>
 
 <div *ngIf="(messages$ | async) as messages; else loading">
+  <div *ngIf="archiveAllMessagesVisible">
+    <button   mat-raised-button
+              color="primary"
+              style="height:45px"
+              (click)="archiveAll()" >
+          <mat-icon>archive</mat-icon>
+      Archive Voids
+    </button>
+  </div>
+
   <div class="ps-flex-group">
     <div *ngIf="orderID">
       <h2 > OrderID {{orderID}} </h2>
@@ -78,6 +88,7 @@
       <mat-card-content>
         <div *ngFor = "let item of messages"
               class = "message-list">
+             
           <app-request-message
             [enableActions]="enableActions"
             (archiveEvent)="toggleArchive(item)"

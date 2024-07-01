@@ -372,12 +372,14 @@ export class PackageListComponent implements OnInit {
       this.packageImport.endDate   = this.scheduleDateForm.get("end").value;
 
       let  search = this.packageImport
-      search.facility = this.facility.name;
+      search.facility = this.facilityNumber // this.facility.name;
       if (!search.startDate || !search.endDate) {
         this.notify('Dates have not been set', 'Close', 5000);
         return;
       }
 
+      console.log(search)
+      // return;
       this.action$ = this.metrcPackagesService.importActiveBySearch(this.site, search).pipe(switchMap (data => {
         this.importing = false
         this.setMessage(data)

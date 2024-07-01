@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
@@ -31,8 +31,12 @@ export class SiteEditFormComponent implements OnInit {
   {
     if (data) {
       this.id = data
-      const site = this.sitesService.getAssignedSite();
-      this.initFormData(data)
+      this.ccsSite$ = this.sitesService.getSite(+data).pipe(switchMap(item => {
+        console.log('data', data, item)
+        this.initForm()
+        this._initForm(item)
+        return of(item)
+      }))
     }
   }
 
@@ -60,12 +64,16 @@ export class SiteEditFormComponent implements OnInit {
 
   initFormData(id: number) {
     this.sitesService.getSite(id).subscribe(
-      data=> {
-        this.sitesForm.patchValue(data)
-        this.ccsSite = data
-        this.imgName = data.imgName
+      data => {
+        this._initForm(data)
       }
     )
+  }
+
+  _initForm(data: ISite) {
+    this.sitesForm.patchValue(data)
+    this.ccsSite = data
+    this.imgName = data?.imgName
   }
 
   onCancel(event) {

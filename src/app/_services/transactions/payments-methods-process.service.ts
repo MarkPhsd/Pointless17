@@ -552,8 +552,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }
 
     console.log('rStream?.CmdStatus', rStream?.CmdStatus)
-    if (!this.isApproved(rStream?.CmdStatus)) {
-      this.loggerService.publishObject('Credit Rstream No Approved', rStream)
+    if (!this.isApproved(rStream?.CmdStatus, rStream?.TextResponse)) {
+      this.loggerService.publishObject('Credit Rstream Not Approved', rStream)
       this.sitesService.notify(`${rStream?.CmdStatus}  - ${rStream?.TextResponse}`, 'close', 3000, 'red');
       return false
     }
@@ -584,6 +584,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     const cmdResponse       = rStream?.CmdResponse;
     const trans             = rStream?.TranResponse;
+    const textResponse      = rStream?.CmdResponse?.TextResponse;
 
     if (!cmdResponse) {
       this.notify(`Error no cmdResponse`, 'Transaction not Complete', 3000);
@@ -615,12 +616,17 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   //"AP*", "Approved", "Approved, Partial AP"
   //then we can get the payment Method Type from Card Type.
-  isApproved(cmdStatus: string) {
+  isApproved(cmdStatus: string, textResponse: string) {
     if (cmdStatus.toLowerCase() === 'AP*'.toLowerCase() ||
         cmdStatus.toLowerCase() === 'Approved'.toLowerCase() ||
         cmdStatus.toLowerCase() === 'Partial AP'.toLowerCase() ||
         cmdStatus.toLowerCase() === 'captured'.toLowerCase()) {
       return true;
+    }
+    // "CmdStatus" : "Declined",
+    // "TextResponse" : "ALREADY REVERSED 79",
+    if (textResponse && textResponse.toLowerCase() == 'ALREADY REVERSED 79'.toLowerCase()) {
+      return true
     }
     return false;
   }
@@ -679,7 +685,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       } catch (error) {
         console.log('error', error)
       }
-
 
       payment   = this.applyCardPointResponseToPayment(trans, payment)
       payment.textResponse =  trans?.resptext.toLowerCase();
@@ -881,7 +886,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     if (rStream) {
       const validate = this.validateResponse( rStream, payment)
       console.log('validate', validate)
-      console.log('isApproved', this.isApproved(rStream?.CmdResponse?.CmdStatus))
+      console.log('isApproved', this.isApproved(rStream?.CmdResponse?.CmdStatus, rStream?.CmdResponse?.TextResponse))
       if (!validate) {
         return of(null)
       }
@@ -893,7 +898,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
       payment   = this.applyEMVResponseToPayment(trans, payment)
 
-      if (this.isApproved(cmdStatus)) {
+      if (this.isApproved(cmdStatus, status)) {
         let cardType       = trans?.CardType;
 
         if (!cardType || cardType === '0') {  cardType = 'credit'};
@@ -922,8 +927,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     if (rStream) {
       const validate = this.validateResponse( rStream, payment)
-      console.log('validate', validate)
-      console.log('isApproved', this.isApproved(rStream?.CmdResponse?.CmdStatus))
+      // console.log('validate', validate)
+      console.log('isApproved', this.isApproved(rStream?.CmdResponse?.CmdStatus, rStream?.CmdResponse?.TextResponse))
       if (!validate) {
         return of(null)
       }
@@ -935,7 +940,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
       payment   = this.applyEMVResponseToPayment(trans, payment)
 
-      if (this.isApproved(cmdStatus)) {
+      if (this.isApproved(cmdStatus, rStream?.CmdResponse?.TextResponse)) {
         let cardType       = trans?.CardType;
 
         if (!cardType || cardType === '0') {  cardType = 'credit'};

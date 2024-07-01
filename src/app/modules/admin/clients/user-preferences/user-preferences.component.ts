@@ -71,7 +71,7 @@ export class UserPreferencesComponent implements OnInit {
       if (this.headerColor) {   data.headerColor = this.headerColor  }
 
       this.action$ = this.savePreferences(data, this.userAuthorizationService.user.id).pipe(switchMap(formValue => {
-        console.log('formValue messagingPreference', formValue?.messagingPreference)
+        // console.log('formValue messagingPreference', formValue?.messagingPreference)
         this.user.userPreferences = formValue;
         this.authenticationService.updateUser(this.user)
         this.authenticationService.updatePreferences(formValue);
@@ -96,7 +96,6 @@ export class UserPreferencesComponent implements OnInit {
       this.user.userPreferences = formValue;
       this.authenticationService.updateUser(this.user)
       setTimeout(() => {
-
           this._close()
       }, 10);
       return of(data)

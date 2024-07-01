@@ -77,8 +77,20 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     }
   }
 
+  disableIfNotCredit() {
+    if (this.uiTransactions?.disableNonCrediTip) {
+      return true;
+    }
+    if (this.uiTransactions?.disableNonCrediTip) {
+      if (this.posPayment.paymentMethod.isCreditCard) {
+        return true
+      }
+    }
+    return false
+  }
+
   get isPaxEnabledTerminal() {
-    if  (this.posDevice.dsiEMVSettings?.TranDeviceID) { 
+    if  (this.posDevice?.dsiEMVSettings?.TranDeviceID) {
       return true
     }
     return false
@@ -407,7 +419,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   editPayment(payment: IPOSPayment) {
       //get payment
 
-      if (!this.isPaxEnabledTerminal)  { 
+      if (!this.isPaxEnabledTerminal)  {
         this.siteService.notify("Please use a terminal with a credit card machine.", 'Close', 1000);
         return;
       }
