@@ -111,7 +111,7 @@ export class METRCProductsAddComponent implements OnInit {
 
   constructor(
           private conversionService: ConversionsService,
-     
+
           public  route: ActivatedRoute,
           public  fb: UntypedFormBuilder,
           private awsBucket: AWSBucketService,
@@ -168,9 +168,9 @@ export class METRCProductsAddComponent implements OnInit {
       this.package$ = this.metrcPackagesService.getPackagesByID(this.id, this.site)
       this.action$ =  this.package$.pipe(
         switchMap(data =>
-        { 
-          if (data) { 
-            this.initItemFormData(data) 
+        {
+          if (data) {
+            this.initItemFormData(data)
           }
           return of(data)
         }
@@ -182,7 +182,7 @@ export class METRCProductsAddComponent implements OnInit {
     if (data) {
 
         data = this.convertValuesToString(data)
-   
+
         this.package = data
 
         if (this.package) {
@@ -226,12 +226,13 @@ export class METRCProductsAddComponent implements OnInit {
           intakeConversionValue:            this.intakeConversion?.value,
           active                        : active,
           sellByDate                    : data?.sellByDate,
-          labTestingPerformedDate       : data?.labTestingPerformedDate,
+          labTestingPerformedDate       : data?.labTestingStateDate.toString(),
           packagedDate                  : data?.packagedDate.toString(),
           expirationDate                : data?.expirationDate,
           useByDate                     : data?.useByDate,
           productionBatchNumber         : data?.productionBatchNumber
       })
+
       console.log('form initialized', this.packageForm.value)
     }
   }
@@ -251,7 +252,7 @@ export class METRCProductsAddComponent implements OnInit {
     }
     return result;
   } else {
-    if (obj) { 
+    if (obj) {
       return obj.toString();
     }
     return obj
@@ -266,7 +267,7 @@ export class METRCProductsAddComponent implements OnInit {
       if (inv) {
         this.inventoryAssigments.splice(i)
         this.initItemFormData(this.package)
- 
+
           // this.packageForm = this.fb.group({
           //   conversionName:                   [ inv.unitConvertedtoName, Validators.required],
           //   inputQuantity:                    [ inv.packageQuantity, Validators.required],
@@ -280,11 +281,11 @@ export class METRCProductsAddComponent implements OnInit {
         const item = {converstionName: inv?.unitConvertedtoName,
           inputQuantity: inv.packageQuantity,
           inventoryLocationID: inv.locationID,
-          cpst: inv?.cost,
-          price: inv?.price,
-          jointWeight: 1,
+          cost          : inv?.cost,
+          price         : inv?.price,
+          jointWeight   : 1,
           expirationDate: inv?.expiration}
-          
+
         this.packageForm.patchValue(item)
         this.getAvailableUnitsByQuantity()
       }
@@ -330,7 +331,7 @@ export class METRCProductsAddComponent implements OnInit {
 
     this.saved = true
     this.packageForm.valueChanges.subscribe(data => {
-      this.saved = false;
+      // this.saved = false;
     })
 
   }
@@ -430,6 +431,7 @@ export class METRCProductsAddComponent implements OnInit {
 
     if (this.saved) {
       const inv = this.packageForm.value as IInventoryAssignment
+      return true;
       if (inv.batchDate &&
           inv.productionBatchNumber &&
           inv.testDate) {
@@ -649,6 +651,7 @@ export class METRCProductsAddComponent implements OnInit {
   completePackageImport() {
     const site=  this.siteService.getAssignedSite();
 
+    this.inventoryAssigments.forEach(data => {data.metrcPackageID = this.package.id })
     const inv$=  this.inventoryAssignmentService.addInventoryList(site, this.inventoryAssigments[0].label,
                                                                   this.inventoryAssigments)
     inv$.subscribe(
@@ -714,10 +717,6 @@ export class METRCProductsAddComponent implements OnInit {
     this.inventoryAssigments.splice(i)
     await this.getAvailableUnitsByQuantity()
   }
-
-
-
-
 
   removeInventoryAssignment(i: number) {
     this.assignInventoryArray.removeAt(i)

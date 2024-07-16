@@ -50,7 +50,7 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
 
   assignDefaultFacility( metrcPackage: METRCPackage) {
     if (metrcPackage && metrcPackage.itemFromFacilityName) {
-      this.inputForm.patchValue({facilityLicenseNumber: [`${metrcPackage?.itemFromFacilityLicenseNumber}-${metrcPackage?.itemFromFacilityName}` ]});
+      this.inputForm.patchValue({facilityLicenseNumber: `${metrcPackage?.itemFromFacilityLicenseNumber} -${metrcPackage?.itemFromFacilityName}`  });
       const site = this.siteService.getAssignedSite();
       this.metrcFacilitiesService.getItemsNameBySearch(site,metrcPackage?.itemFromFacilityLicenseNumber).pipe(
         switchMap(data => {
@@ -75,12 +75,10 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
   }
 
   postNewFacility(licenseNumber: string, name: string): Observable<METRCFacilities> {
-
     return of(null)
   }
 
-
-  //consider maning a component or Directive.
+  // consider maning a component or Directive.
   // @Input('menuItemNameAdd') menuItemNameAdd: string
   addNewMenuItem()  {
     if (this.package && this.package.productName) {
@@ -90,54 +88,60 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
 
   assignDefaultCatalogItem(metrcPackage: METRCPackage) {
     if (metrcPackage && metrcPackage.productName) {
-      this.inputForm.patchValue({productName: [``]})
+      this.inputForm.patchValue({productName: ``})
       const site = this.siteService.getAssignedSite();
-      const searchModel = {} as ProductSearchModel;
-
-    //get conditional item Name
+      let searchModel = {} as ProductSearchModel;
+      console.log( this.package, metrcPackage);
+      //get conditional item Name
       if (this.package.itemStrainName)
 
-      searchModel.name = metrcPackage.productName ;
-      searchModel.exactNameMatch = true;
+        console.log( this.package, metrcPackage)
+        searchModel.exactNameMatch = true;
+        searchModel.name = metrcPackage?.productName ;
 
-      const list$ =  this.menuService.getItemBasicBySearch(site, searchModel ).pipe(
-        switchMap(data => {
-          if (data) {
-            if (data.length == 0) {return of('')}
-            if (!data[0] == undefined || data[0].id == undefined) {return of(null)}
-            return this.menuService.getMenuItemByID( site, data[0].id)
-          }}),
-          catchError( data => {
-            console.log('error' , data)
-            return of(null)
-          }
-        ))
+        console.log(' metrcPackage.productName' , searchModel, metrcPackage?.productName, this.package?.itemStrainName  )
 
-      list$.subscribe(
-          {next: data => {
-          console.log(' get item from basic search ',searchModel,  data )
-          if (data) {
-              const item = {} as IMenuItem;
-              if (this.dataIsMenuItem(data)) {
-                this.menuItem = data as IMenuItem;
-                this.inputForm.patchValue({
-                  productName: [ this.menuItem.name ],
-                  productID  : [ this.menuItem.id]
-                })
-                this.outputMenuItem.emit(data)
-                return
-              }
-          } else {
-            const confirm = window.confirm(`${searchModel?.name} does not exist. Do you want to create a new item?`)
-            if (confirm) {
-              this.openNewProduct(metrcPackage)
+        const list$ =  this.menuService.getItemBasicBySearch( site, searchModel ).pipe(
+          switchMap(data => {
+            if (data) {
+              if (data.length == 0) {return of('')}
+              if (!data[0] == undefined || data[0].id == undefined) {return of(null)}
+              return this.menuService.getMenuItemByID( site, data[0]?.id)
+            }}),
+            catchError( data => {
+              console.log('error' , data)
+              return of(null)
             }
+          ))
+
+        list$.subscribe(
+            {next: data => {
+              console.log(' get item from basic search ', searchModel, searchModel?.name, data )
+              if (data) {
+                const item = {} as IMenuItem;
+                if (this.dataIsMenuItem(data)) {
+                  this.menuItem = data as IMenuItem;
+                  this.inputForm.patchValue({
+                    productName: this.menuItem?.name ,
+                    productID  : this.menuItem?.id
+                  })
+                  this.outputMenuItem.emit(data)
+                  return
+                }
+              }
+              if (!data) {
+                if (searchModel?.name) {
+                  const confirm = window.confirm(`${metrcPackage?.productName} does not exist. Do you want to create a new item?`)
+                  if (confirm) {
+                    this.openNewProduct(metrcPackage)
+                  }
+                }
+              }
+          },
+          error: err => {
+            console.log(err)
           }
-        },
-        error: err => {
-          console.log(err)
         }
-      }
       )
       this.setProductNameEmpty(this.inputForm);
     }
@@ -145,15 +149,14 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
 
   openNewProduct(met: METRCPackage) {
     //data?:METRCPackage
-
     let type = {} as IItemType;
     let uom = {} as any;
     let product = {} as IProduct;
 
-    type.name = met?.item?.productCategoryType;
-    const site = this.siteService.getAssignedSite()
+    type.name   = met?.item?.productCategoryType;
+    const site  = this.siteService.getAssignedSite()
     const type$ = this.getItemType(met?.item?.productCategoryType)
-    const uom$ = this.getUnitTypeByName(met?.unitOfMeasureName)
+    const uom$  = this.getUnitTypeByName(met?.unitOfMeasureName)
 
     let action$ = type$.pipe(switchMap(data => {
       type = data;
@@ -164,9 +167,9 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       product.active = true;
       product.webProduct = 1;
 
-      product.fullProductName = product.name;
-      product.prodModifierType = type.id;
-      product.unitTypeID = uom.id;
+      product.fullProductName = product?.name;
+      product.prodModifierType = type?.id;
+      product.unitTypeID = uom?.id;
       product.productCount = 0;
 
       return      this.menuService.postProduct(site, product)
@@ -174,14 +177,10 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       if (data && type) {
         this.outputMenuItem.emit(data)
       }
-
       return of(data)
     }));
-
     this.action$ = action$
   }
-
-
 
   private getItemType(name: string): Observable<IItemType> {
     const site = this.siteService.getAssignedSite()
@@ -228,8 +227,8 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
 
   setProductNameEmpty(inputForm: UntypedFormGroup) {
     inputForm.patchValue({
-      productName: [''],
-      productID:  ['']
+      productName: '',
+      productID:  ''
     })
   }
 

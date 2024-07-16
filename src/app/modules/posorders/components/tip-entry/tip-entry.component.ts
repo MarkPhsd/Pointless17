@@ -43,20 +43,47 @@ export class TipEntryComponent implements OnInit  {
     const i = 0;
   }
 
-  customTipAmount(amount) {
+  customTipAmount(amount: number) {
     if (this.payment) {
-      const value = +amount;
-      this.tip( ( +value.toFixed(value) )  )
-      this.specifiedTipAmount.emit( +value.toFixed(2))
+      const value = parseFloat(amount.toString());
+      if (!isNaN(value)) {
+        const formattedValue = value.toFixed(2);
+        console.log('customTipAmount', amount, formattedValue);
+        this.tip(parseFloat(formattedValue));
+        this.specifiedTipAmount.emit(parseFloat(formattedValue));
+      } else {
+        console.error('Invalid amount:', amount);
+      }
     }
   }
 
+
+  // customTipAmount(amount) {
+  //   if (this.payment) {
+  //     const value = +amount;
+  //     console.log()
+  //     this.tip( ( +value.toFixed(value) )  )
+  //     this.specifiedTipAmount.emit( +value.toFixed(2))
+  //   }
+  // }
+
   specifiedTip(amount: number) {
-    const payment = this.payment
-    if (payment) {
-      const value = payment.amountPaid * (amount / 100 );
-      this.tip(  +value.toFixed(2)  )
-      this.specifiedTipAmount.emit( +value.toFixed(2))
+    // const payment = this.payment
+    // if (payment) {
+    //   const value = payment.amountPaid * (amount / 100 );
+    //   this.tip(  +value.toFixed(2)  )
+    //   this.specifiedTipAmount.emit( +value.toFixed(2))
+    // }
+    if (this.payment) {
+      const value = parseFloat(amount.toString());
+      if (!isNaN(value)) {
+        const formattedValue = value.toFixed(2);
+        console.log('customTipAmount', amount, formattedValue);
+        this.tip(parseFloat(formattedValue));
+        this.specifiedTipAmount.emit(parseFloat(formattedValue));
+      } else {
+        console.error('Invalid amount:', amount);
+      }
     }
   }
 

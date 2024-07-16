@@ -252,12 +252,13 @@ export class PosEditSettingsComponent implements OnInit {
       ComPort         :[],
       PinPadIpAddress :[],
       PinPadIpPort    :[],
-    SequenceNo      :[],
+      SequenceNo      :[],
       DisplayTextHandle :[],
       enabled           :[],
       partialAuth       :[],
       deviceValue     : [],
       supressedForms  : [],
+      v2: [],
     })
 
     if (this.terminal) {

@@ -23,7 +23,7 @@ export class ApiStoredValueComponent implements OnInit {
   isElectronApp  : boolean;
   electronVersion: string;
   isApp          : boolean;
-
+  newAPI: string;
   constructor(
       private router               : Router,
       public  platFormService      : PlatformService,
@@ -57,7 +57,7 @@ export class ApiStoredValueComponent implements OnInit {
     const value = this.inputForm.controls['apiUrl'].value;
     this.inputForm.patchValue({apiUrl: 'https://'})
   }
-  
+
   typeAPI() {
     //apiUrl
     const value = this.inputForm.controls['apiUrl'].value;
@@ -82,6 +82,10 @@ export class ApiStoredValueComponent implements OnInit {
     this.inputForm = this.fb.group({
       apiUrl: [currentAPIUrl],
     });
+    this.inputForm.valueChanges.subscribe(data => {
+      // console.log('data', data)
+      this.newAPI = data.apiUrl // JSON.stringify(data)
+    })
   }
 
   setAPIUrl(){

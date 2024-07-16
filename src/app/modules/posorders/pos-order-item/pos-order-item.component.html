@@ -7,10 +7,10 @@
           id="panel"
           (swipeleft)="swipeOutItem()"
           (click)="assignItem()"
+          [style]="cardStyle"
           [class]="customcard" >
 
   <mat-card-content>
-
     <div  [class]="gridItems">
       <div *ngIf="orderItem">
 
@@ -78,7 +78,7 @@
         <span (mouseleave)="menuTrigger.closeMenu()">
           <div class="button-list">
 
-              <ng-container *ngIf="!mainPanel || isStaff"  
+              <ng-container *ngIf="!mainPanel || isStaff"
                             [ngTemplateOutlet]="buyAgainViewStaff"></ng-container>
 
               <div *ngIf="!showEdit && (ui?.displayAdd)">
@@ -192,7 +192,6 @@
 
               <div *ngIf="userAuthService &&  userAuths?.editProduct ">
                 <button mat-raised-button  color="accent" (click)="editCatalogItem()">
-                  Edit<br>
                   Edit Catalog
                 </button>
               </div>

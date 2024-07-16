@@ -160,7 +160,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   get androidPaxA920Payment() {
     if (
-      !this.order.completionDate &&
+      !this.order?.completionDate &&
       (
         (this.order?.balanceRemaining != 0 || this.isNegativePaymentAllowed || this.isZeroPaymentAllowed) ||
         (this.order?.balanceRemaining < 0 || this.isNegativePaymentAllowed)
@@ -866,6 +866,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.processing = true
     return  this.paymentsMethodsService.getResults(amount, this.paymentMethod, this.posPayment, this.order).pipe(
       switchMap(data => {
+        if (data && data?.order) { 
+          this.orderMethodsService.updateOrder(data?.order)
+        }
         this.processing = false
         return of(data)
     }))
@@ -1066,5 +1069,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       this.editDialog.openChangeDueDialog(payment, method, this.order)
     })
  }
+
 }
 

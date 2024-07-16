@@ -23,10 +23,13 @@ import { UISettingsService } from './settings/uisettings.service';
 import { PrintingAndroidService} from  './printing-android.service';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
-import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { IMenuItem, ItemType } from 'src/app/_interfaces/menu/menu-products';
 import { ClientTableService } from '../people/client-table.service';
 import { UUID } from 'angular2-uuid';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { MetrcPackagesService } from '../metrc/metrc-packages.service';
+import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
+
 
 export interface printOptions {
   silent: boolean;
@@ -109,7 +112,7 @@ export class PrintingService {
                 private menuItemService   : MenuService,
                 private http              : HttpClient,
                 private posOrderItemService : POSOrderItemService,
-
+                private metrcPackageService: MetrcPackagesService,
                 private printingAndroidService   : PrintingAndroidService,
                 private renderingService  : RenderingService,
                 private settingService    : SettingsService,
@@ -140,17 +143,33 @@ export class PrintingService {
 
   printJoinedLabels( ) {
     let contents = ''
+    console.log('labelContentList', this.labelContentList)
     this.labelContentList.forEach(data => {
       if (data) {
         contents =`${data} ${contents}`
       }
     })
+    // console.log('label contents', contents)
     if (!this.labelPrinter) { return }
     if (!contents) { return }
     this.printLabelElectron(contents, this.labelPrinter)
     this.labelContentList = []
   }
 
+  async printJoinedLabelsWait( ) {
+    let contents = ''
+
+    this.labelContentList.forEach(data => {
+      if (data) {
+        contents =`${data} ${contents}`
+      }
+    })
+    // console.log('label contents', contents)
+    if (!this.labelPrinter) { return }
+    if (!contents) { return }
+    console.log('labelContentList')
+    await this.printLabelElectron(contents, this.labelPrinter)
+  }
   //prints posItem
   printLabels(order: IPOSOrder, newLabels: boolean, joinLabels?: boolean): Observable<any> {
     if (!order || !order.posOrderItems) {  return of(null)  }
@@ -162,7 +181,7 @@ export class PrintingService {
     this.obs$ = []
 
     if (order && order.posOrderItems) {
-        const items = order.posOrderItems
+      const items = order.posOrderItems;
       if (items.length > 0) {
         items.forEach( item => {
           let result = this._printLabelSub({item: item,
@@ -173,7 +192,9 @@ export class PrintingService {
                                             joinLabels: joinLabels})
           printCount= result?.printCount;
         })
+        console.log('print Count', printCount)
       }
+
       if (printCount == 0) {return of(null)};
       return forkJoin(this.obs$)
     }
@@ -186,8 +207,9 @@ export class PrintingService {
     let  printCount     = labelProcess?.printCount;
     let  order          = labelProcess?.order;
     let  printLabelList = labelProcess?.printLabelList;
-    let  item           = labelProcess?.item
+    let  item           = labelProcess?.item //pos order item
     let  joinLabels     = labelProcess?.joinLabels;
+
 
     if (!item.printed && newLabels) {
       this.obs$.push( this.printItemLabel(item, null, order, joinLabels) )
@@ -201,8 +223,45 @@ export class PrintingService {
       printCount += 1
     }
 
-    let result = {newLabels: newLabels, printCount: printCount, printLabelList: printLabelList, order: order}
+    let result = {newLabels: newLabels, printCount: printCount,
+                  printLabelList: printLabelList, order: order}
     return result;
+  }
+
+
+  printLabelByQuantity(contents: any, printerName: string, quantity: number) {
+
+    let timer  =  +localStorage.getItem('testVariable' )
+    if (!timer || timer != 0) { timer = +50000 }
+
+    let printCount = 0;
+    const printLabelList  = [];
+    this.obs$ = []
+    if (quantity == 0) {return };
+    let result = []
+    for (let i = 0; i < quantity; i++) {
+          result = this._printLabelQuantitySub({
+                                            printerName: printerName,
+                                            printCount: quantity,
+                                            contents: contents,
+                                            joinLabels: true})
+
+    }
+    return result;
+
+  }
+
+  _printLabelQuantitySub( labelProcess: any ) {
+    let  printerName    = labelProcess?.printerName;
+    let contents        = labelProcess?.contents;
+    let  printCount     = labelProcess?.printCount;
+    let  joinLabels     = labelProcess?.joinLabels;
+
+    // this.obs$.push( this.printItemLabel(item, null, order, joinLabels) )
+    let result = this.postLabelToListAlt(true, contents)
+    printCount += 1
+
+    return result
   }
 
 
@@ -219,7 +278,6 @@ export class PrintingService {
   initDefaultLayoutsOBS() {
     const site = this.siteService.getAssignedSite();
     return this.settingService.setDefaultReceiptLayoutOBS(site).pipe(switchMap(data => {
-
       return this.settingService.setDefaultReceiptStylesOBS(site)
     }))
   }
@@ -524,7 +582,7 @@ export class PrintingService {
 
   }
 
-  printLabelElectron(printString: string, printerName: string) {
+  async printLabelElectron(printString: string, printerName: string) {
     const uuid = UUID.UUID().slice(0,5);
 
     if (!printString || printString == undefined || printString == 'undefined') { return };
@@ -532,7 +590,7 @@ export class PrintingService {
     const file = `file:///c://pointless//labels//print${uuid}.txt`
     let fileName = `c:\\pointless\\labels\\print${uuid}.txt`;
     try {
-       this.saveContentsToFile(fileName, printString);
+      await  this.saveContentsToFile(fileName, printString);
     } catch (error) {
       this.siteService.notify(`File could not be written.
                                 Please make sure you have a writable folder ${fileName}`, 'Close', 3000, 'red')
@@ -545,6 +603,7 @@ export class PrintingService {
     } as printOptions
 
     try {
+
       this.printElectronForLabels( file, printerName, options )
     } catch (error) {
       return false
@@ -813,6 +872,16 @@ export class PrintingService {
     }))
   }
 
+
+  getInventoryLabelID(item: ItemType  ): number  {
+    if (item.json) {
+      const obj = JSON.parse(item.json)  as any;
+      if (obj && obj.inventoryLabelID) {
+        return obj.inventoryLabelID
+      }
+    }
+    return 0
+  }
   //Prints a label on it's own
   printLabel(item: any, history: boolean, joinLabels: boolean, order?: IPOSOrder) {
 
@@ -824,6 +893,10 @@ export class PrintingService {
     let menuItem$ = this.getLabelMenuItem(site, item)
 
     const printer$ = this.getLabelprinterFromDevice()
+
+    //, inv?: IInventoryAssignment
+    //we need to appy inventoryItem value if we have an inventory
+    let  labelInventoryID = 0;
 
     const result$ =  printer$.pipe(
       concatMap(data => {
@@ -837,15 +910,22 @@ export class PrintingService {
         concatMap(data => {
           if ( !data || !data.itemType) {   return of(null)   }
           this.menuItem = data;
-          if ( data.itemType && ( ( data.itemType.labelTypeID != 0 ) && printer.text ) ) {
-            return  this.settingService.getSetting(site, data.itemType.labelTypeID)
-          } else {
-            if (history) {
-              this.siteService.notify('History Item printing.', 'Close',  10000)
-              return of(null)
-            }
-            return this.orderItemService.setItemAsPrinted(site, item )
+
+          if ( data.itemType && ( ( data?.itemType?.labelTypeID != 0 ) && printer?.text ) ) {
+             return  this.settingService.getSetting(site, data?.itemType?.labelTypeID)
           }
+
+          labelInventoryID = this.getInventoryLabelID(data?.itemType)
+          if ( labelInventoryID !=0 && printer?.text )  {
+            return  this.settingService.getSetting(site, labelInventoryID)
+          }
+
+          if (history) {
+            this.siteService.notify('History Item printing.', 'Close',  10000)
+            return of(null)
+          }
+          return this.orderItemService.setItemAsPrinted(site, item )
+
       })).pipe(
         concatMap( data => {
 
@@ -866,66 +946,65 @@ export class PrintingService {
             return of(null)
           }
 
-          //get the menu item from earlier.
-          item.menuItem = this.menuItem;
-          const labID = this.menuItem?.labID;
-          const producerID = this.menuItem?.producerID;
+          //this is where we deviate
+          //if it's inventoryLabel then we would use what we
+          //have for the Inventory.
+          if (labelInventoryID != 0 && item && item.inventory)  {
+            let inv = item.inventory as any as IInventoryAssignment;
+            if (inv) {
 
-          let lab$ : Observable<any>;
-          let producer$ : Observable<any>;
+              const metrcPackage$ = this.metrcPackageService.getPackagesByID(inv.metrcPackageID, site)
+              // inv.producerName
+              // inv.metrcPackageID
+              //then we get the metrcPackage
+              //from the metrcPackage we can get the producer
+              //we can also get the lab.
+              //we can assign the metrcPackage to item
+              //so that we don't have to go to many levels deep.
+              //
+              return forkJoin([metrcPackage$, of(null), of(data)])
+            }
+          } else {
+              //get the menu item from earlier.
+              item.menuItem    = this.menuItem;
+              const labID      = this.menuItem?.labID;
+              const producerID = this.menuItem?.producerID;
 
-          lab$ = of(null)
-          producer$ = of(null);
+              let lab$ : Observable<any>;
+              let producer$ : Observable<any>;
 
-          if (labID) {  this.getContact(site, labID)   }
-          if (producerID) {  producer$  = this.getContact(site, producerID)  }
+              lab$ = of(null)
+              producer$ = of(null);
 
-          return forkJoin([lab$, producer$, of(data)])
+              if (labID)      {  lab$ = this.getContact(site, labID)   }
+              if (producerID) {  producer$  = this.getContact(site, producerID)  }
+
+              return forkJoin([lab$, producer$, of(data)])
+          }
+          return of(null)
 
       })).pipe(
         concatMap( results => {
-
-          if (!results) {
-            // this.siteService.notify('Lab or producer not found.', 'Close', 10000)
-            return of(null)
-          }
+          if (!results) { return of(null) }
           const data = results[2];
+          if (!data)    { return of(null) }
+          let metrcPackage = {} as METRCPackage
+          let content : any;
 
-          if (!data) { return of(null) }
-
-          try {
-            const lab = results[0]
-            const producer = results[1];
-            if (lab) {  item.lab = lab;  }
-            if (producer) {  item.producer = producer; }
-
-            if (this.menuItem) {
-              if (this.menuItem?.itemType?.type === 'cannabis') {
-                if (!lab) { this.siteService.notify('Item has no lab assigned.', 'Alert', 2000)  }
-                if (!producer) {  this.siteService.notify('Item has no producer assigned.', 'Alert', 2000)  }
-              }
-            }
-          } catch (error) {
-            console.log('error printing label', error )
+          if (item.inventory) {
+            //   if (item.inventoryItem) { item = item.inventoryItem; }
+            //then we should have the metrcPackage
+            if (results[0])  {  metrcPackage = results[0] as METRCPackage }
+            item.metrcPackage = JSON.parse(metrcPackage.json)
+            content = this.renderingService.interpolateText(item, data?.text);
           }
 
-          if (item.inventoryItem) {    item = item.inventoryItem;  }
-          const content = this.renderingService.interpolateText(item, data.text);
-
-          if (!printer.text) { printer.text = this.labelPrinter; }
-          if (printer.text) {
-            const printerName = printer?.text
-
-            if (!joinLabels) {
-              this.labelContentList = []
-              this.printLabelElectron(content, printerName) ;
-            }
-
-            if (joinLabels) {
-              this.labelContentList.push(content)
-            }
+          if (!item.inventory) {
+            this.validationNotificationExitLabel(labelInventoryID, item, results, this.menuItem)
+            content = this.renderingService.interpolateText(item, data?.text);
           }
 
+          this.postLabelToList(printer, joinLabels, content)
           if (!item.printed || (data && !data.printed)) {
             return this.orderItemService.setItemAsPrinted(site, item )
           }
@@ -937,10 +1016,64 @@ export class PrintingService {
           }
           return of(order)
       }))
-    return result$
+
+      return result$
   }
 
-  getLabelPrinter() {
+  postLabelToList(printer: any, joinLabels: boolean, content: any)  {
+    if (!printer.text) { printer.text = this.labelPrinter; }
+    if (printer.text) {
+      const printerName = printer?.text
+      if (!joinLabels) {
+        this.labelContentList = []
+        this.printLabelElectron(content, printerName) ;
+      }
+
+      if (joinLabels) {
+        this.labelContentList.push(content)
+      }
+      return;
+    }
+    if (content) {
+      if (joinLabels) {
+        this.labelContentList.push(content)
+      }
+    }
+  }
+
+  postLabelToListAlt(joinLabels: boolean, content: any)  {
+    if (content) {
+      if (joinLabels) {
+        this.labelContentList.push(content)
+      }
+    }
+    return this.labelContentList
+  }
+
+  processOrderItemLabel(item) {
+
+  }
+
+  validationNotificationExitLabel(labelInventoryID, item, results, menuItem) {
+    if (labelInventoryID == 0)  {
+      try {
+        const lab = results[0]
+        const producer = results[1];
+        if (lab)      {  item.lab = lab;  }
+        if (producer) {  item.producer = producer; }
+        if (menuItem) {
+          if (menuItem?.itemType?.type === 'cannabis') {
+            if (!lab) { this.siteService.notify('Item has no lab assigned.', 'Alert', 2000)  }
+            if (!producer) { this.siteService.notify('Item has no producer assigned.', 'Alert', 2000)  }
+          }
+        }
+      } catch (error) {
+        console.log('error printing label', error )
+      }
+    }
+  }
+
+  getLabelPrinter(item: any) {
     return
   }
 
@@ -969,7 +1102,7 @@ export class PrintingService {
     if (!contactID || contactID == null) {return of(null)};
     const client$ = this.clientService.getClient(site, contactID).pipe(
     switchMap(data =>
-      { return of(data)  }
+        { return of(data)  }
       ),
     catchError(data => {
         return of(null)

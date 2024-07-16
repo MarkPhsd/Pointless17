@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuButtonGroups, IMenuButtonProperties, mb_MenuButton } from 'src/app/_services/system/mb-menu-buttons.service';
@@ -33,6 +34,7 @@ export class FunctionButtonsListComponent implements OnInit {
     private balanceSheetMethodService: BalanceSheetMethodsService,
     private orderMethodsService: OrderMethodsService,
     private router: Router,
+    private productEditButtonService : ProductEditButtonService,
     private ordersService:   OrdersService,
    ) {
 
@@ -55,6 +57,15 @@ export class FunctionButtonsListComponent implements OnInit {
     const functionName = props?.method
     if (!functionName) { return }
     switch (functionName) {
+      case 'deleteOrder':
+        this.deleteOrder();
+        break;
+      case 'printLabels':
+        this.printLabels();
+        break;
+      case 'voidOrder':
+        this.voidOrder();
+        break;
       case 'openDrawer1':
         this.openDrawer1();
         break;
@@ -112,6 +123,26 @@ export class FunctionButtonsListComponent implements OnInit {
         })
       )
     }
+  }
+
+  printLabels() {
+
+  }
+
+
+  voidOrder() {
+    this.productEditButtonService.openVoidOrderDialog(this.order)
+  }
+
+  deleteOrder() {
+    console.log('Placeholder for Suspend Order');
+    const confirm = window.confirm('Are you sure you want to do this action?')
+    if (!confirm) { return }
+    this.action$ = this.orderMethodsService.deleteOrder(this.order.id, false).pipe(switchMap(data => {
+      this.siteService.notify('Suspended', 'close',3000 )
+      return of(data)
+    }))
+    // Ad
   }
 
   async qrLink() {

@@ -512,7 +512,10 @@ export class ProductEditButtonService {
       return product$.pipe(
           switchMap( data => {
                   product = data
-                  return itemType$
+                  const site = this.siteService.getAssignedSite()
+                  console.log('product', data, data?.prodModifierType)
+                  return this.itemTypeService.getItemType(site, data?.prodModifierType);
+                  // return itemType$
               }
           )).pipe(switchMap( itemType => {
               const data = { product, itemType}

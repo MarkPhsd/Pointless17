@@ -35,6 +35,7 @@ export class StrainPackagesComponent implements OnInit {
   @Input() priceForm     :         UntypedFormGroup;
   @Input() facility              = {} as IItemFacilitiyBasic
   @Input() facilityLicenseNumber : string;
+  @Input() saved: boolean;
   inventoryLocationID            : number ;
 
   get f():                UntypedFormGroup  { return this.packageForm as UntypedFormGroup};
@@ -243,7 +244,7 @@ export class StrainPackagesComponent implements OnInit {
 
     try {
       let totalInputQuantity =  0;
-      // if (unitsConverted?.unitConvertTo?.value) { 
+      // if (unitsConverted?.unitConvertTo?.value) {
         totalInputQuantity = this.jointWeight * this.inputQuantity * unitsConverted.unitConvertTo.value;
       // }
       console.log('Total Input Quantity', totalInputQuantity)
@@ -255,7 +256,7 @@ export class StrainPackagesComponent implements OnInit {
       }
       //  && this.jointWeight && this.jointWeight !=0
       if (usingJointsField) {
-        if (this.unitsConverted?.unitOutPutQuantity) { 
+        if (this.unitsConverted?.unitOutPutQuantity) {
           //now we can set the InputQuantity if the join Value exists, and if we are using joints.
           this.inputQuantity = Math.floor(this.unitsConverted?.unitOutPutQuantity / this.jointWeight)
           // console.log('usingJointsField outputUnitQuantity', this.inputQuantity)
@@ -285,6 +286,27 @@ export class StrainPackagesComponent implements OnInit {
   }
 
   getBaseUnitsRemaining() {
+  }
+
+  get isPackageReady() {
+    //
+    // const batchNumber = this.package.productionBatchNumber
+    // const batchNumber = this.package.packagedDate;
+
+    if (this.saved) {
+      const inv = this.packageForm.value as IInventoryAssignment
+      if ( inv.productionBatchNumber  ) {
+          return true;
+      }
+
+      if (inv.batchDate &&
+          inv.productionBatchNumber &&
+          inv.testDate) {
+            return true;
+          }
+      }
+
+    return false
   }
 
   initPackageConversion() {
@@ -488,7 +510,7 @@ export class StrainPackagesComponent implements OnInit {
     ))
   }
 
-  getPackageData() { 
+  getPackageData() {
     //we can get this from the form
     this.packageForm.value as IInventoryAssignment;
   }

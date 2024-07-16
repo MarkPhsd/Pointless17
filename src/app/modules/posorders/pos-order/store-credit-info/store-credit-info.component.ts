@@ -400,7 +400,7 @@ export class StoreCreditInfoComponent implements OnInit, AfterViewInit, OnDestro
 
   cancel(item: IPurchaseOrderItem) {
     if (item) {
-      this.orderMethodService.cancelItem(item.id, false)
+      this.orderMethodService.cancelItem(item.id, item.orderID,false)
       this.closeDialog.emit(true);
       return;
     }

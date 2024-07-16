@@ -81,7 +81,7 @@
       </span>
 
       <span style="margin-left:5px" *ngIf="totalAttributeDepartmentInventory >  0">
-        <button mat-raised-button color="primary" (click)="inventoryReview = !inventoryReview">
+        <button mat-raised-button color="primary" (click)="toggleInventoryReview()">
           <mat-icon>search</mat-icon>Toggle
         </button>
       </span>
@@ -190,7 +190,7 @@
                             ></ng-container>
               </div>
               <div>
-                {{item.name}}
+                {{item?.name}}
               </div>
             </button>
           </div>

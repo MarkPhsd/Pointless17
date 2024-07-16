@@ -11,7 +11,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
-import { DcapService,DcapRStream } from 'src/app/modules/payment-processing/services/dcap.service';
+import { DcapService,DcapRStream, DCAPPaymentResponse } from 'src/app/modules/payment-processing/services/dcap.service';
 import { LoggerService } from 'src/app/modules/payment-processing/services/logger.service';
 
 @Component({
@@ -22,9 +22,7 @@ import { LoggerService } from 'src/app/modules/payment-processing/services/logge
 export class DCAPTransactionComponent implements OnInit {
   resultMessage: any;
   textResponse: string;
-  get isDev() {
-    return this.siteService.isDev
-  }
+  get isDev() { return this.siteService.isDev  }
   action$: Observable<any>;
   processing$: Observable<any>;
   manual: boolean = false;
@@ -32,13 +30,15 @@ export class DCAPTransactionComponent implements OnInit {
   laneID: string;
   terminalSettings: ITerminalSettings;
   order: IPOSOrder;
-  message: string;
   dataPass: any;
   transactionType: string;
   tipValue: string;
+  message: string;
   processing: boolean;
   errorMessage: string;
   inputForm: UntypedFormGroup;
+  result: any;
+  response: DcapRStream;
   ui: TransactionUISettings
   dsiEmv : DSIEMVSettings
   amount: number;
@@ -47,8 +47,6 @@ export class DCAPTransactionComponent implements OnInit {
   uiSettings$: Observable<TransactionUISettings>;
   autoActionData: any;
   terminalSettings$: Observable<ITerminalSettings>;
-  result: any;
-  response: DcapRStream;
   saleComplete: boolean;
 
   constructor(
@@ -91,6 +89,10 @@ export class DCAPTransactionComponent implements OnInit {
       this.amount =  data?.value;
       this.autoActionData = data;
       this.manual = data?.manualPrompt;
+      if (!data?.manualPrompt) {
+        this.manual = false;
+      }
+
     }
 
       autoActions(data) {
@@ -101,7 +103,6 @@ export class DCAPTransactionComponent implements OnInit {
             return;
           }
           if (data?.value<0) {
-            console.log('auto Refund', data?.value )
             this.refundAmount();
             return;
           }
@@ -109,7 +110,6 @@ export class DCAPTransactionComponent implements OnInit {
 
         if (data?.autoAuth) {
           if (data?.value>0) {
-            // console.log('auto auth', data?.value )
             this.preAuth();
             return;
           }
@@ -165,9 +165,21 @@ export class DCAPTransactionComponent implements OnInit {
             const site = this.siteService.getAssignedSite()
             this.initMessaging()
             this.processing = true;
+            if (!this.manual) { this.manual = false}
+
+            if (this.dsiEmv.v2) {
+              const sale$ = this.dCapService.returnAmountV2(this.terminalSettings?.name , this.posPayment, this.manual);
+              this.processing$ = sale$.pipe(concatMap(data => {
+                this.result = data;
+                return this.processResultsV2(data)
+              }))
+              return
+            }
+
             const sale$ = this.dCapService.returnAmount(this.terminalSettings?.name , this.posPayment, this.manual);
             this.processing$ = sale$.pipe(switchMap(data => {
-              data.Authorize = (-(+data.Authorize)).toString()
+              data.authorize = (-(+data.authorize)).toString()
+              console.log('data',data?.authorize, data.Purchase)
               this.result = data;
               this.processing = false;
               return this.processResults(data)
@@ -198,6 +210,26 @@ export class DCAPTransactionComponent implements OnInit {
         }
       }
 
+      payAmountV2() {
+        if (!this.validateTransactionData()) { return }
+        if (this.terminalSettings) {
+          const device = this.terminalSettings.name;
+          const site = this.siteService.getAssignedSite()
+          this.initMessaging()
+          this.processing = true;
+          let sale$ = this.getPaymentManualChipv2().pipe(concatMap(data => {
+            this.posPayment = data?.payment;
+            this.result = data?.response;
+            if (!data?.success) {
+              this.response = data?.response;
+            }
+
+            return this.processResultsV2(data)
+          }))
+          this.processing$ = sale$
+        }
+      }
+
       payAmount() {
         if (!this.validateTransactionData()) { return }
         if (this.terminalSettings) {
@@ -205,13 +237,32 @@ export class DCAPTransactionComponent implements OnInit {
           const site = this.siteService.getAssignedSite()
           this.initMessaging()
           this.processing = true;
-          let sale$ = this.getPaymentManualChip().pipe(concatMap(data => {
+
+          if (this.dsiEmv.v2) {
+            this.processing$ = this.getPaymentManualChipv2().pipe(concatMap(data => {
+              this.result = data;
+              console.log('data', data)
+
+              return this.processResultsV2(data)
+            }))
+            return
+          }
+
+
+          this.processing$ = this.getPaymentManualChip().pipe(concatMap(data => {
             this.result = data;
             return this.processResults(data)
           }))
 
-          this.processing$ = sale$
         }
+      }
+
+      getPaymentManualChipv2() {
+        let sale$ = this.dCapService.payAmountV2(this.terminalSettings?.name , this.posPayment);
+        if (this.manual) {
+          sale$ = this.dCapService.payAmountManualV2(this.terminalSettings?.name , this.posPayment);
+        }
+        return sale$
       }
 
       getPaymentManualChip() {
@@ -222,9 +273,48 @@ export class DCAPTransactionComponent implements OnInit {
         return sale$
       }
 
+      processResultsV2(paymentResponse: DCAPPaymentResponse): Observable<any> {
+        if (!paymentResponse) {
+          this.loggerService.publishObject('Credit processResults No Response', paymentResponse)
+          this.processing = false;
+          this.message = 'Processing failed, reason unknown.';
+          return of(null);
+        }
+
+        if (paymentResponse?.success) {
+          const device = this.terminalSettings?.name;
+          this.order  = paymentResponse?.order;
+          this.posPayment = paymentResponse?.payment;
+
+          const item$ = this.paymentMethodsService.processDCAPResponseV2(
+                        this.posPayment,
+                        this.order);
+
+          return item$.pipe(concatMap( data => {
+              this.processing = false;
+              if (paymentResponse?.success) {
+                this.close();
+                return of(data);
+              }
+              if (!paymentResponse?.success) {
+                this.response = paymentResponse?.response;
+              }
+              return of(null);
+            }
+          ))
+        } else {
+          this.processing = false;
+          let message = paymentResponse?.errorMessage
+          message = `Result failed: reason: ${message} - ${paymentResponse?.response?.TextResponse} - ${paymentResponse?.response?.CaptureStatus}`
+          this.message = 'Processing failed, ' + message;
+          this.response = paymentResponse?.response;
+          return of(null)
+        }
+
+      }
+
       processResults(response: DcapRStream): Observable<any> {
         if (!response) {
-
           this.loggerService.publishObject('Credit processResults No Response', response)
           this.processing = false;
           this.message = 'Processing failed, reason unknown.';
@@ -245,6 +335,7 @@ export class DCAPTransactionComponent implements OnInit {
                 this.close();
                 return of(data);
               }
+
               return of(null);
             }
           ))

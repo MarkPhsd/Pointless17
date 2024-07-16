@@ -1812,7 +1812,6 @@ export class OrderMethodsService implements OnDestroy {
 
           if (data && data.result) {
             this.initItemProcess();
-
             return ;
           }
 
@@ -1820,7 +1819,7 @@ export class OrderMethodsService implements OnDestroy {
 
           if (!data || !data.result) {
             if (data.id){
-              this.cancelItem(data.id, false);
+              this.cancelItem(data.id, data?.orderID, false);
             }
             this.initItemProcess();
            }
@@ -1879,7 +1878,7 @@ export class OrderMethodsService implements OnDestroy {
         this.processItem.posItem = result.posItem
 
         if (!resultValue) {
-          this.cancelItem(posItem.id, false);
+          this.cancelItem(posItem.id, posItem.orderID, false);
           return
         }
         if (resultValue) {
@@ -1923,10 +1922,10 @@ export class OrderMethodsService implements OnDestroy {
     });
   }
 
-  cancelItem(id: number, notify : boolean ) {
+  cancelItem(id: number, orderID: number, notify : boolean ) {
     const site = this.siteService.getAssignedSite();
     if (id) {
-      this.posOrderItemService.deletePOSOrderItem(site, id).subscribe(result => {
+      this.posOrderItemService.deletePOSOrderItem(site, id, orderID).subscribe(result => {
         if (result && result.scanResult) {
         } else  {
 
@@ -1948,9 +1947,12 @@ export class OrderMethodsService implements OnDestroy {
     //   this.notifyEvent('Order not voided', 'Failed')
     //   return
     // }
+    // const confirm = window.confirm('Are you sure you want to do this action?')
+    // if (!confirm) { return }
+
     // const site = this.siteService.getAssignedSite();
-    // this.orderService.voidOrder(site, id).subscribe(
-    //   order => {
+    // return this.orderService.voidOrder(site, id).pipe(
+    //   switchMap( order => {
     //   if (order === 'Order Voided') {
     //     this.notifyEvent('Order Voided', 'Success')
     //     this.orderService.updateOrderSubscription(null)
@@ -1959,7 +1961,8 @@ export class OrderMethodsService implements OnDestroy {
     //   if (order != 'Order Voided') {
     //     this.notifyEvent('Order Voided', 'Success')
     //   }
-    // })
+    //   return of(Data)
+    // }))
   }
 
   deleteOrder(id: number, confirmed: boolean): Observable<any> {
@@ -2298,7 +2301,7 @@ export class OrderMethodsService implements OnDestroy {
 
         if (!data || !data.result) {
           if (data && data.id){
-            this.cancelItem(data.id, false);
+            this.cancelItem(data.id, data?.orderID, false);
           }
           this.updateProcess();
         }
@@ -2358,7 +2361,7 @@ export class OrderMethodsService implements OnDestroy {
 
       if (orderItem.id) {
         const orderID = orderItem.orderID
-        return  this.posOrderItemService.deletePOSOrderItem(site, orderItem.id).pipe(
+        return  this.posOrderItemService.deletePOSOrderItem(site, orderItem.id, orderItem.orderID).pipe(
           switchMap( data => {
           if (data) {
             this.order.posOrderItems.splice(index, 1)
@@ -2390,7 +2393,7 @@ export class OrderMethodsService implements OnDestroy {
 
       if (orderItem.id) {
         const orderID = orderItem.orderID
-        this.posOrderItemService.deletePOSOrderItem(site, orderItem.id).subscribe(
+        this.posOrderItemService.deletePOSOrderItem(site, orderItem?.id, orderItem?.orderID).subscribe(
          { next:  item => {
             if (item) {
               this.order.posOrderItems.splice(index, 1)

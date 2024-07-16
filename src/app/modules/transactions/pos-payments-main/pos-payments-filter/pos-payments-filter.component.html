@@ -5,13 +5,37 @@
     </div>
 
     <div class="keypad">
-      <app-key-pad
-        [inputForm]     ="searchForm"
-        [inputTypeValue]="'text'"
-        (outPutValue)   ="refreshPaymentSearch($event)">
-        Enter Number
-      </app-key-pad>
-  </div>
+      <div>
+        <ng-container [ngTemplateOutlet]="fields"></ng-container>
+      </div>
+    </div>
+
+    <ng-template #fields>
+      <div class="grid-items">
+        <app-value-fields
+              [inputForm]="searchForm"
+              [fieldName]="'cardNum'" >
+          Card Num
+        </app-value-fields>
+        <app-value-fields
+              [inputForm]="searchForm"
+              [fieldName]="'amount'" >
+          Amount
+        </app-value-fields>
+      </div>
+      <div class="grid-items">
+        <app-value-fields
+              [inputForm]="searchForm"
+              [fieldName]="'authNo'" >
+          Auth
+        </app-value-fields>
+        <app-value-fields
+              [inputForm]="searchForm"
+              [fieldName]="'invoiceNo'" >
+          Invoice NO
+        </app-value-fields>
+      </div>
+    </ng-template>
 
     <div class="fields">
       <mat-date-range

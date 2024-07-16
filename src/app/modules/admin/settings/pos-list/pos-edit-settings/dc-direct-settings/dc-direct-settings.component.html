@@ -1,10 +1,24 @@
 <div *ngIf="(action$ | async) as action"></div>
 <mat-card  *ngIf="isDSIEnabled && dsiEMVSettings  && terminal"
           [formGroup]="dsiEMVSettings">
+
+  <mat-card>
+    <div *ngIf="getPaxInfo">
+      <button  color="warn"  mat-raised-button (click)="paramDownload()">Param Download</button>
+    </div>
+  </mat-card>
   <mat-card-subtitle>
     <h4>DC Direct Processing</h4>
     <button mat-raised-button (click)="getDcapAndroidDeviceList()">
       <mat-icon>android</mat-icon>Device list</button>
+      <div *ngIF="(processing$ | async) as process"></div>
+      <div tyle="font-size:1.1em;font-weight:400">
+      <app-dcapresponse-message [errorMessage]="errorMessage"
+        [message]="message"
+        [response]="response"
+        [resultMessage]="resultMessage">
+      </app-dcapresponse-message>
+    </div>
   </mat-card-subtitle>
 
   <div class="grid-container">
@@ -116,6 +130,18 @@
         </div>
         <div>Enabled on each device.</div>
       </div>
+
+
+      <div class="toggle-fields">
+        <div>
+          <mat-slide-toggle
+                formControlName="v2">
+            <mat-label>V2</mat-label>
+          </mat-slide-toggle>
+        </div>
+        <div>Version 2</div>
+      </div>
+
 
       <div class="toggle-fields">
         <div>

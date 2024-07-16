@@ -312,6 +312,14 @@ export class FbProductsService {
       }
     }
 
+    isTareItem(itemType: IItemType | ItemType) {
+      if (itemType && itemType.weightedItem) {
+        return true;
+      }
+      if (itemType && itemType.name === 'Tare Value') {
+        return true;
+      }
+    }
 
     isDiscount(itemType: IItemType | ItemType) {
 

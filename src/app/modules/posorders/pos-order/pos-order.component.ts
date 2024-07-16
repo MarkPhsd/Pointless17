@@ -976,10 +976,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   deleteOrder(event) {
-    if (!this.userAuths.deleteOrder) {
+    if (!this.userAuths?.deleteOrder) {
       this.siteService.notify("Delete order is not allowed", 'Close', 3000, 'red')
     }
-    if (this.userAuths.deleteOrder) {
+    if (this.userAuths?.deleteOrder) {
       this.deleteOrder$ = this.orderMethodsService.deleteOrder(this.order.id, false).pipe(switchMap(data => {
         return of(data)
       }))

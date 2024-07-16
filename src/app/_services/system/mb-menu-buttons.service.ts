@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { ISite } from 'src/app/_interfaces';
 import { AuthenticationService } from '..';
-import { SitesService } from '../reporting/sites.service';
 
 export interface IMenuButtonGroups {
   id: number
@@ -53,6 +52,8 @@ export class MBMenuButtonsService {
     {id: 4, name:'EmailOrder', icon: '', function: 'emailOrder',group: 'order'},
     {id: 5, name:'TextOrder', icon: '', function: 'textOrder',group: 'order'},
     {id: 5, name:'QRLink', icon: '', function: 'qrLink',group: 'order'},
+    {id: 5, name:'Void Order', icon: '', function: 'voidOrder',group: 'order'},
+    {id: 5, name:'Print Labels', icon: '', function: 'printLabels',group: 'order'},
   ]
 //
   constructor(
@@ -61,6 +62,31 @@ export class MBMenuButtonsService {
     private auth: AuthenticationService,
    )
 { }
+
+private parseProperties(properties: string): IMenuButtonProperties {
+  return JSON.parse(properties);
+}
+
+filterMenuButtons(menuButtons: mb_MenuButton[]): mb_MenuButton[] {
+  const filteredButtons = new Map<string, mb_MenuButton>();
+
+  menuButtons.forEach(button => {
+    const properties: IMenuButtonProperties = this.parseProperties(button.properties);
+
+    if (!filteredButtons.has(button.name)) {
+      filteredButtons.set(button.name, button);
+    } else {
+      const existingButton = filteredButtons.get(button.name);
+      const existingProperties = this.parseProperties(existingButton!.properties);
+
+      if (properties.method && !existingProperties.method) {
+        filteredButtons.set(button.name, button);
+      }
+    }
+  });
+
+  return Array.from(filteredButtons.values());
+}
 
   getGroups(site: ISite): Observable<IMenuButtonGroups[]> {
 

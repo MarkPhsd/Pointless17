@@ -314,8 +314,8 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
       {headerName: 'Completed', field: 'completionDate',     sortable: true,
                   cellRenderer: this.agGridService.dateCellRendererUSD,
                   width   : 150,
-                  minWidth: 150,
-                  maxWidth: 150,
+                  minWidth: 175,
+                  maxWidth: 175,
                   flex: 2,
       },
       {headerName: 'Employee',   field: 'employeeName',       sortable: true,
@@ -346,12 +346,27 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
               maxWidth: 100,
               // flex: 2,
       },
+      {headerName: 'CardNum', field: 'cardNum', sortable: true,
+              cellRenderer: this.agGridService.getRightFourRenderer,
+              width   : 100,
+              minWidth: 100,
+              maxWidth: 100,
+              // flex: 2,
+      },
       {headerName: 'Auth', field: 'preAuth', sortable: true,
             width   : 100,
             minWidth: 100,
             maxWidth: 100,
             // flex: 2,
       },
+      {headerName: 'VoidAmount', field: 'voidAmount', sortable: true,
+        width   : 100,
+        minWidth: 100,
+        maxWidth: 100,
+        // flex: 2,
+      },
+      //       .VoidReason = items.VoidReason,
+      // .VoidAmount = items.VoidAmount,
       {headerName: 'Group', field: 'groupNumber', sortable: true,
             width   : 65,
             minWidth: 65,
@@ -388,6 +403,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
       this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
     }
   }
+
 
   listAll(){
     const control = this.itemName
@@ -687,9 +703,6 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   async editItemWithId(payment:any) {
     if(!payment) { return }
     if (payment && payment.rowData) {  payment = payment.rowData;}
-
-    // console.log('editItemWithId', payment)
-
     this.pOSPaymentService.updatePaymentSubscription(payment)
     this._bottomSheet.open(PosPaymentEditComponent);
   }

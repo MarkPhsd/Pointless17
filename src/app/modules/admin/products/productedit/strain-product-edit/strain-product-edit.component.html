@@ -36,9 +36,10 @@
             ></app-edit-buttons-standard>
           </div>
 
-        <app-activity-toggles
+          <app-activity-toggles
               [inputForm]="productForm">
           </app-activity-toggles>
+
           <ng-container [ngTemplateOutlet]="managerProtectedToggle"></ng-container>
         </div>
 
@@ -462,7 +463,13 @@
 
 <ng-template #tareValueView>
 
-  <div *ngIf="fbProductsService.isStoreCredit(itemType) && !fbProductsService.isCannabis(itemType)">
+  <div *ngIf="  ( fbProductsService.isStoreCredit(itemType) ||
+                  fbProductsService.isTareItem(itemType) ||
+                  fbProductsService.isRetail(itemType)  ||
+                  fbProductsService.isModifier(itemType)  ||
+                  fbProductsService.isWeightedItem(itemType)
+                )
+              && !fbProductsService.isCannabis(itemType)">
     <app-value-fields
         [inputForm]="jsonForm"
         [fieldName]="'tareValue'">

@@ -45,31 +45,29 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   facility:                  any;
   images  : string;
   itemTags: string;
-
+  color: string;
   _userAuths: Subscription;
   userAuths: IUserAuth_Properties;
 
   action$: Observable<any>;
-
   uiHome: UIHomePageSettings;
   _uiHome: Subscription;
   updatingForm: boolean;
   costTotal: number;
   formCostTotal: UntypedFormGroup;
+
   getUITransactionsSettings() {
     this._uiHome = this.uiSettingsService.homePageSetting$.subscribe( data => {
       if (data) {
         this.uiHome = data;
       }
     });
-
   }
 
   userAuthSubscriber() {
     this._userAuths = this.authenticationService.userAuths$.subscribe(data => {
       if (data) {
         this.userAuths = data;
-        // this.
       }
     })
   }
@@ -116,19 +114,15 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   }
 
   get isCannabis() {
-
     if (!this.menuItem) { return }
     if (!this.menuItem.itemType) { return }
     if (!this.menuItem?.itemType?.useGroups) { return };
-
     if (this.menuItem?.itemType?.useGroups?.name.toLowerCase() === 'cannabis') {
       return true
     }
-
     if (this.menuItem?.itemType?.useGroups?.name.toLowerCase() === 'med-cannabis') {
       return true
     }
-
   }
 
   ngOnDestroy() {
@@ -157,7 +151,6 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
         return  this.menuService.getMenuItemByID(this.site, data.productID)
       }
     )).subscribe(data => {
-      // console.log('menu item', data)
       this.menuItem = data;
     })
 
@@ -172,7 +165,6 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   }
 
   updateCost(event) {
-    // console.log('cost total', this.costTotal, this.item);
     if (this.costTotal) {
       if (this.item.packageCountRemaining && this.item.packageCountRemaining != 0){
         const value = this.costTotal / this.item.packageCountRemaining
@@ -185,16 +177,14 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     this.item      = data
     this.images    = data?.images;
     this.itemTags  = data.metaTags;
+    this.color     = data?.color;
     this.inputForm = this.fbInventory.initForm(this.inputForm)
     this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
-
     this.subscribeToFormChanges()
   }
 
   subscribeToFormChanges() {
-    // Subscribe to changes on formCostTotal
     if (this.formCostTotal) {
-      // console.log('subscribe cost total')
       this.formCostTotal.valueChanges.subscribe(data => {
         if (!this.updatingForm) {
           this.updatingForm = true; // Set flag to true to indicate programmatic update
@@ -205,8 +195,6 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     }
 
     if (this.inputForm) {
-      // Subscribe to changes on inputForm
-      // console.log('subscribe input form')
       this.inputForm.valueChanges.subscribe(data => {
         if (!this.updatingForm) {
           this.updatingForm = true; // Set flag to true to indicate programmatic update
@@ -231,43 +219,6 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     }
   }
 
-
-  // setCost() {
-  //   if (this.formCostTotal.value && this.item.packageQuantity) {
-  //     const value = this.formCostTotal.value.costTotal / this.item.packageQuantity;
-  //     this.inputForm.patchValue({cost: value})
-  //   }
-  // }
-  // getTotalCost() {
-  //   if (this.inputForm.value.cost && this.item.packageQuantity) {
-  //     const value = this.inputForm.value.cost * this.item.packageQuantity;
-  //     this.formCostTotal.patchValue({costTotal: value})
-  //   }
-  // }
-
-
-    // this.formCostTotal.valueChanges.subscribe(data => {
-    //   console.log('data',this.formCostTotal.value.costTotal , value)
-    //   if (value && this.formCostTotal.value.costTotal == this.costTotal) {
-    //     console.log('value', value)
-    //     return;
-    //   }
-    //   if (this.costTotal == this.formCostTotal.value.costTotal ) {
-    //     console.log( 'same values', this.costTotal, this.formCostTotal.value.costTotal, )
-    //     const value = this.formCostTotal.value.costTotal / this.item.packageQuantity;
-    //     this.inputForm.patchValue({cost: value})
-    //     return ;
-    //   }
-    //   this.costTotal =  this.formCostTotal.value.costTotal
-    //   if (this.formCostTotal.value && this.item.packageQuantity) {
-    //     const value = this.formCostTotal.value.costTotal / this.item.packageQuantity;
-    //     this.inputForm.patchValue({cost: value})
-    //   }
-    // })
-
-
-
-
   setLocation(selection) {
     if (this.locations){
       const item = this.locations.filter( data => { return data.id === selection?.value } )
@@ -285,7 +236,7 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     const product = event
     if (product && this.item) {
       if (product.id) {
-        this.menuService.getMenuItemByID(this.site, product.id).subscribe(data => {
+        this.menuService.getMenuItemByID(this.site, product?.id).subscribe(data => {
           this.item.productID   = data.id;
           this.item.productName = data.name;
           this.inputForm.patchValue(this.item)
@@ -315,34 +266,33 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   }
 
   updateWithoutNotification(): Observable<IInventoryAssignment> {
-    this.item   = this.fbInventory.setItemValues(this.item, this.inputForm)
+
+    this.item       = this.fbInventory.setItemValues(this.item, this.inputForm)
     return this._updateWithoutNotification(this.item)
   }
 
   _updateWithoutNotification(item: IInventoryAssignment) {
     this.saving = true;
-
     if (!item) {
       this.notifyEvent('error no item', 'result')
       return of(null)
     }
-
+    this.item.color = this.color;
+    // console.log('item.color', item.color, this.color)
     let poItem$ = of({} as PosOrderItem )
     const site = this.siteService.getAssignedSite()
     if (this.item.poDetailID && this.item.poDetailID != 0) {
       poItem$ = this.posOrderItemService.getPOSOrderItem(site, this.item.poDetailID)
     }
 
-    return this.inventoryAssignmentService.editInventory(this.site, item.id, item).pipe(switchMap(data => {
+    return this.inventoryAssignmentService.editInventory(this.site, item?.id, item).pipe(switchMap(data => {
       if (data) {
         this.item = data;
-        let posItem = {} as PosOrderItem
-        if (!this.item?.cost) {
-          this.item.cost = 0
-        }
-        posItem.inventoryAssignmentID = data.id
+        let posItem = {} as PosOrderItem;
+        if (!this.item?.cost) {   this.item.cost = 0  }
+        posItem.inventoryAssignmentID = data.id;
         posItem.wholeSale = this.item?.cost;
-        posItem.wholeSaleCost = this.item?.cost
+        posItem.wholeSaleCost = this.item?.cost;
         return this.posOrderItemService.changeItemCost(site, posItem )
       }
       return of(data)
@@ -350,7 +300,6 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
       this.saving = false
       return of(this.item)
     }))
-
   }
 
   updateItemExit(event) {
@@ -379,7 +328,6 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
           }
           this.notifyEvent(JSON.stringify(data), 'Result')
           return
-
         },
         error: catchError => {
           this.notifyEvent('Item did not delete. ', 'Failed')

@@ -12,8 +12,8 @@
 </div>
 
 <div *ngIf="(posDevice$ | async) as device"></div>
-<!-- sidebarMode{{sidebarMode}} -->
-<mat-drawer-container>
+
+<mat-drawer-container [class]="getMatDrawerContainerClass">
 
   <mat-drawer
         *ngIf    ="!menuManager"
@@ -38,41 +38,40 @@
     <ng-container #chatURL></ng-container>
   </mat-drawer>
 
-  <mat-drawer-content [style]='overFlow'  [id]="scrollStyle">
+  <mat-drawer-content
+           [class]="getMatDrawerContentClass"
+           [style]='overFlow'
+           [id]="scrollStyle">
 
-    <div *ngIf="departmentID && departmentID !=0"
-        class="overlay">
+    <div *ngIf="departmentID && departmentID != 0"
+         class="overlay">
       <app-department-menu
         [departmentID]="departmentID">
       </app-department-menu>
     </div>
 
-    <!--  [@routeAnimations]="prepareRoute(outlet)" -->
-    <div  >
+    <div>
       <router-outlet #outlet="outlet"></router-outlet>
     </div>
 
   </mat-drawer-content>
 
-  <mat-drawer
-              position  = "end"
-              [mode]    = "sidebarMode"
-              [opened]  = "rightSideBarToggle" >
+  <mat-drawer  position  = "end"
+               [mode]    = "sidebarMode"
+               [opened]  = "rightSideBarToggle" >
     <ng-container [ngTemplateOutlet]="rightSideBar"></ng-container>
   </mat-drawer>
 </mat-drawer-container>
 
 <app-footer></app-footer>
-
 <ng-container [ngTemplateOutlet]="appSiteFooterOn"></ng-container>
-
 <ng-template #appSiteFooter>
   <app-site-footer></app-site-footer>
 </ng-template>
 
 <div   *ngIf="(homePageSetting$ | async) as setting">
   <div class="fab-chat-button"
-       *ngIf="setting.threecxChatLink">
+       *ngIf="setting?.threecxChatLink">
     <app-three-cxfab></app-three-cxfab>
   </div>
 </div>

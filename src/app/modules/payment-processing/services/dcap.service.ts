@@ -1,10 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPOSPayment } from 'src/app/_interfaces';
-import { CmdResponse } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { IPOSOrder, IPOSPayment, OperationWithAction } from 'src/app/_interfaces';
+import { CmdResponse, TranResponse } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
+export  interface refundResponse  {
+  errorMessage: string;
+  payment : IPOSPayment;
+  order: IPOSOrder;
+  response : TranResponse;
+}
+export  interface DCAPPaymentResponse  {
+  errorMessage: string;
+  payment : IPOSPayment;
+  response : TranResponse;
+  order: IPOSOrder;
+  success: boolean;
+}
 export interface DCAPAndroidRStream {
   CmdResponse: {
     ResponseOrigin: string;
@@ -105,7 +118,7 @@ export interface   DcapRStream {
   SurchargeWithLookup?: string;
   CashBack?: string;
   Tax?: string;
-  Authorize?: string;
+  authorize?: string;
   CardholderName?: string;
   AcqRefData?: string;
   PostProcess?: string;
@@ -137,6 +150,19 @@ export class DcapService {
               private siteService: SitesService
               ) { }
 
+  adustByRecordNoV2(device: string, payment: IPOSPayment, amount: number) : Observable<DCAPPaymentResponse>{
+
+    const controller = '/dCap/'
+
+    const endPoint = "AdjustByRecordNoV2"
+
+    const parameters = `?deviceName=${device}&gratuity=${amount}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<DCAPPaymentResponse>(url, payment)
+  }
+
   adustByRecordNo(device: string, payment: IPOSPayment, amount: number) {
 
     const controller = '/dCap/'
@@ -150,6 +176,46 @@ export class DcapService {
     return this.http.post<any>(url, payment)
   }
 
+  voidByRecordNumber(name: string, id: number) {
+
+    const controller = '/dCap/'
+
+    const endPoint = "voidByRecordNumber"
+
+    const parameters = `?deviceName=${name}&id=${id}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<refundResponse>(url)
+  }
+
+
+  voidSaleByInvoiceNo(name: string, id: number) {
+
+    const controller = '/dCap/'
+
+    const endPoint = "VoidByInvoiceNo"
+
+    const parameters = `?deviceName=${name}&id=${id}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<refundResponse>(url)
+  }
+
+
+  refundByRecordNo(name: string, history: boolean, id: number, removeTipOnly): Observable<refundResponse> {
+
+    const controller = '/dCap/'
+
+    const endPoint = "RefundByRecordNo"
+
+    const parameters = `?deviceName=${name}&history=${history}&id=${id}&removeTipOnly=${removeTipOnly}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<refundResponse>(url)
+  }
 
   batchClose(device: string) : Observable<any> {
 
@@ -218,6 +284,19 @@ export class DcapService {
     return this.http.post<any>(url, posPayment)
   }
 
+  payAmountV2(deviceName: string, posPayment: IPOSPayment): Observable<DCAPPaymentResponse> {
+
+    const controller = '/dCap/'
+
+    const endPoint = "payAmountv2"
+
+    const parameters = `?deviceName=${deviceName}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, posPayment)
+  }
+
   payAmountManual(deviceName: string, posPayment: IPOSPayment): Observable<any> {
 
     const controller = '/dCap/'
@@ -229,6 +308,45 @@ export class DcapService {
     const url = `${this.site.url}${controller}${endPoint}${parameters}`
 
     return this.http.post<any>(url, posPayment)
+  }
+
+  payAmountManualV2(deviceName: string, posPayment: IPOSPayment): Observable<DCAPPaymentResponse> {
+
+    const controller = '/dCap/'
+
+    const endPoint = "payAmountManualV2"
+
+    const parameters = `?deviceName=${deviceName}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, posPayment)
+  }
+
+  returnAmountV2(deviceName: string, posPayment: IPOSPayment, manual: boolean): Observable<DCAPPaymentResponse> {
+
+    const controller = '/dCap/'
+
+    const endPoint = "RefundAmountV2"
+
+    const parameters = `?deviceName=${deviceName}&manual=${manual}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<DCAPPaymentResponse>(url, posPayment)
+  }
+
+  voidSaleByRecordNoV2(action: OperationWithAction): Observable<DCAPPaymentResponse> {
+
+    const controller = '/dCap/'
+
+    const endPoint = "VoidByRecordNumberV2"
+
+    const parameters = ``
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<DCAPPaymentResponse>(url, action)
   }
 
   voidSaleByRecordNo(deviceName: string, id: number, device): Observable<any> {

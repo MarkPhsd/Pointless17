@@ -20,6 +20,7 @@ export class SortSelectorsComponent implements OnInit {
   @Input() sortByService: boolean;
   @Input() sortByMethod : boolean;
   @Input() sortBySheetID: boolean;
+  @Input() completionDate: boolean;
   @Input() searchType: string;
 
   @Input() productSort : boolean;
@@ -32,7 +33,7 @@ export class SortSelectorsComponent implements OnInit {
   _searchModel: Subscription;
   // list = []
 
-  list = ['Employee', 'ServiceType', 'Amount', 'Item','SheetID']; // Assuming these are your options
+  list = ['Employee', 'ServiceType', 'Amount', 'Item','SheetID', 'CompletionDate']; // Assuming these are your options
   initialList = [...this.list]; // Keep a copy of the initial list for resetting purposes
   ascDesc =  [ 'Ascending', 'Descending']
 
@@ -62,6 +63,9 @@ export class SortSelectorsComponent implements OnInit {
     }
     if (this.sortBySheetID) {
       this.list.push('SheetID')
+    }
+    if (this.completionDate) {
+      this.list.push('CompletionDate')
     }
     this.initialList = [...this.list]
     return this.list

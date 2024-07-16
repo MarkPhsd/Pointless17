@@ -1,6 +1,6 @@
 @import "/src/mixins.scss";
 
-mat-card {
+.mat-card {
   width     : 100%;
   // min-width : 335px;
   // max-width : 335px;
@@ -134,7 +134,7 @@ body {
   max-width: 85px;
 }
 
-.payment-button-balance { 
+.payment-button-balance {
   height: 65px;
   width: 125px;
   margin: 5px;
@@ -167,8 +167,8 @@ body {
 
 }
 
-mat-card-content {
-  max-height: 200px;
+.mat-card-content {
+  max-height: 300px;
   overflow-y: auto;
   @include for-phone-only  {
     max-height: 100%;

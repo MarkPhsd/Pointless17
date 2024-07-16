@@ -21,7 +21,15 @@
       <div>
         <h4>
           <span  *ngIf="!isOrderClaimed && order.id" > <mat-icon color="warn">lock</mat-icon>
-          </span> Order {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
+          </span> 
+
+          <span *ngIf="!order.history">
+            Order {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
+          </span>
+          <span *ngIf="order.history">
+            Order {{order?.purchaseOrderNumber | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
+          </span>
+          
           <span #coachingRefresh *ngIf="isApp || isUserStaff">
             <button mat-button (click)='refreshOrder()'><mat-icon>refresh</mat-icon></button>
           </span>
@@ -53,9 +61,10 @@
           </div>
           <div style="margin-left:3px" class="button-row-55">
             <ng-container [ngTemplateOutlet]="editOrderView"></ng-container>
-            <div *ngIf="(menuButtonList$ | async) as list">
+            <div *ngIf="(menuButtonList$ | async) as menuButtonList"></div>
+            <div *ngIf="menuButtonList">
               <function-buttons-list
-                    [list]="list"
+                    [list]="menuButtonList"
                     [order]="order"
                     [isAdmin]="isAdmin"
                     [isUser] ="isUserStaff"
@@ -63,6 +72,7 @@
                     [isStaff]="isStaff">
               </function-buttons-list>
             </div>
+           
           </div>
         </span>
 

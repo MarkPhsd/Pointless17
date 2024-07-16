@@ -203,6 +203,7 @@ export interface BalanceSheetSearchModel {
   greaterThanZero:     number;
   id:                  number;
   type          :     number;
+  reportRunID :     number;
   zRunID: number;
 }
 

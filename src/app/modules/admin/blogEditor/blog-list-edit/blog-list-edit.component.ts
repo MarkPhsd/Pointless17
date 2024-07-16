@@ -6,10 +6,6 @@ import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/o
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-// import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-// import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -139,9 +135,22 @@ export class BlogListEditComponent implements OnInit {
 
     // cellRenderer: this.agGridService.currencyCellRendererUSD,
     this.columnDefs =  [
+
+      {headerName: 'Edit',  field: 'id',
+        cellRenderer: "btnCellRenderer",
+        cellRendererParams: {
+          onClick: this.editProductFromGrid.bind(this),
+          label: 'Edit',
+          getLabelFunction: this.getLabel.bind(this),
+          btnClass: 'btn btn-primary btn-sm'
+        },
+        minWidth: 125,
+        maxWidth: 125,
+        flex: 2,
+      },
       {
       field: 'id',
-      cellRenderer: "btnCellRenderer",
+      cellRenderer:   "btnCellRenderer",
                       cellRendererParams: {
                         cellRenderer: this.buttoncellrender,
                         onClick: this.editProductFromGrid.bind(this),

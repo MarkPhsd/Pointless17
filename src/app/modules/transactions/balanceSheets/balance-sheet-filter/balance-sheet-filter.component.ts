@@ -219,6 +219,7 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
     this.searchModel.balanceSheetStatus =  parseInt(this.toggleOpenClosedAll)
     this.searchModel.pageNumber = 1;
     this.searchModel.pageSize   = 25;
+    this.searchModel.reportRunID = 0;
     this.employees$      = this.employeeService.getAllActiveEmployees(site)
     this.initSearchForm();
     this.initDateForm()

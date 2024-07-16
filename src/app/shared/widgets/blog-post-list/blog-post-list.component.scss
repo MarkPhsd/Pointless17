@@ -1,8 +1,12 @@
 .container {
-margin: 0px;
+  margin: 0px;
   // padding: 10px;
   background-color: rgb(74, 104, 148);
   color: rgb(74, 104, 148);
+}
+
+.mat-card {
+  padding: 2px;
 }
 
 .grid-view {
@@ -12,7 +16,7 @@ margin: 0px;
   overflow-y: auto;
   overflow-x: hidden;
   // margin: 10px;
-  padding: 15px;
+  // padding: 15px;
   padding-left: 20px;
   padding-right: 20px;
   // min-height: 300px;
@@ -23,7 +27,7 @@ margin: 0px;
   // border-radius: 10px;
 }
 
-.footer-cards { 
+.footer-cards {
   overflow-y: auto;
 }
 
@@ -42,6 +46,6 @@ margin: 0px;
   padding: 5px;
 }
 
-li { 
+li {
   padding: 5px;
 }

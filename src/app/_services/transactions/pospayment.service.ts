@@ -31,8 +31,8 @@ export class POSPaymentService {
     this._searchModel.next(searchModel);
   }
 
-  updatePaymentSubscription(order: IPOSPayment) {
-    this._currentPayment.next(order);
+  updatePaymentSubscription(item: IPOSPayment) {
+    this._currentPayment.next(item);
   }
 
   updateItemWithAction(item: OperationWithAction ) {
@@ -164,6 +164,17 @@ export class POSPaymentService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<IPOSPayment>(url);
+  }
+  putPOSPaymentHistory(site: ISite, payment: IPOSPayment): Observable<IPOSPayment> {
+    const controller = '/POSPayments/'
+
+    const endPoint  = 'putPOSPaymentHistory'
+
+    const parameters = `?id=${payment.id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.put<IPOSPayment>(url, payment);
   }
 
   putPOSPayment(site: ISite, payment: IPOSPayment): Observable<IPOSPayment> {
@@ -338,6 +349,7 @@ export class POSPaymentService {
             endDate:             [], //string
             surchargeAmount     :[],
             orderID:              [],
+            recordNo:              [],
           }
         )
         return fb

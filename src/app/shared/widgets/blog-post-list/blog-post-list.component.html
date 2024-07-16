@@ -1,17 +1,10 @@
-<!-- <div *ngIf="(styles$ | async) as styles"></div> -->
 
   <ng-container [ngTemplateOutlet]="blogView"></ng-container>
-
-  <ng-template #loading>
-    <div>
-      <mat-spinner [diameter]="50"></mat-spinner>
-    </div>
-  </ng-template>
 
   <ng-template #gridView>
 
     <div class="grid-view" *ngIf="(blogs$ | async) as blogs">
-      <mat-card>
+      <mat-card class="mat-card">
         <div  *ngFor="let item of blogs">
           <mat-card [class]="class" [style.height]="height" >
             <mat-card-title>
@@ -28,7 +21,7 @@
   <ng-template #listView>
 
     <div *ngIf="(blogs$ | async) as blogs">
-      <mat-card>
+      <mat-card class="mat-card">
         <ul class="list-view" *ngFor="let item of blogs">
           <li [innerHtml]="item[0]?.content?.rendered"></li>
         </ul>
@@ -37,4 +30,8 @@
 
   </ng-template>
 
-
+  <ng-template #loading>
+    <div>
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+  </ng-template>

@@ -109,6 +109,7 @@ export interface OrderItemHistory {
     itemTypeId?: number | null;
     traceOrderDate: string | null;
     cashDiscountValue: number | null;
+    color: string | null;
 }
 
 export interface OrderItemHistorySearch  {
@@ -863,13 +864,13 @@ export class POSOrderItemService {
   }
 
 
-  deletePOSOrderItem(site: ISite, id: number): Observable<ItemPostResults> {
+  deletePOSOrderItem(site: ISite, id: number, orderID: number): Observable<ItemPostResults> {
 
     const controller = "/POSOrderItems/"
 
-    const endPoint = "DeleteItem"
+    const endPoint = "DeleteItemv2"
 
-    const parameters = `?id=${id}`
+    const parameters = `?id=${id}&orderID=${orderID}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 

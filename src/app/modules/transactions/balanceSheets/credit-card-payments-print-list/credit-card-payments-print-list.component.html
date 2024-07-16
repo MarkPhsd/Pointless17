@@ -17,13 +17,13 @@
     </div>
 
     <div class="grid-summary-3-column">
-      <div> {{list.summary?.amountPaid | currency}}</div>
-      <div>{{list.summary?.tipAmount | currency}}</div>
-      <div>{{list.summary?.amountPaid + list.summary?.tipAmount | currency}}</div>
+      <div> {{list?.summary?.amountPaid | currency}}</div>
+      <div>{{list?.summary?.tipAmount | currency}}</div>
+      <div>{{list?.summary?.amountPaid + list?.summary?.tipAmount | currency}}</div>
     </div>
   </div>
 
-  <div *ngIf="!groupType && list && list.results.length >0">
+  <div *ngIf="!groupType && list && list.results && list.results.length >0">
     <div class="grid-items-payments">
       <div>#</div>
       <div>Order </div>
@@ -33,10 +33,10 @@
       <div class="item-value">Grat</div>
     </div>
 
-    <div *ngFor="let item of list.results; let i = index"
+    <div *ngFor="let item of list?.results; let i = index"
           class="grid-items-payments">
       <div>{{i+1}}</div>
-      <div *ngIf="item.orderID">{{item?.orderID.toString().substr(-5)}}</div>
+      <div *ngIf="item?.orderID">{{item?.orderID.toString().substr(-5)}}</div>
       <div>{{item?.completionDate | date: 'shortDate' }} {{item?.completionDate | date: 'shortTime' }}</div>
       <div>{{item?.paymentMethod?.name}}</div>
       <div class="item-value">{{item?.amountPaid | currency}}</div>
@@ -56,9 +56,9 @@
     </div>
 
     <div class="grid-summary-3-column">
-      <div>{{list.summary?.amountPaid | currency}}</div>
-      <div>{{list.summary?.tipAmount | currency}}</div>
-      <div>{{list.summary?.amountPaid + list.summary?.tipAmount | currency}}</div>
+      <div>{{list?.summary?.amountPaid | currency}}</div>
+      <div>{{list?.summary?.tipAmount | currency}}</div>
+      <div>{{list?.summary?.amountPaid + list.summary?.tipAmount | currency}}</div>
     </div>
   </div>
 </div>

@@ -91,11 +91,11 @@ export class RequestMessagesComponent implements OnInit {
     const search   = {}   as IRequestMessageSearchModel;
     search.orderID = this.orderID;
     this.archiveAllMessagesVisible = false
-    
+
     const messages$ = this.requestMessageService.getOpenRequestMessagesByOrder(site, search);
     this.messages$ = messages$.pipe(switchMap(data => {
-      
-      if (data && data.length>0) { 
+
+      if (data && data.length>0) {
         this.archiveAllMessagesVisible = true
       }
       return of(data)
@@ -185,21 +185,21 @@ export class RequestMessagesComponent implements OnInit {
     }))
   }
 
-  archiveAll() { 
+  archiveAll() {
     const site = this.siteService.getAssignedSite()
-    this.action$ = this.requestMessageService.archiveMessageVoids(site).pipe(switchMap(data => { 
+    this.action$ = this.requestMessageService.archiveMessageVoids(site).pipe(switchMap(data => {
       this.refreshOrderMessages()
       return of(data)
     }))
   }
 
   processMessages(list:IRequestMessage[]): Observable<IRequestMessage[]> {
- 
+
     if (!list) { return of(null)}
 
     let messages = [... list];
     //filter out the
- 
+
     const filteredMessages = messages.filter(data => !data?.archived && data?.subject === 'Printing');
     // console.log('request messages', filteredMessages)
 

@@ -75,7 +75,14 @@ constructor(
     try {
       if (!this.menuButtonGroup) { return }
       const group = this.inputForm.value as IMenuButtonGroups
-      const group$ = this.menusService.putGroup(site, group);
+
+      let groupItems = group.mb_MenuButtons
+      const list  = this.menusService.filterMenuButtons(this.menuButtonGroup.mb_MenuButtons)
+
+      let newGroup = group
+      newGroup.mb_MenuButtons = list;
+
+      const group$ = this.menusService.putGroup(site, newGroup);
       group$.subscribe( data => {
         this.refreshButtons(null)
       })
@@ -147,27 +154,6 @@ constructor(
     const site       =  this.siteService.getAssignedSite();
     const result = window.confirm('Do you want to reset the menu?')
 
-    // if (!result) {return}
-
-    // if (this.user) {
-
-    //   const deleteMenu = await this.menusService.deleteMenu(site).pipe().toPromise();
-    //   const menu$      =  this.menusService.createMainMenu(this.user, site)
-    //   const menu       =  await menu$.pipe().toPromise()
-
-    //   //if the main menus hav ebeen created delete the sub menu's and make them also
-    //   if (menu.id) {
-    //     const clearMenu$ = this.menusService.deleteMenuGroup(site,menu.id)
-    //     clearMenu$.pipe(switchMap (data => {
-    //       return  this.menusService.createMainMenu(this.user, site)
-    //       })).pipe(switchMap(menu => {
-    //         return this.menusService.getMainMenu(site);
-    //         })
-    //       ).subscribe(accordionMenu=> {
-    //         this.accordionMenus = accordionMenu
-    //       })
-    //     }
-    //   }
     }
 
   dropAccordion(event: CdkDragDrop<string[]>) {
@@ -185,10 +171,26 @@ constructor(
     if (!this.mb_MenuButton || !this.menuButtonGroup?.name) { return }
     if (this.mb_MenuButton) {
       const name =  this.menuButtonGroup.name.trimEnd()
-      this.menusService.postButtonList(site, this.menuButtonGroup.mb_MenuButtons,
-                                      name, true).subscribe( data=> {
+      const list = this.menusService.filterMenuButtons(this.menuButtonGroup.mb_MenuButtons)
+      console.log('list', list)
+      this.menusService.postButtonList(site,
+                                      list,
+                                       name,
+                                       true).subscribe( data=> {
       })
     }
+  }
+
+
+  deleteItem(event) {
+    if (event.value) {
+      this.menuButtonGroup.mb_MenuButtons = this.removeButtonById(this.menuButtonGroup.mb_MenuButtons, event.value)
+      this.saveAccordion()
+    }
+  }
+
+  removeButtonById(menuButtons: mb_MenuButton[], id: number): mb_MenuButton[] {
+    return menuButtons.filter(button => button.id !== id);
   }
 
   notifyEvent(message: string, action: string) {

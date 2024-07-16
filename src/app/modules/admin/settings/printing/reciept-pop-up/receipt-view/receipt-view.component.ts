@@ -215,13 +215,11 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
           })).pipe(
       switchMap(data => { return styles$ })
           ,catchError(e => {
-            // console.log('e 2', e)
             this.siteService.notify('Error  stylesreceipt view' + e, 'Alert', 2000)
             return of(null)
           })).pipe(
       switchMap(data => { return deviceInfo$}
           ),catchError(e => {
-            // console.log('e 3', e)
             this.siteService.notify('Error deviceInfo receipt view' + e, 'Alert', 2000)
             return of(null)
           })).pipe(
@@ -323,8 +321,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       const item  = JSON.parse(data.text) as ITerminalSettings
       if (item) {
         if (this.platFormService.isAppElectron) {
-          if (item.receiptPrinter) {
-            this.printerName = item.receiptPrinter
+          if (item?.receiptPrinter) {
+            this.printerName = item?.receiptPrinter
           }
         }
       }
@@ -352,7 +350,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     return this.printingService.appyStylesCachedObservable(site).pipe(
         switchMap( data => {
           this.receiptStyles  =  data
-          // console.log('receipts', this.receiptStyles.text)
           this.applyStyle(data)
           return of(data)
         }
@@ -366,9 +363,9 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   setDefaultPrinter(item: ISetting) {
     if (!item) { return}
-    this.electronReceiptSetting = item;
-    this.receiptID   =  +item.option1;
-    this.printerName =  item.text;
+      this.electronReceiptSetting = item;
+      this.receiptID   =  +item.option1;
+      this.printerName =  item?.text;
     return this.receiptID;
   }
 

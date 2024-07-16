@@ -1,5 +1,7 @@
-    <div *ngIf="(product$ | async) as product ">
-       {{product?.name}}
+    <div *ngIf="(product$ | async) as product "></div>
+    <div *ngIf="(action$ | async) as action"></div>
+    <div *ngIf="remainingQuantity && remainingQuantity !=0 ">Left to Print: {{remainingQuantity}}</div>
+    <div *ngIf="product">
        <br>
         <app-label-view-selector
                   [labelID]           ="labelID"
@@ -9,6 +11,7 @@
                   >
         </app-label-view-selector>
     </div>
+
     <div *ngIf="isAppElectron || printingEnabled">
       <app-list-printers-electron
                                 [printerName]="printerName"

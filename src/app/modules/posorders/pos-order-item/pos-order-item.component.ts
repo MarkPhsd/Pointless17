@@ -8,7 +8,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
-import { IPurchaseOrderItem } from 'src/app/_interfaces';
+import { IProduct, IPurchaseOrderItem } from 'src/app/_interfaces';
 import { IMenuItem, ItemType } from 'src/app/_interfaces/menu/menu-products';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
@@ -29,7 +29,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 export interface payload{
   index : number;
   item  : PosOrderItem;
@@ -399,7 +399,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
       this.itemName   =  this.getItemName(this.menuItem?.name)
       this.imagePath  =  this.getImageUrl(this.menuItem?.urlImageMain)
     }
- 
+
     this.refreshItemType();
 
     if (!this.menuItem) {
@@ -412,7 +412,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
         })
       )
     }
- 
+
 
     const item = this.orderItem;
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
@@ -432,16 +432,16 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     this.getReOrderMenuItem()
   }
 
-  refreshItemType() { 
-  if (this.prepScreen) { 
-     
-      if ( this.orderItem.prodModifierType) { 
+  refreshItemType() {
+  if (this.prepScreen) {
+
+      if ( this.orderItem.prodModifierType) {
         const item =  this.itemTypeService.getItemTypeFromList( this.orderItem.prodModifierType) as unknown as ItemType
         if (!this.orderItem.menuItem) { this.orderItem.menuItem = {} as IMenuItem}
         if (!this.menuItem) { this.menuItem = { } as IMenuItem}
-        this.menuItem.itemType = item 
+        this.menuItem.itemType = item
         this.orderItem.menuItem.itemType = item;
-        if ( item?.itemRowColor) { 
+        if ( item?.itemRowColor) {
           this.itemTypeFontColor = `color: ${item?.itemRowColor}`
         }
       }
@@ -894,10 +894,20 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     }
   }
 
+  get cardStyle() {
+    if (this.orderItem) {
+      if (this.orderItem.color) {
+        return `background-color:${this.orderItem.color}`
+      }
+    }
+    return ''
+  }
+
   updateCardStyle(option: boolean)  {
 
     this.updateFlexGroup();
     // this.customcard ='custom-card';
+
     const order = this.orderMethodsService.currentOrder;
     if (this.orderItem && this.orderItem?.idRef && this.orderItem?.id != this.orderItem?.idRef && !order?.history) {
       this.customcard       = 'custom-card-modifier';
@@ -1008,12 +1018,25 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
                                                            }))
   }
 
-  editCatalogItem() { 
+  editCatalogItem() {
     this.orderItem.menuItem;
     const site = this.siteService.getAssignedSite()
-    const product$  =   this.menuService.getProduct(site, this.orderItem?.menuItem?.id)
+    let id = 0;
+    if (this.orderItem?.menuItem?.id) {
+      id = this.orderItem?.menuItem?.id;
+    }
+    if (this.menuItem?.id) {
+      id = this.menuItem?.id
+    }
+    if (this.orderItem.productID) {
+      id = this.orderItem?.productID
+    }
+    console.log('id', id)
+    if (id == 0) { return }
+    const product$  =   this.menuService.getProduct(site, id)
     const item$ = this.itemTypeService.getItemType(site, this.orderItem.menuItem?.itemType?.id);
-    this.action$    =   this.productButtonService._openProductEditorOBS( product$, item$)
+
+    this.productButtonService._openProductEditorOBS( product$, item$ ).subscribe(data =>{})
   }
 
   swipeOutItem(){
@@ -1025,11 +1048,11 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     console.log('cancel item', this.disableActions)
     const currentUrl = this.router.url.split('?')[0].split('/').pop();
     // console.log('currentUrl', currentUrl)
-    if (currentUrl == 'qr-receipt') { 
+    if (currentUrl == 'qr-receipt') {
       this.cancelItem(this.index,  this.orderItem)
       return;
     }
-    if (currentUrl == 'qr-table') { 
+    if (currentUrl == 'qr-table') {
       this.cancelItem(this.index,  this.orderItem)
       return;
     }

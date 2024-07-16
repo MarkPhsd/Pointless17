@@ -6,7 +6,8 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { DSIEMVSettings } from 'src/app/_services/system/settings/uisettings.service';
 import { PointlessCCDSIEMVAndroidService } from 'src/app/modules/payment-processing/services';
-import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
+import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
+import { DcapRStream, DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 
 @Component({
   selector: 'app-dc-direct-settings',
@@ -14,6 +15,15 @@ import { DcapService } from 'src/app/modules/payment-processing/services/dcap.se
   styleUrls: ['./dc-direct-settings.component.scss']
 })
 export class DcDirectSettingsComponent implements OnInit {
+
+  message: string;
+  processing: boolean;
+  errorMessage: string;
+  result: any;
+  response: DcapRStream;
+  textResponse: string;
+  resultMessage: string
+  processing$: Observable<any>;
 
   action$: Observable<any>;
   dcapAndroidDeviceList: string[]
@@ -24,11 +34,52 @@ export class DcDirectSettingsComponent implements OnInit {
   dcapResult: any;
   transactionForm: FormGroup;
 
+  get getPaxInfo() {
+    if (!this.dsiEMVSettings) {return false}
+    const dsiEMVSettings = this.dsiEMVSettings.value
+    if (!this.platFormService.androidApp) { return true}
+    if (dsiEMVSettings) {
+      if (dsiEMVSettings?.deviceValue == 'EMV_A920PRO_DATACAP_E2E') {
+        // this.dsiEMVSettings = data?.dsiEMVSettings
+        return true;
+      }
+    }
+    return false
+  }
+
+  get ParamDownloadCloudEMV() {
+
+    const terminal = this.inputForm.value;
+    const terminalName = terminal?.name;
+
+    if (terminalName) {
+      this.initMessaging();
+      this.processing = true;
+      this.processing$ =  this.dCapService.emvParamDownload(terminalName).pipe(switchMap(data => {
+        this.processing = false;
+        this.result = data;
+        return of(data);
+      }))
+    }
+    return of(null)
+
+  }
+
+  initMessaging() {
+    this.processing = false;
+    this.errorMessage = ''
+    this.message = ''
+    this.response = null;
+    this.textResponse = null;
+  }
+
   constructor(
     private sitesService        : SitesService,
     private dcapService         : DcapService,
     private fb                  : FormBuilder,
     public platFormService     : PlatformService,
+    private dCapService           : DcapService,
+    private dcapMethodsService : DcapMethodsService,
     private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService, ) {
   }
 
@@ -47,6 +98,38 @@ export class DcDirectSettingsComponent implements OnInit {
     const list = await this.dSIEMVAndroidService.getDeviceInfo()
     this.dcapAndroidDeviceList = list;
   }
+
+
+  async paramDownload() {
+    const options = {}
+    const dsiEMV = this.dsiEMVSettings.value;
+
+    // dsi.
+    await   this.dSIEMVAndroidService.downloadParam(dsiEMV)
+
+  }
+
+
+
+  // HostOrIP   :[],
+  // IpPort          :[],
+  // MerchantID       :[],
+  // TerminalID      :[],
+  // OperatorID      :[],
+  // POSPackageID    :['PointlessPOS/3.1'],
+  // TranDeviceID    :[],
+  // UserTrace       :[],
+  // TranCode        :[],
+  // SecureDevice    :[],
+  // ComPort         :[],
+  // PinPadIpAddress :[],
+  // PinPadIpPort    :[],
+  // SequenceNo      :[],
+  // DisplayTextHandle :[],
+  // enabled           :[],
+  // partialAuth       :[],
+  // deviceValue     : [],
+  // supressedForms  : [],
 
   dCapReset() {
     const dsi = this.dsiEMVSettings.value as DSIEMVSettings

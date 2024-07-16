@@ -266,6 +266,16 @@ export class PointlessCCDSIEMVAndroidService {
   async downloadParam(deviceSettings: DSIEMVSettings) {
     try {
 
+
+      let dsi = {} as any; //DSIEMVSettings;
+      // dsi.merchantID      = dsiEMV?.MerchantID;
+      // dsi.SecureDevice    = dsiEMV?.deviceValue;
+      // dsi.pinPadIpAddress = dsiEMV?.HostOrIP;
+      // dsi.pinPadIpPort    = dsiEMV?.PinPadIpPort;
+      // dsi.userTrace       = dsiEMV?.OperatorID;
+      // dsi.TranDeviceID    = dsiEMV?.TranDeviceID
+      // dsi.pOSPackageID    = dsiEMV?.POSPackageID
+
       let prodCertMode = this.certProdMode(deviceSettings.MerchantID)
 
       let options = {} as any;

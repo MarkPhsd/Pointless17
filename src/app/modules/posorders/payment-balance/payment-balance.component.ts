@@ -154,6 +154,17 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.deviceInfo = this.authenticationService.deviceInfo;
   }
 
+  getNumberOfPayments() {
+    let count = 0
+    const list = this.order?.posPayments //?.length // || 0
+    list.forEach(data => {
+      if (data.amountPaid != 0) {
+        count += 1;
+      }
+    })
+    return count
+  }
+
   editCart() {
     this.toolbarUIService.updateOrderBar(false)
     this.toolbarUIService.resetOrderBar(true)

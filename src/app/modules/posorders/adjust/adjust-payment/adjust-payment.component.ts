@@ -3,7 +3,7 @@ import { Component, Inject, OnInit,OnDestroy } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription,Observable, switchMap, EMPTY, of, catchError } from 'rxjs';
+import { Subscription,Observable, switchMap, EMPTY, of, catchError, concatMap } from 'rxjs';
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder, IPOSPayment, OperationWithAction } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
@@ -16,7 +16,7 @@ import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.s
 import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
-import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
+import { DSIEMVSettings, TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
@@ -47,6 +47,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   voidAction$ : Observable<any>;
   settings: TransactionUISettings;
   terminalSettings: ITerminalSettings;
+  terminalSettings$: Observable<ITerminalSettings>;
+  dsiEmv : DSIEMVSettings
   deviceSettings$ : Observable<any>;
   toggleVoid: boolean;
   inputForm: UntypedFormGroup;
@@ -88,17 +90,23 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 @Inject(MAT_DIALOG_DATA) public data: OperationWithAction,
                 )
   {
-    console.log('void data', data)
+    // console.log('void data', data)
     if (data) {
-      this.deviceSettings$ = this.getDevice();
-      this.settings        =  data.uiSetting;
+      this.terminalSettings$ = this.settingsService.terminalSettings$.pipe(concatMap(data => {
+        this.terminalSettings = data;
+        this.dsiEmv = data?.dsiEMVSettings;
+        return of (data)
+      }))
+      this.settings        =  data?.uiSetting;
       const site           = this.siteService.getAssignedSite();
       this.isAuthorized    = this.userAuthorization.isUserAuthorized('admin, manager')
       let action = 2;
-      if (data.action) { action =  data.action };
+      if (data.action) { action =  data?.action };
       if (this.data.manifest) {
-        this.manifest = data.manifest;
-        this.id       = data.id.toString();
+        this.manifest = data?.manifest;
+        if (data.id) { 
+          this.id       = data.id.toString();
+        }
         this.list$    = this.adjustMentService.getReasonsByFilter(site, 4);
         this.resultAction = data
         return
@@ -219,7 +227,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   voidPaymentFromSelection(setting) {
 
-    console.log('voidPayment', this.voidPayment)
+    // console.log('voidPayment', this.voidPayment)
     if (setting) {
       const site = this.siteService.getAssignedSite();
       this.resultAction.voidReason = setting.name
@@ -600,21 +608,32 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   voidDCapPayment() {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
+      this.resultAction.payment = voidPayment;
 
-      // if (this.voidPayment.trancode == 'EMVPreAuth') {
-      //   this.action$ =  this.paymentsMethodsService.processDcapCreditVoid(voidPayment).pipe(switchMap(data => {
-      //     setTimeout(() => {
-      //       this.closeDialog(null, null);
-      //     }, 50)
-      //     return of(data)
-      //   }))
-      // }
+      if (this.dsiEmv) { 
+        if (this.dsiEmv?.v2) { 
+          if (voidPayment) {
+            this.action$ =  this.paymentsMethodsService.processDcapCreditVoidV2(this.resultAction).pipe(switchMap(data => {
+              if (data) { 
+                setTimeout(() => {
+                  this.dialogRef.close();
+                }, 50)
+              }
+              return of(data)
+            }))
+            return;
+          }
+        }
+      }
 
       if (voidPayment) {
         this.action$ =  this.paymentsMethodsService.processDcapCreditVoid(voidPayment).pipe(switchMap(data => {
-          setTimeout(() => {
-            this.closeDialog(null, null);
-          }, 50)
+          if (data) { 
+            setTimeout(() => {
+              this.dialogRef.close();
+            }, 50)
+          }
+          
           return of(data)
         }))
       }

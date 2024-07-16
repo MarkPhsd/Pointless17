@@ -132,11 +132,20 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     if (this.isApp) {
       return 'image-container container-app'
     }
-    return 'image-container container-mobile'
+    if (this.displayType != 'header-category') {
+      return 'image-container container-mobile'
+    }
+    if (this.displayType === 'header-category') {
+      return 'container-mobile-app'
+    }
   }
-
+ 
   get containerclassValue() {
 
+    if (this.displayType === 'header-category') {
+      return 'container-mobile-app'
+    }
+    
     if (this.smallDevice && this.androidApp) {
       return 'container-mobile-app'
     }

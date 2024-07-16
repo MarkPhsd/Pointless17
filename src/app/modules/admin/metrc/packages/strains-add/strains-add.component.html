@@ -36,6 +36,7 @@
               </div>
             </div>
             <div>
+              <mat-icon *ngIf="saved">save</mat-icon>
               <app-edit-buttons-standard
                     (outputeupdateItem)     ="updateItem($event)"
                     (outputupdateItemExit)  ="updateItemExit($event)"
@@ -117,6 +118,7 @@
                   [facilityLicenseNumber] ="facilityLicenseNumber"
                   [priceForm]             ="priceForm"
                   [packageForm]           ="packageForm"
+                  [saved]="saved"
                   [package]               ="package">
                 </app-strain-packages>
               </span>

@@ -166,8 +166,8 @@ export interface DSIEMVSettings {
   partialAuth: boolean;
   deviceValue: string;
   supressedForms: boolean;
+  v2: boolean;
 }
-
 
 export interface DSIEMVAndroidSettings {
 
@@ -803,21 +803,22 @@ export class UISettingsService {
   initDSIEMVSettingsForm(config: any, fb: UntypedFormGroup): UntypedFormGroup {
     if (!config) { return this.initDSIEMVForm(fb)};
     fb = this._fb.group({
-      id               : [config.id],
-      HostOrIP         : [config.DisplayTextHandle],
-      IpPort           : [config.IpPort],
-      MerchantID       : [config.MerchantID],
-      TerminalID       : [config.TerminalID],
-      OperatorID       : [config.OperatorID],
-      UserTrace        : [config.UserTrace],
-      TranCode         : [config.TranCode],
-      SecureDevice     : [config.SecureDevice],
-      ComPort          : [config.ComPort],
-      PinPadIpAddress  : [config.PinPadIpAddress],
-      PinPadIpPort     : [config.PinPadIpPort],
-      SequenceNo       : [config.SequenceNo],
-      DisplayTextHandle: [config.DisplayTextHandle],
-      partialAuth      : [config.partialAuth]
+      id               : [config?.id],
+      HostOrIP         : [config?.DisplayTextHandle],
+      IpPort           : [config?.IpPort],
+      MerchantID       : [config?.MerchantID],
+      TerminalID       : [config?.TerminalID],
+      OperatorID       : [config?.OperatorID],
+      UserTrace        : [config?.UserTrace],
+      TranCode         : [config?.TranCode],
+      SecureDevice     : [config?.SecureDevice],
+      ComPort          : [config?.ComPort],
+      PinPadIpAddress  : [config?.PinPadIpAddress],
+      PinPadIpPort     : [config?.PinPadIpPort],
+      SequenceNo       : [config?.SequenceNo],
+      DisplayTextHandle: [config?.DisplayTextHandle],
+      partialAuth      : [config?.partialAuth],
+      v2               : [config?.v2]
     })
     return fb
   }
@@ -841,6 +842,7 @@ export class UISettingsService {
       DisplayTextHandle: [''],
       enabled:     [''],
       partialAuth: [],
+      v2: []
     })
     return fb
   }

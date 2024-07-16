@@ -29,9 +29,9 @@
     </mat-card-title>
 
     <mat-card-subtitle>
-
       <div class="grid-container" >
         <div class="sub-85px" style="width:235px;">
+
           <div class="item-label">Sku</div>
           <div class="item-info"> {{item.sku}} </div>
           <div class="item-label">Type</div>
@@ -41,39 +41,31 @@
           <div class="item-label">Facility Code</div>
           <div class="item-info"> {{item.facilityLicenseNumber}} </div>
         </div>
-      <div>
 
-          <div>
-            <div class="flex-end button-margins">
-              <div class="margin-5" *ngIf="userAuths &&
-                                           userAuths.allowBuy &&
-                                           uiHome &&
-                                           uiHome.ebayEnabled">
+        <div>
+          <div class="flex-end button-margins">
+            <div class="margin-5" *ngIf="userAuths &&
+                                            userAuths.allowBuy &&
+                                            uiHome &&
+                                            uiHome.ebayEnabled">
                 <button mat-button color="primary" (click)="publishItem(item)">
                   <mat-icon>publish</mat-icon>Publish to Ebay
                 </button>
-              </div>
             </div>
           </div>
-
           <ng-container [ngTemplateOutlet]="headerValueView"></ng-container>
 
         </div>
       </div>
-
       <mat-divider></mat-divider>
-
     </mat-card-subtitle>
 
     <mat-card-content >
       <div class="grid-container">
 
         <div class="grid-195px">
-
           <ng-container [ngTemplateOutlet]="inventoryHeaderValues"></ng-container>
-
           <ng-container [ngTemplateOutlet]="intakeInvoice"></ng-container>
-
         </div>
 
         <div>
@@ -113,6 +105,8 @@
   <div class="toggle-items"
       *ngIf="inputForm"
       [formGroup]="inputForm">
+
+    <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
 
     <div>
       <mat-slide-toggle
@@ -436,4 +430,14 @@
       [inventoryItem]="true">
     </app-chemical-values>
   </mat-tab>
+</ng-template>
+
+<ng-template #buttonColorPicker>
+  <div *ngIf="inputForm" class="grid-items">
+    <mat-label>Item Color</mat-label>
+    <ngx-colors ngx-colors-trigger [(ngModel)]="color"></ngx-colors>
+    <!-- <mat-form-field >
+      <input matInput [(ngModel)]="color">
+    </mat-form-field> -->
+  </div>
 </ng-template>

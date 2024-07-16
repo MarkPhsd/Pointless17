@@ -81,7 +81,8 @@
           <span #coachingCloseShift></span>
           <div   class="button" *ngIf="!sheet.endTime">
             <span *ngIf ="sheet.shiftStarted == 1 && ordersOpen == 0">
-              <button  style="height:60px" color="warn" mat-raised-button (click)="closeSheet('/login')">Close Sheet</button>
+              <button  style="height:60px" color="warn" mat-raised-button
+                      (click)="closeSheet('/login')">Close Sheet</button>
             </span>
           </div>
 

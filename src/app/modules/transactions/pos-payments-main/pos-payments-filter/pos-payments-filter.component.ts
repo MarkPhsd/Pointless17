@@ -143,7 +143,15 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
 
     initForm() {
       this.searchForm   = this.fb.group( {
-        itemName          : [''],
+        itemName : [],
+        authNo   : [],
+        amount   :[],
+        cardNum  :[],
+        invoiceNo: [],
+      })
+
+      this.searchForm.valueChanges.subscribe(data => {
+        this.refreshSearch()
       })
     }
 
@@ -230,13 +238,29 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       if (! this.searchModel) {  this.searchModel = {} as IPaymentSearchModel }
       const searchModel = this.searchModel;
       searchModel.orderID = parseInt (id);
+
+      if (this.searchForm) {
+        const formVal = this.searchForm.value;
+        searchModel.cardNum = formVal?.cardNum
+        searchModel.authNO = formVal?.authNO
+        searchModel.amount = formVal?.amount
+      }
+
       this.posPaymentService.updateSearchModel( searchModel )
       this.outputRefreshSearch.emit('true');
     }
 
     refreshSearch() {
       if (! this.searchModel) {  this.searchModel = {} as IPaymentSearchModel }
-      const search = this.searchModel;
+      let search = this.searchModel;
+
+      if (this.searchForm) {
+        const formVal = this.searchForm.value;
+        search.cardNum = formVal?.cardNum
+        search.authNO = formVal?.authNO
+        search.amount = formVal?.amount
+      }
+
       this.posPaymentService.updateSearchModel( this.searchModel )
       this.outputRefreshSearch.emit('true');
     }

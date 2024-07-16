@@ -109,6 +109,7 @@
 
         <div class="button-assign" *ngIf="baseUnitsRemaining != 0  &&  unitsConverted">
           <button mat-raised-button
+                  [disabled]="!isPackageReady"
                   class   ="button"
                   color   ="primary"
                   type    ="button"
@@ -119,6 +120,7 @@
 
         <div class="btn-edit-pacakge" *ngIf="baseUnitsRemaining != 0  &&  unitsConverted">
           <button mat-raised-button
+                  [disabled]="!isPackageReady"
                   class   ="button"
                   color   ="primary"
                   type    ="button"
@@ -129,6 +131,7 @@
 
         <div *ngIf="baseUnitsRemaining == 0">
           <button mat-raised-button
+                  [disabled]="!isPackageReady"
                   class     ="button"
                   color     ="primary"
                   type      ="button"

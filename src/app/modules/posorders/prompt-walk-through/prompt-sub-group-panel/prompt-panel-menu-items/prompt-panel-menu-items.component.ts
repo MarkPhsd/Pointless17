@@ -59,6 +59,7 @@ export class PromptPanelMenuItemsComponent implements OnInit {
   get itemPropertyList() {
     if (this.subGroup?.json) {
       const items  =  JSON.parse(this.subGroup?.json) as IPromptSubProperites;
+      if (!items.itemModList) { return []}
       const list   = items.itemModList.split(',')
       return list;
     }

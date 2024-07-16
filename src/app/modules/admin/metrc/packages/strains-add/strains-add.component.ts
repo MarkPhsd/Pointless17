@@ -27,6 +27,7 @@ export class StrainsAddComponent implements OnInit {
   productionBatchNumber:  string;
   facilityLicenseNumber:  string;
   action$: Observable<any>;
+  saved: boolean;
 
   get f():                UntypedFormGroup  { return this.packageForm as UntypedFormGroup};
   get hasImportedControl(){ return this.packageForm.get("hasImported") as UntypedFormControl;}
@@ -70,25 +71,21 @@ export class StrainsAddComponent implements OnInit {
           @Inject(MAT_DIALOG_DATA) public data: any,
           private inventoryAssignmentService: InventoryAssignmentService,
           )
-     {
+  {
 
-     if (data) {
-       this.id = data.id
-     } else {
+    if (data) {
+      this.id = data.id
+    } else {
       this.id = this.route.snapshot.paramMap.get('id');
-     }
+    }
 
-    this.initFields()
-
-   }
+    this.initFields();
+  }
 
   async ngOnInit() {
-
     this.initProductSearchModel();
-
     const site        = this.siteService.getAssignedSite();
     this.site         = this.siteService.getAssignedSite();
-
     const item$       = this.metrcPackagesService.getPackagesByID(this.id, site) //.pipe().toPromise();
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
@@ -110,9 +107,7 @@ export class StrainsAddComponent implements OnInit {
         }
       }
     )
-
   }
-
 
   get jsonData() {
     if (this.package) {
@@ -161,11 +156,9 @@ export class StrainsAddComponent implements OnInit {
       return
     }
     let metrcPackage = this.packageForm.value as METRCPackage;
-
     const site = this.siteService.getAssignedSite();
 
     if (this.hasImportedControl) {
-      //  package.inventoryImported = this.hasImportedControl.value as boolean;
       if (this.hasImportedControl.value)  {   metrcPackage.inventoryImported = true  }
       if (!this.hasImportedControl.value) {   metrcPackage.inventoryImported = false  }
     }
@@ -178,6 +171,11 @@ export class StrainsAddComponent implements OnInit {
     package$.subscribe( data => {
       this.notifyEvent('Item saved', 'Success')
       if (event) { this.onCancel(null) }
+    })
+
+    this.saved = true
+    this.packageForm.valueChanges.subscribe(data => {
+      this.saved = false;
     })
   }
 
@@ -199,14 +197,12 @@ export class StrainsAddComponent implements OnInit {
     }
   }
 
-  onCancel(event) {
-    this.dialogRef.close()
-  }
+  onCancel(event) {  this.dialogRef.close()  }
 
   getVendor(event) {
     const facility = event
     if (facility) {
-      this.facilityLicenseNumber = `${facility.displayName} - ${facility.metrcLicense}`
+      this.facilityLicenseNumber = `${facility?.displayName} - ${facility?.metrcLicense}`
       this.facility = event;
       this.packageForm.patchValue({ facilityLicenseNumber: [this.facilityLicenseNumber],})
     }
@@ -255,9 +251,7 @@ export class StrainsAddComponent implements OnInit {
       if (this.id) {
         this.package$ = this.metrcPackagesService.getPackagesByID(this.id, site)
         this.package$.subscribe(data =>
-          {
-            this.initItemFormData(data)
-          }
+          { this.initItemFormData(data)  }
         )
       }
     }
@@ -266,7 +260,7 @@ export class StrainsAddComponent implements OnInit {
   initItemFormData(data: METRCPackage) {
     if (data) {
       try {
-        this.package = data 
+        this.package = data
         this.package.labTestingState =          this.package.labTestingState.match(/[A-Z][a-z]+|[0-9]+/g).join(" ")
         this.facility = {} as                   IItemFacilitiyBasic;
         this.facility.displayName =             this.package.itemFromFacilityName;
@@ -292,13 +286,13 @@ export class StrainsAddComponent implements OnInit {
         if (!this.package.active)  { active = false };
 
         // this can use to assign the item to the form.
-        const facility = `${data.itemFromFacilityLicenseNumber}-${data.itemFromFacilityName}`
+        const facility = `${data?.itemFromFacilityLicenseNumber}-${data?.itemFromFacilityName}`
 
+        console.log('metrcPackage Data', data)
         this.packageForm.patchValue({
-            productCategoryName:              data.item.productCategoryName,
-            productCategoryType:              data.item.productCategoryType,
-            quantityType:                     data.item.quantityType,
-            productname                    :  0,
+            productCategoryName:              data?.item?.productCategoryName,
+            productCategoryType:              data?.item?.productCategoryType,
+            quantityType:                     data?.item?.quantityType,
             inputQuantity:                    0,
             inventoryLocationID:              0,
             priceCategoryID                :  0,
@@ -307,18 +301,15 @@ export class StrainsAddComponent implements OnInit {
             jointWeight:                      1,
             facilityLicenseNumber:            facility,
             active                      :     active,
-            sellByDate                  : [data?.sellByDate],
-            labTestingPerformedDate : [data?.labTestingPerformedDate],
-            packagedDate :    [data?.packagedDate],
-            expirationDate :  [data?.expirationDate],
-            useByDate       : [data?.useByDate],
-            productionBatchNumber : [data?.productionBatchNumber]
+            sellByDate                  : data?.sellByDate,
+            labTestingPerformedDate     : data?.labTestingPerformedDate,
+            packagedDate                : data?.packagedDate,
+            expirationDate              : data?.expirationDate,
+            useByDate                   : data?.useByDate,
+            productionBatchNumber       : data?.productionBatchNumber,
+            productName                 : data?.productName,
+            productID                   : data?.productID,
         })
-   
-
-        const item = {productName :     data.productName,
-                      productID   :     data.productID,}
-        this.packageForm.patchValue(item);
 
       } catch (error) {
         console.log(error)
@@ -331,8 +322,8 @@ export class StrainsAddComponent implements OnInit {
   }
 
   //move to service.
-  async getUnitConversionToGrams(unitName: string): Promise<IUnitConversion> {
-    return  await this.conversionService.getConversionItemByName(unitName)
+  getUnitConversionToGrams(unitName: string): IUnitConversion {
+    return   this.conversionService.getConversionItemByName(unitName)
   }
 
   initFields() {

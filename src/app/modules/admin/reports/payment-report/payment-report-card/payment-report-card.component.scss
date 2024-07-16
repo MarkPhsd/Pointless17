@@ -110,10 +110,10 @@
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 75px 75px 65px 55px 45px;
+  grid-template-columns: 55px 85px 65px 65px 55px;
   font-size: 1em;
   @include for-phone-only {
-    grid-template-columns:  75px 65px 65px 55px 45px;
+    grid-template-columns:  55px 85px 65px 65px 55px;
   }
 
   @media print {

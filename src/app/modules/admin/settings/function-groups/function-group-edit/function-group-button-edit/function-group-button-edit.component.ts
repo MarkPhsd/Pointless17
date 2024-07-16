@@ -91,7 +91,7 @@ export class FunctionGroupButtonEditComponent implements OnInit,OnChanges {
     if (this.menuButton) {
       const menuButton =  this.inputForm.value as mb_MenuButton;
       this.menuService.deleteButton(site, menuButton.id).subscribe(data => {
-        this.outPutUpdateButtons.emit(true)
+        this.outPutUpdateButtons.emit(menuButton.id)
       })
     }
   }

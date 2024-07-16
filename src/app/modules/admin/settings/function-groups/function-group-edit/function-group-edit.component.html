@@ -72,6 +72,7 @@
       <div *ngIf="menuButton">
         <function-group-button-edit
           (outSaveButton)="saveItem($event)"
+          (outPutUpdateButtons) =deleteItem($event)
           (outPutUpdateButtons)="refreshButtons($event)"
           [menuButton]="menuButton">
         </function-group-button-edit>

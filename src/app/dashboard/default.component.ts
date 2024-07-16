@@ -131,6 +131,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   _sendOrderOnExit: Subscription;
   viewPrep: boolean;
 
+  matDrawerContentClass = 'mat-drawer-content'
+  matDrawerContaienr = 'mat-drawer-container'
   viewType$ = this.orderMethodsSevice.viewOrderType$.pipe(switchMap(data => {
     this.viewPrep = false
     if (data && data === 3) {
@@ -138,7 +140,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     return of(data)
   }))
-
 
   initLoginStatus() {
     this.userSwitchingService.clearloginStatus$.pipe(switchMap(data => {
@@ -161,12 +162,14 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       return of(null)
     }))
   }
+
   get appHeaderClass() {
     if (this.hideAppHeader || this.viewPrep) {
       return 'app-header-hidden'
     }
     return ""
   }
+
   get leftSideBar() {
     if (this.swapMenuWithOrder) {
       if (this.toolBarUIService.orderBar) {
@@ -177,10 +180,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
         return this.userBarView
       }
       return this.menuBarView
-
     }
     return this.appMenuSearchBar
   }
+
   get rightSideBar() {
     if (this.swapMenuWithOrder) {
       return this.appMenuSearchBar
@@ -196,6 +199,22 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       return this.userBarView;
     }
     return this.menuBarView;
+  }
+
+  get getMatDrawerContentClass() {
+    if (this.platFormService.isApp() ) { return  'mat-drawer-content'}
+    if (this.userAuthorizationService?.isStaff) { return  'mat-drawer-content'}
+
+    return  'mat-drawer-content-user'
+  }
+
+  get getMatDrawerContainerClass() {
+
+    if (this.platFormService.isApp() ) { return  'mat-drawer-container'}
+    if (this.userAuthorizationService?.isStaff) { return  'mat-drawer-container'}
+
+    return  'mat-drawer-container-user'
+
   }
 
   processLogOut() {
@@ -466,8 +485,13 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get appSiteFooterOn() {
+    return this.appSiteFooter
+    if (this.platFormService.isApp() ) { return }
+    if (this.userAuthorizationService?.isStaff) { return }
+
+    return this.appSiteFooter
     if ( !this.platFormService.isApp() ) {
-      if (this.userAuthorizationService.isStaff) {
+      if (!this.userAuthorizationService?.isStaff) {
         return this.appSiteFooter
       }
     }
@@ -490,10 +514,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  setItemTypeList() { 
+  setItemTypeList() {
     const site = this.siteService.getAssignedSite()
     this.itemTypeList$ = this.itemTypeService.getTypeList(site)
-    // 
+    //
   }
 
   initSubscriptions() {
@@ -603,9 +627,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscribeAddress();
     this.subscribSendOrder()
   }
-
-
-
 
   getHelp() {
     this.router.navigateByUrl(this.chatURL)
@@ -818,8 +839,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.userIdle.onTimerStart().subscribe(count => {
         if (count) {
           // console.log( count)
-          if (this.posDevice) { 
-            if (this.posDevice?.ignoreTimer) { 
+          if (this.posDevice) {
+            if (this.posDevice?.ignoreTimer) {
               return;
             }
           }

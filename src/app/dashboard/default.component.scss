@@ -16,12 +16,15 @@ app-header {
   height: 50px;
   min-height: 50px;
 }
-.app-header-hidden { 
+
+.app-header-hidden {
   display: none;
 }
+
 .app-menu-tiny {
   height: calc(100vh - 165px);
 }
+
 .mat-content {
   overflow: hidden;
 }
@@ -32,7 +35,7 @@ app-sticky-header {
   display: flex;
 }
 
-mat-drawer-content {
+.mat-drawer-content {
   padding-top: -5px;
   overflow: hidden;
 
@@ -43,24 +46,52 @@ mat-drawer-content {
   overflow    : hidden;
   overflow-y  : hidden;
 
-  @media (max-width: 815px) {   height: calc(100vh - 135px );   }
-  @media (max-width: 768px) {   height: calc(100vh - 135px );  }
-  @include for-phone-only  {   height: calc(100vh - 135px ); }
+  @media (max-width: 815px) { height: calc(100vh - 135px ); }
+  @media (max-width: 768px) { height: calc(100vh - 135px ); }
+  @include for-phone-only   { height: calc(100vh - 135px ); }
 }
 
-mat-drawer-container {
+.mat-drawer-content-user {
+  padding-top: -5px;
+  overflow: hidden;
+
+  height      : calc(100vh - 175px );
+  padding     : 5px;
+  margin-left : 5px;
+  margin-right: 5px;
+  overflow    : hidden;
+  overflow-y  : hidden;
+
+  @media (max-width: 815px) { height: calc(100vh - 175px ); }
+  @media (max-width: 768px) { height: calc(100vh - 175px ); }
+  @include for-phone-only   { height: calc(100vh - 175px ); }
+}
+
+.mat-drawer-container {
   padding-top: -5px;
   overflow: hidden;
   height: calc(100vh - 65px );
   position: relative;
   @media (max-width: 815px) {  height: calc(100% - 115px );  }
   @media (max-width: 768px) {  height: calc(100% - 115px );  }
-  @include for-phone-only  {   
+  @include for-phone-only  {
     position: relative;
-    height: calc(100% - 115px );  
+    height: calc(100% - 115px );
   }
 }
 
+.mat-drawer-container-user {
+  padding-top: -5px;
+  overflow: hidden;
+  height: calc(100vh - 175px );
+  position: relative;
+  @media (max-width: 815px) {  height: calc(100% - 175px );  }
+  @media (max-width: 768px) {  height: calc(100% - 175px );  }
+  @include for-phone-only  {
+    position: relative;
+    height: calc(100% - 175px );
+  }
+}
 mat-drawer-inner-container {
   width: 100%;
   height: calc(100vh - 75px);

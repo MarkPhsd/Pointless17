@@ -150,10 +150,24 @@ export class BuySellMainComponent implements OnInit {
 
       this.inventoryItems$ = this.inventoryService.getAvalibleInventorySearch(site, search).pipe(switchMap(data => {
         this.totalAttributeDepartmentInventory = this.getInventoryCount(data);
-        this.inventoryInfo = data;
+        this.refreshInventoryByAttributes(data)
         return of(data)
       }))
     // }
+  }
+
+  refreshInventoryByAttributes(data?) {
+    if (data) {
+      this.inventoryInfo = data;
+    }
+    if (this.attribute && this.inventoryInfo) {
+      let results =  this.inventoryInfo.results.filter(item => {
+        if (item.attribute) {
+          return  this.attribute.toLowerCase() === item.attribute.toLowerCase()
+        }
+      })
+      this.inventoryInfo.results = results
+    }
   }
 
   resetMetaTagSearch() {
@@ -231,6 +245,7 @@ export class BuySellMainComponent implements OnInit {
 
   toggleInventoryReview() {
     this.inventoryReview = !this.inventoryReview;
+    this.refreshInventoryByAttributes()
   }
 
   setInventoryInfo(event) {
@@ -366,13 +381,29 @@ export class BuySellMainComponent implements OnInit {
     }
   }
 
+  getInventoryCountWithAttribute(data, attribute) {
+    //then summarize the inventory
+    //getTotalQuantity
+    let totalCount : number = 0 ;
+    if (data && data.results) {
+      // console.log('data.results', data.results)
+      data.results.forEach(item => {
+        console.log('attribute, ', attribute, item?.attribute)
+        if (item?.attribute === attribute)  {
+          totalCount += +item.packageCountRemaining
+        }
+      })
+      return totalCount
+    }
+    return 0
+  }
+
   getInventoryCount(data) {
     //then summarize the inventory
     //getTotalQuantity
     let totalCount : number = 0 ;
     if (data && data.results) {
       data.results.forEach(item => {
-        // console.log('Counts', item.packageCountRemaining, totalCount)
         totalCount += +item.packageCountRemaining
       })
       return totalCount
@@ -525,8 +556,7 @@ export class BuySellMainComponent implements OnInit {
     search.departmentID = this.departmentID;
     search.attribute = this.attribute
     this.inventoryItemsDeptAttribute$ = this.inventoryService.getAvalibleInventorySearch(site, search).pipe(switchMap(data => {
-      this.totalAttributeDepartmentInventory = this.getInventoryCount(data);
-      // console.log('inventoryItemsDeptAttribute', data)
+      this.totalAttributeDepartmentInventory = this.getInventoryCountWithAttribute(data, this.attribute);
       this.inventoryInfo = data;
       return of(data)
     }))

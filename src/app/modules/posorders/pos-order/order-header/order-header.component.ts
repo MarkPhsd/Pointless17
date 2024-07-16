@@ -65,6 +65,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   isStaff: boolean;
   isAdmin: boolean;
+  menuButtonList: IMenuButtonGroups;
   currentOrderSusbcriber() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
@@ -91,7 +92,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
           const ui$ = this.uiSettingsService.getUITransactionSetting().pipe(switchMap(data => {
             if (data) {
               this.uiSettingsService.updateUISubscription(data)
-
+              this.initMenuButtonList(data)
             }
             return of(data)
           }));
@@ -99,8 +100,8 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
         }
         return of(data)
       })).subscribe(data => {
-        this.initMenuButtonList(data)
         this.uiTransactionSettings = data;
+        this.initMenuButtonList(data)
       })
     } catch (error) {
     }
@@ -154,6 +155,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     if (this._posDevice) { this._posDevice.unsubscribe()}
     if (this._user) { this._user.unsubscribe()}
     if (this._order) { this._order.unsubscribe()}
+    // this.order.orderID_Temp
   }
 
   ngOnChanges() {
@@ -162,10 +164,10 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   initMenuButtonList(ui:TransactionUISettings) {
     const site = this.siteService.getAssignedSite()
-    if (ui?.multiButtonOrderHeader && ui.multiButtonOrderHeader != 0) {
-      this.menuButtonList$ = this.mbMenuGroupService.getGroupByIDCache(site, ui.multiButtonOrderHeader).pipe(switchMap(
+    if (ui?.multiButtonOrderHeader && ui?.multiButtonOrderHeader != 0) {
+      this.menuButtonList$ = this.mbMenuGroupService.getGroupByIDCache(site, ui?.multiButtonOrderHeader).pipe(switchMap(
         data => {
-        // console.log(data)
+          this.menuButtonList = data;
         return of(data)
       }))
     }

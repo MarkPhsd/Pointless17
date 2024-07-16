@@ -104,7 +104,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
 
   routSubscriber() {
-    
+
     this.currentRoute = this.router.url.split('?')[0].split('/').pop();
     this.router.events.subscribe(event => {
       if (event.constructor.name === "NavigationEnd") {
@@ -178,7 +178,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
         if (!this.disableActions) {
           this._order = this.orderMethodService.currentOrder$.subscribe( order => {
             this.order = order
-            console.log('order update', this.order?.posOrderItems)
+            // console.log('order update', this.order?.posOrderItems)
             if (this.order && this.order.posOrderItems)  {
               this.sortPOSItems(this.order.posOrderItems);
             }

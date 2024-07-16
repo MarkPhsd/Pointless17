@@ -452,7 +452,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       responseSuccess = 'complete';
       this.instructions = ''
       const response = this.dcapMethodsService.convertToObject(paymentResponse.value)
-      console.log('intervalCheckResponse')
+      // console.log('intervalCheckResponse')
       if (response) {
         const result =   this.readResult(response, "EMVSale");
         console.log('result', result.success, result.message)

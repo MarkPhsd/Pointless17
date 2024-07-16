@@ -122,6 +122,7 @@ export interface IInventoryAssignment {
   expirationDate: string;
   sourceHarvestName: string;
   json: string; //stores info like ebay publishing.
+  color: string;
 }
 
 export interface inventoryJson {

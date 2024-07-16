@@ -62,7 +62,6 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
 
   initPOSItemSubscription() {
     this._posItem = this.posOrderItemService.posOrderItem$.subscribe(data => {
-      // console.log('working on:', data.productName)
       this.posItem = data;
     })
   }
@@ -70,7 +69,6 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
   initSaveSubscription() {
     this._savePrompt = this.promptWalkThroughService.savePromptSelection$.subscribe(data => {
       if (data) {
-
         this.applyChoices()
       }
     })
@@ -85,7 +83,6 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
           this.promptGroup = data;
           return this.orderMethodsService.currentOrder$
       })).subscribe(data => {
-
         if (data) { this.order = data;}
         if (this.promptGroup) {
           this.orderPromptGroup = this.promptGroup;
@@ -122,10 +119,10 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
     private sitesService             : SitesService,
     private posOrderItemService      : POSOrderItemService,
     private orderService             : OrdersService,
-    public orderMethodsService       : OrderMethodsService,
+    public  orderMethodsService      : OrderMethodsService,
     private promptGroupService       : PromptGroupService,
     private promptWalkThroughService : PromptWalkThroughService,
-    public platformService           : PlatformService,
+    public  platformService          : PlatformService,
     private trackerService           : InputTrackerService,
     private _fb: FormBuilder,
     private dialogRef                : MatDialogRef<PromptWalkThroughComponent>,
@@ -226,7 +223,7 @@ export class PromptWalkThroughComponent implements OnInit, OnDestroy {
 
       // console.log(item?.orderID, item);
       if (item) {
-        this.action$ = this.posOrderItemService.deletePOSOrderItem(site, item.id).pipe(
+        this.action$ = this.posOrderItemService.deletePOSOrderItem(site, item.id, item.orderID).pipe(
           switchMap(data => {
             return  this.orderService.getOrder(site, orderID.toString(), false)
           }

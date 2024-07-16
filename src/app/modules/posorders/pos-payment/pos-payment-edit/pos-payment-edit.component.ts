@@ -1,12 +1,12 @@
 import { Component, OnInit ,OnDestroy,Optional } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IPOSPayment, PaymentMethod } from 'src/app/_interfaces';
-import { OrdersService  } from 'src/app/_services';
+import { IPOSOrder, IPOSPayment, IUser, PaymentMethod } from 'src/app/_interfaces';
+import { AuthenticationService, OrdersService  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
-import { Observable,  Subscription, switchMap } from 'rxjs';
+import { Observable,  Subscription, concatMap, of, switchMap } from 'rxjs';
 import { UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -14,6 +14,11 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { EmployeeService } from 'src/app/_services/people/employee-service.service';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
+import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { DCAPAndroidRStream, DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
+import { TranResponse } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 
 @Component({
   selector: 'pos-payment-edit',
@@ -22,6 +27,8 @@ import { EmployeeService } from 'src/app/_services/people/employee-service.servi
 })
 export class PosPaymentEditComponent implements OnInit, OnDestroy {
 
+  orderHistory$   : Observable<IPOSOrder>
+  
   inputForm       : UntypedFormGroup;
 
   paymentMethod$  : Observable<IPaymentMethod>;
@@ -41,18 +48,77 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
   employees$ = this.employeeService.getEmployees(this.siteService.getAssignedSite())
   action$: Observable<any>;
 
+  _user: Subscription;
+  user: IUser;
+  _userAuths: Subscription;
+  userAuths: IUserAuth_Properties;
+  _uiTran:Subscription;
+  uiTran: TransactionUISettings;
+  terminalSettings$: Observable<ITerminalSettings>;
+  terminalSettings: ITerminalSettings;
+  dsiEmv: DSIEMVSettings;
+  jsonRsponse: any;
+
+  rStream: TranResponse;
+  errorMessage: string;
+
   initSubscriptions() {
     this._payment = this.paymentService.currentPayment$.subscribe( payment => {
       this.payment   = payment
-      console.log('history', payment?.history)
+     
       this.history = payment?.history;
       if (payment && payment.history) {
         this.deleteAllowed = false
       }
+      
+      if (this.history) { 
+        const site  = this.siteService.getAssignedSite()
+        this.orderHistory$  = this.orderService.getOrder(site, payment?.id.toString(), true)
+      }
+
     });
   }
 
+  initUserSubscriber() {
+    this._user = this.authenticationService.user$.subscribe( data => {
+      this.user = data
+    })
+
+    this._userAuths = this.authenticationService.userAuths$.subscribe( data => {
+      this.userAuths = data
+    })
+
+    this._uiTran = this.uiSettings.transactionUISettings$.subscribe(data => {
+      this.uiTran = data;
+    })
+
+  }
+
+  initTerminalSettings() {
+    this.terminalSettings$ = this.settingsService.terminalSettings$.pipe(concatMap(data => {
+      this.terminalSettings = data
+      this.dsiEmv = this.terminalSettings?.dsiEMVSettings;
+      if (!data) {
+        const site = this.siteService.getAssignedSite();
+        const device = localStorage.getItem('devicename');
+        return this.getPOSDeviceSettings(site, device)
+      }
+      return of(data)
+    })).pipe(concatMap(data => {
+      return of(data)
+    }))
+  }
+
+  getPOSDeviceSettings(site, device) {
+    return this.settingsService.getPOSDeviceSettings(site, device).pipe(concatMap(data => {
+      this.settingsService.updateTerminalSetting(data)
+      this.dsiEmv = data?.dsiEMVSettings;
+      return of(data)
+    }))
+  }
+
   constructor(
+      private authenticationService: AuthenticationService,
       private paymentService      : POSPaymentService,
       private paymentMethodService: PaymentMethodsService,
       private userAuthorization   : UserAuthorizationService,
@@ -64,11 +130,15 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
       private _snackBar           : MatSnackBar,
       private _bottomSheet        : MatBottomSheet,
       private printingService     : PrintingService,
+      private uiSettings: UISettingsService,
+      private settingsService       : SettingsService,
+      private dCapService           : DcapService,
       @Optional() private dialogRef  : MatDialogRef<PosPaymentEditComponent>,
 
   ) {
     this.roles = localStorage.getItem(`roles`)
     this.isUserStaff = this.userAuthorization.isCurrentUserStaff()
+
   }
 
   ngOnInit() {
@@ -83,9 +153,10 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     }
     this.getItem(parseInt(this.id));
 
-    const site = this.siteService.getAssignedSite()
-    this.paymentMethods$ =  this.paymentMethodService.getCacheList(site)
-
+    const site = this.siteService.getAssignedSite();
+    this.paymentMethods$ =  this.paymentMethodService.getCacheList(site);
+    this.initUserSubscriber();
+    this.initTerminalSettings();
   }
 
   ngOnDestroy(): void {
@@ -158,11 +229,29 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     if (this.payment && this.inputForm.value) {
       const site      = this.siteService.getAssignedSite()
       this.payment = this.inputForm.value;
+
+      if (this.history) {
+        this.paymentService.putPOSPaymentHistory(site,this.payment).subscribe(data => {
+          this.payment = this.inputForm.value
+          if (data?.errorMessage)  {
+            this.siteService.notify(data?.errorMessage, 'Success' , 10000)
+            return
+          }
+
+          this.siteService.notify('Payment History Saved', 'Success' , 10000)
+        })
+        return;
+      }
+
       this.paymentService.putPOSPayment(site,this.payment).subscribe(data => {
         this.payment = this.inputForm.value
         this.notify('Payment saved', 'Success')
       })
     }
+  }
+
+  initFormData(data) {
+    this.inputForm.patchValue(data)
   }
 
   updateItemExit(event) {
@@ -209,6 +298,112 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
   reOpenOrderSub() {
     const orderID   = this.payment.orderID;
     this.reOpenOrder(orderID)
+  }
+
+  canRefundByRecordNo() {
+    if (this.user && this.dsiEmv && this.terminalSettings) {
+      if (this.userAuths.refundPayment) {
+        if (this.uiTran) {
+          if (this.uiTran.dCapEnabled) {
+            if (this.payment.recordNo) {
+              if (this.payment.amountPaid >0) {
+                return true
+              }
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  voidByRecordNumber( ) {
+    if (!this.terminalSettings?.name) {
+      return this.siteService.notify('no Device name', 'Close', 3200)
+    }
+    if (!this.history) { this.history = false }
+
+    this.action$ = this.dCapService.voidByRecordNumber(this.terminalSettings.name,  this.payment.id).pipe(switchMap(data => {
+      console.log('rStream', data?.response)
+      if ( data?.response) {
+        this.siteService.notify(`Result ${JSON.stringify(data?.response?.CmdStatus)}`, 'close', 600000, )
+      }
+      if ( !data?.response) {
+        this.siteService.notify(`Result ${JSON.stringify(data)}`, 'close', 600000, )
+      }
+
+      if (!data?.payment) {
+        this.payment  = data?.payment;
+        this.paymentService.updatePaymentSubscription(data?.payment);
+        this.initFormData(data?.payment);
+      }
+      this.rStream =  data?.response;
+      this.errorMessage = data?.errorMessage
+      return of(data)
+    }))
+  }
+
+
+  voidByInvoice( ) {
+    if (!this.terminalSettings?.name) {
+      return this.siteService.notify('no Device name', 'Close', 3200)
+    }
+    if (!this.history) { this.history = false }
+
+    this.action$ = this.dCapService.voidSaleByInvoiceNo(this.terminalSettings.name,  this.payment.id).pipe(switchMap(data => {
+      console.log('rStream', data?.response)
+      if ( data?.response) {
+        this.siteService.notify(`Result ${JSON.stringify(data?.response?.CmdStatus)}`, 'close', 600000, )
+      }
+      if ( !data?.response) {
+        this.siteService.notify(`Result ${JSON.stringify(data)}`, 'close', 600000, )
+      }
+
+      if (!data?.payment) {
+        this.payment  = data?.payment;
+        this.paymentService.updatePaymentSubscription(data?.payment);
+        this.initFormData(data?.payment);
+      }
+      this.rStream =  data?.response;
+      this.errorMessage = data?.errorMessage
+      return of(data)
+    }))
+  }
+
+
+  refundByRecordNo() {
+
+    if (!this.terminalSettings?.name) {
+      return this.siteService.notify('no Device name', 'Close', 3200)
+    }
+    if (!this.history) { this.history = false }
+
+    this.action$ = this.dCapService.refundByRecordNo(this.terminalSettings.name, this.history, this.payment.id, false).pipe(switchMap(data => {
+      console.log('rStream', data?.response)
+      if ( data?.response) {
+        this.siteService.notify(`Result ${JSON.stringify(data?.response?.CmdStatus)}`, 'close', 600000, )
+      }
+      if ( !data?.response) {
+        this.siteService.notify(`Result ${JSON.stringify(data)}`, 'close', 600000, )
+      }
+
+      if (!data?.payment) {
+        this.payment  = data?.payment;
+        this.paymentService.updatePaymentSubscription(data?.payment);
+        this.initFormData(data?.payment);
+      }
+      this.rStream =  data?.response;
+      this.errorMessage = data?.errorMessage
+      return of(data)
+    }))
+  }
+
+  refundByRecordNoRemoveTip( ) {
+    this.action$ = this.dCapService.refundByRecordNo(this.terminalSettings.name, this.payment.history, this.payment.id, true).pipe(switchMap(data => {
+      this.siteService.notify(`Result ${JSON.stringify(data)}`, 'close', 600000, )
+      this.jsonRsponse = data;
+      return of(data)
+    }))
   }
 
   reOpenOrder(id: number) {

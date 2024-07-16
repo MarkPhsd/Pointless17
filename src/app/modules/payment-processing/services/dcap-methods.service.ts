@@ -180,9 +180,11 @@ export class DcapMethodsService {
     resultMessage  = cmdResponse?.CmdStatus;
     processing     = false;
 
-    const len = 'Transaction rejected because the referenced original transaction is invalid'.length;
-    if (response.substring(0, len) === 'Transaction rejected because the referenced original transaction is invalid.') {
-      return {success :false , message: message, processing: processing, resultMessage: resultMessage}
+    if (response) { 
+      const len = 'Transaction rejected because the referenced original transaction is invalid'.length;
+      if (response.substring(0, len) === 'Transaction rejected because the referenced original transaction is invalid.') {
+        return {success :false , message: message, processing: processing, resultMessage: resultMessage}
+      }
     }
 
     return {success :false , message: message, processing: processing, resultMessage: resultMessage};
@@ -191,8 +193,6 @@ export class DcapMethodsService {
 
   readResult(cmdResponse: DcapRStream) {
     console.log('readresult', cmdResponse?.TextResponse, cmdResponse)
-    
-
 
     let message: string;
     let resultMessage: string;
@@ -265,8 +265,10 @@ export class DcapMethodsService {
     processing     = false;
 
     const len = 'Transaction rejected because the referenced original transaction is invalid'.length;
-    if (response.substring(0, len) === 'Transaction rejected because the referenced original transaction is invalid.') {
-      return {success :false , message: message, processing: processing, resultMessage: resultMessage}
+    if (response) { 
+      if (response.substring(0, len) === 'Transaction rejected because the referenced original transaction is invalid.') {
+        return {success :false , message: message, processing: processing, resultMessage: resultMessage}
+      }
     }
 
     return {success :false , message: message, processing: processing, resultMessage: resultMessage};

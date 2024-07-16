@@ -18,6 +18,18 @@ export class AgGridService {
       }
     };
 
+    getRightFourRenderer(params: any) {
+      try {
+        if (!params.value || typeof params.value !== 'string' || params.value.length === 0) {
+          return '';
+        }
+        return params.value.slice(-4);
+      } catch (error) {
+        console.error('Error in getRightFour:', error);
+      }
+      return '';
+    }
+
     currencyCellRendererUSD(params: any) {
 
       if (isNaN(params) != true)  {  return 0.00 }

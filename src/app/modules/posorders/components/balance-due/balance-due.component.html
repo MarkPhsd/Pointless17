@@ -1,5 +1,6 @@
 <div *ngIf="(action$ | async) as newOrder"></div>
 <div *ngIf="(dCapReset$ | async) as reset"></div>
+<div *ngIf="(terminalSettings$ | async) as terminal"></div>
 
 <div  class="grid-items"
       *ngIf=" (uiTransactions$ | async) as uiTransactions" >
@@ -13,9 +14,10 @@
         <div class="tip-grid">
 
           <div class="action-center">
-            <mat-label class="h3" *ngIf="!payment.completionDate && payment"> Payment: {{ payment.amountPaid }} </mat-label>
+            <mat-label class="h3" *ngIf="payment?.amountPaid">Payment: {{ payment.amountPaid | currency }} </mat-label>
+            <mat-label class="h3" *ngIf="payment?.tipAmount >0"> Gratuity: {{ payment.tipAmount  | currency}} </mat-label>
             <br>
-            <mat-label class="h3"  color ="accent" *ngIf="!isUser && payment.completionDate"> Change Due: <br> {{ changeDue | currency }}</mat-label>
+            <mat-label class="h3"  color ="accent" *ngIf="!isUser && payment.completionDate"> Change Due: {{ changeDue | currency }}</mat-label>
           </div>
 
           <div *ngIf="!isUser" class="action-center">
@@ -40,10 +42,12 @@
     <mat-card *ngIf="step == 2">
       <div class="action-center">
         <div class="action-center">
-          <mat-label class="h3" *ngIf="!payment.completionDate && payment">Payment: {{ payment.amountPaid }} </mat-label>
-        </div>
-        <div  *ngIf="!isUser" class="action-center">
-          <mat-label class="h3"  color ="accent" *ngIf="payment.completionDate"> Change Due: <br> {{ changeDue | currency }}</mat-label>
+          <mat-label class="h3" *ngIf="payment?.amountPaid">   Payment: {{ payment.amountPaid | currency }} </mat-label>
+          <mat-label class="h3" *ngIf="payment?.tipAmount >0"> Gratuity: {{ payment.tipAmount  | currency}} </mat-label>
+          <br>
+          <mat-label class="h3"  color ="accent" *ngIf="!isUser && payment.completionDate && payment.amountPaid>0">
+            Change Due: {{ changeDue | currency }}
+          </mat-label>
         </div>
       </div>
 

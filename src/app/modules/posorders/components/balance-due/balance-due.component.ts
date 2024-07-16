@@ -3,25 +3,26 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of,Subscription } from 'rxjs';
-import {  catchError, switchMap } from 'rxjs/operators';
+import {  catchError, concatMap, switchMap } from 'rxjs/operators';
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder, IPOSPayment, IServiceType } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { IBalanceDuePayload } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { TransactionUISettings,  UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { DSIEMVSettings, TransactionUISettings,  UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
-import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
+import { DcapRStream, DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { PosPaymentComponent } from '../../pos-payment/pos-payment.component';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { DcapPayAPIService } from 'src/app/modules/payment-processing/services/dcap-pay-api.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 
 @Component({
   selector: 'app-balance-due',
@@ -32,6 +33,13 @@ export class ChangeDueComponent implements OnInit  {
 
   uiTransactions: TransactionUISettings
   uiTransactions$ : Observable<TransactionUISettings>;
+
+  ui: TransactionUISettings
+  dsiEmv : DSIEMVSettings
+  terminalSettings:ITerminalSettings;
+  terminalSettings$: Observable<ITerminalSettings>;
+  response: DcapRStream;
+
   dCapReset$ : Observable<any>;
   printing$ : Observable<any>;
   action$   : Observable<any>;
@@ -75,6 +83,7 @@ export class ChangeDueComponent implements OnInit  {
               private orderMethodService: OrderMethodsService,
               private changeDetect : ChangeDetectorRef,
               private dCapService : DcapService,
+              private settingsService: SettingsService,
               private dialogRef: MatDialogRef<ChangeDueComponent>,
               @Inject(MAT_DIALOG_DATA) public data: IBalanceDuePayload
             )
@@ -95,6 +104,28 @@ export class ChangeDueComponent implements OnInit  {
     if (this.step == 1) {
       this.orderMethodsService.setScanner( )
     }
+  }
+
+  initTerminalSettings() {
+    this.terminalSettings$ = this.settingsService.terminalSettings$.pipe(concatMap(data => {
+      this.terminalSettings = data;
+      this.dsiEmv = data?.dsiEMVSettings;
+
+      if (!data) {
+        const site = this.siteService.getAssignedSite();
+        const device = localStorage.getItem('devicename');
+        return this.getPOSDeviceSettings(site, device)
+      }
+      return of(data)
+    }))
+  }
+
+  getPOSDeviceSettings(site, device) {
+    return this.settingsService.getPOSDeviceSettings(site, device).pipe(concatMap(data => {
+      this.settingsService.updateTerminalSetting(data)
+      this.dsiEmv = data?.dsiEMVSettings;
+      return of(data)
+    }))
   }
 
   printingCheck() {
@@ -138,6 +169,7 @@ export class ChangeDueComponent implements OnInit  {
     this.printingCheck();
     this.initAuthorization();
     this.initTransactionUISettings();
+    this.initTerminalSettings()
   }
 
   initTransactionUISettings() {
@@ -211,45 +243,54 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   customTipAmount(amount) {
-    if (this.payment) {
-      const value = +amount;
-      console.log('customTipAmount', amount, +amount.toFixed(2))
-      this.tip( ( amount )  )
+    const payment = this.payment;
+    if (!payment) {
+      console.log('no payment', amount)
+    }
+    if (payment) {
+      // Ensure amount has 2 decimal places
+      const formattedAmount = parseFloat(amount.toFixed(2));
+      console.log('customTipAmount', amount, formattedAmount);
+      this.tip(formattedAmount);
     }
   }
-
   specifiedTip(amount: number) {
-    const payment = this.payment
+    const payment = this.payment;
+    if (!payment) {
+      console.log('no payment', amount)
+    }
     if (payment) {
-
-      // const value = payment.amountPaid * (amount / 100 );
-
-      console.log('specifiedTip', amount, +amount.toFixed(2))
-
-      this.tip(  +amount.toFixed(2)  )
-
+      // Ensure amount has 2 decimal places
+      const formattedAmount = parseFloat(amount.toFixed(2));
+      console.log('customTipAmount', amount, formattedAmount);
+      this.tip(formattedAmount);
     }
   }
 
   tip(amount: number) {
 
-    console.log('tip', amount, +amount.toFixed(2))
+    // console.log('tip', amount, +amount.toFixed(2))
+
+    const formattedAmount = parseFloat(amount.toFixed(2));
+    console.log('customTipAmount', amount, formattedAmount);
+
+
     const site = this.siteService.getAssignedSite();
     const payment = this.payment
     if (payment) {
       if (this.uiTransactions.dCapEnabled) {
         if (this.payment?.tranCode === 'EMVPreAuth') {
-          this.action$ = this.completeAuthWithDcapTip(amount)
+          this.action$ = this.completeAuthWithDcapTip(formattedAmount)
           return;
         }
         if (this.payment?.tranCode === 'PayAPISale') {
-          this.action$ = this.processPayAPIAdjustSale(amount)
+          this.action$ = this.processPayAPIAdjustSale(formattedAmount)
           return;
         }
-        this.action$ = this.processDcapTip(amount)
+        this.action$ = this.processDcapTip(formattedAmount)
         return;
       }
-      this.action$ = this.applytoPOS(payment, amount, site)
+      this.action$ = this.applytoPOS(payment, formattedAmount, site)
     }
   }
 
@@ -266,19 +307,63 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   processDcapTip(amount: number) {
-    const device = localStorage.getItem('devicename')
+
     const site = this.siteService.getAssignedSite()
-    const process$ = this.dCapService.adustByRecordNo(device, this.payment, amount)
+
+
+    if (this.dsiEmv) {
+      if (this.dsiEmv.v2) {
+        return this.processDCAPTipV2(amount)
+      }
+    }
+    const device = localStorage.getItem('devicename')
+    const process$ = this.dCapService.adustByRecordNo(device, this.payment, amount);
+
     return process$.pipe(switchMap(data => {
-      if (data && data.TextResponse && data.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) {
+
+
+      if (data.CmdStatus && data.CmdStatus.ToLower() == 'approved') {
+        return this.getOrderUpdate(this.payment.orderID.toString(), site)
+      }
+
+      if (data.captureStatus && data.captureStatus.ToLower() == 'captured') {
+        return this.getOrderUpdate(this.payment.orderID.toString(), site)
+      }
+
+      if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) {
+        this.siteService.notify(data.cmdResponse + ' ' + data?.textResponse, 'close',50000, 'red' )
+      }
+
+      if (data && data?.TextResponse && data.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) {
         if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) {
           this.siteService.notify(data.cmdResponse + ' ' + data.textResponse, 'close',50000, 'red' )
-          return of(null)
         }
       }
+
       return this.getOrderUpdate(this.payment.orderID.toString(), site)
     }))
+
+
   }
+
+  processDCAPTipV2(amount: number) {
+    const device = localStorage.getItem('devicename')
+    console.log('amount', amount)
+    const process$ = this.dCapService.adustByRecordNoV2(device, this.payment, amount);
+
+    return process$.pipe(switchMap(data => {
+        if (!data.success) {
+          this.siteService.notify(data?.response?.TextResponse, 'close', 10000)
+        }
+        if (data.success) {
+          this.payment = data?.payment;
+        }
+        this.orderMethodService.updateOrder(data?.order)
+        return of(data)
+      })
+    );
+  }
+
 
   // processPayAPIAdjustSale(amount: number) {
   //   const device = localStorage.getItem('devicename')

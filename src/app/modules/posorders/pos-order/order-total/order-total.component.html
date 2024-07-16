@@ -25,9 +25,8 @@
     <div class="total-headers foreground-color">Items </div>
     <div class="totals foreground-color">{{ order.itemCount }}</div>
 
-
-    <div class="total-headers foreground-color" *ngIf="!order.completionDate && ui && ui?.dcapMultiPrice &&  ui?.dcapDualPriceValue > 0  && ui?.dcapSurchargeOption != 0" > Credit  Price ({{ui?.dcapSurchargeOption}}) </div>
-    <div class="total-headers foreground-color" *ngIf="!order.completionDate &&ui && ui?.dcapMultiPrice &&  ui?.dcapDualPriceValue < 0 && ui?.dcapSurchargeOption != 0" >   Non Credit Price ({{ui?.dcapSurchargeOption}}) </div>
+    <div class="total-headers foreground-color" *ngIf="!order.completionDate && ui && ui?.dcapMultiPrice &&  ui?.dcapDualPriceValue > 0 " >  Credit  Price ({{ui?.dcapSurchargeOption}}) </div>
+    <div class="total-headers foreground-color" *ngIf="!order.completionDate &&ui && ui?.dcapMultiPrice &&  ui?.dcapDualPriceValue < 0 " >   Non Credit Price ({{ui?.dcapSurchargeOption}}) </div>
 
     <div class="totals foreground-color"  *ngIf="!order.completionDate && ui && ui?.dcapMultiPrice != 0">{{ cashDiscount | currency  }}</div>
 

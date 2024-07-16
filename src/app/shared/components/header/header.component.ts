@@ -15,7 +15,6 @@ import { ScaleInfo, ScaleSetup } from 'src/app/_services/system/scale-service.se
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { PollingService } from 'src/app/_services/system/polling.service';
 import { Router } from '@angular/router';
 // import { IFloorPlan } from 'pointless-room-layout/src/app/app.component';
 import { FloorPlanService, IFloorPlan } from 'src/app/_services/floor-plan.service';

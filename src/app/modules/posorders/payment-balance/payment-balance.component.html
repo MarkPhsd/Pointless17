@@ -2,7 +2,7 @@
 <div *ngIf="(void$ | async) as void"></div>
 <div *ngIf="(printing$ | async) as printing"></div>
 
-<mat-card *ngIf="order">
+<mat-card *ngIf="order" class="mat-card">
   <mat-card-subtitle>
     <ng-content></ng-content>
     <div class="grid-header">
@@ -75,24 +75,26 @@
     </div>
   </mat-card-subtitle>
 
-  <mat-card-content *ngIf="order.posPayments">
-
+  <mat-card-content *ngIf="order.posPayments" class="mat-card-content">
+    <h5># of Payments:  {{ getNumberOfPayments() }}</h5>
     <div  *ngFor="let item of order.posPayments">
+
       <div class="payment-grid"
             *ngIf=" getPaymentViewA(item) ||
                     getPaymentViewB(item) ||
                     emvDataCap(item)  ">
 
+
         <ng-container *ngTemplateOutlet="tranTypeInfoView, context: {$implicit: item}"></ng-container>
-        <ng-container *ngTemplateOutlet="editPaymentView,  context: {$implicit: item}"></ng-container>
+        <!-- <ng-container *ngTemplateOutlet="editPaymentView,  context: {$implicit: item}"></ng-container> -->
         <ng-container *ngTemplateOutlet="cardPointCaptureView,  context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="triPOSCaptureView,  context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="dCapCaptureView,  context: {$implicit: item}"></ng-container>
 
         <ng-container *ngTemplateOutlet="cardInfoView,  context: {$implicit: item}"></ng-container>
-        <ng-container *ngTemplateOutlet="tipView,  context: {$implicit: item}"></ng-container>
+        <!-- <ng-container *ngTemplateOutlet="tipView,  context: {$implicit: item}"></ng-container> -->
         <ng-container *ngTemplateOutlet="printButtonView,  context:  {$implicit: item}"></ng-container>
-        <ng-container *ngTemplateOutlet ="voidActionView,  context:  {$implicit: item}"></ng-container>
+        <ng-container *ngTemplateOutlet="voidActionView,  context:  {$implicit: item}"></ng-container>
 
         <div *ngIf="item.voidReason && item.voidReason != 0" >
           <mat-label class="void-info">
@@ -134,7 +136,7 @@
 <ng-template #dCapCaptureView  let-item>
 
   <div *ngIf="dCapViewEnabled(item) && item?.paymentMethod?.isCreditCard" >
-    <!-- PaxA920 {{PaxA920}} -->
+
     <div *ngIf="(order.creditBalanceRemaining != 0 && totalAuthPayments > 0 )">
       <button class="payment-buttons-sm" mat-raised-button color='primary' (click)="captureDCap(item, totalAuthPayments)">
           <mat-label>Complete  <br> {{ totalAuthPayments | currency }}</mat-label>
@@ -168,10 +170,11 @@
 
         <ng-container   *ngTemplateOutlet ="dsiEMVAndroidCardButton,  context:  {$implicit: item}"></ng-container>
       </div>
+
       <button   color="accent"
                 class="payment-buttons-sm"
                 style="width:125px"
-                 *ngIf="!PaxA920"
+                 *ngIf="!PaxA920  && item.amountPaid > 0"
                 mat-raised-button (click)="editPayment(item)">
         <mat-icon>edit</mat-icon><br>
           Edit Tip</button>
@@ -198,7 +201,6 @@
     </div>
     </dsiemvandroid-pay-btn>
 </ng-template>
-
 
 <ng-template #triPOSCaptureView let-item>
   <div *ngIf="!qrOrder && (
@@ -231,8 +233,8 @@
 </ng-template>
 
 <ng-template #cardInfoView let-item>
-  <div *ngIf="item?.paymentMethod?.isCreditCard && item?.cardNum" >
-    {{item.cardNum}}
+  <div *ngIf="item?.paymentMethod?.isCreditCard" >
+
     <div *ngIf="item.cardHolder">
       <span >
         {{item.cardHolder}}
@@ -242,20 +244,31 @@
 </ng-template>
 
 <ng-template #tranTypeInfoView let-item>
-  <div *ngIf="item.paymentMethod" class="grid-item">
-    {{item?.paymentMethod?.name}}
-    <div *ngIf="item.tranType">
-      <br> {{ item?.tranType.replace('Response', '') }}
+  <div>
+
+    <div *ngIf="item.paymentMethod" class="grid-item">
+      {{item?.paymentMethod?.name}}  {{item?.cardNum}}
     </div>
-    <span *ngIf="item.groupID != 0"> ({{item.groupID}})</span>
+    <div *ngIf="item.cardHolder">
+      <span >
+        {{item.cardHolder}}
+      </span>
+    </div>
+    <div *ngIf="item.tranType">
+      {{ item?.tranType.replace('Response', '') }}
+    </div>
+
+    <span *ngIf="item?.groupID != 0"> ({{item.groupID}})</span>
     <span *ngIf="item.voidReason"><mat-icon>void</mat-icon> </span>
 
-    <div *ngIf=" item?.completionDate ">
-      <!-- <span *ngIf="item.amountPaid - item.amountReceived !=0"> -->
-        Received: {{ item.amountReceived | currency}} <br>
-        Due:  {{item.amountPaid - item.amountReceived | currency}}
-      <!-- </span> -->
+    <div *ngIf="item?.completionDate ">
+      Received: {{ item.amountReceived | currency}} <br>
     </div>
+
+    <div  *ngIf="item?.tipAmount > 0">
+      Grat: {{item.tipAmount  | currency}}
+    </div>
+
   </div>
 </ng-template>
 
@@ -283,7 +296,7 @@
                                   item.tipAmount >0
                                   ">
 
-    <span *ngIf="item?.tranCode">
+    <!-- <span *ngIf="item?.tranCode">
       {{item?.tranCode.replace('PreAuthCapture', 'Captured')}}
     </span>
 
@@ -302,14 +315,14 @@
       <span  *ngIf="item.amountPaid - item.amountReceived !=0">
         {{  (item.amountReceived + +item.addedPercentageFee - item.amountPaid)  | currency }}
       </span>
-    </div>
+    </div> -->
   </div>
 </ng-template>
 
 <ng-template #voidActionView let-item>
 
   <div *ngIf="(authData$ | async) as auth">
-    <div *ngIf="!PaxA920 && isPaxEnabledTerminal && !qrOrder &&  auth.voidPayment && (item.completionDate || item.amountPaid != 0) &&  (item?.voidReason != 0 && !item.voidReason)">
+    <div *ngIf="!PaxA920 && isPaxEnabledTerminal &&  item.amountPaid  != 0 && !qrOrder &&  auth.voidPayment && (item.completionDate || item.amountPaid != 0) &&  (item?.voidReason != 0 && !item.voidReason)">
       <button mat-button
               [disabled]="(item.voidReason && item.voidReason != 0 && item.voidAmount == item.amountPaid)"
               class="payment-button-balance"

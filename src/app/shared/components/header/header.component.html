@@ -176,7 +176,7 @@
 </ng-template>
 
 <ng-template #splitSelector>
-  <split-entry-selector 
+  <split-entry-selector
       *ngIf="platformService.isApp() && phoneDevice"
       [order]="order"
       [isUserStaff]="isUserStaff"
@@ -243,6 +243,12 @@
   <div *ngIf="user && user.roles && user.roles != 'user'">
     <ng-container [ngTemplateOutlet]="menuButtonContainer">  </ng-container>
   </div>
+  <div *ngIf="user && user.roles && user.roles == 'user'">
+    <!-- <ng-container [ngTemplateOutlet]="menuButtonContainer">  </ng-container>
+      -->
+      <ng-container [ngTemplateOutlet]="menuBarView"></ng-container>
+  </div>
+
 </ng-template>
 
 <ng-template #clockInOut>

@@ -27,7 +27,9 @@
     <ng-container [ngTemplateOutlet]="largeScreenButtons"></ng-container>
 
     <div *ngIf="phoneDevice && !showNotes">
-      <button mat-raised-button (click)="showNotes = !showNotes"><mat-icon>note</mat-icon>Enter Notes</button>
+      <button mat-raised-button (click)="showNotes = !showNotes">
+        <mat-icon>note</mat-icon>Enter Notes
+      </button>
     </div>
     <mat-card-actions *ngIf="noteForm && showNotes">
       <div  [formGroup]="noteForm">
@@ -42,7 +44,9 @@
       </div>
 
       <div class="margin5">
-        <button mat-button (click)="setToggleKeyboard()"><mat-icon class="margin5">keyboard</mat-icon>Keyboard</button>
+        <button mat-button (click)="setToggleKeyboard()">
+          <mat-icon class="margin5">keyboard</mat-icon>Keyboard
+        </button>
       </div>
       <ng-container [ngTemplateOutlet]="keyboardDisplay"></ng-container>
     </mat-card-actions>

@@ -1,4 +1,6 @@
 <div *ngIf="(action$  | async) as action"></div>
+<div *ngIf="(terminalSettings$ | async) as item"></div>
+
 <div *ngIf="payment as item; else loading">
   <mat-card>
     <mat-card-subtitle>
@@ -7,9 +9,13 @@
 
         <div class="header-grid info-width">
 
-          <div class="title-format"> Order</div>
-          <div class="title-format">{{item.orderID}}</div>
-
+          <div class="title-format" > ID </div>
+          <div class="title-format" *ngIf="!payment?.history">{{item.orderID}}</div>
+          <div class="title-format" *ngIf="payment?.history">
+            <div *ngIf="(orderHistory$ | async) as orderHistory">
+             POS Order#  {{item?.purchaseOrderNumber}}
+            </div>
+          </div>
           <div class="title-format">Payment ID</div>
           <div class="title-format">{{item.id}}</div>
 
@@ -23,7 +29,10 @@
           <div class="title-format"> {{item.amountReceived | currency}} </div>
 
           <div class="title-format">Tip</div>
-          <div class="title-format"> {{item.tipAmount | currency}} </div>
+          <div class="title-format"> {{item?.tipAmount | currency}} </div>
+
+          <div class="title-format">Batched</div>
+          <div class="title-format"> {{ history}} </div>
 
         </div>
 
@@ -42,6 +51,28 @@
             ></app-edit-buttons-standard>
         </div>
 
+        <div *ngIf="canRefundByRecordNo && dsiEmv">
+          <div style="margin:5px">
+            <button mat-raised-button (click)="voidByRecordNumber()">
+              <mat-icon>edit</mat-icon>Void By Record No (Same Day)
+            </button>
+          </div>
+          <div style="margin:5px">
+            <button  mat-raised-button (click)="voidByInvoice()">
+              <mat-icon>edit</mat-icon>Void By Invoice (Same Day)
+            </button>
+          </div>
+          <div style="margin:5px">
+            <button mat-raised-button (click)="refundByRecordNo()">
+              <mat-icon>edit</mat-icon>Refund By Record Number
+            </button>
+          </div>
+          <div style="margin:5px">
+            <button *ngIf="payment?.tipAmount>0" mat-raised-button (click)="refundByRecordNo()">
+              <mat-icon>edit</mat-icon>Remove Only Tip
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="header-grid info-width sub-title">
@@ -53,6 +84,11 @@
     </mat-card-subtitle>
 
     <mat-card-content>
+      <div>
+        <h3 *ngIf="errorMessage">{{errorMessage}}</h3>
+        <ngx-json-viewer *ngIf="rStream" [json]="rStream"></ngx-json-viewer>
+      </div>
+
       <mat-divider></mat-divider>
 
       <div *ngIf="inputForm"
@@ -70,6 +106,16 @@
                 <input matInput
                       type             ="text"
                       formControlName  ="amountPaid"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field appearance="outline">
+                <mat-label >Tip Amount</mat-label>
+                <input matInput
+                      type             ="text"
+                      formControlName  ="tipAmount"
                       class="form-control" >
               </mat-form-field>
             </div>
@@ -191,7 +237,15 @@
           <div class="header">
             <h4><mat-icon>credit_card</mat-icon> Credit Into </h4>
           </div>
-
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label >Card Num </mat-label>
+              <input matInput
+                    type             ="text"
+                    formControlName  ="accountNum"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
           <div>
             <mat-form-field appearance="outline">
               <mat-label >Approval Code </mat-label>
@@ -224,6 +278,37 @@
 
           <div>
             <mat-form-field appearance="outline">
+              <mat-label >recordNo</mat-label>
+              <input matInput
+                    type             ="text"
+                    formControlName  ="recordNo"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label >acqRefData</mat-label>
+              <input matInput
+                    type             ="text"
+                    formControlName  ="dlNumber"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label >process Data</mat-label>
+              <input matInput
+                    type             ="text"
+                    formControlName  ="processData"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
+
+
+          <div>
+            <mat-form-field appearance="outline">
               <mat-label >Tran code</mat-label>
               <input matInput
                     type             ="text"
@@ -244,7 +329,7 @@
 
           <div>
             <mat-form-field appearance="outline">
-              <mat-label >textResponse</mat-label>
+              <mat-label >Capture Status</mat-label>
               <input matInput
                     type             ="text"
                     formControlName  ="captureStatus"
@@ -276,9 +361,13 @@
       </div>
 
       <div class="header">Raw Data</div>
+
+
+
       <div class="raw-data">
         {{payment | json}}
       </div>
+
     </mat-card-content>
 
 

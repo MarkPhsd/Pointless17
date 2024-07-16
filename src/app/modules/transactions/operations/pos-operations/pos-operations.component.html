@@ -38,6 +38,7 @@
     <span *ngIf="(uiTransactions?.dCapEnabled && dsiEmv)">
       <button mat-raised-button (click)="viewdcapBatchSummary()"> <mat-icon>credit_card</mat-icon>Batch Summary</button>
     </span>
+
     <span *ngIf="(uiTransactions?.dCapEnabled && dsiEmv)">
       <button mat-raised-button (click)="forcedcapBatchClose()"> <mat-icon>credit_card</mat-icon>Force Batch Close</button>
     </span>
@@ -203,7 +204,7 @@
         </div>
 
         <div>
-          
+
           <ng-container -container [ngTemplateOutlet]="itemAdjustmentVoids"></ng-container>
           <div *ngIf="(!auths?.disableItemSales)">
             <ng-container [ngTemplateOutlet]="itemSalesReport"></ng-container>

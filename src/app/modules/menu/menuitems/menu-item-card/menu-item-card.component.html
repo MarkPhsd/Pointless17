@@ -52,7 +52,7 @@
     <ng-container [ngTemplateOutlet]="typeDisplayView"></ng-container>
   </div>
 
-  <div class="footer">
+  <div class="footer"  *ngIf="displayType != 'header-category'">
     <button mat-button (click)="altMethod(true)"   [@.disabled]="androidApp"
             *ngIf="isCategory && displayType === 'header-category'"
             class="header-category-title">
@@ -80,7 +80,7 @@
 </ng-template>
 
 <ng-template #menuItemName>
-  <div class="item-name-center">
+  <div class="item-name-center" >
     {{ menuItem?.name  | truncateText: 30   }}
     <div *ngIf="menuItem?.prodSecondLanguage">
       {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}

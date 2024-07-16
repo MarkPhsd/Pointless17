@@ -259,6 +259,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         return 1
       }
 
+      console.log('balance paid',  order.balanceRemaining == 0)
       if (this.platFormService.isApp()) {
         if ((payment.amountReceived >= payment.amountPaid && order.completionDate) || order.balanceRemaining == 0) {
           this.orderMethodsService.updateOrder(order)
@@ -276,13 +277,17 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     if (!this.userAuthorizationService?.user) {   return of(null)  }
     if (!uiTransactions) {this.uiSettingService._transactionUISettings.value}
+
     if (order) {
       const expoPrinter = uiTransactions?.expoPrinter
       const templateID  = uiTransactions?.expoTemplateID;
       const prep$ = this.prepPrintingService.printLocations(order,
                                                             printUnPrintedOnly,
                                                             expoPrinter,
-                                                            templateID, cancelUpdateSubscription);
+                                                            templateID, 
+                                                            cancelUpdateSubscription);
+
+
       let item$ =  prep$.pipe(
         concatMap( data => {
           return  this.prepPrintUnPrintedItems(order?.id, cancelUpdateSubscription)
@@ -306,7 +311,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         concatMap(data => {
 
           if (cancelUpdateSubscription) {
-            console.log('cancelUpdateSubscription', cancelUpdateSubscription)
+            // console.log('cancelUpdateSubscription', cancelUpdateSubscription)
             return of(null)
           }
           return this.orderService.getOrder(site, id.toString(), false)
@@ -448,6 +453,30 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   }
 
+  processDcapCreditVoidV2( action:OperationWithAction) {
+    //once we get back the method 'Card Type'
+    //lookup the payment method.
+    //we can't get the type of payment before we get the PaymentID.
+    //so we just have to request the ID, and then we can establish everything after that.
+    const site = this.sitesService.getAssignedSite();
+    const device = localStorage.getItem('devicename')
+    action.deviceName  = device;
+    
+    return this.dCapService.voidSaleByRecordNoV2(action).pipe(switchMap(data => {
+        if (data) {
+            if (data.errorMessage) {
+              this.sitesService.notify(data?.errorMessage, 'close', 10000)
+            }
+            this.orderMethodsService.updateOrder(data?.order)
+            
+            this.sitesService.notify('Voided - this order has been re-opened if closed.', 'Result', 10000, 'green' )
+          }
+      
+        return of(data)
+      })
+    )
+  }
+
   processDcapCreditVoid( payment: IPOSPayment) {
     //once we get back the method 'Card Type'
     //lookup the payment method.
@@ -460,7 +489,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return this.dCapService.voidSaleByRecordNo(device, payment.id, device).pipe(switchMap(data => {
       if (data) {
         let valid =   this.validateDCAPResponse(data, posPayment)
-        console.log('valid', valid)
         if (valid) {
           const item = {} as OperationWithAction;
           posPayment.voidAmount = posPayment.amountPaid;
@@ -496,7 +524,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       this.sitesService.notify('Voided - this order has been re-opened if closed.', 'Result', 10000, 'green' )
       return of(data)
     }))
-
   }
 
   processDSIEMVCreditVoid( payment: IPOSPayment) {
@@ -855,6 +882,25 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     )).pipe(concatMap(data => {
       return of (this.orderMethodsService.order)
     }))
+  }
+
+  processDCAPResponseV2(payment: IPOSPayment, order: IPOSOrder) {
+
+    const site = this.sitesService.getAssignedSite();
+
+    let paymentResponse = {} as IPaymentResponse;
+    paymentResponse.order = order;
+    paymentResponse.payment = payment;
+
+    console.log('method',paymentResponse?.payment?.paymentMethod)
+    console.log('order', paymentResponse?.order)
+
+    return  this.finalizeTransaction(paymentResponse).pipe(
+      switchMap(data => {
+        return of(data)
+        }
+      )
+    )
   }
 
   finalizeTransaction(paymentResponse: IPaymentResponse) : Observable<IPOSOrder> {

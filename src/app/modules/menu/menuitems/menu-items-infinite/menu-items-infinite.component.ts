@@ -876,7 +876,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     const process$    = this.getProcess(site, model)
     if (this.value != 100 ) {
       if (!this.endOfRecords) {
-      this.loading      = true
+        this.loading      = true
       }
     }
 
@@ -1004,9 +1004,12 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
 
       if (this.menuItems) {
         try {
-          if (this.menuItems[this.menuItems.length -1 ].name.toLowerCase() === 'load more') {
-            this.menuItems.splice(this.menuItems.length -1 , 1)
-          };
+
+            // if (this.menuItems[this.menuItems.length -1 ].name.toLowerCase() === 'load more') {
+            //   this.menuItems.splice(this.menuItems.length -1 , 1)
+            // };
+     
+          
         } catch (error) {
         }
 
@@ -1039,7 +1042,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
 
         this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
 
-        if ( !this.endOfRecords) {
+        if ( this.value < 100) {
           const lastItem = this.getNextMenuItem();
           this.menuItems.push(lastItem)
         }

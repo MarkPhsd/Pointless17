@@ -85,6 +85,19 @@ export class TransferDataService {
 
    }
 
+   canCloseDayV2(site, deviceName:string, id: number) : Observable<ICanCloseOrder> {
+
+    const controller =  "/TransferData/"
+
+    const endPoint = `canCloseDayV2`
+
+    const parameters = `?deviceName=${deviceName}&id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<ICanCloseOrder>(url)
+
+   }
   //dateStart As String, dateEnd As String
   closeByDate(site: ISite, dateStart: string, dateEnd: string) : Observable<any> {
 
