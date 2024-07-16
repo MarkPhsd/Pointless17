@@ -27,12 +27,12 @@
 
           <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
 
+          <!-- (outPutTip)          = "customTipAmount($event)" -->
           <div  *ngIf="isUser || ((payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard))">
             <tip-entry-amount
               [payment]            = "payment"
               [paymentMethod]      = "paymentMethod"
               (specifiedTipAmount) = "specifiedTip($event)"
-              (outPutTip)          = "customTipAmount($event)"
             ></tip-entry-amount>
           </div>
         </div>

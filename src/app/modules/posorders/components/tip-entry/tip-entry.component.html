@@ -3,13 +3,14 @@
   <div class="action-center" >
     <button class="tip-button"
             mat-raised-button
-            (click)="customAmount = !customAmount">Custom</button>
-</div>
+            (click)="customAmount = !customAmount">Custom
+    </button>
+  </div>
 
   <div class="action-center" >
       <button class="tip-button"
               mat-raised-button
-              (click)="specifiedTip(15)">Tip 15 %  <br>  {{ payment.amountPaid * (15/100) | currency }}</button>
+              (click)="specifiedTip(15)">Tip 15 %  <br>  {{ payment?.amountPaid * (15/100) | currency }}</button>
   </div>
 
   <div class="action-center">
@@ -26,7 +27,6 @@
 
 </div>
 
-
 <div  *ngIf="(payment) && customAmount">
   <div class="action-center">
     <app-key-pad
@@ -35,7 +35,7 @@
         [inputTypeValue]      = "'decimal'"
         [inputDisabled]       = 'inputDisabled'
         [numberbuttons]       = "'number-buttons button-sized-2'"
-        (outPutReturnEnter)   ="customTipAmount($event)">
+        (outPutReturnEnter)   = "customTipAmount($event)">
         Enter tip amount.
     </app-key-pad>
   </div>

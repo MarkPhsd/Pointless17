@@ -254,6 +254,7 @@ export class ChangeDueComponent implements OnInit  {
       this.tip(formattedAmount);
     }
   }
+  
   specifiedTip(amount: number) {
     const payment = this.payment;
     if (!payment) {
@@ -268,13 +269,8 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   tip(amount: number) {
-
-    // console.log('tip', amount, +amount.toFixed(2))
-
     const formattedAmount = parseFloat(amount.toFixed(2));
     console.log('customTipAmount', amount, formattedAmount);
-
-
     const site = this.siteService.getAssignedSite();
     const payment = this.payment
     if (payment) {
