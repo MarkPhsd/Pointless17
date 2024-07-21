@@ -115,6 +115,7 @@ export interface IBalanceSheet {
   checkDeposit:         number;
   otherDeposit:         number;
   depositer:            string;
+  batchJSON           : string;
   c1s:                  number;
   c5s:                  number;
   c10s:                 number;

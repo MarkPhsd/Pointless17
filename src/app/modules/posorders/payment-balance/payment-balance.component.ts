@@ -90,7 +90,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
   get isPaxEnabledTerminal() {
-    if  (this.posDevice?.dsiEMVSettings?.TranDeviceID) {
+    if  (this.posDevice?.dsiEMVSettings?.TranDeviceID || this.posDevice?.dsiEMVSettings?.enabled ) {
       return true
     }
     return false
@@ -153,6 +153,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
     this.deviceInfo = this.authenticationService.deviceInfo;
   }
+
 
   getNumberOfPayments() {
     let count = 0

@@ -1,4 +1,5 @@
-import { Component, Inject, OnInit,OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit,OnDestroy, EventEmitter ,Output, HostListener} from '@angular/core';
+import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,8 +9,10 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IItemBasic, OrderActionResult, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
+import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ItemWithAction, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
+// import { EventEmitter } from 'stream';
 
 @Component({
   selector: 'app-adjust-item',
@@ -18,6 +21,7 @@ import { ItemWithAction, POSOrderItemService } from 'src/app/_services/transacti
 })
 export class AdjustItemComponent implements OnInit, OnDestroy {
 
+  @Output() outPutDismissBottomSheet = new EventEmitter()
   private _ItemWithAction : Subscription
   public  itemWithAction  : ItemWithAction;
   private id              : string;
@@ -45,10 +49,12 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
           private settingsService: SettingsService,
           private siteService: SitesService,
           private orderService: OrdersService,
+          private uiSettingService: UISettingsService,
           private orderMethodService: OrderMethodsService,
           private matSnackBar: MatSnackBar,
           private router: Router,
           private dialogRef: MatDialogRef<AdjustItemComponent>,
+          private _bottomSheetService  : MatBottomSheet,
           @Inject(MAT_DIALOG_DATA) public data: any,
           )
   {
@@ -67,6 +73,21 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
         this.getVoidReasons();
       })
     }
+  }
+
+
+  get IsSmallDevice() {
+    if (window.innerWidth < 599) {
+      return true
+    }
+    return false
+  }
+
+  get IsTinyDevice() {
+    if (window.innerWidth < 400) {
+      return true
+    }
+    return false
   }
 
   ngOnInit(): void {
@@ -147,13 +168,28 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   }
 
   closeDialog() {
-    if (this.itemWithAction.typeOfAction.toLowerCase() == 'voidorder'.toLowerCase()  ||
+    if (this.itemWithAction?.typeOfAction.toLowerCase() == 'voidorder'.toLowerCase()  ||
         this.itemWithAction?.typeOfAction.toLowerCase()  === 'refundOrder'.toLowerCase()
       ) {
-      this.updateOrderSubscription()
-      return ;
+      this.updateOrderSubscription();
+      return;
     }
-    this.dialogRef.close();
+    console.log(this.IsSmallDevice, this.IsTinyDevice, window.innerWidth )
+    if (!this.IsSmallDevice) { 
+      setTimeout(data => { 
+        console.log('timoutclose')
+        this.dialogRef.close();
+      }, 500);
+    }else { 
+      console.log('dismiss')
+      this.dialogRef.close();
+      // this.dismiss()
+      // this.dismiss()
+    }
+
+  }
+  dismiss() {
+    this._bottomSheetService.dismiss();
   }
 
   updateOrderSubscription() {
@@ -202,7 +238,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
         }
         return response$.pipe(
           switchMap(data => {
-            console.log('void order data', data)
+            // console.log('void order data', data)
             if (data === 'success') {
               this.notifyEvent('Voided', 'Success')
               this.updateOrderSubscription()
@@ -221,8 +257,16 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   updateOrderSub(order: IPOSOrder) {
     this.orderMethodService.updateLastItemAdded(null)
     this.orderMethodService.updateOrderSubscription(order)
-    this.dialogRef.close();
+    // this.dismiss()
+    setTimeout(data => { 
+      this.dialogRef.close();
+    }, 500);
+
+    // if (this.bottomSheetRef) { 
+    //   this.bottomSheetRef.dismiss();
+    // }
   }
+
 
   selectItem(setting) {
 
@@ -248,10 +292,16 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
             response$ =  this.itemService.voidPOSOrderItem(site, this.itemWithAction)
             this.actionResponse$ = response$.pipe(switchMap(
               data => {
-                  if (data === 'Item voided') {
-                    this.updateSubscription()
-                    this.notifyEvent('Item voided', 'Result')
-                    this.closeDialog();
+                  console.log('data', data)
+                  if (data) { 
+                    let result = data as string;
+                    const passGo = result.toLowerCase() === 'item voided' 
+                    console.log('passgo, ', passGo)
+                    if (passGo ) {
+                      this.updateSubscription()
+                      this.notifyEvent('Item voided', 'Result')
+                      this.closeDialog();
+                    }
                   }
                   return of(data)
                 }

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { supportsReferrerPolicy } from '@sentry/utils';
 import { Observable, Subject, of, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { IPaymentSalesSearchModel, IPaymentSalesSummary, PaymentSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
@@ -12,6 +11,7 @@ import { IPaymentSalesSearchModel, IPaymentSalesSummary, PaymentSummary, SalesPa
 })
 export class PaymentReportComponent implements OnInit, OnChanges {
 
+  @Input()  batchData: any;
   @Input()  type    : string;
   @Input()  site    : ISite;
   @Input()  dateTo  : string;

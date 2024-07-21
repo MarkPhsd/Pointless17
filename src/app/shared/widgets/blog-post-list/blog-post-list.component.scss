@@ -15,18 +15,22 @@
   grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
   overflow-y: auto;
   overflow-x: hidden;
-  // margin: 10px;
-  // padding: 15px;
   padding-left: 20px;
   padding-right: 20px;
-  // min-height: 300px;
   width: 100%;
-  // background-color: #cfe1ea;
   border-top: 15px;
   border-color: rgb(48, 53, 116);
-  // border-radius: 10px;
+
+  // display: flex;
+  // flex-direction: column;
+  // gap: 10px;
+  list-style: none;
+
 }
 
+.h1 {
+  font-size: 1.3rem;
+}
 .footer-cards {
   overflow-y: auto;
 }

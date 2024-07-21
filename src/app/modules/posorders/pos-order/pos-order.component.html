@@ -598,7 +598,10 @@
 </ng-template>
 
 <ng-template #labelPrintChild>
-  <label-select-printer [poItem]="selectedItem"></label-select-printer>
+  <label-select-printer 
+    [poItem]="selectedItem"
+    [poItems]="order.posOrderItems"
+  ></label-select-printer>
 </ng-template>
 
 <ng-template #purchaseItemSales>

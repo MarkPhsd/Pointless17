@@ -23,6 +23,7 @@ import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach
 import { IPaymentSalesSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { TouchBarOtherItemsProxy } from 'electron';
 
 @Component({
   selector: 'pos-operations',
@@ -84,12 +85,14 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   printStyles: string;
   validateSales$: Observable<any>;
   batchSummary$: Observable<any>;
+  batchData: any;
+  
   terminalSettings$: Observable<ITerminalSettings>;
   terminalSettings: ITerminalSettings
   dsiEmv: DSIEMVSettings
 
   initDevice : boolean;
-
+  toggleViewBatch: boolean;
   completedReportCount: number = 0;
   printReady: boolean;
 
@@ -134,7 +137,11 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    const site = this.siteService;
     this.userSubscriber();
+    this.initTransactionUISettings();
+    this.initTerminalSettings();
+    this.initAuthentication();
     const item  = localStorage.getItem('DSIEMVSettings');
     if (item) {
       this.dsiEMVSettings = JSON.parse(item) as Transaction;
@@ -144,15 +151,20 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       this.printStyles = data;
       return of(data)
     }))
-    const site = this.siteService
-    this.validateSales$ = this.balanceSheetService.validateDaysSales(this.site).pipe(switchMap(data => {
-      this.refreshInit()
-      return of(data)
-    }),catchError(data => {
-      this.refreshInit()
-      return of(data)
-    }))
-    this.initTerminalSettings()
+    this.refreshInfo()
+  }
+
+  initSalesReportsBatch() { 
+    this.validateSales$ = this.balanceSheetService.validateDaysSales(this.site).pipe(
+      switchMap(data => {
+          this.refreshInit()
+          return of(data)
+      })).pipe(
+        switchMap(data => { 
+          this.viewdcapBatchSummary()
+          return of(data)
+      }))
+    
   }
 
   get paymentPositiveNegView() {
@@ -164,7 +176,6 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   }
 
   initTerminalSettings() {
-
     const device = localStorage.getItem('devicename');
     if (!device) { return }
     this.terminalSettings$ = this.settingsService.terminalSettings$.pipe(concatMap(data => {
@@ -194,9 +205,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
       this.cdr.detectChanges()
       this.refreshSales();
       this.refreshClosingCheck();
-      this.initTransactionUISettings();
       this.setSchedulePeriod();
-      this.initAuthentication();
       this.notifyChild();
   }
 
@@ -219,16 +228,19 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
 
   initTransactionUISettings() {
       this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
-      switchMap(data => {
-        if (data) {
-          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
-          return of(this.uiTransactions)
-        }
-        if (!data) {
-          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
-          return of(this.uiTransactions)
-        }
-    }))
+        switchMap(data => {
+          console.log('ui data reporting',data )
+          if (data) {
+            this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+            this.viewdcapBatchSummary();
+            return of(this.uiTransactions)
+          }
+          if (!data) {
+            this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+            this.viewdcapBatchSummary();
+            return of(this.uiTransactions)
+          }
+      }))
   }
 
   get viewMetrcNetSales() {
@@ -288,6 +300,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     this.getUser();
     this.refreshSales();
     this.refreshClosingCheck();
+    this.viewdcapBatchSummary();
     const site = this.siteService.getAssignedSite()
     this.auditPayment$ = this.paymentReportService.getPaymentDiscrepancy(site, this.zrunID, '','')
   }
@@ -360,14 +373,20 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   viewdcapBatchSummary() {
     this.batchSummary$ = this.dcapBatchSummary
   }
+
   forcedcapBatchClose() {
     this.batchSummary$ = this.dcapbatchClose
   }
 
   get dcapBatchSummary() {
+    console.log('batch summary')
     if (this.uiTransactions?.dCapEnabled) {
       const device = localStorage.getItem('devicename')
-      return this.dcapService.batchSummary(device)
+      return this.dcapService.batchSummary(device).pipe(
+        switchMap(data => { 
+        this.batchData = data;
+        return of(data)
+      }))
     }
     return of(null)
   }

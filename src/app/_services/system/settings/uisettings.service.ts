@@ -2,7 +2,7 @@ import { Injectable} from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
-import { ISetting, IUser } from 'src/app/_interfaces';
+import { ISetting, ISite, IUser } from 'src/app/_interfaces';
 import { SitesService } from '../../reporting/sites.service';
 import { EmailModel } from '../../twilio/send-grid.service';
 import { SettingsService } from '../settings.service';
@@ -13,6 +13,7 @@ import { PosEditSettingsComponent } from 'src/app/modules/admin/settings/pos-lis
 import { ElectronService } from 'ngx-electron';
 import { PlatformService } from '../platform.service';
 import { UserPreferencesComponent } from 'src/app/modules/admin/clients/user-preferences/user-preferences.component';
+import { IMenuButtonGroups } from '../mb-menu-buttons.service';
 
 export interface ContactFieldOptions {
   id: number;
@@ -28,6 +29,7 @@ export interface TransactionUISettings {
   displayAdd             : boolean;
   displayQuantity        : boolean;
   lockOrders             : boolean;
+  disableTipGratutity: boolean;
   deleteUnClosedPrintedOrders: boolean;
   closeOrderTimeCutOff   : string;
   ordersRequireCustomer  : boolean;
@@ -361,7 +363,6 @@ export class UISettingsService {
   private _relativeValue         = new BehaviorSubject<unknown>(null);
   public  relativeValue$        = this._relativeValue.asObservable();
 
-  //.updateRelativeValue(value)
 
   get theme() {
     // if (this.toggleTheme === 'dark-theme' ) {
@@ -892,6 +893,7 @@ export class UISettingsService {
       cardPointPreAuth       : [''],
       cardPointBoltEnabled   : [''],
       cardPointAndroidEnabled: [''],
+      disableTipGratutity:  [],
       dsiEMVAndroidEnabcardPointPreAuthled   : [''],
       dsiEMVNeteEpayEnabled  : [''],
       dsiEMVIP               : [''],

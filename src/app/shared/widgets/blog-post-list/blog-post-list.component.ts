@@ -19,8 +19,8 @@ export class BlogPostListComponent implements OnInit {
   @ViewChild('gridView')      gridView: TemplateRef<any>;
 
   @Input() viewType = 'list';
-  @Input() group = '';
-  @Input() class = 'cards';
+  @Input() group  = '';
+  @Input() class  = 'cards';
   @Input() height = '400px';
 
   styles$: Observable<any>;
@@ -54,11 +54,16 @@ export class BlogPostListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadStyles()
     if (this.platformService.isApp()) { return }
+    this.loadStyles()
     this.refreshList()
   }
 
+  ngOnChanges() { 
+    if (this.platformService.isApp()) { return }
+    this.loadStyles()
+    this.refreshList()
+  }
   getHomePageSettings() {
     if (this.homePageSettings){ 
       return of(this.homePageSettings)
@@ -88,13 +93,10 @@ export class BlogPostListComponent implements OnInit {
 
     this.blogs$ = 
         homePage$.pipe(switchMap( data => { 
-          // console.log('search Group', search, data.wordpressHeadless)
           return this.blogService.searchBlogs( site, search )
         })).pipe(
           switchMap( data => {
-              // console.log('unfiltered', data)
               data.results.filter(item => { return item.enabled == true});
-              // console.log('filtered', data)
               this.blogs = data.results.sort((a, b) => (a.sort > b.sort ? 1 : -1));
               return of(this.blogs)
             }
@@ -134,7 +136,6 @@ export class BlogPostListComponent implements OnInit {
   }
 
   ngDestroy() { 
-    // document.body.destroyemp('style')
     this.styleElement.nativeElement.remove();
   }
 
@@ -158,7 +159,6 @@ export class BlogPostListComponent implements OnInit {
         return of('')
       })
     )
-
   }
 
   //    const result = await this.httpClient.get('assets/app-config.json').toPromise() //;( result => {

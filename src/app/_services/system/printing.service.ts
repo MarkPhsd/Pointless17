@@ -30,6 +30,10 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { MetrcPackagesService } from '../metrc/metrc-packages.service';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 
+export interface ItemLabelPrintOut  {
+  completed: boolean;
+  printOutAuto: boolean;
+}
 
 export interface printOptions {
   silent: boolean;
@@ -45,6 +49,12 @@ export class PrintingService {
 
   public _printOrder        = new BehaviorSubject<IPrintOrders>(null);
   public printOrder$         = this._printOrder.asObservable();
+
+  public _autoLabelPrinting       = new BehaviorSubject<ItemLabelPrintOut>(null);
+  public autoLabelPrinting$         = this._autoLabelPrinting.asObservable();
+
+  public _itemLabelPrintingComplete     = new BehaviorSubject<boolean>(null);
+  public itemLabelPrintingComplete$     = this._itemLabelPrintingComplete.asObservable();
 
   labelPrinter     : string;
   labelContentList = []  as string[]
@@ -81,6 +91,9 @@ export class PrintingService {
     return this.__printView;
   }
 
+  updateAutoLabelPrinting(value: ItemLabelPrintOut) {
+    this._autoLabelPrinting.next(value);
+  }
   updatePrepStatus(value: number) {
     this._prepStatus.next(value);
   }

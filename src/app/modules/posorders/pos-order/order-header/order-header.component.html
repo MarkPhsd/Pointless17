@@ -1,5 +1,5 @@
 <div *ngIf="(printAction$ | async) as item"></div>
-
+<div *ngIf="(menuButtonList$ | async) as item"></div>
 <span *ngIf="order">
 
   <div>
@@ -31,7 +31,9 @@
           </span>
           
           <span #coachingRefresh *ngIf="isApp || isUserStaff">
-            <button mat-button (click)='refreshOrder()'><mat-icon>refresh</mat-icon></button>
+            <button mat-button (click)='refreshOrder()'><mat-icon>refresh</mat-icon></button> 
+           
+            <span *ngIf="order.priceColumn && order.priceColumn >0 "><mat-icon>column</mat-icon> Level {{order.priceColumn}}</span>
           </span>
           <div *ngIf="order.tableName">{{order.tableName}}</div>
         </h4>
@@ -59,9 +61,9 @@
               <mat-icon>qr_code</mat-icon>QR Link
             </button>
           </div>
+
           <div style="margin-left:3px" class="button-row-55">
-            <ng-container [ngTemplateOutlet]="editOrderView"></ng-container>
-            <div *ngIf="(menuButtonList$ | async) as menuButtonList"></div>
+            <!-- <ng-container [ngTemplateOutlet]="editOrderView"></ng-container> -->
             <div *ngIf="menuButtonList">
               <function-buttons-list
                     [list]="menuButtonList"
@@ -120,14 +122,14 @@
 
         <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
 
-        <div>
+        <!-- <div>
           <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption && isSale && isUserStaff" >
             <value-from-list-selector
                 [value] ="order.priceColumn"
                 (assignValue)="assignPriceColumn($event)">
               Price </value-from-list-selector>
           </div>
-        </div>
+        </div> -->
       </div>
 
     </div>
@@ -146,7 +148,7 @@
 </ng-template>
 
 <ng-template #editOrderView>
-  <span *ngIf="!hideButtonOptions && user?.roles === 'admin'">
+  <!-- <span *ngIf="!hideButtonOptions && user?.roles === 'admin'">
     <button mat-button (click)="editOrder()"><mat-icon>edit</mat-icon></button>
-  </span>
+  </span> -->
 </ng-template>

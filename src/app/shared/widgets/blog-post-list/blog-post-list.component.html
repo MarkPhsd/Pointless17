@@ -3,15 +3,10 @@
 
   <ng-template #gridView>
 
-    <div class="grid-view" *ngIf="(blogs$ | async) as blogs">
-      <mat-card class="mat-card">
-        <div  *ngFor="let item of blogs">
-          <mat-card [class]="class" [style.height]="height" >
-            <mat-card-title>
-              {{item?.title}}
-            </mat-card-title>
-            <div [class]="gridClass"  [innerHtml]="item[0]?.content?.rendered"></div>
-          </mat-card>
+    <div  *ngIf="(blogs$ | async) as blogs">
+      <mat-card class="mat-card grid-view" >
+        <div   [style.height]="height"  *ngFor="let item of blogs" >
+          <ng-container  *ngTemplateOutlet="listItem,  context: {$implicit: item}" ></ng-container>
         </div>
       </mat-card>
     </div>
@@ -23,7 +18,7 @@
     <div *ngIf="(blogs$ | async) as blogs">
       <mat-card class="mat-card">
         <ul class="list-view" *ngFor="let item of blogs">
-          <li [innerHtml]="item[0]?.content?.rendered"></li>
+          <ng-container  *ngTemplateOutlet="listItem,  context: {$implicit: item}" ></ng-container>
         </ul>
       </mat-card>
     </div>
@@ -34,4 +29,12 @@
     <div>
       <mat-spinner [diameter]="50"></mat-spinner>
     </div>
+  </ng-template>
+
+
+  <ng-template #listItem let-item>
+    <mat-card-title class="h1">
+      {{item[0]?.title?.rendered}}
+    </mat-card-title>
+    <li [innerHtml]="item[0]?.content?.rendered"></li>
   </ng-template>

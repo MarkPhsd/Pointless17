@@ -1,148 +1,157 @@
-<div *ngIf="(validateSales$ | async) as validate"></div>
+
 <div *ngIf="(closingProcedure$ | async) as closingProcedures"></div>
-<div *ngIf="(balanceSheet$  | async) as balanceSheet"></div>
-<div *ngIf="(terminalSettings$ | async) as terminalSettings"></div>
-<mat-card *ngIf="(uiTransactions$ | async) as uiTransactions">
+<div  *ngIf="(terminalSettings$ | async) as terminalSettings"></div>
 
-  <mat-card-title></mat-card-title>
-  <mat-card-subtitle>
-    <h2><mat-spinner *ngIf="completedReportCount<reportCountRequired" [diameter]="20"></mat-spinner>
-        Daily Report.
-        <span *ngIf="completedReportCount<reportCountRequired">Generating {{completedReportCount}} of {{reportCountRequired}}</span>
-        <span *ngIf="completedReportCount >= reportCountRequired">Ready to close</span>
-        <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
-    </h2>
-    <div *ngIf="(uiTransactions?.dCapEnabled && !terminalSettings && !dsiEmv)">
-     <h5>Use a POS device connected to a credit card terminal to close the day.</h5>
-    </div>
-  </mat-card-subtitle>
+<div *ngIf="(auths$ | async) as auths">
+  <div *ngIf="(uiTransactions$ | async) as uiTransactions">
+    <div *ngIf="(validateSales$ | async) as validate"></div> 
+    <div *ngIf="(balanceSheet$  | async) as balanceSheet"></div>
 
-  <mat-card-content>
-    <span>
-      <button mat-raised-button (click)="refreshInfo()"><mat-icon>refresh</mat-icon>
-      Refresh Sales Reports</button>
-    </span>
-
-    <span #coachingCloseDay>
-      <button mat-raised-button (click)="closeDay()">Close Day</button>
-    </span>
-
-    <span *ngIf="(printAction$ | async) as action">
-      <button [disabled]="!printReady" mat-raised-button (click)="print(action)"> <mat-icon>print</mat-icon>Print</button>
-    </span>
-
-    <span>
-      <button mat-raised-button (click)="email()"> <mat-icon>email</mat-icon>Email</button>
-    </span>
-
-    <span *ngIf="(uiTransactions?.dCapEnabled && dsiEmv)">
-      <button mat-raised-button (click)="viewdcapBatchSummary()"> <mat-icon>credit_card</mat-icon>Batch Summary</button>
-    </span>
-
-    <span *ngIf="(uiTransactions?.dCapEnabled && dsiEmv)">
-      <button mat-raised-button (click)="forcedcapBatchClose()"> <mat-icon>credit_card</mat-icon>Force Batch Close</button>
-    </span>
-
-    <span *ngIf="(uiTransactions && uiTransactions.dsiEMVNeteEpayEnabled) && dsiEMVSettings && isElectronApp">
-      <button mat-raised-button (click)="emvDatacapBatchCards()"> <mat-icon>credit_card</mat-icon>Batch Close</button>
-    </span>
-
-    <span *ngIf="(uiTransactions && uiTransactions.dsiEMVNeteEpayEnabled) && dsiEMVSettings && isElectronApp">
-      <button mat-raised-button (click)="emvDataCapBatchInquire()"> <mat-icon>credit_card</mat-icon>Batch Inquire</button>
-    </span>
-
-    <app-list-printers-electron
-        [printerName]      ="printerName"
-        (outputPrinterName)="setPrinter($event)" >
-      Receipt Printer
-    </app-list-printers-electron>
-
-    <span *ngIf="runningClose">
-      <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
-    </span>
-
-    <span #coachingUnClosedBalanceSheets></span>
-    <span *ngIf="balanceSheetsClosed">
-      {{balanceSheetsClosed}}.
-    </span>
-    <span *ngIf="closeResult">
-      {{closeResult}}
-    </span>
-
-    <div *ngIf="(batchSummary$ | async)  as batchSummary; else batchProcessing">
-      <mat-card>
-        <mat-card-subtitle>Batch Summary</mat-card-subtitle>
-        <ngx-json-viewer *ngIf="batchSummary" [json]="batchSummary"></ngx-json-viewer>
-      </mat-card>
-    </div>
-
-    <ng-template #batchProcessing>
-      <div *ngIf="batchSummary$">
-        <h5>...getting batch info</h5>
-        <div>
-          <mat-spinner [diameter]="50"></mat-spinner>
+    <mat-card>
+      <mat-card-title></mat-card-title>
+      <mat-card-subtitle>
+        <h2><mat-spinner *ngIf="completedReportCount<reportCountRequired" [diameter]="20"></mat-spinner>
+            Daily Report.
+            <span *ngIf="completedReportCount<reportCountRequired">Generating {{completedReportCount}} of {{reportCountRequired}}</span>
+            <span *ngIf="completedReportCount >= reportCountRequired">Ready to close</span>
+            <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
+        </h2>
+        <div *ngIf="(uiTransactions?.dCapEnabled && !terminalSettings && !dsiEmv)">
+        <h5>Use a POS device connected to a credit card terminal to close the day.</h5>
         </div>
-      </div>
-    </ng-template>
+      </mat-card-subtitle>
+    
+      <mat-card-content>
+        <span>
+          <button mat-raised-button (click)="refreshInfo()"><mat-icon>refresh</mat-icon>
+          Refresh Sales Reports</button>
+        </span>
+    
+        <span #coachingCloseDay>
+          <button mat-raised-button (click)="closeDay()">Close Day</button>
+        </span>
+    
+        <span *ngIf="(printAction$ | async) as action">
+          <button [disabled]="!printReady" mat-raised-button (click)="print(action)"> <mat-icon>print</mat-icon>Print</button>
+        </span>
+    
+        <span>
+          <button mat-raised-button (click)="email()"> <mat-icon>email</mat-icon>Email</button>
+        </span>
+    
+        <span *ngIf="(uiTransactions?.dCapEnabled && dsiEmv)">
+          <button mat-raised-button (click)="viewdcapBatchSummary()"> <mat-icon>credit_card</mat-icon>Batch Summary</button>
+        </span>
+    
+        <span *ngIf="(uiTransactions?.dCapEnabled && dsiEmv)">
+          <button mat-raised-button (click)="forcedcapBatchClose()"> <mat-icon>credit_card</mat-icon>Force Batch Close</button>
+        </span>
+    
+        <span *ngIf="(uiTransactions && uiTransactions.dsiEMVNeteEpayEnabled) && dsiEMVSettings && isElectronApp">
+          <button mat-raised-button (click)="emvDatacapBatchCards()"> <mat-icon>credit_card</mat-icon>Batch Close</button>
+        </span>
+    
+        <span *ngIf="(uiTransactions && uiTransactions.dsiEMVNeteEpayEnabled) && dsiEMVSettings && isElectronApp">
+          <button mat-raised-button (click)="emvDataCapBatchInquire()"> <mat-icon>credit_card</mat-icon>Batch Inquire</button>
+        </span>
+    
+        <app-list-printers-electron
+            [printerName]      ="printerName"
+            (outputPrinterName)="setPrinter($event)" >
+          Receipt Printer
+        </app-list-printers-electron>
+    
+        <span *ngIf="runningClose">
+          <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
+        </span>
+    
+        <span #coachingUnClosedBalanceSheets></span>
+        <span *ngIf="balanceSheetsClosed">
+          {{balanceSheetsClosed}}.
+        </span>
+        <span *ngIf="closeResult">
+          {{closeResult}}
+        </span>
 
-    <div *ngIf="batchSummary  && isElectronApp">
-      <mat-card>
-        <mat-card-subtitle>Batch Inquire</mat-card-subtitle>
-        <div class="grid-container" >
-          <div>Batch No</div>
-          <div>{{batchSummary?.BatchNo}}</div>
-          <div>Net Batch Total</div>
-          <div>{{batchSummary?.NetBatchTotal}}</div>
-          <div>Batch Item Count</div>
-          <div>{{batchSummary?.BatchItemCount}}</div>
+        <div style="width:300px" *ngIf="(batchSummary$ | async)  as batchSummary">
+          <mat-card>
+            <mat-card-subtitle *ngIf="batchSummary">Batch Summary {{batchSummary?.netBatchTotal ?? 0 | currency}}</mat-card-subtitle>
+            <div *ngIf="batchSummary">
+              <button mat-raised-button (click)="toggleViewBatch = !toggleViewBatch"><mat-icon>list</mat-icon>Batch Data</button>
+            </div>
+            <ngx-json-viewer *ngIf="batchSummary && toggleViewBatch" [json]="batchData"></ngx-json-viewer>
+          </mat-card>
         </div>
-      </mat-card>
-    </div>
-
-    <div  *ngIf="batchClose  && isElectronApp">
-      <mat-card>
-        <mat-card-subtitle>Bath close summary</mat-card-subtitle>
-        <div class="grid-container">
-          <div>Batch No</div>
-          <div>{{batchClose?.BatchNo}}</div>
-          <div>Net Batch Total</div>
-          <div>{{batchClose?.NetBatchTotal | currency}}</div>
-          <div>Batch Item Count</div>
-          <div>{{batchClose?.BatchItemCount}}</div>
+    
+        <ng-template #batchProcessing>
+          <!-- *ngIf="batchSummary$" -->
+          <div >
+            <h5>...getting batch info</h5>
+            <div>
+              <mat-spinner [diameter]="50"></mat-spinner>
+            </div>
+          </div>
+        </ng-template>
+    
+        <div *ngIf="batchSummary  && isElectronApp">
+          <mat-card>
+            <mat-card-subtitle>Batch Inquire</mat-card-subtitle>
+            <div class="grid-container" >
+              <div>Batch No</div>
+              <div>{{batchSummary?.BatchNo}}</div>
+              <div>Net Batch Total</div>
+              <div>{{batchSummary?.NetBatchTotal}}</div>
+              <div>Batch Item Count</div>
+              <div>{{batchSummary?.BatchItemCount}}</div>
+            </div>
+          </mat-card>
         </div>
-      </mat-card>
-    </div>
-
-    <div *ngIf="(email$ | async) as item; emailing"></div>
-    <ng-template #emailing>
-      <div *ngIf="emailSending">
-        <mat-spinner [diameter]="50"></mat-spinner>
-        ...emailing
-      </div>
-    </ng-template>
-
-    <span #coachingUnpaidOrders></span>
-
-    <div *ngIf="closingCheck$ | async as closing">
-      <div>
-        <close-day-validation
-          (refreshCloseCheck)="refreshClosingCheck()"
-          [closeDayValidation]="closing">
-        </close-day-validation>
-      </div>
-      <!-- disableDiscrepancy {{uiTransactions?.disableDiscrepancy}} -->
-      <div *ngIf="!uiTransactions?.disableDiscrepancy">
-          <ng-container [ngTemplateOutlet]="paymentDiscrepancy"></ng-container>
-      </div>
-    </div>
-
-    <mat-divider></mat-divider>
-  </mat-card-content>
-
-</mat-card>
+    
+        <div  *ngIf="batchClose  && isElectronApp">
+          <mat-card>
+            <mat-card-subtitle>Bath close summary</mat-card-subtitle>
+            <div class="grid-container">
+              <div>Batch No</div>
+              <div>{{batchClose?.BatchNo}}</div>
+              <div>Net Batch Total</div>
+              <div>{{batchClose?.NetBatchTotal | currency}}</div>
+              <div>Batch Item Count</div>
+              <div>{{batchClose?.BatchItemCount}}</div>
+            </div>
+          </mat-card>
+        </div>
+    
+        <div *ngIf="(email$ | async) as item; emailing"></div>
+        <ng-template #emailing>
+          <div *ngIf="emailSending">
+            <mat-spinner [diameter]="50"></mat-spinner>
+            ...emailing
+          </div>
+        </ng-template>
+    
+        <span #coachingUnpaidOrders></span>
+    
+        <div *ngIf="closingCheck$ | async as closing">
+          <div>
+            <close-day-validation
+              (refreshCloseCheck)="refreshClosingCheck()"
+              [closeDayValidation]="closing">
+            </close-day-validation>
+          </div>
+          <!-- disableDiscrepancy {{uiTransactions?.disableDiscrepancy}} -->
+          <div *ngIf="!uiTransactions?.disableDiscrepancy">
+              <ng-container [ngTemplateOutlet]="paymentDiscrepancy"></ng-container>
+          </div>
+        </div>
+    
+        <mat-divider></mat-divider>
+      </mat-card-content>
+    
+    </mat-card>
+  </div>
+</div>
 
 <div class="mat-divider">
-  <!-- <mat-divider></mat-divider> -->
 </div>
 
 <div *ngIf="iBalanceSheet"
@@ -152,10 +161,10 @@
       <div class="grid-sales-cards ">
         <div>
           <div>
-            Start {{iBalanceSheet.startTime | date: 'short'}}
+            Start {{iBalanceSheet?.startTime | date: 'short'}}
           </div>
           <div>
-            ID {{iBalanceSheet.id}}
+            ID {{iBalanceSheet?.id}}
           </div>
         </div>
       </div>
@@ -163,15 +172,15 @@
   </mat-card>
 </div>
 
-<div class="container" *ngIf="(auths$ | async) as auths">
-  <div *ngIf="auths.blindClose" class="grid-sales-cards">
+<div class="container" >
+  <div *ngIf="auths?.blindClose" class="grid-sales-cards">
     <mat-card>
       Blind Close Enabled.
     </mat-card>
   </div>
 
   <div  class="grid-sales-cards"
-        *ngIf="iBalanceSheet && localSite && !auths.blindClose ">
+        *ngIf="iBalanceSheet && localSite && !auths?.blindClose ">
 
     <span #printsection>
       <div  class="grid-sales-cards">
@@ -219,8 +228,8 @@
     </span>
   </div>
 
-  <mat-card *ngIf="iBalanceSheet && iBalanceSheet.startTime &&
-                    (auths && (!auths.blindClose && !auths.disableBalanceEndOfDay))">
+  <mat-card *ngIf="iBalanceSheet && iBalanceSheet?.startTime &&
+                    (auths && (!auths?.blindClose && !auths?.disableBalanceEndOfDay))">
 
       <app-widget-card   [dateFrom]  ="iBalanceSheet.startTime"
                           [dateTo]   ="iBalanceSheet.startTime"
@@ -348,6 +357,7 @@
       [groupBy] ="'paymentMethod'"
       [autoPrint]="autoPrint"
       [surCharge]="uiTransactions?.dCapSurcharge"
+      [batchData]="batchData"
       [type]    ="'sales'">
     <h4>
       <mat-icon>credit_card</mat-icon>Payment Methods

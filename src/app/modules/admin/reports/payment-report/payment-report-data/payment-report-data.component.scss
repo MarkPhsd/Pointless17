@@ -215,13 +215,13 @@ button {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns:  75px 75px 55px 55px 45px;
+  grid-template-columns:  65px 75px 55px 45px 45px;
   font-size: 1em;
 
   @media print {
     font-size: 12pt;
     font-weight: bold;
-    grid-template-columns:  75px 75px 55px 55px 45px;
+    grid-template-columns:  65px 75px 55px 45px 45px;
     gap: var(--gap);
     display: grid;
     margin-left:  0px;
@@ -237,7 +237,7 @@ button {
 }
 
 .grid-header {
-  --gap: 5px;
+  --gap: 2px;
   display: grid;
   gap: var(--gap);
   grid-template-columns:  55px 85px 55px 45px 65px;
@@ -248,33 +248,42 @@ button {
 }
 
 .grid-footer {
-  --gap: 5px;
+  --gap: 2px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 55px 75px 75px 75px 65px;
+  // grid-template-columns: 55px 75px 75px 75px 65px;
+  grid-template-columns: 55px 85px 55px 35px 65px;
   // margin-left: 15px;
   font-size: 1.1em;
   margin-top: 5px;
   margin-bottom: 5px;
-
+  @include for-phone-only {
+    grid-template-columns:  55px 85px 55px 35px 65px;
+  }
 }
 
 .grid-footer-payments {
-  --gap: 5px;
+  --gap: 2px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 55px 75px 75px 75px 65px;
+  // grid-template-columns: 55px 75px 75px 75px 65px;
+  grid-template-columns: 55px 85px 55px 35px 65px;
   margin-left: 15px;
   font-size: 1.1em;
   margin-top: 15px;
   margin-bottom: 5px;
+
+  @include for-phone-only {
+    grid-template-columns:  55px 85px 55px 35px 65px;
+  }
 }
 
 .grid-voids {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 55px 65px 65px 65px 65px;
+  // grid-template-columns: 55px 65px 65px 65px 65px;
+  grid-template-columns:    55px 85px 55px 35px 65px;
   // margin-left: 15px;
   white-space   : nowrap;
   overflow      : hidden;
@@ -292,6 +301,10 @@ button {
   overflow      : hidden;
   text-overflow : ellipsis;
   text-transform: capitalize;
+
+  @include for-phone-only {
+    grid-template-columns:  55px 85px 55px 35px 65px;
+  }
 }
 
 .grid-items {

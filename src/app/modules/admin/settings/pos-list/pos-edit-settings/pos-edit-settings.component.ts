@@ -16,6 +16,8 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { ActivatedRoute, Route } from '@angular/router';
 import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
+import { MenuService } from 'src/app/_services';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 @Component({
   selector: 'app-pos-edit-settings',
   templateUrl: './pos-edit-settings.component.html',
@@ -52,6 +54,7 @@ export class PosEditSettingsComponent implements OnInit {
   androidDisplay: any;
   processing$: Observable<any>;
 
+  categories$  : Observable<IMenuItem[]>;
   medOrRecStoreList = [
     {id:0,name:'Any'},  {id:1,name:'Med'},  {id:2,name:'Rec'}
   ]
@@ -68,7 +71,8 @@ export class PosEditSettingsComponent implements OnInit {
     private uiSettingService    : UISettingsService,
     private fileSystemService   : FileSystemService,
     private serviceTypeService: ServiceTypeService,
-    public  labelingService: LabelingService,
+    public  labelingService     : LabelingService,
+    private menuService         : MenuService,
     private cardPointBoltService: CardPointBoltService,
     public route        : ActivatedRoute,
     private dCapService           : DcapService,
@@ -175,6 +179,7 @@ export class PosEditSettingsComponent implements OnInit {
     await this.getAndroidPrinterAssignment()
     const site = this.sitesService.getAssignedSite()
     this.serviceType$ = this.serviceTypeService.getAllServiceTypes(site);
+    this.categories$ = this.menuService.getListOfCategoriesAll(site);
   }
 
   async createZPLFolderData() {
@@ -223,6 +228,7 @@ export class PosEditSettingsComponent implements OnInit {
       enableScale        : [],
       ignoreTimer        : [],
       defaultOrderTypeID: [],
+      defaultMenuCategoryID: [],
       triPOSMarketCode: [],
       enablePrepView  : [],
       defaultLabel    : [],
@@ -287,8 +293,6 @@ export class PosEditSettingsComponent implements OnInit {
     }
     return null
   }
-
-
 
   saveTerminalSetting(close: boolean) {
     const site = this.sitesService.getAssignedSite()

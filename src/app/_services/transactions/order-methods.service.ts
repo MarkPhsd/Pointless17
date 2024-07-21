@@ -609,6 +609,7 @@ export class OrderMethodsService implements OnDestroy {
       this.updateOrderSubscription(order)
     }
     this.initSubscriptions();
+  
   }
 
   ngOnDestroy(): void {
@@ -1540,7 +1541,7 @@ export class OrderMethodsService implements OnDestroy {
   newOrderWithPayloadMethod(site: ISite, serviceType: IServiceType, overRideNavigation?: boolean): Observable<any> {
       if (!site) { return of(null) }
 
-      if (!this.userAuthorization.user) {
+      if (!this.userAuthorization?.user) {
         this.siteService.notify('Please login, user required', 'Alert', 1000)
         return of(null)
       }
@@ -1548,7 +1549,7 @@ export class OrderMethodsService implements OnDestroy {
       let orderPayload = this.getPayLoadDefaults(serviceType)
       let order: any;
 
-      if (this.userAuthorization.isUser) {
+      if (this.userAuthorization?.isUser) {
         orderPayload.order.suspendedOrder = true;
         orderPayload.order.onlineOrderID  = uuid.v4();
       }
@@ -1561,7 +1562,6 @@ export class OrderMethodsService implements OnDestroy {
           if (!serviceType) {   serviceType = order.service  }
           this.processOrderResult(order, site, serviceType?.retailType, null, serviceType?.resaleType )
           if (overRideNavigation) {
-            // console.log('set active order')
             this.setActiveOrder(order)
             return of(null)
           }
@@ -1742,8 +1742,6 @@ export class OrderMethodsService implements OnDestroy {
 
   getEmployeeID(): number {
     const id = +this.authenticationService?.userValue?.id;
-    // const id = localStorage.getItem('employeeIDLogin')  ;
-    // console.log('employeeIDLogin', id)
     if (id) {
       return +id
     }
@@ -1751,9 +1749,25 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   navToDefaultCategory(): Observable<IMenuItem> {
-    return this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
-      const site = this.siteService.getAssignedSite()
+    const deviceName = localStorage.getItem('devicename') 
+    
+    const device$ =   this.uiSettingService.posDevice$
+    let categoryID = 0
 
+    return device$.pipe(switchMap(data => { 
+      if (data) { 
+        if (data?.defaultMenuCategoryID) { 
+          categoryID = data?.defaultMenuCategoryID;
+        }
+      }
+      return this.uiSettingService.transactionUISettings$
+    })).pipe(switchMap(data =>  {
+      const site = this.siteService.getAssignedSite()
+      console.log('nave to default ', categoryID)
+      if (categoryID != 0) { 
+        this.router.navigate(["/menuitems-infinite/", {categoryID:categoryID}]);
+        return this.menuService.getMenuItemByID(site, categoryID)
+      }
       if (data && data.defaultNewOrderCategoryID) {
         this.router.navigate(["/menuitems-infinite/", {categoryID: data.defaultNewOrderCategoryID}]);
         return this.menuService.getMenuItemByID(site, data.defaultNewOrderCategoryID)

@@ -1144,7 +1144,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.bottomSheetItemsOpen = true
       this.orderMethodsService.updateBottomSheetOpen(true)
       this._ItemsSheet = this.bottomSheet.open(PosOrderItemsComponent)
-      // ref.subscribeda
     }
   }
 

@@ -76,7 +76,7 @@
   </mat-card-subtitle>
 
   <mat-card-content *ngIf="order.posPayments" class="mat-card-content">
-    <h5># of Payments:  {{ getNumberOfPayments() }}</h5>
+    <h5 *ngIf="getNumberOfPayments()>0"># of Payments:  {{ getNumberOfPayments() }}</h5>
     <div  *ngFor="let item of order.posPayments">
 
       <div class="payment-grid"
@@ -320,9 +320,15 @@
 </ng-template>
 
 <ng-template #voidActionView let-item>
-
+  <!-- Void ACTION<br>
+  action1 {{!PaxA920}} <br>
+  isPaxEnabledTerminal {{isPaxEnabledTerminal}} <br>
+  paid {{item.amountPaid  != 0}} <br>
+  qrOrder {{!qrOrder}}<br> -->
   <div *ngIf="(authData$ | async) as auth">
-    <div *ngIf="!PaxA920 && isPaxEnabledTerminal &&  item.amountPaid  != 0 && !qrOrder &&  auth.voidPayment && (item.completionDate || item.amountPaid != 0) &&  (item?.voidReason != 0 && !item.voidReason)">
+    <!-- voidPayment {{auth?.voidPayment}} -->
+    <div *ngIf="!PaxA920 && isPaxEnabledTerminal &&  item.amountPaid  != 0
+                 && !qrOrder &&  auth.voidPayment && (item.completionDate || item.amountPaid != 0) &&  (item?.voidReason != 0 && !item.voidReason)">
       <button mat-button
               [disabled]="(item.voidReason && item.voidReason != 0 && item.voidAmount == item.amountPaid)"
               class="payment-button-balance"

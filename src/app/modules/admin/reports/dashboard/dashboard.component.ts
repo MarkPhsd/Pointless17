@@ -18,6 +18,7 @@ import { ReportingItemsSalesService } from 'src/app/_services/reporting/reportin
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
 import { TransferDataService } from 'src/app/_services/transactions/transfer-data.service';
+import { RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -156,6 +157,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   uiHomePage : UIHomePageSettings
   _uiHomePage: Subscription;
   autoPrint: boolean = false;
+  batchData: any;
 
   constructor(
               private authentication              : AuthenticationService,
@@ -230,6 +232,8 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
 
   initDateFilter() {
     this.completionDateForm  = this.getFormRangeInitial(this.completionDateForm);
+
+    this.refreshZrunReports(this.completionDateForm.controls["start"].value , this.completionDateForm.controls["end"].value )
     this.subscribeToCompletionDatePicker();
     this.refreshCompletionDateSearch();
     this.refreshReports()
@@ -274,17 +278,32 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     const site = this.siteService.getAssignedSite()
     this.zrunID = null;
     this.action$ =  this.balanceSheetService.getSheet(site, event).pipe(switchMap(data => {
+      console.log(data)
+      console.log('batch', JSON.parse(data?.batchJSON))
+      const batchObj = this.siteService.convertToCamel(JSON.parse(data?.batchJSON))
       this.dateFrom = null;
       this.dateTo   = null;
-      this.zrunID   = data.id.toString()
+      this.zrunID   = data?.id.toString();
+      this.batchData = batchObj
       return of(data)
     }))
   }
 
   refreshZrunReports(start: string, end: string) {
+
+    if (this.dateFrom) { 
+      start = this.dateFrom
+    }
+    if (this.dateTo) { 
+      end = this.dateTo
+    }
+    console.log('refreshZRunReports', start, end)
     const site = this.siteService.getAssignedSite()
     this.zrunID = null;
-    this.zrunReports$ = this.salesPaymentsService.listZrunsInDateRange(site, this.dateFrom, this.dateTo).pipe(switchMap(data => {
+    
+    this.initZrunForm()
+    this.zrunReports$ = this.salesPaymentsService.listZrunsInDateRange(site, start, end).pipe(switchMap(data => {
+      console.log('Zreports obs', data)
       if (data.resultMessage) {
         this.siteService.notify(`Error ${data.resultMessage}`, 'Error', 5000, 'red'  )
       }

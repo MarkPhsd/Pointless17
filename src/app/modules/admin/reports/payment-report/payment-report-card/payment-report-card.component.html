@@ -30,18 +30,18 @@
         <div class="grid-item" *ngIf="!payment.paymentMethod" >EMPTY</div>
         <div  class='grid-item-right'  >   {{payment?.amountPaid | currency }}   </div>
         <div  class='grid-item-right'   >  {{( payment?.count && payment?.count > 0) ? (payment?.amountPaid / payment?.count).toFixed(2) : 0 | currency}}    </div>
-        <div  class='grid-item-right'  >  {{ payment.count }} </div>
-        <div   class='grid-item-right'  >    {{payment?.tipAmount | currency }}</div>
+        <div  class='grid-item-right'  >   {{ payment?.count }} </div>
+        <div   class='grid-item-right'  >  {{payment?.tipAmount | currency }}</div>
       </div>
 
       <div *ngIf="groupBy === 'service'"
             class="grid-payment-report-card">
         <div class="grid-item" *ngIf="payment.serviceType" >{{ payment?.serviceType }} </div>
         <div class="grid-item" *ngIf="!payment.serviceType" >EMPTY </div>
-        <div  class='grid-item-right' >   {{payment?.amountPaid | currency }}   </div>
-        <div  class='grid-item-right'  >   {{( payment?.count && payment?.count > 0) ? (payment?.amountPaid / payment?.count).toFixed(2) : 0 | currency}}   </div>
-        <div  class='grid-item-right' >   {{payment.count }} </div>
-        <div  class='grid-item-right' >    {{payment?.tipAmount | currency }}</div>
+        <div  class='grid-item-right' >   {{ payment?.amountPaid | currency }}   </div>
+        <div  class='grid-item-right'  >  {{( payment?.count && payment?.count > 0) ? (payment?.amountPaid / payment?.count).toFixed(2) : 0 | currency}}   </div>
+        <div  class='grid-item-right' >   {{ payment.count }} </div>
+        <div  class='grid-item-right' >   {{ payment?.tipAmount | currency }}</div>
       </div>
     </div>
 

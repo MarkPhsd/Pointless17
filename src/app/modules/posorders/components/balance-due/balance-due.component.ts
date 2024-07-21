@@ -23,6 +23,7 @@ import { PosPaymentComponent } from '../../pos-payment/pos-payment.component';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { DcapPayAPIService } from 'src/app/modules/payment-processing/services/dcap-pay-api.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 @Component({
   selector: 'app-balance-due',
@@ -58,6 +59,9 @@ export class ChangeDueComponent implements OnInit  {
   isUser: boolean;
   isStaff: boolean;
   isAuthorized: boolean;
+  vice           : ITerminalSettings
+  posDevice: ITerminalSettings;
+  _posDevice          : Subscription;
 
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
@@ -70,7 +74,7 @@ export class ChangeDueComponent implements OnInit  {
               private userAuthorization: UserAuthorizationService,
               private paymentService: POSPaymentService,
               private siteService: SitesService,
-              public orderMethodsService: OrderMethodsService,
+              public  orderMethodsService: OrderMethodsService,
               private orderService:  OrdersService,
               private toolbarServiceUI: ToolBarUIService,
               private snackBar : MatSnackBar,
@@ -79,6 +83,7 @@ export class ChangeDueComponent implements OnInit  {
               private printingService: PrintingService,
               private paymentMethodProcessService: PaymentsMethodsProcessService,
               private payAPIService: DcapPayAPIService,
+              private serviceTypeService:ServiceTypeService,
               private methodsService: CardPointMethodsService,
               private orderMethodService: OrderMethodsService,
               private changeDetect : ChangeDetectorRef,
@@ -88,6 +93,10 @@ export class ChangeDueComponent implements OnInit  {
               @Inject(MAT_DIALOG_DATA) public data: IBalanceDuePayload
             )
   {
+
+    this._posDevice = this.uISettingsService.posDevice$.subscribe(data => {
+      this.posDevice = data;
+   })
 
     if (data) {
       this.order = data.order
@@ -134,6 +143,39 @@ export class ChangeDueComponent implements OnInit  {
       this.finalizer = data;
       this.changeDetect.detectChanges()
     })
+  }
+
+
+  addNewOrder() {
+    const site = this.siteService.getAssignedSite();
+    const order = localStorage.getItem('orderSubscription')
+    let defaultOrderTypeID = 0
+
+    if (order && order != null) {
+      this.paymentMethodProcessService.sendOrderProcessLockMethod(this.orderMethodsService.currentOrder)
+    }
+   
+    let categoryID = 0
+ 
+    if (this.posDevice) {
+      if (this.posDevice?.defaultOrderTypeID  && this.posDevice?.defaultOrderTypeID != 0) {
+        const serviceType$ = this.serviceTypeService.getType(site, this.posDevice.defaultOrderTypeID)
+        this.action$ = serviceType$.pipe(switchMap(data => {
+            return of(data)
+        })).pipe(switchMap(data => {
+            const order$ = this.addNewOrderByType(data)
+            return order$
+        }))
+        return ;
+      }
+    }
+
+    this.action$  = this.addNewOrderByType(null)
+  }
+
+  addNewOrderByType(serviceType) {
+    const site = this.siteService.getAssignedSite();
+    return this.paymentMethodProcessService.newOrderWithPayloadMethod(site, serviceType)
   }
 
   newDefaultOrder(){

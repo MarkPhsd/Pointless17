@@ -99,11 +99,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   _transactionUI      :   Subscription;
 
-  userSave$                 : Observable<any>;
-  userInitCheck$: Observable<any>;
+  userSave$           : Observable<any>;
+  userInitCheck$      : Observable<any>;
   user                : IUser;
   _user               : Subscription;
-  signOut: boolean;
+  signOut             : boolean;
 
   userName:                  string;
   userRoles:                 string;

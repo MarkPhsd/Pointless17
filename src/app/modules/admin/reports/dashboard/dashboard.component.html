@@ -234,7 +234,8 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
             </ng-container>
           </div>
-
+          <!-- ZRUN {{zrunID}} <br>
+          Range {{dateFrom}} - {{dateTo}} <br> -->
           <sales-tax-report
                   [site]="site"
                   [dateFrom]  ="dateFrom"
@@ -253,6 +254,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [dateFrom]="dateFrom"
                   [dateTo]  ="dateTo"
                   [zrunID]  ="zrunID"
+                  [batchData]="batchData"
                   [notifier]="childNotifier">
             <div header>
               <mat-icon >summarize</mat-icon> Payments - {{site.name}}

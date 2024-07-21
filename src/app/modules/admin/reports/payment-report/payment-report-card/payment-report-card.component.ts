@@ -12,6 +12,7 @@ export class PaymentReportCardComponent implements OnInit {
   @ViewChild('refundsView')    refundsView: TemplateRef<any>;
   @ViewChild('voidsView')      voidsView: TemplateRef<any>;
 
+  @Input()  batchData : any;
   @Input()  groupBy: string;
   @Input()  payments: any;
   @Input()  refunds: true;

@@ -13,6 +13,7 @@ import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarVerticalPosition as 
 })
 export class SitesService {
 
+
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   sites: ISite[];
   site: ISite;
@@ -71,6 +72,23 @@ export class SitesService {
 
     this.apiUrl   = this.appInitService.apiBaseUrl()
 
+  }
+
+  toCamelCase(str) {
+    return str.replace(/_./g, s => s.charAt(1).toUpperCase()).replace(/^./, s => s.toLowerCase());
+  }
+
+  convertToCamel(obj: any) {
+    if (Array.isArray(obj)) {
+        return obj.map(this.convertToCamel);
+    } else if (obj !== null && obj.constructor === Object) {
+        return Object.keys(obj).reduce((result, key) => {
+            const camelCaseKey = this.toCamelCase(key);
+            result[camelCaseKey] = this.convertToCamel(obj[key]);
+            return result;
+        }, {});
+    }
+    return obj;
   }
 
   get debugMode() {

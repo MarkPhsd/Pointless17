@@ -22,12 +22,11 @@
         <mat-card-subtitle>
           <div >
             <div *ngIf="!uiHomePageSetting.smtpEmailEnabled && !uiHomePageSetting.twilioEnabled">Self registration is not allowed. </div>
-
             <span *ngIf="uiHomePageSetting.smtpEmailEnabled || uiHomePageSetting.twilioEnabled">
               <h2>Register Account</h2>
                 <p>
                 <span *ngIf="uiHomePageSetting.smtpEmailEnabled">  For email input your email. </span>
-                <span *ngIf="uiHomePageSetting.twilioEnabled">For text messang, only numeric, no spaces for text messaging</span>.
+                <span *ngIf="uiHomePageSetting.twilioEnabled">For text messang: only numeric, no spaces for text messaging</span>.
                 </p>
               <p> We will send an email or text with a code to make a password.</p>
             </span>

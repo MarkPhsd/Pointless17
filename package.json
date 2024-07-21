@@ -1,6 +1,6 @@
 {
-  "name": "pointlessposbeta",
-  "version": "3.15.22",
+  "name": "pointlesspos",
+  "version": "3.15.44",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -26,9 +26,8 @@
     "emergency": " npm run deploy --domain=emergencyroom",
     "ockosher": " npm run deploy --domain=ockosherstore",
     "noshhouse": " npm run deploy --domain=noshhouse",
-    "coconutsbeta": " npm run deploy -eletePromptSubGroups-domain=coconutspanamacity",
     "coconuts": " npm run deploy --domain=coconutsfl",
-    "cannabispos": " npm run deploy --domain=cannabispos",
+    "coconutspcb": " npm run deploy --domain=coconutspcb",
     "liquorpos": " npm run deploy --domain=liquorpos",
     "liquorpointofsale": " npm run deploy --domain=liquorpointofsale",
     "restaurantpointofsale": " npm run deploy --domain=restaurantpointofsale",

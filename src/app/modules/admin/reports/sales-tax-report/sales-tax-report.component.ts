@@ -23,15 +23,17 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   @Input() summaryOnly: boolean;
   //[site]="site" [dateFrom]="dateFrom" [dateTo]="dateTo"   [notifier]="childNotifier"
   @Input() site: ISite;
+
   @Input() dateTo: string;
   @Input() dateFrom: string;
+  @Input() zrunID  : string;
+  
   @Input() employeeID: number;
   @Input() scheduleDateStart: string;
   @Input() scheduleDateEnd: string;
   // scheduleDateStart       :     string;
   // scheduleDateEnd         :     string;
   @Input() notifier: Subject<boolean>
-  @Input() zrunID  : string;
   @Input() minimized: boolean;
   @Input() pendingTransactions: boolean;
   sales: ITaxReport;
@@ -94,7 +96,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
                 scheduleDateStart: this.scheduleDateStart } as IReportingSearchModel;
 
     if (this.employeeID != 0) { item.employeeID = this.employeeID  }
-    // console.log('Search', item, item.employeeID)
+    console.log('putSalesTaxReport', item, item.employeeID)
     if (item.scheduleDateEnd && item.scheduleDateStart) {
       this.sales$ =  this.reportingItemsSalesService.putSalesTaxReport(this.site, item ).pipe(switchMap(data => {
           this.sales = data;
@@ -119,16 +121,18 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
         }))
       return
     }
-
-    this.sales$ =  this.laborSummary$.pipe(switchMap(data => {
-      this.laborSummary = data;
-      return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
-    })).pipe(switchMap(data => {
-        this.sales = data;
-        this.processing = false;
-        this.outputComplete.emit('SalesTaxReport')
-        return of(data)
-    }))
+    
+    if (!item.zrunID) { 
+      this.sales$ =  this.laborSummary$.pipe(switchMap(data => {
+        this.laborSummary = data;
+        return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
+      })).pipe(switchMap(data => {
+          this.sales = data;
+          this.processing = false;
+          this.outputComplete.emit('SalesTaxReport')
+          return of(data)
+      }))
+    }
   }
 
   dataGridView() {

@@ -157,6 +157,21 @@
               </mat-select>
             </mat-form-field>
         </div>
+        <div *ngIf="(categories$ | async) as list ">
+          <mat-form-field style="width: 200px" class="fields"
+              appearance="outline">
+            <mat-label>Default Category</mat-label>
+              <mat-select
+                        type              = "number"
+                        formControlName   = "defaultMenuCategoryID" >
+                <mat-option
+                    *ngFor="let item of list"
+                    [value]="item?.id">
+                    {{item?.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
 
       </div>
 

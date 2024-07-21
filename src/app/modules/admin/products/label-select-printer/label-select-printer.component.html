@@ -1,6 +1,13 @@
     <div *ngIf="(product$ | async) as product "></div>
     <div *ngIf="(action$ | async) as action"></div>
+    
+    <!-- {{poItems | json}} -->
+    <div *ngIf="poItems && poItems.length>0">
+      <button mat-raised-button (click)="printAllItems()"><mat-icon>print</mat-icon>Print All Items</button>
+    </div>
     <div *ngIf="remainingQuantity && remainingQuantity !=0 ">Left to Print: {{remainingQuantity}}</div>
+
+
     <div *ngIf="product">
        <br>
         <app-label-view-selector

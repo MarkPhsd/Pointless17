@@ -2,7 +2,7 @@ import { Component, OnInit,Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
+import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -36,6 +36,8 @@ export class FunctionButtonsListComponent implements OnInit {
     private router: Router,
     private productEditButtonService : ProductEditButtonService,
     private ordersService:   OrdersService,
+    private authenticationService: AuthenticationService,
+    private fbProductButtonService: ProductEditButtonService,
    ) {
 
   }
@@ -57,6 +59,9 @@ export class FunctionButtonsListComponent implements OnInit {
     const functionName = props?.method
     if (!functionName) { return }
     switch (functionName) {
+      case 'editOrder':
+        this.editOrder();
+        break;
       case 'deleteOrder':
         this.deleteOrder();
         break;
@@ -87,16 +92,20 @@ export class FunctionButtonsListComponent implements OnInit {
       case 'qrLink':
           this.qrLink();
           break;
-      case 'price1':
+      case 'price1': 
+      case 'price(1)':
         this.price(1);
         break;
       case 'price2':
+      case 'price(2)':
         this.price(2);
         break;
       case 'price3':
+      case 'price(3)':
         this.price(3);
         break;
       case 'price':
+      case 'price(0)':
         this.price(0);
         break;
       default:
@@ -105,18 +114,26 @@ export class FunctionButtonsListComponent implements OnInit {
     }
   }
 
+  editOrder() {
+    if (!this.order) { return }
+    const diag = this.fbProductButtonService.openOrderEditor(this.order)
+  }
+
+
   price(value) {
-    this.price(value)
+    if (this.order ) { 
+      if (this.authenticationService?.userAuths?.priceColumnOption &&  this.authenticationService?.isStaff) {
+        this.assignPriceColumn(value)
+      }
+    }
   }
 
   assignPriceColumn(value: number){
     const site = this.siteService.getAssignedSite()
     if (this.order) {
       this.order.priceColumn = value
-      // console.log(this.order.id,value)
       this.action$ = this.ordersService.setOrderPriceColumn(this.order.id, value).pipe(
         switchMap(data => {
-          // this.siteService.notify(`Price Column Set: ${value}`, 'Result', 2000)
           this.order.priceColumn = data;
           this.orderMethodsService.updateOrder(this.order)
           return of(data)

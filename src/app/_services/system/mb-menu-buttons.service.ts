@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { ISite } from 'src/app/_interfaces';
 import { AuthenticationService } from '..';
@@ -44,18 +44,32 @@ export interface IMenuButtonProperties {
 })
 export class MBMenuButtonsService {
 
+  private _menuButtonList         = new BehaviorSubject<IMenuButtonGroups>(null);
+  public  menuButtonList$        = this._menuButtonList.asObservable();
+
   functions = [
     {id: 0, name:'DRW 1', icon: 'register', function: 'openDrawer1',group: 'drawer'},
     {id: 1, name:'DRW 2', icon: 'register', function: 'openDrawer2',group: 'drawer'},
     {id: 2, name:'DRW 3', icon: 'register', function: 'openDrawer3',group: 'drawer'},
-    {id: 3, name:'Suspend', icon: 'hold', function: 'suspendOrder',group: 'order'},
+    {id: 3, name:'Edit Order', icon: 'edit', function: 'editOrder',group: 'drawer'},
     {id: 4, name:'EmailOrder', icon: '', function: 'emailOrder',group: 'order'},
-    {id: 5, name:'TextOrder', icon: '', function: 'textOrder',group: 'order'},
-    {id: 5, name:'QRLink', icon: '', function: 'qrLink',group: 'order'},
-    {id: 5, name:'Void Order', icon: '', function: 'voidOrder',group: 'order'},
-    {id: 5, name:'Print Labels', icon: '', function: 'printLabels',group: 'order'},
+    {id: 5, name:'Price 1', icon: '', function: 'price(1)',group: 'order'},
+    {id: 6, name:'Price 2', icon: '', function: 'price(2)',group: 'order'},
+    {id: 7, name: 'Price 3', icon: '', function: 'price(3)',group: 'order'},
+    {id: 8, name:'Print Labels', icon: '', function: 'printLabels',group: 'order'},
+    {id: 9, name:'QRLink', icon: '', function: 'qrLink',group: 'order'},
+    {id: 10, name:'Suspend', icon: 'hold', function: 'suspendOrder',group: 'order'},
+    {id: 5, name:'Standard Price', icon: '', function: 'price(0)',group: 'order'},
+    {id: 11, name:'TextOrder', icon: '', function: 'textOrder',group: 'order'},
+    {id: 12, name:'Void Order', icon: '', function: 'voidOrder',group: 'order'},
   ]
 //
+
+  //.updateRelativeValue(value)
+  setOrderHeaderMenuButtonList(list: IMenuButtonGroups) {
+    this._menuButtonList.next(list)
+  }
+
   constructor(
     private http: HttpClient,
     private httpCache: HttpClientCacheService,
@@ -130,7 +144,7 @@ filterMenuButtons(menuButtons: mb_MenuButton[]): mb_MenuButton[] {
 
     const uri = `${site.url}${controller}${endPoint}${parameters}`
 
-    const options = { url: uri, cacheMins: 30}
+    const options = { url: uri, cacheMins: 0}
 
     return  this.httpCache.get<IMenuButtonGroups>(options)
 

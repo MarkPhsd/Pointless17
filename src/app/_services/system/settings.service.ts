@@ -37,7 +37,6 @@ export interface ITerminalSettings {
   enableScale         : boolean;
   enableExitLabel     : boolean;
   ignoreTimer         : boolean;
-  defaultOrderTypeID: number;
   exitOrderOnFire   : boolean;
   enablePrepView    : boolean;
   defaultLabel      : string;
@@ -51,6 +50,8 @@ export interface ITerminalSettings {
   disableImages: boolean;
   disableMenuImages: boolean;
   quickScanningDevice: boolean;
+  defaultOrderTypeID: number;
+  defaultMenuCategoryID: number;
 }
 @Injectable({
   providedIn: 'root'

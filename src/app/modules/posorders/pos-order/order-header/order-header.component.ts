@@ -66,6 +66,8 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   isStaff: boolean;
   isAdmin: boolean;
   menuButtonList: IMenuButtonGroups;
+  _menuButton: Subscription;
+
   currentOrderSusbcriber() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
@@ -92,7 +94,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
           const ui$ = this.uiSettingsService.getUITransactionSetting().pipe(switchMap(data => {
             if (data) {
               this.uiSettingsService.updateUISubscription(data)
-              this.initMenuButtonList(data)
+            
             }
             return of(data)
           }));
@@ -101,7 +103,15 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
         return of(data)
       })).subscribe(data => {
         this.uiTransactionSettings = data;
-        this.initMenuButtonList(data)
+       
+      })
+    } catch (error) {
+    }
+
+    try { 
+      this._menuButton = this.mbMenuGroupService.menuButtonList$.subscribe(data => { 
+        console.log('order header menubutton list', data)
+        this.menuButtonList = data;
       })
     } catch (error) {
     }
@@ -159,19 +169,14 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-    this.refreshPrintOption()
-  }
-
-  initMenuButtonList(ui:TransactionUISettings) {
-    const site = this.siteService.getAssignedSite()
-    if (ui?.multiButtonOrderHeader && ui?.multiButtonOrderHeader != 0) {
-      this.menuButtonList$ = this.mbMenuGroupService.getGroupByIDCache(site, ui?.multiButtonOrderHeader).pipe(switchMap(
-        data => {
-          this.menuButtonList = data;
-        return of(data)
-      }))
+    this.refreshPrintOption();
+    if (!this.menuButtonList) {
+      if (this.isApp && this.uiTransactionSettings) { 
+        
+      }
     }
   }
+
 
   editOrder() {
     if (!this.order) { return }
@@ -357,10 +362,8 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     const site = this.siteService.getAssignedSite()
     if (this.order) {
       this.order.priceColumn = value
-      // console.log(this.order.id,value)
       this.action$ = this.ordersService.setOrderPriceColumn(this.order.id, value).pipe(
         switchMap(data => {
-          // this.siteService.notify(`Price Column Set: ${value}`, 'Result', 2000)
           this.order.priceColumn = data;
           this.orderMethodsService.updateOrder(this.order)
           return of(data)

@@ -1,11 +1,10 @@
 <div *ngIf="resultMessage">
   Result Mesage {{resultMessage}}
 </div>
-<div *ngIf="message">
-  <h4 *ngIf="saleComplete || response?.TextResponse === 'Error'">Response :    {{response?.TextResponse}}</h4>
-  <h4 *ngIf="saleComplete  || response?.ResponseOrigin === 'Error'">Response Origin :  {{response?.ResponseOrigin}}</h4>
-  <h4 *ngIf="saleComplete || response?.DSIXReturnCode === 'Error'">DSIX Return Code : {{response?.DSIXReturnCode}}</h4>
-  <!-- <h4 *ngIf="message">{{message}}</h4> -->
+<div *ngIf="response">
+  <h4 *ngIf="saleComplete  || response?.TextResponse">Response :    {{response?.TextResponse}}</h4>
+  <h4 *ngIf="saleComplete  || response?.ResponseOrigin ">Response Origin :  {{response?.ResponseOrigin}}</h4>
+  <h4 *ngIf="saleComplete  || response?.DSIXReturnCode">DSIX Return Code : {{response?.DSIXReturnCode}}</h4>
   <h4 >Status :       {{response?.CmdStatus}}</h4>
 </div>
 

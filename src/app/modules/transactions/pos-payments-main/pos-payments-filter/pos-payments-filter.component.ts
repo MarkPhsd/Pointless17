@@ -34,7 +34,7 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
     @ViewChild('input', {static: true}) input: ElementRef;
     @Output() itemSelect  = new EventEmitter();
     value : string;
-  employeeID: any;
+     employeeID: any;
     get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
     searchForm: UntypedFormGroup;
 

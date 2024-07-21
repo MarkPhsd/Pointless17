@@ -2,7 +2,7 @@ import { HostListener, Injectable } from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 
-import { MenuService } from 'src/app/_services';
+import { AuthenticationService, MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { StrainProductEditComponent } from 'src/app/modules/admin/products/productedit/strain-product-edit/strain-product-edit.component';
 import { EditSelectedItemsComponent } from 'src/app/modules/admin/products/productedit/edit-selected-items/edit-selected-items.component';
@@ -71,6 +71,7 @@ export class ProductEditButtonService {
               private paymentMethodService:PaymentMethodsService,
               private inventoryService    : InventoryAssignmentService,
               private itemTypeService     : ItemTypeService,
+              private userAuthService: AuthenticationService,
             ) { }
 
 
@@ -124,6 +125,13 @@ export class ProductEditButtonService {
   }
 
   openOrderEditor(order: IPOSOrder) {
+
+    const user = this.userAuthService._user.value
+    if (user?.roles !='admin') {
+      this.siteService.notify('Not authorized.', 'close', 3000);
+      return null;
+    }
+
     let dialogRef: any;
     const site = this.siteService.getAssignedSite();
 

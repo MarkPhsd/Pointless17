@@ -107,31 +107,25 @@
 }
 
 .grid-payment-report-card {
-  --gap: 5px;
+  --gap: 2px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 55px 85px 65px 65px 55px;
+  grid-template-columns: 55px 95px 60px 45px 75px;
   font-size: 1em;
+
   @include for-phone-only {
-    grid-template-columns:  55px 85px 65px 65px 55px;
+    grid-template-columns:  55px 85px 55px 35px 65px;
   }
 
   @media print {
     font-size: 12pt;
     font-weight: bold;
-    grid-template-columns:  75px 65px 65px 55px 45px;
+    grid-template-columns:  75px 65px 65px 35px 65px;
     gap: var(--gap);
     display: grid;
   }
 
 }
-
-// <!-- <div class="grid-item">Method</div>
-// <div class="grid-item">Reason</div>
-// <div class="grid-item">Employee</div>
-// <div class="grid-item">Device</div>
-// <div class="grid-item">Amount </div> -->
-
 
 .grid-voids {
   --gap: 5px;

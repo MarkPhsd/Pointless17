@@ -1,4 +1,6 @@
-<div *ngIf="(uiTransactions$ | async) as settings"></div>
+<div *ngIf="(uiTransactions$ | async) as settings">
+
+</div>
 <div *ngIf="(printAction$ | async) as printAction"></div>
 <div *ngIf="(posDevice$ | async) as posDevice"></div>
 <div *ngIf="(printOrders$ | async) as printOrders"></div>
@@ -16,7 +18,7 @@
 <mat-drawer-container [class]="getMatDrawerContainerClass">
 
   <mat-drawer
-        *ngIf    ="!menuManager"
+        *ngIf    ="!menuManager" 
         position ="start"
         [mode]   ="sidebarMode"
         [opened] ="leftSideBarToggle">

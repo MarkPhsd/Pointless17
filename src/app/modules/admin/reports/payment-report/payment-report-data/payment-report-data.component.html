@@ -195,6 +195,12 @@
             {{ (+(sales?.tipAmount ?? 0)) + (+(sales?.creditTotal ?? 0)) + (+(sales?.surChargeAmount ?? 0)) | currency }}
           </div>
 
+          <div *ngIf="batchData">
+            Batch Total
+          </div>
+          <div *ngIf="batchData">
+            {{batchData?.netBatchTotal ?? 0 | currency}}
+          </div>
           <!-- <div  *ngIf="groupBy && (groupBy === 'paymentMethod')" >
             All Total
           </div>

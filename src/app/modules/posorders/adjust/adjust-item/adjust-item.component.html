@@ -1,12 +1,8 @@
-
-<!-- Adjusts Item Container -->
-<!-- itemWithAction {{value | json}} -->
-
 <div *ngIf="(actionResponse$  | async) as action">
-  {{action}}
+  <!-- {{action}} -->
 </div>
 
-<div *ngIf="itemWithAction">
+<div *ngIf="itemWithAction" class="adjust-container">
   <mat-card>
     <mat-card-title>
     </mat-card-title>

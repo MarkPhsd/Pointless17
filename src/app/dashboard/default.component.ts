@@ -27,6 +27,7 @@ import { OrderMethodsService } from '../_services/transactions/order-methods.ser
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { PrintQueService } from '../_services/transactions/print-que.service';
 import { IItemType, ItemTypeService } from '../_services/menu/item-type.service';
+import { MBMenuButtonsService } from '../_services/system/mb-menu-buttons.service';
 @Component({
   selector: 'app-default',
   templateUrl: './default.component.html',
@@ -115,8 +116,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   uiSettings  : UIHomePageSettings;
   homePageSetting$: Observable<UIHomePageSettings>;
   uiTransactions$: Observable<any>;
+  uiTransactions : TransactionUISettings
   printAction$   : Observable<any>;
-
   devMode     : boolean;
   chatURL     : string;
   phoneDevice : boolean;
@@ -124,13 +125,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   hideAppHeader: boolean;
   posDevice$ : Observable<ITerminalSettings>
 
-  uiTransactions:TransactionUISettings
-
   action$ : Observable<any>;
   _sendAndLogOut: Subscription;
   _sendOrderOnExit: Subscription;
   viewPrep: boolean;
-
   matDrawerContentClass = 'mat-drawer-content'
   matDrawerContaienr = 'mat-drawer-container'
   viewType$ = this.orderMethodsSevice.viewOrderType$.pipe(switchMap(data => {
@@ -286,13 +284,38 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initUITransactionSettings() {
-    this.uiTransactions$ = this.uiSettingsService.getSetting('UITransactionSetting').pipe(
-      switchMap( data => {
-        this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
-        this.uiSettingsService._transactionUISettings.next(this.uiTransactions)
-        return of(data);
-    }));
+    let ui: TransactionUISettings
+    const site = this.siteService.getAssignedSite();
+    
+  
+    return this.settingService.getUITransactionSetting().pipe(
+      concatMap( data => {
+          this.uiTransactions = data
+          ui = this.uiTransactions;
+         
+          this.uiSettingsService._transactionUISettings.next(this.uiTransactions)
+          return of(data);
+      })).pipe(concatMap(data => { 
+          return this.initMenuButtonList( ui );
+      })).pipe(concatMap(data => {
+          return of(ui)
+      }
+    ))
   }
+  
+  initMenuButtonList(ui:TransactionUISettings) {
+    const site = this.siteService.getAssignedSite()
+    console.log('initMenuButtonList', ui?.multiButtonOrderHeader, ui)
+    if (ui?.multiButtonOrderHeader && ui?.multiButtonOrderHeader != 0) {
+      return this.mbMenuGroupService.getGroupByIDCache(site, ui?.multiButtonOrderHeader).pipe(switchMap(
+        data => {
+          console.log('menu button list', data)
+          this.mbMenuGroupService.setOrderHeaderMenuButtonList(data)
+          return of(data)
+      }))
+    }
+  }
+
 
   initDevice() {
     const site = this.siteService.getAssignedSite();
@@ -312,8 +335,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }))
     // }
   }
-
-
 
   homePageSubscriber(){
     try {
@@ -585,6 +606,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                public  toolBarUIService: ToolBarUIService,
                private _renderer       : Renderer2,
                private cd              : ChangeDetectorRef,
+               private mbMenuGroupService: MBMenuButtonsService,
                private itemTypeService : ItemTypeService,
                private appInitService          : AppInitService,
                private authorizationService    : AuthenticationService,
@@ -619,10 +641,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.renderTheme();
     this.initSettings();
     const site = this.siteService.getAssignedSite();
+    this.uiTransactions$ = this.initUITransactionSettings();
     this.splashLoader.stop();
     // this.initDevice();
     this.userIdle.resetTimer();
-    this.initUITransactionSettings();
     this.initLoginStatus();
     this.subscribeAddress();
     this.subscribSendOrder()

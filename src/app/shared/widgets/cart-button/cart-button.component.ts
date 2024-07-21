@@ -183,13 +183,16 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   addNewOrder() {
     const site = this.siteService.getAssignedSite();
     const order = localStorage.getItem('orderSubscription')
+    let defaultOrderTypeID = 0
 
     if (order && order != null) {
       this.paymentMethodsService.sendOrderProcessLockMethod(this.orderMethodsService.currentOrder)
     }
-
+   
+    let categoryID = 0
+ 
     if (this.posDevice) {
-      if (this.posDevice.defaultOrderTypeID  && this.posDevice.defaultOrderTypeID != 0) {
+      if (this.posDevice?.defaultOrderTypeID  && this.posDevice?.defaultOrderTypeID != 0) {
         const serviceType$ = this.serviceTypeService.getType(site, this.posDevice.defaultOrderTypeID)
         this.actionOrder$ = serviceType$.pipe(switchMap(data => {
             return of(data)

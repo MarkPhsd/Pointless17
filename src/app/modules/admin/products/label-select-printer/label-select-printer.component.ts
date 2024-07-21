@@ -1,12 +1,12 @@
-import { Component, OnInit,Input,OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit,Input,OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { of, switchMap , Observable} from 'rxjs';
-import { IProduct, ISetting, PosOrderItem } from 'src/app/_interfaces';
+import { of, switchMap , Observable, Subject, Subscription, BehaviorSubject} from 'rxjs';
+import { IPOSOrder, IProduct, ISetting, PosOrderItem } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { PrintingService } from 'src/app/_services/system/printing.service';
+import { ItemLabelPrintOut, PrintingService } from 'src/app/_services/system/printing.service';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 
 @Component({
@@ -20,7 +20,9 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
   @Input() menuItem: IMenuItem;
   @Input() poItem: PosOrderItem;
   action$ : Observable<any>;
+  @Input() poItems: PosOrderItem[];
 
+// = new EventEmitter();
   labelID : number;
   printerName : string;
   printQuantity : number;
@@ -30,6 +32,41 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
   printForm: FormGroup;
   product$: any;
   remainingQuantity: number;
+
+  autoPrintQUe: Subscription;
+
+  public _notifier       : Subscription ; //new BehaviorSubject<boolean>(null);
+  // public notifier$       = this._notifier.asObservable();
+
+  currentItemIndex: number; 
+  initAutoQue() { 
+
+    this._notifier = this.printingService.itemLabelPrintingComplete$.subscribe(data => { 
+      //we have already started the loop. 
+      //at this point, we have completed the first label print
+      //nowe we received a signal that sales we can do the the next item
+      // instead of doing anything, we can just trigger the same function we started with
+      //and apply the current index
+      this.currentItemIndex = this.currentItemIndex + 1
+      this.poItem = this.poItems[this.currentItemIndex]
+      this.printItemLabel()
+    })
+   
+    this.autoPrintQUe = this.printingService.autoLabelPrinting$.subscribe(data => { 
+      if (data && data.printOutAuto) {
+
+        //then we print
+        
+        //when we are done printing
+        //we update the subscriber. 
+        //then on the parent
+        //we know that the print has completed and we can move to the next item
+        //from there, we update the subscribert to say that the printing is not complete, but first we submit a new item
+        //that new item is triggered such that the next print out prints the next item on the transaction. 
+        //from there we repeat until the order is complete
+      }
+    })
+  }
 
   constructor(private printingService : PrintingService,
               private siteService: SitesService,
@@ -45,8 +82,9 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
     this.isAppElectron =  this.platFormService.isAppElectron
     this.printerName = this.getLastPrinterName();
     this.refreshLabel()
+    this.initForm();
 
-    this.initForm()
+    this.initAutoQue()
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -84,9 +122,9 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
       this.initForm()
       return of(data)
     }))
-
-
   }
+  
+
 
   initForm() {
     let count = 0
@@ -143,6 +181,34 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
   printSerial() {
   }
 
+  printItemLabel() {
+    let product$: Observable<IProduct>;
+    const site = this.siteService.getAssignedSite()
+    if (this.poItem) {
+      product$ = this.menuService.getProduct(site, this.poItem.productID)
+      console.log('poItem productID', this.poItem?.productID)
+    }
+
+    if (!product$) { return }
+    this.product$ =  product$.pipe(switchMap(data => {
+      this.labelID = this.printingService.getLastLabelUsed();
+      this.product = data;
+      this.initForm()
+      this.printSku()
+      return of(data)
+    }))
+  }
+  //
+  printAllItems() {
+    this.printOutItems(0)
+  }
+
+  printOutItems(index: number) { 
+    this.currentItemIndex = index;
+    this.poItem = this.poItems[index]
+    this.printItemLabel()
+  }
+
   async printSku() {
     if (this.labelSetting && this.product) {
       const content = this.renderingService.interpolateText(this.product, this.labelSetting.text);
@@ -161,6 +227,9 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
         this.printingService.labelContentList = [];
         remainingQuantity -= currentBatchQuantity;
         this.remainingQuantity = remainingQuantity;
+        if (this.remainingQuantity == 0) { 
+          this.printingService._itemLabelPrintingComplete.next(true)
+        }
       }
     }
     this.remainingQuantity = 0;
@@ -169,39 +238,6 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-
-  // printSku() {
-  //   if (this.labelSetting && this.product) {
-  //     const content = this.renderingService.interpolateText(this.product, this.labelSetting.text);
-  //     this.printQuantity = +this.printForm.controls['printQuantity'].value || 1;
-
-  //     const maxQuantity = 3;
-  //     let remainingQuantity = this.printQuantity;
-
-  //     while (remainingQuantity > 0) {
-
-
-  //         const currentBatchQuantity = Math.min(remainingQuantity, maxQuantity);
-  //         this.printingService.printLabelByQuantity(content, this.printerName, currentBatchQuantity);
-  //         this.printingService.labelPrinter = this.printerName;
-  //         this.printingService.printJoinedLabelsWait();
-  //         this.printingService.labelContentList = []
-  //         remainingQuantity -= currentBatchQuantity;
-
-  //     }
-  //   }
-  // }
-  // printSku() {
-  //   if (this.labelSetting && this.product) {
-  //     const content = this.renderingService.interpolateText(this.product, this.labelSetting.text)
-  //     this.printQuantity = +this.printForm.controls['printQuantity'].value;
-  //     if(this.printQuantity == null) { this.printQuantity == 1} {
-  //       this.printingService.printLabelByQuantity(content, this.printerName, this.printQuantity )
-  //       this.printingService.labelPrinter = this.printerName;
-  //       this.printingService.printJoinedLabels();
-  //     }
-  //   }
-  // }
 
   printLabels() {
     this.printingService.printJoinedLabels();
