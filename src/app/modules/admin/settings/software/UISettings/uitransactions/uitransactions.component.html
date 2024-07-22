@@ -279,13 +279,6 @@
             </div>
           <div>
 
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="disableNonCrediTip"
-                        [(ngModel)]="disableNonCrediTip" >
-                <mat-label>Disable Non Credit Tips</mat-label>
-              </mat-slide-toggle>
-            </div>
 
             <div>
               <mat-icon class="mat-label-info"
@@ -317,12 +310,6 @@
               </app-value-fields>
             </div>
 
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="disableTipGratutity" >
-                <mat-label>Disable Tip/Gratuity</mat-label>
-              </mat-slide-toggle>
-            </div>
 
             <div class="toggle-fields">
               <mat-slide-toggle
@@ -412,14 +399,7 @@
               </app-value-fields>
             </div>
 
-            <div>
-              <mat-label class="mat-label-design">High tip warning on percentage compared of payment.</mat-label>
-              <app-value-fields
-                  [inputForm]="inputForm"
-                  [fieldName]="'highTipInputPercentage'">
-                  High Tip %
-              </app-value-fields>
-            </div>
+
 
 
           </div>
@@ -429,6 +409,32 @@
         </div>
 
         <div class="grid-views">
+
+          <div>
+            <mat-label class="mat-label-design">High tip warning on percentage compared of payment.</mat-label>
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'highTipInputPercentage'">
+                High Tip %
+            </app-value-fields>
+          </div>
+
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="disableNonCrediTip"
+                      [(ngModel)]="disableNonCrediTip" >
+              <mat-label>Disable Non Credit Tips</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="disableTipGratutity" >
+              <mat-label>Disable Tip/Gratuity</mat-label>
+            </mat-slide-toggle>
+          </div>
+
           <h4><mat-icon color="primary" style="margin-top:5px">credit_card</mat-icon>Credit Card Processing</h4>
 
           <div class="toggle-fields" [formGroup]="inputForm">

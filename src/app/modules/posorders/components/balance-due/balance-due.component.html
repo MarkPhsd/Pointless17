@@ -51,7 +51,7 @@
         </div>
       </div>
 
-      <div  *ngIf="isUser || ((payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard))">
+      <div  *ngIf="!uiTransactions?.disableTipGratutity && isUser || ((payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard))">
         <tip-entry-amount
           [payment]            = "payment"
           [paymentMethod]      = "paymentMethod"
@@ -106,7 +106,7 @@
 
 <ng-template #newOrderButton>
   <div class="new-order-button" *ngIf="!isUser">
-    <button class="big-button" mat-raised-button (click)="newDefaultOrder()">
+    <button class="big-button" mat-raised-button (click)="addNewOrder()">
       <h2>New Order</h2></button>
   </div>
 </ng-template>

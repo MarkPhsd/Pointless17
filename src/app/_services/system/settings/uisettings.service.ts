@@ -65,6 +65,7 @@ export interface TransactionUISettings {
   dCapSurchargeValue     : string;
   dcapMultiPrice         : boolean
   dcapDualPriceValue     : number;
+  disableTipEntry: boolean;
   dsiTipPrompt           : boolean;
   dsiTipPromptValues     : string;
   dcapSurchargeOption    : number;
