@@ -94,7 +94,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
           const ui$ = this.uiSettingsService.getUITransactionSetting().pipe(switchMap(data => {
             if (data) {
               this.uiSettingsService.updateUISubscription(data)
-            
+
             }
             return of(data)
           }));
@@ -103,14 +103,13 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
         return of(data)
       })).subscribe(data => {
         this.uiTransactionSettings = data;
-       
+
       })
     } catch (error) {
     }
 
-    try { 
-      this._menuButton = this.mbMenuGroupService.menuButtonList$.subscribe(data => { 
-        console.log('order header menubutton list', data)
+    try {
+      this._menuButton = this.mbMenuGroupService.menuButtonList$.subscribe(data => {
         this.menuButtonList = data;
       })
     } catch (error) {
@@ -171,8 +170,8 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   ngOnChanges() {
     this.refreshPrintOption();
     if (!this.menuButtonList) {
-      if (this.isApp && this.uiTransactionSettings) { 
-        
+      if (this.isApp && this.uiTransactionSettings) {
+
       }
     }
   }

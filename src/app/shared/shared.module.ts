@@ -249,6 +249,7 @@ import { SetTokenComponent } from '../modules/admin/settings/set-token/set-token
 import { DCAPResponseMessageComponent } from '../modules/dsiEMV/Dcap/dcaptransaction/dcapresponse-message/dcapresponse-message.component';
 import { EmployeesOnClockListComponent } from '../modules/admin/employeeClockAdmin/employees-on-clock-list/employees-on-clock-list.component';
 import { FunctionButtonsListComponent } from '../modules/admin/settings/function-groups/function-buttons-list/function-buttons-list.component';
+import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-emvcard-pay-btn/dsi-emvcard-pay-btn.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -260,6 +261,7 @@ import { FunctionButtonsListComponent } from '../modules/admin/settings/function
 // }
 @NgModule({
   declarations: [
+    DsiEMVCardPayBtnComponent,
     SafeHtmlPipe,
     ArrayFilterPipe,
     ArraySortPipe,
@@ -567,6 +569,7 @@ import { FunctionButtonsListComponent } from '../modules/admin/settings/function
     CallUsSelectorComponent,
     CardComponent,
     DSIEMVAndroidPayBtnComponent,
+    DsiEMVCardPayBtnComponent,
     TimeChartReportComponent,
     ProductChartReportComponent,
     CardDashboardComponent,

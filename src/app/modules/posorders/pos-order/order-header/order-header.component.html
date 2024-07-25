@@ -21,7 +21,7 @@
       <div>
         <h4>
           <span  *ngIf="!isOrderClaimed && order.id" > <mat-icon color="warn">lock</mat-icon>
-          </span> 
+          </span>
 
           <span *ngIf="!order.history">
             Order {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
@@ -29,10 +29,9 @@
           <span *ngIf="order.history">
             Order {{order?.purchaseOrderNumber | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
           </span>
-          
+
           <span #coachingRefresh *ngIf="isApp || isUserStaff">
-            <button mat-button (click)='refreshOrder()'><mat-icon>refresh</mat-icon></button> 
-           
+            <button mat-button (click)='refreshOrder()'><mat-icon>refresh</mat-icon></button>
             <span *ngIf="order.priceColumn && order.priceColumn >0 "><mat-icon>column</mat-icon> Level {{order.priceColumn}}</span>
           </span>
           <div *ngIf="order.tableName">{{order.tableName}}</div>
@@ -53,28 +52,24 @@
 
     <div>
 
-      <div *ngIf="(isApp) || (!isApp  && isUserStaff) && uiTransactionSettings ">
+      <div >
 
-        <span class="flex-grid-column-nogap">
-          <div>
+        <span class="flex-grid-column-nogap"  >
+          <div *ngIf="(isApp) || (!isApp  && isUserStaff) && uiTransactionSettings ">
             <button mat-button (click)="qrCodeDisplayToggle()">
               <mat-icon>qr_code</mat-icon>QR Link
             </button>
           </div>
 
-          <div style="margin-left:3px" class="button-row-55">
-            <!-- <ng-container [ngTemplateOutlet]="editOrderView"></ng-container> -->
-            <div *ngIf="menuButtonList">
-              <function-buttons-list
-                    [list]="menuButtonList"
-                    [order]="order"
-                    [isAdmin]="isAdmin"
-                    [isUser] ="isUserStaff"
-                    [buttonSize]="'button-small'"
-                    [isStaff]="isStaff">
-              </function-buttons-list>
-            </div>
-           
+          <div style="margin-left:3px"  *ngIf="menuButtonList" class="button-row-55">
+            <function-buttons-list
+                  [list]="menuButtonList"
+                  [order]="order"
+                  [isAdmin]="isAdmin"
+                  [isUser] ="isUserStaff"
+                  [buttonSize]="'button-small'"
+                  [isStaff]="isStaff">
+            </function-buttons-list>
           </div>
         </span>
 
@@ -85,7 +80,7 @@
             </button>
           </div>
 
-          <span #coachingFire >
+          <span #coachingFire *ngIf="(isApp) || (!isApp  && isUserStaff) && uiTransactionSettings ">
             <div  class="button-margin" *ngIf="(locations$ | async) as locations">
               <div *ngIf="locations.length>0">
                 <div *ngIf="isSale && isUserStaff">
@@ -121,15 +116,15 @@
         </div>
 
         <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
+        <div>
 
-        <!-- <div>
           <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption && isSale && isUserStaff" >
             <value-from-list-selector
                 [value] ="order.priceColumn"
                 (assignValue)="assignPriceColumn($event)">
               Price </value-from-list-selector>
           </div>
-        </div> -->
+        </div>
       </div>
 
     </div>

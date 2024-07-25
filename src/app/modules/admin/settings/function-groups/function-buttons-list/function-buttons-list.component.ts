@@ -43,14 +43,12 @@ export class FunctionButtonsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      console.log()
-      // this.list
-      if (this.buttonSize == 'button-small') {
-        this.buttonSizeMenu = 'button-small-menu'
-      }
-      if (this.buttonSize == 'button-medium') {
-        this.buttonSizeMenu = 'button-medium-menu'
-      }
+    if (this.buttonSize == 'button-small') {
+      this.buttonSizeMenu = 'button-small-menu'
+    }
+    if (this.buttonSize == 'button-medium') {
+      this.buttonSizeMenu = 'button-medium-menu'
+    }
   }
 
   functionCall(item:mb_MenuButton) {

@@ -94,7 +94,7 @@ export class UITransactionsComponent implements OnInit {
     this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
       switchMap( data => {
         this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
-        // console.log(data.text, this.uiTransactions)
+
         this.initFormData(  this.uiTransactions )
         return of(data);
     }));

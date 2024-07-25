@@ -278,8 +278,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     const site = this.siteService.getAssignedSite()
     this.zrunID = null;
     this.action$ =  this.balanceSheetService.getSheet(site, event).pipe(switchMap(data => {
-      console.log(data)
-      console.log('batch', JSON.parse(data?.batchJSON))
+
       const batchObj = this.siteService.convertToCamel(JSON.parse(data?.batchJSON))
       this.dateFrom = null;
       this.dateTo   = null;
@@ -291,19 +290,19 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
 
   refreshZrunReports(start: string, end: string) {
 
-    if (this.dateFrom) { 
+    if (this.dateFrom) {
       start = this.dateFrom
     }
-    if (this.dateTo) { 
+    if (this.dateTo) {
       end = this.dateTo
     }
-    console.log('refreshZRunReports', start, end)
+    // console.log('refreshZRunReports', start, end)
     const site = this.siteService.getAssignedSite()
     this.zrunID = null;
-    
+
     this.initZrunForm()
     this.zrunReports$ = this.salesPaymentsService.listZrunsInDateRange(site, start, end).pipe(switchMap(data => {
-      console.log('Zreports obs', data)
+      // console.log('Zreports obs', data)
       if (data.resultMessage) {
         this.siteService.notify(`Error ${data.resultMessage}`, 'Error', 5000, 'red'  )
       }
@@ -539,7 +538,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     return undefined
   }
 
-  assignItemFromDynamicGrid(event) { 
+  assignItemFromDynamicGrid(event) {
     console.log(event)
   }
 

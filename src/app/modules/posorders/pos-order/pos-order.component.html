@@ -142,6 +142,9 @@
                 class="payment-buttons-container">
               <ng-container [ngTemplateOutlet]="receiveOrderView"></ng-container>
               <ng-container [ngTemplateOutlet]="stripePayButtonView"></ng-container>
+
+              <ng-container [ngTemplateOutlet]="disEMVCreditOnlyCardButton"></ng-container>
+              <ng-container [ngTemplateOutlet]="disEMVDebitOnlyCardButton"></ng-container>
               <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
               <ng-container [ngTemplateOutlet]="disEMVCardManualButton"></ng-container>
               <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
@@ -305,24 +308,50 @@
   </div>
 </ng-template>
 
-<ng-template #dsiEMVAndroidCardButton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
-    <dsiemvandroid-pay-btn
+<ng-template #disEMVCreditOnlyCardButton>
+  <div style="margin-top:5px">
+    <dsi-emvcard-pay-btn
+        *ngIf="(isApp || isStaff) && devicename  && uiTransactions?.dCapAllowCreditOnlyOption"
+        [autoPay]="true"
+        [preAuth]="false"
         [order]="order"
         [devicename]="devicename"
-        [uiTransactions]="uiTransactionSettings"
+        [uiTransactions]="uiTransactions"
         [platForm]="platForm"
-        [creditBalanceRemaining]="creditPaymentAmount"
-        [paymentAmount]="order.balanceRemaining"
+        [creditBalanceRemaining]="cashDiscount"
+        [paymentAmount]="cashDiscount"
+        [creditOnly]="true"
         (setStep) ="setStep(1)">
-        <mat-icon>credit_card</mat-icon>
-        <br>Credit / Debit
-    </dsiemvandroid-pay-btn>
+      Credit
+      <br>  {{cashDiscount | currency}}
+    </dsi-emvcard-pay-btn>
+  </div>
+
+</ng-template>
+
+<ng-template #disEMVDebitOnlyCardButton>
+  <div style="margin-top:5px">
+    <dsi-emvcard-pay-btn
+        *ngIf="(isApp || isStaff) && devicename && uiTransactions?.dCapAllowCreditOnlyOption"
+        [autoPay]="true"
+        [preAuth]="false"
+        [order]="order"
+        [devicename]="devicename"
+        [uiTransactions]="uiTransactions"
+        [platForm]="platForm"
+        [paymentAmount]="order.balanceRemaining"
+        [debitOnly]="true"
+        (setStep) ="setStep(1)">
+      Debit
+      <br>  {{order.balanceRemaining | currency}}
+    </dsi-emvcard-pay-btn>
   </div>
 </ng-template>
 
 <ng-template #disEMVCardButton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
+  
+  <div style="margin-top:5px" *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder
+              && !uiTransactions?.dCapAllowCreditOnlyOption">
     <dsi-emvcard-pay-btn
       [autoPay]="true"
       [devicename]="devicename"
@@ -338,8 +367,25 @@
   </div>
 </ng-template>
 
+<ng-template #dsiEMVAndroidCardButton>
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder
+             ">
+    <dsiemvandroid-pay-btn
+        [order]="order"
+        [devicename]="devicename"
+        [uiTransactions]="uiTransactionSettings"
+        [platForm]="platForm"
+        [creditBalanceRemaining]="creditPaymentAmount"
+        [paymentAmount]="order.balanceRemaining"
+        (setStep) ="setStep(1)">
+        <mat-icon>credit_card</mat-icon>
+        <br>Credit / Debit
+    </dsiemvandroid-pay-btn>
+  </div>
+</ng-template>
+
 <ng-template #dCApPreAuthButton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
+  <div style="margin-top:5px" *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder && enablePreAuth">
     <dsi-emvcard-pay-btn
         *ngIf="(isApp || isStaff)"
         [autoPay]="true"
@@ -359,7 +405,7 @@
 </ng-template>
 
 <ng-template #disEMVCardManualButton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
+  <div style="margin-top:5px" *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder">
     <dsi-emvcard-pay-btn
         *ngIf="(isApp || isStaff) && devicename"
         [autoPay]="true"
@@ -598,7 +644,7 @@
 </ng-template>
 
 <ng-template #labelPrintChild>
-  <label-select-printer 
+  <label-select-printer
     [poItem]="selectedItem"
     [poItems]="order.posOrderItems"
   ></label-select-printer>

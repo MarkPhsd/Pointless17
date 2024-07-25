@@ -48,7 +48,8 @@ export class DCAPTransactionComponent implements OnInit {
   autoActionData: any;
   terminalSettings$: Observable<ITerminalSettings>;
   saleComplete: boolean;
-
+  creditOnly: boolean;
+  debitOnly : boolean;
   constructor(
     public  userAuthService       : UserAuthorizationService,
     public  auth                  : UserAuthorizationService,
@@ -89,6 +90,8 @@ export class DCAPTransactionComponent implements OnInit {
       this.amount =  data?.value;
       this.autoActionData = data;
       this.manual = data?.manualPrompt;
+      this.creditOnly = data?.creditOnly;
+      this.debitOnly  = data?.debitOnly;
       if (!data?.manualPrompt) {
         this.manual = false;
       }
@@ -179,7 +182,6 @@ export class DCAPTransactionComponent implements OnInit {
             const sale$ = this.dCapService.returnAmount(this.terminalSettings?.name , this.posPayment, this.manual);
             this.processing$ = sale$.pipe(switchMap(data => {
               data.authorize = (-(+data.authorize)).toString()
-              console.log('data',data?.authorize, data.Purchase)
               this.result = data;
               this.processing = false;
               return this.processResults(data)
@@ -239,10 +241,27 @@ export class DCAPTransactionComponent implements OnInit {
           this.processing = true;
 
           if (this.dsiEmv.v2) {
+
+            if (this.debitOnly) {
+              console.log('debitOnly')
+              this.processing$ =  this.dCapService.payAmountV2Debit(this.terminalSettings?.name , this.posPayment).pipe(concatMap(data => {
+                this.result = data;
+                return this.processResultsV2(data)
+              }))
+              return;
+            }
+
+            if (this.creditOnly) {
+              console.log('creditOnly')
+              this.processing$ =  this.dCapService.payAmountV2Credit(this.terminalSettings?.name , this.posPayment).pipe(concatMap(data => {
+                this.result = data;
+                return this.processResultsV2(data)
+              }))
+              return;
+            }
+
             this.processing$ = this.getPaymentManualChipv2().pipe(concatMap(data => {
               this.result = data;
-              console.log('data', data)
-
               return this.processResultsV2(data)
             }))
             return
@@ -258,6 +277,10 @@ export class DCAPTransactionComponent implements OnInit {
       }
 
       getPaymentManualChipv2() {
+        if (this.creditOnly) {
+          return this.dCapService.payAmountV2Credit(this.terminalSettings?.name , this.posPayment);
+          return;
+        }
         let sale$ = this.dCapService.payAmountV2(this.terminalSettings?.name , this.posPayment);
         if (this.manual) {
           sale$ = this.dCapService.payAmountManualV2(this.terminalSettings?.name , this.posPayment);
@@ -303,6 +326,7 @@ export class DCAPTransactionComponent implements OnInit {
             }
           ))
         } else {
+          console.log(paymentResponse?.response)
           this.processing = false;
           let message = paymentResponse?.errorMessage
           message = `Result failed: reason: ${message} - ${paymentResponse?.response?.TextResponse} - ${paymentResponse?.response?.CaptureStatus}`

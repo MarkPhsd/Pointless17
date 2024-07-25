@@ -284,6 +284,33 @@ export class DcapService {
     return this.http.post<any>(url, posPayment)
   }
 
+  payAmountV2Debit(deviceName: string, posPayment: IPOSPayment): Observable<DCAPPaymentResponse> {
+
+    const controller = '/dCap/'
+
+    const endPoint = "payAmountV2Debit"
+
+    const parameters = `?deviceName=${deviceName}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, posPayment)
+  }
+
+  payAmountV2Credit(deviceName: string, posPayment: IPOSPayment): Observable<DCAPPaymentResponse> {
+
+    const controller = '/dCap/'
+
+    const endPoint = "PayAmountV2Credit"
+
+    const parameters = `?deviceName=${deviceName}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, posPayment)
+  }
+
+
   payAmountV2(deviceName: string, posPayment: IPOSPayment): Observable<DCAPPaymentResponse> {
 
     const controller = '/dCap/'

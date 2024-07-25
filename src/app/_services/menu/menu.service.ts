@@ -840,7 +840,7 @@ export class MenuService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.httpClient.post<IProductSearchResultsPaged>(url, productSearchModel)
-
+// barCodeAltSearch
   }
 
   getRecipeUsageListFiltered(site: ISite, productSearchModel: ProductSearchModel): Observable<IProductSearchResultsPaged> {

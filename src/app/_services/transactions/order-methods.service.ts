@@ -1587,11 +1587,9 @@ export class OrderMethodsService implements OnDestroy {
         switchMap( data => {
           order = data
           if (!serviceType) {   serviceType = order.service  }
-          this.processOrderResult(order, site, serviceType?.retailType, null, serviceType?.resaleType)
+          // this.processOrderResult(order, site, serviceType?.retailType, null, serviceType?.resaleType)
           return this.navToDefaultCategory()
-
         })).pipe(switchMap( item => {
-          // console.log('serviceType', serviceType)
           this.processOrderResult(order, site, serviceType?.retailType, item?.id, serviceType?.resaleType)
           return of(order)
         }),
@@ -1750,7 +1748,7 @@ export class OrderMethodsService implements OnDestroy {
 
   navToDefaultCategory(): Observable<IMenuItem> {
     const deviceName = localStorage.getItem('devicename') 
-    
+    const site = this.siteService.getAssignedSite()
     const device$ =   this.uiSettingService.posDevice$
     let categoryID = 0
 
@@ -1762,16 +1760,14 @@ export class OrderMethodsService implements OnDestroy {
       }
       return this.uiSettingService.transactionUISettings$
     })).pipe(switchMap(data =>  {
-      const site = this.siteService.getAssignedSite()
-      console.log('nave to default ', categoryID)
-      if (categoryID != 0) { 
-        this.router.navigate(["/menuitems-infinite/", {categoryID:categoryID}]);
-        return this.menuService.getMenuItemByID(site, categoryID)
-      }
-      if (data && data.defaultNewOrderCategoryID) {
-        this.router.navigate(["/menuitems-infinite/", {categoryID: data.defaultNewOrderCategoryID}]);
-        return this.menuService.getMenuItemByID(site, data.defaultNewOrderCategoryID)
-      }
+      // if (categoryID != 0) { 
+      //   this.router.navigate(["/menuitems-infinite/", {categoryID:categoryID}]);
+      //   return this.menuService.getMenuItemByID(site, categoryID)
+      // }
+      // if (data && data.defaultNewOrderCategoryID) {
+      //   this.router.navigate(["/menuitems-infinite/", {categoryID: data?.defaultNewOrderCategoryID}]);
+      //   return this.menuService.getMenuItemByID(site, data.defaultNewOrderCategoryID)
+      // }
       return of(null)
     }))
   }

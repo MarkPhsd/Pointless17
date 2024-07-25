@@ -321,13 +321,7 @@
 
 <ng-template #voidActionView let-item>
   <div *ngIf="(authData$ | async) as auth">
-    <!-- void Reason {{(item?.voidReason != 0 && !item.voidReason)}} <br>
-    void Reason {{auth.voidPayment}} <br>
-    !qrOrder {{!qrOrder}} <br>
-    completed {{( item.amountPaid != 0)}} -->
-    <!-- && !qrOrder &&  auth.voidPayment -->
-    <!-- *ngIf="!PaxA920 && isPaxEnabledTerminal &&  item.amountPaid  != 0 " -->
-    <div *ngIf="auth?.voidPayment && !PaxA920 && !isPaxEnabledTerminal && item.amountPaid  != 0 && !order.history" >
+    <div *ngIf="auth?.voidPayment && !PaxA920  && item.amountPaid!= 0 && !order.history" >
       <button mat-button
               [disabled]="(item.voidReason && item.voidReason != 0 && item.voidAmount == item.amountPaid)"
               class="payment-button-balance"

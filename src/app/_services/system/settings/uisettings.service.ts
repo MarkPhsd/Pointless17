@@ -79,7 +79,8 @@ export interface TransactionUISettings {
   dcapPayAPIMultiPrice         : boolean
   dcapPayAPIDualPriceValue     : number;
   dcapDisableDualPayOptions : boolean;
-  dCapDualPayEnableDebit: boolean
+  dCapDualPayEnableDebit: boolean;
+  dCapAllowCreditOnlyOption: boolean;
   diableDescrepencies    : boolean;
   disableCreditFilter    : boolean;
   allowPreAuth           : boolean;
@@ -903,6 +904,7 @@ export class UISettingsService {
       dsiTipPrompt           : [''],
       dCapEnabled            : [],
       dCapSurcharge          : [],
+      dCapAllowCreditOnlyOption: [],
       dCapSurchargeValue     : [],
       dcapMultiPrice         : [],
       dcapDualPriceValue     : [],

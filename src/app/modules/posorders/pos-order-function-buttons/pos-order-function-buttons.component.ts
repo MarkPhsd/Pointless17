@@ -9,6 +9,7 @@ import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balan
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ITerminalSettings} from 'src/app/_services/system/settings.service';
 import { AuthenticationService } from 'src/app/_services';
+import { Capacitor } from '@capacitor/core';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { RequestMessageService } from 'src/app/_services/system/request-message.service';
 import { PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
@@ -20,6 +21,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 })
 
 export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
+  get platForm() {  return Capacitor.getPlatform(); }
 
   posDevice$: Observable<ITerminalSettings>;
   posDevice : ITerminalSettings;
@@ -487,4 +489,28 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
       })
     )
   }
+
+  roundToPrecision(value: number, precision: number): number {
+    const factor = Math.pow(10, precision);
+    return Math.round(value * factor) / factor;
+  }
+
+  get cashDiscount() {
+    const ui = this.uiTransactionSetting;
+
+    if (ui?.dcapSurchargeOption == 3) {
+      return this.roundToPrecision( this.order.subTotal * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (ui?.dcapSurchargeOption == 2) {
+      return this.roundToPrecision( this.order.subTotal * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (ui?.dcapSurchargeOption == 1 ) {
+      return this.roundToPrecision( this.order.balanceRemaining * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (!ui?.dcapSurchargeOption && ui.dcapDualPriceValue ) {
+      return this.roundToPrecision( this.order.balanceRemaining * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+
+  }
+
 }

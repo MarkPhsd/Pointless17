@@ -581,6 +581,12 @@
                       <mat-label>Data Cap Multi Price</mat-label>
                     </mat-slide-toggle>
                   </div>
+                  <div class="toggle-fields">
+                    <mat-slide-toggle
+                              formControlName="dCapAllowCreditOnlyOption" >
+                      <mat-label>Use Credit Only Button</mat-label>
+                    </mat-slide-toggle>
+                  </div>
 
                   <div class="toggle-fields" style="width:225px">
                     <app-value-fields
@@ -804,8 +810,7 @@
 
         <div class="toggle-fields"  style="margin-bottom: 5px">
           <mat-slide-toggle
-                    formControlName="enableItemReOrder"
-                    >
+                    formControlName="enableItemReOrder" >
             <mat-label>Enable Re Order Item <br> In Order History</mat-label>
           </mat-slide-toggle>
         </div>
@@ -1045,16 +1050,14 @@
 
           <div class="toggle-fields">
             <mat-slide-toggle
-                      formControlName="enablMEDClients"
-                      >
+                      formControlName="enablMEDClients" >
               <mat-label>Enable MED patients</mat-label>
             </mat-slide-toggle>
           </div>
 
           <div class="toggle-fields">
             <mat-slide-toggle
-                      formControlName="ordersRequireCustomer"
-                      >
+                      formControlName="ordersRequireCustomer" >
               <mat-label>Orders require a customer</mat-label>
             </mat-slide-toggle>
           </div>

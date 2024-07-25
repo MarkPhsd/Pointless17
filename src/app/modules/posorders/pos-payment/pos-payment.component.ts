@@ -125,7 +125,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   posDevice: ITerminalSettings;
   PaxA920 : boolean;
   payApiEnabled: boolean;
-
+  enablePreAuth = this.paymentsMethodsService?.DSIEmvSettings?.partialAuth;
   posDevice$      = this.uISettingsService.posDevice$.pipe(switchMap(data => {
     if (!data)  {
       const item = localStorage.getItem('devicename')
@@ -622,6 +622,31 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     })
   }
 
+  roundToPrecision(value: number, precision: number): number {
+    const factor = Math.pow(10, precision);
+    return Math.round(value * factor) / factor;
+  }
+
+  get cashDiscount() {
+    const ui = this.uiTransactions;
+
+    if (ui?.dcapSurchargeOption == 3) {
+      return this.roundToPrecision( this.order.subTotal * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (ui?.dcapSurchargeOption == 2) {
+      return this.roundToPrecision( this.order.subTotal * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (ui?.dcapSurchargeOption == 1 ) {
+      return this.roundToPrecision( this.order.balanceRemaining * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (!ui?.dcapSurchargeOption && ui.dcapDualPriceValue ) {
+      return this.roundToPrecision( this.order.balanceRemaining * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+
+    return null
+  }
+
+
   formatValueEntered(event) {
     if (event) {
       if (event == 0) {
@@ -866,7 +891,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.processing = true
     return  this.paymentsMethodsService.getResults(amount, this.paymentMethod, this.posPayment, this.order).pipe(
       switchMap(data => {
-        if (data && data?.order) { 
+        if (data && data?.order) {
           this.orderMethodsService.updateOrder(data?.order)
         }
         this.processing = false

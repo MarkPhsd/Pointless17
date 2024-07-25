@@ -71,6 +71,8 @@ export class CashPaymentButtonComponent implements OnInit {
     return this.order.balanceRemaining
   }
 
+
+
   //Allow Cash Payments For Other Servers
   get isAuthorizedPayment() {
     if (this.user?.roles === 'user' || this.user?.roles == 'guest') { return false }

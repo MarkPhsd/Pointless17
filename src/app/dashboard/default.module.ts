@@ -331,7 +331,6 @@ import { ClockBreaksTypesComponent } from '../modules/admin/employeeClockAdmin/c
 import { DailyReportComponent } from '../modules/admin/settings/printing/daily-report/daily-report.component';
 import { QuickPayButtonsComponent } from '../modules/posorders/pos-order/quick-pay-buttons/quick-pay-buttons.component';
 import { CardPointeCardPayBtnComponent } from '../modules/posorders/pos-payment/card-pointe-card-pay-btn/card-pointe-card-pay-btn.component';
-import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-emvcard-pay-btn/dsi-emvcard-pay-btn.component';
 import { GiftCardPayBtnComponent } from '../modules/posorders/pos-payment/gift-card-pay-btn/gift-card-pay-btn.component';
 import { PaypalCardPayBtnComponent } from '../modules/posorders/pos-payment/paypal-card-pay-btn/paypal-card-pay-btn.component';
 import { StripeCardPayBtnComponent } from '../modules/posorders/pos-payment/stripe-card-pay-btn/stripe-card-pay-btn.component';
@@ -482,7 +481,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DevxReportDesignerComponent,
     ReportViewerComponent,
     InventoryMenuItemComponent,
- 
+
     MessageEditorListComponent,
     MessageEditorComponent,
     ManifestEditorHeaderComponent,
@@ -515,7 +514,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     StripeCardPayBtnComponent,
     PaypalCardPayBtnComponent,
     GiftCardPayBtnComponent,
-    DsiEMVCardPayBtnComponent,
     CardPointeCardPayBtnComponent,
 
     ItemsMainComponent,
@@ -642,7 +640,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MetrcSalesListComponent,
     METRCProductsAddComponent,
     MetrcRequirementsComponent,
-    
+
     MenuBoardComponent,
     MenuItemModalComponent,
     NewInventoryItemComponent,

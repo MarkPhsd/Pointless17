@@ -49,6 +49,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   printOrders$ : Observable<IPOSOrder[]>;
   departmentID     =0
   posDevice: ITerminalSettings;
+  menuButtonsInitialized: boolean;
   get platForm() {  return Capacitor.getPlatform(); }
   toggleControl     = new UntypedFormControl(false);
   isSafari        : any;
@@ -286,30 +287,35 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   initUITransactionSettings() {
     let ui: TransactionUISettings
     const site = this.siteService.getAssignedSite();
-    
-  
+
     return this.settingService.getUITransactionSetting().pipe(
       concatMap( data => {
           this.uiTransactions = data
           ui = this.uiTransactions;
-         
           this.uiSettingsService._transactionUISettings.next(this.uiTransactions)
           return of(data);
-      })).pipe(concatMap(data => { 
-          return this.initMenuButtonList( ui );
+      })).pipe(concatMap(data => {
+          return this.initMenuButtonList( data );
       })).pipe(concatMap(data => {
           return of(ui)
       }
     ))
   }
-  
+
   initMenuButtonList(ui:TransactionUISettings) {
     const site = this.siteService.getAssignedSite()
-    console.log('initMenuButtonList', ui?.multiButtonOrderHeader, ui)
+    if (!this.authorizationService._user.value) { return }
+
+    if (this.menuButtonsInitialized) { 
+      if (this.mbMenuGroupService._menuButtonList.value) { 
+        return;
+      }
+    }
+   
     if (ui?.multiButtonOrderHeader && ui?.multiButtonOrderHeader != 0) {
-      return this.mbMenuGroupService.getGroupByIDCache(site, ui?.multiButtonOrderHeader).pipe(switchMap(
+      return this.mbMenuGroupService.getGroupByID(site, ui?.multiButtonOrderHeader).pipe(switchMap(
         data => {
-          console.log('menu button list', data)
+          this.menuButtonsInitialized = true
           this.mbMenuGroupService.setOrderHeaderMenuButtonList(data)
           return of(data)
       }))

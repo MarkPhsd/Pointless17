@@ -24,6 +24,9 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
   @Input() preAuth: boolean;
   @Input() autoPay: boolean;
   @Input() manual: boolean;
+  @Input() creditOnly: boolean;
+  @Input() debitOnly: boolean;
+  themeClass = '';
   stripeEnabled: boolean;
   paymentMethod$: Observable<IPaymentMethod>;
 
@@ -38,6 +41,16 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
     public  platFormService : PlatformService,) { }
 
   ngOnInit(): void {
+
+    if (this.debitOnly) { 
+      this.themeClass = 'button-debit';
+    }
+    if (this.creditOnly) { 
+      this.themeClass = 'button-credit';
+    }
+    if (this.manual) { 
+      this.themeClass = 'button-manual';
+    }
     const i = 0
   }
 
@@ -66,7 +79,7 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
     const order = this.order;
     if (order) {
       let amount = this.getValidAmount()
-      this.paymentsMethodsService.processDCAPVCreditPayment(order, amount, manual, this.autoPay, false)
+      this.paymentsMethodsService.processDCAPVCreditPayment(order, amount, manual, this.autoPay, false, this.creditOnly, this.debitOnly)
     }
   }
 
@@ -74,7 +87,7 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
     const order = this.order;
     if (order) {
       let amount = this.getValidAmount()
-      this.paymentsMethodsService.processDCAPVCreditPayment(order, amount, manual, false, true)
+      this.paymentsMethodsService.processDCAPVCreditPayment(order, amount, manual, false, true, this.creditOnly, this.debitOnly)
     }
   }
 
@@ -83,13 +96,13 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
     let amount = this.creditBalanceRemaining
     if (order) {
       if (this.paymentAmount && this.paymentAmount !=0) {
-        amount = this.paymentAmount
+        amount= this.roundToPrecision(  this.paymentAmount, 2) 
       }
       if (amount > this.creditBalanceRemaining) {
-        amount  = this.creditBalanceRemaining
+        amount  = this.roundToPrecision( this.creditBalanceRemaining, 2) 
       }
     }
-    return amount
+    return  this.roundToPrecision(amount,2)
   }
 
   async dsiResetDevice() {
@@ -97,6 +110,12 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
     this.sitesService.notify('PIN Pad Reset', 'Success', 1000)
   }
 
+  
+  roundToPrecision(value: number, precision: number): number {
+    const factor = Math.pow(10, precision);
+    const valueResult = Math.round(value * factor) / factor;
+    return valueResult
+  }
 
   // @Input() order: IPOSOrder;
   // @Input() uiTransactions: TransactionUISettings;

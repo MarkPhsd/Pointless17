@@ -175,7 +175,12 @@ export class ChangeDueComponent implements OnInit  {
 
   addNewOrderByType(serviceType) {
     const site = this.siteService.getAssignedSite();
-    return this.paymentMethodProcessService.newOrderWithPayloadMethod(site, serviceType)
+    return this.paymentMethodProcessService.newOrderWithPayloadMethod(site, serviceType).pipe(switchMap(data => {
+      setTimeout(() => {
+        this.dialogRef.close()
+      }, 100);
+      return of(data)
+    }))
   }
 
   newDefaultOrder(){

@@ -140,7 +140,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @Input() itemsPerPage  = 8
 
   _creditPaymentAmount = 0;
-  dsiEMVEnabled = this.paymentsMethodsService.DSIEmvSettings?.enabled;
+  dsiEMVEnabled = this.paymentsMethodsService?.DSIEmvSettings?.enabled;
+  enablePreAuth = this.paymentsMethodsService?.DSIEmvSettings?.partialAuth;
   _openBar      : Subscription;
   openBar       : boolean;
 
@@ -499,7 +500,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   initPurchaseOrderOption(id: number) {
-    console.log('initPurchaseOrderOption', id)
+    // console.log('initPurchaseOrderOption', id)
     if (!id) { return }
     this.purchaseOrderEnabled = false
     if (this.userAuthorization.isManagement || this.userAuthorization.isAdmin) {
@@ -620,6 +621,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private serviceTypeService     : ServiceTypeService,
               private settingService         : SettingsService,
               private _bottomSheet           : MatBottomSheet,
+
               private inventoryAssignmentService: InventoryAssignmentService,
               private posOrderItemService    : POSOrderItemService,
               private coachMarksService      : CoachMarksService,
@@ -641,7 +643,15 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.refreshOrder(+id);
   }
 
+  initTransactionUISettings() {
+    this.uiSettingsService.transactionUISettings$.subscribe( data => {
+        this.uiTransactions = data
+      }
+    )
+  }
+
   async ngOnInit() {
+    this.initTransactionUISettings();
     this.getDeviceInfo();
     this.initAuthorization();
     this.gettransactionUISettingsSubscriber();
@@ -716,6 +726,30 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     return null
   }
 
+  roundToPrecision(value: number, precision: number): number {
+    const factor = Math.pow(10, precision);
+    const valueResult = Math.round(value * factor) / factor;
+    console.log('valueResult',value, valueResult) ;
+    return valueResult
+  }
+
+  get cashDiscount() {
+    const ui = this.uiTransactions;
+
+    if (ui?.dcapSurchargeOption == 3) {
+      return this.roundToPrecision( this.order.subTotal * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (ui?.dcapSurchargeOption == 2) {
+      return this.roundToPrecision( this.order.subTotal * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (ui?.dcapSurchargeOption == 1 ) {
+      return this.roundToPrecision( this.order.balanceRemaining * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (!ui?.dcapSurchargeOption && ui.dcapDualPriceValue ) {
+      return this.roundToPrecision( this.order.balanceRemaining * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    return null
+  }
 
   //purchaseItemHistory
   get purchaseItemHistoryView() {

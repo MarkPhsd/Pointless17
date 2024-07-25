@@ -66,5 +66,5 @@ export interface ProductSearchModel {
   sortBy2Asc? : string;//=  searchForm.sortBy2Asc
   sortBy3?    : string;//=  searchForm.sortBy3Asc
   sortBy3Asc? : string;// =  searchForm.sortBy3Asc
-
+  barCodeAltSearch: string;
 }

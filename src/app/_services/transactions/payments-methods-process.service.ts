@@ -284,7 +284,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       const prep$ = this.prepPrintingService.printLocations(order,
                                                             printUnPrintedOnly,
                                                             expoPrinter,
-                                                            templateID, 
+                                                            templateID,
                                                             cancelUpdateSubscription);
 
 
@@ -375,7 +375,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       return null
   }
 
-  processDCAPVCreditPayment( order: IPOSOrder, amount: number, manualPrompt: boolean, autoPay: boolean, autoAuth: boolean ) {
+  processDCAPVCreditPayment( order: IPOSOrder, amount: number, manualPrompt: boolean, autoPay: boolean,
+                            autoAuth: boolean, creditOnly?: boolean, debitOnly?: boolean ) {
     //once we get back the method 'Card Type'
     //lookup the payment method.
     //we can't get the type of payment before we get the PaymentID.
@@ -394,7 +395,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         if (amount < 0) { action = 3;  }
         this.dialogRef = this.dialogOptions.openDCAPTransaction({payment: payment,value: amount, action: action,
                                                                    manualPrompt: manualPrompt,
-                                                                   autoPay: autoPay, autoAuth: autoAuth
+                                                                   autoPay: autoPay, autoAuth: autoAuth,
+                                                                   creditOnly: creditOnly, debitOnly: debitOnly
                                                                   });
         this._dialog.next(this.dialogRef)
         return of(payment)
@@ -461,17 +463,17 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     const site = this.sitesService.getAssignedSite();
     const device = localStorage.getItem('devicename')
     action.deviceName  = device;
-    
+
     return this.dCapService.voidSaleByRecordNoV2(action).pipe(switchMap(data => {
         if (data) {
             if (data.errorMessage) {
               this.sitesService.notify(data?.errorMessage, 'close', 10000)
             }
             this.orderMethodsService.updateOrder(data?.order)
-            
+
             this.sitesService.notify('Voided - this order has been re-opened if closed.', 'Result', 10000, 'green' )
           }
-      
+
         return of(data)
       })
     )

@@ -2,8 +2,9 @@
              && order && order?.balanceRemaining != 0">
   <button class="payment-buttons"
       mat-raised-button
-      color="primary"
+      [ngClass]="themeClass"
       (click)="processPayment(manual)">
     <ng-content></ng-content>
   </button>
 </span>
+<!-- class="buttons payment-buttons" -->

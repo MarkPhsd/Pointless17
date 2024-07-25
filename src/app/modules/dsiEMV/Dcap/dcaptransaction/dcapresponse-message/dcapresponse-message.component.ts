@@ -7,11 +7,11 @@ import { Component, Input } from '@angular/core';
 })
 export class DCAPResponseMessageComponent {
 
-  @Input() response:any;
-  @Input() errorMessage: string;
+  @Input() response     : any;
+  @Input() errorMessage : string;
   @Input() resultMessage: string;
-  @Input() message: any;
-  @Input() processing: boolean;
-  @Input() saleComplete: boolean;
+  @Input() message      : any;
+  @Input() processing   : boolean;
+  @Input() saleComplete : boolean;
 
 }

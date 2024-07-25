@@ -44,7 +44,7 @@ export interface IMenuButtonProperties {
 })
 export class MBMenuButtonsService {
 
-  private _menuButtonList         = new BehaviorSubject<IMenuButtonGroups>(null);
+  public _menuButtonList         = new BehaviorSubject<IMenuButtonGroups>(null);
   public  menuButtonList$        = this._menuButtonList.asObservable();
 
   functions = [
