@@ -116,6 +116,7 @@
                 (outPutPurchaseOrder) ="makeManifest($event)"
                 (outPutchangeTransactionType) ="changeTransactionType($event)"
                 (outPutListView)      ="toggleListView($event)"
+                (outPutToggleQuickMenu)     ="initQuickMenus($event)"
                 [prepOrderOnClose]    ="prepOrderOnClose"
                 [itemsPrinted]        ="itemsPrinted"
                 [paymentsMade]        ="paymentsMade"
@@ -131,6 +132,7 @@
                 [refundItemEnabled]   ="refundItemsAvalible"
                 [devicename]          ="devicename"
                 [smallDevice]         ='smallDevice'
+                [quicKMenusExist]     ='uiTransactionSetting.enableQuickMenu'
                 [userAuths]="userAuths"
           ></pos-order-function-buttons>
         </div>
@@ -138,11 +140,15 @@
         <mat-divider></mat-divider>
 
         <div >
-          <div *ngIf="mainPanel && uiTransactionSettings"
+
+          <div *ngIf="menuToggleEnabled">
+            <ng-container [ngTemplateOutlet]="displaySubMenu"></ng-container>
+          </div>
+
+          <div *ngIf="mainPanel && uiTransactionSettings && !menuToggleEnabled"
                 class="payment-buttons-container">
               <ng-container [ngTemplateOutlet]="receiveOrderView"></ng-container>
               <ng-container [ngTemplateOutlet]="stripePayButtonView"></ng-container>
-
               <ng-container [ngTemplateOutlet]="disEMVCreditOnlyCardButton"></ng-container>
               <ng-container [ngTemplateOutlet]="disEMVDebitOnlyCardButton"></ng-container>
               <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
@@ -188,7 +194,6 @@
         </div>
 
         <div class="grid-po-helper" >
-          <!-- View filter: {{order?.service?.filterType}} -->
           <ng-container [ngTemplateOutlet]="reconcileView"> </ng-container>
         </div>
       </div>
@@ -206,6 +211,18 @@
       <ng-container [ngTemplateOutlet]="getListViewType"></ng-container>
     </div> -->
 </div>
+
+<ng-template #displaySubMenu>
+  <price-schedule-menu-list 
+    [retailView]="true"
+    (outPutMenu)="setDefaultFirstMenu($event)">
+  </price-schedule-menu-list>
+
+  <price-schedule-menu-items 
+
+      [menuCategoryID]="menuCategoryID">
+  </price-schedule-menu-items>
+</ng-template>
 
 <ng-template #receiveOrderView>
 

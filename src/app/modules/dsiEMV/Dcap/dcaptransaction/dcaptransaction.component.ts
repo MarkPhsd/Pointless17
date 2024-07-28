@@ -402,12 +402,27 @@ export class DCAPTransactionComponent implements OnInit {
         this.processing$ = this._reset();
       }
 
+      _cancelTransaction() {
+        if (this.terminalSettings) {
+          const device = this.terminalSettings.name;
+          this.initMessaging()
+          this.processing = true;
+          return  this.dCapService.transactionCancel(device).pipe(switchMap(data => {
+            this.processing = false;
+            this.result = data;
+            this._close()
+            return of(data);
+          }))
+        }
+        return of(null)
+      }
+
       _reset() {
         if (this.terminalSettings) {
           const device = this.terminalSettings.name;
           this.initMessaging()
           this.processing = true;
-          return  this.dCapService.resetDevice(device).pipe(switchMap(data => {
+          return  this.dCapService.transactionCancel(device).pipe(switchMap(data => {
             this.processing = false;
             this.result = data;
             return of(data);
@@ -445,7 +460,7 @@ export class DCAPTransactionComponent implements OnInit {
       }
 
       close() {
-
+        
         this._close()
         // this.processing$ = this._reset().pipe(switchMap(data => {
         //   setTimeout(() => {
@@ -455,8 +470,13 @@ export class DCAPTransactionComponent implements OnInit {
         // }))
       }
 
-      _close() {   this.dialogRef.close()  }
-      cancel() {  this.close()  }
+      _close() { 
+        this.dialogRef.close()  
+      }
+
+      cancel() { 
+        this.processing$ = this._cancelTransaction()
+      }
 
       get _tipValue() {
         if (!this.tipValue) {  this.tipValue = '0.00' }

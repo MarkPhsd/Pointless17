@@ -49,7 +49,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   @Output() outPutUpdateCategory = new EventEmitter();
   @Output() addItem = new EventEmitter();
   @Input() ignoreType: boolean; //used for prompt modifiers.
-
+  @Input() maxHeight: string;
   @Input() smallDevice: boolean;
   @Input() allowBuy  : boolean;
   @Input() allowEdit : boolean;
@@ -67,6 +67,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   @Input() disableImages: boolean;
   @Input() androidApp: boolean;
   @Input() isApp     = false;
+  
   ///for use with prompts
   @Input() styleMatCard = ''
 
@@ -280,19 +281,21 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
       const item = JSON.parse(menuItem.json) as menuButtonJSON;
       this.menuButtonJSON = item
       if (this.menuButtonJSON.buttonColor) {
-        this.buttonColor = `background-color:${this.menuButtonJSON.buttonColor} `
+        this.buttonColor = `background-color:${this.menuButtonJSON.buttonColor}`
       }
     }
     if (this.categoryIDSelected != 0 && this.categoryIDSelected == this.id) {
       const box = ''
-      this.buttonColor = `background-color: #e1f5fe`
+      this.buttonColor = `background-color: #e1f5fe` 
     }
 
     if (this.buttonColor) {
       this.buttonColor = this.buttonColor + ';' + this.styleMatCard
     } else {
-      this.buttonColor = this.styleMatCard
+      this.buttonColor = this.styleMatCard 
     }
+
+    this.buttonColor = `${this.buttonColor};${this.maxHeight}`
 
   }
 

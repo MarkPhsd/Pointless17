@@ -106,9 +106,20 @@ export class FunctionButtonsListComponent implements OnInit {
       case 'price(0)':
         this.price(0);
         break;
+
+      case 'lastOrder':
+        this.setLastOrderActive()
+        break;
       default:
         console.log('Function not found');
         break;
+    }
+  }
+
+  setLastOrderActive() { 
+    const order = this.orderMethodsService.lastOrder
+    if (order) { 
+      this.orderMethodsService.setActiveOrder(order)
     }
   }
 

@@ -10,7 +10,8 @@
       <div  class="grid-category-flow">
         <div *ngFor="let item of menus">
           <ng-container [ngTemplateOutlet]="categoryItemView"
-                        [ngTemplateOutletContext]="{$implicit: item}"></ng-container>
+                        [ngTemplateOutletContext]="{$implicit: item}">
+          </ng-container>
         </div>
       </div>
     </div>
@@ -18,15 +19,14 @@
 </ng-template>
 
 <ng-template #basicMenu>
-  <div *ngIf="menus">
-    <div *ngFor="let menu of menus">
+  <div *ngIf="menus" class="grid-flow">
+    <div *ngFor="let menu of menus" >
       <div>
           <mat-button-toggle
               class="button-toggle"
               type="button"
               [value]="menu"
               (click)="setItem(menu)" >
-
             <div class="grid-toggle-tiny">
               <div *ngIf="!phoneSize">
                 {{menu?.name}}
@@ -52,5 +52,5 @@
       (outPutlistItems)="_listItems($event)"
     ></menu-card-category>
 </ng-template>
-<!-- [isAdmin]="authenticationService?.isAdmin" -->
+
 

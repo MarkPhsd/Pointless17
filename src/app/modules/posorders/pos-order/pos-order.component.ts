@@ -167,6 +167,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   user          : any;
   _user: Subscription;
 
+  menuCategoryID: number;
   _uiSettings: Subscription;
   uiSettings : UIHomePageSettings;
   wideBar    =  true;
@@ -210,6 +211,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
    categories$      : Observable<IMenuItem[]>;
    departments$     : Observable<IMenuItem[]>;
    productTypes$    : Observable<IItemType[]>;
+
+   menuToggleEnabled: boolean;
   // _assignedItems: Subscription;
   // assignedItems: PosOrderItem[]
   // initItemSubscription() {
@@ -366,6 +369,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })
   }
 
+  setDefaultFirstMenu(event) { 
+    this.menuCategoryID = event
+    if (event) { 
+      // console.log('setDefaultFirstMenu', event)
+    }
+  }
 
 
   gettransactionUISettingsSubscriber() {
@@ -497,6 +506,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
         // console.log(this.orderItemsHeightStyle)
       }
     })
+  }
+
+  initQuickMenus(event) { 
+    console.log(event,event.value)
+    this.menuToggleEnabled = event;
+
   }
 
   initPurchaseOrderOption(id: number) {

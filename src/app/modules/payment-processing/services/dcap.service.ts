@@ -243,6 +243,20 @@ export class DcapService {
     return this.http.get<any>(url)
   }
 
+
+  transactionCancel(deviceName: string): Observable<any> {
+
+    const controller = '/dCap/'
+
+    const endPoint = "TransactionCancel"
+
+    const parameters = `?deviceName=${deviceName}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url)
+  }
+
   resetDevice(deviceName: string): Observable<any> {
 
     const controller = '/dCap/'

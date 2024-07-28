@@ -1,16 +1,17 @@
 <div class="container" *ngIf="inputForm">
-  <button [hidden]="hideRefresh" class="button" mat-button (click)="emitDatePickerData()"><mat-icon>refresh</mat-icon></button>
+  <button [hidden]="hideRefresh" class="button" 
+          mat-button (click)="emitDatePickerData()">
+      <mat-icon>refresh</mat-icon>
+  </button>
   <ng-container [ngTemplateOutlet]="magPickerView"></ng-container>
 </div>
 
-
-<!-- {{inputForm.value | json}} -->
 <ng-template #touchTemplate>
   <mat-form-field
         class="dates-field"
         appearance="outline">
     <mat-label><ng-content></ng-content></mat-label>
-    <mat-date-range-input [formGroup]   ="inputForm"
+    <mat-date-range-input     [formGroup]   ="inputForm"
                   [rangePicker] ="reportRangePicker">
       <input matStartDate
         formControlName="start"
@@ -33,7 +34,7 @@
         class="dates-field"
         appearance="outline">
     <mat-label><ng-content></ng-content></mat-label>
-    <mat-date-range-input [formGroup]   ="inputForm"
+    <mat-date-range-input  [formGroup]   ="inputForm"
                   [rangePicker] ="reportRangePicker">
       <input matStartDate
         formControlName="start"

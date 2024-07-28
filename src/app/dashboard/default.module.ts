@@ -79,12 +79,12 @@ import { DatabaseSchemaComponent } from '../modules/admin/settings/database/data
 import { CSVImportComponent } from '../modules/admin/settings/database/csv-import/csv-import.component';
 // import { ProductFilterComponent } from './widgets/product-filter/product-filter.component';
 // import { CategorySelectListFilterComponent } from './widgets/category-select-list-filter/category-select-list-filter.component';
+import { ReceiptLayoutComponent } from '../modules/admin/settings/printing/receipt-layout/receipt-layout.component';
 
 import { InstalledPrintersComponent } from '../modules/admin/settings/printing/installed-printers/installed-printers.component';
 import { MenuItemsInfiniteComponent } from '../modules/menu/menuitems/menu-items-infinite/menu-items-infinite.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { HTMLEditPrintingComponent } from '../modules/admin/settings/printing/htmledit-printing/htmledit-printing.component';
-import { ReceiptLayoutComponent } from '../modules/admin/settings/printing/receipt-layout/receipt-layout.component';
 import { CacheSettingsComponent } from '../modules/admin/settings/database/cache-settings/cache-settings.component';
 import { InventoryHistoryListComponent } from '../modules/admin/inventory/inventory-history-list/inventory-history-list.component';
 import { InventoryHistoryItemComponent } from '../modules/admin/inventory/inventory-history-item/inventory-history-item.component';
@@ -594,7 +594,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     FunctionGroupEditComponent,
     FunctionGroupButtonEditComponent,
     HTMLEditPrintingComponent,
-
+    ReceiptLayoutComponent,
     JobTypesEditComponent,
     JobTypesListComponent,
 

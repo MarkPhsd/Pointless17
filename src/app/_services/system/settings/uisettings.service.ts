@@ -139,6 +139,7 @@ export interface TransactionUISettings {
   multiButtonOrderMain   : number;
   multiButtonOrderPayment: number;
   multiButtonOrderService: number;
+  enableQuickMenu: boolean;
 }
 
 export interface StripeAPISettings {
@@ -909,6 +910,7 @@ export class UISettingsService {
       dcapMultiPrice         : [],
       dcapDualPriceValue     : [],
       dcapSurchargeOption    : [],
+      enableQuickMenu         : [],
       payPalEnabled          : [ ],
       payPalClientID         : [''],
       payPalCurrency         : [ ],

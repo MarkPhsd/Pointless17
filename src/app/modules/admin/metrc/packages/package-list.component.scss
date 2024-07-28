@@ -18,6 +18,13 @@ mat-form-field {
   // margin-top: 3px;
 }
 
+.flex-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  flex:auto;
+}
+
 .grid-container-selectors {
   display: flex;
   flex-wrap: wrap;
@@ -26,7 +33,7 @@ mat-form-field {
 
 .grid-item {
   font-size: .9em;
-  margin: 5px
+  margin: 5px;
 }
 
 .site-select {

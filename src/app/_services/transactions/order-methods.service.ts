@@ -2061,7 +2061,6 @@ export class OrderMethodsService implements OnDestroy {
     }
 
     if (url === '/pos-orders') {
-      // this.router.navigate(['app-main-menu'])
     }
   }
 

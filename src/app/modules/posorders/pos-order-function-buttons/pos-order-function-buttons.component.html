@@ -62,11 +62,39 @@
     <ng-container [ngTemplateOutlet]="isbalanceSheetMenuView"></ng-container>
   </div>
 
+  <div>
+    <ng-container [ngTemplateOutlet]="quickMenusToggle"></ng-container>
+  </div>
+
   <div *ngIf="order && order.history">
     <h5>Transaction can not be modified.</h5>
   </div>
 
 </div>
+
+<ng-template #quickMenusToggle>
+  <button 
+          mat-raised-button
+          class="button"
+          color="primary"
+          (click)="toggleQuickMenu()">
+    <span *ngIf="menuToggle">
+       Payment Options
+     </span>
+     <span *ngIf="!menuToggle">
+       Menus
+    </span>
+  </button>
+</ng-template>
+<!-- <ng-template #toggleMenuview>
+  <button mat-raised-button class="button"
+      color="primary"
+      (click)="openBalanceSheetAction()">
+    <span>
+      Balance Sheet
+    </span>
+  </button>
+</ng-template> -->
 
 <ng-template #listItemsView>
   <div  *ngIf="!(mainPanel && !smallDevice)">
@@ -399,6 +427,8 @@
     </span>
   </button>
 </ng-template>
+
+
 
 <ng-template #balanceSheetMenuView>
 

@@ -17,11 +17,12 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class MenuSectionComponent implements OnInit {
   //Grid Display
-  @Input() disableActions: boolean;
-  @Input() refreshTime = 1;
-  @Input() listItemID: any;
-  @Input() text: any;
-  @Input() ccs: any;
+  @Input() menuCategoryID : number;
+  @Input() disableActions : boolean;
+  @Input() refreshTime     = 1;
+  @Input() listItemID     : any;
+  @Input() text           : any;
+  @Input() ccs            : any;
 
   bucket$: Observable<any>;
   @Input() menu: IDisplayMenu;
@@ -98,19 +99,31 @@ export class MenuSectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    if (this.menuCategoryID != 0) { 
+      this.id = this.menuCategoryID;
+      this.listItemID = this.menuCategoryID; 
+      this.initCategoryByID(this.id);
+      return
+    }
+
     if (this.listItemID && this.listItemID != 0) { this.id = this.listItemID  }
     if (this.ccs) { this.addStyles(this.ccs) }
     this.bucket$ = this.getBucket()
+    this.initCategoryByID(this.id)
+  }
+
+  initCategoryByID(id) { 
     if (this.id) {
       const site   = this.siteService.getAssignedSite();
       this.obs$ = this.priceScheduleService.getPriceScheduleFull(site, this.id).pipe(switchMap(data =>{
         this.categoryMenu = data;
         this.categoryMenu.itemDiscounts.sort((a, b) => a.sort - b.sort);
+        console.log(data)
         return of(data)
       }))
       return;
     }
-
   }
 
   addStyles(styles): void {
@@ -130,8 +143,6 @@ export class MenuSectionComponent implements OnInit {
   menuItemActionObs(menuItem : IMenuItem) {
     const site = this.siteService.getAssignedSite();
     let order$ = of(this.order)
-    // if (!this.order || this.order == null) {  this.order = {} as IPOSOrder  }
-    // console.log('order', this.order)
     this.addMenuItem$ = this.orderMethodService.menuItemActionObs( this.order, menuItem, true,
                                                       this.orderMethodService.assignPOSItems).pipe(concatMap(data => {
       return of(data)

@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Output,Component, EventEmitter, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { PS_SearchResultsPaged,IPriceSearchModel } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
@@ -12,6 +12,9 @@ import { AWSBucketService } from 'src/app/_services';
 })
 export class PriceScheduleMenuListComponent implements OnInit {
 
+  @Input()  retailView: boolean;
+  @Output() outPutMenu  = new EventEmitter();
+  
   phoneSize: boolean;
   id: number;
   menus$: Observable<any>;
@@ -49,28 +52,65 @@ export class PriceScheduleMenuListComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     if (this.menuStyle === 'fancy') {
       this.menus$ = this.priceScheduleService.getSimpleMenuList(site).pipe(switchMap(data => {
-        this.menus = data.results.sort((a, b) => (a.sort > b.sort ? 1 : -1));
-        return (data.results)
+
+        if (!data || !data.results) { 
+          return of(null)
+        }
+
+        if (data.results) {
+          if (this.retailView) { 
+            const id = data?.results[0]?.id 
+            this._listItems(id)
+          }
+        }
+
+        if (data?.results) {
+          this.menus = data?.results.sort((a, b) => (a.sort > b.sort ? 1 : -1));
+        }
+        return (data?.results)
       }))
       return;
     }
     this.menus$ = this.priceScheduleService.getSimpleMenuList(site).pipe(switchMap(data => {
-      this.menus = data.results.sort((a, b) => (a.sort > b.sort ? 1 : -1));
-      return (data.results)
+
+      if (!data || !data.results) { 
+        return of(null)
+      }
+
+      if(data.results) {
+        if (this.retailView) { 
+          const id = data?.results[0]?.id 
+          this._listItems(id)
+        }
+      }
+
+      if (data.results) {
+        this.menus = data.results.sort((a, b) => (a.sort > b.sort ? 1 : -1));
+      }
+      return (data?.results)
     }))
   }
 
   setItem(menu) {
+    if (this.retailView) { 
+      this.outPutMenu.emit(menu?.id)
+      return;
+    }
+
     this.router.navigate(["/price-schedule-menu-items/", {id: menu?.id }]);
   }
 
   _listItems(event) {
-    console.log(event)
+
+    if (this.retailView) { 
+      this.outPutMenu.emit(event)
+      return
+    }
+
     if (this.menuStyle == 'fancy') {
       this.router.navigate(['/app-menu-section/', {id: event} ])
       return;
     }
-
   }
 
   _editItem(event) {}

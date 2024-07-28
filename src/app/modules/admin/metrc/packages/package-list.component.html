@@ -6,7 +6,7 @@
       *ngIf="searchForm" >
 
   <div class="grid-container-selectors">
-      <div class="grid-item">
+      <div >
         <search-debounce-input
                               [itemNameControl] = "'itemName'"
                               [searchForm]      = "searchForm"
@@ -18,7 +18,7 @@
         </search-debounce-input>
       </div>
 
-      <div class="grid-item">
+      <div >
         <form-select-list [searchForm]      = "searchForm"
                           [formFieldName]   ="'metrcCategory'"
                           [list$]           = "metrcCategory$"
@@ -27,7 +27,7 @@
         </form-select-list>
       </div>
 
-      <div class="grid-item">
+      <div >
         <app-mat-select
                 [hideClear]           = "true"
                 [inputForm]           = "searchForm"
@@ -38,9 +38,8 @@
            Choose Site
         </app-mat-select>
       </div>
-      <!-- {{searchForm.value | json}} -->
 
-      <div class="grid-item site-select"
+      <div 
            *ngIf="site && facilities && !loadingFacilities">
         <mat-form-field
                 class="selector-small"
@@ -64,65 +63,7 @@
         </mat-form-field>
       </div>
 
-      <div class="grid-item"
-           *ngIf="site && loadingFacilities">
-           ....loading facilities</div>
-
-      <!-- <div class="grid-item"
-           *ngIf="site && facilityNumber" style="width:50px" >
-          <app-value-fields
-              [fieldsClass]="'fields-small'"
-              [fieldType]="'number'"
-              [inputForm]="searchForm"
-              [fieldName]="'numberOfdays'">
-              Days to Import
-          </app-value-fields>
-      </div>
-
-      <div class="grid-item"
-            *ngIf="(site && facilityNumber) && !importing " >
-        <button mat-raised-button
-                color="primary"
-                (click)="importActivePackages()">
-                <mat-icon>download</mat-icon>
-                Packages
-        </button>
-      </div> -->
-
-      <mat-card *ngIf="(site && facilityNumber) && !importing" >  
-
-        <mat-date-range
-            [inputForm] = "scheduleDateForm" >
-            Range
-        </mat-date-range>
-
-        <div class="grid-item">
-          <button mat-raised-button
-                  color="primary"
-                  (click)="importActiveBySearch()">
-                  <mat-icon>download</mat-icon>
-               Packages
-          </button>
-        </div>
-      </mat-card>
-
-      <div class="grid-item"
-            *ngIf="(site && facilityNumber) && !importing " >
-        <button mat-raised-button
-                color="warn"
-                (click)="resetImportActivePackages()">
-                <mat-icon>download</mat-icon>
-                Reset <br> Download  Entire List
-        </button>
-      </div>
-
-      <div *ngIf="importing">
-        <div>..Please wait while packages import. </div>
-        <mat-spinner [diameter]="50"></mat-spinner>
-      </div>
-
-      <div class="grid-item"
-           *ngIf="viewOptions$">
+      <div    *ngIf="viewOptions$">
           <form-select-list [searchForm]= "searchForm"
                   [formFieldName]   ="'active'"
                   [list$]           = "viewOptions$"
@@ -131,7 +72,29 @@
         </form-select-list>
       </div>
 
-      <div class="grid-item">
+      <div  *ngIf="site && loadingFacilities">
+           ....loading facilities
+      </div>
+
+      <div style="width:285px;" class="flex-dates" *ngIf="(site && facilityNumber) && !importing" >  
+        <mat-date-range
+            [hideRefresh]="true"
+            [inputForm] = "scheduleDateForm" >
+            Range
+        </mat-date-range>
+        <button style="height:35px;margin-top:15px" mat-raised-button
+                color="primary"
+                (click)="importActiveBySearch()">
+                <mat-icon>download</mat-icon>
+        </button>
+      </div>
+
+      <div *ngIf="importing">
+        <div>..Please wait while packages import. </div>
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </div>
+
+      <div>
         <mat-slide-toggle name="hasImported"
                           class="mat-toggle"
                           formControlName="hasImported"
@@ -140,7 +103,7 @@
         </mat-slide-toggle>
       </div>
 
-      <div class="grid-item">
+      <div>
         <button mat-button
                 mat-button
                 color="primary"
@@ -148,12 +111,22 @@
                 <mat-icon>refresh</mat-icon>
         </button>
       </div>
-      <div class="grid-item">
+
+      <div>
         <button mat-button
                 mat-button
                 color="primary"
                 (click)="reset()">
-              Reset
+              Reset Search
+        </button>
+      </div>
+
+      <div  *ngIf="(site && facilityNumber) && !importing " >
+        <button mat-raised-button
+                color="warn"
+                (click)="resetImportActivePackages()">
+                <mat-icon>download</mat-icon>
+                Reset  ReDownload
         </button>
       </div>
   </div>

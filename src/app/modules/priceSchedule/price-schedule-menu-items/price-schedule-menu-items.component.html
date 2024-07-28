@@ -1,4 +1,6 @@
-<button mat-raised-button (click)="toggleSort()"><mat-icon>sort_by_alpha</mat-icon>{{sort}}</button>
+<button mat-raised-button (click)="toggleSort()">
+  <mat-icon>sort_by_alpha</mat-icon>{{sort}}
+</button>
 
 <div *ngIf="(addItem$ | async) as item"></div>
 
@@ -6,22 +8,13 @@
   <div   *ngIf="(menus$ | async) as menuItems"></div>
   <div   [class]="ordersListClass" *ngIf="menuItems">
     <div  *ngFor="let item of menuItems; let i = index">
-
-         <ng-container
-          [ngTemplateOutlet]="menuItemCard"
-          [ngTemplateOutletContext]="{$implicit: item}">
-        </ng-container>
-        <!-- <button mat-raised-button
-                class="image-button"
-                (click)="menuItemAction(item)">
-            {{ item?.name  | truncateText: 30  }}
-          <mat-icon></mat-icon>
-        </button> -->
-
+      <ng-container
+        [ngTemplateOutlet]="menuItemCard"
+        [ngTemplateOutletContext]="{$implicit: item}">
+      </ng-container>
     </div>
   </div>
 </div>
-
 
 <ng-template #menuItemCard let-item let-type="type">
   <app-menu-item-card
@@ -35,11 +28,9 @@
       [menuItem]        ="item"
       [bucketName]      ="bucketName"
       [class]           ="infiniteItemClass"
+      [ignoreType]      ="true"
+      [maxHeight]       ="'250px'"
       [isStaff]         ="isStaff"
-   >
+      >
   </app-menu-item-card>
-<!-- </div> -->
 </ng-template>
-<!-- (outputRefresh)   ="refreshFromSelection($event)" -->
-<!-- (outPutUpdateCategory)="setCategoryID($event)" -->
-<!-- (outPutLoadMore)  ='moveNext($event)' -->

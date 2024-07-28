@@ -22,6 +22,8 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 
 export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   get platForm() {  return Capacitor.getPlatform(); }
+  @Input()    quicKMenusExist : boolean;
+  menuToggle: boolean;
 
   posDevice$: Observable<ITerminalSettings>;
   posDevice : ITerminalSettings;
@@ -43,8 +45,6 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @ViewChild('balanceSheetMenuView')  balanceSheetMenuView: TemplateRef<any>;
   @ViewChild('communicationsView')  communicationsView: TemplateRef<any>;
   @ViewChild('reFireOrder')  reFireOrder: TemplateRef<any>;
-
-
   @ViewChild('cancelButton') cancelButton: TemplateRef<any>;
   @Input() devicename: string;
 
@@ -75,6 +75,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @Output() outPutShowItems     = new EventEmitter();
   @Output() outPutSuspendOrder  = new EventEmitter();
   @Output() outPutRemoveSuspension  = new EventEmitter();
+  @Output() outPutToggleQuickMenu  = new EventEmitter();
 
   @Output() outPutToggleSuspension = new EventEmitter();
   @Output() outPutEmailOrder    = new EventEmitter();
@@ -181,6 +182,11 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   toggleListView() {
     this.listView = !this.listView;
     this.outPutListView.emit(this.listView)
+  }
+
+  toggleQuickMenu() { 
+    this.menuToggle = !this.menuToggle
+    this.outPutToggleQuickMenu.emit(this.menuToggle)
   }
 
   ngOnDestroy(): void {

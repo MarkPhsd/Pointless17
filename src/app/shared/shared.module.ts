@@ -250,6 +250,7 @@ import { DCAPResponseMessageComponent } from '../modules/dsiEMV/Dcap/dcaptransac
 import { EmployeesOnClockListComponent } from '../modules/admin/employeeClockAdmin/employees-on-clock-list/employees-on-clock-list.component';
 import { FunctionButtonsListComponent } from '../modules/admin/settings/function-groups/function-buttons-list/function-buttons-list.component';
 import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-emvcard-pay-btn/dsi-emvcard-pay-btn.component';
+// import { ReceiptLayoutComponent } from '../modules/admin/settings/printing/receipt-layout/receipt-layout.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -414,6 +415,7 @@ import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-
     OptionsSelectFilterComponent,
     CategoryMenuSelectorComponent,
     MenuCardCategoriesComponent,
+    // ReceiptLayoutComponent,
     //*** */
     AuditPaymentComponent,
     PriceScheduleMenuListComponent,
@@ -705,6 +707,7 @@ import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-
     RetailProductEditComponent,
     RequestMessageComponent,
     RequestMessagesComponent,
+    // ReceiptLayoutComponent,
     QuantiySelectorComponent,
     UnitTypeSelectorComponent,
     UserPreferencesComponent,

@@ -4,3 +4,21 @@
   margin: 5px;
   padding: 5px;
 }
+
+.grid-flow {
+  --gap: 5px;
+  margin-top: 2px;
+  margin-right: 2px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fill, minmax(125px, 1fr) );
+  overflow-y: visible;
+}
+
+
+.grid-item {
+  // align-items: flex-end;
+  height: 125px;
+  width:  125px;
+  overflow-x: scroll;
+}

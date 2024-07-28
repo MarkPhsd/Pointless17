@@ -17,13 +17,12 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { DcapRStream, DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
-import { RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { PosPaymentComponent } from '../../pos-payment/pos-payment.component';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { DcapPayAPIService } from 'src/app/modules/payment-processing/services/dcap-pay-api.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-balance-due',
@@ -88,6 +87,7 @@ export class ChangeDueComponent implements OnInit  {
               private orderMethodService: OrderMethodsService,
               private changeDetect : ChangeDetectorRef,
               private dCapService : DcapService,
+              private router: Router,
               private settingsService: SettingsService,
               private dialogRef: MatDialogRef<ChangeDueComponent>,
               @Inject(MAT_DIALOG_DATA) public data: IBalanceDuePayload
@@ -286,18 +286,27 @@ export class ChangeDueComponent implements OnInit  {
     this.paymentMethodProcessService._sendOrderOnExit.next(null)
     this.paymentMethodProcessService._sendOrderAndLogOut.next(null)
     this.orderMethodService.clearOrder();
+    this._closeOnly()
+  }
+
+  _closeOnly() {
+    this.orderMethodsService._scanner.next(true)
     this.dialogRef.close()
+  }
+
+  viewReceipt() { 
+    this.router.navigate['pos-payment']
+    this._closeOnly()
   }
 
   customTipAmount(amount) {
     const payment = this.payment;
     if (!payment) {
-      console.log('no payment', amount)
+  
     }
     if (payment) {
       // Ensure amount has 2 decimal places
       const formattedAmount = parseFloat(amount.toFixed(2));
-      console.log('customTipAmount', amount, formattedAmount);
       this.tip(formattedAmount);
     }
   }
@@ -391,7 +400,6 @@ export class ChangeDueComponent implements OnInit  {
 
   processDCAPTipV2(amount: number) {
     const device = localStorage.getItem('devicename')
-    console.log('amount', amount)
     const process$ = this.dCapService.adustByRecordNoV2(device, this.payment, amount);
 
     return process$.pipe(switchMap(data => {
@@ -406,23 +414,6 @@ export class ChangeDueComponent implements OnInit  {
       })
     );
   }
-
-
-  // processPayAPIAdjustSale(amount: number) {
-  //   const device = localStorage.getItem('devicename')
-  //   const site = this.siteService.getAssignedSite()
-  //   this.payment.tipAmount = amount;
-  //   const process$ = this.dCapService.preAuthCaptureByRecordNo(device, this.payment)
-  //   return process$.pipe(switchMap(data => {
-  //     if (data && data.TextResponse && data.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) {
-  //       if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) {
-  //         this.siteService.notify(data?.cmdResponse + ' ' + data?.textResponse, 'close',50000, 'red' )
-  //         return of(null)
-  //       }
-  //     }
-  //     return this.getOrderUpdate(this.payment?.orderID.toString(), site)
-  //   }))
-  // }
 
   completeAuthWithDcapTip(amount: number) {
     const device = localStorage.getItem('devicename')

@@ -27,8 +27,9 @@
 
           <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
 
-          <!-- (outPutTip)          = "customTipAmount($event)" -->
-          <div  *ngIf="isUser || ((payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard))">
+          <div  *ngIf="!uiTransactions?.disableTipGratutity && isUser || 
+                        ((payment && payment?.account) 
+                        || (paymentMethod && paymentMethod?.isCreditCard && !uiTransactions?.disableTipGratutity))">
             <tip-entry-amount
               [payment]            = "payment"
               [paymentMethod]      = "paymentMethod"
@@ -51,7 +52,9 @@
         </div>
       </div>
 
-      <div  *ngIf="!uiTransactions?.disableTipGratutity && isUser || ((payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard))">
+      <div  *ngIf="!uiTransactions?.disableTipGratutity && isUser || 
+                  ((payment && payment?.account) 
+                  || (paymentMethod && paymentMethod?.isCreditCard && !uiTransactions?.disableTipGratutity))">
         <tip-entry-amount
           [payment]            = "payment"
           [paymentMethod]      = "paymentMethod"
@@ -59,6 +62,16 @@
           (outPutTip)          = "customTipAmount($event)"
         ></tip-entry-amount>
       </div>
+    
+      <!-- <ng-container [ngTemplateOutlet]="receiptView"></ng-container> -->
+                      
+      <!-- <ng-template #receiptView>
+        <mat-card class="card-dimensions">
+          <mat-card-content style="overflow-y:auto">
+            <app-receipt-view [hideExit]="true" [order]="order"></app-receipt-view>
+          </mat-card-content>
+        </mat-card>
+      </ng-template> -->
 
       <mat-card-actions>
         <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
@@ -94,6 +107,11 @@
             class="tip-button"
             (click)="close()"><mat-icon>close</mat-icon>
             Exit</button>
+
+    <button mat-button
+          class="tip-button"
+          (click)="_closeOnly()"><mat-icon>receipt</mat-icon>
+            View Receipt</button>
 
     <button mat-button
             class="tip-button"

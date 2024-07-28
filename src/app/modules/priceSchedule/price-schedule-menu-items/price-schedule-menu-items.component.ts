@@ -1,14 +1,12 @@
-import { Component,  OnChanges, OnInit } from '@angular/core';
+import { Component,  Input,  OnChanges, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, catchError, of, switchMap } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { DiscountInfo } from 'src/app/_interfaces/menu/price-schedule';
-import { AWSBucketService, AuthenticationService, MenuService, OrdersService } from 'src/app/_services';
+import { AWSBucketService, AuthenticationService, MenuService,  } from 'src/app/_services';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
@@ -17,7 +15,9 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   templateUrl: './price-schedule-menu-items.component.html',
   styleUrls: ['./price-schedule-menu-items.component.scss']
 })
-export class PriceScheduleMenuItemsComponent implements OnInit,OnChanges {
+export class PriceScheduleMenuItemsComponent implements OnInit, OnChanges {
+  
+  @Input() menuCategoryID : number;
   id: number;
   addItem$: Observable<any>;
   menus$: Observable<any>;
@@ -62,6 +62,14 @@ export class PriceScheduleMenuItemsComponent implements OnInit,OnChanges {
 
   ngOnInit(): void {
     const i = 0;
+    this.refreshMenu()
+  }
+
+  refreshMenu() { 
+    console.log(this.id, this.menuCategoryID)
+    if(this.menuCategoryID !=0 && this.menuCategoryID != undefined) { 
+      this.id = this.menuCategoryID
+    }
     if (this.id) {
       const site   = this.siteService.getAssignedSite();
       this.menus$  = this.priceScheduleService.getScheduleMenuItems(site, +this.id).pipe(switchMap(data => {
@@ -90,7 +98,8 @@ export class PriceScheduleMenuItemsComponent implements OnInit,OnChanges {
   }
 
   ngOnChanges() {
-    console.log('id', this.id)
+    // console.log('id', this.id)
+    this.refreshMenu()
   }
 
   menuItemAction(item: any) {

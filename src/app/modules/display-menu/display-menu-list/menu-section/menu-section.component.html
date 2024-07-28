@@ -3,6 +3,8 @@
                 [ngTemplateOutletContext]="{$implicit: menu}"></ng-container>
 </div>
 
+<!-- {{categoryMenu | json}} -->
+
 <ng-template #category let-category>
 
   <div class="category-view"
@@ -81,7 +83,6 @@
         <div>
           <button mat-button (click)="menuItemActionObs(item?.menuItem)">
             <div class="item-price display-font-large">
-              <!-- {{ item?.menuItem?.name }} -->
               {{item?.sort}}. {{item?.name}}
             </div>
           </button>
