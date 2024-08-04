@@ -30,6 +30,7 @@ export interface TransactionUISettings {
   displayQuantity        : boolean;
   lockOrders             : boolean;
   disableTipGratutity: boolean;
+  disableRequestOptions: boolean;
   deleteUnClosedPrintedOrders: boolean;
   closeOrderTimeCutOff   : string;
   ordersRequireCustomer  : boolean;
@@ -910,6 +911,8 @@ export class UISettingsService {
       dcapMultiPrice         : [],
       dcapDualPriceValue     : [],
       dcapSurchargeOption    : [],
+      dcapDisableOkayAmount:[],
+      disableRequestOptions: [],
       enableQuickMenu         : [],
       payPalEnabled          : [ ],
       payPalClientID         : [''],

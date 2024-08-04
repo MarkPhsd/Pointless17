@@ -446,7 +446,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         this.uiTransactions = data
       }
     )
-
   }
 
   ngOnDestroy(): void {
@@ -460,12 +459,15 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   emailOrder(event) {
+    if (!this.order) { 
+      this.orderMethodsService.notifyEvent('Order not idenfitied', 'Success')
+    }
     this.orderMethodsService.emailOrder(this.order).subscribe(data => {
-      if (data && (data.isSuccessStatusCode || data.toString() == 'Success')) {
+      if (data && (data?.isSuccessStatusCode || data.toString() == 'Success')) {
         this.orderMethodsService.notifyEvent('Email Sent', 'Success')
         return;
       }
-      if (!data.isSuccessStatusCode) {
+      if (!data || !data.isSuccessStatusCode) {
         this.orderMethodsService.notifyEvent('Email not sent. Check email settings', 'Failed')
         return;
       }

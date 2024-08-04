@@ -847,6 +847,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   postLogout() {
+    if (this.authenticationService.authenticationInProgress) {
+      this.userSwitchingService.clearLoggedInUser();
+      return
+    }
+
     if (this.authenticationService.authenticationInProgress) { return }
     console.log('postlogout')
     this.userSwitchingService.clearLoggedInUser();

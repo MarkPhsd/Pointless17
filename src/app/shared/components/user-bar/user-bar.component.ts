@@ -21,7 +21,7 @@ export class UserBarComponent implements OnInit {
   accordionMenus: AccordionMenu[];
   mailCount  = 0;
   client: IClientTable;
-
+  smallDevice
   constructor(
     private navigationService   : NavigationService,
     private siteService         : SitesService,
@@ -47,7 +47,15 @@ export class UserBarComponent implements OnInit {
         // console.log('error getting client', data)
         return of(data)
       }))
-    this.getMenuGroup('customer')
+    this.getMenuGroup('customer');
+
+    if (window.innerWidth > 811) {
+      this.smallDevice = false;
+      this.siteService.smallDevice = false
+    } else {
+      this.smallDevice = true;
+      this.siteService.smallDevice = true
+    }
   }
 
   navPOSOrders() {

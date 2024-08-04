@@ -79,6 +79,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   androidApp: boolean;
   smallDevice: boolean;
 
+
+  get smallPOS() { 
+    if (this.smallDevice && this.androidApp) { 
+      return true
+    }
+    return false;
+  }
   initSubscriptions() {
     this._user = this.authenticationService.user$.subscribe( user => {
       if (user)  { this.loggedInUser = user }
@@ -134,7 +141,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         private _renderer              : Renderer2,
         private authenticationService  : AuthenticationService,
         private userSwitchingService   : UserSwitchingService,
-        private _snackBar              : MatSnackBar,
         private companyService         : CompanyService,
         private siteService            : SitesService,
         public  platformService        : PlatformService,
@@ -339,6 +345,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   forgetMe() {
     this.initForm();
     this.clearUserSettings();
+    localStorage.removeItem('devicename')
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
     this.statusMessage = ''
   }
@@ -358,6 +365,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   clearUserSettings() {
     this.spinnerLoading = false;
     this.authenticationService.clearUserSettings();
+    this.orderMethodsService.clearOrderSubscription();
   }
 
   getCompanyInfo() {
@@ -478,7 +486,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           //reveal why.
           this.pollingService._poll.next(true)
           this.spinnerLoading = false;
-          this.orderMethodsService.updateOrder(null)
+          this.orderMethodsService.clearOrderSubscription();
           this.paymentMethodsservice._sendOrderAndLogOut.next(null)
           this.initForm();
 
@@ -486,13 +494,13 @@ export class LoginComponent implements OnInit, OnDestroy {
           //if is not app then result is the user.
           let user = result?.user ;
           let sheet = result?.sheet as IBalanceSheet;
-
+          this.authenticationService.authenticationInProgress = false;
           //if there is a sheet we login here with the user to prompt the sheet if needed.
           if (sheet) {  if (this.loginApp(result)) {  return of('success') } }
           if (result && result.username != undefined) { user = result }
 
           if (user) {
-            console.log('user', user?.message)
+            // console.log('user', user?.message)
 
             if (user && user?.errorMessage === 'failed') {
               this.authenticationService.authenticationInProgress = false;
@@ -504,6 +512,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (user && user?.message && user?.message.toLowerCase() === 'success') {
               let pass = false
               this.authenticationService.authenticationInProgress = false;
+              // user.
               if (!this.loginAction) {  this.userSwitchingService.assignCurrentOrder(user) }
               if (this.loginAction?.name === 'setActiveOrder') {
                 this.userSwitchingService.processLogin(user, '/pos-payment')

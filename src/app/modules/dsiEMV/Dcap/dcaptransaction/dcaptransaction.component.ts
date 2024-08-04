@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { Component, Inject, OnInit, Optional,OnDestroy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Observable, catchError, concatMap, of, switchMap } from 'rxjs';
@@ -19,7 +19,7 @@ import { LoggerService } from 'src/app/modules/payment-processing/services/logge
   templateUrl: './dcaptransaction.component.html',
   styleUrls: ['./dcaptransaction.component.scss']
 })
-export class DCAPTransactionComponent implements OnInit {
+export class DCAPTransactionComponent implements OnInit, OnDestroy {
   resultMessage: any;
   textResponse: string;
   get isDev() { return this.siteService.isDev  }
@@ -96,6 +96,10 @@ export class DCAPTransactionComponent implements OnInit {
         this.manual = false;
       }
 
+    }
+
+    ngOnDestroy() { 
+      this.orderMethodsService._scanner.next(true)
     }
 
       autoActions(data) {
@@ -243,7 +247,7 @@ export class DCAPTransactionComponent implements OnInit {
           if (this.dsiEmv.v2) {
 
             if (this.debitOnly) {
-              console.log('debitOnly')
+              // console.log('debitOnly')
               this.processing$ =  this.dCapService.payAmountV2Debit(this.terminalSettings?.name , this.posPayment).pipe(concatMap(data => {
                 this.result = data;
                 return this.processResultsV2(data)
@@ -471,6 +475,7 @@ export class DCAPTransactionComponent implements OnInit {
       }
 
       _close() { 
+        this.orderMethodsService._scanner.next(true)
         this.dialogRef.close()  
       }
 

@@ -164,7 +164,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       if (!this.displayHistoryInfo) {
         this._order = this.orderMethodService.currentOrder$.subscribe( order => {
           this.order = order
-          console.log('order update', this.order.posOrderItems)
+          console.log('order update', this.order?.posOrderItems)
           if (this.order && this.order.posOrderItems)  {
             this.sortPOSItems(this.order.posOrderItems);
           }

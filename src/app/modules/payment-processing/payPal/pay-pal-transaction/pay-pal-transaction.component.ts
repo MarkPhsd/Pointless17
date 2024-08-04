@@ -191,7 +191,7 @@ export class PayPalTransactionComponent implements OnInit {
     // purchase_units: IPurchaseUnit[];
 
     payment.tranType = auth.status;
-    payment.trancode = auth.intent;
+    payment.tranCode = auth.intent;
     payment.processData = auth.id;
     payment.amountPaid = +this.amount;
     payment.amountReceived = +this.amount;

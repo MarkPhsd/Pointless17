@@ -1,0 +1,147 @@
+@import "/src/mixins.scss";
+
+:host {
+  display: block;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
+body {
+  // overflow: auto;
+  overflow-y: scroll;
+}
+.bg {
+  /* The image used */
+  // background-image: url('https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg');
+  /* Full height */
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.large {
+  // width: 125px;
+  min-width: 125px;
+  min-height: 125px;
+}
+
+.small-button {
+  height: 35px;
+}
+.message-grid {
+  display: grid;
+  grid-template-columns: 1fr 45px;
+  width: 100%;
+  gap: 10px;
+}
+mat-card  {
+  width: 100%;
+}
+
+.buttons-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
+  width        : 100%;
+}
+
+button {
+  height: 75px;
+  min-width: 75px;
+  width: 100px;
+  margin: 5px;
+}
+
+.container {
+  width: 99%;
+  max-width: 500px;
+}
+mat-card-content {
+  margin: 5px;
+  padding: 5px;
+}
+
+.loading {
+  margin-top: 50px;
+  top: 450px;
+  position: absolute;
+}
+
+.sendingMessage {
+  margin-top: 70px;
+  // top: 450px;
+}
+
+.pointless-logo {
+  width: 25px;
+}
+
+.grid-about {
+  display: grid;
+  grid-template-columns: 45px 1fr;
+  gap: 10px;
+  margin: 5px;
+}
+
+.transaction-data-side-panel-small {
+  display      : grid;
+  grid-template-columns: 55px 1fr;
+  width        : 125px;
+  overflow-y   : auto;
+  overflow-x   : hidden;
+  font-size    : large;
+  margin-bottom: 5px;
+}
+
+.transaction-data-side-panel {
+  display      : grid;
+  grid-template-columns: 1fr 1fr;
+  width        : 100%;
+  overflow-y   : auto;
+  overflow-x   : hidden;
+  font-size    : large;
+  margin-bottom: 5px;
+}
+
+.foreground-color {
+  //  color: mat-contrast($accent, 500);
+  // color: rgba(black, 0.87)
+}
+
+.transaction-data {
+  display: grid;
+  grid-template-columns: 65px 75px 50px 155px;
+  width         : 100%;
+  font-size     : large;
+  margin-bottom : 5px;
+  gap: 5px;
+}
+
+.user-name {
+  max-width: 155px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.totals {
+  font-size     : small;
+  float         : right;
+  align-items   : flex-end;
+  text-align    : right;
+  font-size     : medium;
+}
+
+.total-headers {
+  font-size     : small;
+  float         : left;
+  align-items   : flex-start;
+  text-align    : left;
+  font-size     : medium;
+}
+
+.order-message {
+  margin: 10px
+}

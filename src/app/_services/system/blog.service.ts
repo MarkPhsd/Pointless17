@@ -38,7 +38,7 @@ export interface IBlogResults {
 export class BlogService {
 
   apiUrl: any;
-  groups = ['Footer', 'Brand Head',  'Category Head', 'Department Head', 'Menu Head', 'Main Page', 'Tier Head'];
+  groups = ['Footer', 'Brand Head',  'Category Head', 'Department Head', 'Menu Head', 'Main Page', 'Tier Head', 'Sale Policy'];
 
   constructor( private http: HttpClient,
                private appInitService  : AppInitService,

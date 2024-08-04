@@ -1,8 +1,25 @@
 <div class="header">
   <mat-icon>group_work</mat-icon>
-  Prompts & Kits
+  Prompts & Kits 
 </div>
-<br>
+
+<div class="grid-items">
+  <div > 
+    <button mat-raised-button (click)="setStep(1)">
+      <mat-icon>group</mat-icon>Groups
+    </button>
+  </div>
+  <div > 
+    <button mat-raised-button (click)="setStep(2)">
+      <mat-icon>group</mat-icon>Pages
+    </button>
+  </div>
+  <div > 
+    <button mat-raised-button (click)="setStep(3)">
+      <mat-icon>group</mat-icon>Associations
+    </button>
+  </div>
+</div>
 
 <div class="settings"
      *ngIf="role">

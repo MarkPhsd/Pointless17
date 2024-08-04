@@ -430,15 +430,19 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
   editPayment(payment: IPOSPayment) {
       //get payment
+      if (payment.tranCode === 'PayAPISale') {
+        this.editDialog.openChangeDueDialog(payment, null, this.order)
+        return;
+      }
 
       if (!this.isPaxEnabledTerminal)  {
         this.siteService.notify("Please use a terminal with a credit card machine.", 'Close', 1000);
         return;
       }
       if (this.PaxA920) {
-
         return;
       }
+    
 
       const site = this.siteService.getAssignedSite();
       if (payment.paymentMethodID == 0) {

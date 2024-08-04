@@ -93,6 +93,9 @@ export class BalanceSheetMethodsService {
       const deviceName = this.getDeviceName();
       localStorage.setItem('user', JSON.stringify(user))
 
+      
+      if (!user)  { of({sheet: null, user: user, err: null}) };
+
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
           if (data && data.errorMessage) {

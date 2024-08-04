@@ -146,13 +146,16 @@ import { PayAPIComponent } from './modules/payment-processing/pay-api/pay-api.co
 import { PayAPIFrameComponent } from './modules/payment-processing/pay-apiiframe/pay-apiiframe.component';
 import { PosEditSettingsComponent } from './modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
 import { PosOrderItemsComponent } from './modules/posorders/pos-order/pos-order-items/pos-order-items.component';
+import { QrPaymentComponent } from './modules/orders/qr-payment/qr-payment.component';
 
 const routes: Routes = [
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
     { path: 'qr-receipt',  component: QRCodeTableComponent, data: { title: 'Order', animation: 'isLeft'} },
-
+      
     {path: '', component: DefaultComponent,
       children: [
+        { path: 'qr-payment',  component: QrPaymentComponent, data: { title: 'Order', animation: 'isLeft'} },
+     
         { path: 'pay-api', component: PayAPIComponent, data: { title: 'Order', animation: 'isLeft'} },
         { path: 'pay-api-iframe', component: PayAPIFrameComponent, data: { title: 'Order', animation: 'isLeft'} },
 

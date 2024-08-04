@@ -2,16 +2,16 @@
 <div *ngIf="(loginAction$ | async) as loginAction"></div>
 <div *ngIf="(action$ | async) as loginAction"></div>
 
-<div class="item-container header">
-  <div>
+<div class="item-container header" >
+  <div *ngIf="!smallPOS">
     <h3>Enter PIN Code</h3>
   </div>
 
-  <div style="margin:5px" *ngIf="!disableUserStatus">
+  <div style="margin:5px" *ngIf="!disableUserStatus && !smallPOS">
     <button class="payment-buttons" mat-button (click)="logout()"><mat-icon>lock</mat-icon>Lock</button>
   </div>
 
-  <div *ngIf="!disableUserStatus">
+  <div *ngIf="!disableUserStatus && !smallPOS">
     <ng-container [ngTemplateOutlet]="checkUserStatus"></ng-container>
   </div>
 </div>

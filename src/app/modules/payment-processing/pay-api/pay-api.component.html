@@ -16,7 +16,12 @@
       <div>{{data?.saleResponse?.status}}</div>
       <div>Message</div>
       <div>{{data?.saleResponse?.message}}</div>
+      <div>Origin</div>
+      <div>{{data?.saleResponse?.responseOrigin}}</div>
     </div>
+  </div>
+  <div *ngIf="errorMessage">
+    <h4>{{errorMessage}}</h4>
   </div>
 
   <div *ngIf="!publicKey">
@@ -26,11 +31,11 @@
 
   <mat-card *ngIf="publicKey && formInitialized"
             style="width:390;">
-      <mat-card-title  style="border-radius:5px;padding:5px;">
-        <div class="ps-flex-group" style="">
+      <mat-card-subtitle>
+        <div class="ps-flex-group" >
           <!-- background:rgb(189, 193, 219) -->
           <div>
-            <div style="margin-top:5px">
+            <div>
               Payment Details
             </div>
           </div>
@@ -38,13 +43,30 @@
             <img src="../assets/images/accepted.png">
           </div>
         </div>
-        <mat-divider></mat-divider>
-        <div style="margin-left:20px">
-          Amount {{order?.total | currency}}
-        </div>
-      </mat-card-title>
 
-      <mat-card-subtitle>
+        <div class="grid">
+          <!-- style="font-size:large;margin-left:20px" -->
+          <div class="grid-item" >
+            Amount
+          </div>
+          <div class="grid-item-right">
+            {{order?.total | currency}}
+          </div>
+          <!-- style="font-size:large;margin-left:20px" -->
+          <div *ngIf="getTipValue>0" class="grid-item" >
+            Gratuity
+          </div>
+          <div *ngIf="getTipValue>0" class="grid-item-right">
+            {{getTipValue | currency}}
+          </div>
+          <!-- style="font-size:large;margin-left:20px" -->
+          <div class="grid-item" >
+            Surcharge
+          </div>
+          <div  class="grid-item-right">
+            {{(order?.total * .03).toFixed(2) | currency}}
+          </div>
+        </div>
 
         <div *ngIf="expInvalid">
           <mat-icon color="warm">alert</mat-icon>Invalid EXP
@@ -62,11 +84,13 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <div  class="flex-end flex-grid-row">
+        <div  class="centered-flex">
           <div>
             <button [disabled]="processing" class="payment-buttons"
                       mat-raised-button color="primary"
-                    (click)="requestToken()">Pay
+                    (click)="requestToken()">
+                    <mat-icon>credit_card</mat-icon><br>
+                    Pay
             </button>
           </div>
         </div>
@@ -78,7 +102,7 @@
     <form  id="payment_form" style="border-radius:3px;padding:10px; background:rgb(255, 255, 255);color:black">
       <div class="card-number">
         <mat-label>Card</mat-label><br>
-        <input  style="padding:3px"  type="number"   data-token="card_number"  />
+        <input style="width:255px;padding:5px"   type="number"   data-token="card_number"  />
       </div>
 
       <div class="flex-grid-row" style="gap:0px">

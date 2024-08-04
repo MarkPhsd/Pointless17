@@ -1,4 +1,9 @@
-<div class="centered-flex">
+<div *ngIf="(order$ | async) as order; else loadingOrder"></div>
+<div *ngIf="(action$ | async) as order"></div>
+
+<div class="centered-flex"  
+     *ngIf="(uiHomePageSetting$ | async) as uiHomePageSetting">
+ 
   <mat-card class="container">
     <div class="grid-about">
       <div>
@@ -11,13 +16,11 @@
 
     <mat-divider></mat-divider>
 
-    <div *ngIf="(uiHomePageSetting$ | async) as uiHomePageSetting">
-      <h3>{{uiHomePageSetting?.displayCompanyName}}</h3>
-      <app-logo [logoSize]="'large'" ></app-logo>
-    </div>
-
-    <div *ngIf="(action$ | async) as order">
-
+    <div class="centered-flex" >
+      <div >
+        <h3>{{uiHomePageSetting?.displayCompanyName}}</h3>
+        <app-logo [logoSize]="'large'" ></app-logo>
+      </div>
     </div>
 
     <div class="order-message" *ngIf="goingToPay">
@@ -51,9 +54,9 @@
               <div *ngIf="order?.tableName" class="">Table   </div>
               <div *ngIf="order?.tableName" class=""> {{ order?.tableName }}</div>
             </div>
+
             <div class="transaction-data-side-panel-smal" *ngIf="order" >
-              <div class=""> User</div>
-              <div class="user-name"> {{ userAuth.user?.username }}</div>
+              <div class=""> User  {{ userAuth.user?.username }}</div>
             </div>
 
             <div class="buttons-header">
@@ -85,12 +88,6 @@
 
           </mat-card-subtitle>
           <mat-card-content>
-            <!-- <app-order-total
-              [mainPanel]="false"
-              [qrOrder]="true"
-              [order]="order">
-            </app-order-total> -->
-            <!-- <h3>Order Balance : {{order.balanceRemaining | currency}}</h3> -->
             <app-payment-balance
               [mainPanel]="true"
               [qrOrder]="true"
@@ -120,4 +117,5 @@
     ...loading your order.
   </div>
 </ng-template>
+
 

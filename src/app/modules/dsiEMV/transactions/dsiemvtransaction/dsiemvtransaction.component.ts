@@ -336,7 +336,7 @@ export class DSIEMVTransactionComponent implements OnInit {
         }
 
         try {
-          item.payment.trancode        = response?.TranResponse?.TranCode
+          item.payment.tranCode        = response?.TranResponse?.TranCode
           item.payment.tranType        = response?.TranResponse?.TranCode
         } catch (error) {
         }
@@ -429,7 +429,7 @@ export class DSIEMVTransactionComponent implements OnInit {
         }
 
         try {
-          item.payment.trancode        = response?.TranResponse?.TranCode
+          item.payment.tranCode        = response?.TranResponse?.TranCode
           item.payment.tranType        = response?.TranResponse?.TranCode
         } catch (error) {
         }

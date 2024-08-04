@@ -498,7 +498,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           posPayment.textResponse = data?.textResponse
           posPayment.captureStatus = data?.captureStatus;
           posPayment.processData = data?.processData;
-          posPayment.trancode    = data?.trancode;
+          posPayment.tranCode    = data?.trancode;
           posPayment.tipAmount   = data?.gratuity;
           posPayment.recordNo = data?.recordNo;
           posPayment.tranType = data?.tranType;
@@ -1169,7 +1169,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     payment.accountNum    = trans?.AcctNo;
     payment.exp           = trans?.ExpDate;
     payment.cardHolder    = trans?.CardholderName;
-    payment.trancode      = trans?.TranCode;
+    payment.tranCode      = trans?.TranCode;
     payment.tranType      = trans?.TranCode;
     payment.refNumber     = trans?.RefNo;
     payment.dlNumber      = trans?.AcqRefData;

@@ -85,8 +85,14 @@ export class PromptSubGroupEditComponent implements OnInit {
 
   getPrompt(): PromptSubGroups {
     this.prompt = this.inputForm.value as PromptSubGroups
-    const values = JSON.stringify(this.promptPropertiesForm.value)
-    this.prompt.json = values;
+    try {
+      if (this.promptPropertiesForm) { 
+        const values = JSON.stringify(this.promptPropertiesForm.value)
+        this.prompt.json = values;
+      }
+    } catch (error) {
+      
+    }
     return this.prompt
   }
 

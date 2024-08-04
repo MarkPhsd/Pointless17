@@ -130,7 +130,6 @@ export class SettingsService {
     site.url = this.apiUrl;
 
     return this.getSettingByNameCached(site, deviceName)
-
   }
 
   isAPIOnline(): Observable<any> {
@@ -312,6 +311,8 @@ export class SettingsService {
 
   }
 
+  //getSettingByName
+
   getPOSDeviceSettings(site: ISite, name: String):  Observable<ITerminalSettings> {
 
     const user =  JSON.parse(localStorage.getItem('user')) as IUser
@@ -340,10 +341,11 @@ export class SettingsService {
 
     if (!name) { return of(null) }
     const user =  JSON.parse(localStorage.getItem('user')) as IUser
-    if (!user || !user.roles ||  !user.username ) {
+    if (!user || !user.roles || !user.username ) {
       return this.getSettingByNameNoRoles(site, name)
     }
 
+  
 
     const controller = "/settings/"
 

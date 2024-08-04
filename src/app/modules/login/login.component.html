@@ -147,11 +147,11 @@
               <div class="registration">
                 <mat-divider></mat-divider>
               </div>
-              <div  *ngIf="isApp || smallDevice || (!isApp && !smallDevice)">
+              <div  *ngIf="(isApp || smallDevice || (!isApp && !smallDevice) ) && !smallPOS">
                 First time users please register.
                 If you have forgotten your password or user name,
                 press register or reset password below.</div>
-              <div class="registration" >
+              <div class="registration" *ngIf="!smallPOS">
                 <button mat-raised-button  (click)='changePassword()'>Reset Password</button>
                 <button mat-raised-button  (click)='registerUser()'>Register</button>
                 <button mat-raised-button  (click)='forgetMe()'>Forget Me</button>
@@ -167,13 +167,13 @@
           </mat-card-content>
         </mat-card>
       </div>
-      <div *ngIf="isElectron && uiHomePageSetting?.employeeOnClockList">
+      <div *ngIf="!smallPOS && isElectron && uiHomePageSetting?.employeeOnClockList">
         <employees-on-clock-list></employees-on-clock-list>
       </div>
     </div>
 
-    <div>
-      <div  class="pin-entry">
+    <div *ngIf="!smallPOS">
+      <div class="pin-entry">
         <ng-container [ngTemplateOutlet]="enableTimeClockView"></ng-container>
       </div>
     </div>
@@ -207,7 +207,7 @@
             </div>
           </mat-card>
 
-          <div class="">
+          <div  *ngIf="!smallPOS">
             <div  class="pin-entry">
               <ng-container [ngTemplateOutlet]="enableTimeClockView"></ng-container>
             </div>

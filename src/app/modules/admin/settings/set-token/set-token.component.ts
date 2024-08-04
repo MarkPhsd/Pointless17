@@ -31,6 +31,9 @@ export class SetTokenComponent implements OnInit {
       if (data) {
         localStorage.setItem('pinToken', data);
         this.siteService.notify('Token Assigned', 'close', 3000)
+      } 
+      if (!data) { 
+        this.siteService.notify('Token Server Disabled', 'close', 3000)
       }
       return of(data)
     }))

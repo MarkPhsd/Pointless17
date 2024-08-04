@@ -60,6 +60,8 @@
         <app-toggle-theme></app-toggle-theme>
       </div>
 
+      
+      <app-site-footer *ngIf="smallDevice"></app-site-footer>
       </mat-card-content>
   </mat-card>
 </div>
@@ -73,3 +75,4 @@
      <mat-icon>exit_to_app</mat-icon><span *ngIf="client">Sign Out</span><span *ngIf="!client">Sign In</span> </button>
   </div>
 </ng-template>
+

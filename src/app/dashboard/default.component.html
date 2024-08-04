@@ -66,9 +66,11 @@
 </mat-drawer-container>
 
 <app-footer></app-footer>
+
 <ng-container [ngTemplateOutlet]="appSiteFooterOn"></ng-container>
+
 <ng-template #appSiteFooter>
-  <app-site-footer></app-site-footer>
+  <app-site-footer *ngIf="!smallDevice"></app-site-footer>
 </ng-template>
 
 <div   *ngIf="(homePageSetting$ | async) as setting">

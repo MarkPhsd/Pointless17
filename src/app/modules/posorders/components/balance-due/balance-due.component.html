@@ -1,6 +1,15 @@
-<div *ngIf="(action$ | async) as newOrder"></div>
+<div *ngIf="(action$ | async) as newOrder; else action"></div>
 <div *ngIf="(dCapReset$ | async) as reset"></div>
 <div *ngIf="(terminalSettings$ | async) as terminal"></div>
+
+
+<ng-template #action>
+  <!-- <div >
+    <mat-spinner [diameter]="50"></mat-spinner><br>
+    ...processing
+  </div> -->
+</ng-template>
+
 
 <div  class="grid-items"
       *ngIf=" (uiTransactions$ | async) as uiTransactions" >
@@ -35,6 +44,11 @@
               [paymentMethod]      = "paymentMethod"
               (specifiedTipAmount) = "specifiedTip($event)"
             ></tip-entry-amount>
+        
+            <div style="width:100%" *ngIf="proccessing">
+              <mat-spinner [diameter]="50"></mat-spinner><br>
+              ...processing
+            </div>
           </div>
         </div>
       </div>
@@ -61,18 +75,15 @@
           (specifiedTipAmount) = "specifiedTip($event)"
           (outPutTip)          = "customTipAmount($event)"
         ></tip-entry-amount>
+
+        <div style="width:100%" *ngIf="proccessing">
+          <mat-spinner [diameter]="50"></mat-spinner><br>
+          ...processing
+        </div>
+        <ng-container [ngTemplateOutlet]="action"></ng-container>
+        
       </div>
     
-      <!-- <ng-container [ngTemplateOutlet]="receiptView"></ng-container> -->
-                      
-      <!-- <ng-template #receiptView>
-        <mat-card class="card-dimensions">
-          <mat-card-content style="overflow-y:auto">
-            <app-receipt-view [hideExit]="true" [order]="order"></app-receipt-view>
-          </mat-card-content>
-        </mat-card>
-      </ng-template> -->
-
       <mat-card-actions>
         <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
       </mat-card-actions>
@@ -110,7 +121,7 @@
 
     <button mat-button
           class="tip-button"
-          (click)="_closeOnly()"><mat-icon>receipt</mat-icon>
+          (click)="viewReceipt()"><mat-icon>receipt</mat-icon>
             View Receipt</button>
 
     <button mat-button
@@ -128,7 +139,4 @@
       <h2>New Order</h2></button>
   </div>
 </ng-template>
-<!--
-<div>
-  <button class="big-button" mat-raised-button (click)="newDefaultOrder()">New Order</button>
-</div> -->
+

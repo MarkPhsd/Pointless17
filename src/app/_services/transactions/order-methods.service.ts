@@ -96,14 +96,14 @@ export class OrderMethodsService implements OnDestroy {
   public  assignedPOSItems$ = this._assingedPOSItems.asObservable();
   public  assignPOSItems       : PosOrderItem[];
 
-  public _lastSelectedItem = new BehaviorSubject<PosOrderItem>(null);
+  public _lastSelectedItem  = new BehaviorSubject<PosOrderItem>(null);
   public  lastSelectedItem$ = this._lastSelectedItem.asObservable();
 
   private _posIssuePurchaseItem   = new BehaviorSubject<IPurchaseOrderItem>(null);
-  public  posIssuePurchaseItem$ = this._posIssuePurchaseItem.asObservable();
+  public  posIssuePurchaseItem$   = this._posIssuePurchaseItem.asObservable();
 
-  private _posIssueItem = new BehaviorSubject<PosOrderItem>(null);
-  public  posIssueItem$ = this._posIssueItem.asObservable();
+  private _posIssueItem   = new BehaviorSubject<PosOrderItem>(null);
+  public  posIssueItem$   = this._posIssueItem.asObservable();
   public splitEntryValue  = 0;
 
   overrideClear: boolean;
@@ -142,7 +142,7 @@ export class OrderMethodsService implements OnDestroy {
   private _splitGroupOrder     = new BehaviorSubject<IPOSOrder>(null);
   public splitGroupOrder$      = this._splitGroupOrder.asObservable();
 
-  public _sendOrder     = new BehaviorSubject<boolean>(null);
+  public _sendOrder      = new BehaviorSubject<boolean>(null);
   public sendOrder$      = this._sendOrder.asObservable();
 
   public _scanner             = new BehaviorSubject<boolean>(null);

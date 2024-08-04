@@ -637,7 +637,7 @@ export interface IPOSPayment {
   emvDate:             string;
   emvcvm:              string;
   entryMethod:         string;
-  trancode:            string;
+  tranCode:            string;
   textResponse:        string;
   transactionData     : string;
   captureStatus:       string;

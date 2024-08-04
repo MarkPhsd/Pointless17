@@ -1036,13 +1036,13 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
           this.value = 100;
         }
 
-        // console.log('menuItem length', this.menuItems.length)
         this.menuItems = this.removeDuplicates( this.menuItems )
-        // console.log('Post dupe removal', this.menuItems.length)
-
         this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
 
         if ( this.value < 100) {
+          this.menuItems.filter(data => { 
+            return data.id != -1
+          })
           const lastItem = this.getNextMenuItem();
           this.menuItems.push(lastItem)
         }

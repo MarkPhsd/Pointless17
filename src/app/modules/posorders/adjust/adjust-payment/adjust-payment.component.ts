@@ -670,7 +670,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   get isDSIEmvPayment() {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
-      if (voidPayment.trancode && voidPayment.trancode.toLowerCase() ===  'EMVSale'.toLowerCase()) {
+      if (voidPayment.tranCode && voidPayment.tranCode.toLowerCase() ===  'EMVSale'.toLowerCase()) {
         return true
       }
     }

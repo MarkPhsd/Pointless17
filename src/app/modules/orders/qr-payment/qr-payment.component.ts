@@ -1,5 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { numberFormat } from 'highcharts';
 import { Subscription, Observable, switchMap, of } from 'rxjs';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
@@ -7,16 +9,16 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
 import { IRequestResponse } from 'src/app/_services/system/request-message.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
-  selector: 'qr-order',
-  templateUrl: './qrcode-table.component.html',
-  styleUrls: ['./qrcode-table.component.scss']
+  selector: 'app-qr-payment',
+  templateUrl: './qr-payment.component.html',
+  styleUrls: ['./qr-payment.component.scss']
 })
-export class QRCodeTableComponent implements OnInit, OnDestroy {
+export class QrPaymentComponent {
   mainPanel: boolean;
   isNotInSidePanel: boolean
   sidePanelWidth: number
@@ -25,7 +27,7 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   phoneDevice = false;
   orderItemsHeightStyle: string;
   goingToPay: boolean;
-
+  setToPay: boolean;
   _uISettings       : Subscription;
    order             : IPOSOrder;
   uiHomePageSetting$: Observable<UIHomePageSettings>;
@@ -35,6 +37,18 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   message$          : Observable<IRequestResponse>;
   sendingMessage    : boolean;
   processing: boolean;
+
+  uiTransactions: TransactionUISettings
+
+  paymentForm: FormGroup;
+
+  initTransactionUISettings() {
+    this.uISettingsService.transactionUISettings$.subscribe( data => {
+        this.uiTransactions = data
+      }
+    )
+
+  }
   constructor(
       private uiSettingsService: UISettingsService,
       private settingsService: SettingsService,
@@ -44,19 +58,23 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
       private orderMethodsService: OrderMethodsService,
       public userAuth       : UserAuthorizationService,
       private authenticationService: AuthenticationService,
+      private uISettingsService: UISettingsService,
       private requestMessageMethods: RequestMessageMethodsService,
       private router         : Router,
+      private fb: FormBuilder,
   ) { }
 
   ngOnInit(): void {
     this.getUser();
     this.uiHomePageSetting$ = this.settingsService.getUIHomePageSettings();
-  
+    this.initTransactionUISettings()
     this.order$ = this.getOrder().pipe(switchMap(data => { 
-      // this.order = data;
+
       return of(data)
     }))
-  
+    this.paymentForm = this.fb.group({
+      tipAmount: []
+    })
   }
 
   ngOnDestroy() {
@@ -64,10 +82,9 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   }
 
   navigateToLogin(){
-    // console.log('navigateToLogin clear user settings')
     localStorage.removeItem('user')
     this.uiHomePageSetting$.subscribe(data => {
-      this.authenticationService.logout(data.pinPadDefaultOnApp)
+      this.authenticationService.logout(data?.pinPadDefaultOnApp)
       this.setLoginActions()
     })
   }
@@ -123,24 +140,29 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
 
   payOrder() {
 
-    if (!this.userAuth.user || this.userAuth?.user?.username.toLowerCase() === 'temp') {
+    if (!this.userAuth.user || this.userAuth.user.username.toLowerCase() === 'temp') {
       this.setLoginActions()
       const ref = this.authenticationService.openLoginDialog()
       return;
     }
 
     if (this.userAuth.user) {
-      this.action$ =  this.goPay();
+      this.setToPay = true;
+      // this.action$ =  this.goPay();
     }
 
   }
+
   getOrder(): Observable<IPOSOrder> {
     try { 
       this.processing = true;
       const id = this.route.snapshot.paramMap.get('id');
       const orderCode = this.route.snapshot.paramMap.get('orderCode');
       const site = this.siteService.getAssignedSite();
-
+      const setToPay =  this.route.snapshot.paramMap.get('setToPay'); 
+      if (setToPay) { 
+        this.setToPay = true;
+      }
       if (!id && !orderCode) { 
         this.processing = false;
         return of(null)}
@@ -150,8 +172,7 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
       const user = this.getUser()
       let order$ : Observable<IPOSOrder>
 
-      // console.log('user', user)
-
+      console.log('user', user)
       if (user && user?.username  &&  user?.username != "Temp" && user.password) { 
         if (orderCode) {
           order$ =this.orderService.getQROrder(site, orderCode);
@@ -170,13 +191,16 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
       }
    
       if (!order$) { 
-        console.log('order null')
         this.processing = false;
         return of(null)
       }
       return order$.pipe(switchMap(data => { 
         this.processing = false;
-        console.log('data from order',data)
+        this.order = data;
+        this.orderMethodsService.updateOrder(data)
+        if (setToPay) { 
+          
+        }
         return of(data)
       }));
       
@@ -185,6 +209,11 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
       this.processing = false;
       return of(null)
     }
+  }
+
+  creditPaymentAmount() { 
+    // this.payment.surcharge = +(this.order.balanceRemaining * 0.03).toFixed(2)
+    // this.order.balanceRemaining = 
   }
 
   navigateToOrder() {
@@ -208,7 +237,7 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
           this.order = data;
           this.orderMethodsService.setActiveOrder( data)
           this.goingToPay = false
-          this.router.navigate(['qr-payment', {orderCode: data?.orderCode, setToPay: true}])
+          this.router.navigate(['pos-payment'])
           return of(data)
         })
      )
@@ -225,5 +254,4 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
     }
     return user;
   }
-
 }

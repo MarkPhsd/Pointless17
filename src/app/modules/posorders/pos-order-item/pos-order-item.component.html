@@ -169,13 +169,13 @@
 
               <mat-divider></mat-divider>
 
-              <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService?.isStaff">
+              <div *ngIf="!ui?.disableRequestOptions &&  userAuthService && !userAuthService?.isManagement && userAuthService?.isStaff">
                 <button mat-raised-button  color="accent" (click)="requestVoidItem(orderItem)">
                   Void Request
                 </button>
               </div>
 
-              <div *ngIf="!showEdit && (ui?.displayAdd) && (userAuths && !userAuths?.refundItem)">
+              <div *ngIf="!ui?.disableRequestOptions &&  !showEdit && (ui?.displayAdd) && (userAuths && !userAuths?.refundItem)">
                 <button mat-raised-button  class="button" color="warn" (click)="requestRefundItem(orderItem)">
                   <mat-icon  class="warn" >delete</mat-icon>
                     Refund <br>
@@ -183,7 +183,7 @@
                 </button>
               </div>
 
-              <div *ngIf="userAuthService && !userAuthService?.isManagement && userAuthService?.isStaff">
+              <div *ngIf="!ui?.disableRequestOptions && userAuthService && !userAuthService?.isManagement && userAuthService?.isStaff">
                 <button mat-raised-button  color="accent" (click)="requestPriceChange(orderItem)">
                   Request<br>
                   Change Price

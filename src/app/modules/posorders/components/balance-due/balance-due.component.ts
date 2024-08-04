@@ -39,7 +39,7 @@ export class ChangeDueComponent implements OnInit  {
   terminalSettings:ITerminalSettings;
   terminalSettings$: Observable<ITerminalSettings>;
   response: DcapRStream;
-
+  proccessing: boolean ;
   dCapReset$ : Observable<any>;
   printing$ : Observable<any>;
   action$   : Observable<any>;
@@ -295,7 +295,9 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   viewReceipt() { 
-    this.router.navigate['pos-payment']
+    const url = 'pos-payment'
+    this.router.navigateByUrl(url)
+    // this.router.navigate['pos-payment']
     this._closeOnly()
   }
 
@@ -319,16 +321,17 @@ export class ChangeDueComponent implements OnInit  {
     if (payment) {
       // Ensure amount has 2 decimal places
       const formattedAmount = parseFloat(amount.toFixed(2));
-      console.log('customTipAmount', amount, formattedAmount);
+      // console.log('specifiedTip', amount, formattedAmount);
       this.tip(formattedAmount);
     }
   }
 
   tip(amount: number) {
     const formattedAmount = parseFloat(amount.toFixed(2));
-    console.log('customTipAmount', amount, formattedAmount);
+
     const site = this.siteService.getAssignedSite();
-    const payment = this.payment
+    const payment = this.payment;
+
     if (payment) {
       if (this.uiTransactions.dCapEnabled) {
         if (this.payment?.tranCode === 'EMVPreAuth') {
@@ -362,7 +365,6 @@ export class ChangeDueComponent implements OnInit  {
 
     const site = this.siteService.getAssignedSite()
 
-
     if (this.dsiEmv) {
       if (this.dsiEmv.v2) {
         return this.processDCAPTipV2(amount)
@@ -371,10 +373,18 @@ export class ChangeDueComponent implements OnInit  {
     const device = localStorage.getItem('devicename')
     const process$ = this.dCapService.adustByRecordNo(device, this.payment, amount);
 
+    console.log('processDcapTip')
+
+    
+    this.proccessing = true;
     return process$.pipe(switchMap(data => {
+      console.log(data, data.cmdStatus, data.textResponse)
+      if (data.cmdStatus && data.cmdStatus.ToLower() == 'error') {
+        this.siteService.notify(data?.cmdResponse + ' ' + data?.textResponse, 'close',50000, 'red' )
+        return this.getOrderUpdate(this.payment.orderID.toString(), site)
+      }
 
-
-      if (data.CmdStatus && data.CmdStatus.ToLower() == 'approved') {
+      if (data.cmdStatus && data.cmdStatus.ToLower() == 'approved') {
         return this.getOrderUpdate(this.payment.orderID.toString(), site)
       }
 
@@ -382,34 +392,31 @@ export class ChangeDueComponent implements OnInit  {
         return this.getOrderUpdate(this.payment.orderID.toString(), site)
       }
 
-      if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) {
-        this.siteService.notify(data.cmdResponse + ' ' + data?.textResponse, 'close',50000, 'red' )
-      }
-
-      if (data && data?.TextResponse && data.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) {
+      if (data && data?.textResponse && data.textResponse.toLowerCase() != 'Approved'.toLowerCase()) {
         if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) {
-          this.siteService.notify(data.cmdResponse + ' ' + data.textResponse, 'close',50000, 'red' )
+          this.siteService.notify(data?.cmdResponse + ' ' + data?.textResponse, 'close',50000, 'red' )
         }
       }
-
+      this.proccessing = false;
       return this.getOrderUpdate(this.payment.orderID.toString(), site)
     }))
-
-
   }
 
   processDCAPTipV2(amount: number) {
     const device = localStorage.getItem('devicename')
     const process$ = this.dCapService.adustByRecordNoV2(device, this.payment, amount);
-
+    this.proccessing = true;
     return process$.pipe(switchMap(data => {
+   
+       const result = data as any;
         if (!data.success) {
-          this.siteService.notify(data?.response?.TextResponse, 'close', 10000)
+          this.siteService.notify(result?.response?.textResponse, 'close', 10000, 'red', 'top')
         }
         if (data.success) {
           this.payment = data?.payment;
         }
         this.orderMethodService.updateOrder(data?.order)
+        this.proccessing = false;
         return of(data)
       })
     );
@@ -432,6 +439,7 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   applytoPOS(payment:IPOSPayment, amount, site) {
+    console.log('applytoPOS')
     payment.tipAmount = amount;
     const payment$ =  this.paymentService.putPOSPayment(site, payment);
     //process tip via credit card service.

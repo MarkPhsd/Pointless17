@@ -45,6 +45,14 @@ export class FastUserSwitchComponent implements OnInit {
   employeeAllowed: number;
   sheet: IBalanceSheet;
 
+
+  get smallPOS() { 
+    if (this.smallDevice &&  this.platformService.androidApp) { 
+      return true
+    }
+    return false;
+  }
+
   constructor(
     // private dialog                 : MatDialog,
     private userSwitchingService   : UserSwitchingService,
@@ -248,6 +256,8 @@ export class FastUserSwitchComponent implements OnInit {
     // if (user?.id) {
       const site = this.siteService.getAssignedSite()
       const device = localStorage.getItem('devicename')
+
+      if (!user) { return of(null)}
       return  this.balanceSheetService.getCurrentUserBalanceSheet(site, device ).pipe(switchMap(data => {
         // console.log('checkBalanceSheet', data)
         if (data) {

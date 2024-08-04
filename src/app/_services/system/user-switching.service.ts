@@ -371,6 +371,7 @@ export class UserSwitchingService implements  OnDestroy {
     if (user.preferences) {
       currentUser.userPreferences = JSON.parse(user.preferences) as UserPreferences;
       currentUser.preferences = user?.preferences;
+
       if (!currentUser.userPreferences.swapMenuOrderPlacement) {
         currentUser.userPreferences.swapMenuOrderPlacement = false;
       }
@@ -378,6 +379,7 @@ export class UserSwitchingService implements  OnDestroy {
         currentUser.userPreferences.showAllOrders = false;
       }
     }
+
 
     if (!user.preferences) {
       currentUser.userPreferences               =  {} as UserPreferences;
@@ -397,7 +399,6 @@ export class UserSwitchingService implements  OnDestroy {
     currentUser.authdata     = user?.authdata
     localStorage.setItem('user', JSON.stringify(currentUser))
     this.authenticationService.updateUser(currentUser)
-    // console.log('verify stored user')
     this.getStoredUser()
     return currentUser
   }

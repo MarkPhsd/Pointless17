@@ -244,9 +244,7 @@
     <ng-container [ngTemplateOutlet]="menuButtonContainer">  </ng-container>
   </div>
   <div *ngIf="user && user.roles && user.roles == 'user'">
-    <!-- <ng-container [ngTemplateOutlet]="menuButtonContainer">  </ng-container>
-      -->
-      <ng-container [ngTemplateOutlet]="menuBarView"></ng-container>
+    <ng-container [ngTemplateOutlet]="menuBarView"></ng-container>
   </div>
 
 </ng-template>
@@ -398,7 +396,9 @@
   <ng-container *ngIf="orderMethodsService.lastOrder">
     <mat-divider class="margin-5"></mat-divider>
     <div  class="margin-5">
-      <button class='ps-button-150' mat-raised-button (click)="setLastOrder()">Last Order {{orderMethodsService.lastOrder.id}}</button>
+      <button class='ps-button-150' mat-raised-button (click)="setLastOrder()">
+        Last Order {{orderMethodsService.lastOrder.id}}
+      </button>
     </div>
   </ng-container>
 </ng-template>

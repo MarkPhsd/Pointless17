@@ -90,6 +90,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   counter: number = 0;
 
   enterTip: boolean;
+  tipPreSale: boolean;
   dsiEMVSettings : DSIEMVSettings;
   PaxA920 : boolean;
   payApiEnabled: boolean;
@@ -105,6 +106,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   private timer: any;
   paymentResponse: IPaymentResponse;
   instructions: string;
+  
   initPOSDevice() {
     this.posDevice$      = this.uISettingsService.posDevice$.pipe(switchMap(data => {
       if (!data)  {
@@ -352,7 +354,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
 
   checkResponse_Transaction(tranType) {
     this.processing = true;
-    console.log('checkResponse_Transaction', tranType)
+    // console.log('checkResponse_Transaction', tranType)
     this.timer = setInterval(async () => {
       //PARAMDOWNLOAD
       if (tranType === 'PARAMDOWNLOAD') {
@@ -381,7 +383,6 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       }
     }, 500);
   }
-
 
   async intervalCheckPrint(timer: any) {
     let responseSuccess = '';
@@ -425,7 +426,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       responseSuccess = 'complete';
       this.instructions = ''
       const response = this.dcapMethodsService.convertToObject(paymentResponse.value)
-      console.log('intervalAdjutByRecordNoResponse')
+      // console.log('intervalAdjutByRecordNoResponse')
       if (response) {
         const result =   this.readResult(response, "AdjustByRecordNo");
         console.log('result', result.success, result.message)
@@ -452,7 +453,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       responseSuccess = 'complete';
       this.instructions = ''
       const response = this.dcapMethodsService.convertToObject(paymentResponse.value)
-      // console.log('intervalCheckResponse')
+     
       if (response) {
         const result =   this.readResult(response, "EMVSale");
         console.log('result', result.success, result.message)
@@ -481,6 +482,8 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
         this.instructions = 'Please tap or insert card'
       }
 
+      // console.log('options', options)
+      // return ;
       if (options) {
         const item = await dsiemvandroid.processSale(options);
         const stream =  this.dcapMethodsService.convertToObject(item.value)
@@ -496,6 +499,11 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     item.UseForms = ""
     item.tranCode    = "PrintReceipt";
     let printData    = this.responseData?.PrintData;
+
+    console.log('print check response Data', this.responseData)
+
+    return;
+
     const printInfo = this.mergePrintDataToTransaction(printData, item)
     const printResult  =  dsiemvandroid.print(printInfo)
     this.checkResponse_Transaction('PRINT')
@@ -603,6 +611,23 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       this.payment.tipAmount = event
       this.processDcapTip(this.payment.tipAmount);
       this.enterTip = false;
+      return;
+    }
+  }
+
+  specifiedTipPreSale(event) {
+    if (this.payment) {
+      this.payment.tipAmount = event;
+      // this.processDcapTip(this.payment?.tipAmount);
+      this.tipPreSale = false;
+    }
+  }
+
+  customTipAmountPreSale(event) {
+    if (this.payment) {
+      this.payment.tipAmount = event
+      // this.processDcapTip(this.payment?.tipAmount);
+      this.tipPreSale = false;
       return;
     }
   }
@@ -772,6 +797,9 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     item.pinPadIpAddress = device?.HostOrIP;
     item.pinPadIpPort    = device?.PinPadIpPort;
     item.userTrace       = device?.OperatorID;
+    if (this.payment.tipAmount>0 ) { 
+      item.gratuity = this.payment.tipAmount.toString();;
+    }
     item.prodCertMode    = this.certProdMode(device?.MerchantID);
     item.refNo           = this.payment?.orderID.toString();
     item.invoiceNo       = this.payment?.orderID.toString();
@@ -782,7 +810,6 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     item.RefNo           = this.payment?.orderID.toString();
     item.refNo           = this.payment?.orderID.toString();
     return item;
-
   }
 
   certProdMode(merchantID: string) {

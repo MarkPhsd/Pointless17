@@ -137,12 +137,20 @@
               <mat-label>Enable Retail Quick Menu</mat-label>
             </mat-slide-toggle>
           </div>
-          
+
           <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="requireEnterTabBarcodeLookup"
                       >
               <mat-label>Require Enter/Tab to Lookup</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="disableRequestOptions"
+                      >
+              <mat-label>Disable Refund/Void Request</mat-label>
             </mat-slide-toggle>
           </div>
 
@@ -570,6 +578,13 @@
                       <mat-label>DCAP Surcharge</mat-label>
                     </mat-slide-toggle>
                   </div>
+                  
+                  <div class="toggle-fields">
+                    <mat-slide-toggle
+                              formControlName="dcapDisableOkayAmount" >
+                      <mat-label>Enable 'Okay Amount Prompt'</mat-label>
+                    </mat-slide-toggle>
+                  </div>
 
                   <div style="width:225px">
                     <app-value-fields
@@ -587,12 +602,30 @@
                       <mat-label>Data Cap Multi Price</mat-label>
                     </mat-slide-toggle>
                   </div>
-                  <div class="toggle-fields">
-                    <mat-slide-toggle
-                              formControlName="dCapAllowCreditOnlyOption" >
-                      <mat-label>Use Credit Only Button</mat-label>
-                    </mat-slide-toggle>
-                  </div>
+
+                  <mat-card>
+                    <div class="toggle-fields">
+                      <mat-slide-toggle
+                                formControlName="dCapAllowCreditOnlyOption" >
+                        <mat-label>Use Credit Only Button</mat-label>
+                      </mat-slide-toggle>
+                    </div>
+
+                    <div class="toggle-fields">
+                      <mat-slide-toggle
+                                formControlName="dCapDualPayEnableDebit" >
+                        <mat-label>Enable Debit</mat-label>
+                      </mat-slide-toggle>
+                    </div>
+
+                    <div class="toggle-fields">
+                      <mat-slide-toggle
+                                formControlName="dcapDisableDualPayOptions" >
+                        <mat-label>Hide Cash Cash / EBT Options on PAX</mat-label>
+                      </mat-slide-toggle>
+                    </div>
+                    
+                  </mat-card>
 
                   <div class="toggle-fields" style="width:225px">
                     <app-value-fields
@@ -604,20 +637,6 @@
                       <mat-label>Enter value .035 is 3.5%</mat-label>
                     <mat-divider></mat-divider>
                   </div>
-
-                  <div class="toggle-fields">
-                    <mat-slide-toggle
-                              formControlName="dcapDisableDualPayOptions" >
-                      <mat-label>Disable Options</mat-label>
-                    </mat-slide-toggle>
-                  </div>
-                  <div class="toggle-fields">
-                    <mat-slide-toggle
-                              formControlName="dCapDualPayEnableDebit" >
-                      <mat-label>Enable Debit</mat-label>
-                    </mat-slide-toggle>
-                  </div>
-                  <!-- //dCapDualPayEnableDebit -->
 
               <div class="toggle-fields">
                   <mat-divider></mat-divider>

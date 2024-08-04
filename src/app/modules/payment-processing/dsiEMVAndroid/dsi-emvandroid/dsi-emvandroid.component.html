@@ -34,8 +34,8 @@
           </h4>
 
           <div>
-            <h4 *ngIf="payment">Total:     {{ +payment?.amountPaid + +payment?.tipAmount | currency}}</h4>
             <h4 *ngIf="payment">Gratuity:  {{ +payment?.tipAmount ?? 0 | currency}}</h4>
+            <h4 *ngIf="payment">Total:     {{ +payment?.amountPaid + +payment?.tipAmount | currency}}</h4>
           </div>
         </div>
 
@@ -50,6 +50,17 @@
       <!-- <h3>Type: {{type}}</h3> -->
       <div class="grid-buttons">
         <div>
+
+          <div *ngIf="!tipPreSale">
+            <button
+                    *ngIf="!saleComplete"
+                    color="primary"
+                    mat-raised-button
+                    (click)="tipPreSale = true">
+                <mat-icon>credit_card</mat-icon>Gratuity
+            </button>
+          </div>
+
           <div>
             <button [disabled]="processing"
                     *ngIf="!saleComplete"
@@ -73,13 +84,10 @@
       </div>
 
       <div class="grid-buttons" >
-        <div style="margin:5px" *ngIf="payment?.amountPaid >0 && saleComplete && !enterTip">
+
+        <div style="margin:5px" *ngIf="payment?.amountPaid >0 && saleComplete && !enterTip && (payment.tipAmount != 0)">
           <button style="width:100px" color="accent" mat-raised-button (click)="saleComplete && enterTip = !enterTip">Add Tip</button>
         </div>
-
-        <!-- <div style="margin:5px" *ngIf="payment?.amountPaid >0 && saleComplete && enterTip">
-          <button style="width:100px" color="accent" mat-raised-button (click)="enterTip = !enterTip">Back</button>
-        </div> -->
 
       </div>
     </mat-card-content>
@@ -98,14 +106,20 @@
     </mat-card>
   </div>
 
+  <div *ngIf="tipPreSale">
+    <tip-entry-amount
+      [payment]            = "payment"
+      (specifiedTipAmount) = "specifiedTipPreSale($event)"
+      (outPutTip)          = "customTipAmountPreSale($event)"
+    ></tip-entry-amount>
+  </div>
+
   <div class="tip-container" *ngIf="enterTip">
     <tip-entry-amount
-        [payment]            = "payment"
-        [hideKeyPad]         = "true"
-        (specifiedTipAmount) = "specifiedTip($event)"
-
+      [payment]            = "payment"
+      (specifiedTipAmount) = "specifiedTip($event)"
+      (outPutTip)          = "customTipAmount($event)"
     ></tip-entry-amount>
-    <!--     (outPutTip)          = "customTipAmount($event)" -->
   </div>
 
   <div class="grid-buttons">
@@ -130,7 +144,7 @@
     </div>
   </div>
 
-  <div class="grid-buttons"  *ngIf="isDevMode">
+  <div class="grid-buttons"  *ngIf="isDevMode || isAdmin">
     <div>
       <button mat-raised-button color="warn" (click)="paramDownload()">
         Param Download
@@ -138,7 +152,7 @@
     </div>
   </div>
 
-  <div  [hidden]="hideRequest" *ngIf="isDevMode">
+  <div  [hidden]="hideRequest" *ngIf="isDevMode  || isAdmin">
     <h3>Request:</h3> {{request | json}}
     <div>
       <mat-card>

@@ -91,7 +91,7 @@ export class BlogListEditComponent implements OnInit {
               private productEditButtonService: ProductEditButtonService,
            ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.initClasses();
     this.initForm();
     this.initAgGrid(50);

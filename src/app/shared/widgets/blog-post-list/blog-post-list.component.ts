@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap, of, catchError, Observable, forkJoin } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -13,7 +13,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
   styleUrls: ['./blog-post-list.component.scss'],
   // encapsulation: ViewEncapsulation.None,
 })
-export class BlogPostListComponent implements OnInit {
+export class BlogPostListComponent implements OnInit , OnChanges {
   @ViewChild('styleElement') private styleElement: ElementRef;
   @ViewChild('listView')      listView: TemplateRef<any>;
   @ViewChild('gridView')      gridView: TemplateRef<any>;
@@ -22,7 +22,7 @@ export class BlogPostListComponent implements OnInit {
   @Input() group  = '';
   @Input() class  = 'cards';
   @Input() height = '400px';
-
+//Sale Policy
   styles$: Observable<any>;
   blogs: IBlog[];
   blogs$: Observable<any>;
@@ -35,12 +35,22 @@ export class BlogPostListComponent implements OnInit {
   slug: string;
   action$ : Observable<any>;
 
-  gridClass = 'grid-class'
+  gridClass = 'grid-class';
+
+  get blogView() {
+    if ( this.viewType === 'grid' ) {
+      return this.gridView
+    }
+    if ( this.viewType === 'list' ) {
+    }
+    return this.listView
+  }
+
   constructor( private siteService     : SitesService,
                private blogService     : BlogService,
                public route            : ActivatedRoute,
-               private platformService: PlatformService,
-               private uiSettings : UISettingsService,
+               private platformService : PlatformService,
+               private uiSettings      : UISettingsService,
                private http            : HttpClient,
   ) {
     const group = this.route.snapshot.paramMap.get('group');
@@ -55,15 +65,16 @@ export class BlogPostListComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.platformService.isApp()) { return }
-    this.loadStyles()
-    this.refreshList()
+    // this.loadStyles()
+    // this.refreshList()
   }
 
   ngOnChanges() { 
     if (this.platformService.isApp()) { return }
     this.loadStyles()
     this.refreshList()
-  }
+  };
+
   getHomePageSettings() {
     if (this.homePageSettings){ 
       return of(this.homePageSettings)
@@ -90,12 +101,13 @@ export class BlogPostListComponent implements OnInit {
     search.group = this.group;
     search.enabled = true;
     const homePage$ = this.getHomePageSettings();
-
+    console.log('refresh list')
     this.blogs$ = 
         homePage$.pipe(switchMap( data => { 
           return this.blogService.searchBlogs( site, search )
         })).pipe(
           switchMap( data => {
+              console.log('refresh list', data)
               data.results.filter(item => { return item.enabled == true});
               this.blogs = data.results.sort((a, b) => (a.sort > b.sort ? 1 : -1));
               return of(this.blogs)
@@ -125,15 +137,7 @@ export class BlogPostListComponent implements OnInit {
         }))
       }
 
-  get blogView() {
-    if ( this.viewType === 'list' ) {
-      return this.listView
-    }
-    if ( this.viewType === 'grid' ) {
-      return this.gridView
-    }
-    return null;
-  }
+
 
   ngDestroy() { 
     this.styleElement.nativeElement.remove();

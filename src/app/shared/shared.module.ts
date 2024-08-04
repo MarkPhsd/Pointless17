@@ -28,7 +28,6 @@ import { FacilitySearchSelectorComponent } from 'src/app/shared/widgets/facility
 import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
 import { ListPrintersElectronComponent } from '../modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
 import { DSIEMVAndroidPayBtnComponent } from '../modules/posorders/pos-payment/dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
-
 import { ListProductSearchInputComponent } from './widgets/search-list-selectors/list-product-search-input/list-product-search-input.component';
 import { MoveInventoryLocationComponent } from 'src/app/modules/admin/inventory/move-inventory-location/move-inventory-location.component';
 import { AdjustmentReasonsComponent } from './widgets/adjustment-reasons/adjustment-reasons.component';
@@ -250,6 +249,9 @@ import { DCAPResponseMessageComponent } from '../modules/dsiEMV/Dcap/dcaptransac
 import { EmployeesOnClockListComponent } from '../modules/admin/employeeClockAdmin/employees-on-clock-list/employees-on-clock-list.component';
 import { FunctionButtonsListComponent } from '../modules/admin/settings/function-groups/function-buttons-list/function-buttons-list.component';
 import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-emvcard-pay-btn/dsi-emvcard-pay-btn.component';
+import { SiteFooterComponent } from './components/site-footer/site-footer.component';
+// import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
+
 // import { ReceiptLayoutComponent } from '../modules/admin/settings/printing/receipt-layout/receipt-layout.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
@@ -379,6 +381,10 @@ import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-
     OrderTotalComponent,
     OrderHeaderComponent,
     QROrderComponent,
+    // QrPaymentComponent,
+    // PayAPIComponent,
+    // PayAPIFrameComponent,
+
     PagingInfoComponent,
     PagerBlobComponent,
     PageNotFoundComponent,
@@ -477,8 +483,6 @@ import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-
     FreeDraggingHandleDirective,
     KeyboardButtonComponent,
     M22ResizableComponent,
-
-
     AggregateSelectorComponent,
     AndOrSelectorComponent,
     DesignerEditorComponent,
@@ -506,6 +510,7 @@ import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-
     ImageLightHouseComponent,
     ClockViewComponent,
     CloseFloatingButtonComponent,
+    SiteFooterComponent,
 
   ],
 
@@ -588,6 +593,9 @@ import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-
     ChipsDisplayComponent,
     ClientTypesLookupComponent,
 
+    // PayAPIComponent,
+    // PayAPIFrameComponent,
+
     ClockViewComponent,
     CompanyInfoHeaderComponent,
     EmailSettingsComponent,
@@ -666,6 +674,7 @@ import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-
     OrderHeaderComponent,
     QROrderComponent,
     QRCodeTableComponent,
+    // QrPaymentComponent,
     PagingInfoComponent,
     PageNotFoundComponent,
     PaymentBalanceComponent,
@@ -686,7 +695,7 @@ import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-
     OptionsSelectFilterComponent,
     CategoryMenuSelectorComponent,
     //*** */
-
+    SiteFooterComponent,
     PartUsageGraphComponent,
 
     ProfileMedInfoComponent,

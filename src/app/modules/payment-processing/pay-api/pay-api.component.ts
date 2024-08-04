@@ -18,10 +18,14 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
   styleUrls: ['./pay-api.component.scss']
 })
 export class PayAPIComponent implements OnInit {
+
+  @Input() paymentForm: FormGroup;
+
   @ViewChild('tokenInput') tokenInput!: ElementRef;
   fieldsClass: string;
   encodedString: string;
   inputForm: FormGroup;
+  errorMessage: string;
 
   expInvalid: boolean;
   cardInValid: boolean;
@@ -58,7 +62,7 @@ export class PayAPIComponent implements OnInit {
       this.order.id          = 871919
     }
 
-
+    this.errorMessage = ''
     this.payAPIKeyExists()
     this.payMID$ = this.getPayMID().pipe(switchMap(data => {
       if (this.publicKey) {
@@ -182,32 +186,35 @@ export class PayAPIComponent implements OnInit {
   // }
 
   requestToken(): void {
-
+     this.errorMessage = ''
      this.processing = true;
      const tokenCallback = (response: any) => {
-          this.processing = false;
+          // console.log('response',response)
+          // this.processing = false;
           if (response.Error) {
-            alert("Token error: " + response.Error);
+            // alert("Token error: " + response.Error);
+            this.siteService.notify(`${response?.Error} - Please verify your card, exp and cvv.`, 'Close', 5000 , 'red', 'top')
+            this.errorMessage = response?.Error;
+            this.processing = false;
           } else {
 
             // Here, you might want to do something with the token, like sending it to your server;
             if (response.Token) {
+
                 let posPayment = {} as IPOSPayment;
                 posPayment.orderID    = this.order.id;
-                posPayment.amountPaid = this.order.total;
+                posPayment.amountPaid = this.order?.total;
                 posPayment.preAuth    = response?.Token;
-                this.payment$ = this.dcapPayAPIService.sale(response,posPayment).pipe(switchMap(data => {
+                // posPayment = this.getTipAmount(posPayment);
 
-                    this.siteService.notify(data.responseMessage, 'close', 5000, 'green')
-                    // if (data.responseMessage.toLowerCase() == 'Approved' || data.responseMessage.toLowerCase() == 'success'.toLowerCase()) {
-
-                    // }
-                    this.orderMethodsService.updateOrder(data?.order)
-                    this.orderMethodsService.updateOrderSubscription(data?.order)
-
-                    this.processing = false;
-                   return of(data)
-                }))
+                this.payment$ = this.dcapPayAPIService.sale(response, posPayment).pipe(switchMap(data => {
+                  this.siteService.notify(data?.responseMessage, 'close', 5000, 'green')
+                  this.orderMethodsService.updateOrder(data?.order)
+                  this.orderMethodsService.updateOrderSubscription(data?.order)
+                  this.processing = false;
+                  return of(data)
+                }
+            ))
           }
         };
       }
@@ -215,6 +222,23 @@ export class PayAPIComponent implements OnInit {
       let mid  = this.publicKey
       window.DatacapWebToken.requestToken(mid, "payment_form", tokenCallback);
   }
+
+ get getTipValue() { 
+    if (this.paymentForm) { 
+        return this.paymentForm.controls['tipAmount'].value
+    }
+    return 0;
+  }
+
+ getTipAmount(posPayment) { 
+  if (!this.paymentForm) {  return posPayment} 
+  let tipAmount = 0
+  if (this.paymentForm.controls['tipAmount'].value) { 
+     tipAmount = +this.paymentForm.controls['tipAmount'].value
+  }
+  posPayment.tipAmount = tipAmount;
+  return posPayment;
+ }
 
   payAPIKeyExists() {
     this.payAPIKeyExists$ = this.dcapPayAPIService.payAPIKeyExists().pipe(switchMap(data => {

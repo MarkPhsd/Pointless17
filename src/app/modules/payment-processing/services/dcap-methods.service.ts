@@ -346,7 +346,7 @@ export class DcapMethodsService {
         }
 
         try {
-          item.payment.trancode        = response?.TranResponse?.TranCode
+          item.payment.tranCode        = response?.TranResponse?.TranCode
           item.payment.tranType        = response?.TranResponse?.TranCode
         } catch (error) {
         }

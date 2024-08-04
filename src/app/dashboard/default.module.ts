@@ -311,7 +311,6 @@ import { PriceScheduleSortComponent } from '../modules/admin/products/price-sche
 import { DisplayMenuSortComponent } from '../modules/admin/products/display-menu/display-menu-sort/display-menu-sort.component';
 import { NgxPayPalModule } from 'ngx-paypal';
 import { PayPalTransactionComponent } from '../modules/payment-processing/payPal/pay-pal-transaction/pay-pal-transaction.component';
-import { SiteFooterComponent } from '../shared/components/site-footer/site-footer.component';
 import { BlogListEditComponent } from '../modules/admin/blogEditor/blog-list-edit/blog-list-edit.component';
 import { BlogPostEditComponent } from '../modules/admin/blogEditor/blog-post-edit/blog-post-edit.component';
 import { BlogPostSortComponent } from '../modules/admin/blogEditor/blog-post-sort/blog-post-sort.component';
@@ -391,12 +390,13 @@ import { MenuSectionComponent } from '../modules/display-menu/display-menu-list/
 import { PosOrderEditorComponent } from '../modules/posorders/pos-order/pos-order-editor/pos-order-editor.component';
 import { CatalogScheduleInfoComponent } from '../modules/admin/products/price-schedule/catalog-schedule-info/catalog-schedule-info.component';
 import { CatalogScheduleInfoListComponent } from '../modules/admin/products/price-schedule/catalog-schedule-info-list/catalog-schedule-info-list.component';
-import { PayAPIComponent } from '../modules/payment-processing/pay-api/pay-api.component';
-import { PayAPIFrameComponent } from '../modules/payment-processing/pay-apiiframe/pay-apiiframe.component';
 import { DcDirectSettingsComponent } from '../modules/admin/settings/pos-list/pos-edit-settings/dc-direct-settings/dc-direct-settings.component';
 import { EmployeeSelectPopUpComponent } from '../modules/admin/employees/employee-select-pop-up/employee-select-pop-up.component';
 import { LabelSelectPrinterComponent } from '../modules/admin/products/label-select-printer/label-select-printer.component';
 
+import { PayAPIComponent } from '../modules/payment-processing/pay-api/pay-api.component';
+import { PayAPIFrameComponent } from '../modules/payment-processing/pay-apiiframe/pay-apiiframe.component';
+import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -407,6 +407,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 @NgModule({
   declarations: [
 
+    PayAPIComponent,
+    PayAPIFrameComponent,
+    
     BrandClassEditorComponent,
     BrandFilterComponent,
     BrandEditorMainComponent,
@@ -539,7 +542,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     SiteEditComponent,
     SiteEditFormComponent,
 
-    SiteFooterComponent,
     ServiceTypeEditComponent,
     ServiceTypeListComponent,
 
@@ -661,7 +663,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     OrdersMainComponent,
     OrderPanelComponent,
     TransferOrderComponent,
-
+    QrPaymentComponent,
     PayAPIComponent,
     PayAPIFrameComponent,
     PartBuilderMainComponent,
@@ -701,7 +703,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PosPaymentsFilterComponent,
     PosPaymentComponent,
     POSPaymentsComponent,
-    PosPaymentComponent,
     POSOrderScheduleComponent,
     POSOrderServiceTypeComponent,
     POSOrderShippingAddressComponent,

@@ -5,7 +5,7 @@
 
     <div *ngIf="(homePage$ | async) as homePageSettings; else loading">
       <ng-container [ngTemplateOutlet]="blogPostMainView"></ng-container>
-      <ng-container [ngTemplateOutlet]="catalogScheduleMenu"></ng-container>
+      <!-- <ng-container [ngTemplateOutlet]="catalogScheduleMenu"></ng-container> -->
       <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isResaleMenuOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isDepartmentViewOn"></ng-container>

@@ -7,7 +7,6 @@ import { Component, HostBinding, OnInit, AfterViewInit,
 import { UntypedFormControl } from '@angular/forms';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { catchError, concatMap, delay, filter, Observable, of, repeatWhen, Subscription,switchMap, throwError } from 'rxjs';
-import { fader } from 'src/app/_animations/route-animations';
 import { ToolBarUIService } from '../_services/system/tool-bar-ui.service';
 import { Capacitor } from '@capacitor/core';
 import { AppInitService } from '../_services/system/app-init.service';
@@ -512,16 +511,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get appSiteFooterOn() {
-    return this.appSiteFooter
     if (this.platFormService.isApp() ) { return }
     if (this.userAuthorizationService?.isStaff) { return }
 
     return this.appSiteFooter
-    if ( !this.platFormService.isApp() ) {
-      if (!this.userAuthorizationService?.isStaff) {
-        return this.appSiteFooter
-      }
-    }
     return null;
   }
 
