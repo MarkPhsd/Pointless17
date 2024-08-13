@@ -1,9 +1,10 @@
 <div *ngIf="(order$ | async) as order; else loadingOrder"></div>
 <div *ngIf="(action$ | async) as order"></div>
+<div *ngIf="(user$ | async) as user"></div>
 
-<div class="centered-flex"  
+<div class="centered-flex"
      *ngIf="(uiHomePageSetting$ | async) as uiHomePageSetting">
-  
+
   <mat-card class="container">
     <div class="grid-about">
       <div>
@@ -43,7 +44,7 @@
       ...sending
       <button mat-raised-button (click)="cancelMessage()"><mat-icon>cancel</mat-icon>Cancel</button>
     </div>
-
+ 
     <div *ngIf="order && setToPay">
 
       <div class="centered-flex">
@@ -51,24 +52,24 @@
           Review Order
         </button>
       </div>
-      
+
       <div class="centered-flex">
         <ng-container [ngTemplateOutlet]="payApiView"></ng-container>
       </div>
-   
+
       <div>
         <blog-post-list [viewType]="'grid'" [group]="'Sale Policy'"> </blog-post-list>
       </div>
-    </div>  
+    </div>
 
     <div class="navigating order-message"
           *ngIf="order && !setToPay">
-         
+
         <div class="transaction-data-side-panel-small" >
           <div *ngIf="order?.tableName" class="">Table   </div>
           <div *ngIf="order?.tableName" class=""> {{ order?.tableName }}</div>
         </div>
-      
+
         <div class="centered-flex">
           <div class="buttons-header">
             <div *ngIf="order.balanceRemaining != 0">
@@ -114,6 +115,7 @@
         <mat-card>
           <pos-order-items
                 [mainPanel]      ="true"
+                [phoneDevice]    ="true"
                 [qrOrder]        ='true'
                 [panelHeight]    ="orderItemsHeightStyle"
                 [disableActions] ='true'
@@ -126,15 +128,18 @@
 </div>
 
 <ng-template #loadingOrder>
-  <div class="loading && processing">
-    <mat-spinner [diameter]="50"></mat-spinner>
-    ...loading your order.
+  <!-- user {{user | json}} -->
+  <div *ngIf="user?.id">
+    <div class="loading && processing">
+      <mat-spinner [diameter]="50"></mat-spinner>
+      ...loading your order.
+    </div>
   </div>
 </ng-template>
 
 <ng-template #payApiView>
   <div class="centered-flex" style="width:350px">
-    
+
     <app-value-fields
       *ngIf="paymentForm"
       [inputForm]="paymentForm"
@@ -142,13 +147,13 @@
      Gratuity
     </app-value-fields>
 
-    <app-pay-api 
+    <app-pay-api
            [order]="order"
            [paymentForm]="paymentForm"
            [uiTransactions]="uiTransactions"
            [creditBalanceRemaining]="order?.balanceRemaining"
            [paymentAmount]="order?.balanceRemaining"  >
            Pay  <mat-icon color="warn">credit_card</mat-icon>
-     </app-pay-api> 
+     </app-pay-api>
   </div>
 </ng-template>

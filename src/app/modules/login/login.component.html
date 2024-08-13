@@ -32,11 +32,11 @@
                         (click)="setAPIAlt()">
                     <app-logo
                           [uiHomePageSetting] ="uiHomePageSetting"
-                          [logoSize]          ="'large'"
+                          [logoSize]          ="'medium'"
+                          [border]=''
                           [logo]              ="uiHomePageSetting.logoHomePage"
                     ></app-logo>
                   </div>
-
 
                 <div *ngIf="!uiHomePageSetting && logo">
                   <img  *ngIf="logo"
@@ -141,8 +141,7 @@
               <app-keyboard-button
                   [smallDevice]="false"
                   [isApp]="true"
-                  [isUserStaff]="true"
-                >
+                  [isUserStaff]="true"  >
               </app-keyboard-button>
               <div class="registration">
                 <mat-divider></mat-divider>
@@ -189,7 +188,7 @@
       <div *ngIf="isElectron && uiHomePageSetting?.employeeOnClockList">
         <employees-on-clock-list></employees-on-clock-list>
       </div>
-      
+
       <div *ngIf="platformService.isApp && togglePIN" >
           <div class="pin-entry">
             <button class="pin-button"

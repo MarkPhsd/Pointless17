@@ -161,31 +161,35 @@ export class StrainProductEditComponent implements OnInit {
     }
   }
 
+  refreshProductInfo(product: IProduct, itemType: IItemType) {
+
+    if (itemType) {  this.itemType = itemType  }
+    if (product) {   this.product = product as IProduct  }
+
+    if (this.product.id) {
+      this.initializeForm();
+      this.initMenuButtonJson(this.product);
+      this.initJSONForm(this.product.json)
+      this.id = this.product.id.toString();
+
+      if (this.product &&  itemType &&  itemType.id) {
+        if (!this.product.prodModifierType ) {
+          this.product.prodModifierType = parseInt(itemType?.id.toString());
+        }
+      }
+    }
+  }
+
   setInit(data) {
     //init all search forms that are not bound to data.
-
+    console.log ('set init data', data)
     try {
       this.initPbSearchForm();
       this.initUnitForm();
       this.initReOrderUnitSearchForm();
-
       if (data) {
         if (data.product) {
-          this.product = data.product as IProduct
-          if (this.product.id) {
-            this.initializeForm();
-            this.initMenuButtonJson(this.product);
-            this.initJSONForm(this.product.json)
-            this.id = this.product.id.toString();
-            if (this.product && data.itemType && data.itemType.id) {
-              if (!this.product.prodModifierType ) {
-                this.product.prodModifierType = parseInt(data.itemType.id);
-              }
-            }
-          }
-          if (data.itemType) {
-            this.itemType = data.itemType
-          }
+          this.refreshProductInfo(data?.product, data?.itemType)
         }
       }
     } catch (error) {
@@ -200,6 +204,10 @@ export class StrainProductEditComponent implements OnInit {
       this.initializeDataAndForm()
     }
   };
+
+  updateSave(event) {
+    this.action$ = this.updateItem(event);
+  }
 
   initializeDataAndForm() {
     const site = this.siteService.getAssignedSite();
@@ -488,15 +496,17 @@ export class StrainProductEditComponent implements OnInit {
             this.notifyEvent('Item Updated', 'Success')
             this.message = 'Saved'
             this.performingAction = false;
-            return this.itemTypeService.getItemType(site,this.product.prodModifierType)
+
+            return this.itemTypeService.getItemType(site,this.product.prodModifierType).pipe(switchMap(data => {
+              this.setInit({product: data, itemType: data})
+              return of(data)
+            }))
           }
       ))
     }
   };
 
-  updateSave(event) {
-    this.action$ = this.updateItem(event);
-  }
+
 
   updateItemExit(event) {
     this.message = "Saving"

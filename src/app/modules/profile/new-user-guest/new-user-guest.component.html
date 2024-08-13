@@ -1,0 +1,44 @@
+<div *ngIf="(action$ | async) as action"></div>
+<mat-card *ngIf="(uiHome$ | async) as uiHome">
+
+    <mat-card-title><mat-icon>user</mat-icon>Welcome new user</mat-card-title>
+    <mat-card-subtitle>Let's get you setup so we may notify you about your order when it's complete.
+      Please enter a user name, and email <span *ngIf="mobileEnabled"> or mobile number </span> to make a password</mat-card-subtitle>
+
+    <mat-card-content>
+
+      <!-- {{user | json}} -->
+
+      <div *ngIf="inputForm && user">
+
+        <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'userName'">
+          User Name
+        </app-value-fields>
+
+        <div *ngIf="uiHome.twilioEnabled || uiHome?.mobileEnabled">
+          <app-value-fields
+                          [inputForm]="inputForm"
+                          [fieldName]="'phone'">
+              Phone
+            </app-value-fields>
+        </div>
+        <div >
+          <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'email'">
+            Email
+          </app-value-fields>
+        </div>
+
+        <button mat-raised-button color="primary" (click)="requestUser()">
+          <mat-icon>password</mat-icon>Password Request
+        </button>
+
+      </div>
+
+    </mat-card-content>
+
+  </mat-card>
+

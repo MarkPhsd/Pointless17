@@ -18,13 +18,14 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   templateUrl: './qr-payment.component.html',
   styleUrls: ['./qr-payment.component.scss']
 })
+
 export class QrPaymentComponent {
   mainPanel: boolean;
   isNotInSidePanel: boolean
   sidePanelWidth: number
   sidePanelPercentAdjust: number
   smallDevice : boolean;
-  phoneDevice = false;
+  phoneDevice : boolean =  true;
   orderItemsHeightStyle: string;
   goingToPay: boolean;
   setToPay: boolean;
@@ -37,18 +38,42 @@ export class QrPaymentComponent {
   message$          : Observable<IRequestResponse>;
   sendingMessage    : boolean;
   processing: boolean;
-
+  user: IUser;
   uiTransactions: TransactionUISettings
 
   paymentForm: FormGroup;
+
+  orderCurrent$ = this.orderMethodsService.currentOrder$.pipe(switchMap(data => {
+    this.order = data;
+    return of(data)
+  }))
+ 
+  user$ = this.authenticationService.user$.pipe(switchMap(data => {
+
+    if (this.user && data) { 
+      if (this.user.id != data.id) { 
+        console.log('user refresh1', this.user)
+        this.user = data;
+        this.refresh()
+      }
+    }
+    if (!this.user && data) {
+      console.log('user refresh2', this.user)
+      this.user = data;
+      this.refresh()
+    }
+    // this.user = data;
+    // this.refresh()
+    return of(data)
+  }));
 
   initTransactionUISettings() {
     this.uISettingsService.transactionUISettings$.subscribe( data => {
         this.uiTransactions = data
       }
     )
-
   }
+
   constructor(
       private uiSettingsService: UISettingsService,
       private settingsService: SettingsService,
@@ -65,16 +90,38 @@ export class QrPaymentComponent {
   ) { }
 
   ngOnInit(): void {
-    this.getUser();
+    // this.initSubscriptions()
+    if (!this.checkUserLoggedIn()) {
+      return
+    }
+    console.log('refresh user exists')
+    this.refresh()
+  }
+
+  refresh() {
+    console.log('order refresh')
+    // this.getUser();
     this.uiHomePageSetting$ = this.settingsService.getUIHomePageSettings();
     this.initTransactionUISettings()
-    this.order$ = this.getOrder().pipe(switchMap(data => { 
 
+    this.order$ = this.getOrder().pipe(switchMap(data => {
+      this.order = data;
       return of(data)
     }))
     this.paymentForm = this.fb.group({
       tipAmount: []
     })
+  }
+
+  checkUserLoggedIn() {
+    const  user = this.authenticationService._user.value
+    if (!user || !user?.id) {
+      const orderCode =this.route.snapshot.paramMap.get('orderCode'); ;
+      this.authenticationService.openLoginDialog(`/qr-payment;orderCode=${orderCode}`)
+      return false;
+    }
+    this.user = user;
+    return true
   }
 
   ngOnDestroy() {
@@ -154,26 +201,34 @@ export class QrPaymentComponent {
   }
 
   getOrder(): Observable<IPOSOrder> {
-    try { 
+
+
+    try {
       this.processing = true;
       const id = this.route.snapshot.paramMap.get('id');
       const orderCode = this.route.snapshot.paramMap.get('orderCode');
       const site = this.siteService.getAssignedSite();
-      const setToPay =  this.route.snapshot.paramMap.get('setToPay'); 
-      if (setToPay) { 
+      const setToPay =  this.route.snapshot.paramMap.get('setToPay');
+
+      if (setToPay) {
         this.setToPay = true;
       }
-      if (!id && !orderCode) { 
+
+      const user = this.getUser()
+
+      console.log('get order', id, orderCode, setToPay, user)
+      if (!id && !orderCode) {
         this.processing = false;
-        return of(null)}
+        return of(null)
+      }
 
       this.action$ = null;
 
-      const user = this.getUser()
+    
       let order$ : Observable<IPOSOrder>
 
-      console.log('user', user)
-      if (user && user?.username  &&  user?.username != "Temp" && user.password) { 
+     
+      if (user && user?.username  &&  user?.username != "Temp" && user.password) {
         if (orderCode) {
           order$ =this.orderService.getQROrder(site, orderCode);
         }
@@ -181,7 +236,7 @@ export class QrPaymentComponent {
           order$ = this.orderService.getQRCodeOrder(site, id);
         }
       }
-      if (!user) { 
+      if (!user) {
         if (orderCode) {
           order$ =this.orderService.getQROrder(site, orderCode);
         }
@@ -189,31 +244,31 @@ export class QrPaymentComponent {
           order$ = this.orderService.getQRCodeOrder(site, id)
         }
       }
-   
-      if (!order$) { 
+
+      if (!order$) {
         this.processing = false;
         return of(null)
       }
-      return order$.pipe(switchMap(data => { 
+      return order$.pipe(switchMap(data => {
         this.processing = false;
-        this.order = data;
+      
         this.orderMethodsService.updateOrder(data)
-        if (setToPay) { 
-          
+        if (setToPay) {
+
         }
         return of(data)
       }));
-      
+
       // return this.navigateToOrder();
-    } catch { 
+    } catch {
       this.processing = false;
       return of(null)
     }
   }
 
-  creditPaymentAmount() { 
+  creditPaymentAmount() {
     // this.payment.surcharge = +(this.order.balanceRemaining * 0.03).toFixed(2)
-    // this.order.balanceRemaining = 
+    // this.order.balanceRemaining =
   }
 
   navigateToOrder() {

@@ -140,6 +140,7 @@ export class ToolBarUIService {
   }
 
   switchToolBarSideBar() {
+    console.log('this.mainMenuSideBar', this.mainMenuSideBar)
     this.searchBar         = false;
     this.mainMenuSideBar   =  !this.mainMenuSideBar;
     this._mainMenuSideBar.next(this.mainMenuSideBar);

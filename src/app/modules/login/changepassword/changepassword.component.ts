@@ -1,9 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser }  from 'src/app/_interfaces';
-import { fadeInAnimation } from 'src/app/_animations';
 
 @Component({
   selector: 'app-changepassword',
@@ -41,21 +40,44 @@ export class ChangepasswordComponent implements OnInit {
       this.loginForm = this.formBuilder.group({
           username:        [this.userName, Validators.required],
           confirmpassword: ['', Validators.required],
-          password:        ['', Validators.required],
+          password:        ['', [Validators.required, this.passwordValidator]],
           resetcode:       ['', Validators.required],
       });
+
+
 
       this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
+
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
+
+  // Custom validator function
+  passwordValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const password = control.value;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumeric = /[0-9]/.test(password);
+    const hasSpecialChar = /[\W]/.test(password);
+    const isValidLength = password.length >= 6;
+
+    const isValid = hasUpperCase && hasLowerCase && hasNumeric && hasSpecialChar && isValidLength;
+
+    return isValid ? null : { passwordStrength: true };
+  }
 
   onSubmit() {
     this.updatePassword()
   }
 
   updatePassword(){
+
+    if (!this.passwordValidator) {
+      this.loading = false;
+      return false;
+    }
+
     try {
       const user    = {} as IUser;
       user.username = this.f.username.value.trim()
@@ -71,7 +93,7 @@ export class ChangepasswordComponent implements OnInit {
       this.loading = true;
 
       if(this.f.password.value == this.f.confirmpassword.value){
-        this.authenticationService.updatePassword(user).subscribe(data => { 
+        this.authenticationService.updatePassword(user).subscribe(data => {
           this.statusMessage = "Updated. Routing to login."
           this.router.navigate(['/login']);
         })

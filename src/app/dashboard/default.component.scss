@@ -64,7 +64,7 @@ app-sticky-header {
 
   @media (max-width: 815px) { height: calc(100vh - 175px ); }
   @media (max-width: 768px) { height: calc(100vh - 175px ); }
-  @include for-phone-only   { height: calc(100vh - 175px ); }
+  @include for-phone-only   { height: calc(100vh - 125px ); }
 }
 
 .mat-drawer-container {

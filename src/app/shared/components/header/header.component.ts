@@ -149,11 +149,23 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   headerBackColor: string;
   userChecked: boolean;
   _site: Subscription;
+  site$: Observable<ISite>;
 
   initSiteSubscriber() {
-    this._site = this.siteService.site$.subscribe( data => {
-      this.site = data
-    })
+
+
+    this._site = this.siteService.site$.subscribe(
+      data => {
+        this.site = data
+        // return site$;
+        this.getSite(data?.id)
+      }
+    )
+  }
+
+  getSite(id: number) {
+    if (!id) { return of(this.site)}
+    this.site$ = this.siteService.getSite(id)
   }
 
   initOrderSubscriber() {
@@ -274,7 +286,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   ngOnInit() {
 
     this.userChecked = false
-    this.site =  this.siteService.getAssignedSite();
+    // this.site =  this.siteService.getAssignedSite();
+    this.site$ = this.siteService.getHeaderSite()
+
+    // .subscribe(data => {
+    //   console.log('site',data)
+    //    this.site = data
+    // })
+
     this.getDeviceInfo();
     this.getUITransactionsSettings();
     this.initUIService();
@@ -440,7 +459,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     // Logic to determine if lastRoute is within the DefaultComponent's children
     // This is application-specific and depends on your routing structure
 
-    console.log('lastRoute', lastRoute)
+    // console.log('lastRoute', lastRoute)
     if (lastRoute === 'login') {
       this.router.navigateByUrl('app-main-menu')
       return;
@@ -550,7 +569,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       const user = JSON.parse(localStorage.getItem('user')) as IUser
       if (user) {
         this.user = user;
-        console.log('user exists')
+        // console.log('user exists')
         return of(user)
       }
 
@@ -565,7 +584,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       const user = JSON.parse(localStorage.getItem('user')) as IUser
       if (user) {
         this.user = user;
-        console.log('user exists')
+        // console.log('user exists')
         return of (user)
       }
       this.authenticationService.updateUser(null)
@@ -787,6 +806,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   toggleSideBar() {
+
+    console.log('toggle', this.userSwitchingService.swapMenuWithOrderBoolean)
+    console.log('openOrderBar', this.openOrderBar)
+
     if (this.userSwitchingService.swapMenuWithOrderBoolean) {
       if (this.openOrderBar) {
         this.toolbarUIService.updateOrderBar(false)
@@ -853,7 +876,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     }
 
     if (this.authenticationService.authenticationInProgress) { return }
-    console.log('postlogout')
+    // console.log('postlogout')
     this.userSwitchingService.clearLoggedInUser();
     this.smallDeviceLimiter();
   }
@@ -889,7 +912,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   switchUser() {
     const order = this.orderMethodsService.currentOrder;
-    console.log('logout switch user')
+    // console.log('logout switch user')
+
     this.paymentMethodsService.sendOrderAndLogOut( order , true )
     this.setInterFace(null)
   }

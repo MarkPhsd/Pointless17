@@ -1,6 +1,6 @@
-<div *ngIf="(uiTransactions$ | async) as settings">
 
-</div>
+<!-- <app-cookie-consent></app-cookie-consent> -->
+<div *ngIf="(uiTransactions$ | async) as settings"> </div>
 <div *ngIf="(printAction$ | async) as printAction"></div>
 <div *ngIf="(posDevice$ | async) as posDevice"></div>
 <div *ngIf="(printOrders$ | async) as printOrders"></div>
@@ -18,10 +18,10 @@
 <mat-drawer-container [class]="getMatDrawerContainerClass">
 
   <mat-drawer
-        *ngIf    ="!menuManager" 
-        position ="start"
-        [mode]   ="sidebarMode"
-        [opened] ="leftSideBarToggle">
+          *ngIf    ="!menuManager" 
+          position ="start"
+          [mode]   ="sidebarMode"
+          [opened] ="leftSideBarToggle">
 
     <div *ngIf="swapMenuWithOrder">
       <ng-container [ngTemplateOutlet]="leftSideBar"></ng-container>
@@ -70,7 +70,7 @@
 <ng-container [ngTemplateOutlet]="appSiteFooterOn"></ng-container>
 
 <ng-template #appSiteFooter>
-  <app-site-footer *ngIf="!smallDevice"></app-site-footer>
+  <app-site-footer></app-site-footer>
 </ng-template>
 
 <div   *ngIf="(homePageSetting$ | async) as setting">
@@ -82,8 +82,7 @@
 
 <ng-template #appMenuSearchBar>
   <div [class]  ="barType">
-  <app-menu-search-bar>
-    </app-menu-search-bar>
+    <app-menu-search-bar> </app-menu-search-bar>
   </div>
 </ng-template>
 
@@ -119,5 +118,4 @@
     </button>
   </div>
 </ng-template>
-
 

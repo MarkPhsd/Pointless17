@@ -37,6 +37,17 @@
 .mat-card-grid {
   max-width: 150px;
   padding: 0px;
+
+  @include for-phone-only {
+    // height: 116px;
+  }
+
+}
+
+.mat-card-grid-header-category {
+  max-width: 150px;
+  height: 105px;
+  padding: 0px;
 }
 
 .category-open {
@@ -55,8 +66,8 @@
 .container-mobile  {
   min-height: 135px;
   @include for-phone-only {
-    min-height: 95px;
-    height: 95px;
+    min-height: 116px;
+    height: 116px;
   }
 }
 
@@ -132,8 +143,35 @@
   height: 2em;
 }
 
+.footer-category {
+  z-index: 99;
+  height: 1em;
+}
+
 .text-max-width {
   max-width: 200px;
+}
+
+.image-button-category {
+  object-fit    : cover;
+  transition    : box-shadow 400ms;
+  border-radius : 5px;
+  margin        : 0px;
+  width         : 100%;
+  padding       : 5px;
+  font-weight: 400;
+  font-size: 1em;
+  white-space:normal;
+  overflow: hidden;
+  text-transform: capitalize;
+  font-size   : 1.5em;
+  height: 85px;
+  overflow: hidden;
+  @include for-phone-only {
+    font-size   : 1.5em;
+    height: auto;
+
+  }
 }
 
 .image-button {
@@ -148,15 +186,35 @@
   white-space:normal;
   overflow: hidden;
   text-transform: capitalize;
+  font-size   : 1.5em;
+  height: 125px;
+  overflow: hidden;
+  @include for-phone-only {
+    // font-size   : 1.5em;
+    height: auto;
+    font-size: .65em;
+  }
+}
 
-  height: 100px;
+.image-button-image {
+  object-fit    : cover;
+  transition    : box-shadow 400ms;
+  border-radius : 5px;
+  margin        : 0px;
+  width         : 100%;
+  padding       : 5px;
+  font-weight: 400;
+  font-size: 1em;
+  white-space:normal;
+  overflow: hidden;
+  text-transform: capitalize;
+  font-size   : 1.5em;
+  height: auto;
   overflow: hidden;
   @include for-phone-only {
     font-size   : 1.5em;
-    height: auto;
+
   }
-
-
 }
 
 #advertisement {
@@ -187,17 +245,34 @@
   }
  }
 
+ .product-image-category  {
+  object-fit  :   cover;
+  border-radius: 15px;
+  width       : 100%;
+  white-space : normal;
+  overflow    : hidden;
+  height  : 65px;
+
+  @include for-phone-only {
+    font-size   : 1.3em;
+    height  : 65px;
+    height:65px;
+  }
+}
+
+
+
 .product-image  {
   object-fit  :   cover;
   border-radius: 15px;
   width       : 100%;
   white-space : normal;
   overflow    : hidden;
-  max-height  : 85px;
+  height  : 85px;
 
   @include for-phone-only {
     font-size   : 1.3em;
-    max-height  : 65px;
+    height  : 65px;
     height:65px;
   }
 }
@@ -305,18 +380,64 @@
   float:         left;
 }
 
-.item-name-center {
+.item-name-center-category {
+
   text-align: center;
   justify-content: center;
   z-index: 102;
-  height: 2.4em;
-  font-weight:   500;
+  font-weight:   450;
   margin-bottom: 3px;
+  font-size: .9rem;
+  top: -15px;
+
+  position: relative;
   @supports (-webkit-touch-callout: none) {
     font-size: .8em;
   }
   @include for-phone-only {
     margin-top: -3px;
+    top: -15px;
+  }
+}
+
+.item-name-center-image {
+
+  text-align: center;
+  justify-content: center;
+  z-index: 102;
+  font-weight:   500;
+  margin-bottom: 3px;
+  font-size: 1rem;
+  top: -28px;
+  position: relative;
+
+  @supports (-webkit-touch-callout: none) {
+    font-size: .8em;
+  }
+  @include for-phone-only {
+    margin-top: -3px;
+    top: -5px;
+  }
+}
+
+.item-name-center {
+  
+  text-align: center;
+  justify-content: center;
+  z-index: 102;
+  font-weight:   500;
+  margin-bottom: 3px;
+  font-size: 1rem;
+  top: -28px;
+  position: relative;
+
+  @supports (-webkit-touch-callout: none) {
+    font-size: .8em;
+  }
+
+  @include for-phone-only {
+    margin-top: -3px;
+    top: 5px;
   }
 }
 

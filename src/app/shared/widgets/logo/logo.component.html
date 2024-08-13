@@ -1,7 +1,7 @@
-<div *ngIf="(bucket$ | async) as bucket">
-  <div  *ngIf="logo">
+<div *ngIf="(bucket$ | async) as item">
+  <div  *ngIf="logo" >
     <img
-      onerror   = "this.src='../assets/images/logo.png'"
+      [style]='borderStyle'
       [src]="logo"
       [alt]="company"
       [class]="logoSize"
@@ -9,3 +9,4 @@
   </div>
 </div>
 
+<!--  onerror = "this.src='../assets/images/logo.png'" -->

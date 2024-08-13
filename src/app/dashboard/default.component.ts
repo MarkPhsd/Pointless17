@@ -211,6 +211,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.platFormService.isApp() ) { return  'mat-drawer-container'}
     if (this.userAuthorizationService?.isStaff) { return  'mat-drawer-container'}
 
+    if (this.smallDevice) { 
+      return  'mat-drawer-container'
+    }
     return  'mat-drawer-container-user'
 
   }
@@ -287,6 +290,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     let ui: TransactionUISettings
     const site = this.siteService.getAssignedSite();
 
+    if (!this.authService._user.value) {return}
     return this.settingService.getUITransactionSetting().pipe(
       concatMap( data => {
           this.uiTransactions = data
@@ -513,9 +517,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   get appSiteFooterOn() {
     if (this.platFormService.isApp() ) { return }
     if (this.userAuthorizationService?.isStaff) { return }
-
+    if (this.smallDevice) { return }
     return this.appSiteFooter
-    return null;
   }
 
   barSizeSubscriber() {

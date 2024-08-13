@@ -67,7 +67,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   @Input() disableImages: boolean;
   @Input() androidApp: boolean;
   @Input() isApp     = false;
-  
+
   ///for use with prompts
   @Input() styleMatCard = ''
 
@@ -100,6 +100,12 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     return  false
   }
 
+  get matCardGridClass() {
+    if (this.displayType === 'header-category') {
+      return 'mat-card-grid-header-category'
+    }
+    return this.matCardClass;
+  }
 
   get priceView() {
     if (this.isProduct) {
@@ -129,6 +135,33 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     return null;
   }
 
+  get itemNameCenterClass() {
+    if (this.displayType === 'header-category') {
+      return  'item-name-center-category'
+    }
+    if (this.menuItem.urlImageMain) { 
+      return 'item-name-center-image'
+    }
+    return  'item-name-center'
+  }
+
+  get imageButtonClass() {
+    if (this.displayType === 'header-category') {
+      return 'image-button-category'
+    }
+      // const imageName =  item.urlImageMain.split(",")
+    if (this.menuItem.urlImageMain) {
+          return 'image-button'
+    }
+    return 'image-button'
+  }
+
+  get productImageClass() {
+    if (this.displayType === 'header-category') {
+     return 'product-image-category'
+    }
+    return 'product-image'
+  }
   get imageContainer() {
     if (this.isApp) {
       return 'image-container container-app'
@@ -140,13 +173,13 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
       return 'container-mobile-app'
     }
   }
- 
+
   get containerclassValue() {
 
     if (this.displayType === 'header-category') {
       return 'container-mobile-app'
     }
-    
+
     if (this.smallDevice && this.androidApp) {
       return 'container-mobile-app'
     }
@@ -286,13 +319,13 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     }
     if (this.categoryIDSelected != 0 && this.categoryIDSelected == this.id) {
       const box = ''
-      this.buttonColor = `background-color: #e1f5fe` 
+      this.buttonColor = `background-color: #e1f5fe`
     }
 
     if (this.buttonColor) {
       this.buttonColor = this.buttonColor + ';' + this.styleMatCard
     } else {
-      this.buttonColor = this.styleMatCard 
+      this.buttonColor = this.styleMatCard
     }
 
     this.buttonColor = `${this.buttonColor};${this.maxHeight}`

@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
-import { ISite } from 'src/app/_interfaces';
+import { ISite, IUser } from 'src/app/_interfaces';
 import { AuthenticationService } from '..';
 
 export interface IMenuButtonGroups {
@@ -105,6 +105,9 @@ filterMenuButtons(menuButtons: mb_MenuButton[]): mb_MenuButton[] {
 
   getGroups(site: ISite): Observable<IMenuButtonGroups[]> {
 
+    const user =  JSON.parse(localStorage.getItem('user')) as IUser;
+    if (!user) { return of(null)}
+
     const controller = "/mb_MenuButtonGroups/"
 
     const endPoint = "GetGroups"
@@ -120,6 +123,10 @@ filterMenuButtons(menuButtons: mb_MenuButton[]): mb_MenuButton[] {
   };
 
   getGroupsByName(site: ISite, name: string): Observable<IMenuButtonGroups[]> {
+
+
+    const user =  JSON.parse(localStorage.getItem('user')) as IUser;
+    if (!user) { return of(null)}
 
     const controller = "/MB_MenuButtonGroups/"
 
@@ -154,6 +161,9 @@ filterMenuButtons(menuButtons: mb_MenuButton[]): mb_MenuButton[] {
 
   getGroupByID(site: ISite, id: number): Observable<IMenuButtonGroups> {
 
+    const user =  JSON.parse(localStorage.getItem('user')) as IUser;
+    if (!user) { return of(null)};
+    
     const controller = "/MB_MenuButtonGroups/"
 
     const endPoint = "GetGroup"

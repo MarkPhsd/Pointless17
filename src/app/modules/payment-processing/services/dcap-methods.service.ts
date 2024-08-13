@@ -180,7 +180,7 @@ export class DcapMethodsService {
     resultMessage  = cmdResponse?.CmdStatus;
     processing     = false;
 
-    if (response) { 
+    if (response) {
       const len = 'Transaction rejected because the referenced original transaction is invalid'.length;
       if (response.substring(0, len) === 'Transaction rejected because the referenced original transaction is invalid.') {
         return {success :false , message: message, processing: processing, resultMessage: resultMessage}
@@ -200,6 +200,18 @@ export class DcapMethodsService {
     let success: boolean;
     success = false
     processing = false
+
+
+    //TRANSACTION NOT COMPLETE - DUKPT not Enabled
+    if (cmdResponse?.TextResponse == 'TRANSACTION NOT COMPLETE - DUKPT not Enabled') {
+      const status = "Failed - If entering manually, do not use CVV or ZIP."
+      return {success : false , message: status, processing: processing, resultMessage: status, textResponse: cmdResponse?.TextResponse};
+    }
+
+    if (cmdResponse?.TextResponse == 'Invalid Check Digit. Check Acct Number') {
+      const status = "Card entered wrong. Please retry"
+      return {success : false , message: status, processing: processing, resultMessage: status, textResponse: cmdResponse?.TextResponse};
+    }
 
     // console.log('readResult', cmdResponse)
     const status = cmdResponse?.CmdStatus
@@ -265,7 +277,7 @@ export class DcapMethodsService {
     processing     = false;
 
     const len = 'Transaction rejected because the referenced original transaction is invalid'.length;
-    if (response) { 
+    if (response) {
       if (response.substring(0, len) === 'Transaction rejected because the referenced original transaction is invalid.') {
         return {success :false , message: message, processing: processing, resultMessage: resultMessage}
       }

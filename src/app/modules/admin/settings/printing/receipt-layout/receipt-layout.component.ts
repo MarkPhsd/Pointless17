@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter, SimpleChanges,OnChanges } from '@angular/core';
 import { of, Subscription, Observable } from 'rxjs';
 import { ISetting, ISite } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
@@ -19,8 +19,8 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   templateUrl: './receipt-layout.component.html',
   styleUrls: ['./receipt-layout.component.scss']
 })
-export class ReceiptLayoutComponent implements OnInit, OnDestroy {
-
+export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
+  nonIndentedIndex: number = 1;
   // {item: data, id: this.items[i].id, idRef: this.items[i].idRef}
   itemsText = [] as any[];
   @Output() outPutPrintReady = new EventEmitter()
@@ -216,6 +216,18 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
     private menuService:     MenuService,
     private fakeDataService : FakeDataService) { }
 
+
+   ngOnChanges(changes: SimpleChanges) {
+    if (changes.itemsText || changes.interpolatedItemTexts) {
+      this.nonIndentedIndex = 1;
+     
+    }
+  }
+
+  getNonIndentedIndex(): number {
+    return this.nonIndentedIndex++;
+  }
+    
   ngOnInit() {
     if (this.templateInit) {
       // this.action$ = this.initTemplateData(this.order)
@@ -278,7 +290,33 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  isLastIndented(index: number): string | undefined {
+    // Filter all indented items from the list
+    const indentedItems = this.itemsText.filter(item => item.idRef && item.id !== item.idRef && item.idRef !== 0);
+    
+    // Identify the current item
+    const currentItem = this.itemsText[index];
+    
+    // Check if the current item is indented
+    const isIndented = currentItem.idRef && currentItem.id !== currentItem.idRef && currentItem.idRef !== 0;
+    
+    if (isIndented) {
+      // Find the next indented item, if it exists
+      const nextIndentedIndex = indentedItems.indexOf(currentItem) + 1;
+      const nextItem = indentedItems[nextIndentedIndex];
+      
+      // Check if the next item is indented and if it is within the same group
+      if (!nextItem || nextItem.idRef !== currentItem.idRef) {
+        return 'section-bottom';
+      }
+    }
+  
+    // Return undefined if the current item is not the last indented item
+    return undefined;
+  }
+  
   getInterpolatedData() {
+  
     if (!this.orders || !this.orders[0]) { return }
     this.scrubOrders(this.orders[0])
 

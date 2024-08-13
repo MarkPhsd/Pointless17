@@ -10,6 +10,7 @@ import { LoginComponent } from 'src/app/modules/login';
 import { SitesService} from 'src/app/_services/reporting/sites.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IUserAuth_Properties } from '../people/client-type.service';
+import { NewUserGuestComponent } from 'src/app/modules/profile/new-user-guest/new-user-guest.component';
 
 export interface IUserExists {
   id:           number;
@@ -122,7 +123,7 @@ export class AuthenticationService {
         this.siteSerivce._user.next(null)
         return
       }
-   
+
       if (!user.userPreferences) {
         user.userPreferences = {} as UserPreferences;
       }
@@ -130,12 +131,11 @@ export class AuthenticationService {
         if ( !user.userPreferences?.firstTime_FilterOrderInstruction) {
            user.userPreferences.firstTime_FilterOrderInstruction = false
         }
-     
+
         if ( !user.userPreferences?.firstTime_notifyShowAllOrders) {
           user.userPreferences.firstTime_notifyShowAllOrders = false
         }
-   
-     
+
       // console.log('user pref', user, user?.userPreferences)
       this._user.next(user)
       this.siteSerivce._user.next(user)
@@ -343,19 +343,34 @@ export class AuthenticationService {
       }
     }
 
-    openLoginDialog() {
-      let width    = '455px'
+    openLoginDialog(returnUrl?: string) {
+      let width    = '400px'
       let dialogRef: any;
       dialogRef = this.dialog.open(LoginComponent,
         { width    : width,
           minWidth : width,
           height   : '650px',
           minHeight: '650px',
-          data:    'openLogin'
+          data:    {returnUrl: returnUrl}
         },
       )
       return dialogRef;
     }
+
+    openGuestNewUserDialog() {
+      let width    = '375px'
+      let dialogRef: any;
+      dialogRef = this.dialog.open(NewUserGuestComponent,
+        { width    : width,
+          minWidth : width,
+          height   : '50px',
+          minHeight: '650px',
+          data:     'openLogin'
+        },
+      )
+      return dialogRef;
+    }
+
 
     clearSubscriptions() {
       // this.orderService.updateOrderSubscription(null)
@@ -383,10 +398,8 @@ export class AuthenticationService {
     };
 
     requestPasswordResetToken(userName: string): Observable<any>  {
-
       const api = this.siteSerivce.getAssignedSite().url
       const url = `${api}/users/RequestPasswordResetToken`
-
       return this.http.post<any>(url, {userName: userName})
     };
 
@@ -417,6 +430,11 @@ export class AuthenticationService {
       return  this.http.post<any>(url, user)
     }
 
+    requestNewUser(user: IUser): Observable<IUserExists> {
+      const api = this.siteSerivce.getAssignedSite().url
+      const url = `${api}/users/RequestNewUser`
+      return  this.http.post<any>(url, user)
+    }
 
     //get app toolbar
     getAppToolBarStyle(color: string, width: number) {

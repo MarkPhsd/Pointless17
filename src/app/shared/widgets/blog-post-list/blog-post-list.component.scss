@@ -1,31 +1,26 @@
 .container {
   margin: 0px;
-  // padding: 10px;
   background-color: rgb(74, 104, 148);
   color: rgb(74, 104, 148);
 }
 
 .mat-card {
   padding: 2px;
+  // max-height: 120px;
 }
 
 .grid-view {
-  display: grid;
-  gap: 10px;
+  display    : grid;
+  gap        : 10px;
   grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y : auto;
+  overflow-x : hidden;
   padding-left: 20px;
   padding-right: 20px;
-  width: 100%;
-  border-top: 15px;
+  width       : 100%;
+  border-top  : 15px;
   border-color: rgb(48, 53, 116);
-
-  // display: flex;
-  // flex-direction: column;
-  // gap: 10px;
-  list-style: none;
-
+  list-style  : none;
 }
 
 .h1 {

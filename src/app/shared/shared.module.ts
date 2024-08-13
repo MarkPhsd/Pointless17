@@ -250,6 +250,7 @@ import { EmployeesOnClockListComponent } from '../modules/admin/employeeClockAdm
 import { FunctionButtonsListComponent } from '../modules/admin/settings/function-groups/function-buttons-list/function-buttons-list.component';
 import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-emvcard-pay-btn/dsi-emvcard-pay-btn.component';
 import { SiteFooterComponent } from './components/site-footer/site-footer.component';
+import { SiteCardComponent } from './widgets/site-card/site-card.component';
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
 // import { ReceiptLayoutComponent } from '../modules/admin/settings/printing/receipt-layout/receipt-layout.component';
@@ -436,6 +437,7 @@ import { SiteFooterComponent } from './components/site-footer/site-footer.compon
     ScaleSettingsComponent,
     SidebarComponent,
     SiteSelectorComponent,
+    SiteCardComponent,
     SpeciesListComponent,
     StatusLookupComponent,
     StoreCreditInfoComponent,
@@ -720,7 +722,7 @@ import { SiteFooterComponent } from './components/site-footer/site-footer.compon
     QuantiySelectorComponent,
     UnitTypeSelectorComponent,
     UserPreferencesComponent,
-
+    SiteCardComponent,
     SearchFieldsComponent,
     SaveChangesButtonComponent,
     ScaleValueViewComponent,

@@ -295,7 +295,12 @@ export class SettingsService {
 
   getPOSDeviceBYName(site: ISite, name: String):  Observable<ISetting> {
 
-    const user =  JSON.parse(localStorage.getItem('user')) as IUser
+    const user =  JSON.parse(localStorage.getItem('user')) as IUser;
+    
+    if (user?.roles === 'user') {
+      console.log('user?roles', user?.roles)
+      return of(null)
+    }
     if (!user) { return of(null)}
     if (!name) { return of(null)};
 
@@ -316,9 +321,13 @@ export class SettingsService {
   getPOSDeviceSettings(site: ISite, name: String):  Observable<ITerminalSettings> {
 
     const user =  JSON.parse(localStorage.getItem('user')) as IUser
-    if (!user) { return of(null)}
+    if (!user) { return of(null)};
     if (!name) { return of(null)};
-
+    
+    if (user?.roles === 'user') {
+      console.log('user?roles', user?.roles)
+      return of(null)
+    }
     const controller = "/settings/"
 
     const endPoint = 'getPOSDeviceBYName';
@@ -340,12 +349,14 @@ export class SettingsService {
   getSettingByName(site: ISite, name: String):  Observable<ISetting> {
 
     if (!name) { return of(null) }
+    if (name == undefined || name == null) { return of(null) }
+
+    console.log('getSettingByName', name)
+
     const user =  JSON.parse(localStorage.getItem('user')) as IUser
     if (!user || !user.roles || !user.username ) {
       return this.getSettingByNameNoRoles(site, name)
     }
-
-  
 
     const controller = "/settings/"
 
@@ -361,6 +372,12 @@ export class SettingsService {
 
 
   getSettingByNameNoRoles(site: ISite, name: String):  Observable<ISetting> {
+
+
+    if (!name) { return of(null) }
+    if (name == undefined || name == null) { return of(null) }
+
+    console.log('getSettingByName', name)
 
     const controller = "/settings/"
 
@@ -882,6 +899,9 @@ export class SettingsService {
 
 
   getSettingByNameCached(site: ISite, name: String):  Observable<ISetting> {
+
+    if (!name) { return of(null) }
+    if (name == undefined || name == null) { return of(null) }
 
     const controller = "/settings/"
 

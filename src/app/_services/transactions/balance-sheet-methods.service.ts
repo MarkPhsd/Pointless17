@@ -93,7 +93,7 @@ export class BalanceSheetMethodsService {
       const deviceName = this.getDeviceName();
       localStorage.setItem('user', JSON.stringify(user))
 
-      
+
       if (!user)  { of({sheet: null, user: user, err: null}) };
 
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
@@ -124,6 +124,8 @@ export class BalanceSheetMethodsService {
   getCurrentBalanceSheet(): Observable<IBalanceSheet> {
     const deviceName = this.getDeviceName();
     const site = this.sitesService.getAssignedSite()
+    // const user = this.authenticationService._user.value;
+    // if (!user) {  return }
     return   this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
       switchMap(sheet => {
         return  this.getSheetCalc(site, sheet)

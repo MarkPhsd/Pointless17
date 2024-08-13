@@ -179,9 +179,9 @@ export class UserSwitchingService implements  OnDestroy {
   authenticate(userLogin: userLogin): Observable<IUser> {
     const apiUrl =  this.appInitService.apiBaseUrl()
     const url = `${apiUrl}/users/authenticate`
-    return this.http.post<any>(url, userLogin ).pipe(switchMap(data => { 
+    return this.http.post<any>(url, userLogin ).pipe(switchMap(data => {
       // console.log('data', data)
-      if (data?.errorMessage) { 
+      if (data?.errorMessage) {
         this.siteService.notify(`${data?.message} ${data?.errorMessage}`, 'Close', 10000, 'red')
       }
       return of(data)
@@ -369,17 +369,29 @@ export class UserSwitchingService implements  OnDestroy {
 
     currentUser.token        = user?.token;
     if (user.preferences) {
-      currentUser.userPreferences = JSON.parse(user.preferences) as UserPreferences;
-      currentUser.preferences = user?.preferences;
-
-      if (!currentUser.userPreferences.swapMenuOrderPlacement) {
-        currentUser.userPreferences.swapMenuOrderPlacement = false;
+      try {
+        currentUser.userPreferences = JSON.parse(user.preferences) as UserPreferences;
+      } catch (error) {
+        currentUser.userPreferences = {} as  UserPreferences;
       }
-      if (!currentUser.userPreferences.showAllOrders) {
-        currentUser.userPreferences.showAllOrders = false;
+
+      try {
+        if (!currentUser.userPreferences.swapMenuOrderPlacement) {
+          currentUser.userPreferences.swapMenuOrderPlacement = false;
+        }
+        if (!currentUser.userPreferences.showAllOrders) {
+          currentUser.userPreferences.showAllOrders = false;
+        }
+
+        if (currentUser?.userPreferences.swapMenuOrderPlacement) {
+          this.swapMenuWithOrder(currentUser.userPreferences?.swapMenuOrderPlacement);
+        } else {
+          this.swapMenuWithOrder(false);
+        }
+      } catch (error) {
+
       }
     }
-
 
     if (!user.preferences) {
       currentUser.userPreferences               =  {} as UserPreferences;
@@ -387,12 +399,6 @@ export class UserSwitchingService implements  OnDestroy {
       currentUser.userPreferences.swapMenuOrderPlacement = false;
       currentUser.userPreferences.showAllOrders = false;
       currentUser.preferences = JSON.stringify(currentUser?.userPreferences);
-    }
-
-    if (currentUser?.userPreferences.swapMenuOrderPlacement) {
-      this.swapMenuWithOrder(currentUser.userPreferences?.swapMenuOrderPlacement);
-    } else {
-      this.swapMenuWithOrder(false);
     }
 
     user.authdata            = window.btoa(user.username + ':' + user.password);
@@ -454,11 +460,33 @@ export class UserSwitchingService implements  OnDestroy {
     this._swapMenuWithOrder.next(swap)
   }
 
+
+  processPaymentLink(path : string) { 
+    const [route, params] = path.split(';');
+    const paramParts = params.split('=');
+    const paramName = paramParts[0];
+    const orderCode = paramParts[1];
+
+    // Ensure the paramName is 'orderCode' before navigating
+    if (paramName === 'orderCode' && orderCode) {
+      // Navigate using the extracted route and order code
+
+      // this.router.navigate(["/menuitems-infinite/", {subCategoryID:item.id }])
+
+      this.router.navigate( [route.toString() ,  { orderCode:  orderCode} ] );
+    }
+  }
+
   processLogin(user: IUser, path : string) {
 
     if (!user) {
       console.log('no user', user)
       return 'user undefined'
+    }
+
+    if (path.startsWith('/qr-payment')) { 
+      this.processPaymentLink(path)
+      return;
     }
 
     if (user && user.message == undefined) {

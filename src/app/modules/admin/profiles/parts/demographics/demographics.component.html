@@ -32,18 +32,17 @@
 
       <div class="name-fields">
 
-        <div>
+        <div *ngIf="auths?.editEmail">
           <app-value-fields
-                        [enabled]="auths?.editEmail"
+                        
                         [inputForm]="inputForm"
                         [fieldName]="'phone'">
             Phone
           </app-value-fields>
         </div>
 
-        <div>
+        <div *ngIf="auths?.editEmail">
           <app-value-fields
-                    [enabled]="auths?.editEmail"
                     [inputForm]="inputForm"
                     [fieldName]="'email'">
               Email
@@ -85,19 +84,6 @@
         </div>
 
       </div>
-
-      <!-- [matDatepicker]="picker"
-                    formControlName="medPrescriptionExpiration" -->
-
-      <!-- <div class="name-fields">
-        <app-value-fields
-                [enabled]="isStaff"
-                [inputForm]="inputForm"
-                [enabled] ='false'
-                [fieldName]="'accountNumber'">
-          Account #
-        </app-value-fields>
-      </div> -->
 
       <div *ngIf="enableLimitsView" class="counts-container">
         <div *ngIf="isStaff">
@@ -221,14 +207,6 @@
       </div>
 
 
-      <!-- <div>
-        <app-value-fields
-
-              [inputForm]="inputForm"
-              [fieldName]="'defaultDiscount'">
-            Default % Discount
-        </app-value-fields>
-      </div> -->
       <div class="points" *ngIf="isAuthorized">
         <mat-form-field appearance="outline">
         <mat-label >Default % Discount</mat-label>

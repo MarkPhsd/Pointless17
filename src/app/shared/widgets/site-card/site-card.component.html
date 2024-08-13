@@ -1,0 +1,27 @@
+<mat-card *ngIf="site" >
+  <mat-card-title>
+  <div class="site-name" >
+      {{site?.name}}
+  </div>
+  <mat-divider></mat-divider>
+</mat-card-title>
+
+  <mat-card-content>
+    <div  class="centered=flex">
+      <div *ngIf="site.imgName" >
+        <img class="site-image" [src]="getImageURL(site.imgName)">
+      </div>
+      </div>
+      <div  class="centered=flex">
+        <div class="site-address" >
+          {{site?.address}}
+        </div>
+        <div class="site-address" >
+          {{site?.city}}, {{site?.state}} {{site?.zip}}
+        </div>
+        <div class="site-address" >
+          {{site?.phone}}
+        </div>
+      </div>
+  </mat-card-content>
+</mat-card>

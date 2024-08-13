@@ -58,6 +58,7 @@ export class BalanceSheetReportComponent implements OnInit {
       search.completionDate_From = this.dateFrom;
       search.completionDate_To = this.dateTo;
       search.zRunID = null;
+      search.balanceSheetStatus = 2
     }
 
     this.sheets$ = this.balanceSheetService.searchBalanceSheets(site, search).pipe(
@@ -66,7 +67,9 @@ export class BalanceSheetReportComponent implements OnInit {
          return  of(data)
       }
     ))
+
   }
+
 
   togglesShowAll() {
     this.showAll = !this.showAll;

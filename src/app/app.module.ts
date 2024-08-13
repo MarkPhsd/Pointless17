@@ -64,7 +64,66 @@ import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-l
 import { UserIdleModule } from 'angular-user-idle';
 import { DragAndDropModule } from 'angular-draggable-droppable';
 import { ResizeDirective } from './_directives/resize.directive';
-import { environment } from '../environments/environment';
+
+import {NgcCookieConsentConfig} from 'ngx-cookieconsent';
+import {NgcCookieConsentModule} from 'ngx-cookieconsent';
+
+// const cookieConfig:NgcCookieConsentConfig = {
+//   cookie: {
+//     domain: 'window.location.hostname' // or 'your.domain.com' // it is mandatory to set a domain, for cookies to work properly (see https://goo.gl/S2Hy2A)
+//   },
+//   palette: {
+//     popup: {
+//       background: '#000'
+//     },
+//     button: {
+//       background: '#f1d600'
+//     }
+//   },
+//   theme: 'edgeless',
+//   type: 'opt-out'
+// };
+
+const cookieConfig:NgcCookieConsentConfig = {
+  cookie: {
+    domain: window.location.hostname // it is recommended to set your domain, for cookies to work properly
+  },
+  palette: {
+    popup: {
+      background: '#000'
+    },
+    button: {
+      background: '#f1d600'
+    }
+  },
+  theme: 'edgeless',
+  type: 'opt-out',
+  layout: 'my-custom-layout',
+  layouts: {
+    "my-custom-layout": '{{messagelink}}{{compliance}}'
+  },
+  elements:{
+    messagelink: `
+    <span id="cookieconsent:desc" class="cc-message">{{message}} 
+      <a aria-label="learn more about cookies" tabindex="0" class="cc-link" href="{{cookiePolicyHref}}" target="_blank" rel="noopener">{{cookiePolicyLink}}</a>, 
+      <a aria-label="learn more about our privacy policy" tabindex="1" class="cc-link" href="{{privacyPolicyHref}}" target="_blank" rel="noopener">{{privacyPolicyLink}}</a> and our 
+      <a aria-label="learn more about our terms of service" tabindex="2" class="cc-link" href="{{tosHref}}" target="_blank" rel="noopener">{{tosLink}}</a>
+    </span>
+    `,
+  },
+  content:{
+    message: 'By using our site, you acknowledge that you have read and understand our ',
+    
+    cookiePolicyLink: 'Cookie Policy',
+    cookiePolicyHref: 'https://cookie.com',
+
+    privacyPolicyLink: 'Privacy Policy',
+    privacyPolicyHref: 'https://privacy.com',
+
+    tosLink: 'Terms of Service',
+    tosHref: 'https://tos.com',
+  }
+};
 
 
 // import {HammerGestureConfig, HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
@@ -125,6 +184,8 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
 
 @NgModule({
   declarations: [
+
+    
     AgGridTestComponent,
     AgGridImageFormatterComponent,
     AgGridToggleComponent,
@@ -147,7 +208,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     GridManagerEditComponent,
     GridComponentPropertiesComponent,
     GridDesignerInfoComponent,
-
+ 
     DashboardMenuComponent,
     OrderTotalBoardComponent,
     LimitValuesCardComponent,
@@ -162,6 +223,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
 
   imports: [
     IonicModule.forRoot(),
+    NgcCookieConsentModule.forRoot(cookieConfig),
     // G-6BNWKZ7VY8
     // NgxGoogleAnalyticsModule.forRoot('traking-code'),
     // NgxGoogleAnalyticsModule.forRoot(await getTrackingCode()) ,
@@ -190,6 +252,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
 
   exports: [
     AppMaterialModule,
+    NgcCookieConsentModule,
     SharedModule,
     EditorModule,
     FormsModule,

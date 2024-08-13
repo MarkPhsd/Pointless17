@@ -2,8 +2,8 @@ import { Component, OnInit, Input,OnDestroy } from '@angular/core';
 import { UntypedFormGroup,UntypedFormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
-import { IPOSOrder, IServiceType,  } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
+import { IPOSOrder, IServiceType, IUser,   } from 'src/app/_interfaces';
+import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
@@ -84,6 +84,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     private requestMessageService: RequestMessageService,
     private sanitizer: DomSanitizer,
     private userAuthorization: UserAuthorizationService,
+    private authenticationService: AuthenticationService,
     // public datepipe: DatePipe
     )
   { }
@@ -218,7 +219,27 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     })
   }
 
+  isGuest(word:string) {
+    if (word.startsWith("Guest")) {
+        // console.log("The word starts with 'Guest'.");
+        return true
+    } else {
+        // console.log("The word does not start with 'Guest'.");
+        return false
+    }
+  }
+
   save() {
+
+    console.log(this.authenticationService._user.value)
+
+    if (this.authenticationService._user.value) {
+      const user = this.authenticationService._user.value as IUser;
+      if (this.isGuest(user.username)) {
+        this.authenticationService.openGuestNewUserDialog()
+        return;
+      }
+    }
     if (!this.order) {
       this.errorMessage = 'The order is not initialized. Please go back a page.'
       this.matSnack.open(this.errorMessage, 'Alert')
@@ -283,7 +304,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     }
   }
 
-  navigate(event) { 
+  navigate(event) {
     console.log(this.selectedIndex, event, this.selectedIndex + event)
     this.updateSelectedIndex(this.selectedIndex + event);
   }
@@ -361,7 +382,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     if (this.serviceType && this.serviceType?.deliveryService) {
       const address = this.inputForm.value
       if (address) {
-        if (!address.address || !address.city || !address.state || !address.zip) { 
+        if (!address.address || !address.city || !address.state || !address.zip) {
           this.messages.push('Shipping location required.');
         }
       }

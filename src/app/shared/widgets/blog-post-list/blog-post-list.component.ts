@@ -101,13 +101,13 @@ export class BlogPostListComponent implements OnInit , OnChanges {
     search.group = this.group;
     search.enabled = true;
     const homePage$ = this.getHomePageSettings();
-    console.log('refresh list')
+    // console.log('refresh list')
     this.blogs$ = 
         homePage$.pipe(switchMap( data => { 
           return this.blogService.searchBlogs( site, search )
         })).pipe(
           switchMap( data => {
-              console.log('refresh list', data)
+              // console.log('refresh list', data)
               data.results.filter(item => { return item.enabled == true});
               this.blogs = data.results.sort((a, b) => (a.sort > b.sort ? 1 : -1));
               return of(this.blogs)

@@ -17,7 +17,7 @@
 
  <div *ngIf="(action$ | async) as item"></div>
 
-<div *ngFor="let observable of observablesArray$ | async">
+<div *ngFor="let observable of orderMethodsService.observablesArray$ | async">
   <ng-container *ngIf="observable | async as value">
   </ng-container>
 </div>

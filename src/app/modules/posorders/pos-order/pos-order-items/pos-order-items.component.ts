@@ -293,7 +293,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     })
 
     this.initSubscriptions();
-    this.initStyles()
+    this.initStyles();
+    // this.getItemHeight()
   }
 
   initStyles() {
@@ -352,6 +353,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   @HostListener("window:resize", [])
   updateItemsPerPage() {
+
     this.smallDevice = false
 
     if (this.prepScreen) { return }
@@ -364,7 +366,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     if (window.innerWidth < 500) {
       this.deviceWidthPercentage = '95%'
     }
-
+    
+    // this.getItemHeight()
     //the heights of this panel are what control
     //the inside scroll section.
     //changing this to a dynamic ng-style will allow controlling
@@ -433,9 +436,21 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     if (!this.myScrollContainer) {
       return
     }
+
+
+    if (this.phoneDevice) {  
+      this.myScrollContainer.nativeElement.style.height = '100%'
+      return;
+    }
+    if (this.smallDevice) {
+      this.myScrollContainer.nativeElement.style.height = '100%'
+      return
+    }
+
     const divTop = this.myScrollContainer.nativeElement.getBoundingClientRect().top;
     const viewportBottom = window.innerHeight;
     const remainingHeight = viewportBottom - divTop;
+
     if (!this.disableActions) {
       this.myScrollContainer.nativeElement.style.height  = `${remainingHeight-10}px`;
     }
@@ -459,7 +474,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   viewPayment() {
-    this.navigationService.makePaymentFromSidePanel(true, this.phoneDevice,this.isStaff, this.order);
+    this.navigationService.makePaymentFromSidePanel(false, this.phoneDevice, this.isStaff, this.order);
     this.dismiss();
   }
 

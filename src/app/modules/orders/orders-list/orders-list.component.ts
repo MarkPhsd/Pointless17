@@ -130,7 +130,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
 
         this.searchModel            = data
 
-        console.log('search model', data?.clientID,  data)
+        // console.log('search model', data?.clientID,  data)
         if (data?.clientID !=0) {  clientID =  data?.clientID  }
         if (data?.suspendedOrder && data.suspendedOrder != 0 )  {this.suspendedOrders = data?.suspendedOrder }
 
@@ -157,7 +157,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           this.searchModel.suspendedOrder = 0;
         }
 
-        console.log(this.searchModel, this.clientID,this.suspendedOrders)
+        // console.log(this.searchModel, this.clientID,this.suspendedOrders)
 
         this.refreshSearch()
         return

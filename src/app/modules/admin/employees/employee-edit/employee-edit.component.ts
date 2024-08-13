@@ -240,7 +240,7 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
   initForm() {
     this.inputForm = this.employeeService.initForm(this.inputForm)
 
-    this.inputForm.valueChanges.subscribe(data => { 
+    this.inputForm.valueChanges.subscribe(data => {
       this.flagSaved = true;
     })
     return this.inputForm
@@ -309,7 +309,7 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
 
     if (this.inputForm)  { employee = this.inputForm.value as employee; }
 
-    console.log(employee);
+    // console.log(employee);
 
 
     if (client && employee) {
@@ -318,7 +318,7 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
 
         empeloyeeClient$ =  newEmployee$.pipe(switchMap(
           data => {
-            if (employee.errorMessage) { 
+            if (employee.errorMessage) {
               this.notifyEvent('Passwords do not match', "");
               return of(null)
             }
@@ -343,13 +343,16 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
 
   }
 
-  update(event): void {
+  update(event, exit?: boolean): void {
     const empClient$ = this.getEmployeeClientObservable();
     if (empClient$) {
         this.action$ = empClient$.pipe(
           switchMap(data  => {
             this.notifyEvent('Saved', "Saved")
             this.flagSaved = true;
+            if (exit) {
+              this.onCancel(event);
+            }
             return of(data)
           }),catchError ( err => {
             const message = 'Adding employee failed, please input a unique PIN Code. It may need to be a be a long number';
@@ -384,8 +387,8 @@ export class EmployeeEditComponent implements OnInit, OnDestroy {
   }
 
   updateItemExit(event) {
-    this.update(event);
-    this.onCancel(event);
+    this.update(event, true);
+
   };
 
   navUserList(event) {

@@ -52,7 +52,7 @@ export class UserPreferencesComponent implements OnInit {
       product:  [], //ProductSearchModel;
       showAllOrders:  [], //boolean;
       firstTime_notifyShowAllOrders: [], // boolean;
-      firstTime_FilterOrderInstruction:  [], //boolean;
+      firstTime_FilterOrderInstruction:  [true], //boolean;
       enableCoachMarks: [], // boolean;
       contactPreference:  [], //number;
       orderID:  [], //number;
@@ -65,14 +65,16 @@ export class UserPreferencesComponent implements OnInit {
 
     this.inputForm.patchValue(this.user?.userPreferences)
     this.headerColor  = this.user?.userPreferences?.headerColor;
+  
 
     this.inputForm.valueChanges.subscribe(data => {
       const formValue = data;
       if (this.headerColor) {   data.headerColor = this.headerColor  }
-
-      this.action$ = this.savePreferences(data, this.userAuthorizationService.user.id).pipe(switchMap(formValue => {
-        // console.log('formValue messagingPreference', formValue?.messagingPreference)
-        this.user.userPreferences = formValue;
+      let pref =     this.user.userPreferences = formValue;
+      
+      this.action$ = this.savePreferences(data, this.userAuthorizationService?.user?.id).pipe(switchMap(formValue => {
+        pref.firstTime_FilterOrderInstruction = false;
+        this.user.preferences = pref;
         this.authenticationService.updateUser(this.user)
         this.authenticationService.updatePreferences(formValue);
         return of(data)

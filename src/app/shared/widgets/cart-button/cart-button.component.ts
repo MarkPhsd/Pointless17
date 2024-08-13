@@ -188,9 +188,9 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     if (order && order != null) {
       this.paymentMethodsService.sendOrderProcessLockMethod(this.orderMethodsService.currentOrder)
     }
-   
+
     let categoryID = 0
- 
+
     if (this.posDevice) {
       if (this.posDevice?.defaultOrderTypeID  && this.posDevice?.defaultOrderTypeID != 0) {
         const serviceType$ = this.serviceTypeService.getType(site, this.posDevice.defaultOrderTypeID)
@@ -209,6 +209,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   addNewOrderByType(serviceType) {
     const site = this.siteService.getAssignedSite();
+    this.orderMethodsService.clearObservable();
     return this.paymentMethodsProcess.newOrderWithPayloadMethod(site, serviceType)
   }
 

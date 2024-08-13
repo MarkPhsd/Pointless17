@@ -78,10 +78,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   isElectron: any;
   androidApp: boolean;
   smallDevice: boolean;
+  returnlUrl: string;
 
-
-  get smallPOS() { 
-    if (this.smallDevice && this.androidApp) { 
+  get smallPOS() {
+    if (this.smallDevice && this.androidApp) {
       return true
     }
     return false;
@@ -156,7 +156,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         @Inject(MAT_DIALOG_DATA) public data: any,
     )
   {
-    if (data) { this.dialogOpen = true  }
+    if (data)  { this.dialogOpen = true  }
+
+    if (data?.returnUrl) {
+      this.returnlUrl = data?.returnUrl;
+    }
     if (!data) {  this.redirects();  }
   }
 
@@ -192,13 +196,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.refreshUIHomePageSettings();
     this.initDevice();
 
-
   }
 
   initDevice() {
     const device = localStorage.getItem('devicename');
     if (device) {
-      this.device$ = this.uiSettingService.getPOSDevice(device).pipe(switchMap(data => {
+      const site = this.siteService.getAssignedSite()
+      this.device$ = this.settingService.getPOSDeviceSettings(site,device).pipe(switchMap(data => {
         this.zoom(data)
         return of(data)
       }))
@@ -500,13 +504,22 @@ export class LoginComponent implements OnInit, OnDestroy {
           if (result && result.username != undefined) { user = result }
 
           if (user) {
-            // console.log('user', user?.message)
 
             if (user && user?.errorMessage === 'failed') {
               this.authenticationService.authenticationInProgress = false;
               this.clearUserSettings()
               this.authenticationService.updateUser(null);
               return of('failed')
+            }
+
+
+            if (this.returnlUrl) { 
+              if (user && user?.message && user?.message.toLowerCase() === 'success') {
+                this.authenticationService.updateUser(user)
+                this.userSwitchingService.processLogin(user, this.returnlUrl)
+                this.closeDialog();
+                return of('success')
+              }
             }
 
             if (user && user?.message && user?.message.toLowerCase() === 'success') {

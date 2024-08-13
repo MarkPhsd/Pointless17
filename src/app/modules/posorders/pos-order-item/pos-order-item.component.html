@@ -11,6 +11,7 @@
           [class]="customcard" >
 
   <mat-card-content>
+
     <div  [class]="gridItems">
       <div *ngIf="orderItem">
 
@@ -21,6 +22,7 @@
         </div>
 
         <ng-container [ngTemplateOutlet]="voidInfoView"></ng-container>
+        
         <ng-container [ngTemplateOutlet]="formView"></ng-container>
       </div>
 
@@ -196,7 +198,6 @@
                 </button>
               </div>
 
-
             <div>
 
             </div>
@@ -335,7 +336,8 @@
       <div *ngIf="ui && ui?.dcapMultiPrice && ui?.dcapDualPriceValue != 0 && !orderItem.completionDate ">
         <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue > 0 &&  !orderItem.completionDate" > Credit  Price </span>
         <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue < 0 && !orderItem.completionDate" >  Discount Price </span>
-        @ {{ cashDiscount | currency }} | ({{ui.dcapDualPriceValue}}%)
+        @ {{ cashDiscount | currency }}
+        <!-- | ({{ui.dcapDualPriceValue}}%) -->
       </div>
 
     </div>
@@ -403,8 +405,7 @@
 
     <span  class='ready-icon' *ngIf="
                 (userAuthService?.isStaff) &&
-                orderItem?.itemPrepped && prepScreen && !isModifier
-            ">
+                orderItem?.itemPrepped && prepScreen && !isModifier ">
       <mat-icon class="mat-icon-label" color="alert" *ngIf="prepScreen" >done</mat-icon>
       <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.itemPrepped | date: 'shortTime'}} </span>
     </span>
@@ -426,24 +427,29 @@
 
 
 <ng-template #formView>
-  <div  class="grid-item-span" *ngIf="orderItem && !prepScreen && purchaseOrderEnabled && inputForm">
+
+  <div  class="grid-item-span" *ngIf="!isStaff || ( orderItem && !prepScreen && purchaseOrderEnabled && inputForm)">
+
+
     <div class="field-grid">
 
-      <div class="field-values">
+      <div class="field-values" >
         <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'quantity'">
           Quantity
         </app-value-fields>
       </div>
-      <div class="field-values">
+
+      <div class="field-values" *ngIf="isStaff">
         <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'wholeSale'">
           Cost
         </app-value-fields>
       </div>
-      <div class="field-values">
+      
+      <div class="field-values" *ngIf="isStaff">
         <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'unitPrice'">
@@ -451,7 +457,7 @@
         </app-value-fields>
       </div>
 
-      <div class="field-values-long">
+      <div class="field-values-long" *ngIf="isStaff">
         <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'serialCode'">
@@ -459,7 +465,7 @@
         </app-value-fields>
       </div>
 
-      <div class="field-values-long">
+      <div class="field-values-long" *ngIf="isStaff">
         <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'modifierNote'">

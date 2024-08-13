@@ -135,6 +135,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
         this.inputForm.patchValue(this.sheet)
       }
     })
+
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user = data;
     })
@@ -184,7 +185,10 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.id            = +this.route.snapshot.paramMap.get('id');
 
     if(!this.id) {
+      const user = this.authenticationService._user.value;
+
       this.newBalanceSheet();
+
     }
 
     if (this.id) {
@@ -214,6 +218,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   //we have to initialize the balance sheet.
   //we should just be sending maybe the device, and the user.
   newBalanceSheet() {
+    const user = this.authenticationService._user.value;
+    if (!user) {  return }
     this.balanceSheet$ = this.sheetMethodsService.getCurrentBalanceSheet().pipe(
       switchMap(data => {
         this.getSheetType(data)

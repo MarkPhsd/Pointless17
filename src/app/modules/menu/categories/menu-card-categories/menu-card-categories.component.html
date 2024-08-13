@@ -16,8 +16,7 @@
         (click)= "listItems(item.id)">
 
     <div>
-      <div class="text">{{item.name  | truncateText: textLength  }}</div>
-
+      <div class="text">{{item?.name  | truncateText: textLength  }}</div>
       <div class="grid-item" *ngIf="!disableImages">
         <img
             loading   = "lazy"
@@ -33,7 +32,7 @@
   </div>
 
   <div *ngIf="item.id == -1">
-      <div class="text">{{item.name  | truncateText: textLength  }}</div>
+      <div class="text">{{item?.name  | truncateText: textLength  }}</div>
     <div class="grid-item-button">
       <button mat-raised-button
             color="warn"

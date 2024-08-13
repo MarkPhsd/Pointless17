@@ -420,14 +420,15 @@
 <ng-template #cashPayButtons>
   <ng-container class="pay-buttons"
                 *ngIf="!smallDevice && isApp">
+
     <cash-payment-buttons
         [order]="order"
         [user]="user"
         [userAuths]="userAuths"
         [uiTransactions]="uiTransactions"
         [platForm]="platForm"
-        [creditBalanceRemaining]="creditPaymentAmount"
-        [paymentAmount] ="cashpaymentRemaining"
+        [creditBalanceRemaining]="order?.balanceRemaining"
+        [paymentAmount] ="order?.balanceRemaining"
         [isApp]         ="isApp" >
       <div>Total</div>
     </cash-payment-buttons>
@@ -617,7 +618,7 @@
 
 <ng-template #disEMVCreditOnlyCardButton>
   <dsi-emvcard-pay-btn
-      *ngIf="(isApp || isStaff) && devicename && !PaxA920 
+      *ngIf="(isApp || isStaff) && devicename && !PaxA920
              && uiTransactions?.dCapAllowCreditOnlyOption"
       [autoPay]="true"
       [preAuth]="false"
@@ -636,9 +637,9 @@
 
 <ng-template #disEMVDebitOnlyCardButton>
   <dsi-emvcard-pay-btn
-      *ngIf="(isApp || isStaff) && devicename && !PaxA920 
+      *ngIf="(isApp || isStaff) && devicename && !PaxA920
             && uiTransactions?.dCapAllowCreditOnlyOption
-            && uiTransactions?.dCapDualPayEnableDebit" 
+            && uiTransactions?.dCapDualPayEnableDebit"
       [autoPay]="true"
       [preAuth]="false"
       [order]="order"
@@ -655,7 +656,7 @@
 
 <ng-template #disEMVCardButton>
   <dsi-emvcard-pay-btn
-      *ngIf="(isApp || isStaff) && devicename && !PaxA920 
+      *ngIf="(isApp || isStaff) && devicename && !PaxA920
             && !uiTransactions.dCapAllowCreditOnlyOption"
       [autoPay]="true"
       [preAuth]="false"

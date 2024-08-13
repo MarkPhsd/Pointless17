@@ -1,3 +1,4 @@
+
 import { AfterViewInit,OnChanges, Component, ElementRef,  HostListener,
          Input, OnInit, Output, EventEmitter, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -522,11 +523,26 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   }
 
   initEdit() {
-    if (this.purchaseOrderEnabled && !this.itemEdit) {
+    console.log('initEdit', this.purchaseOrderEnabled, this.itemEdit)
+
+    // this.itemEdit = !this.itemEdit;
+
+    if ((this.purchaseOrderEnabled && !this.itemEdit) || !this.isStaff) {
+      console.log('pre init form')
       this.itemEdit = true;
       try {
         this.inputForm = this.fb.group( this.orderItem )
+        // this.inputForm = this.fb.group({
+        //   quantity:[],
+        //   unitPrice: [],
+        //   wholeSale: [],
+        //   modifierNote: [],
+        //   serialCode: [],
+        // } )
+        
+
         this.inputForm.patchValue(this.orderItem)
+        console.log('inputForm', this.inputForm.value)
         this.inputForm.valueChanges.subscribe(item => {
           this.action$ = this.updateValues(item)
         })
@@ -544,6 +560,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   }
 
   destroyEdit() {
+    if (!this.isStaff) {return}
     if ( this.orderMethodsService.isItemAssigned( this.orderItem.id ) ) { return }
     this.itemEdit = false;
     this.inputForm = null;
@@ -575,6 +592,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
   assignItem() {
     const result = this.orderMethodsService.updateAssignedItems(this.orderItem);
+    console.log('result', result)
     if (result) {
       this.initEdit()
     }

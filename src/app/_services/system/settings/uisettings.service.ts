@@ -82,6 +82,7 @@ export interface TransactionUISettings {
   dcapDisableDualPayOptions : boolean;
   dCapDualPayEnableDebit: boolean;
   dCapAllowCreditOnlyOption: boolean;
+
   diableDescrepencies    : boolean;
   disableCreditFilter    : boolean;
   allowPreAuth           : boolean;
@@ -210,6 +211,7 @@ export interface CmdResponse{
 }
 
 export interface UIHomePageSettings {
+  mobileEnabled: boolean;
   pinPadDefaultOnApp: boolean;
   lockTerminalToBalanceSheet: boolean;
   gloabalSecondLanguage: boolean;
@@ -976,7 +978,6 @@ export class UISettingsService {
       dCapPayAPISurchargeValue     : [],
       dcapPayAPIMultiPrice         : [],
       dcapPayAPIDualPriceValue     : [],
-
      })
   }
 

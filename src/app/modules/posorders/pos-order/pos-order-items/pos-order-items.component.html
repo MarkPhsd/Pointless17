@@ -1,5 +1,7 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(printAction$ | async) as action"></div>
+    <!-- phondevice -->
+
 
 <ng-container [ngTemplateOutlet]="posItemsView"></ng-container>
 
@@ -36,6 +38,7 @@
       </span>
     </div>
 
+
     <div  #scrollMe
         [id]="scrollStyle"
         *ngIf="posOrderItems && posOrderItems.length>0"
@@ -68,9 +71,8 @@
                               let i = index;trackBy: trackByFN"
                       (ionSwipe)="swipeAction(i)"  >
 
-      <div *ngIf="uiConfig">
+      <div *ngIf="uiConfig">  
         <ion-item *ngIf="item" >
-          <!--     [order]       ="order" -->
           <pos-order-item
                       [class]      ="gridScroller"
                       [index]      ="i"
@@ -98,7 +100,7 @@
                       [prepScreen]          ="prepScreen"
                       [enableExitLabel]     = "enableExitLabel"
                       [disableActions]      = "disableActions"
-                      [isStaff]="isStaff"
+                      [isStaff]             ="isStaff"
                       [displayHistoryInfo]  = "displayHistoryInfo"
                       [enableItemReOrder]   = "enableItemReOrder"
                       [purchaseOrderEnabled]= "purchaseOrderEnabled"

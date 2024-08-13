@@ -24,7 +24,6 @@ export class SiteSelectorComponent implements OnInit {
   async ngOnInit() {
     this.bucketName =  await this.awsBucketService.awsBucket();
     this.sites$ = this.siteService.getSites()
-
   }
 
   getImageURL(imageName: string): string {

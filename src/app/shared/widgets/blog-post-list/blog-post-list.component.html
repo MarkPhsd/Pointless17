@@ -15,10 +15,10 @@
   <ng-template #listView>
     <!-- listView Type <br> -->
     <div *ngIf="(blogs$ | async) as blogs">
-      <mat-card class="mat-card">
-        <ul class="list-view" *ngFor="let item of blogs">
+      <mat-card *ngFor="let item of blogs"> 
+       <div>
           <ng-container  *ngTemplateOutlet="listItem,  context: {$implicit: item}" ></ng-container>
-        </ul>
+        </div>
       </mat-card>
     </div>
 

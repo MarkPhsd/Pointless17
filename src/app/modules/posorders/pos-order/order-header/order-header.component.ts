@@ -237,7 +237,6 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
       return;
     }
 
-    console.log('continue?')
     if (this.uiTransactionSettings.prepOrderOnExit) {
       this.printAction$ = this.paymentMethodsService.sendOrderOnExit(order).pipe(switchMap(data => {
         const site = this.siteService.getAssignedSite()

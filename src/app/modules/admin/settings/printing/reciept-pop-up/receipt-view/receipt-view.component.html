@@ -1,3 +1,5 @@
+<div *ngIf="action$ | async"></div>
+
 <div *ngIf="(email$ | async) as email">
   Email: {{email}}
   <button  mat-raised-button (click) ="email$ = null">Clear</button>

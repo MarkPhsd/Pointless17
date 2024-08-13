@@ -8,7 +8,6 @@ import {  Component, ElementRef,AfterViewInit,
 import { AWSBucketService, AuthenticationService, IProductSearchResults, MenuService} from 'src/app/_services';
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { trigger, transition, animate, style, query, stagger } from '@angular/animations';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
@@ -51,7 +50,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
   @Input() disableImages: boolean;
 
-  textLength = 26;
+  textLength       = 26;
   @Input()         panelHeightValue = 300;
   panelHeightStyle= ''
   currentPage      : number;
@@ -317,7 +316,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
       { productSearchModel.categoryID  = id }
     }
     // console.log('init Product Search Model categories',productSearchModel)
-    productSearchModel.pageSize   = 25
+    productSearchModel.pageSize   = 45
     productSearchModel.pageNumber = 1
     this.menuService.updateSearchModel(productSearchModel)
     return productSearchModel;
@@ -399,9 +398,9 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
         this.pagingInfo = data.paging
         if (data) {
-          this.categories    = data.results
+          this.categories   = data.results
           this.loading      = false
-          this.value = 100;
+          this.value        = 100;
         }
       }
     )
@@ -421,10 +420,10 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     const site                   = this.siteService.getAssignedSite()
     const searchModel            = this.initSearchModel();
     this.startRow                = 1;
-    this.endRow                  = 25
+    this.endRow                  = 45
     this.searchModel = searchModel
     this.productSearchResults    = {} as IProductSearchResults
-    this.searchModel.pageSize    = 25
+    this.searchModel.pageSize    = 45
     this.searchModel.pageNumber  = 1
     this.searchModel.currentPage = 1
     this.searchModel.itemTypeID  = this.itemTypeID;
@@ -436,7 +435,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     if (this.itemName.value) {
       searchModel.categoryName  = this.input.nativeElement.value
     }
-    searchModel.pageSize        = 25
+    searchModel.pageSize        = 45
     searchModel.pageNumber      = 1
     return searchModel;
   }

@@ -134,11 +134,8 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
   constructor(
     public orderService           : OrdersService,
-    private orderMethodsService    : OrderMethodsService,
     private settingService        : SettingsService,
     private siteService           : SitesService,
     private platFormService       : PlatformService,

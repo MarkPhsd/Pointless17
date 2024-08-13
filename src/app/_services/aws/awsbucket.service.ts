@@ -183,10 +183,10 @@ export class AWSBucketService {
   getImageURLFromNameArray(bucket: string, nameArray: string): string {
 
     if (!nameArray) {  return 'assets/images/placeholderimage.png' }
-    // this.getImageURLPath(bucket, "placeholderproduct.png") }
-    // assets/images/placeholderimage.png
+
     const imageName =  nameArray.split(",")
     bucket = bucket.replace('https//', '')
+   
     if (imageName) {
       if (imageName[0] == undefined || imageName[0] == '' || imageName[0] == ',' ) {
         return  this.getImageURLPath(bucket, "placeholderproduct.png")

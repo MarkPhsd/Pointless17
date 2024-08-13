@@ -792,7 +792,7 @@ export class MenuService {
    //for customer menu
    getMenuItemsBySearchPaged(site: ISite, productSearchModel: ProductSearchModel, androidApp?: boolean): Observable<IMenuItemsResultsPaged> {
 
-    productSearchModel.pageSize = 15;
+    // productSearchModel.pageSize = 15;
     const controller =  "/MenuItems/"
 
     const endPoint = "GetMenuItemsBySearchPaged"

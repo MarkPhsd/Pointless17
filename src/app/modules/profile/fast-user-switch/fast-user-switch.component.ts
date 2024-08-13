@@ -46,8 +46,8 @@ export class FastUserSwitchComponent implements OnInit {
   sheet: IBalanceSheet;
 
 
-  get smallPOS() { 
-    if (this.smallDevice &&  this.platformService.androidApp) { 
+  get smallPOS() {
+    if (this.smallDevice &&  this.platformService.androidApp) {
       return true
     }
     return false;
@@ -257,6 +257,7 @@ export class FastUserSwitchComponent implements OnInit {
       const site = this.siteService.getAssignedSite()
       const device = localStorage.getItem('devicename')
 
+      console.log('checkBalanceSheet', user)
       if (!user) { return of(null)}
       return  this.balanceSheetService.getCurrentUserBalanceSheet(site, device ).pipe(switchMap(data => {
         // console.log('checkBalanceSheet', data)
@@ -277,7 +278,7 @@ export class FastUserSwitchComponent implements OnInit {
   }
 
   submitLogin(userName: string, password: string, employeeIDAllowed?: number) {
-
+    console.log('submitLogin')
     this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(
       switchMap(data =>
         {
@@ -314,8 +315,10 @@ export class FastUserSwitchComponent implements OnInit {
               this.onCancel();
               return of('failed')
             }
+
             if (this.platformService.isApp()) {
               this.loginApp(user)
+              console.log('check balance sheet - return')
               return this.checkBalanceSheet(user)
             }
 

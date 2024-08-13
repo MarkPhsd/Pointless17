@@ -14,19 +14,21 @@
         </div>
 
         <div      *ngIf="items && itemText && items.length>0">
-          <div    *ngFor="let item of items" style="margin-bottom:12px">
-            <div *ngIf="(item.id == item.idRef || item.idRef == 0 || !item.idRef)">
+          <div    *ngFor="let item of items; let i = index" style="margin-bottom:12px">
+            <div *ngIf="(item.id == item.idRef || item.idRef == 0 || !item.idRef) && (!item.voidReason || (item.voidAmount !=0 && item.voidAmount != undefined))">
 
               <div  [class]="gridReceiptClass"
                     [innerHTML]="getInterpolatedHTML(itemText, item)" >  </div>
             </div>
-            <div style="margin-left:15px" *ngIf="(item.idRef && item.id != item.idRef && item.idRef != 0)">
-
+            <div [class]="isLastIndented(i)" style="margin-left:15px" *ngIf="(item.idRef && item.id != item.idRef && item.idRef != 0)">
               <div  [class]="gridReceiptClass"
                     [innerHTML]="getInterpolatedHTML(itemText, item)" >  </div>
             </div>
+       
           </div>
         </div>
+
+        
 
         <div *ngIf="footerText && orders && orders.length>0">
           <div *ngFor="let order of orders">
@@ -59,7 +61,7 @@
           </div>
         </div>
 
-        <div      *ngIf="interpolatedItemTexts && interpolatedItemTexts.length>0"  class="section-item">
+        <!-- <div      *ngIf="interpolatedItemTexts && interpolatedItemTexts.length>0"  class="section-item">
           <div    *ngFor="let item of itemsText; let i = index">
             <div    style="margin-bottom:5px"  *ngIf="(item.id == item.idRef || item.idRef == 0 || !item.idRef)">
               <div  [class]="gridReceiptClass"
@@ -70,11 +72,23 @@
                     [innerHTML]="interpolatedItemTexts[i]" >  </div>
             </div>
           </div>
+        </div> -->
+    
+        <div *ngIf="interpolatedItemTexts && interpolatedItemTexts.length > 0" class="section-item">
+          <div *ngFor="let item of itemsText; let i = index">
+            <div style="margin-bottom:5px" *ngIf="(item.id == item.idRef || item.idRef == 0 || !item.idRef)">
+              <div [class]="gridReceiptClass" [innerHTML]="interpolatedItemTexts[i]"> </div>
+            </div>
+            <div [class]="isLastIndented(i)" style="margin-left:15px" *ngIf="(item.idRef && item.id != item.idRef && item.idRef != 0)">
+              <div [class]="gridReceiptClass" [innerHTML]="interpolatedItemTexts[i]"> </div>
+            </div>
+            <div *ngIf="isLastIndented(i) === 'section-bottom'">
+              <!-- {{isLastIndented(i)}} -->
+              ----------------------------
+              <mat-divider></mat-divider>
+            </div>
+          </div>
         </div>
-        <!-- this.interpolatedItemTexts.forEach((data, i) => {
-          itemTexts.push({item: data, id: this.items[i].id, idRef: this.items[i].idRef})
-        })
-        this.itemsText = itemTexts; -->
 
         <div   *ngIf="interpolatedFooterTexts && interpolatedFooterTexts.length>0"   class="section-item">
           <div *ngFor="let order of interpolatedFooterTexts; let i = index">

@@ -8,6 +8,7 @@ import { ElectronService } from 'ngx-electron';
 import { SitesService } from '../reporting/sites.service';
 import { PlatformService } from '../system/platform.service';
 import { ItemBasic } from 'src/app/modules/admin/report-designer/interfaces/reports';
+import { AuthenticationService } from '../system/authentication.service';
 
 
 export interface  IBalanceEmployeeSummary {
@@ -216,7 +217,7 @@ export class BalanceSheetService {
 
 
   constructor(
-
+    private authenticationService: AuthenticationService,
     private platFormService: PlatformService,
     private siteService: SitesService,
     private http: HttpClient,
@@ -346,6 +347,13 @@ export class BalanceSheetService {
   }
 
   getCurrentUserBalanceSheet(site: ISite, deviceName: string)  : Observable<IBalanceSheet> {
+
+    const user = this.authenticationService._user.value;
+    if (!user) { 
+      return of(null)
+    }
+
+    if (!deviceName) { return of(null)}
 
     if (deviceName === '' || !deviceName ) { deviceName = 'nothing'}
 

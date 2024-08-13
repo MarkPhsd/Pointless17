@@ -7,6 +7,7 @@ import { InterceptorSkipHeader } from 'src/app/_http-interceptors/basic-auth.int
 import { AppInitService, IAppConfig } from '../system/app-init.service';
 import { PlatformService } from '../system/platform.service';
 import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition } from '@angular/material/legacy-snack-bar';
+import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +67,7 @@ export class SitesService {
                private appInitService  : AppInitService,
                private platformSevice  : PlatformService,
                private httpClient      : HttpClient,
+               private httpCache: HttpClientCacheService,
                private snackBar        : MatSnackBar,
 
     ) {
@@ -92,11 +94,41 @@ export class SitesService {
   }
 
   get debugMode() {
-    // if (this.platformSevice.i)
     let appCache =  JSON.parse(localStorage.getItem('appCache')) as unknown as ISetting;
     if (appCache.webEnabled) {
       return true
     }
+  }
+
+  getSitesCache() :  Observable<ISite[]> {
+    this.apiUrl   = this.appInitService.apiBaseUrl()
+    const endPoint = `/CCSSites/getsites`
+    if (!this.apiUrl) {   this.apiUrl = this.getAssignedSite().url   }
+    const url = `${this.apiUrl}${endPoint}`
+    return  this.getSitesList(url)
+  }
+
+  getHeaderSite() :  Observable<ISite> {
+    const endPoint = `/CCSSites/getsites`
+    if (!this.apiUrl) {   this.apiUrl = this.getAssignedSite().url   }
+    const url = `${this.apiUrl}${endPoint}`
+
+    const sites$ = this.getSitesListCache(url)
+
+    return  sites$.pipe(switchMap(data => {
+
+      const assSite = this.getAssignedSite()
+      const sites  = data.filter(item => { 
+        if (assSite.url) { 
+          return item.url == assSite.url;
+        }
+        return item == this.apiUrl;
+      })
+
+      const site = sites[0] // = {} as ISite;
+      // console.log(site)
+      return of(site)
+    }))
   }
 
   getSites() :  Observable<ISite[]> {
@@ -114,69 +146,56 @@ export class SitesService {
     }))
   }
 
+  getSitesListCache(url : string):  Observable<ISite[]> {
+     this.apiUrl   = this.appInitService.apiBaseUrl()
+    const endPoint = `/CCSSites/getsites`
+    const options = { url: url, cacheMins: 45}
+    return this.httpCache.get<ISite[]>(options);
+  }
+  
+
   getSite(id: number):  Observable<ISite> {
-
+    if (!id) { return of(this.getAssignedSite())}
     const endPoint = `/CCSSites/`
-
     const params = `getSite?id=${id}`
-
     if (!this.apiUrl) {
       this.apiUrl = this.getAssignedSite().url
     }
     const url = `${this.apiUrl}${endPoint}${params}`
-
     return this.http.get<ISite>(url)
-
   }
 
   updateSite(id: number, site: ISite):  Observable<ISite> {
 
     if ( site.id === undefined  ) {  site.id= 0 }
-
     const endPoint = `/CCSSites/`
-
     const params = `putSite?id=${id}`
-
-
     if (!this.apiUrl) {
       this.apiUrl = this.getAssignedSite().url
     }
-
     const url = `${this.apiUrl}${endPoint}${params}`
-
     return this.http.put<ISite>(url, site)
-
   }
 
   addSite(site: ISite): Observable<ISite> {
-
     const endPoint = `/CCSSites/`
-
     const params = `postSite`
-
     if (!this.apiUrl) {
       this.apiUrl = this.getAssignedSite().url
     }
-
     const url = `${this.apiUrl}${endPoint}${params}`
-
     return this.http.post<ISite>(url, site)
 
   }
 
   deleteSite(id: number): Observable<any> {
-
     const endPoint = `/CCSSites/`
-
     const params = `deleteSite?id=${id}`
-
-   if (!this.apiUrl) {
+    if (!this.apiUrl) {
       this.apiUrl = this.getAssignedSite()
     }
-
     const url = `${this.apiUrl}${endPoint}${params}`
     return  this.http.delete<any>(url)
-
   }
 
   getSatelliteHeaders() {
@@ -186,6 +205,7 @@ export class SitesService {
     this.authentication.updateUserX(user);
     return new HttpHeaders().set(InterceptorSkipHeader, '');
   }
+
   private updateLocalStorageWithSites(newSites: ISite[]): void {
     const savedSites: ISite[] = JSON.parse(localStorage.getItem('SiteList') || '[]');
 
@@ -212,10 +232,7 @@ export class SitesService {
     localStorage.setItem('SiteList', JSON.stringify(updatedSites));
   }
 
-
-
    getAssignedSite(): ISite {
-
     try {
       let site = {} as ISite
       const url = localStorage.getItem("site.url")
@@ -245,7 +262,6 @@ export class SitesService {
     }
 
     return null;
-
   }
 
   setDefaultSite(): Observable<ISite> {
@@ -260,7 +276,8 @@ export class SitesService {
           site.url    = data?.apiUrl
           localStorage.setItem("site.url"    ,  site.url)
           localStorage.setItem("storedApiUrl",  site.url)
-          localStorage.setItem("site.name",  site.name)
+          localStorage.setItem("site.name",     site.name)
+
           return of(site);
         }))
     }
@@ -271,7 +288,6 @@ export class SitesService {
       localStorage.setItem("site.url", site.url)
       return of(site)
      }
-
   }
 
   setAssignedSite(site: ISite){

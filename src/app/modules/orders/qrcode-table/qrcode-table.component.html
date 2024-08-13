@@ -1,9 +1,13 @@
-<div *ngIf="(order$ | async) as order; else loadingOrder"></div>
+<!-- <div *ngIf="(order$ | async) as order; else loadingOrder"></div> -->
+<!-- Site:
+{{siteService.getAssignedSite() | json}} -->
+<div  *ngIf="(order$ | async) as order; else loadingOrder"></div>
 <div *ngIf="(action$ | async) as order"></div>
 
-<div class="centered-flex"  
+<div class="centered-flex"
      *ngIf="(uiHomePageSetting$ | async) as uiHomePageSetting">
- 
+
+
   <mat-card class="container">
     <div class="grid-about">
       <div>
@@ -44,12 +48,11 @@
       <button mat-raised-button (click)="cancelMessage()"><mat-icon>cancel</mat-icon>Cancel</button>
     </div>
 
-    <div class="navigating order-message"
-          *ngIf="(order$ | async) as order; else loadingOrder">
- 
+    <div class="navigating order-message" >
+
         <mat-card>
           <mat-card-subtitle  *ngIf="order">
-         
+
             <div class="transaction-data-side-panel-smal" >
               <div *ngIf="order?.tableName" class="">Table   </div>
               <div *ngIf="order?.tableName" class=""> {{ order?.tableName }}</div>
@@ -105,7 +108,7 @@
                 [posOrderItems]   ='order.posOrderItems'
                 [order]          ="order">
           </pos-order-items>
-        
+
         </mat-card>
     </div>
   </mat-card>

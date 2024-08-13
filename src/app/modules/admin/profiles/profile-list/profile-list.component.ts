@@ -509,7 +509,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   editProductFromGrid(e) {
-    console.log(e.rowData.id);
+    // console.log(e.rowData.id);
     if (e.rowData.id)  {
       if (this.buttonName === 'Check In') {
         this.postNewCheckIn(e.rowData.id);
@@ -647,7 +647,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   displayFn(search) {
-    console.log(search)
+    // console.log(search)
     this.selectItem(search)
     this.item = search
     this.search = search

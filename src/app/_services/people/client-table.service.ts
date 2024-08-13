@@ -54,6 +54,9 @@ export class ClientTableService {
     if (overRideError) {
        headers = new HttpHeaders().set('X-Skip-Error-Handling', 'true');
     }
+
+    if (!id) { return of(null) }
+
     if (id == 0) {return of({} as IClientTable)}
 
     const controller =  "/ClientTable/"

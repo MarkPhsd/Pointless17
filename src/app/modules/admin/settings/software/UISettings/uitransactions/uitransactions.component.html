@@ -304,15 +304,15 @@
                 Grace Value
               </app-value-fields>
             </div>
-
-            <div>
-              <app-value-fields
-                  [inputForm]="inputForm"
-                  [fieldName]="'enableOnScreenKeyboard'">
-                Toolbar Keyboard
-              </app-value-fields>
+       
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="enableOnScreenKeyboard"
+                        >
+                <mat-label>Enable Keyboard</mat-label>
+              </mat-slide-toggle>
             </div>
-
+            
             <div>
               <mat-icon class="mat-label-info"
                     color="accent"
@@ -578,7 +578,7 @@
                       <mat-label>DCAP Surcharge</mat-label>
                     </mat-slide-toggle>
                   </div>
-                  
+
                   <div class="toggle-fields">
                     <mat-slide-toggle
                               formControlName="dcapDisableOkayAmount" >
@@ -624,7 +624,7 @@
                         <mat-label>Hide Cash Cash / EBT Options on PAX</mat-label>
                       </mat-slide-toggle>
                     </div>
-                    
+
                   </mat-card>
 
                   <div class="toggle-fields" style="width:225px">
@@ -649,7 +649,7 @@
                       </div>
 
                       <div style="width:225px">
-                        <mat-label>Enter Values with commas, E.g. 10,15,20.</mat-label>
+                        <mat-label>Enter 4 Values with commas, E.g. 10,15,20,25.</mat-label>
                         <app-value-fields
                             [inputForm]="inputForm"
                             [fieldName]="'dsiTipPromptValues'">
@@ -724,10 +724,10 @@
                         [fieldName]="'dCapPayAPISurchargeValue'">
                       Surcharge Value
                   </app-value-fields>
-                  <mat-label>Enter value .035 is 3.5%</mat-label>
+                  <mat-label>Enter value .03 is 3%</mat-label>
                 </div>
 
-                <div class="toggle-fields">
+                <!-- <div class="toggle-fields">
                   <mat-slide-toggle
                             formControlName="dcapPayAPIMultiPrice">
                     <mat-label>Dual Price</mat-label>
@@ -742,7 +742,7 @@
                     Dual Price Value
                   </app-value-fields>
                   <mat-label>Enter value .035 is 3.5%</mat-label>
-                </div>
+                </div> -->
 
               </div>
 
@@ -1000,6 +1000,14 @@
                 [inputForm]="inputForm"
                 [fieldName]="'employeeClockNotifier'">
               Employee Break Notifier
+            </app-value-fields>
+          </div>
+          <div  style="width:150px">
+            <mat-label>Employee Break Notifier</mat-label>
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'timeOTPerDay'">
+              Time OT Per Day
             </app-value-fields>
           </div>
         </div>

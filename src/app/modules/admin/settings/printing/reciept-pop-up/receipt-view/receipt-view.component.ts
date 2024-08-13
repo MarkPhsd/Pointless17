@@ -66,7 +66,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   payments          : any[];
   orderTypes        : any;
   platForm          = '';
-
+  action$ : Observable<any>;
   printOptions      : printOptions;
   result            : any;
   isElectronServiceInitiated = false;
@@ -441,16 +441,26 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     return file
   }
 
+  sendOrder() {
+    const trans$ = this.settingService.getUITransactionSetting()
+    const prep$ =   trans$.pipe(switchMap(data => {
+      return this.paymentsMethodsProcessService.sendToPrep(this.order, true, data  )
+    }))
+    this.action$ = prep$
+  }
+
+
   async print() {
     if (this.platFormService.isAppElectron) {
       await this.printElectron();
-      this.printPrep();
+      // this.printPrep();
+      this.sendOrder()
       return
     }
 
     if (!this.printerName) {
       this.convertToPDF()
-      this.printPrep();
+      // this.printPrep();
       return
     }
 

@@ -24,14 +24,13 @@ const { Keyboard } = Plugins;
   styleUrls: ['./list-product-search-input.component.scss']
 })
 export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
+
   scans = [] as unknown[];
   obs$ : Observable<unknown>[];
   barcodeScanner$ : Observable<unknown>;
   _scanners = new ReplaySubject <unknown>()
   posDevice       : ITerminalSettings
   _posDevice      : Subscription;
-  private observablesArraySubject = new BehaviorSubject<Observable<any>[]>([]);
-  public observablesArray$ = this.observablesArraySubject.asObservable();
 
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -52,22 +51,8 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   transactionUISettings : TransactionUISettings;
   requireEnter          : boolean;
 
-  addObservable(newObservable: Observable<any>): void {
-    const currentObservables = this.observablesArraySubject.getValue();
-    newObservable = newObservable.pipe(
-      take(1),
-      finalize(() => this.removeObservable(newObservable))
-    );
-    this.observablesArraySubject.next([...currentObservables, newObservable]);
-  }
 
-  removeObservable(observableToRemove: Observable<any>): void {
-    const currentObservables = this.observablesArraySubject.getValue();
-    const updatedObservables = currentObservables.filter(
-      observable => observable !== observableToRemove
-    );
-    this.observablesArraySubject.next(updatedObservables);
-  }
+
 
   initSubscriptions() {
     this.orderMethodsService.scanner$.subscribe(data =>  {
@@ -115,8 +100,8 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     private settingService        : SettingsService,
     private siteService           : SitesService,
     private uiSettingService      : UISettingsService,
-    public orderMethodsService: OrderMethodsService,
-    private serviceTypeService: ServiceTypeService,
+    public  orderMethodsService   : OrderMethodsService,
+    private serviceTypeService    : ServiceTypeService,
   )
   {   }
 
@@ -128,9 +113,9 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     }
   }
 
-  getUISettings() { 
+  getUISettings() {
     try {
-      if (this.transactionUISettings) { 
+      if (this.transactionUISettings) {
         this.initUISettings(this.transactionUISettings)
       }
       const site = this.siteService.getAssignedSite()
@@ -146,7 +131,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     }
   }
 
-  initUISettings(ui: TransactionUISettings) { 
+  initUISettings(ui: TransactionUISettings) {
     this.requireEnter = ui?.requireEnterTabBarcodeLookup;
     if (!this.requireEnter) {   this.initSearchSubscription() }
     this.hideKeyboardTimeOut();
@@ -228,7 +213,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
   scan(barcode: string){
-    this.addObservable(this.addItemToOrder(barcode))
+    this.orderMethodService.addObservable(this.addItemToOrder(barcode))
   }
 
   addItemToOrder(barcode: string): Observable<unknown> {

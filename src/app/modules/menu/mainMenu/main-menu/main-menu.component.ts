@@ -154,15 +154,28 @@ export class MainMenuComponent implements OnInit  {
         // Set panel height based on current settings
         this.setPanelHeight(this.homePageSetings);
         // Continue the chain with the posDevice$ observable
+        const devicename = localStorage.getItem('devicename')
+        if (!devicename) { return of(null)  }
+        const user = localStorage.getItem('user')
+        if (!user) { return of(null) }
         return this.uiSettings.posDevice$;
       }),
       switchMap(deviceData => {
         // Update disableImages based on device data if available
         // console.log('initHomePageSettings', deviceData?.name, deviceData?.disableImages)
+        const user = localStorage.getItem('user')
+        const devicename = localStorage.getItem('devicename')
+        
+        // console.log('userdevice', user, devicename)
+        if (!user || !devicename) { 
+          return  of(this.homePageSetings)
+        }
+
         if (deviceData) {
           this.disableImages = deviceData?.disableImages;
         } else {
           const item = localStorage.getItem('devicename')
+          if (!item) {  return of(this.homePageSetings); }
           if (item) {
             return this.uiSettings.getPOSDevice(item).pipe(switchMap(data => {
               if (data) {
@@ -172,6 +185,7 @@ export class MainMenuComponent implements OnInit  {
             }))
           }
         }
+
         // Wrap homePageSetings in an observable to continue the observable chain
         return of(this.homePageSetings);
     }))

@@ -1008,8 +1008,8 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
             // if (this.menuItems[this.menuItems.length -1 ].name.toLowerCase() === 'load more') {
             //   this.menuItems.splice(this.menuItems.length -1 , 1)
             // };
-     
-          
+
+
         } catch (error) {
         }
 
@@ -1038,12 +1038,10 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
 
         this.menuItems = this.removeDuplicates( this.menuItems )
         this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
-
+        this.menuItems = this.menuItems.filter(item => item.id !== -1)
         if ( this.value < 100) {
-          this.menuItems.filter(data => { 
-            return data.id != -1
-          })
-          const lastItem = this.getNextMenuItem();
+
+        const lastItem = this.getNextMenuItem();
           this.menuItems.push(lastItem)
         }
 

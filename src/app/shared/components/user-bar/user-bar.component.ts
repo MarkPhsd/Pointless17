@@ -5,9 +5,9 @@ import { AuthenticationService } from 'src/app/_services';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MenusService } from 'src/app/_services/system/menus.service';
-import { AccordionMenu, IClientTable, IUser, MenuGroup, SubMenu } from 'src/app/_interfaces';
+import { AccordionMenu, IClientTable, ISite, IUser, MenuGroup, SubMenu } from 'src/app/_interfaces';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
-
+import { AWSBucketService } from 'src/app/_services';
 @Component({
   selector: 'user-bar',
   templateUrl: './user-bar.component.html',
@@ -21,17 +21,28 @@ export class UserBarComponent implements OnInit {
   accordionMenus: AccordionMenu[];
   mailCount  = 0;
   client: IClientTable;
-  smallDevice
+  smallDevice;
+  bucketName: string;
+
+  site: ISite;
+
   constructor(
     private navigationService   : NavigationService,
     private siteService         : SitesService,
     private menusService: MenusService,
     private clientService: ClientTableService,
     private userSwitchingService: UserSwitchingService,
+    private awsBucketService: AWSBucketService,
     private authenticationService: AuthenticationService) { }
 
-  ngOnInit(): void {
-    const site = this.siteService.getAssignedSite()
+  async ngOnInit() {
+    this.bucketName =  await this.awsBucketService.awsBucket();
+    const siteAss = this.siteService.getAssignedSite()
+    this.site = siteAss;
+    this.siteService.getSite(siteAss.id).subscribe(data => { 
+      this.site = data;
+    })
+   
     this.user$ = this.authenticationService.user$.pipe(
       switchMap(data => {
           // console.log('userbar update user', data)
@@ -39,7 +50,7 @@ export class UserBarComponent implements OnInit {
           if (!data) {
             return of (null)
           }
-          return this.clientService.getClient(site, this.user?.id)
+          return this.clientService.getClient(this.site, this.user?.id)
       })).pipe(switchMap(data => {
           this.client = data;
           return of(data)

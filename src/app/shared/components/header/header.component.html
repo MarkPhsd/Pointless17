@@ -5,6 +5,7 @@
 <span *ngIf="(uiHomePageSetting$ | async) as item"></span>
 <span *ngIf="(userSave$  | async) as pref"></span>
 <span *ngIf="(action$ | async) as action"></span>
+
 <mat-toolbar [class]="mattoolbar"
              [color]="matToolbarColor"
              [style]="headerBackColor">
@@ -54,9 +55,18 @@
 </ng-template>
 
 <ng-template #logoView>
-  <div  class="logo" *ngIf="!isApp" >
-    <app-logo [logoSize]="'small'" ></app-logo>
+  <div  class="logo" *ngIf="!isApp " >
+    <div *ngIf="homePageSetings && homePageSetings.logoHomePage"
+        class="logo">
+      <app-logo
+          [uiHomePageSetting] ="homePageSetings"
+          [logoSize]          ="'small'"
+          [logo]              ="homePageSetings.logoHomePage"
+          [border]            ="'thin'"
+      ></app-logo>
+    </div>
   </div>
+
 </ng-template>
 
 <ng-template #menuBarView>
@@ -157,12 +167,16 @@
 </ng-template>
 
 <ng-template #currentSite>
-  <div *ngIf="!smallDevice && !phoneDevice" >
-    <div class="site-name" *ngIf="site && site.name && site.name != undefined">
-      <div *ngIf="site?.name.toLowerCase() != 'local'">
-        <h2 > {{ site?.name.toUpperCase() | truncateText : 8 }} </h2>
+  <div *ngIf="!platformService.androidApp" >
+    <div class="site-name" *ngIf="(site$ | async) as site">
+      <!-- <div *ngIf="site?.name.toLowerCase() != 'local'"> -->
+        <h2 style='font-size:12px; line-height:1.6em'>
+          <span *ngIf="!isUserStaff">{{site?.phone}} </span>
+          <br *ngIf="!isUserStaff">
+          {{ site?.name.toUpperCase() | truncateText : 12 }}
+        </h2>
       </div>
-    </div>
+   
   </div>
 </ng-template>
 
@@ -176,7 +190,8 @@
 </ng-template>
 
 <ng-template #splitSelector>
-  <split-entry-selector
+
+<split-entry-selector
       *ngIf="platformService.isApp() && phoneDevice"
       [order]="order"
       [isUserStaff]="isUserStaff"

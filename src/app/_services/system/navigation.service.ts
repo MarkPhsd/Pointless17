@@ -59,9 +59,11 @@ export class NavigationService {
 
   makePaymentFromSidePanel(openOrderBar: boolean, smallDevice: boolean, isStaff: boolean, order: IPOSOrder) {
     // this.openOrderBar = false
-    this.toolbarUIService.updateOrderBar(false);
-    this.toolbarUIService.updateSideBar(false)
-    this.toolbarUIService.updateToolBarSideBar(false)
+    if (!smallDevice) { 
+      this.toolbarUIService.updateOrderBar(false);
+      this.toolbarUIService.updateSideBar(false)
+      this.toolbarUIService.updateToolBarSideBar(false)
+    }
     let path = ''
     if (order) {
       if (order.tableName && order.tableName.length>0) {
@@ -69,12 +71,14 @@ export class NavigationService {
       }
     }
     this.makePayment(openOrderBar, smallDevice,
-                                      isStaff, order.completionDate, path )
+                                   isStaff, order.completionDate, path )
   }
 
 
   makePayment(openOrderBar: boolean , smallDevive: boolean,
               isStaff: boolean, completionDate: string, path: string) {
+
+                
     this.toolbarUIService.updateOrderBar(openOrderBar)
     this.toolbarUIService.resetOrderBar(false)
     this.toolbarUIService.updateSearchBarSideBar(false)

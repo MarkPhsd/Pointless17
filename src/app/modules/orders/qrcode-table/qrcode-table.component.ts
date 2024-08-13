@@ -35,10 +35,11 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   message$          : Observable<IRequestResponse>;
   sendingMessage    : boolean;
   processing: boolean;
+
   constructor(
       private uiSettingsService: UISettingsService,
       private settingsService: SettingsService,
-      private siteService    : SitesService,
+      public siteService    : SitesService,
       private route          : ActivatedRoute,
       private orderService   : OrdersService,
       private orderMethodsService: OrderMethodsService,
@@ -51,12 +52,12 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getUser();
     this.uiHomePageSetting$ = this.settingsService.getUIHomePageSettings();
-  
-    this.order$ = this.getOrder().pipe(switchMap(data => { 
+
+    this.order$ = this.getOrder().pipe(switchMap(data => {
       // this.order = data;
       return of(data)
     }))
-  
+
   }
 
   ngOnDestroy() {
@@ -134,14 +135,15 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
     }
 
   }
+
   getOrder(): Observable<IPOSOrder> {
-    try { 
+    try {
       this.processing = true;
       const id = this.route.snapshot.paramMap.get('id');
       const orderCode = this.route.snapshot.paramMap.get('orderCode');
       const site = this.siteService.getAssignedSite();
 
-      if (!id && !orderCode) { 
+      if (!id && !orderCode) {
         this.processing = false;
         return of(null)}
 
@@ -150,9 +152,11 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
       const user = this.getUser()
       let order$ : Observable<IPOSOrder>
 
-      // console.log('user', user)
 
-      if (user && user?.username  &&  user?.username != "Temp" && user.password) { 
+      console.log('site?.url', site?.url)
+
+      //orderCode
+      if (user && user?.username ) {
         if (orderCode) {
           order$ =this.orderService.getQROrder(site, orderCode);
         }
@@ -160,7 +164,7 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
           order$ = this.orderService.getQRCodeOrder(site, id);
         }
       }
-      if (!user) { 
+      if (!user) {
         if (orderCode) {
           order$ =this.orderService.getQROrder(site, orderCode);
         }
@@ -168,20 +172,22 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
           order$ = this.orderService.getQRCodeOrder(site, id)
         }
       }
-   
-      if (!order$) { 
+
+      console.log(user, user?.username )
+      if (!order$) {
         console.log('order null')
         this.processing = false;
         return of(null)
       }
-      return order$.pipe(switchMap(data => { 
+      return order$.pipe(switchMap(data => {
         this.processing = false;
+        this.order = data;
         console.log('data from order',data)
         return of(data)
       }));
-      
+
       // return this.navigateToOrder();
-    } catch { 
+    } catch {
       this.processing = false;
       return of(null)
     }
@@ -215,7 +221,12 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   }
 
   getUser() {
-    let user = this.userAuth.currentUser();
+    let user = this.authenticationService._user.value
+    console.log('auth user', user)
+    if (user) {
+      return user
+    }
+    user = this.userAuth.currentUser();
     if (!user) {
       user = {} as IUser;
       user.username = 'Temp'

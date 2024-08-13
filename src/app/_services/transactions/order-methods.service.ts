@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { BehaviorSubject, catchError,concatMap,Observable, of, Subscription, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError,concatMap,finalize,Observable, of, Subscription, switchMap, take } from 'rxjs';
 import { IClientTable,  IPOSOrder, IPOSOrderSearchModel, IPOSPayment, IPurchaseOrderItem, IReconcilePayload, IServiceType, IUser, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
@@ -68,6 +68,7 @@ export class DateValidators {
 })
 export class OrderMethodsService implements OnDestroy {
 
+
   emailSubjects = [
     {name: 'Please Complete', subject: 'Please review this order for prep. I would like it completed. I agree to pay when it the order is completed.', id: 1},
     {name: 'Please Review for Prep', subject: 'Please review this order for prep. I would like it confirmed and then please contact me.', id: 2},
@@ -105,6 +106,9 @@ export class OrderMethodsService implements OnDestroy {
   private _posIssueItem   = new BehaviorSubject<PosOrderItem>(null);
   public  posIssueItem$   = this._posIssueItem.asObservable();
   public splitEntryValue  = 0;
+
+  private observablesArraySubject = new BehaviorSubject<Observable<any>[]>([]);
+  public observablesArray$ = this.observablesArraySubject.asObservable();
 
   overrideClear: boolean;
   orderSearchEmployeeID: number;
@@ -169,6 +173,29 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   get IsOrderClaimed() { return this.orderClaimed};
+
+  clearObservable() {
+    // throw new Error('Method not implemented.');
+    this.observablesArraySubject.next([]);
+  }
+
+  addObservable(newObservable: Observable<any>): void {
+    const currentObservables = this.observablesArraySubject.getValue();
+    newObservable = newObservable.pipe(
+      take(1),
+      finalize(() => this.removeObservable(newObservable))
+    );
+    this.observablesArraySubject.next([...currentObservables, newObservable]);
+  }
+
+  removeObservable(observableToRemove: Observable<any>): void {
+    const currentObservables = this.observablesArraySubject.getValue();
+    const updatedObservables = currentObservables.filter(
+      observable => observable !== observableToRemove
+    );
+    this.observablesArraySubject.next(updatedObservables);
+  }
+
 
   updateTemplateOrder(order: IPOSOrder) {
     order = this.getCost(order)
@@ -609,7 +636,7 @@ export class OrderMethodsService implements OnDestroy {
       this.updateOrderSubscription(order)
     }
     this.initSubscriptions();
-  
+
   }
 
   ngOnDestroy(): void {
@@ -1425,6 +1452,14 @@ export class OrderMethodsService implements OnDestroy {
     return false;
   }
 
+  promptLogin(message) { 
+    if (message == 'No user type') {
+      this.validateUser()
+      return true
+    }
+    return false
+  }
+
   processItemPostResultsPipe(data) {
 
       if (!this.overrideClear) {  this.assignPOSItems = [];  }
@@ -1434,6 +1469,10 @@ export class OrderMethodsService implements OnDestroy {
 
       if (data && data.resultErrorDescription && data.resultErrorDescription != null) {
         if (data && data.order) {   this.updateOrderSubscription(data.order);  }
+
+        const result = this.promptLogin(data?.resultErrorDescription)
+        if (result) { return } 
+
         this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
         return;
       }
@@ -1747,20 +1786,20 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   navToDefaultCategory(): Observable<IMenuItem> {
-    const deviceName = localStorage.getItem('devicename') 
+    const deviceName = localStorage.getItem('devicename')
     const site = this.siteService.getAssignedSite()
     const device$ =   this.uiSettingService.posDevice$
     let categoryID = 0
 
-    return device$.pipe(switchMap(data => { 
-      if (data) { 
-        if (data?.defaultMenuCategoryID) { 
+    return device$.pipe(switchMap(data => {
+      if (data) {
+        if (data?.defaultMenuCategoryID) {
           categoryID = data?.defaultMenuCategoryID;
         }
       }
       return this.uiSettingService.transactionUISettings$
     })).pipe(switchMap(data =>  {
-      // if (categoryID != 0) { 
+      // if (categoryID != 0) {
       //   this.router.navigate(["/menuitems-infinite/", {categoryID:categoryID}]);
       //   return this.menuService.getMenuItemByID(site, categoryID)
       // }

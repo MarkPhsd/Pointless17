@@ -1,11 +1,9 @@
 <span *ngIf="(buyItem$ | async) as item"></span>
 <span *ngIf="(action$  | async) as action"></span>
 
-<!-- <ng-container  *ngIf="optimalView"></ng-container> -->
-
 <ng-container >
-   <mat-card [style]="buttonColor"
-             [class]="matCardClass" >
+  <mat-card  [style]="buttonColor"
+             [class]="matCardGridClass" >
       <ng-container [ngTemplateOutlet]="menuItemContents">
       </ng-container>
    </mat-card>
@@ -37,10 +35,7 @@
       </ng-container>
 
       <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
-
-      <!-- <ng-container *ngIf="buttonViewBol"> -->
-        <ng-container [ngTemplateOutlet]="buttonView"></ng-container>
-      <!-- </ng-container> -->
+      <ng-container [ngTemplateOutlet]="buttonView"></ng-container>
 
       <ng-container *ngIf="menuNameViewBol">
         <ng-container [ngTemplateOutlet]="menuNameView"></ng-container>
@@ -52,7 +47,18 @@
     <ng-container [ngTemplateOutlet]="typeDisplayView"></ng-container>
   </div>
 
+  <div class="footer-category"  *ngIf="displayType === 'header-category' && menuItem?.urlImageMain">
+    <!-- {{menuItem?.name}} -->
+    <!-- {{!menuItem?.urlImageMain}} -->
+    <!-- <button mat-button (click)="altMethod(true)"
+            [@.disabled]="androidApp"
+            class="header-category-title">
+       {{menuItem?.name}}
+    </button> -->
+  </div>
+
   <div class="footer"  *ngIf="displayType != 'header-category'">
+
     <button mat-button (click)="altMethod(true)"   [@.disabled]="androidApp"
             *ngIf="isCategory && displayType === 'header-category'"
             class="header-category-title">
@@ -60,13 +66,12 @@
     </button>
 
     <ng-container #reviews *ngIf="menuItem"></ng-container>
-
     <ng-container *ngIf="priceViewBol">
       <ng-container [ngTemplateOutlet]="priceView"></ng-container>
     </ng-container>
-
     <ng-container [ngTemplateOutlet]="seeMoreInCategoryView"></ng-container>
   </div>
+
 </ng-template>
 
 <ng-template #menuNameTemplate>
@@ -80,8 +85,8 @@
 </ng-template>
 
 <ng-template #menuItemName>
-  <div class="item-name-center" >
-    {{ menuItem?.name  | truncateText: 30   }}
+  <div [class]="itemNameCenterClass" >
+    {{ menuItem?.name  | truncateText: 35   }}
     <div *ngIf="menuItem?.prodSecondLanguage">
       {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
     </div>
@@ -126,7 +131,6 @@
         mat-mini-fab
         color="accent"
         (click)="viewItem()" >
-
       <mat-icon *ngIf="isStaff" color="primary">open_in_new</mat-icon>
       <mat-icon *ngIf="!isStaff" color="primary">info</mat-icon>
     </button>
@@ -135,13 +139,10 @@
 
 <ng-template #menuButton>
   <div *ngIf="menuItem?.name != 'Load More' && ((isApp && !imageUrl) || !imageUrl) && menuItem?.icon"
-        class="product-name-only" >
-        <!--  [@.disabled]="androidApp" -->
-        icon button
+        class="product-name-only"  >
       <button
-
               mat-button
-              class="image-button"
+              [class]="imageButtonClass"
               (click)="altMethod(true)">
         <ng-container [ngTemplateOutlet]="imageButtonInfo" ></ng-container>
       </button>
@@ -157,11 +158,11 @@
         class="product-name-only"
         style="padding-top:5px" >
       <button mat-raised-button
-              class="image-button"
+              [class]="imageButtonClass"
               color="warn"
               fxFill
               (click)="altMethod(true)">
-        {{ menuItem.name  | truncateText: 30  }}
+        {{ menuItem?.name  | truncateText: 30  }}
         <div *ngIf="menuItem?.prodSecondLanguage">
           {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
         </div>
@@ -191,26 +192,21 @@
 <ng-template #productImage>
   <img  *ngIf     ="imageUrl && bucketName &&  !isCategory && !disableImages"
         src     = {{imageUrl}}
-        class     ="product-image"/>
+        [class]     ="productImageClass"/>
 </ng-template>
-<!--  onerror   = "this.src='assets/images/placeholderimage.png'"
- -->
+
 <ng-template #categoryImage>
 
   <div class="round-container" *ngIf="imageUrl && bucketName && isCategory && !disableImages">
     <img
-      src     = {{imageUrl}}
-      class     ="product-image" />
+      src      = {{imageUrl}}
+      [class]  ="productImageClass" />
   </div>
 </ng-template>
-<!--     onerror   = "this.src='assets/images/placeholderimage.png'"
- -->
 
- <!--  [@.disabled]="androidApp" -->
 <ng-template #buttonAddItem>
   <div *ngIf="!isApp" >
       <button
-
           mat-mini-fab
           class="add-button"
           color="warn"
@@ -250,12 +246,10 @@
 
 <ng-template #appView>
   <span >
-    <!--  [@.disabled]="androidApp" -->
     <button
-
               mat-flat-button
               style="width:100%"
-              class="image-button"
+             [class]="imageButtonClass"
               (click)="altMethod(false)">
 
         <div *ngIf="!menuItem.urlImageMain || disableImages">
@@ -276,7 +270,7 @@
   <span >
     <button   mat-flat-button
               style="width:100%"
-              class="image-button"
+              [class]="imageButtonClass"
               (click)="altMethod(true)">
 
         <div *ngIf="!menuItem.urlImageMain || disableImages">

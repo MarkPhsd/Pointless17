@@ -397,6 +397,10 @@ import { LabelSelectPrinterComponent } from '../modules/admin/products/label-sel
 import { PayAPIComponent } from '../modules/payment-processing/pay-api/pay-api.component';
 import { PayAPIFrameComponent } from '../modules/payment-processing/pay-apiiframe/pay-apiiframe.component';
 import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
+import { CookieConsentComponent } from '../cookie-consent/cookie-consent.component';
+import {NgcCookieConsentConfig} from 'ngx-cookieconsent';
+import {NgcCookieConsentModule} from 'ngx-cookieconsent';
+import { NewUserGuestComponent } from '../modules/profile/new-user-guest/new-user-guest.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -406,6 +410,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
 @NgModule({
   declarations: [
+
+    NewUserGuestComponent,
 
     PayAPIComponent,
     PayAPIFrameComponent,
@@ -456,6 +462,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     CloseDayValidationComponent,
     CreditCardPaymentsPrintListComponent,
 
+    
+    CookieConsentComponent,
     //adminModule
     AdminbranditemComponent,
     AdminbrandslistComponent,
@@ -855,6 +863,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       NgxJsonViewerModule,
       NgxColorsModule,
       FormsModule,
+      NgcCookieConsentModule,
     ],
 
   exports: [

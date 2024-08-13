@@ -59,15 +59,15 @@
 
 
 <ng-template #reportView let-item>
-  <div class="header balance-sheet-grid">
-    <div class="grid-item text-format">{{ item?.startTime | date: 'M/d/yy' }}</div>
+  <div class="header balance-sheet-grid" >
+    <div class="grid-item text-format">  {{item?.startTime | date: 'M/d/yy' }}</div>
     <div class="grid-item number-format">{{item?.id}}</div>
-    <div class="grid-item text-format">{{item?.balanceSheetEmployee?.firstName | truncateText : 5}}  {{ item?.balanceSheetEmployee?.lastName | truncateText : 1 }}.</div>
+    <div class="grid-item text-format">  {{item?.balanceSheetEmployee?.firstName | truncateText : 5}}  {{ item?.balanceSheetEmployee?.lastName | truncateText : 1 }}.</div>
     <div class="grid-item number-format">{{item?.salesTotal | currency}}</div>
-    <div class="grid-item number-format">{{item?.overUnderTotal | currency }}</div>
-    <div class="grid-item text-format">{{item?.deviceName  }}</div>
+    <div class="grid-item number-format" *ngIf="-item?.overUnderTotal != item?.salesTotal">{{item?.overUnderTotal | currency }}</div>
+    <div class="grid-item text-format">  {{item?.deviceName  }}</div>
     <div></div>
-    <div class="grid-item col-span-2 ">{{item?.startTime | date : 'hh:mm ampm' }}</div> 
+    <div class="grid-item col-span-2 ">{{item?.startTime | date : 'hh:mm ampm' }}</div>
     <div class="grid-item col-span-2">{{item?.endTime |  date : 'hh:mm ampm' }}</div>
   </div>
 </ng-template>
@@ -85,6 +85,8 @@
       <mat-icon>download</mat-icon></button>
     <button mat-raised (click)="dataGridView()">
       <mat-icon>open_in_full</mat-icon></button>
+      <button mat-raised (click)="refreshData()">
+        <mat-icon>refresh</mat-icon></button>
   </div>
 </ng-template>
 
