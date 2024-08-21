@@ -1,4 +1,6 @@
 <div *ngIf="(action$ | async) as action"></div>
+<div *ngIf="(packageForm$ | async) as action"></div>
+
 <ng-template #loading><mat-spinner [diameter]="50"></mat-spinner></ng-template>
 
 <div class="flex-grid-row-5px">
@@ -12,7 +14,6 @@
       <ngx-json-viewer [expanded]="true" [json]="jsonData"></ngx-json-viewer>
     </div>
   </div>
-
   
   <div style="min-width: 900px;
               width: calc(100vw - 700px);">
@@ -106,7 +107,6 @@
 
               <div *ngIf="packageForm.controls.cost.errors?.required
                     && packageForm.controls.cost.touched" class="error">
-                <!-- <mat-icon color="warn">warning</mat-icon> Cost value required. -->
               </div>
 
               <span *ngIf=" package && !package.inventoryImported">

@@ -174,25 +174,25 @@ export class ConversionsService {
     const unitConversion = conversion
 
     if (!conversion) { console.log('This conversion value does not exist') }
-    console.log('method: getAvailibleQuantityByUnitType')
+    // console.log('method: getAvailibleQuantityByUnitType')
     if (unitConversion.unitConvertFrom) {
-      console.log('unitConversion.unitConvertFrom.value', unitConversion.unitConvertFrom.value)
-      console.log('Get Avalible Quantity BaseQuantity'  , unitConversion.baseQuantity)
+      // console.log('unitConversion.unitConvertFrom.value', unitConversion.unitConvertFrom.value)
+      // console.log('Get Avalible Quantity BaseQuantity'  , unitConversion.baseQuantity)
       const gramsCount = unitConversion.baseQuantity * unitConversion.unitConvertFrom.value
       if (unitConversion.unitConvertTo) {
         //allthough JointWeight may not be zero - it's always set to 1, we check both the jointweight and the ConvertedTo.Name to
         //see if we should be converting based on a joint.
         if (unitConversion.unitConvertTo.name.toLocaleLowerCase() === 'Joints' && jointWeight != 0) {
           if (jointWeight) { console.log('get avalible is a joint', jointWeight) }
-          console.log('Unit Convert to :' +  unitConversion.unitConvertTo.value + ' jointWeight ' + jointWeight)
+          // console.log('Unit Convert to :' +  unitConversion.unitConvertTo.value + ' jointWeight ' + jointWeight)
           unitConversion.unitConvertTo.value = jointWeight
         }
         //now that we are in grams we can divide by the unit we want to convert to
         if (unitConversion.unitConvertTo.value != 0) {
           const outPutValue = +(gramsCount / unitConversion.unitConvertTo.value).toFixed(2)
-          console.log('const outPutValue = gramsCount / unitConversion.unitConvertTo.value', outPutValue)
+          // console.log('const outPutValue = gramsCount / unitConversion.unitConvertTo.value', outPutValue)
           unitConversion.unitOutPutQuantity = +outPutValue.toFixed(2)
-          console.log('unitConversion.unitOutPutQuantity ', unitConversion.unitOutPutQuantity )
+          // console.log('unitConversion.unitOutPutQuantity ', unitConversion.unitOutPutQuantity )
         }
         if (unitConversion.unitConvertTo.value != 0) {
           const remainder               =  gramsCount % unitConversion.unitConvertTo.value

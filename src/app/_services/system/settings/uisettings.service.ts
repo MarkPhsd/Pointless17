@@ -76,7 +76,7 @@ export interface TransactionUISettings {
   dcapPayAPITokenAuth       : boolean;
   dcapPayAPIRecurringAuth   : boolean;
   dCapPayAPISurcharge          : boolean;
-  dCapPayAPISurchargeValue     : string;
+  dCapPayAPISurchargeValue     : number;
   dcapPayAPIMultiPrice         : boolean
   dcapPayAPIDualPriceValue     : number;
   dcapDisableDualPayOptions : boolean;
@@ -105,6 +105,7 @@ export interface TransactionUISettings {
   contactAPI: string;
   startNewOrderOnCloseOrder: boolean;
   prepOrderOnClose: boolean;
+  disablePrintPrepOnPrint: boolean;
   printLabelsOnclose: boolean;
   enableExactChange: boolean;
   preventDuplicateBarcodes: boolean;
@@ -958,6 +959,7 @@ export class UISettingsService {
       singlePrintReceipt: [],
       prepOrderOnExit: [],
       preferredMargin: [],
+      disablePrintPrepOnPrint: [],
       exitOrderOnPrintReceipt: [],
       enableItemReOrder: [],
       resaleCostRatio: [],

@@ -1,9 +1,8 @@
 import { Component, OnInit,OnChanges, EventEmitter, Output, Input, ElementRef, ViewChild, ChangeDetectionStrategy, SimpleChange } from '@angular/core';
 import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
+import { fromEvent, Subscription, of } from 'rxjs';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { TagChipsProductsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/tag-chips-products/tag-chips-products.component';
 
 // https://market.ionicframework.com/plugins/ion-numeric-keyboard
 @Component({
@@ -36,7 +35,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   @Input() showInput      = false;
   @Input() formatted      : any;
   @Input() fieldName      : string;
-  @Input() disableFocus: boolean;
+  @Input() disableFocus   : boolean;
   @Input() negativeOption :  boolean;
   formattedValue          : any;
   inputType               = 'text';
@@ -50,13 +49,16 @@ export class KeyPadComponent implements OnInit, OnChanges {
   @Input() decimals       = 0;
   @Input() requireWholeNumber: boolean;
   @Input() inputDisabled: boolean;
+
   constructor(
     private orderMethodsService: OrderMethodsService,
     private fb: UntypedFormBuilder) {
+
     if (this.formatted) {
       if (this.inputTypeValue.toLowerCase() === 'decimal')
       { this.showDoubleZero = true}
     }
+    
   }
 
   ngOnInit() {
@@ -124,7 +126,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
       this.inputForm.addControl( this.fieldName,new UntypedFormControl([]) );
       this.formSubscriber()
       this.inputForm.controls[this.fieldName].valueChanges.subscribe(data => {
-
         this.outputOnChange.emit(data)
         if (data == '' || data == undefined) {
           this.returnEnter(data);
@@ -178,7 +179,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
         tap((event:KeyboardEvent) => {
           if (this.input.nativeElement.value) {
             const search  = this.input.nativeElement.value
-
             if (search > 1) {
               this.outPutValue.emit(search)
             }
@@ -213,6 +213,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
   enterValue(event) {
     this.value =  this.value + event
+    console.log(this.value, event)
     this.updateDisplayOutput()
   }
 
@@ -272,6 +273,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
   refreshDisplay() {
 
+    console.log(this.inputTypeValue, this.value, this.decimals, this.requireWholeNumber)
     if (!this.value)  {
       this.setDefault();
       return
@@ -353,6 +355,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
       const item      = { itemName:  this.formatted, packageQuantity: this.formatted, }
       this.inputForm.patchValue(item)
     } else {
+      console.log('undefined formatted')
       this.initForm();
     }
 
@@ -367,7 +370,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
     }
 
     if (!this.formatted) {
-      console.log('2cashvalue', this.cashValue)
+      console.log('2cashvalue', this.cashValue, this.value)
       this.outPutReturnEnter.emit(this.value)
       return
     }

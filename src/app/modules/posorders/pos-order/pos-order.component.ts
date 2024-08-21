@@ -744,7 +744,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   roundToPrecision(value: number, precision: number): number {
     const factor = Math.pow(10, precision);
     const valueResult = Math.round(value * factor) / factor;
-    console.log('valueResult',value, valueResult) ;
+    // console.log('valueResult',value, valueResult) ;
     return valueResult
   }
 

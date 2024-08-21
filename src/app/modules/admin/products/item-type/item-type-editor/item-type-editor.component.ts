@@ -61,6 +61,8 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
   metrcCategories$ : Observable<METRCItemsCategories[]>;
 
   properties: ItemType_Properties;
+  metrcGroup_List :  IItemBasic[] ;
+
   exitSubscrption: Subscription;
   private _exitSubscrption     = new BehaviorSubject<boolean>(null);
   public  exitActions$        = this._exitSubscrption.asObservable();
@@ -88,6 +90,7 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
     this.metrcCategories$  =  this.metrcCategoryService.getCategories();
     this.receiptList$      =  this.settingService.getReceipts(site);
     this.printerLocations$ =  this.printerLocationsService.getLocations();
+    this.metrcGroup_List   =  this.itemTypeService.metrcGroups ;
 
     if (data) {
       this.id = data.id
@@ -187,6 +190,8 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
       inventoryLabelID: [],
       sellByValue: [],
       useByValue: [],
+      metrcPackageWeight: [],
+      metrcGroup: [],
     })
 
     if (itemType.json) {

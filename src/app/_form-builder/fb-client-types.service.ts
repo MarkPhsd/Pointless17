@@ -17,7 +17,13 @@ export class FbClientTypesService {
 
   initUserAuthForm(fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
+      disableUOMSales: [],
+      balanceSheetCreditCardPayments: [],
+      priceChangeNotification: [],
 
+      deleteSaleItemNotification: [],
+      enableItemDiscount: [],
+      enableCashVoid : [],
       //notifications
       voidNotification: [],
       balanceSheetStartNotification: [],
@@ -130,6 +136,8 @@ export class FbClientTypesService {
             limitExtract: [],
             limitConcentrates: [],
             limitCombinedCategory: [],
+            metrcGroup1: [],
+            metrcGroup2: [],
             allowStaffUse: [],
             authorizationGroupID: [],
             jsonObject       : [],

@@ -95,6 +95,8 @@ export interface IUserProfile extends IUser {
   patientRecOption        : boolean;
   errorMessage: string;
   message: string;
+  metrcGroup1: number;
+  metrcGroup2: number;
 }
 
 export interface clientType {
@@ -114,6 +116,8 @@ export interface clientType {
   allowStaffUse:    boolean;
   authorizationGroupID:  number;
   jsonObject       : string;
+  metrcGroup1: number;
+  metrcGroup2: number;
 }
 
 export interface employee {

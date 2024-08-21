@@ -35,7 +35,6 @@ export class PosOrderItemEditComponent  {
       public authenticationService: AuthenticationService,
       public platFormService      : PlatformService,
       private orderMethodsService : OrderMethodsService,
-      private userAuthorizations  : UserAuthorizationService,
       private _fb                 : UntypedFormBuilder,
       private posOrderItemMethodsService: PosOrderItemMethodsService,
       private siteService: SitesService,
@@ -59,8 +58,8 @@ export class PosOrderItemEditComponent  {
       this.instructions = data.instructions
       this.editField    = data.editField
       this.posOrderItem = data.orderItem;
-      this.menuItem     = data.menuItem
-
+      this.menuItem     = data.menuItem 
+      this.requireWholeNumber  = data.requireWholeNumber
       if (this.editField == 'quantity') {
         if (this.menuItem && this.menuItem.itemType) {
           this.requireWholeNumber = this.menuItem.itemType?.requireWholeNumber;
@@ -70,6 +69,8 @@ export class PosOrderItemEditComponent  {
         this.decimals = 2
       }
     }
+    
+    console.log('keypad', data, this.requireWholeNumber)
     this.initForm();
 
   }
@@ -78,6 +79,13 @@ export class PosOrderItemEditComponent  {
     if (this.posOrderItem) {
       this.initValueType()
 
+      if (this.editField === 'itemPerDiscount') {
+        this.inputForm = this._fb.group({
+          itemPercentDiscount: [this.posOrderItem.itemPercentageDiscountValue],
+          itemName: [],
+        })
+      }
+      
       if (this.editField == 'modifierNote') {
         this.inputForm = this._fb.group({
           modifierNote: [this.posOrderItem.modifierNote],
@@ -126,6 +134,9 @@ export class PosOrderItemEditComponent  {
           itemName: [],
         })
       }
+
+  
+
     }
   }
 
@@ -135,19 +146,22 @@ export class PosOrderItemEditComponent  {
       return
     }
 
-    if (this.editField == 'quantity') {
-      if (this.menuItem?.itemType?.requireWholeNumber) {
+    if (this.editField == 'quantity' || this.editField == 'itemPerDiscount') {
+      if (this.menuItem?.itemType?.requireWholeNumber || this.requireWholeNumber) {
         this.inputTypeValue = 'number'
         this.decimals = 0
         return
       }
 
-      if (!this.menuItem?.itemType?.requireWholeNumber) {
+      if (!this.menuItem?.itemType?.requireWholeNumber  || !this.requireWholeNumber) {
         this.inputTypeValue = 'decimal'
         this.decimals = 2
         return
       }
     }
+
+    //itemPerDiscount
+
   }
 
   saveChange(event) {
@@ -180,7 +194,6 @@ export class PosOrderItemEditComponent  {
       }))
     }
   }
-
 
   refreshOrderAndClose(data) {
     if (!data) {
@@ -227,6 +240,10 @@ export class PosOrderItemEditComponent  {
       item.wholeSaleCost = value;
     }
 
+    if (this.editField=='itemPerDiscount') { 
+      item.itemPercentageDiscountValue = value;
+    }
+
     return item
   }
 
@@ -264,6 +281,12 @@ export class PosOrderItemEditComponent  {
       item.wholeSaleCost = value;
     }
 
+    if (this.editField === 'itemPerDiscount') {
+      const value = this.inputForm.controls['itemPerDiscount'].value;
+      item.itemPercentageDiscountValue = value;
+    }
+    // /itemPerDiscount
+
     return item
   }
 
@@ -275,7 +298,7 @@ export class PosOrderItemEditComponent  {
   }
 
   onClose(event) {//
-    console.log('close press')
+    console.log('press close ')
     this.authenticationService.updateUserAuthstemp(null);
     this.dialogRef.close();
     this.closeOnEnterPress.emit('true')

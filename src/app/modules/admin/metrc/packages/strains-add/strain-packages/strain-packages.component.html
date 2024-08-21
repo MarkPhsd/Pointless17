@@ -1,3 +1,5 @@
+<div *ngIf="(action$ | async) as action"></div>
+
 <div [formGroup]="packageForm"
      *ngIf="packageForm && package"  >
 
@@ -27,7 +29,7 @@
                         (selectionChange)  ="getLocationAssignment($event.value)">
               <div *ngIf="(inventoryLocations$ | async) as list">
                 <mat-option *ngFor="let item of list" [value]="item.id">
-                  {{item.name}}
+                  {{item?.name}}
                 </mat-option>
               </div>
             </mat-select>
@@ -65,8 +67,7 @@
               <input  matInput
                       type           ="text"
                       formControlName="cost"
-                      (change)="transformAmount($event)"
-                      [(ngModel)]="cost" >
+                       >
           </mat-form-field>
         </div>
 
@@ -89,7 +90,6 @@
                           [(ngModel)]     ="price"
                           type            ="text"
                           formControlName ="price"
-                          (blur)          ="transformPriceAmount($event)"
                     >
               </mat-form-field>
             </div>
@@ -143,16 +143,31 @@
 
   </div>
 
+  <!-- <div>
+    <div *ngIf="!showJSONData">
+      <button mat-raised-button color="primary"  (click)="showJSONData=!showJSONData">Show Data</button>
+    </div>
+
+    <div  *ngIf="showJSONData">
+      <button mat-raised-button color="primary" (click)="showJSONData=!showJSONData">Hide Data</button>
+    </div>
+  </div> -->
+
+  <div *ngIf="showJSONData" style="overflow-y: scroll; max-height: 625px;">
+    <ngx-json-viewer [expanded]="true" [json]="packageForm.value"></ngx-json-viewer>
+    <ngx-json-viewer [expanded]="true" [json]="package"></ngx-json-viewer>
+    <ngx-json-viewer [expanded]="true" [json]="inventoryAssignments"></ngx-json-viewer>
+  </div>
+
   <!-- fxFlex fxFlexFill -->
   <div *ngIf="inventoryAssignments">
     <mat-card class="package-list" >
       <div *ngFor="let item of inventoryAssignments ;let i = index">
         <app-metrc-individual-package
-                                    (outputEditAssignment)  ="editAssignment($event)"
-                                    (outputdeleteAssignment)="deleteAssignment($event)"
-                                    [item]                  ="item"
-                                    [i]                     ="i"
-                                    >
+            (outputEditAssignment)  ="editAssignment($event)"
+            (outputdeleteAssignment)="deleteAssignment($event)"
+            [item]                  ="item"
+            [i]                     ="i"  >
         </app-metrc-individual-package>
 
       </div>

@@ -350,10 +350,16 @@ export class BalanceSheetService {
 
     const user = this.authenticationService._user.value;
     if (!user) { 
-      return of(null)
+      let item = {} as IBalanceSheet;
+      item.id = 0;
+      return of(item)
     }
 
-    if (!deviceName) { return of(null)}
+    if (!deviceName) { 
+      let item = {} as IBalanceSheet
+      item.id = 0;
+      return of(item)
+    }
 
     if (deviceName === '' || !deviceName ) { deviceName = 'nothing'}
 

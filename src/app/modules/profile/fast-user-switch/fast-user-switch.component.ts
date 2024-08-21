@@ -257,7 +257,7 @@ export class FastUserSwitchComponent implements OnInit {
       const site = this.siteService.getAssignedSite()
       const device = localStorage.getItem('devicename')
 
-      console.log('checkBalanceSheet', user)
+      // console.log('checkBalanceSheet', user)
       if (!user) { return of(null)}
       return  this.balanceSheetService.getCurrentUserBalanceSheet(site, device ).pipe(switchMap(data => {
         // console.log('checkBalanceSheet', data)
@@ -269,7 +269,7 @@ export class FastUserSwitchComponent implements OnInit {
           } else  {
             this.router.navigate(['/app-main-menu']);
           }
-          this.onCancel();
+          // this.onCancel();
         }
         return of(data)
       }))

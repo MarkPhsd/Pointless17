@@ -164,7 +164,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       if (!this.displayHistoryInfo) {
         this._order = this.orderMethodService.currentOrder$.subscribe( order => {
           this.order = order
-          console.log('order update', this.order?.posOrderItems)
+          // console.log('order update', this.order?.posOrderItems)
           if (this.order && this.order.posOrderItems)  {
             this.sortPOSItems(this.order.posOrderItems);
           }
@@ -382,7 +382,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   removeItemFromList(payload: any) {
-    console.log('remove item from list', payload)
+    // console.log('remove item from list', payload)
     if (this.order.completionDate && (this.userAuths && this.userAuths.disableVoidClosedItem)) {
       this.siteService.notify('Item can not be voided or refunded. You must void the order from Adjustment in Cart View', 'close', 10000, 'red')
       return
@@ -515,7 +515,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                            printServer: serverName,id: order.id,history: order.history} as any;
         const site = this.siteService.getAssignedSite()
         this.printAction$ =  this.paymentService.remotePrintMessage(site, remotePrint).pipe(switchMap(data => {
-          console.log(data)
+          // console.log(data)
           if (data) {
             this.siteService.notify('Print job sent', 'Close', 3000, 'green')
           } else {

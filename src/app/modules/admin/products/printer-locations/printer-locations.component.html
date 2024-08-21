@@ -1,4 +1,14 @@
-<h2>Printer Locations</h2>
+<div class="ps-flex-group"  style="width:350px">
+  <div>
+    <h2>Printer Locations</h2>
+  </div>
+  <div>
+    <button  mat-raised-button (click)="refresh()"><mat-icon>refresh</mat-icon></button>
+  </div>
+  
+</div>
+
+
 <div *ngIf="(action$ | async) as items"></div>
 <div *ngIf="(locationTable$ | async) as items"></div>
 
@@ -59,49 +69,52 @@
     </div>
   </div>
 </div>
+<div  class="flex-start " ></div>
 
-<form [formGroup]="locationForm" class="centered-flex" >
+<form [formGroup]="locationForm" >
 
   <div *ngIf="!location">
     <h2>Add</h2>
   </div>
 
   <div *ngIf="location">
-    ID: {{location.id}}
+    <!-- ID: {{location.id}} -->
     <h2>Edit</h2>
   </div>
-  <div>
-    <mat-form-field appearance="outline">
-      <mat-label >Name</mat-label>
-      <input matInput
-            type="text"
-            formControlName="name"
-            class="form-control" >
-    </mat-form-field>
-  </div>
+  <div class="ps-flex-group" >
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label >Name</mat-label>
+        <input matInput
+              type="text"
+              formControlName="name"
+              class="form-control" >
+      </mat-form-field>
+    </div>
 
-  <div>
-    <mat-form-field appearance="outline">
-      <mat-label >Printer</mat-label>
-      <input matInput
-            type="text"
-            formControlName="printer"
-            class="form-control" >
-    </mat-form-field>
-  </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label >Printer</mat-label>
+        <input matInput
+              type="text"
+              formControlName="printer"
+              class="form-control" >
+      </mat-form-field>
+    </div>
 
-  <div>
-    <mat-form-field appearance="outline">
-      <mat-label >Address</mat-label>
-      <input matInput
-            type="text"
-            formControlName="address"
-            class="form-control" >
-    </mat-form-field>
-  </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label >Address</mat-label>
+        <input matInput
+              type="text"
+              formControlName="address"
+              class="form-control" >
+      </mat-form-field>
+    </div>
 
-  <ng-container [ngTemplateOutlet]="isElectronPrintingDesignTemplate">
-  </ng-container>
+    <ng-container [ngTemplateOutlet]="isElectronPrintingDesignTemplate">
+    </ng-container>
+  </div>
 
   <ng-template #electronPrintingDesignTemplate>
 
@@ -129,38 +142,38 @@
     ...loading receipt templates
   </ng-template>
 
-<mat-divider></mat-divider>
+  <mat-divider></mat-divider>
 
-<div  >
+  <div  class="ps-flex-group" style="width:350px">
 
-  <div>
-    <button mat-button color="primary" (click)="clearLocation()">
-      <mat-icon>clear</mat-icon>
-      Clear</button>
+    <div>
+      <button mat-button color="primary" (click)="clearLocation()">
+        <mat-icon>clear</mat-icon>
+        Clear</button>
+    </div>
+
+    <div *ngIf="location && (location.id != 0 && location.id != undefined)">
+
+      <button  mat-button   color="primary" (click)="updateLocation()">
+        <mat-icon>save</mat-icon>
+        Save
+      </button>
+    </div>
+
+    <div *ngIf="!location || (location.id == 0 || location.id == undefined) ">
+
+      <button  mat-button  color="primary" (click)="addLocation()">
+        <mat-icon>add</mat-icon>
+        Add</button>
+    </div>
+
+    <div>
+      <button  mat-button  color="primary" (click)="delete()">
+        <mat-icon>delete</mat-icon>
+        Delete  <span *ngIf="location">{{location?.name}}</span> </button>
+    </div>
+
   </div>
-
-  <div *ngIf="location && (location.id != 0 && location.id != undefined)">
-
-    <button  mat-button   color="primary" (click)="updateLocation()">
-      <mat-icon>save</mat-icon>
-      Save
-    </button>
-  </div>
-
-  <div *ngIf="!location || (location.id == 0 || location.id == undefined) ">
-
-    <button  mat-button  color="primary" (click)="addLocation()">
-      <mat-icon>add</mat-icon>
-      Add</button>
-  </div>
-
-  <div>
-    <button  mat-button  color="primary" (click)="delete()">
-      <mat-icon>delete</mat-icon>
-      Delete  <span *ngIf="location">{{location?.name}}</span> </button>
-  </div>
-
-</div>
 </form>
 
 <ng-template #loading>

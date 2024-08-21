@@ -114,9 +114,9 @@ export class RequestMessagesComponent implements OnInit {
 
     this.messageRefresh$ = this.getMessages().pipe(
       catchError(err => {
-        console.error('Error fetching messages, will retry after delay', err);
+        // console.error('Error fetching messages, will retry after delay', err);
         // Return an observable that emits once (like a placeholder) to trigger the repeat mechanism
-        return of(null);
+        return of({});
       }),
       // Use repeatWhen to handle retries
       repeatWhen(notifications => notifications.pipe(

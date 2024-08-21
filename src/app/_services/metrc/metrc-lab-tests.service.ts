@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, } from 'rxjs';
-import { IMETRCSales } from 'src/app/_interfaces/transactions/metrc-sales';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../../_services/system/authentication.service';
 import { ISite } from 'src/app/_interfaces';
-import { SitesService } from '../../_services/reporting/sites.service';
 
 import {
   METRCLabTestsStates,
@@ -14,6 +12,43 @@ import {
   METRCLabTEstsLabeTestDocument,
   METRCLabTestResultsRelease
 } from '../../_interfaces/metrcs/lab-tests';
+import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
+import { IInventoryAssignment } from '../inventory/inventory-assignment.service';
+
+export interface LabTestResult {
+  packageId: number;
+  labTestResultId: number;
+  labFacilityLicenseNumber: string;
+  labFacilityName: string;
+  sourcePackageLabel: string;
+  productName: string;
+  productCategoryName: string;
+  testPerformedDate: Date;
+  overallPassed: boolean;
+  revokedDate?: Date | null;
+  labTestResultDocumentFileId: number;
+  resultReleased: boolean;
+  resultReleaseDateTime: Date;
+  expirationDateTime?: Date | null;
+  testTypeName: string;
+  testPassed: boolean;
+  testResultLevel?: number | null;
+  testComment: string;
+  testInformationalOnly: boolean;
+  labTestDetailRevokedDate?: Date | null;
+}
+
+export interface LabTestResultResponse {
+  data: LabTestResult[];
+  total: number;
+  totalRecords: number;
+  pageSize: number;
+  recordsOnPage: number;
+  page: number;
+  currentPage: number;
+  totalPages: number;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -24,100 +59,39 @@ export class MetrcLabTestsService {
     private auth: AuthenticationService,
    ) {}
 
-  getLabTestsStates(site: ISite): Observable<METRCLabTestsStates[]> {
+   getTest(site: ISite, id: number): Observable<METRCPackage> {
 
-    const controller = '/labtests/v1/states'
+    const controller = '/MetrcLabTests/';
 
-    const endPoint = ``
+    const parameters = `?siteID=${site.id}&metrcID=${id}`;
 
-    const parameters = ''
+    const endPoint = 'GetTestForPackage';
 
-    const licenseNumber  = `?licenseNumber=${site.metrcLicenseNumber}`
+    const url = `${site.url}${controller}${endPoint}${parameters}`;
 
-    const url = `${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}`
-
-    return this.http.get<METRCLabTestsStates[]>(url);
+    return  this.http.get<METRCPackage>(url);
 
   }
 
-  getLabtestsTypes(site: ISite): Observable<METRCLabTestTypes[]> {
 
-    const controller = '/labtests/v1/types'
+  getHarvest(site: ISite, id: number): Observable<METRCPackage> {
 
-    const endPoint = ``
+    const controller = '/MetrcLabTests/v2/';
 
-    const parameters = ''
+    const parameters = `?siteID=${site.id}&metrcID=${id}`;
 
-    const licenseNumber  = `?licenseNumber=${site.metrcLicenseNumber}`
+    const endPoint = 'getHarvest';
 
-    const url = `${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}`
+    const url = `${site.url}${controller}${endPoint}${parameters}`;
 
-    return this.http.get<METRCLabTestTypes[]>(url);
-
-  }
-
-  getLabTestResults(site: ISite): Observable<METRCLabTestsResults[]> {
-
-    const controller = '/labtests/v1/results'
-
-    const endPoint = ``
-
-    const parameters = ''
-
-    const licenseNumber  = `?licenseNumber=${site.metrcLicenseNumber}`
-
-    const url = `${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}`
-
-    return this.http.get<METRCLabTestsResults[]>(url);
+    return  this.http.get<METRCPackage>(url);
 
   }
 
-  postLabTestsRecord(mETRCLabTestsRecordPOST: METRCLabTestsRecordPOST [], site: ISite): Observable<any> {
+  getTestResults(inv: IInventoryAssignment, metrc: METRCPackage) {
 
-    const controller = '/labtests/v1/record'
-
-    const endPoint = ``
-
-    const parameters = ''
-
-    const licenseNumber  = `?licenseNumber=${site.metrcLicenseNumber}`
-
-    const url = `${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}`
-
-    return this.http.post<METRCLabTestsRecordPOST[]>(url,mETRCLabTestsRecordPOST);
+    const labTests = JSON.parse(metrc.labResults) as LabTestResultResponse
 
   }
-
-  putLabtestDocument(mETRCLabTestsRecordPOST: METRCLabTEstsLabeTestDocument [], site: ISite): Observable<any> {
-
-    const controller = '/labtests/v1/labtestdocument'
-
-    const endPoint = ``
-
-    const parameters = ''
-
-    const licenseNumber  = `?licenseNumber=${site.metrcLicenseNumber}`
-
-    const url = `${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}`
-
-    return this.http.post<METRCLabTEstsLabeTestDocument[]>(url,mETRCLabTestsRecordPOST);
-
-  }
-  putLabTestsResultsRelease(mETRCLabTestsRecordPOST: METRCLabTestResultsRelease [], site: ISite): Observable<any> {
-
-    const controller = '/labtests/v1/results/release'
-
-    const endPoint = ``
-
-    const parameters = ''
-
-    const licenseNumber  = `?licenseNumber=${site.metrcLicenseNumber}`
-
-    const url = `${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}`
-
-    return this.http.post<METRCLabTestResultsRelease[]>(url,mETRCLabTestsRecordPOST);
-
-  }
-
 
 }

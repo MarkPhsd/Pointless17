@@ -33,7 +33,7 @@ export class METRCProductsAddComponent implements OnInit {
   inventoryLocationName:  string;
   unitsConverted = {} as  IUnitsConverted;
   unitsRemaining:         number;
-  baseUnitsRemaining:     number;
+  baseUnitsRemaining:     number ;
   initialQuantity:        number;
   remainingQuantity:      number;
   inventoryAssigments:    IInventoryAssignment[];
@@ -61,10 +61,20 @@ export class METRCProductsAddComponent implements OnInit {
   get userPref() {
     if (this.authenticationService._user.value) {
       const user = this.authenticationService._user.value;
-      if (user) {
-        const pref = this.authenticationService._user.value.preferences;
-        const preferences = JSON.parse(pref) as UserPreferences;
-        return preferences;
+
+      const userPref  = this.authenticationService._user.value.userPreferences;
+      if (userPref ) {
+        return userPref 
+      }
+
+      try {
+        if (user) {
+          const pref = this.authenticationService._user.value.preferences;
+          const preferences = JSON.parse(pref) as UserPreferences;
+          return preferences;
+        }
+      } catch (error) {
+        this.siteService.notify('Error user pref', 'Close', 3000, 'red')        
       }
     }
     return {} as UserPreferences;
@@ -111,7 +121,6 @@ export class METRCProductsAddComponent implements OnInit {
 
   constructor(
           private conversionService: ConversionsService,
-
           public  route: ActivatedRoute,
           public  fb: UntypedFormBuilder,
           private awsBucket: AWSBucketService,
@@ -180,24 +189,21 @@ export class METRCProductsAddComponent implements OnInit {
 
   initItemFormData(data: METRCPackage) {
     if (data) {
-
         data = this.convertValuesToString(data)
-
         this.package = data
-
         if (this.package) {
-          if (this.package.unitOfMeasureName && this.package.unitOfMeasureName.toLocaleLowerCase() === 'each') {
+          if (this.package.unitOfMeasureName && this.package?.unitOfMeasureName.toLocaleLowerCase() === 'each') {
             this.inputQuantity = this.package?.quantity;
           }
         }
 
         if (this.package.unitOfMeasureName) {
-          this.intakeConversion = this.conversionService.getConversionItemByName(this.package.unitOfMeasureName)
-          this.intakeconversionQuantity = +this.intakeConversion.value * +this.package.quantity
-          this.baseUnitsRemaining = this.intakeconversionQuantity
-          this.initialQuantity    = this.intakeconversionQuantity
+          this.intakeConversion = this.conversionService.getConversionItemByName(this.package?.unitOfMeasureName)
+          this.intakeconversionQuantity = +this.intakeConversion.value * +this.package?.quantity
+          this.baseUnitsRemaining = +this.intakeconversionQuantity
+          this.initialQuantity    = +this.intakeconversionQuantity
         }
-
+        console.log(' initItemFormData baseUnitsRemaining' , this.baseUnitsRemaining)
         this.package.labTestingState =          this.package?.labTestingState.match(/[A-Z][a-z]+|[0-9]+/g).join(" ")
         this.facility = {} as                   IItemFacilitiyBasic
         this.facility.displayName =             this.package?.itemFromFacilityName
@@ -232,51 +238,39 @@ export class METRCProductsAddComponent implements OnInit {
           useByDate                     : data?.useByDate,
           productionBatchNumber         : data?.productionBatchNumber
       })
-
-      console.log('form initialized', this.packageForm.value)
-    }
-  }
-
-  // Utility function to convert all values to strings
- convertValuesToString(obj: any): any {
-  if (typeof obj === 'string') {
-    return obj;
-  } else if (Array.isArray(obj)) {
-    return obj.map(item => item.toString());
-  } else if (typeof obj === 'object' && obj !== null) {
-    const result: any = {};
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        result[key] = this.convertValuesToString(obj[key]);
+        console.log('form initialized', this.packageForm.value)
       }
     }
-    return result;
-  } else {
-    if (obj) {
-      return obj.toString();
+
+  // Utility function to convert all values to strings
+  convertValuesToString(obj: any): any {
+    if (typeof obj === 'string') {
+      return obj;
+    } else if (Array.isArray(obj)) {
+      return obj.map(item => item.toString());
+    } else if (typeof obj === 'object' && obj !== null) {
+      const result: any = {};
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          result[key] = this.convertValuesToString(obj[key]);
+        }
+      }
+      return result;
+    } else {
+      if (obj) {
+        return obj.toString();
+      }
+      return obj
     }
-    return obj
   }
-}
 
-
-   editAssignment(i: any) {
+  editAssignment(i: any) {
 
     if (this.inventoryAssigments[i]) {
       const inv =  this.inventoryAssigments[i]
       if (inv) {
         this.inventoryAssigments.splice(i)
         this.initItemFormData(this.package)
-
-          // this.packageForm = this.fb.group({
-          //   conversionName:                   [ inv.unitConvertedtoName, Validators.required],
-          //   inputQuantity:                    [ inv.packageQuantity, Validators.required],
-          //   inventoryLocationID:              [ inv.locationID, Validators.required],
-          //   cost:                             [ inv.cost],
-          //   price:                            [ inv.price],
-          //   jointWeight:                      [ 1 ],
-          //   expiration:                       [ inv.expiration],
-          // })
 
         const item = {converstionName: inv?.unitConvertedtoName,
           inputQuantity: inv.packageQuantity,
@@ -400,7 +394,13 @@ export class METRCProductsAddComponent implements OnInit {
     //check out if the amouunt being input is greater than the allowed amouunt.
     // console.log('this.unitsConverted.unitOutPutQuantity', this.unitsConverted.unitOutPutQuantity);
     // console.log('this.inputquantity', this.inputQuantity);
-    if (this.inputQuantity >  this.baseUnitsRemaining  ) {
+
+    if (this.inventoryLocation || !this.inventoryLocation.name) {
+      this.notifyEvent('Please chose a location.', 'Alert')
+      return false
+    }
+
+    if (+this.inputQuantity >  +this.baseUnitsRemaining  ) {
       this.notifyEvent('Use a smaller quantity.', 'Alert')
       return false
     }
@@ -415,10 +415,10 @@ export class METRCProductsAddComponent implements OnInit {
       return false
     }
 
-    if (this.getStringValue('productionBatchNumber') === '') {
-      this.notifyEvent('Input a batch #.', 'Alert')
-      return false
-    }
+    // if (this.getStringValue('productionBatchNumber') === '') {
+    //   this.notifyEvent('Input a batch #.', 'Alert')
+    //   return false
+    // }
 
     return true
   }
@@ -428,6 +428,7 @@ export class METRCProductsAddComponent implements OnInit {
     //
     // const batchNumber = this.package.productionBatchNumber
     // const batchNumber = this.package.packagedDate;
+    return true;
 
     if (this.saved) {
       const inv = this.packageForm.value as IInventoryAssignment
@@ -453,8 +454,8 @@ export class METRCProductsAddComponent implements OnInit {
     let inventoryAssignment = {} as IInventoryAssignment
 
     //assign values to inventoryAssignement
-    inventoryAssignment.label = this.package.label
-    inventoryAssignment.sku = this.package.label
+    inventoryAssignment.label = this.package?.label
+    inventoryAssignment.sku = this.package?.label
     if (!this.userPref?.metrcUseMetrcLabel) {
       const index = this.inventoryAssigments.length + 1
       inventoryAssignment.sku = this.generateSku(this.package.label, index);
@@ -462,10 +463,12 @@ export class METRCProductsAddComponent implements OnInit {
     }
 
     let inventoryLocation = this.getLocationAssignment(this.inventoryLocationID);
-    inventoryAssignment.locationID                 = this.inventoryLocation.id
-    inventoryAssignment.location                   = this.inventoryLocation.name
-    inventoryAssignment.intakeUOM                  = this.intakeConversion.name
-    inventoryAssignment.intakeConversionValue      = this.intakeConversion.value
+    if (inventoryLocation) { 
+      inventoryAssignment.locationID                 = this.inventoryLocation?.id
+      inventoryAssignment.location                   = this.inventoryLocation?.name
+      inventoryAssignment.intakeUOM                  = this.intakeConversion?.name
+      inventoryAssignment.intakeConversionValue      = this.intakeConversion?.value
+    }
 
     if (!this.inventoryLocation.activeLocation) {
       inventoryAssignment.notAvalibleForSale  = true
@@ -488,19 +491,19 @@ export class METRCProductsAddComponent implements OnInit {
     //unit of measure being sold or stored in.
     const unitConversion = this.conversionService.getConversionItemByName('Each')
     inventoryAssignment.unitConvertedtoName =   unitConversion.name
-    inventoryAssignment.unitOfMeasureName =     this.package.unitOfMeasureName
+    inventoryAssignment.unitOfMeasureName =     this.package?.unitOfMeasureName
     inventoryAssignment.unitMulitplier =        unitConversion.value
 
     //quantity in this unit of measurement.
     inventoryAssignment.packageQuantity =       this.inputQuantity
-    inventoryAssignment.packageCountRemaining = inventoryAssignment.packageQuantity
-    inventoryAssignment.baseQuantity =          this.inputQuantity * unitConversion.value
-    inventoryAssignment.baseQuantityRemaining = inventoryAssignment.baseQuantity
+    inventoryAssignment.packageCountRemaining = inventoryAssignment?.packageQuantity
+    inventoryAssignment.baseQuantity =          this.inputQuantity * unitConversion?.value
+    inventoryAssignment.baseQuantityRemaining = inventoryAssignment?.baseQuantity
 
-    inventoryAssignment.productID =             this.menuItem.id
-    inventoryAssignment.productName =           this.menuItem.name
+    inventoryAssignment.productID =             this.menuItem?.id
+    inventoryAssignment.productName =           this.menuItem?.name
     inventoryAssignment.itemStrainName =        this.menuItem.name
-    inventoryAssignment.packageType =           this.package.packageType
+    inventoryAssignment.packageType =           this.package?.packageType
 
     inventoryAssignment.employeeName =          localStorage.getItem('username');
     inventoryAssignment.employeeID =            parseInt(localStorage.getItem('userid'));
@@ -527,10 +530,11 @@ export class METRCProductsAddComponent implements OnInit {
       inventoryAssignment.expiration =          this.getStringValue('expiration')
       inventoryAssignment.testDate =            this.getStringValue('testDate')
     } catch (error) {
+      this.siteService.notify('Error Occured' + error.toString(), 'Close', 50000, 'red' )
       console.log(error)
     }
 
-    inventoryAssignment.facilityLicenseNumber = this.facility.metrcLicense
+    // inventoryAssignment.facilityLicenseNumber = this.facility.metrcLicense
     const cost =  numeral(+f.get('cost').value).format('0,0');
     this.cost = cost
     const price = numeral(+f.get('price').value).format('0,0');
@@ -597,10 +601,10 @@ export class METRCProductsAddComponent implements OnInit {
     this.cost = 0;
     this.price = 0;
     this.jointWeight = 1;
-
+    this.baseUnitsRemaining = 0;
     if (this.unitsConverted) {
       this.unitsConverted.unitOutPutQuantity = 0
-      this.unitsConverted.ouputRemainder =0
+      this.unitsConverted.ouputRemainder = 0
     }
   }
 
@@ -616,7 +620,7 @@ export class METRCProductsAddComponent implements OnInit {
 
       this.unitsConverted.unitConvertTo =
       this.conversionService.getConversionItemByName(name)
-      this.unitsConverted.baseQuantity = this.baseUnitsRemaining
+      this.unitsConverted.baseQuantity = +this.baseUnitsRemaining
       this.unitsConverted = this.conversionService.getAvailibleQuantityByUnitType(this.unitsConverted, 0)
     }
 
@@ -626,7 +630,8 @@ export class METRCProductsAddComponent implements OnInit {
   getAvailableUnitsByQuantity() {
     const site =  this.siteService.getAssignedSite();
      //base is always grams
-     this.baseUnitsRemaining = this.inventoryAssignmentService.getSummaryOfGramsUsed(site, this.inventoryAssigments, this.initialQuantity );
+     this.baseUnitsRemaining = +this.inventoryAssignmentService.getSummaryOfGramsUsed(site, this.inventoryAssigments, this.initialQuantity );
+     console.log('baseUnitsRemaining' , this.baseUnitsRemaining)
     if (this.unitsConverted) {
       if (this.unitsConverted.unitConvertTo) {
         const quantity = (+this.baseUnitsRemaining / +this.unitsConverted.unitConvertTo.value) - +this.inputQuantity
@@ -654,27 +659,34 @@ export class METRCProductsAddComponent implements OnInit {
     this.inventoryAssigments.forEach(data => {data.metrcPackageID = this.package.id })
     const inv$=  this.inventoryAssignmentService.addInventoryList(site, this.inventoryAssigments[0].label,
                                                                   this.inventoryAssigments)
-    inv$.subscribe(
-      {
-        next: data => {
-          this.onCancel(null);
+    this.action$ = inv$.pipe(switchMap(data => { 
 
-          if (this.userPref?.metrcUseMetrcLabel) {
-            if (this.inventoryAssigments[0].label === this.package.label) {
-              if (data) {
-                const item = data[0]
-                const dialogRef = this.inventoryAssignmentService.openInventoryItem(data[0].id)
-              }
-            }
-          }
-          this.notifyEvent('Inventory Packages Imported', 'Success');
-          },
-        error: error => {
-          this.notifyEvent(`Inventory Packages failed: ${error}`, 'Failed');
+      if (!data) { 
+        this.siteService.notify('Inventory Packages note imported', 'Failed', 2000, 'red');
+        return of(data)
       }
-    }
-    )
+
+      this.siteService.notify('Inventory Packages Imported', 'Success', 2000, 'green');
+      if (this.userPref?.metrcUseMetrcLabel) {
+        if (this.inventoryAssigments[0].label === this.package.label) {
+          if (data) {
+            const item = data[0]
+            const dialogRef = this.inventoryAssignmentService.openInventoryItem(data[0].id)
+          }
+          
+        }
+        return of(data)
+      }
+    
+    }))
+
   }
+    //     error: error => {
+    //       this.notifyEvent(`Inventory Packages failed: ${error}`, 'Failed');
+    //   }
+    // }
+    // )
+
 
   // getSelectedMenuItem(event) {
   //   if (event) {

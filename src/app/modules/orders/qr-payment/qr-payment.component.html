@@ -48,7 +48,9 @@
     <div *ngIf="order && setToPay">
 
       <div class="centered-flex">
-        <button style="width:150px;height:45px" mat-raised-button color="accent" (click)="setToPay = false">
+        <button style="width:150px;height:45px" 
+                mat-raised-button color="accent" 
+                (click)="setToPay = false">
           Review Order
         </button>
       </div>
@@ -152,7 +154,9 @@
            [paymentForm]="paymentForm"
            [uiTransactions]="uiTransactions"
            [creditBalanceRemaining]="order?.balanceRemaining"
-           [paymentAmount]="order?.balanceRemaining"  >
+           [paymentAmount]="order?.balanceRemaining"
+           (outPutRefresh) ="setToPay = false"
+           >
            Pay  <mat-icon color="warn">credit_card</mat-icon>
      </app-pay-api>
   </div>

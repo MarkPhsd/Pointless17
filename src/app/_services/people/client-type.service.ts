@@ -6,6 +6,9 @@ import {clientType, ISite }   from 'src/app/_interfaces';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 
 export interface IUserAuth_Properties {
+
+  enableItemDiscount: boolean;
+  enableCashVoid: boolean;
   enablebuyAgain: boolean;
   disableSplitByItems: boolean;
   disableMultiplePayments: boolean;

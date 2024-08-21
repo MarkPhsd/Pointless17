@@ -160,6 +160,20 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
+                
+                <mat-form-field appearance="outline" [formGroup]="jsonForm">
+                  <mat-label>METRC Group</mat-label>
+                  <mat-select
+                              type               = "number"
+                              [formControlName]  = "'metrcGroup'"
+                              name               = "metrcGroup">
+                    <mat-option value= "0">Clear</mat-option>
+                    <mat-option *ngFor="let item of metrcGroup_List"
+                                [value]="item.id">
+                      {{item?.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
               </div>
 
               <div>
@@ -268,16 +282,8 @@
               
                 <div >
                   <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
-
-                  <!-- <h3>Prep Line Color</h3>
-                  buttonColorPicker
-                  <ngx-colors ngx-colors-trigger [(ngModel)]="itemRowColor"></ngx-colors>
-                  <mat-form-field>
-                    <input matInput  [(ngModel)]="itemRowColor" >
-                  </mat-form-field> -->
                 </div>
 
-                <!-- {{prepList |json}} -->
                 <div *ngIf="prepList">
                   <mat-form-field appearance="outline">
                     <mat-label>Prep List</mat-label>
@@ -328,7 +334,6 @@
                   </app-label-view-selector>
               </div>
 
-
               <div class="filterItem" *ngIf="jsonForm" [formGroup]="jsonForm">
 
                 <app-label-view-selector
@@ -372,13 +377,22 @@
                 <app-value-fields
                     [inputForm]="jsonForm"
                     [fieldName]="'sellByValue'">
-                    Sell By Value
+                    Sell By Value 
                 </app-value-fields>
+
                 <app-value-fields
                     [inputForm]="jsonForm"
-                    [fieldName]="'sellByValue'">
-                    Sell By Value
+                    [fieldName]="'useByValue'">
+                    Use by Value
                 </app-value-fields>
+                
+                <!-- <app-value-fields
+                    [inputForm]="jsonForm"
+                    [fieldName]="'metrcPackageWeight'">
+                    (Metrc) Package Weight
+                </app-value-fields> -->
+           
+             
               </div>
           </div>
         </div>

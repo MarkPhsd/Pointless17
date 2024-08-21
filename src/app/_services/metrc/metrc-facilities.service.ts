@@ -61,7 +61,7 @@ export class MetrcFacilitiesService {
 
     const url = `${site.url}${controller}${parameters}`
 
-    console.log('url', url)
+    // console.log('url', url)
     return this.http.get<METRCFacilities[]>(url);
 
   }
@@ -76,7 +76,7 @@ export class MetrcFacilitiesService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    console.log("search model ", name)
+    // console.log("search model ", name)
 
     return this.http.get<IItemFacilitiyBasic[]>(url)
 

@@ -74,12 +74,30 @@ export class StrainPackagesComponent implements OnInit {
   processJointWeight     = true;
   processUnitConversion  = true;
 
+  showJSONData: boolean;
+
   get userPref() {
     if (this.authenticationService._user.value) {
       const user = this.authenticationService._user.value;
       if (user) {
         const pref = this.authenticationService._user.value.preferences;
-        const preferences = JSON.parse(pref) as UserPreferences;
+        
+        const userPref = this.authenticationService._user.value.userPreferences
+        if (userPref) { 
+          return userPref;
+        }
+        if (!pref) { 
+          console.log('error pref', pref, this.authenticationService._user.value)
+          const preferences = {} as UserPreferences;
+          return preferences;
+        }
+        try { 
+          const preferences = JSON.parse(pref) as UserPreferences;
+          return preferences;
+        } catch(error) { 
+          console.log('error pref', pref, this.authenticationService._user.value)
+        }
+        const preferences = {} as UserPreferences;
         return preferences;
       }
     }
@@ -94,27 +112,25 @@ export class StrainPackagesComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private metrcPackagesService: MetrcPackagesService,
     private inventoryLocationsService: InventoryLocationsService,
-    private currencyPipe : CurrencyPipe,
     private inventoryAssignmentService: InventoryAssignmentService,
     )
   {
   }
 
-  ngOnInit() {
+    ngOnInit() {
 
-    this.conversions =   this.conversionService.getGramsConversions();
-    this.unitsConverted = {} as IUnitsConverted;
-    this.inventoryAssignments = [];
-    this.inventoryLocations$ =  this.setInventoryLocation()
+      this.conversions =   this.conversionService.getGramsConversions();
+      this.unitsConverted = {} as IUnitsConverted;
+      this.inventoryAssignments = [];
+      this.inventoryLocations$ =  this.setInventoryLocation()
+      this.intakeConversion =  this.getUnitConversionToGrams(this.package.unitOfMeasureName)
+      this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity
+      this.baseUnitsRemaining = this.intakeconversionQuantity
+      this.initialQuantity = this.intakeconversionQuantity
+      
+    }
 
-
-    this.intakeConversion =  this.getUnitConversionToGrams(this.package.unitOfMeasureName)
-    this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity
-    this.baseUnitsRemaining = this.intakeconversionQuantity
-    this.initialQuantity = this.intakeconversionQuantity
-
-  }
-
+    
   setInventoryLocation() {
     return  this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
       this.inventoryLocations = data
@@ -145,18 +161,9 @@ export class StrainPackagesComponent implements OnInit {
   generateSku(sku: string, index: number): any {
 
     if (this.userPref?.metrcUseMetrcLabel) {
-      // inventoryAssignment.label = this.package.label
-      // inventoryAssignment.sku = this.package.label
-      return this.package.label;
+      return this.package?.label;
     }
-
     return this.metrcPackagesService.generateSku(sku, index)
-    // if (!this.userPref?.metrcUseMetrcLabel) {
-    //   const index = inventoryAssigments.length + 1
-    //   inventoryAssignment.sku = this.metrcPackagesService.generateSku(sku, index)// this.generateSku(this.package.label, index);
-    //   inventoryAssignment.metrcPackageID = this.package.id
-    // }
-
   }
 
   outPutPackage(metrcPackage: METRCPackage) {
@@ -188,13 +195,6 @@ export class StrainPackagesComponent implements OnInit {
   }
 
   getAvailableUnitsByConversion(event) {
-
-    // console.log('getAvailableUnitsByConversion')
-    // if (this.processUnitConversion == true) {
-    //   console.log('getAvailableUnitsByConversion - disabled')
-    //     this.processUnitConversion  = false;
-    //     return
-    // }
 
     if (!event) { return }
 
@@ -241,35 +241,29 @@ export class StrainPackagesComponent implements OnInit {
     this.validateQuantities();
     let unitsConverted = this.initPackageConversion();
     if ( this.jointWeight == 0 ) { this.jointWeight = 1}
-
+    let totalInputQuantity =  0;
     try {
-      let totalInputQuantity =  0;
-      // if (unitsConverted?.unitConvertTo?.value) {
+
+    
+      if (unitsConverted?.unitConvertTo?.value) {
         totalInputQuantity = this.jointWeight * this.inputQuantity * unitsConverted.unitConvertTo.value;
-      // }
-      console.log('Total Input Quantity', totalInputQuantity)
-      if (!usingJointsField) {
-        //if we are only selecting the conversion type, not entering a value for quantity or joint weight.
-        if ( totalInputQuantity == 0 )  { return };
-        console.log('outputUnitQuantity', this.unitsConverted?.unitOutPutQuantity)
-        // this.inputQuantity = Math.floor(this.unitsConverted.unitOutPutQuantity / this.inputQuantity)
       }
-      //  && this.jointWeight && this.jointWeight !=0
+
+      if (!usingJointsField) {
+        if ( totalInputQuantity == 0 )  { return totalInputQuantity};
+      }
+     
       if (usingJointsField) {
         if (this.unitsConverted?.unitOutPutQuantity) {
-          //now we can set the InputQuantity if the join Value exists, and if we are using joints.
           this.inputQuantity = Math.floor(this.unitsConverted?.unitOutPutQuantity / this.jointWeight)
-          // console.log('usingJointsField outputUnitQuantity', this.inputQuantity)
           totalInputQuantity = this.inputQuantity * this.jointWeight
-          // console.log('usingJointsField outputUnitQuantity', totalInputQuantity)
         }
       }
       //verify the amount doesn't exceed avalible resources.
       if ( this.doesInputQuantityExcceedTotal(totalInputQuantity) ) { return 0 }
       //gets the summary of the remaining  packages.
       const remainingValue  = this.conversionService.getBaseUnitsConvertedTo(this.unitsConverted, this.baseUnitsRemaining, totalInputQuantity);
-      // this.baseUnitsRemaining = remainingValue
-      // console.log('remaining Value', remainingValue)
+    
       unitsConverted = this.conversionService.getAvailibleQuantityByUnitType(unitsConverted,this.jointWeight )
 
       if (unitsConverted) {
@@ -293,20 +287,20 @@ export class StrainPackagesComponent implements OnInit {
     // const batchNumber = this.package.productionBatchNumber
     // const batchNumber = this.package.packagedDate;
 
-    if (this.saved) {
-      const inv = this.packageForm.value as IInventoryAssignment
-      if ( inv.productionBatchNumber  ) {
-          return true;
-      }
+    // if (this.saved) {
+      // const inv = this.packageForm.value as IInventoryAssignment
+      // if ( inv.productionBatchNumber  ) {
+      //     return true;
+      // }
 
-      if (inv.batchDate &&
-          inv.productionBatchNumber &&
-          inv.testDate) {
-            return true;
-          }
-      }
+      // if (inv.batchDate &&
+      //     inv.productionBatchNumber &&
+      //     inv.testDate) {
+      //       return true;
+      //     }
+      // }
 
-    return false
+    return true
   }
 
   initPackageConversion() {
@@ -322,7 +316,7 @@ export class StrainPackagesComponent implements OnInit {
       if (this.unitsConverted.unitConvertTo ) {
         //multiply Input Quantity by JointWeight - if joint's aren't being used, set joints to = 1 so
         //we can continue to use jointWeight in all calculations.
-        console.log('Pre Process',  this.jointWeight)
+        // console.log('Pre Process',  this.jointWeight)
         if (this.unitsConverted.unitConvertTo.name.toLocaleLowerCase() != 'Joints') {
           if (this.jointWeight == 0) {
             this.jointWeight = 1;
@@ -350,7 +344,7 @@ export class StrainPackagesComponent implements OnInit {
   doesInputQuantityExcceedTotal(totalInputQuantity: number): boolean {
     this.baseUnitsRemaining = +this.baseUnitsRemaining.toFixed(2)
     totalInputQuantity      = +totalInputQuantity.toFixed(2)
-    console.log('doesInputQuantityExcceedTotal', totalInputQuantity.toFixed(2) , )
+    // console.log('doesInputQuantityExcceedTotal', totalInputQuantity.toFixed(2) , )
     if (totalInputQuantity > +this.baseUnitsRemaining)  {
       this.inputQuantity = 0;
       this.jointWeight   = 0;
@@ -367,25 +361,50 @@ export class StrainPackagesComponent implements OnInit {
   }
 
   setNonConvertingFieldValues(inventoryAssignment: IInventoryAssignment): IInventoryAssignment {
-    try {
-      const f                                   =  this.f
-      const index                               =  this.inventoryAssignments.length + 1
-      this.inventoryLocation                    =  this.getLocationAssignment(this.inventoryLocationID);
-      inventoryAssignment.sku                   =  this.generateSku(this.package.label, index);
+      try {
+        const f                                   =  this.f
 
-      const cost  =  numeral(+f.get('cost').value).format('0,0');
-      this.cost   = cost
-      const price = numeral(+f.get('price').value).format('0,0');
-      this.price  = price
+        const index                               =  this.inventoryAssignments.length + 1
 
-      try { inventoryAssignment.cost  = this.costValue   } catch (error) { }
-      try { inventoryAssignment.price = this.priceValue  } catch (error) { }
-      inventoryAssignment = this.inventoryAssignmentService.setNonConvertingFieldValues( inventoryAssignment ,this.facility, this.inventoryLocation,
-                                                                                         this.intakeConversion, this.menuItem, this.package, )
+        this.inventoryLocation                    =  this.getLocationAssignment(this.inventoryLocationID);
+        
+        inventoryAssignment.sku                   =  this.generateSku(this.package?.label, index);
+
+        console.log('pricecostvalues',inventoryAssignment, f.value);
+
+        const cost  =  numeral(+f.get('cost').value).format('0,0');
+        this.cost   = cost
+        const price = numeral(+f.get('price').value).format('0,0');
+        this.price  = price
+
+        console.log('pricecostvalues', f.value);
+        
+        inventoryAssignment.cost = +cost;
+        inventoryAssignment.price = +price;
+
+        const itemPackage = this.packageForm.value;
+        inventoryAssignment.facilityLicenseNumber = itemPackage?.facilityLicenseNumber
+        inventoryAssignment.facilityLicenseName = itemPackage?.facilityLicenseName
+        inventoryAssignment.labFacilityLicenseNumber = itemPackage?.facilityLicenseNumber
+        inventoryAssignment.sourceHarvestName  = itemPackage?.sourceHarvestName
+        inventoryAssignment.sourceHarvestNumber  = itemPackage.sourceHarvestNumber
+
+        inventoryAssignment.facilityLicenseName = itemPackage?.facilityLicenseName
+        
+        inventoryAssignment.cbd = +itemPackage?.cbd;
+        inventoryAssignment.thc = +itemPackage?.tch;
+        inventoryAssignment.thc = +itemPackage?.thca;
+        
+
+        inventoryAssignment = this.inventoryAssignmentService.setNonConvertingFieldValues(
+                            inventoryAssignment ,this.facility, this.inventoryLocation,
+                            this.intakeConversion, this.menuItem, this.package, )
+                  }
+      catch (error) {
+        console.log('error', error)
+      }
+  
       return inventoryAssignment
-    }
-     catch (error) {
-    }
   }
 
   getPriceValues(item: IInventoryAssignment) {
@@ -400,26 +419,39 @@ export class StrainPackagesComponent implements OnInit {
     return item;
   }
 
+
   addInventoryAssignmentGroup() {
     let inventoryAssignment = {} as IInventoryAssignment
     if ( ! this.isValidEntry() )  { return }
     try {
-      inventoryAssignment                       = this.getPriceValues(inventoryAssignment)
-      inventoryAssignment                       = this.setNonConvertingFieldValues(inventoryAssignment)
-      const unitConversion                      = this.conversionService.getConversionItemByName(this.conversionName)
-      inventoryAssignment.unitConvertedtoName   = unitConversion.name
-      inventoryAssignment.unitMulitplier        = unitConversion.value
+      
+      inventoryAssignment                       = this.getPriceValues(inventoryAssignment);
+      inventoryAssignment                       = this.setNonConvertingFieldValues(inventoryAssignment);
+      console.log('getPriceValues 1', inventoryAssignment)
 
+      const unitConversion                      = this.conversionService.getConversionItemByName(this.conversionName);
+    
+      if (!inventoryAssignment) {  
+        this.siteService.notify('No Item assigned', 'close', 5000)  
+        return
+      }
+
+      inventoryAssignment.unitConvertedtoName   = unitConversion?.name;
+      inventoryAssignment.unitMulitplier        = unitConversion?.value;
+      
       if (this.unitsConverted.unitConvertTo) {
         inventoryAssignment = this.conversionService.getConversionQuantities(inventoryAssignment, this.unitsConverted, this.inputQuantity, this.jointWeight)
+        // console.log('addInventoryAssignmentGroup 2', inventoryAssignment)
+      
         if (!this.inventoryAssignments) { this.inventoryAssignments = {} as IInventoryAssignment[]}
-        this.inventoryAssignments.unshift(inventoryAssignment)
-        this.unitOfMeasure = {} as IUnitConversion
+        this.inventoryAssignments.unshift(inventoryAssignment);
+        this.unitOfMeasure = {} as IUnitConversion;
         this.resetInventoryFormAssignmentValues();
       }
     } catch (error) {
       console.log('this function', error)
     }
+    return inventoryAssignment;
   }
 
   addRemainingInventoryToAssignedGroup() {
@@ -494,18 +526,38 @@ export class StrainPackagesComponent implements OnInit {
       this.notifyEvent(`Package not completed. There are ${remaining} gram(s) left.`, 'Entry required')
       return
     }
-    const items = this.inventoryAssignments.forEach( item => {
-      item.facilityLicenseNumber = this.facilityLicenseNumber
-    })
-    const inv$=  this.inventoryAssignmentService.addInventoryList(site, this.inventoryAssignments[0].label,
+   
+    const packageItem = this.packageForm.value;
+    
+    this.inventoryAssignments.forEach((assignment, index) => {
+      assignment.thc = packageItem?.thc;
+      assignment.thca = packageItem?.thca;
+      assignment.cbd = packageItem?.cbd;
+      assignment.labFacilityName = packageItem?.labFacilityName;
+      assignment.labFacilityLicenseNumber = packageItem?.labFacilityLicenseNumber;
+      assignment.sourceHarvestName = packageItem?.sourceHarvestName;
+      assignment.sourceHarvestNumber = packageItem?.sourceHarvestNumber;
+      assignment.facilityLicenseName = packageItem?.facilityLicenseName;
+      assignment.facilityLicenseNumber = packageItem?.facilityLicenseNumber;
+    });
+
+    const inv$=  this.inventoryAssignmentService.addInventoryList(site, 
+                                                                  this.inventoryAssignments[0].label,
                                                                   this.inventoryAssignments)
     this.action$ = inv$.pipe(
       switchMap(data => {
-
         this.outoutClosePackage.emit('close')
-        this.notifyEvent('Inventory Packages Imported', 'Success');
-        return of(data)
+       
+        this.siteService.notify('Inventory Packages Imported', 'Success', 2000, 'green');
+        if (this.userPref?.metrcUseMetrcLabel) {
+          if (data) {
+            const item = data[0]
+            const dialogRef = this.inventoryAssignmentService.openInventoryItem(data[0].id)
+          }
+          return of(data)
+        }
 
+        return of(data)
       }
     ))
   }
@@ -555,8 +607,8 @@ export class StrainPackagesComponent implements OnInit {
     const x = this.inputQuantity;
     const y = this.unitsConverted.unitOutPutQuantity;
     const n = y - x
-    console.log('x', x)
-    console.log('this.unitsConverted.unitOutPutQuantity', this.unitsConverted.unitOutPutQuantity)
+    // console.log('x', x)
+    // console.log('this.unitsConverted.unitOutPutQuantity', this.unitsConverted.unitOutPutQuantity)
 
     if ( +n == +0 ) {
       //friendly message not a restriction.
@@ -628,21 +680,21 @@ export class StrainPackagesComponent implements OnInit {
     }
   }
 
-  transformAmount(element){
-    if (this.cost) {
-      this.costValue       = this.cost
-      this.cost            = this.currencyPipe.transform(this.cost, '$');
-      element.target.value = this.cost;
-    }
-  }
+  // transformAmount(element){
+  //   if (this.cost) {
+  //     this.costValue       = this.cost
+  //     this.cost            = this.currencyPipe.transform(this.cost, '$');
+  //     element.target.value = this.cost;
+  //   }
+  // }
 
-  transformPriceAmount(element){
-    if (this.price) {
-      this.priceValue      = this.price
-      this.price           = this.currencyPipe.transform(this.price, '$');
-      element.target.value = this.price;
-    }
-  }
+  // transformPriceAmount(element){
+  //   if (this.price) {
+  //     this.priceValue      = this.price
+  //     this.price           = this.currencyPipe.transform(this.price, '$');
+  //     element.target.value = this.price;
+  //   }
+  // }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

@@ -58,7 +58,9 @@ export interface IPOSOrderItem {
   itemsPrepped                  : string;
   splitGroupID                  : number;
   printLocation                 : number;
-  inventory                     : IInventoryAssignment
+  inventory                     : IInventoryAssignment;
+  metrcGroup1: number;
+  metrcGroup2: number;
 }
 
 export interface PosOrderMenuItem {

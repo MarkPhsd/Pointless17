@@ -14,7 +14,8 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ConversionsService, IUnitConversion } from 'src/app/_services/measurement/conversions.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { UserPreferences } from 'src/app/_interfaces';
-import { IInventoryLocation, InventoryLocationsService } from 'src/app/_services/inventory/inventory-locations.service';
+import {  InventoryLocationsService } from 'src/app/_services/inventory/inventory-locations.service';
+import { LabTestResult, LabTestResultResponse, MetrcLabTestsService } from 'src/app/_services/metrc/metrc-lab-tests.service';
 
 @Component({
   selector: 'app-strains-add',
@@ -42,6 +43,8 @@ export class StrainsAddComponent implements OnInit {
   id:                     any;
   package:                METRCPackage
   package$:               Observable<METRCPackage>;
+  packageForm$: Observable<any>;
+
   facility = {} as        IItemFacilitiyBasic
   site:                   ISite;
   menuItem:               any ;
@@ -65,8 +68,8 @@ export class StrainsAddComponent implements OnInit {
           private siteService: SitesService,
           private menuService: MenuService,
           private authenticationService: AuthenticationService,
-          private inventoryLocationsService: InventoryLocationsService,
           private metrcPackagesService: MetrcPackagesService,
+          private metrcLabService: MetrcLabTestsService,
           private dialogRef: MatDialogRef<StrainsAddComponent>,
           @Inject(MAT_DIALOG_DATA) public data: any,
           private inventoryAssignmentService: InventoryAssignmentService,
@@ -78,8 +81,7 @@ export class StrainsAddComponent implements OnInit {
     } else {
       this.id = this.route.snapshot.paramMap.get('id');
     }
-
-    this.initFields();
+  
   }
 
   async ngOnInit() {
@@ -89,24 +91,88 @@ export class StrainsAddComponent implements OnInit {
     const item$       = this.metrcPackagesService.getPackagesByID(this.id, site) //.pipe().toPromise();
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
-
-    item$.subscribe(
-      {
-        next: data => {
-          this.package = data;
-          if (this.package) {
-            if (this.package.productID) {
-              this.assignMenItem(+this.package.productID)
-            }
-            this.initForm();
-            this.initPriceForm();
+    this.initFields();
+    this.packageForm$ = item$.pipe(switchMap(data => {
+        this.package = data;
+        if (this.package) {
+          if (this.package.productID) {
+            this.assignMenItem(+this.package.productID)
           }
-        },
-        error: err => {
-          console.log('error', err)
         }
+        if (!data.labResults || data.labResults == null ||  
+             data.labResults == 'null' || data.labResults == undefined) { 
+          return this.metrcLabService.getTest(site, data?.id)
+        }
+        return of(data)
       }
-    )
+   
+    )).pipe(switchMap(data => {
+      this.initItemFormData(data) 
+      this.initPriceForm();
+      return of(data)
+    }
+  ))
+  }
+
+  setLabResultsInPackage( labResults: string) {
+    let checked : boolean;
+    const form = this.packageForm;
+
+    if (!labResults) { return };
+    const results: LabTestResultResponse = JSON.parse(labResults);
+    const chem = {tch: 0, thc2:0, tcha:0,tcha2:0, cbd:0,cbd2:0,cbn:0,cbn2:0,cbda:0,cbda2:0}
+    form.patchValue(chem)
+    if (results) {
+        const list = results.data as  LabTestResult[];
+        const cbd = list.find(c => c.testTypeName.includes("Total CBD (mg/g;"));
+        let labChecked : boolean
+        // /
+        try {
+          if (list) { 
+            if (list.length>0) { 
+              let lab = list[0]
+              form.patchValue({labFacilityLicenseNumber: lab?.labFacilityLicenseNumber, 
+                              labFacilityName: lab.labFacilityName});
+            }
+          }
+        } catch (error) {
+          console.log(error)
+        }
+
+        try {
+          const thcLevel = list.find(c => c.testTypeName.includes("Total THC (mg/g)"));
+          if (thcLevel) {
+            form.patchValue({thc: thcLevel?.testResultLevel });
+            form.patchValue({labFacilityLicenseNumber: thcLevel?.labFacilityLicenseNumber, 
+                             labFacilityName: thcLevel.labFacilityName});
+
+            labChecked = true
+            checked = true
+          }
+        } catch (error) {
+          console.log(error)
+        }
+        
+        try {
+            const thca = list.find(c => c.testTypeName.includes("Delta 9"));
+            if (thca) {
+              form.patchValue({thca: thca?.testResultLevel });
+              checked = true
+            }
+        } catch (error) {
+          console.log(error)
+        }
+
+        try {
+          const cbd = list.find(c => c.testTypeName.includes("Total CBD (mg/g;"));
+          if (cbd) {
+            form.patchValue({cbd: cbd?.testResultLevel });
+            checked = true
+          }
+        } catch (error) {
+          console.log(error)
+        }
+    }
   }
 
   get jsonData() {
@@ -223,7 +289,6 @@ export class StrainsAddComponent implements OnInit {
     this.menuService.getMenuItemByID(this.site, id).subscribe(data => {
       if (data) {
         this.menuItem = data
-        console.log( 'results', this.menuItem, this.packageForm.value)
         const item = {productName: data.name, productID: data.id}
         this.packageForm.patchValue(item)
         return;
@@ -263,8 +328,7 @@ export class StrainsAddComponent implements OnInit {
         this.package = data
         this.package.labTestingState =          this.package.labTestingState.match(/[A-Z][a-z]+|[0-9]+/g).join(" ")
         this.facility = {} as                   IItemFacilitiyBasic;
-        this.facility.displayName =             this.package.itemFromFacilityName;
-        this.facility.metrcLicense =            this.package.itemFromFacilityLicenseNumber;
+  
 
         if (this.package.unitOfMeasureName) {
           this.intakeConversion = this.conversionService.getConversionItemByName(this.package.unitOfMeasureName);
@@ -286,9 +350,9 @@ export class StrainsAddComponent implements OnInit {
         if (!this.package.active)  { active = false };
 
         // this can use to assign the item to the form.
-        const facility = `${data?.itemFromFacilityLicenseNumber}-${data?.itemFromFacilityName}`
+        // const facility = `${data?.itemFromFacilityLicenseNumber}-${data?.itemFromFacilityName}`
+        // facilityLicenseNumber:            facility,
 
-        console.log('metrcPackage Data', data)
         this.packageForm.patchValue({
             productCategoryName:              data?.item?.productCategoryName,
             productCategoryType:              data?.item?.productCategoryType,
@@ -299,18 +363,26 @@ export class StrainsAddComponent implements OnInit {
             cost:                             0,
             price:                            0,
             jointWeight:                      1,
-            facilityLicenseNumber:            facility,
-            active                      :     active,
-            sellByDate                  : data?.sellByDate,
-            labTestingPerformedDate     : data?.labTestingPerformedDate,
-            packagedDate                : data?.packagedDate,
-            expirationDate              : data?.expirationDate,
-            useByDate                   : data?.useByDate,
-            productionBatchNumber       : data?.productionBatchNumber,
-            productName                 : data?.productName,
-            productID                   : data?.productID,
-        })
+            active                          : active,
+            sellByDate                      : data?.sellByDate,
 
+            labTestingPerformedDate         : data?.labTestingStateDate,
+            packagedDate                    : data?.packagedDate,
+            expirationDate                  : data?.expirationDate,
+            
+            useByDate                       : data?.useByDate,
+            productionBatchNumber           : data?.productionBatchNumber,
+            productName                     : data?.productName,
+            productID                       : data?.productID,
+        
+            sourceHarvestNumber             : data?.itemFromFacilityLicenseNumber,
+            sourceHarvestName               : data?.itemFromFacilityName,
+            sourceHarvestNames              : data?.itemFromFacilityName,
+
+        })
+        console.log('json data', data)
+        console.log(this.packageForm.value)
+        this.setLabResultsInPackage(this.package?.labResults)
       } catch (error) {
         console.log(error)
       }

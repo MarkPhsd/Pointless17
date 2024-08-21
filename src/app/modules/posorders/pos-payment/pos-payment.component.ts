@@ -7,7 +7,7 @@ import { Component,
          TemplateRef,
          ChangeDetectorRef,
          ElementRef} from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
@@ -111,6 +111,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   _paymentAmount       = 0;
   enterCustomAmount   = false;
   _creditPaymentAmount = 0;
+
+  //for gratuity
+  paymentForm: FormGroup;
 
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
   uiTransactions: TransactionUISettings
@@ -284,7 +287,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
     this.getPaymentMethods(site)
     this.userSubscriber();
-
+    this.paymentForm = this.fb.group({
+      tipAmount: []
+    })
 
     try {
       this.dsiEMVEnabled = this.paymentsMethodsService.DSIEmvSettings?.enabled;

@@ -1,6 +1,6 @@
 {
   "name": "pointlesspos",
-  "version": "3.21.3",
+  "version": "3.22.7",
   "browser": {
     "crypto": false,
     "stream": false,

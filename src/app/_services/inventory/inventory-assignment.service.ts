@@ -45,7 +45,7 @@ export interface IInventoryAssignment {
   baseQuantityRemaining: number;
   dateCreated:           string;
   expiration:            string;
-  facilityLicenseNumber: string;
+
   labName: string;
   producerName: string;
   facilityID: number;
@@ -120,9 +120,14 @@ export interface IInventoryAssignment {
   labTestingPerformedDate: string;
   packagedDate: string;
   expirationDate: string;
-  sourceHarvestName: string;
   json: string; //stores info like ebay publishing.
   color: string;
+  labFacilityLicenseNumber: string;
+  labFacilityName: string;
+  sourceHarvestName: string;
+  sourceHarvestNumber: string;
+  facilityLicenseNumber: string;
+  facilityLicenseName: string
 }
 
 export interface inventoryJson {
@@ -261,7 +266,7 @@ export class InventoryAssignmentService {
 
       const url = `${site.url}${controller}${endPoint}${parameters}`
 
-      console.log('url', url)
+      // console.log('url', url)
 
       return  this.http.get<AvalibleInventoryResults>(url)
 
@@ -287,15 +292,20 @@ export class InventoryAssignmentService {
 
 }
 
-  getSummaryOfGramsUsed(site: ISite, inventoryAssigments: IInventoryAssignment[], packageQuantity: number): any {
+  getSummaryOfGramsUsed(site: ISite, inventoryAssigments: IInventoryAssignment[], packageQuantity: number): number {
+    console.log(inventoryAssigments, packageQuantity)
+
     if (inventoryAssigments) {
       let total = 0; inventoryAssigments.forEach(item =>
-      {
-        total += item.baseQuantity //* item.jointWeight
-      })
-      console.log('total used')
+        {
+          total += item.baseQuantity //* item.jointWeight
+        })
+      // console.log('total used')
+      if (!total)  { return packageQuantity }
+      // if (!packageQuantity) { return 0}
       return packageQuantity - total
     }
+    return packageQuantity;
   }
 
   getInventoryAssignment(site: ISite, id: number): Observable<IInventoryAssignment> {
@@ -578,33 +588,26 @@ export class InventoryAssignmentService {
   }
 
   setNonConvertingFieldValues(inventoryAssignment: IInventoryAssignment,
-                                        facility, inventoryLocation , intakeConversion, menuItem: IMenuItem, metrcPackage: METRCPackage ): IInventoryAssignment {
+                                        facility, inventoryLocation , intakeConversion, 
+                                        menuItem: IMenuItem, metrcPackage: METRCPackage ): IInventoryAssignment {
 
-    // inventoryAssignment = this.inventoryAssignmentService.setNonConvertingFieldValues( )
-    //assign values to inventoryAssignement
     inventoryAssignment.locationID            = inventoryLocation?.id
     inventoryAssignment.location              = inventoryLocation?.name
-
     inventoryAssignment.intakeUOM             = intakeConversion?.name
     inventoryAssignment.intakeConversionValue = intakeConversion?.value
-
-    inventoryAssignment.facilityLicenseNumber = facility?.metrcLicense
-
     inventoryAssignment.productID             = menuItem?.id
     inventoryAssignment.productName           = menuItem?.name
     inventoryAssignment.itemStrainName        = menuItem?.name
-
     inventoryAssignment.label                 = metrcPackage?.label
     inventoryAssignment.metrcPackageID        = metrcPackage?.id
     inventoryAssignment.packageType           = metrcPackage?.packageType
     inventoryAssignment.unitOfMeasureName     = metrcPackage?.unitOfMeasureName
     inventoryAssignment.productCategoryName   = metrcPackage?.productCategoryName
-    // metrcPackage.
 
-    inventoryAssignment.notAvalibleForSale  = false
+    inventoryAssignment.notAvalibleForSale    = false;
+
     if (!inventoryLocation.activeLocation) { inventoryAssignment.notAvalibleForSale  = true}
-    inventoryAssignment.requiresAttention     = false
-
+    inventoryAssignment.requiresAttention     = false;
     inventoryAssignment.employeeName          = localStorage.getItem('username');
     inventoryAssignment.employeeID            = parseInt(localStorage.getItem('userID'));
 
@@ -617,17 +620,13 @@ export class InventoryAssignmentService {
 
   assignProductToInventory(menuItem: IMenuItem,  item: IInventoryAssignment) {
     if (!item) {item = {} as IInventoryAssignment}
-
     item.productName = menuItem?.name
     item.label       = menuItem?.sku;
     item.productID   = menuItem?.id;
     item.cost        = menuItem?.wholesale;
-    // item.price       = menuItem?.retail;
-    // item.productCategoryID = menuItem?.categoryID;
     item.notAvalibleForSale =  false;
     item.itemTypeID = menuItem?.itemType?.id;
     item.packageType = menuItem?.itemType?.name;
-    // console.log('assignProductToInventory', item)
     return item
   }
 
@@ -686,7 +685,7 @@ export class InventoryAssignmentService {
         id:                                [''],
         label:                             [''],
         packageType:                       [''],
-        sourceHarvestName:                 [''],
+
         locationID:                        [''],
         locationName:                      [''],
         locationTypeName:                  [''],
@@ -770,7 +769,10 @@ export class InventoryAssignmentService {
         labTestingPerformedDate         : [],
         expirationDate                  : [],
         useByDate                       : [],
-
+        sourceHarvestName : [],
+        sourceHarvestNumber: [],
+        labFacilityLicenseNumber:[],
+        labFacilityName: [],
         json                             : [],
       }
     )

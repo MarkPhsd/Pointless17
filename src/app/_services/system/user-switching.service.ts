@@ -188,7 +188,7 @@ export class UserSwitchingService implements  OnDestroy {
     }))
   }
 
-  userAutFailed(user) : IUserProfile {
+  userAutFailed(user) : any {
     let message = user?.errorMessage;
     if (user?.errorMessage) {
       user.message = 'User not found.'
@@ -197,7 +197,8 @@ export class UserSwitchingService implements  OnDestroy {
     if (user?.errorMessage) {
       this.snackBar.open(`${user?.errorMessage} ${user?.message}`, 'Failed Login', {duration: 1500})
     }
-    return user
+
+    return {user: user, sheet: null}
   }
 
   processTimeClockLogin(user: string, password: string): Observable<any>  {
@@ -212,134 +213,80 @@ export class UserSwitchingService implements  OnDestroy {
     const userLogin = { userName, password };
     const timeOut = 3000;
     this.authenticationService.authenticationInProgress = true;
+    const  deviceName = localStorage.getItem('devicename');
+
     // Authentication stream
     let auth$ = this.authenticate(userLogin).pipe(
       concatMap(user => {
-        if (!user || (user.message === 'failed' || user.errorMessage) ) {
+        if (!user || (user?.message === 'failed' || user?.errorMessage) ) {
+          // console.log('auth failed', user)
+          
           this.authenticationService.authenticationInProgress = false;
           return of(this.userAutFailed(user));
         }
         user.message = 'success';
         const currentUser = this.setUserInfo(user, password);
         this.uiSettingService.initSecureSettings();
-        return this.contactsService.getContact(site, user.id);
+        return this.contactsService.getContact(site, user?.id);
       })
     );
 
     // Authorization update stream
     let updateAuth$ = auth$.pipe(
       concatMap(data => {
-        if (!data || (data.errorMessage != undefined && data.errorMessage != null)) {
+        // console.log('submit 3', data)
+        if (!data || (data?.errorMessage != undefined && data?.errorMessage != null)) {
           return of(this.userAutFailed(data));
         }
         this.authenticationService.updateUserAuths(
-          data.clientType?.jsonObject ? JSON.parse(data.clientType.jsonObject) : null
+          data?.clientType?.jsonObject ? JSON.parse(data?.clientType?.jsonObject) : null
         );
-        const item = localStorage.getItem('user');
-        return of(JSON.parse(item));
+        data.message = 'success';
+        return of(data);
       })
     );
 
     // Handle balance sheet or pass through user data
     let balanceSheet$ = updateAuth$.pipe(
       concatMap(user => {
+
         if (user && user?.errorMessage !== null) {
           this.authenticationService.authenticationInProgress = false;
           return of(this.userAutFailed(user));
         }
-        if (clockInOnly) return of(user);
-        return this.platformService.isApp() ? this.promptBalanceSheet(user) : of(user);
+        
+        user.message = 'success'
+        const userSheet = {sheet: null, user: user}
+        
+        if (clockInOnly) return of(userSheet);
+
+        if  ( this.platformService.isApp() && deviceName ) { 
+          return this.promptBalanceSheet(user)
+        } 
+        
+        // console.log('submit with no balancesheet', clockInOnly, userSheet)
+
+        return of(userSheet);
       })
     );
 
     // Final result handling
     let result$ = balanceSheet$.pipe(
       concatMap(data => {
-        if (!data || data.message === 'failed') {
+    
+        if (!data || data?.message === 'failed') {
           this.authenticationService.authenticationInProgress = false;
           return of(this.userAutFailed(data));
         }
+      
+        console.log('submit 5', data)
+    
         return of(data);
       })
     );
 
     return result$;
-    // this.clearSubscriptions();
-    // this.authenticationService.clearUserSettings();
-    // const site      = this.siteService.getAssignedSite();
-    // const userLogin = { userName, password } as userLogin;
-    // const timeOut   = 3 * 1000;
-
-    // let auth$ =  this.authenticate(userLogin).pipe(
-    //   concatMap(  user => {
-
-    //     if (!user || (user?.message === 'failed')) {
-    //       console.log('user message',  user?.message)
-    //       return of(this.userAutFailed(user))
-    //     }
-
-    //     user.message = 'success'
-    //     const currentUser = this.setUserInfo(user, password)
-    //     this.uiSettingService.initSecureSettings();
-    //     return this.contactsService.getContact(site, user?.id)
-
-    // }))
-
-    // let updateAuth$ = auth$.pipe(concatMap(data => {
-
-    //   if (data && (data?.errorMessage != undefined && data?.errorMessage != null)) {
-    //     console.log('updateAuth$ ', data, data?.message, data.errorMessage)
-    //     if (!data || (data?.message === 'failed' )) {
-    //       return of(this.userAutFailed(data))
-    //     }
-    //   }
-
-    //   const item = localStorage.getItem('user')
-    //   const user = JSON.parse(item) as IUser;
-
-    //   if (data && data.clientType && data?.clientType?.jsonObject) {
-    //     this.authenticationService.updateUserAuths(JSON.parse(data?.clientType?.jsonObject))
-    //   } else  {
-    //     console.log('no Auths updateAuth$', data)
-    //     this.authenticationService.updateUserAuths(null)
-    //   }
-
-    //   return of(user )
-    // }))
-
-    // let balanceSheet$ = updateAuth$.pipe(concatMap(user => {
-
-    //   if (user && (user?.errorMessage != undefined && user?.errorMessage != null)) {
-    //     console.log('balanceSheet$', user)
-    //     if (user?.message === 'failed' ) {
-    //       return of(this.userAutFailed(user))
-    //     }
-    //   }
-
-    //   console.log('update auths', user)
-    //   if (clockInOnly) {   return of(user)  }
-
-    //   if (user) {
-    //     if ( this.platformService.isApp()  )  {
-    //       return this.promptBalanceSheet(user)
-    //     }
-    //     if ( !this.platformService.isApp() )  {
-    //       return of(user)
-    //     }
-    //   }
-    //   console.log('no user no login' )
-    //   return of(null)
-    // }))
-
-    // let result$ = balanceSheet$.pipe( concatMap(data => {
-    //   if (!data || (data?.message === 'failed')) {
-    //     console.log('balance sheet Failed', data,  data?.message)
-    //     return of(this.userAutFailed(data))
-    //   }
-    //   return of(data)
-    // }))
-
-    // return result$
+ 
 }
 
   // getAuthorization()
@@ -415,6 +362,7 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   clearSubscriptions() {
+    this.orderMethodService.clearOrderSubscription();
     this.orderMethodService.updateOrderSubscription(null);
     this.contactsService.updateSearchModel(null);
     this.sheetMethodsService.updateBalanceSearchModel(null);

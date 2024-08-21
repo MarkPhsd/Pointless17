@@ -91,10 +91,10 @@ export class BalanceSheetMethodsService {
     if (this.platformService.isAppElectron || this.platformService.androidApp) {
       const site     = this.sitesService.getAssignedSite()
       const deviceName = this.getDeviceName();
+
       localStorage.setItem('user', JSON.stringify(user))
 
-
-      if (!user)  { of({sheet: null, user: user, err: null}) };
+      if (!user)  { return of({sheet: null, user: user, err: null}) };
 
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
@@ -103,8 +103,10 @@ export class BalanceSheetMethodsService {
             return of({sheet: null, user: user, err: null})
           }
           if (data.id == 0 )  {
+              user.message = 'success'
              return of({sheet: null, user: user, err: null})
           }
+          user.message = 'success'
           const item = {sheet: data, user: user, err: null};
           return of(item)
         }),
@@ -114,6 +116,7 @@ export class BalanceSheetMethodsService {
         })
       )
     }
+    user.message = 'success'
     return of({sheet: null, user: user, err: null})
   }
 

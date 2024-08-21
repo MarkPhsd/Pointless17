@@ -1040,9 +1040,10 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
         this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
         this.menuItems = this.menuItems.filter(item => item.id !== -1)
         if ( this.value < 100) {
-
-        const lastItem = this.getNextMenuItem();
-          this.menuItems.push(lastItem)
+          if (!this.endOfRecords) {
+            const lastItem = this.getNextMenuItem();
+            this.menuItems.push(lastItem)
+          }
         }
 
         this.loading   = false

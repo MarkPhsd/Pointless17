@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { EmployeeClockMethodsService } from 'src/app/_services/employeeClock/employee-clock-methods.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 @Component({
   selector: 'app-receipt-view',
   templateUrl: './receipt-view.component.html',
@@ -66,7 +67,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   payments          : any[];
   orderTypes        : any;
   platForm          = '';
-  action$ : Observable<any>;
+  action$           : Observable<any>;
   printOptions      : printOptions;
   result            : any;
   isElectronServiceInitiated = false;
@@ -78,13 +79,13 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   @Input() order    : IPOSOrder;
 
-  _order            : Subscription;
-  subscriptionInitialized: boolean;
-  electronReceiptSetting: ISetting;
-  _printReady       : Subscription;
-  printReady        : boolean
+  _order                  : Subscription;
+  subscriptionInitialized : boolean;
+  electronReceiptSetting  : ISetting;
+  _printReady             : Subscription;
+  printReady              : boolean
 
-  orderCheck        = 0;
+  orderCheck            = 0;
 
   isElectronApp         : boolean;
   electronSetting       : ISetting;
@@ -99,12 +100,12 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   autoPrinted           = false;
   email$: Observable<any>;
-  printAction$: Observable<any>;
-  layout$: Observable<any>;
-  order$ : Observable<any>;
+  printAction$  : Observable<any>;
+  layout$       : Observable<any>;
+  order$        : Observable<any>;
   user          : any;
   _user: Subscription;
-  tempPayments: PosPayment[];
+  tempPayments  : PosPayment[];
 
   printView: number;
   groupID = 0
@@ -166,12 +167,13 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   constructor(
-    public orderService           : OrdersService,
-    public orderMethodsService    : OrderMethodsService,
-    public employeeClockMethodsService: EmployeeClockMethodsService,
+    public  orderService           : OrdersService,
+    private uiSettingService       : UISettingsService,
+    public  orderMethodsService    : OrderMethodsService,
+    public  employeeClockMethodsService: EmployeeClockMethodsService,
     private settingService        : SettingsService,
     private siteService           : SitesService,
-    public platFormService        : PlatformService,
+    public  platFormService        : PlatformService,
     public  printingService       : PrintingService,
     private orderMethodService    : OrderMethodsService,
     private coachMarksService     : CoachMarksService,
@@ -451,22 +453,33 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
 
   async print() {
+    const  ui  = this.uiSettingService._transactionUISettings.value as TransactionUISettings;
     if (this.platFormService.isAppElectron) {
       await this.printElectron();
-      // this.printPrep();
-      this.sendOrder()
+      //   uiTransactions  = {} as TransactionUISettings;
+      // uiTransactions$  : Observable<ISetting>;
+      if (!ui?.disablePrintPrepOnPrint) { 
+        this.sendOrder()
+      }
+      if (this.order?.completionDate) {
+        this.sendOrder()
+      }
       return
     }
 
     if (!this.printerName) {
       this.convertToPDF()
-      // this.printPrep();
       return
     }
 
     if (this.platFormService.webMode)    {
       this.convertToPDF()
-      this.printPrep();
+      if (!ui.disablePrintPrepOnPrint) { 
+        this.sendOrder()
+      }
+      if (this.order?.completionDate) {
+        this.sendOrder()
+      }
       return;
     }
   }
@@ -575,7 +588,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   getOrder() {
      let printOrder$  = of(this.printingService.printOrder);
      if (!this.printingService.printOrder) {
-      printOrder$ = this.orderMethodsService.currentOrder$
+       printOrder$ = this.orderMethodsService.currentOrder$
      }
 
      return printOrder$.pipe(switchMap(data => {
@@ -610,7 +623,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       })
     )
   }
-
 
   initPopOver() {
     if (this.user?.userPreferences?.enableCoachMarks ) {

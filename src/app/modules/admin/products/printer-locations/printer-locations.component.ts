@@ -71,6 +71,10 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
     ))
   }
 
+  refresh() { 
+    this.receiptList$ = this.refreshAll();
+  }
+
   getReceiptList() {
     const site         = this.siteService.getAssignedSite()
     return this.settingService.getReceipts(site).pipe(switchMap(data => {

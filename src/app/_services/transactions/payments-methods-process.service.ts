@@ -158,7 +158,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     if (!order) {  return of(null)  }
     if (this.isApp) {
       return  sendOrder$ = this.uiSettingService.transactionUISettings$.pipe(switchMap(data => {
-        // console.trace('prepOrderOnExit data', data)
         if (data) {
           if (data.prepOrderOnExit) {
             return this.sendToPrep (order, true, data, true  )
@@ -306,7 +305,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   prepPrintUnPrintedItems(id: number, cancelUpdateSubscription?: boolean) {
     if (!this.userAuthorizationService?.user) { return of(null)  }
     if (id) {
-      const site = this.sitesService.getAssignedSite()
+      const site = this.sitesService.getAssignedSite();
+
+        
       return  this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
         concatMap(data => {
 

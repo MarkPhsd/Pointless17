@@ -16,7 +16,6 @@ import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.serv
 import { ElectronService } from 'ngx-electron';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { PollingService } from 'src/app/_services/system/polling.service';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 
 @Component({
@@ -468,6 +467,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   pinLogin(event) {
     const pin = event.password;
     const user = event.username;
+    this.dialogOpen = false
     this.submitLogin( user, pin)
   }
 
@@ -476,6 +476,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.spinnerLoading = true;
     const userName = this.f.username.value;
     const password = this.f.password.value;
+    this.dialogOpen = false
     this.submitLogin(userName,password)
   }
 
@@ -484,16 +485,21 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(concatMap(result =>
         {
 
+          // console.log(result)
           //if you assign these two lines, detail here why you have done that.
           //for some reason they were here, but they prevented a login,
           //after login it would log out. but reviewing these two lines does not
           //reveal why.
-          this.pollingService._poll.next(true)
-          this.spinnerLoading = false;
-          this.orderMethodsService.clearOrderSubscription();
-          this.paymentMethodsservice._sendOrderAndLogOut.next(null)
-          this.initForm();
+          try {
+            this.pollingService.clearPoll();
+            this.spinnerLoading = false;
+            this.paymentMethodsservice._sendOrderAndLogOut.next(null);
+          } catch (error) {
+            console.log('subscriber error', error)
+          }
 
+          this.initForm();
+      
           //if is app then result is a combination of user and sheet
           //if is not app then result is the user.
           let user = result?.user ;
@@ -502,41 +508,52 @@ export class LoginComponent implements OnInit, OnDestroy {
           //if there is a sheet we login here with the user to prompt the sheet if needed.
           if (sheet) {  if (this.loginApp(result)) {  return of('success') } }
           if (result && result.username != undefined) { user = result }
+          
+          console.log('user message', user, result, result?.message, result?.errorMessage)
 
-          if (user) {
+          try {
+            if (user) {
+          
+              if (user && user?.errorMessage === 'failed') {
+                console.log('login failed')
+                this.siteService.notify('Login failed', 'Close', 3000, 'red')
+                this.authenticationService.authenticationInProgress = false;
+                this.clearUserSettings()
+                this.authenticationService.updateUser(null);
+                return of('failed')
+              }
 
-            if (user && user?.errorMessage === 'failed') {
-              this.authenticationService.authenticationInProgress = false;
-              this.clearUserSettings()
-              this.authenticationService.updateUser(null);
-              return of('failed')
-            }
-
-
-            if (this.returnlUrl) { 
-              if (user && user?.message && user?.message.toLowerCase() === 'success') {
-                this.authenticationService.updateUser(user)
-                this.userSwitchingService.processLogin(user, this.returnlUrl)
+              if (this.returnlUrl) { 
+                if (result && result?.message && result?.message === 'success') {
+                  console.log('login success 1')
+                  this.authenticationService.updateUser(user)
+                  this.userSwitchingService.processLogin(user, this.returnlUrl)
+                  this.closeDialog();
+                  return of('success')
+                }
+              }
+            
+              if (user && ( user?.message === 'success' || (result?.message === 'success'))) {
+                console.log('login success 2')
+                let pass = false
+                this.authenticationService.authenticationInProgress = false;
+                // user.
+                if (!this.loginAction) {  this.userSwitchingService.assignCurrentOrder(user) }
+                if (this.loginAction?.name === 'setActiveOrder') {
+                  this.userSwitchingService.processLogin(user, '/pos-payment')
+                  pass = true
+                }
+                if (!pass) { this.userSwitchingService.processLogin(user, '')  }
                 this.closeDialog();
                 return of('success')
               }
             }
-
-            if (user && user?.message && user?.message.toLowerCase() === 'success') {
-              let pass = false
-              this.authenticationService.authenticationInProgress = false;
-              // user.
-              if (!this.loginAction) {  this.userSwitchingService.assignCurrentOrder(user) }
-              if (this.loginAction?.name === 'setActiveOrder') {
-                this.userSwitchingService.processLogin(user, '/pos-payment')
-                pass = true
-              }
-              if (!pass) { this.userSwitchingService.processLogin(user, '')  }
-              this.closeDialog();
-              return of('success')
-            }
+          } catch (error) {
+            console.log('subscriber error', error)
           }
+          return of(null)
         }
+        
     ))
   }
 
@@ -546,6 +563,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   closeDialog() {
     if (this.dialogOpen) {
+      console.log('dialog open')
       try {
         this.dialogRef.close();
       } catch (error) {

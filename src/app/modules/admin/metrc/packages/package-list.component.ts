@@ -211,7 +211,7 @@ export class PackageListComponent implements OnInit {
         this.selectedSiteID  = data[0].id
         this.site = data[0]
         this.searchForm.patchValue({selectedSiteID: this.site?.id})
-        console.log(this.searchForm.value)
+        // console.log(this.searchForm.value)
         this.packageImport.siteID = this.selectedSiteID
         this.refreshFilters(this.site)
       }
@@ -322,7 +322,7 @@ export class PackageListComponent implements OnInit {
 
   getMetrcCategory(event) {
     this.metrcCategoryID = event
-    console.log(this.metrcCategory, event)
+    // console.log(this.metrcCategory, event)
     if (this.metrcCategoryID == 0) {
       this.metrcCategory = null
       this.refreshSearch()
@@ -378,7 +378,7 @@ export class PackageListComponent implements OnInit {
         return;
       }
 
-      console.log(search)
+      // console.log(search)
       // return;
       this.action$ = this.metrcPackagesService.importActiveBySearch(this.site, search).pipe(switchMap (data => {
         this.importing = false

@@ -1,4 +1,5 @@
 <div *ngIf="(action$ | async) as action"></div>
+
 <div *ngIf="inputForm && package"  [formGroup]="inputForm">
 
     <div class="grid-menu-search-selector">
@@ -29,27 +30,30 @@
       </div>
 
     </div>
+    <div style="width:150px" *ngIf="package?.unitOfMeasureName != 'Each'">
+      <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'labFacilityLicenseNumber'"
+      > Lab Faclicity Number</app-value-fields>
 
-    <div class="grid-menu-search-selector">
-      <app-facility-search-selector
-          [searchForm]="inputForm"
-          (itemSelect)="getVendor($event)">
-      </app-facility-search-selector>
+       <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'labFacilityName'"
+      > Lab Facility Name</app-value-fields>
 
-        <!-- ID {{package?.productID}} -->
-      <div style="margin-top: 5px;" *ngIf="inputForm.controls['facilityLicenseNumber'].value">
-        <button mat-raised-button color="accent" (click)="openFacility()">
-          <mat-icon>open_in_new</mat-icon>
-        </button>
+       <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'sourceHarvestNumber'"
+      > Producer Number</app-value-fields> 
+
+       <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'sourceHarvestName'"
+        >Producer Name
+      </app-value-fields>
+
       </div>
 
-
-    </div>
-
-    <div *ngIf="package && package.sourceHarvestName">
-      <mat-label>Source harvest:</mat-label>
-      {{package?.sourceHarvestName}}
-    </div>
 
     <div>
       <mat-form-field appearance="outline" fxFill>

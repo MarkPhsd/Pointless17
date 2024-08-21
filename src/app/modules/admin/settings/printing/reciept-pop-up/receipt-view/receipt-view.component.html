@@ -6,7 +6,6 @@
 </div>
 
 <div *ngIf="printView">
-
   <div *ngIf="(printAction$ | async) as printAction"></div>
 
   <div *ngIf="(refreshView$ | async) as layout">
@@ -15,16 +14,12 @@
 
       <div *ngIf="platFormService.isApp()">
         <button  mat-button (click)="print()">
-          <span *ngIf="printerName">
-            <mat-icon>print</mat-icon>{{printerName}}
-          </span>
+          <span *ngIf="printerName"> <mat-icon>print</mat-icon>{{printerName}} </span>
         </button>
       </div>
 
       <div *ngIf="!hideExit">
-        <button mat-button (click)="exit()">
-          <mat-icon>close</mat-icon> Exit
-        </button>
+        <button mat-button (click)="exit()"> <mat-icon>close</mat-icon> Exit </button>
       </div>
 
     </div>
@@ -44,9 +39,7 @@
         </button>
       </div>
 
-      <button  mat-button (click)="convertToPDF()">
-        <mat-icon>pdf</mat-icon> PDF
-      </button>
+      <button  mat-button (click)="convertToPDF()">  <mat-icon>pdf</mat-icon> PDF </button>
 
     </div>
 

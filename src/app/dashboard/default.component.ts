@@ -247,7 +247,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this._sendAndLogOut  = this.paymentMethodsService.sendOrderAndLogOut$.pipe(switchMap(
         send => {
-          if (!send || send == null) {
+          if (!send || send == null || send == undefined) {
             return of('false')  ;
           }
           const noOrder = (!send.order || send.order == undefined)
@@ -297,8 +297,13 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           ui = this.uiTransactions;
           this.uiSettingsService._transactionUISettings.next(this.uiTransactions)
           return of(data);
-      })).pipe(concatMap(data => {
+      })
+       ).pipe(concatMap(data => {
+          if (!data) { 
+            return of(ui)
+          }
           return this.initMenuButtonList( data );
+          return of(ui)
       })).pipe(concatMap(data => {
           return of(ui)
       }
@@ -307,22 +312,23 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   initMenuButtonList(ui:TransactionUISettings) {
     const site = this.siteService.getAssignedSite()
-    if (!this.authorizationService._user.value) { return }
+    if (!this.authorizationService._user.value) { return of(null)}
 
     if (this.menuButtonsInitialized) { 
       if (this.mbMenuGroupService._menuButtonList.value) { 
-        return;
+        return of(null)
       }
     }
    
     if (ui?.multiButtonOrderHeader && ui?.multiButtonOrderHeader != 0) {
-      return this.mbMenuGroupService.getGroupByID(site, ui?.multiButtonOrderHeader).pipe(switchMap(
+      return this.mbMenuGroupService.getGroupByID(site, ui?.multiButtonOrderHeader).pipe(concatMap(
         data => {
           this.menuButtonsInitialized = true
           this.mbMenuGroupService.setOrderHeaderMenuButtonList(data)
           return of(data)
       }))
     }
+    return of(null)
   }
 
 

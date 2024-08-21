@@ -418,18 +418,18 @@
         </div>
 
       </mat-tab>
-      <ng-container [ngTemplateOutlet]="chemicalView"></ng-container>
+      <mat-tab label="Chemicals">
+        <ng-container [ngTemplateOutlet]="chemicalView"></ng-container>
+      </mat-tab>
     </mat-tab-group>
   </div>
 </ng-template>
 
 <ng-template #chemicalView>
-  <mat-tab label="Chemicals">
-    <app-chemical-values
-      [inputForm]="inputForm"
-      [inventoryItem]="true">
-    </app-chemical-values>
-  </mat-tab>
+  <app-chemical-values
+    [inputForm]="inputForm"
+    [inventoryItem]="true">
+  </app-chemical-values>
 </ng-template>
 
 <ng-template #buttonColorPicker>

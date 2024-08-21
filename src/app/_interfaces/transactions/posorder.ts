@@ -154,6 +154,8 @@ export interface IPOSOrder {
   cashDiscountNet 	: number | null;
   cashDiscountTax	  : number | null;
   cashDiscountGross : number | null;
+  metrcGroup1: number;
+  metrcGroup2: number;
 }
 
  export interface ClientsPOSOrders {
@@ -206,6 +208,8 @@ export interface IPOSOrder {
   medFlowerLimit: number;
   combinedCategoryLimit: number;
   solidCountLimit: number;
+  metrcGroup1: number;
+  metrcGroup2: number;
 }
 
 export interface ClientType {
@@ -224,6 +228,8 @@ export interface ClientType {
   limitCombinedCategory:number;
   allowStaffUse    : boolean;
   authorizationGroupID:  number;
+  metrcGroup1: number;
+  metrcGroup2: number;
   jsonObject      : string;
 }
 
@@ -324,6 +330,8 @@ export interface PosOrderItem {
   cashDiscountTotalPrice: number | null;
   cashDiscountGross: number | null;
   color: string | null;
+  metrcGroup1: number;
+  metrcGroup2: number;
 }
 //ItemPrepped,PrintLocation,Splitter as SplitGroupID,Gratuity,ProdSecondLanguage,productSortOrder,PizzaMultiplier, PizzaGroup, PriceTierID
 
@@ -829,4 +837,6 @@ export interface OrderToFrom {
   cashDiscountValue?: number | null;
   items?: any[];
   payments?: any[];
+  metrcGroup1: number;
+  metrcGroup2: number;
 }

@@ -1,14 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, concatMap, switchMap } from 'rxjs/operators';
 import { IProduct, ISite } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { METRCFacilities } from 'src/app/_interfaces/metrcs/facilities';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { MenuService } from 'src/app/_services';
-import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { IItemType, ItemType_Properties, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { MetrcFacilitiesService } from 'src/app/_services/metrc/metrc-facilities.service';
@@ -39,43 +39,12 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
     private unitTypeService: UnitTypesService,
     private itemTypeService: ItemTypeService,
     private productButtonService: ProductEditButtonService,
-    private metrcFacilitiesService: MetrcFacilitiesService,
+
   ) { }
 
   ngOnInit(): void {
     this.site = this.siteService.getAssignedSite()
-    this.assignDefaultFacility(this.package);
     this.assignDefaultCatalogItem(this.package)
-  }
-
-  assignDefaultFacility( metrcPackage: METRCPackage) {
-    if (metrcPackage && metrcPackage.itemFromFacilityName) {
-      this.inputForm.patchValue({facilityLicenseNumber: `${metrcPackage?.itemFromFacilityLicenseNumber} -${metrcPackage?.itemFromFacilityName}`  });
-      const site = this.siteService.getAssignedSite();
-      this.metrcFacilitiesService.getItemsNameBySearch(site,metrcPackage?.itemFromFacilityLicenseNumber).pipe(
-        switchMap(data => {
-          if (data) {
-            return this.metrcFacilitiesService.getFacility(data[0].id, site)
-          }
-          return this.postNewFacility( metrcPackage?.itemFromFacilityLicenseNumber,metrcPackage?.itemFromFacilityName )
-      })).subscribe(data => {
-        if (data && data.license) {
-          this.facilityLicenseNumber = `${data.license.number}-${data.name}`
-          this.inputForm.patchValue({facilityLicenseNumber: this.facilityLicenseNumber});
-        }
-      })
-    }
-  }
-
-  //inputForm.controls['facilityLicenseNumber'].value)
-  openFacility(){
-    if (this.package.itemFromFacilityLicenseNumber) {
-      this.productButtonService.openFacility(this.package?.itemFromFacilityLicenseNumber)
-    }
-  }
-
-  postNewFacility(licenseNumber: string, name: string): Observable<METRCFacilities> {
-    return of(null)
   }
 
   // consider maning a component or Directive.
@@ -91,16 +60,11 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       this.inputForm.patchValue({productName: ``})
       const site = this.siteService.getAssignedSite();
       let searchModel = {} as ProductSearchModel;
-      console.log( this.package, metrcPackage);
-      //get conditional item Name
-      if (this.package.itemStrainName)
 
-        console.log( this.package, metrcPackage)
+      if (this.package.itemStrainName)
+        // console.log( this.package, metrcPackage)
         searchModel.exactNameMatch = true;
         searchModel.name = metrcPackage?.productName ;
-
-        console.log(' metrcPackage.productName' , searchModel, metrcPackage?.productName, this.package?.itemStrainName  )
-
         const list$ =  this.menuService.getItemBasicBySearch( site, searchModel ).pipe(
           switchMap(data => {
             if (data) {
@@ -116,7 +80,6 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
 
         list$.subscribe(
             {next: data => {
-              console.log(' get item from basic search ', searchModel, searchModel?.name, data )
               if (data) {
                 const item = {} as IMenuItem;
                 if (this.dataIsMenuItem(data)) {
@@ -153,17 +116,30 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
     let uom = {} as any;
     let product = {} as IProduct;
 
-    type.name   = met?.item?.productCategoryType;
+    type.name   = met?.item?.productCategoryName;
     const site  = this.siteService.getAssignedSite()
-    const type$ = this.getItemType(met?.item?.productCategoryType)
+    const type$ = this.getItemType(met?.item?.productCategoryName)
     const uom$  = this.getUnitTypeByName(met?.unitOfMeasureName)
+    let packageWeight = 0
 
-    let action$ = type$.pipe(switchMap(data => {
+    let jsonInfo : ItemType_Properties
+    let action$ = type$.pipe(concatMap(data => {
       type = data;
+
+      try {
+        if (data.json) {
+          jsonInfo = JSON.parse(data.json) as ItemType_Properties
+          if (jsonInfo) { 
+            packageWeight = jsonInfo?.metrcPackageWeight;
+          }
+        }
+      } catch {
+      }
+
       return uom$
-    })).pipe(switchMap(data => {
+    })).pipe(concatMap(data => {
       uom = data;
-      product.name = met?.item.name;
+      product.name = met?.item?.name;
       product.active = true;
       product.webProduct = 1;
 
@@ -171,6 +147,14 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       product.prodModifierType = type?.id;
       product.unitTypeID = uom?.id;
       product.productCount = 0;
+
+      if(met?.item?.unitWeight) { 
+
+        const result = +met?.item?.unitWeight - +packageWeight;
+        const roundedResult = Math.round(result * 100) / 100;
+        console.log('type', roundedResult)
+        product.gramCount = +roundedResult
+      }
 
       return      this.menuService.postProduct(site, product)
     })).pipe(switchMap(data => {
@@ -214,11 +198,16 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       return
     }
     const site = this.siteService.getAssignedSite()
-    this.action$  = this.menuService.getProduct(site,productID).pipe(switchMap(data => {
-      return this.itemTypeService.getItemType(site,data.prodModifierType )
+    let product
+    this.action$  = this.menuService.getProduct(site, productID).pipe(concatMap(data => {
+      product = data
+      if (!data) {return of(null) }
+      return this.itemTypeService.getItemType(site, data?.prodModifierType )
     })).pipe(switchMap(data => {
+
+      console.log('type', data, product?.prodModifierType)
       if (data && productID) {
-        this.productButtonService.openProductEditor(productID, data.id)
+        this.productButtonService.openProductEditor(productID, data?.id)
       }
       return of(data)
     }))
@@ -237,14 +226,6 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       return false
     }
     return true;
-  }
-
-  getVendor(event) {
-    const facility = event
-    if (facility) {
-      this.facilityLicenseNumber = `${facility.displayName} - ${facility.metrcLicense}`
-      this.outputVendor.emit(facility)
-    }
   }
 
   openNewProductByType() {

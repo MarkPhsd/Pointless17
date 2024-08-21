@@ -53,6 +53,22 @@ export class DcapPayAPIService {
               private siteService: SitesService
               ) { }
 
+
+  getCertMode() : Observable<string> { 
+
+    //PayAPIMode
+    const controller = '/payAPI/'
+
+    const endPoint = "getCertMode"
+
+    const parameters = ``
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<string>(url)
+
+  }              
+
   acquireInitialApiKey(): Observable<KeyResponse> {
 
     const controller = '/payAPI/'

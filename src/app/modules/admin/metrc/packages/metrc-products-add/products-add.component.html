@@ -179,7 +179,7 @@
 
                   <br>
 
-                  <div class="button-assign" *ngIf="baseUnitsRemaining != 0">
+                  <div class="button-assign" *ngIf="baseUnitsRemaining &&  +baseUnitsRemaining != 0">
                     <button mat-raised-button
                             [disabled]="!isPackageReady"
                             class="button"
@@ -190,11 +190,11 @@
                     </button>
                   </div>
 
-                  <div class="btn-edit-pacakge" *ngIf="baseUnitsRemaining != 0">
-                    <!-- isPackageReady {{isPackageReady}}
+                  <!-- <div class="btn-edit-pacakge" *ngIf="+baseUnitsRemaining != 0">
+                    isPackageReady {{isPackageReady}}
                     batchDate {{ packageForm.controls['batchDate'].value }}
                     batch#      {{ packageForm.controls['productionBatchNumber'].value }}
-                    testDate {{ packageForm.controls['testDate'].value }} -->
+                    testDate {{ packageForm.controls['testDate'].value }} 
                     <button mat-raised-button
                             [disabled]="!isPackageReady"
                             class="button"
@@ -202,11 +202,11 @@
                             type="button"
                             style="margin-top:3px"
                             (click)="addRemainingInventoryToAssignedGroup()">
-                            Use Remaining
+                            Use Remaining {{baseUnitsRemaining}}
                     </button>
-                  </div>
+                  </div> -->
 
-                  <div *ngIf="baseUnitsRemaining == 0">
+                  <div *ngIf="+baseUnitsRemaining == 0 && inventoryAssigments">
                     <button
                             [disabled]="!isPackageReady"
                             mat-raised-button

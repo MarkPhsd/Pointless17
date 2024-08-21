@@ -351,7 +351,7 @@ export class SettingsService {
     if (!name) { return of(null) }
     if (name == undefined || name == null) { return of(null) }
 
-    console.log('getSettingByName', name)
+    // console.log('getSettingByName', name)
 
     const user =  JSON.parse(localStorage.getItem('user')) as IUser
     if (!user || !user.roles || !user.username ) {
@@ -377,7 +377,7 @@ export class SettingsService {
     if (!name) { return of(null) }
     if (name == undefined || name == null) { return of(null) }
 
-    console.log('getSettingByName', name)
+    // console.log('getSettingByName', name)
 
     const controller = "/settings/"
 

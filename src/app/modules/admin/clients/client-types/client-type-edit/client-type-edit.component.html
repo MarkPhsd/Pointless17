@@ -175,6 +175,29 @@
                   </mat-form-field>
                 </div>
 
+                
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Combined Group </mat-label>
+                    <input matInput
+                          type             ="text"
+                          formControlName  ="metrcGroup1"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
+                
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Metrc Group 2</mat-label>
+                    <input matInput
+                          type             ="text"
+                          formControlName  ="metrcGroup2"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
+
               </div>
 
               <div>
@@ -312,11 +335,11 @@
         <mat-label>Allow Zero Value Order </mat-label>
       </mat-slide-toggle>
     </div>
-
+    
     <div class="toggle-fields">
       <mat-slide-toggle
-                formControlName="allowBuy" >
-        <mat-label>Allow Buy From Customer</mat-label>
+                formControlName="enableItemDiscount" >
+        <mat-label>Enable Item % Discount</mat-label>
       </mat-slide-toggle>
     </div>
 
@@ -366,6 +389,13 @@
       <mat-slide-toggle
                 formControlName="voidItem" >
         <mat-label>Void Item</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="enableCashVoid" >
+        <mat-label>Void Cash Payment</mat-label>
       </mat-slide-toggle>
     </div>
 
@@ -432,13 +462,21 @@
       </mat-slide-toggle>
     </div>
 
-
     <div class="toggle-fields">
       <mat-slide-toggle
                 formControlName="enablebuyAgain" >
         <mat-label>Staff: Enable Buy Again</mat-label>
       </mat-slide-toggle>
     </div>
+
+    <h4>Resale Options</h4>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="allowBuy" >
+        <mat-label>Allow Buy From Customer</mat-label>
+      </mat-slide-toggle>
+    </div>
+
 
   </div>
 

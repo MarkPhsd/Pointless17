@@ -23,6 +23,8 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
   extractCountProgress     : any;
   liquidCountProgress      : any;
   combinedCateogryProgress : any;
+  metrcGroup1Progress: number =0;
+  metrcGroup2Progress: number =0;
 
   gramRatio: number;
   extractRatio: number;
@@ -31,6 +33,9 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
   concentrateCountRatio: number;
   solidCountRatio: number;
   combinedCategoryRatio: number;
+  metrcGroup1Ratio: number;
+  metrcGroup2Ratio: number;
+
   last30Days$ : Observable<Last30DaysSales>;
   clientTypeName: string;
   clientType$: Observable<clientType>;
@@ -60,17 +65,17 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
        ( this.order.clients_POSOrders.client_Type.name.toLowerCase() === 'patient' ||
          this.order.clients_POSOrders.client_Type.name.toLowerCase() === 'caregiver' )
        ) {
-       const customLimit = this.order.clients_POSOrders.medGramLimit;
-       const standardLimit = this.order.clients_POSOrders.client_Type.limitGram;
+       const customLimit = this.order.clients_POSOrders?.medGramLimit;
+       const standardLimit = this.order.clients_POSOrders.client_Type?.limitGram;
        let currentLimit: number;
        currentLimit = standardLimit
        if (!customLimit || customLimit == 0) { currentLimit = customLimit }
        const site = this.siteService.getAssignedSite()
-       this.last30Days$ = this.contactService.last30DayValues(site, this.order.clientID).pipe(
+       this.last30Days$ = this.contactService.last30DayValues(site, this.order?.clientID).pipe(
         switchMap(data => {
-         if (!data || !data.gramTotal) return of(null)
-         data.thirtyDayProgress  = ((data.gramTotal / standardLimit ) * 100)
-         return of(data)
+          if (!data || !data.gramTotal) return of(null)
+          data.thirtyDayProgress  = ((data.gramTotal / standardLimit ) * 100)
+          return of(data)
        })
       )
     }
@@ -94,7 +99,7 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
       return of(this.clientType);
     }
 
-    return this.clientTypeService.getClientTypeByNameCached(site, 'Consumer').pipe(switchMap(data => {
+    return this.clientTypeService.getClientTypeByNameCached(site, 'consumer').pipe(switchMap(data => {
       this.clientType = data;
       this.refreshLimitProgress(this.order);
       return of(data);
@@ -125,53 +130,67 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
     let plantCountratio = 1
     let combinedCateogryRatio = 1;
     let solidCountRatio = 1;
+    let metrcGroup1Ratio = 1;
+    let metrcGroup2Ratio = 1
 
     if (this.clientType) {
       const type = this.clientType;
-      gramRatio = type.limitGram | 56;
-      concentrateCountRatio = type.limitConcentrate;
-      extractRatio = type.limitExtract;
-      seedCountRatio = type.limitSeeds;
-      liquidCountRatio = type.limitLiquid;
-      plantCountratio = type.limitPlants
-      combinedCateogryRatio = type.limitCombinedCategory;
-      solidCountRatio = type.limitSolid ;
+      gramRatio = type?.limitGram | 56;
+      concentrateCountRatio = type?.limitConcentrate;
+      extractRatio = type?.limitExtract;
+      seedCountRatio = type?.limitSeeds;
+      liquidCountRatio = type?.limitLiquid;
+      plantCountratio = type?.limitPlants
+      combinedCateogryRatio = type?.limitCombinedCategory;
+      solidCountRatio = type?.limitSolid ;
+      metrcGroup1Ratio = type?.metrcGroup1;
+      metrcGroup2Ratio = type?.metrcGroup2;
     }
 
     if (order) {
       const type = this.validateType(order)
       if (type) {
-
+        console.log('type', type)
         const order           = this.order
-        gramRatio             = type.limitGram;
-        concentrateCountRatio = type.limitConcentrate
-        extractRatio          = type.limitExtract;
-        seedCountRatio        = type.limitSeeds;
-        liquidCountRatio      = type.limitLiquid;
-        solidCountRatio       = type.limitSolid;
+        gramRatio             = type?.limitGram;
+        concentrateCountRatio = type?.limitConcentrate
+        extractRatio          = type?.limitExtract;
+        seedCountRatio        = type?.limitSeeds;
+        liquidCountRatio      = type?.limitLiquid;
+        solidCountRatio       = type?.limitSolid;
         plantCountratio       = 28
-        combinedCateogryRatio = type.limitCombinedCategory | 5;
+        combinedCateogryRatio = type?.limitCombinedCategory | 5;
+        metrcGroup1Ratio      = type?.metrcGroup1;
+        metrcGroup2Ratio      = type?.metrcGroup2;
 
-        const  client         = this.order.clients_POSOrders;
+        const  client         = this.order?.clients_POSOrders;
 
         if (client && client.client_Type) {
+
+          console.log('type', client.client_Type)
+
           if (client.client_Type.name.toLowerCase() === 'patient' ||
               client.client_Type.name.toLowerCase() === 'caregiver' ) {
 
+            if (client.metrcGroup1 && client.metrcGroup1 != 0){
+              metrcGroup1Ratio =   client.metrcGroup1
+            }
+
+            if (client.metrcGroup2 && client.metrcGroup2 != 0){
+              metrcGroup2Ratio =   client.metrcGroup2
+            }
+            
             if (client.medGramLimit && client.medGramLimit != 0){
               gramRatio = client.medGramLimit
             }
 
             if (client.medConcentrateLimit && client.medConcentrateLimit != 0){
               concentrateCountRatio = client.medConcentrateLimit
-              // console.log('concentrate', client.medConcentrateLimit, concentrateCountRatio)
             }
-
 
             if (client.medPlantLimit && client.medPlantLimit != 0){
               plantCountratio =   client.medPlantLimit
             }
-
 
             if (client.combinedCategoryLimit && client.combinedCategoryLimit != 0){
               combinedCateogryRatio = client.combinedCategoryLimit
@@ -180,7 +199,6 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
             if (client.solidCountLimit && client.solidCountLimit != 0){
               solidCountRatio =  client.solidCountLimit
             }
-
           }
         }
       }
@@ -192,7 +210,6 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
         this.seedCountProgress         = ((order.seedCount / seedCountRatio  ) * 100).toFixed(0)
       }
       if (order.concentrateCount != 0) {
-        // console.log('concentrate ratio', concentrateCountRatio)
         this.concentrateCountProgress  = ((order.concentrateCount / concentrateCountRatio ) * 100 ).toFixed(0)
       }
       if (order.extractCount != 0) {
@@ -207,8 +224,15 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
       if (order.solidCount  != 0) {
         this.solidCountProgress       = ((order.solidCount / solidCountRatio ) * 100).toFixed(0)
       }
+      if (order.metrcGroup1  != 0 && metrcGroup1Ratio != 0) {
+        this.metrcGroup1Progress       = +((order.metrcGroup1 / metrcGroup1Ratio ) * 100).toFixed(0)
+      }
+      if (order.metrcGroup2  != 0 && metrcGroup2Ratio != 0) {
+        this.metrcGroup2Progress       = +((order.metrcGroup2 / metrcGroup2Ratio ) * 100).toFixed(0)
+      }
 
-
+      this.metrcGroup1Ratio = metrcGroup1Ratio;
+      this.metrcGroup2Ratio = metrcGroup2Ratio;
       this.combinedCategoryRatio = combinedCateogryRatio;
       this.gramRatio = gramRatio;
       this.solidCountRatio = solidCountRatio;
@@ -216,7 +240,6 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
       this.liquidCountRatio = liquidCountRatio;//: number;
       this.seedCountRatio = seedCountRatio;//: number;
       this.concentrateCountRatio = concentrateCountRatio;
-      // console.log('concentrate ratio', concentrateCountRatio)
 
     }
   }

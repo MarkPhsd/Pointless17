@@ -110,6 +110,22 @@
           </app-value-fields>
         </div>
 
+        <div *ngIf="isStaff">
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'metrcGroup1'">
+             Comined Category
+          </app-value-fields>
+        </div>
+
+        <div *ngIf="isStaff">
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'metrcGroup2'">
+            Group 2
+          </app-value-fields>
+        </div>
+
       </div>
 
       <div *ngIf="isStaff">

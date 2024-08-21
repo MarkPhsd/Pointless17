@@ -1,13 +1,14 @@
 
-<!-- <app-cookie-consent></app-cookie-consent> -->
-<div *ngIf="(uiTransactions$ | async) as settings"> </div>
-<div *ngIf="(printAction$ | async) as printAction"></div>
-<div *ngIf="(posDevice$ | async) as posDevice"></div>
-<div *ngIf="(printOrders$ | async) as printOrders"></div>
-<div *ngIf="(action$ | async) as action"></div>
+<!-- <app-cookie-consent></app-cookie-consent> --> 
+<!---->
+ <div *ngIf="(uiTransactions$ | async) as settings"> </div>
+<div *ngIf="(printAction$ | async) as printAction"></div> 
+<div *ngIf="(posDevice$ | async) as posDevice"></div> 
+<div *ngIf="(printOrders$ | async) as printOrders"></div> 
+<div *ngIf="(action$ | async) as action"></div> 
 <div *ngIf="(user$ | async) as user"></div>
-<div *ngIf="(viewType$ | async) as viewPrep"></div>
-<div *ngIf="(itemTypeList$ | async) as itemTypeList"></div>
+<div *ngIf="(viewType$ | async) as viewPrep"></div> 
+<div *ngIf="(itemTypeList$ | async) as itemTypeList"></div> 
 
 <div class="getAppHeaderClass" >
   <app-header> </app-header>

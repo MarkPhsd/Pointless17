@@ -38,6 +38,7 @@ export class PollingService   {
   sub               : Subscription;
   apiUrl             = '';
   action$: Observable<ISite>;
+  
   public _poll          = new BehaviorSubject<boolean>(null);
   public poll$           = this._poll.asObservable();
   public pollOnce$

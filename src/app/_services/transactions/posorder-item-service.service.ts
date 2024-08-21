@@ -763,6 +763,23 @@ export class POSOrderItemService {
 
   }
 
+  applyItemPerDiscount(site: ISite, item: PosOrderItem, list: PosOrderItem[]) {
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "applyItemPerDiscount";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const payLoad = { posOrderItem: item, list: list }
+
+    return  this.http.post<IPOSOrder>(url, payLoad)
+
+  }
+
+
   changeItemQuantity(site: ISite, posOrderItem: PosOrderItem): Observable<IPOSOrder> {
 
     // const result = this.validateItemchange(posOrderItem)

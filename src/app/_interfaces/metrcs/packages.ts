@@ -30,17 +30,18 @@ export interface METRCPackage {
   id:                                number;
   label:                             string;
   packageType:                       string;
-  sourceHarvestName:                 null;
-  locationID:                        null;
-  locationName:                      null;
-  locationTypeName:                  null;
+  sourceHarvestName:                 string;
+  sourceHarvestNames                 :string;
+  locationID:                        number;
+  locationName:                      string;
+  locationTypeName:                  string;
   quantity:                          number;
   unitOfMeasureName:                 string;
   unitOfMeasureAbbreviation:         string;
   patientLicenseNumber:              string;
   itemFromFacilityLicenseNumber:     string;
   itemFromFacilityName:              string;
-  itemStrainName:                    null;
+  itemStrainName:                    string;
   note:                              string;
   packagedDate:                      string;
   initialLabTestingState:            string;
@@ -64,7 +65,7 @@ export interface METRCPackage {
   receivedFromFacilityLicenseNumber: string;
   receivedFromFacilityName:          string;
   isOnHold:                          boolean;
-  archivedDate:                      null;
+  archivedDate:                       string;
   finishedDate:                      string;
   lastModified:                      string;
   remainingCount:                    number;
@@ -81,6 +82,7 @@ export interface METRCPackage {
   labTestingPerformedDate: string;
   useByDate: string;
   json: string;
+  labResults: string;
 }
 
 export interface Item {

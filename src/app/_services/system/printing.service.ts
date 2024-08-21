@@ -180,7 +180,7 @@ export class PrintingService {
     // console.log('label contents', contents)
     if (!this.labelPrinter) { return }
     if (!contents) { return }
-    console.log('labelContentList')
+    // console.log('labelContentList')
     await this.printLabelElectron(contents, this.labelPrinter)
   }
   //prints posItem
@@ -205,7 +205,7 @@ export class PrintingService {
                                             joinLabels: joinLabels})
           printCount= result?.printCount;
         })
-        console.log('print Count', printCount)
+        // console.log('print Count', printCount)
       }
 
       if (printCount == 0) {return of(null)};

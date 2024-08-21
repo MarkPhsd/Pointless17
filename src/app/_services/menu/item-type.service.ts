@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../system/authentication.service';
 import { BehaviorSubject, Observable, of, switchMap  } from 'rxjs';
 import { ISite }  from 'src/app/_interfaces';
-import { IItemBasicB } from './menu.service';
+import { IItemBasic, IItemBasicB } from './menu.service';
 import { SitesService } from '../reporting/sites.service';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 // import { UseGroupTax, UseGroups } from './use-groups.service';
@@ -122,7 +122,11 @@ export interface IItemType {
 
 export interface ItemType_Properties {
   inventoryLabelID: number;
-
+  packageWeight: number;
+  sellByValue: number;
+  useByValue: number;
+  metrcPackageWeight: number;
+  metrcGroup: number;
 }
 
 export interface ItemTypeCategory {
@@ -303,7 +307,7 @@ export class ItemTypeService {
 // 13	Restaurant
 
   useType = ['product', 'adjustment', 'category', 'modifier']
-
+  metrcGroups = [{name:'', id: 0 }, {name: 'Combined Group', id: 1}, {name: 'Group 2', id: 2}] ;
   site: ISite;
   constructor(private http: HttpClient,
               private siteService : SitesService,

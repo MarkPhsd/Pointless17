@@ -185,7 +185,12 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
 
 
-
+  get enableItemDiscount() {
+    if (this.userAuths.enableItemDiscount) { 
+      return true
+    }
+    return false
+  }
 
   //&&
   // (!this.orderItem.rewardAvailibleID || this.orderItem.rewardCounterDiscountID ==0)
@@ -643,6 +648,10 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     this.editProperties('price' , 'Change Price')
   }
 
+  editItemDiscount() { 
+    this.editProperties('itemPerDiscount' , 'Item % Discount')
+  }
+
   editSubTotal() {
     this.editProperties('subTotal' , 'Change Sub Total Price')
   }
@@ -695,12 +704,15 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
         let requireWholeNumber = false;
         if (editField == 'quantity') {   requireWholeNumber = this.menuItem.itemType.requireWholeNumber }
+        if (editField == 'itemPerDiscount') {   requireWholeNumber = true; }
 
         const item = {orderItem: this.orderItem,
                       editField: editField,
                       menuItem: this.menuItem,
                       requireWholeNumber: requireWholeNumber,
                       instructions: instructions}
+
+        console.log(item, editField, requireWholeNumber)
         let height  = '600px';
 
         if (editField == 'quantity') {
@@ -712,7 +724,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
           width   = '100vw !important'
         }
 
-        if (editField == 'price' || editField == 'subTotal') {
+        if (editField == 'itemPerDiscount' || editField == 'price' || editField == 'subTotal') {
           if (!this.authenticationService?.userAuths?.changeItemPrice) {
             const request =  {request: 'checkAuth' , action: editField}
             this.authorizeEdit(item, request,  width, height);
@@ -766,6 +778,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
         data      : item
       },
     )
+
     dialogRef.afterClosed().subscribe(result => {
       this.authenticationService.overRideUser(null)
     });

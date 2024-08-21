@@ -130,4 +130,6 @@ export interface IClientTable {
   insTertiaryNum: string;
   userName: string; //not used as username used for client oomp
   payRate: number;
+  metrcGroup1: number;
+  metrcGroup2: number;
 }

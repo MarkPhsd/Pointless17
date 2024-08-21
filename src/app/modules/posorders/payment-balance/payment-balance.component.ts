@@ -155,6 +155,13 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
 
+  isCashVoidAllowed(item: IPOSPayment) {
+    if (this.authData?.enableCashVoid) { 
+      if (item?.paymentMethod?.isCash) { 
+        return true
+      }
+    }
+  }
   getNumberOfPayments() {
     let count = 0
     const list = this.order?.posPayments //?.length // || 0
