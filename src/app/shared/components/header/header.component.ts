@@ -574,7 +574,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
       }
 
       if (!data) {
-        console.log('no user')
+        // console.log('no user')
         this.user = null;
         this.authenticationService.updateUser(null)
       }
@@ -807,8 +807,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   toggleSideBar() {
 
-    console.log('toggle', this.userSwitchingService.swapMenuWithOrderBoolean)
-    console.log('openOrderBar', this.openOrderBar)
+    // console.log('toggle', this.userSwitchingService.swapMenuWithOrderBoolean)
+    // console.log('openOrderBar', this.openOrderBar)
 
     if (this.userSwitchingService.swapMenuWithOrderBoolean) {
       if (this.openOrderBar) {

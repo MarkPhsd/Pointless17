@@ -298,7 +298,7 @@ export class SettingsService {
     const user =  JSON.parse(localStorage.getItem('user')) as IUser;
     
     if (user?.roles === 'user') {
-      console.log('user?roles', user?.roles)
+      // console.log('user?roles', user?.roles)
       return of(null)
     }
     if (!user) { return of(null)}

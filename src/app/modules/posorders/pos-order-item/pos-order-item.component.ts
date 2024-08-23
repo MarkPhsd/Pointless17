@@ -150,9 +150,9 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   }
 
   get _unitprice() {
-    if (this.orderItem.completionDate) {
+    if (this.orderItem?.completionDate) {
       if (this.cashDiscount !=0) {
-        return (this.unitPrice * (1 + this.ui.dcapDualPriceValue)).toFixed(2)
+        return (this.unitPrice * (1 + this.ui?.dcapDualPriceValue)).toFixed(2)
       }
     }
     return this.unitPrice
@@ -160,7 +160,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
   get itemHasDiscount() {
     const item = this.orderItem
-    if (item.itemOrderCashDiscount != 0 || item.itemPercentageDiscountValue != 0 || item.itemPercentageDiscountValue != 0 ||
+    if (item.itemOrderCashDiscount != 0 || item.itemPercentageDiscountValue != 0 ||
+         item.itemPercentageDiscountValue != 0 ||
         item.itemOrderPercentageDiscount ) {
           return true;
     }
@@ -186,7 +187,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
 
   get enableItemDiscount() {
-    if (this.userAuths.enableItemDiscount) { 
+    if (this.userAuths && this.userAuths?.enableItemDiscount) { 
       return true
     }
     return false
@@ -195,8 +196,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   //&&
   // (!this.orderItem.rewardAvailibleID || this.orderItem.rewardCounterDiscountID ==0)
   get showQuantityEdit() {
-    if ((!this.showEdit  && (this.ui.displayQuantity) &&
-       !this.orderItem.serialCode && !this.orderItem.printed ) &&
+    if ((!this.showEdit  && (this.ui?.displayQuantity) &&
+       !this.orderItem.serialCode && !this.orderItem?.printed ) &&
        this.orderItem.rewardGroupApplied == 0) {
       return true;
     }
@@ -206,7 +207,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   get showWeight() {
     const order = this.orderMethodsService.currentOrder
     if (order &&  order.balanceRemaining != 0 &&
-                      this.orderItem.isWeightedItem &&
+                      this.orderItem?.isWeightedItem &&
                       !this.prepScreen) {
       // console.log('showWeight (2)',this.userAuthService?.isStaff , this.mainPanel , this.orderItem?.printLocation)
       if (this.userAuthService?.isStaff &&  this.mainPanel ) {

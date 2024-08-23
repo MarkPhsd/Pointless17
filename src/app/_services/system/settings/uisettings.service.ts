@@ -518,11 +518,13 @@ export class UISettingsService {
   getUITransactionSetting() {
     return this.settingsService.getUITransactionSetting()
   }
+
   getUIHomePageSettings() {
     if (!this.userAuthorizationService.user) {  this._homePageSetting.next(null)  }
     this.settingsService.getUIHomePageSettings().subscribe(data => {
       this._homePageSetting.next(data)
     })
+    return this._homePageSetting.value;
   }
 
   get UIHomePageSettings() {

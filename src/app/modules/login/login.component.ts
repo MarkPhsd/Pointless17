@@ -296,6 +296,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.counter  = this.counter +1
     if (this.counter > 5) {
       this.counter = 0;
+      this.closeDialog();
       this.router.navigate(['/apisetting']);
     }
   }
@@ -315,6 +316,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   redirectUserLoggedIn() {
     const user = this.authenticationService.userValue;
     if (user) {
+      this.closeDialog();
       this.router.navigate(['/app-main-menu']);
       return true
     }
@@ -324,6 +326,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.platformService.isApp())  {
       this.platformService.initAPIUrl();
       if (!this.platformService.apiUrl || this.platformService.apiUrl.length == 0) {
+        this.closeDialog();
         this.router.navigate(['/apisetting']);
         return true
       }
@@ -351,6 +354,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     localStorage.removeItem('devicename')
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
     this.statusMessage = ''
+
+
   }
 
   browseMenu() {
@@ -358,6 +363,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.userSwitchingService.clearLoggedInUser()
     this.userSwitchingService.browseMenu();
     this.statusMessage = ''
+
+    this.closeDialog();
   }
 
   loginToReturnUrl() {
@@ -385,9 +392,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
   }
 
-  registerUser()  { this.router.navigate(['/register-user']);}
+  registerUser()  { 
+    this.closeDialog();
+    this.router.navigate(['/register-user']);
+  }
 
-  changePassword(){ this.router.navigate(['/resetpassword']);}
+  changePassword(){
+    this.closeDialog();
+    this.router.navigate(['/resetpassword']);
+  }
 
   validateForm(inputForm: UntypedFormGroup) : boolean {
     try {
@@ -509,13 +522,13 @@ export class LoginComponent implements OnInit, OnDestroy {
           if (sheet) {  if (this.loginApp(result)) {  return of('success') } }
           if (result && result.username != undefined) { user = result }
           
-          console.log('user message', user, result, result?.message, result?.errorMessage)
-
+          // console.log('user message', user, result)
+          
           try {
             if (user) {
           
               if (user && user?.errorMessage === 'failed') {
-                console.log('login failed')
+                // console.log('login failed')
                 this.siteService.notify('Login failed', 'Close', 3000, 'red')
                 this.authenticationService.authenticationInProgress = false;
                 this.clearUserSettings()
@@ -525,7 +538,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
               if (this.returnlUrl) { 
                 if (result && result?.message && result?.message === 'success') {
-                  console.log('login success 1')
+                  // console.log('login success 1')
                   this.authenticationService.updateUser(user)
                   this.userSwitchingService.processLogin(user, this.returnlUrl)
                   this.closeDialog();
@@ -534,7 +547,7 @@ export class LoginComponent implements OnInit, OnDestroy {
               }
             
               if (user && ( user?.message === 'success' || (result?.message === 'success'))) {
-                console.log('login success 2')
+        
                 let pass = false
                 this.authenticationService.authenticationInProgress = false;
                 // user.
@@ -544,6 +557,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                   pass = true
                 }
                 if (!pass) { this.userSwitchingService.processLogin(user, '')  }
+
                 this.closeDialog();
                 return of('success')
               }
@@ -562,14 +576,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   closeDialog() {
-    if (this.dialogOpen) {
-      console.log('dialog open')
+    // if (this.dialogOpen) {
+    //   console.log('dialog open')
       try {
         this.dialogRef.close();
       } catch (error) {
         return of('error')
       }
-    }
+    // }
   }
 
   setloginAction(): Observable<IPOSOrder> {

@@ -34,7 +34,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   @ViewChild('buyItemView')             buyItemView :  TemplateRef<any> | undefined;
   @ViewChild('viewItemView')            viewItemView: TemplateRef<any> | undefined;
 
-  @ViewChild('browserView')             browserView :  TemplateRef<any> | undefined;
+  @ViewChild('browser_View')             browser_View :  TemplateRef<any> | undefined;
   @ViewChild('appView')                 appView: TemplateRef<any> | undefined;
   @ViewChild('typeDisplayTemplate')     typeDisplayTemplate: TemplateRef<any> | undefined;
   @ViewChild('menuNameTemplate')        menuNameTemplate: TemplateRef<any> | undefined;
@@ -42,8 +42,6 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   @ViewChild('materialView')        materialView: TemplateRef<any> | undefined;
   @ViewChild('androidView')         androidView: TemplateRef<any> | undefined;
 
-  //menuNameTemplate
-  //typeDisplayTemplate
 
   @Output() outPutLoadMore = new EventEmitter()
   @Output() outPutUpdateCategory = new EventEmitter();
@@ -204,9 +202,15 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
   get buttonView() {
     if (this.isApp) {
+      // return this.appView;
+      return;
+    }
+    return  this.browser_View
+  }
+  get itemAppView() {
+    if (this.isApp) {
       return this.appView
     }
-    return  this.browserView
   }
 
   get typeDisplayViewBol() {

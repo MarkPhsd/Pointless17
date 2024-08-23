@@ -183,14 +183,14 @@ export class UserSwitchingService implements  OnDestroy {
       // console.log('data', data)
       if (data?.errorMessage) {
         this.siteService.notify(`${data?.message} ${data?.errorMessage}`, 'Close', 10000, 'red')
-      }
+      } else { data.errorMessage = null}
       return of(data)
     }))
   }
 
   userAutFailed(user) : any {
     let message = user?.errorMessage;
-    if (user?.errorMessage) {
+    if (user?.errorMessage && !user.message) {
       user.message = 'User not found.'
     }
     // console.log('failed login',user?.errorMessage , user)
@@ -205,26 +205,43 @@ export class UserSwitchingService implements  OnDestroy {
     return this.login(user,password, true)
   }
 
-  login(userName: string, password: string, clockInOnly: boolean): Observable<any> {
-    // Clear existing subscriptions and settings, get assigned site and set timeout
+  initalizeLogin() {
     this.clearSubscriptions();
     this.authenticationService.clearUserSettings();
+    this.authenticationService.authenticationInProgress = true;
+  }
+
+  didItemFail(item) { 
+    if (item?.message == 'failed') { 
+      return true
+    }
+    if (item.errorMessage && item?.errorMessage != '') { 
+      return true
+    }
+  }
+
+  login(userName: string, password: string, clockInOnly: boolean): Observable<any> {
+
+    this.initalizeLogin()
     const site = this.siteService.getAssignedSite();
     const userLogin = { userName, password };
     const timeOut = 3000;
-    this.authenticationService.authenticationInProgress = true;
     const  deviceName = localStorage.getItem('devicename');
 
     // Authentication stream
     let auth$ = this.authenticate(userLogin).pipe(
       concatMap(user => {
-        if (!user || (user?.message === 'failed' || user?.errorMessage) ) {
-          // console.log('auth failed', user)
-          
+
+        console.log('authenticate ', user)
+        if (this.didItemFail(user)) {
+          console.log('auth failed')
           this.authenticationService.authenticationInProgress = false;
-          return of(this.userAutFailed(user));
-        }
+          user.errorMessage = 'Auth Failed'
+          const result = this.userAutFailed(user) as IUserProfile
+          return of(result);
+        } 
         user.message = 'success';
+        user.errorMessage = null;
         const currentUser = this.setUserInfo(user, password);
         this.uiSettingService.initSecureSettings();
         return this.contactsService.getContact(site, user?.id);
@@ -234,8 +251,9 @@ export class UserSwitchingService implements  OnDestroy {
     // Authorization update stream
     let updateAuth$ = auth$.pipe(
       concatMap(data => {
-        // console.log('submit 3', data)
-        if (!data || (data?.errorMessage != undefined && data?.errorMessage != null)) {
+        console.log('submit 3', data)
+        if (this.didItemFail(data)) { 
+          data.errorMessage = 'Auth Failed'
           return of(this.userAutFailed(data));
         }
         this.authenticationService.updateUserAuths(
@@ -249,9 +267,10 @@ export class UserSwitchingService implements  OnDestroy {
     // Handle balance sheet or pass through user data
     let balanceSheet$ = updateAuth$.pipe(
       concatMap(user => {
-
-        if (user && user?.errorMessage !== null) {
+        console.log('submit 4', user)
+        if (this.didItemFail(user)) { 
           this.authenticationService.authenticationInProgress = false;
+          user.errorMessage = 'Auth Failed'
           return of(this.userAutFailed(user));
         }
         
@@ -273,14 +292,11 @@ export class UserSwitchingService implements  OnDestroy {
     // Final result handling
     let result$ = balanceSheet$.pipe(
       concatMap(data => {
-    
-        if (!data || data?.message === 'failed') {
+        console.log('submit 5', data)
+        if (this.didItemFail(data)) { 
           this.authenticationService.authenticationInProgress = false;
           return of(this.userAutFailed(data));
         }
-      
-        console.log('submit 5', data)
-    
         return of(data);
       })
     );

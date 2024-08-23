@@ -2,11 +2,13 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { DcapPayAPIService, KeyResponse } from '../services/dcap-pay-api.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
-import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSPayment, IUser } from 'src/app/_interfaces';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { Router } from '@angular/router';
 // declare var DatacapWebToken : any; // This allows TypeScript to recognize the global variable
 // declare let window: any; // Broad approach, makes window accept any property
 // declare global {
@@ -27,6 +29,7 @@ export class PayAPIComponent implements OnInit {
   inputForm: FormGroup;
   errorMessage: string;
 
+  scriptUrl: string;
   expInvalid: boolean;
   cardInValid: boolean;
   cvvInvalid: boolean;
@@ -49,6 +52,13 @@ export class PayAPIComponent implements OnInit {
   certMode$: Observable<any>;
   uiTransactions$ : Observable<TransactionUISettings>;
   certMode: boolean;
+  user: IUser;
+
+  get isAdmin() { 
+    if (this.user?.roles === 'admin' || this.user?.roles === 'Admin') { 
+      return true
+    }
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -56,27 +66,25 @@ export class PayAPIComponent implements OnInit {
     private siteService: SitesService,
     private orderMethodsService: OrderMethodsService,
     private uiSettingService: UISettingsService,
-    private dcapPayAPIService: DcapPayAPIService) { }
+    private dcapPayAPIService: DcapPayAPIService, 
+    private userAuthorization: UserAuthorizationService,
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
 
+    this.user = this.userAuthorization.currentUser()
     if (!this.uiTransactions) { 
       this.uiTransactions$ = this.uiSettingService.getUITransactionSetting().pipe(switchMap(data => { 
         this.uiTransactions = data;
         return of(data)
       }))
     }
-    // if (!this.order) {
-    //   this.order = {} as IPOSOrder;
-    //   this.order.subTotal    = 1.00;
-    //   this.order.taxTotal    = .07
-    //   this.order.total       = 1.07
-    //   this.order.id          = 871919
-    // }
+
 
     this.certMode$ = this.dcapPayAPIService.getCertMode().pipe(switchMap(data => { 
         if (data) { 
-          if (data == 'cert') {
+          if (data == 'cert' || data == 'test') {
             this.certMode = true
           }
         }
@@ -117,6 +125,7 @@ export class PayAPIComponent implements OnInit {
     } else {
       scriptUrl = 'https://token.dcap.com/v1/client';
     }
+    this.scriptUrl = scriptUrl
     // console.log('script', scriptUrl)
     this.loadScript(scriptUrl)
     .then(() => {
@@ -180,7 +189,9 @@ export class PayAPIComponent implements OnInit {
 
                   if (data?.responseMessage === 'Approved') {
                     this.isApproved = true
-                    this.outPutRefresh.emit(true)
+                    this.outPutRefresh.emit(true);
+                    this.router.navigate( ['payment-completed',  { id:  this.order.id} ] );
+                    // this.router.navigateByURL([])
                   }
                   return of(data)
                 }

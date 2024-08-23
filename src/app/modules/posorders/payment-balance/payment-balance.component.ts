@@ -34,6 +34,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   @Input() order : IPOSOrder;
   @Input() mainPanel = true;
   @Input() uiTransactions: TransactionUISettings;
+  @Input() disableOptions: boolean;
+  
   void$: Observable<any>;
   action$: Observable<any>;
   printing$: Observable<any>;

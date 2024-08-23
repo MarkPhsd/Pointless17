@@ -251,6 +251,7 @@ import { FunctionButtonsListComponent } from '../modules/admin/settings/function
 import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-emvcard-pay-btn/dsi-emvcard-pay-btn.component';
 import { SiteFooterComponent } from './components/site-footer/site-footer.component';
 import { SiteCardComponent } from './widgets/site-card/site-card.component';
+import { OnlinePaymentCompletedComponent } from '../modules/payment-processing/online-payment-completed/online-payment-completed.component';
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
 // import { ReceiptLayoutComponent } from '../modules/admin/settings/printing/receipt-layout/receipt-layout.component';
@@ -385,7 +386,7 @@ import { SiteCardComponent } from './widgets/site-card/site-card.component';
     // QrPaymentComponent,
     // PayAPIComponent,
     // PayAPIFrameComponent,
-
+    OnlinePaymentCompletedComponent,
     PagingInfoComponent,
     PagerBlobComponent,
     PageNotFoundComponent,
@@ -597,7 +598,7 @@ import { SiteCardComponent } from './widgets/site-card/site-card.component';
 
     // PayAPIComponent,
     // PayAPIFrameComponent,
-
+    OnlinePaymentCompletedComponent,
     ClockViewComponent,
     CompanyInfoHeaderComponent,
     EmailSettingsComponent,

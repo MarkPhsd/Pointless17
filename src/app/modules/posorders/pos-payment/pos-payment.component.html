@@ -711,7 +711,7 @@
 
 <ng-template #payApiView>
   <div>
-    <div style="width:150px">
+    <div style="width:150px" *ngIf="!isApp">
       <app-value-fields
           *ngIf="paymentForm"
           [inputForm]="paymentForm"
@@ -720,7 +720,7 @@
       </app-value-fields>
     </div>
 
-    <div>
+    <div *ngIf="!isApp">
       <app-pay-api
           [order]="order"
           [paymentForm]="paymentForm"

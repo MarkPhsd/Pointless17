@@ -47,14 +47,17 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
       private authenticationService: AuthenticationService,
       private requestMessageMethods: RequestMessageMethodsService,
       private router         : Router,
+      // private route: AC
   ) { }
 
   ngOnInit(): void {
+
+    // this.id = this.route.snapshot.paramMap.get('id');
+
     this.getUser();
     this.uiHomePageSetting$ = this.settingsService.getUIHomePageSettings();
 
     this.order$ = this.getOrder().pipe(switchMap(data => {
-      // this.order = data;
       return of(data)
     }))
 
@@ -65,7 +68,6 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   }
 
   navigateToLogin(){
-    // console.log('navigateToLogin clear user settings')
     localStorage.removeItem('user')
     this.uiHomePageSetting$.subscribe(data => {
       this.authenticationService.logout(data.pinPadDefaultOnApp)

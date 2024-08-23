@@ -1,8 +1,16 @@
 
 <div *ngIf="uiTransactions$ | async"></div>
+<div *ngIf="(certMode$ | async) as cert"></div>
+
 <div *ngIf="uiTransactions">
   <div *ngIf="payApiEnabled && order?.balanceRemaining !=0">
 
+
+    <div *ngIf="isAdmin">
+      MID {{publicKey}} <br>
+      URL {{scriptUrl}} <br>
+      Mode: {{certMode}}
+    </div>
     <div *ngIf="(payMID$ | async) as key">
       <div *ngIf="!key"> No MID Present  </div>
     </div>
@@ -13,7 +21,7 @@
 
     <div *ngIf="(payment$ | async) as data">
       <h4>{{data?.responseMessage}}</h4>
-      <div *ngIf="" style="margin-left:10px" class="grid-toggle-medium" >
+      <div *ngIf="!isApproved" style="margin-left:10px" class="grid-toggle-medium" >
         <div>Status</div>
         <div>{{data?.saleResponse?.status}}</div>
         <div>Message</div>
@@ -56,12 +64,12 @@
                 {{order?.total | currency}}
               </div>
   
-              <div *ngIf="getTipValue>0" class="grid-item" >
+              <div class="grid-item" >
                 Gratuity
               </div>
 
-              <div *ngIf="getTipValue>0" class="grid-item-right">
-                {{getTipValue | currency}}
+              <div class="grid-item-right">
+                {{getTipValue ?? 0| currency}}
               </div>
 
               <div class="grid-item" *ngIf="uiTransactions?.dCapPayAPISurchargeValue && uiTransactions?.dCapPayAPISurchargeValue>0">

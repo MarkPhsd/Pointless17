@@ -1,0 +1,43 @@
+<mat-card *ngIf="(ui$ | async) as uiHomePageSetting"  class="centered-flex" >
+
+  <mat-card-title>
+    
+    <div class="centered-flex">
+      <div *ngIf="uiHomePageSetting && uiHomePageSetting.logoHomePage"
+            class="logo">
+        <app-logo
+              [uiHomePageSetting] ="uiHomePageSetting"
+              [logoSize]          ="'medium'"
+              [border]            =''
+              [logo]              ="uiHomePageSetting?.logoHomePage"
+        ></app-logo>
+      </div>
+    </div>
+
+    <div>
+      Order placed, thank you!
+    </div>
+  
+  </mat-card-title>
+
+  <mat-card-subtitle>
+    Confirmation will be sent to your email.
+  </mat-card-subtitle>
+
+  <mat-card-content *ngIf="(order$ | async) as data">
+    <div class="centered-flex">
+      <div>
+        <app-payment-balance
+          [disableOptions]="true"
+          [order]="order"
+        ></app-payment-balance>
+      </div>
+  
+      <div *ngIf="serviceIsScheduled">
+        <posorder-schedule-card>
+        </posorder-schedule-card>
+      </div>
+    </div>  
+  </mat-card-content>
+
+</mat-card>

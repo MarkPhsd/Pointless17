@@ -114,7 +114,6 @@ export class MainMenuComponent implements OnInit  {
     if (this.platFormService.isAppElectron) {
       setTimeout(this.refreshView, 25)
     }
-    //  console.log('set panel height', value, this.panelHeightSize, this.panelHeightValue)
   }
 
   refreshView() {

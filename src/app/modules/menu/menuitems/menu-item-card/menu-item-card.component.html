@@ -34,16 +34,23 @@
         <ng-container [ngTemplateOutlet]="isImageButtonView"></ng-container>
       </ng-container>
 
+      <!-- Icon Only -->
       <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
-      <ng-container [ngTemplateOutlet]="buttonView"></ng-container>
 
-      <ng-container *ngIf="menuNameViewBol">
+      <!-- options for app or web  -->
+      <!-- <ng-container [ngTemplateOutlet]="buttonView"></ng-container> -->
+      <ng-container [ngTemplateOutlet]="itemAppView"></ng-container> 
+
+      <!-- <ng-container *ngIf="menuNameViewBol">
         <ng-container [ngTemplateOutlet]="menuNameView"></ng-container>
-      </ng-container>
+      </ng-container> -->
 
-      <ng-container [ngTemplateOutlet]="imageButtonInfo" ></ng-container>
+      <!-- !!icon only Do not uncomment not used-->
+      <!-- <ng-container [ngTemplateOutlet]="imageButtonInfo" ></ng-container> -->
 
     </div>
+
+    <!-- only shows if no type assigned -->
     <ng-container [ngTemplateOutlet]="typeDisplayView"></ng-container>
   </div>
 
@@ -245,6 +252,7 @@
 </ng-template>
 
 <ng-template #appView>
+
   <span >
     <button
               mat-flat-button
@@ -266,8 +274,8 @@
   </span>
 </ng-template>
 
-<ng-template #browserView>
-  <span >
+<ng-template #browser_View>
+  <span>
     <button   mat-flat-button
               style="width:100%"
               [class]="imageButtonClass"
@@ -288,3 +296,24 @@
 </ng-template>
 
 
+<ng-template #appView>
+  <span >
+    <button   mat-flat-button
+              style="width:100%"
+              [class]="imageButtonClass"
+              (click)="altMethod(true)">
+
+<!--       
+        <div *ngIf="!menuItem.urlImageMain || disableImages">
+          <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
+        </div>
+
+        <div *ngIf="menuItem.urlImageMain  && !disableImages">
+          <ng-container [ngTemplateOutlet]="productImage"></ng-container>
+          <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
+        </div>
+
+        <ng-container [ngTemplateOutlet]="discountItemDescription"></ng-container> -->
+    </button>
+  </span>
+</ng-template>

@@ -278,6 +278,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private fb              : UntypedFormBuilder) { }
 
   ngOnInit(): void {
+
+
+    this.paymentForm = this.fb.group({
+      tipAmount: []
+    })
+    
     this.initTransactionUISettings();
     this.initAuthorization()
     const site = this.sitesService.getAssignedSite();
@@ -287,10 +293,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
     this.getPaymentMethods(site)
     this.userSubscriber();
-    this.paymentForm = this.fb.group({
-      tipAmount: []
-    })
-
+ 
     try {
       this.dsiEMVEnabled = this.paymentsMethodsService.DSIEmvSettings?.enabled;
     } catch (error) {

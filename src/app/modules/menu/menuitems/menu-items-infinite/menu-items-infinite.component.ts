@@ -222,7 +222,6 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
         private userAuthorizationService: UserAuthorizationService,
         private fb: UntypedFormBuilder,
         private platformService: PlatformService,
-        private cd: ChangeDetectorRef,
         private renderer: Renderer2
   )
   {

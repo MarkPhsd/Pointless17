@@ -158,7 +158,7 @@
     </div>
 
     <div  style="font-size:1.2em;margin-top:10px"
-          *ngIf="(order.creditBalanceRemaining != 0 && totalAuthPayments > 0 && item?.tipAmount > 0 )">
+          *ngIf="!disableOptions && (order.creditBalanceRemaining != 0 && totalAuthPayments > 0 && item?.tipAmount > 0 )">
         Tip {{item?.tipAmount  | currency}}
     </div>
 
@@ -174,7 +174,7 @@
       <button   color="accent"
                 class="payment-buttons-sm"
                 style="width:125px"
-                 *ngIf="!PaxA920  && item.amountPaid > 0"
+                 *ngIf="!disableOptions &&  !PaxA920  && item.amountPaid > 0"
                 mat-raised-button (click)="editPayment(item)">
         <mat-icon>edit</mat-icon><br>
           Edit Tip</button>
@@ -185,7 +185,7 @@
 
 <ng-template #dsiEMVAndroidCardButton let-item>
   <dsiemvandroid-pay-btn
-    *ngIf="PaxA920  && item"
+    *ngIf="!disableOptions && PaxA920  && item"
     [order]="order"
     [devicename]="posDevice?.name"
     [uiTransactions]="uiTransactions"
@@ -203,7 +203,7 @@
 </ng-template>
 
 <ng-template #triPOSCaptureView let-item>
-  <div *ngIf="!qrOrder && (
+  <div *ngIf="!disableOptions && !qrOrder && (
     (item?.paymentMethod?.isCreditCard &&
       (uiTransactions && uiTransactions.triposEnabled && !item.completionDate)) ||
       (item.account && !item.completionDate &&
@@ -278,7 +278,7 @@
 </ng-template>
 
 <ng-template #editPaymentView let-item>
-  <div *ngIf="  !qrOrder &&
+  <div *ngIf="!disableOptions &&   !qrOrder &&
               ( item?.paymentMethod?.isCreditCard && (item?.tranCode != 'EMVSale' && item?.tranCode != 'EMVPreAuth')) &&
               ( !isUser &&
               ( item?.paymentMethod?.isCreditCard &&
@@ -296,7 +296,7 @@
 
 <ng-template #tipView let-item>
 
-  <div class="amount-paid" *ngIf="(item?.tranCode && item?.tranCode.toLowerCase()  != 'EMVPreAuth'.toLowerCase()) &&
+  <div class="amount-paid" *ngIf="!disableOptions && (item?.tranCode && item?.tranCode.toLowerCase()  != 'EMVPreAuth'.toLowerCase()) &&
                                   (item?.tranCode && item?.tranCode.toLowerCase()  != 'IncrementalAuth'.toLowerCase()) ||
                                   item.tipAmount >0
                                   ">
@@ -325,7 +325,7 @@
 </ng-template>
 
 <ng-template #voidActionView let-item>
-  <div *ngIf="(authData$ | async) as auth">
+  <div *ngIf="!disableOptions && (authData$ | async) as auth">
     <div *ngIf="(auth?.voidPayment || isCashVoidAllowed(item)) && !PaxA920  && item.amountPaid!= 0 && !order.history" >
       <button mat-button
               [disabled]="(item.voidReason && item.voidReason != 0 && item.voidAmount == item.amountPaid)"
@@ -339,7 +339,7 @@
 </ng-template>
 
 <ng-template #printButtonView let-item>
-  <div *ngIf="!qrOrder  && ((!getPaymentViewB(item) && order.completionDate) || item.completionDate)">
+  <div *ngIf="!disableOptions && !qrOrder  && ((!getPaymentViewB(item) && order.completionDate) || item.completionDate)">
     <button mat-raised-button
             class="payment-button-balance"
             (click)="printPaymentReceipt(item)"  >
@@ -350,7 +350,7 @@
 </ng-template>
 
 <ng-template #removeLastAuthView>
-  <div *ngIf="incrementalAuth">
+  <div *ngIf="!disableOptions && incrementalAuth">
     <button class="payment-button-balance"
             color="warn"
             mat-raised-button (click)="reverseIncrementalAuth(incrementalAuth)">

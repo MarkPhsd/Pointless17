@@ -78,32 +78,30 @@ export class QrPaymentComponent {
       private uiSettingsService: UISettingsService,
       private settingsService: SettingsService,
       private siteService    : SitesService,
-      private route          : ActivatedRoute,
       private orderService   : OrdersService,
       private orderMethodsService: OrderMethodsService,
       public userAuth       : UserAuthorizationService,
       private authenticationService: AuthenticationService,
       private uISettingsService: UISettingsService,
       private requestMessageMethods: RequestMessageMethodsService,
+      private route          : ActivatedRoute,
       private router         : Router,
       private fb: FormBuilder,
   ) { }
 
   ngOnInit(): void {
-    // this.initSubscriptions()
+
+    // this.id = this.route.snapshot.paramMap.get('id');
+
     if (!this.checkUserLoggedIn()) {
       return
     }
-    console.log('refresh user exists')
     this.refresh()
   }
 
   refresh() {
-    console.log('order refresh')
-    // this.getUser();
     this.uiHomePageSetting$ = this.settingsService.getUIHomePageSettings();
     this.initTransactionUISettings()
-
     this.order$ = this.getOrder().pipe(switchMap(data => {
       this.order = data;
       return of(data)
