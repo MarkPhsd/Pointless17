@@ -137,7 +137,8 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     this.getBucket()
     this.init();
     this.setPanelSyle();
-    if (this.authSevice && this.authSevice.deviceInfo && this.authSevice.deviceInfo.phoneDevice) {
+    if (this.authSevice && this.authSevice.deviceInfo && 
+          this.authSevice.deviceInfo?.phoneDevice) {
       this.textLength = 24
     }
     this.uiSettings.posDevice$.subscribe(data => {
@@ -187,7 +188,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     this.singlePage = false
     this.classcontainer = 'parent-container'
     this.orderslist     = 'orders-list'
-
   }
 
   ngAfterViewInit() {
@@ -295,11 +295,12 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
   }
 
-  _getItemSrc(event) {
-    this._getItemSrc(event?.value)
-  }
+  // _getItemSrc(event) {
+  //   this._getItemSrc(event?.value)
+  // }
 
   getItemSrc(nameArray: string) {
+    console.log('getItemSrc', nameArray)
     return this.awsBucket.getImageURLFromNameArray(this.bucket, nameArray)
   }
 
@@ -315,7 +316,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
        productSearchModel.hideSubCategoryItems = false;
       { productSearchModel.categoryID  = id }
     }
-    // console.log('init Product Search Model categories',productSearchModel)
+ 
     productSearchModel.pageSize   = 45
     productSearchModel.pageNumber = 1
     this.menuService.updateSearchModel(productSearchModel)

@@ -95,7 +95,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     if (this.isProduct && ((!this.smallDevice && this.androidApp) || !this.androidApp)) {
       return true
     }
-    return  false
+    return  true
   }
 
   get matCardGridClass() {
@@ -106,7 +106,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   }
 
   get priceView() {
-    if (this.isProduct) {
+    if (!this.isCategory) {
       return this.priceTemplate
     }
     return null;
@@ -137,7 +137,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     if (this.displayType === 'header-category') {
       return  'item-name-center-category'
     }
-    if (this.menuItem.urlImageMain) { 
+    if (this.menuItem.urlImageMain) {
       return 'item-name-center-image'
     }
     return  'item-name-center'
@@ -160,6 +160,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     }
     return 'product-image'
   }
+
   get imageContainer() {
     if (this.isApp) {
       return 'image-container container-app'
@@ -167,6 +168,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     if (this.displayType != 'header-category') {
       return 'image-container container-mobile'
     }
+
     if (this.displayType === 'header-category') {
       return 'container-mobile-app'
     }
@@ -230,7 +232,8 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
 
   get menuNameViewBol() {
-    if (this.menuItem && this.menuItem.urlImageMain  && !this.disableImages) {
+    if (this.menuItem &&
+     (this.menuItem.urlImageMain || this.menuItem.thumbNail)  && !this.disableImages) {
       return true
     }
     return false;
@@ -261,14 +264,14 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
   ngOnInit() {
     this.initSubscriptions();
-    // this.cd.markForCheck();
     if (!this.menuItem) {return }
     this.isProduct = this.getIsNonProduct(this.menuItem)
     this.containerclass  = this.containerclassValue;
     this.imageContainerClass = this.imageContainer
+
     if (!this.disableImages ) {
       this.imageUrl  = this.getItemSrc(this.menuItem)
-      if (!this.menuItem.urlImageMain) { this.noImage = true  }
+      if (!this.imageUrl) { this.noImage = true  }
     } else {
       this.noImage = true
     }
@@ -293,7 +296,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     this.cd.detectChanges();
   }
 
-  get isImageButtonViewBol() {
+  get showLoadMore() {
     if (this.menuItem &&  this.menuItem?.name && this.menuItem?.name.toLowerCase() === 'load more') {
       return true// this.loadMoreButton
     }
@@ -346,7 +349,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
   editItem() {
     if (!this.menuItem) { return }
-    this.action$ = this.productEditButtonService.openProductDialogObs(this.menuItem.id);
+    this.action$ = this.productEditButtonService.openProductDialogObs(this.menuItem?.id);
   }
 
   buyItem() {
@@ -354,7 +357,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
       return
     }
     const site = this.siteService.getAssignedSite()
-    const item$ = this.menuService.getMenuItemByID(site, this.menuItem.id)
+    const item$ = this.menuService.getMenuItemByID(site, this.menuItem?.id)
     this.buyItem$ = item$.pipe(switchMap(data => {
       return   this.productEditButtonService.openBuyInventoryItemDialogObs(data,  this.orderMethodsService.currentOrder)
       }
@@ -387,8 +390,8 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     if ((this.isApp && this.smallDevice)) { return }
     try {
       if (this.allowBuy ) {
-        if (this.menuItem && this.menuItem.itemType && this.menuItem.itemType.useType
-            && (this.menuItem.itemType.type.toLowerCase() != 'grouping')
+        if (this.menuItem && this.menuItem.itemType && this.menuItem?.itemType?.useType
+            && (this.menuItem?.itemType?.type.toLowerCase() != 'grouping')
             ) {
           return true
         }
@@ -403,8 +406,8 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     if ((this.isApp && this.smallDevice)) { return }
     try {
       if (this.allowBuy ) {
-        if (this.menuItem && this.menuItem.itemType && this.menuItem.itemType.useType
-            && (this.menuItem.itemType.type.toLowerCase() != 'grouping')
+        if (this.menuItem && this.menuItem.itemType && this.menuItem?.itemType?.useType
+            && (this.menuItem?.itemType?.type.toLowerCase() != 'grouping')
             ) {
           return this.buyItemView
         }
@@ -418,7 +421,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   get enableViewItemBol() {
     if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
     if (this.isApp && this.authenticationService.isAdmin || this.allowEdit && this.isApp) {
-      if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
+      if (this.menuItem.id > 0 && this.menuItem?.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
         return true
       }
     }
@@ -538,12 +541,19 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   }
 
   getItemSrc(item:IMenuItem) {
-    if (!item.urlImageMain) {
-      if (this.isApp) { return }
-      const image = this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.png")
-      return image
+    const thumbnail = item?.thumbNail ?? item?.urlImageMain;
+    if (!thumbnail) {
+      if (this.isApp) { 
+         const image =`${this.bucketName}productplaceholder.png`
+         return image 
+      }
+      return null
     } else {
-      const imageName =  item.urlImageMain.split(",")
+      const thumbnail = item?.thumbNail ?? item?.urlImageMain;
+      const imageName =  thumbnail.split(",")
+      if (!imageName || imageName.length == 0) {
+        return null
+      }
       const image =`${this.bucketName}${imageName[0]}`
       return image
     }

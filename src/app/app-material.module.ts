@@ -1,5 +1,5 @@
 import {NgModule } from '@angular/core';
-
+import { NgOptimizedImage } from '@angular/common'
 import {MatLegacyAutocompleteModule as MatAutocompleteModule} from '@angular/material/legacy-autocomplete';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
@@ -48,6 +48,7 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
   imports        : [
     // NgxMatDatetimePickerModule,
     // NgxMatNativeDateModule,
+    NgOptimizedImage,
     OverlayModule ],
   exports: [
     DragDropModule,
@@ -91,9 +92,16 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
     MatTreeModule,
     OverlayModule,
     NgxMatDatetimePickerModule,
+    NgOptimizedImage,
     NgxMatNativeDateModule
   ],
   providers: [
+    // {
+    //   provide: IMAGE_CONFIG,
+    //   useValue: {
+    //     placeholderResolution: 40
+    //   }
+    // },
     { provide: MatDialogRef , useValue:{} },
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: false } }

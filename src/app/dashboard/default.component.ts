@@ -211,7 +211,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.platFormService.isApp() ) { return  'mat-drawer-container'}
     if (this.userAuthorizationService?.isStaff) { return  'mat-drawer-container'}
 
-    if (this.smallDevice) { 
+    if (this.smallDevice) {
       return  'mat-drawer-container'
     }
     return  'mat-drawer-container-user'
@@ -299,7 +299,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           return of(data);
       })
        ).pipe(concatMap(data => {
-          if (!data) { 
+          if (!data) {
             return of(ui)
           }
           return this.initMenuButtonList( data );
@@ -314,12 +314,12 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     const site = this.siteService.getAssignedSite()
     if (!this.authorizationService._user.value) { return of(null)}
 
-    if (this.menuButtonsInitialized) { 
-      if (this.mbMenuGroupService._menuButtonList.value) { 
+    if (this.menuButtonsInitialized) {
+      if (this.mbMenuGroupService._menuButtonList.value) {
         return of(null)
       }
     }
-   
+
     if (ui?.multiButtonOrderHeader && ui?.multiButtonOrderHeader != 0) {
       return this.mbMenuGroupService.getGroupByID(site, ui?.multiButtonOrderHeader).pipe(concatMap(
         data => {
@@ -505,7 +505,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (!data && data != 0 || this.smallMenu) {
           this.barType =  "mat-drawer-searchbar-tiny"
-          this.style   = `width:${this.style}`
+          if (this.style){
+            this.style   = `width:${this.style}`
+          }
         }
 
       })

@@ -35,6 +35,8 @@ export class StrainProductEditComponent implements OnInit {
   @ViewChild('priceCategorySelectorTemplate') priceCategorySelectorTemplate : TemplateRef<any>;
   @ViewChild('groceryPromptTemplate') groceryPromptTemplate : TemplateRef<any>;
 
+  thumbNailWidth: number = 110
+  thumbNailHeight: number = 80
   get groceryPromptView() {
     const itemType = this.itemType;
     if ( itemType && itemType.useType && (itemType.type?.toLowerCase() === 'grocery' ||

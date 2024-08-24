@@ -17,10 +17,20 @@ export class MenuCardCategoriesComponent implements OnInit {
   @Input()  isAdmin: boolean;
   @Input()  textLength: number = 15;
   @Input()  disableImages: boolean;
-  constructor(private awsBucket: AWSBucketService) { }
+  constructor(public awsBucket: AWSBucketService) { }
+
+  urlImage: string;
 
   ngOnInit(): void {
     const i = 0;
+    if (this.item && this.bucket) { 
+      this.urlImage = this.getItemSrc(this.item)
+    } else { 
+      if (!this.item && this.bucket) { 
+        const image =`https://${this.bucket}.s3.amazonaws.com/placeholderproduct.png`
+        this.urlImage = image;
+      }
+    }
   }
 
   editItem(item) {
@@ -35,7 +45,27 @@ export class MenuCardCategoriesComponent implements OnInit {
     this.outPutNextPage.emit(true)
   }
 
-  getItemSrc(nameArray: string) {
-    return this.awsBucket.getImageURLFromNameArray(this.bucket, nameArray)
+  // getItemSrc() {
+  //   if (this.item?.urlImageMain || this.item?.thumbNail) { 
+  //     const image = this.item?.thumbNail ?? this.item?.urlImageMain ;
+  //     this.urlImage = this.awsBucket.getImageURLPath(this.bucket, image)
+  //   }
+  // }
+
+  getItemSrc(item:any) {
+    const thumbnail = item?.thumbNail ?? item?.urlImageMain;
+    console.log(thumbnail, this.bucket)
+    if (thumbnail) {
+      const thumbnail = item?.thumbNail ?? item?.urlImageMain;
+      const imageName =  thumbnail.split(",")
+      if (!imageName || imageName.length == 0) {
+        return null
+      }
+      //s3.amazonaws.com/
+      // https://coconutsfl.s3.amazonaws.com/
+      const image =`https://${this.bucket}.s3.amazonaws.com/${imageName[0]}`
+      console.log('image', image)
+      return image
+    }
   }
 }

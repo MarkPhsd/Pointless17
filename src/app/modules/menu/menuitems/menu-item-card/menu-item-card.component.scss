@@ -37,9 +37,10 @@
 .mat-card-grid {
   max-width: 150px;
   padding: 0px;
+  // height: 116px;
 
   @include for-phone-only {
-    // height: 116px;
+
   }
 
 }
@@ -61,13 +62,10 @@
   position: relative;
   height: 100%;
   overflow: hidden;
-}
+  height: 125px;
 
-.container-mobile  {
-  min-height: 135px;
   @include for-phone-only {
-    min-height: 116px;
-    height: 116px;
+    height: 125px;
   }
 }
 
@@ -97,18 +95,11 @@
   width: 100%;
   max-height: 75px;
   border-radius: 15px;
-}
 
-.image-container-mobile  {
   @include for-phone-only {
     height    : 75px;
   }
-}
 
-.image-container-app  {
-  @include for-phone-only {
-    height    : 50px;
-  }
 }
 
 .header-container {
@@ -128,6 +119,16 @@
   text-wrap: wrap;
   max-height: 2em;
   width: 70px;
+  overflow: hidden;
+}
+
+.header-category-title-app {
+  font-size: 1em;
+  font-weight: 450;
+  text-align: center;
+  justify-content: center;
+  text-wrap: wrap;
+  max-height: 2em;
   overflow: hidden;
 }
 
@@ -154,21 +155,22 @@
 
 .image-button-category {
   object-fit    : cover;
-  transition    : box-shadow 400ms;
+  // transition    : box-shadow 400ms;
   border-radius : 5px;
   margin        : 0px;
   width         : 100%;
-  padding       : 5px;
-  font-weight: 400;
-  font-size: 1em;
-  white-space:normal;
-  overflow: hidden;
-  text-transform: capitalize;
-  font-size   : 1.5em;
+  padding-left   : 3px;
+  padding-right  : 3px;
+  // font-weight: 400;
+  // font-size: 1em;
+  // white-space:normal;
+  // overflow: hidden;
+  // text-transform: capitalize;
+  // font-size   : 1.5em;
   height: 85px;
   overflow: hidden;
   @include for-phone-only {
-    font-size   : 1.5em;
+    // font-size   : 1.5em;
     height: auto;
 
   }
@@ -176,23 +178,25 @@
 
 .image-button {
   object-fit    : cover;
-  transition    : box-shadow 400ms;
+  // transition    : box-shadow 400ms;
   border-radius : 5px;
   margin        : 0px;
   width         : 100%;
-  padding       : 5px;
-  font-weight: 400;
-  font-size: 1em;
-  white-space:normal;
+  padding-left   : 3px;
+  padding-right  : 3px;
+  // font-weight: 400;
+  // font-size: 1em;
+  // white-space:normal;
   overflow: hidden;
-  text-transform: capitalize;
-  font-size   : 1.5em;
-  height: 125px;
+  // text-transform: capitalize;
+  // font-size   : 1.5em;
+  // height: 125px;
   overflow: hidden;
+
   @include for-phone-only {
     // font-size   : 1.5em;
     height: auto;
-    font-size: .65em;
+    // font-size: .65em;
   }
 }
 
@@ -246,34 +250,40 @@
  }
 
  .product-image-category  {
-  object-fit  :   cover;
-  border-radius: 15px;
-  width       : 100%;
-  white-space : normal;
-  overflow    : hidden;
-  height  : 65px;
-
-  @include for-phone-only {
-    font-size   : 1.3em;
+    object-fit  :   cover;
+    border-radius: 15px;
+    width       : 100%;
+    white-space : normal;
+    overflow    : hidden;
     height  : 65px;
-    height:65px;
+
+    @include for-phone-only {
+      font-size   : 1.3em;
+      height  : 65px;
+      height:65px;
+    }
+}
+
+.product-image-container {
+  height  : 85px;
+  object-fit: cover;
+  @include for-phone-only {
+    height  : 65px;
   }
 }
 
-
-
 .product-image  {
-  object-fit  :   cover;
+  // object-fit  :   cover;
   border-radius: 15px;
-  width       : 100%;
+  // width       : 100%;
+
   white-space : normal;
   overflow    : hidden;
   height  : 85px;
 
   @include for-phone-only {
-    font-size   : 1.3em;
-    height  : 65px;
-    height:65px;
+    // height  : 65px;
+    height  :65px;
   }
 }
 
@@ -371,13 +381,21 @@
   margin-top:  10px;
 }
 
+.price-grid {
+  --gap: 2px;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
 #price {
   align-items:   baseline;
-  margin-top:    .8em;
+  margin-top:    5px;
   text-align:    left;
   font-weight:   500;
   font-size:     .9em;
-  float:         left;
+  // float:         left;
 }
 
 .item-name-center-category {
@@ -408,7 +426,8 @@
   font-weight:   500;
   margin-bottom: 3px;
   font-size: 1rem;
-  top: -28px;
+  margin-top: 1px;
+  // top: -28px;
   position: relative;
 
   @supports (-webkit-touch-callout: none) {
@@ -416,19 +435,24 @@
   }
   @include for-phone-only {
     margin-top: -3px;
-    top: -5px;
+    // top: -5px;
   }
 }
 
 .item-name-center {
+
+  margin-bottom: 3px;
+  margin-top: 1px;
+  // top: -28px;
   
+  //text layout
   text-align: center;
   justify-content: center;
   z-index: 102;
   font-weight:   500;
-  margin-bottom: 3px;
   font-size: 1rem;
-  // top: -28px;
+  height: 95px;
+  text-wrap: auto;
   position: relative;
 
   @supports (-webkit-touch-callout: none) {
@@ -438,6 +462,7 @@
   @include for-phone-only {
     margin-top: -3px;
     top: 5px;
+    height: 65px;
   }
 }
 
@@ -449,19 +474,13 @@
   min-height: .1rem;
 }
 
-.price-grid {
-  --gap: 2px;
-  display: flex;
-  justify-content: space-between;
-  padding-left: 2px;
-  padding-right: 2px;
-}
 
-button  {
-  margin-right: 1px;
-  margin-left : 1px;
-  padding     : 1px;
-}
+
+// button  {
+//   margin-right: 1px;
+//   margin-left : 1px;
+//   padding     : 1px;
+// }
 
 .category-img {
   height: 65px;

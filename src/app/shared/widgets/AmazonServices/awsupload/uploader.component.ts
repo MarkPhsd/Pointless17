@@ -6,6 +6,7 @@ import { EMPTY, Observable, of,  } from 'rxjs';
 
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { catchError, switchMap } from 'rxjs/operators';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
   selector: 'app-widget-uploader',
@@ -19,7 +20,9 @@ export class UploaderComponent implements OnInit {
   upload$: Observable<any>;
   errorMessage: string;
 
-  @Input() fileNames: string ; //string array of files
+  @Input() width : number;
+  @Input() height: number;
+  @Input() fileNames: string ; 
   @Output() messageOut = new EventEmitter<string>();
   @Input() id:            string;
 
@@ -35,7 +38,7 @@ export class UploaderComponent implements OnInit {
 
   constructor(private awsBucket: AWSBucketService,
              private _snackBar: MatSnackBar,
-             private truncateTextPipe: TruncateTextPipe,
+             private siteService: SitesService,
              ) {
             }
 
@@ -49,8 +52,6 @@ export class UploaderComponent implements OnInit {
     if (itemName) {
       itemName = itemName.substr(0, itemName.length - 4 )
       return itemName.substr(0,10)
-      return this.truncateTextPipe.transform(itemName.replace(/<[^>]+>/g, ''), 10)
-      // return itemName.substr(0,10)
     }
   }
 
@@ -66,7 +67,11 @@ export class UploaderComponent implements OnInit {
   }
 
   getImageURL(fileName: string): any {
-    if (fileName) { return this.awsBucket.getImageURLPath(this.bucketName, fileName) }
+    if (fileName) { 
+      const image =  this.awsBucket.getImageURLPath(this.bucketName, fileName)
+      console.log('getImageURL', image)
+      return image
+     }
   }
 
   uploadFiles(files: Array<any>) {
@@ -102,7 +107,7 @@ export class UploaderComponent implements OnInit {
       })
 
      } catch (error) {
-       this.notifyEvent(`Failed to upload ${error}`, 'Error')
+      this.siteService.notify(`Failed to upload.` + JSON.stringify(error), 'Error', 4000)
        this.uploading = false;
      }
   };
@@ -134,14 +139,12 @@ export class UploaderComponent implements OnInit {
     }),
     catchError( e => {
       console.log('get assigned url', e)
-      this.errorMessage = e.toString()
+      this.errorMessage =  JSON.stringify(e)
       return of(null)
     })
     ).pipe(switchMap( data => {
-
           if (!data) {
-            console.log()
-            this.notifyEvent(`Failed to upload.`, 'Error')
+            this.siteService.notify(`Failed to upload.` + JSON.stringify(data), 'Error', 4000)
             this.uploading = false;
             return of('not uploaded')
           }
@@ -151,39 +154,11 @@ export class UploaderComponent implements OnInit {
         }
       ),
       catchError( e => {
-        console.log(e)
+        this.siteService.notify(`Failed to upload.` + JSON.stringify(e), 'Error', 4000)
         this.errorMessage = 'uploading error' + e.toString()
         return of(null)
       })
     )
-
-    // this.upload$ = presign$.pipe(
-    //   switchMap( data => {
-    //       if (!data || !data?.preassignedURL) {
-    //         this.notifyEvent(`Failed to upload.`, 'Error')
-    //         this.uploading = false;
-    //         return of(null)
-    //       }
-    //       if (data?.preassignedURL) {
-    //         return this.awsBucket.uploadFile(file,  data?.preassignedURL)
-    //       }
-    //       return of(null)
-    //     )
-    //   ).pipe(
-    //   switchMap(data => {
-    //     if (!data) { return of('not uploaded')}
-    //     this.uploading = false;
-    //     this.uploadFile_alt(file)
-    //     return of('')
-    //     }
-    //   )
-    // )
-
-    //  } catch (error) {
-    //    this.notifyEvent(`Failed to upload ${error}`, 'Error')
-    //   this.uploading = false;
-    //   console.log(error)
-    //  }
 
   };
 
@@ -199,7 +174,6 @@ export class UploaderComponent implements OnInit {
 
     //first check if files exist
     if ( this.files) {
-
       [...this.files].forEach(file =>
         {
           if (this.fileNames)
@@ -211,7 +185,6 @@ export class UploaderComponent implements OnInit {
       );
 
       const newArray = [...new Set(this.fileNames.split(","))];
-
       this.fileNames = "";
       [...newArray].forEach(file => {
           if (file != undefined || file != null) {
@@ -220,17 +193,14 @@ export class UploaderComponent implements OnInit {
           }
         }
       )
-
       this.fileNames =   this.fileNames.replace('undefined', '')
       this.fileNames =   this.fileNames.replace('null', '')
       this.fileNames =   this.fileNames.replace(',,', ',')
-
     }
     this.messageOut.emit(this.fileNames)
   }
 
   deleteFile(name:string) {
-
     if ( this.fileNames != undefined || this.fileNames != '') {
       const removeFile = name // this.files[index].name
       this.fileNames  = this.fileNames.replace(name, '')
@@ -238,13 +208,10 @@ export class UploaderComponent implements OnInit {
       if (this.fileNames.substring(1, 1) === "," && this.fileNames.length>1) {
         this.fileNames = this.fileNames.substring(2, this.fileNames.length -1)
       }
-      if (this.fileNames.trim() === ',' ) {
-        this.fileNames = ''
-      }
+      if (this.fileNames.trim() === ',' ) {  this.fileNames = '' }
       this.messageOut.emit(this.fileNames)
       return
     }
-
     this.messageOut.emit('')
   }
 

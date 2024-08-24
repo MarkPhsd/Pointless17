@@ -3,10 +3,12 @@
 
 <ng-container >
   <mat-card  [style]="buttonColor"
-             [class]="matCardGridClass" >
+             [class]="matCardGridClass"  >
+
       <ng-container [ngTemplateOutlet]="menuItemContents">
       </ng-container>
-   </mat-card>
+
+  </mat-card>
 </ng-container>
 
 <ng-template #menuItemContents>
@@ -28,47 +30,49 @@
   </ng-container>
 
   <div   [class]="containerclassValue">
-    <div [class]="imageContainer">
+     <!-- options for app or web  -->
+    <ng-container [ngTemplateOutlet]="buttonView"></ng-container>
+    <ng-container [ngTemplateOutlet]="itemAppView"></ng-container>
+    <!-- only for show load more. -->
+    <ng-container *ngIf="showLoadMore">
+      <ng-container [ngTemplateOutlet]="isImageButtonView"></ng-container>
+    </ng-container>
 
-      <ng-container *ngIf="isImageButtonViewBol">
-        <ng-container [ngTemplateOutlet]="isImageButtonView"></ng-container>
-      </ng-container>
+    <div [class]="imageContainer">
 
       <!-- Icon Only -->
       <ng-container [ngTemplateOutlet]="menuButton"></ng-container>
 
-      <!-- options for app or web  -->
-      <!-- <ng-container [ngTemplateOutlet]="buttonView"></ng-container> -->
-      <ng-container [ngTemplateOutlet]="itemAppView"></ng-container> 
-
-      <!-- <ng-container *ngIf="menuNameViewBol">
+      <ng-container *ngIf="menuNameViewBol">
         <ng-container [ngTemplateOutlet]="menuNameView"></ng-container>
-      </ng-container> -->
-
-      <!-- !!icon only Do not uncomment not used-->
-      <!-- <ng-container [ngTemplateOutlet]="imageButtonInfo" ></ng-container> -->
+      </ng-container>
 
     </div>
-
     <!-- only shows if no type assigned -->
     <ng-container [ngTemplateOutlet]="typeDisplayView"></ng-container>
+
   </div>
 
-  <div class="footer-category"  *ngIf="displayType === 'header-category' && menuItem?.urlImageMain">
-    <!-- {{menuItem?.name}} -->
-    <!-- {{!menuItem?.urlImageMain}} -->
-    <!-- <button mat-button (click)="altMethod(true)"
-            [@.disabled]="androidApp"
-            class="header-category-title">
-       {{menuItem?.name}}
-    </button> -->
-  </div>
+  <!-- footer -->
+  <ng-container [ngTemplateOutlet]="footerTemplate"></ng-container>
 
-  <div class="footer"  *ngIf="displayType != 'header-category'">
+
+</ng-template>
+
+<ng-template #footerTemplate>
+  <div  *ngIf="displayType != 'header-category'">
 
     <button mat-button (click)="altMethod(true)"   [@.disabled]="androidApp"
             *ngIf="isCategory && displayType === 'header-category'"
             class="header-category-title">
+      {{menuItem?.name}}
+    </button>
+
+    <!-- show name on app if  image is shown.  -->
+    <button mat-button (click)="altMethod(true)"
+            *ngIf="androidApp"
+            class="header-category-title-app"
+            style="text-wrap:wrap">
       {{menuItem?.name}}
     </button>
 
@@ -78,7 +82,6 @@
     </ng-container>
     <ng-container [ngTemplateOutlet]="seeMoreInCategoryView"></ng-container>
   </div>
-
 </ng-template>
 
 <ng-template #menuNameTemplate>
@@ -92,7 +95,7 @@
 </ng-template>
 
 <ng-template #menuItemName>
-  <div [class]="itemNameCenterClass" >
+  <div [class]="itemNameCenterClass" *ngIf="!androidApp" (click)="altMethod(true)">
     {{ menuItem?.name  | truncateText: 35   }}
     <div *ngIf="menuItem?.prodSecondLanguage">
       {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
@@ -188,8 +191,8 @@
 </ng-template>
 
 <ng-template #priceTemplate>
-  <div class="price-grid" id="price">
-    {{menuItem?.retail | currency}}
+  <div class="price-grid" id="price" >
+    {{menuItem?.retail ?? 0 | currency}}
     <span class="uom" *ngIf="menuItem?.unitDescription">
       /  {{menuItem?.unitDescription | truncateText: 5 }}
     </span>
@@ -197,17 +200,29 @@
 </ng-template>
 
 <ng-template #productImage>
-  <img  *ngIf     ="imageUrl && bucketName &&  !isCategory && !disableImages"
-        src     = {{imageUrl}}
-        [class]     ="productImageClass"/>
+  <!-- {{imageUrl}} -->
+  <!-- [src]      = "imageUrl" -->
+   <!--  [class]     ="productImageClass" -->
+  <div class="product-image-container"
+              *ngIf    ="imageUrl && bucketName &&
+                        !isCategory && !disableImages">
+    <img
+        [src]   = "imageUrl"
+        [class]  ="productImageClass"
+        width="100%"
+      />
+  </div>
+
 </ng-template>
 
 <ng-template #categoryImage>
-
-  <div class="round-container" *ngIf="imageUrl && bucketName && isCategory && !disableImages">
-    <img
-      src      = {{imageUrl}}
-      [class]  ="productImageClass" />
+  <div class="round-container product-image-container"
+        *ngIf="imageUrl && bucketName && isCategory && !disableImages">
+     <!-- {{imageUrl}} -->
+     <!-- [class]  ="productImageClass" -->
+    <img   [src]   = "imageUrl"   width="100%"
+           [class]  ="productImageClass"
+       />
   </div>
 </ng-template>
 
@@ -252,19 +267,18 @@
 </ng-template>
 
 <ng-template #appView>
-
   <span >
     <button
               mat-flat-button
               style="width:100%"
-             [class]="imageButtonClass"
+              [class]="imageButtonClass"
               (click)="altMethod(false)">
 
-        <div *ngIf="!menuItem.urlImageMain || disableImages">
+        <div *ngIf="!imageUrl || disableImages">
           <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
         </div>
 
-        <div *ngIf="menuItem.urlImageMain  && !disableImages">
+        <div *ngIf="imageUrl  && !disableImages">
           <ng-container [ngTemplateOutlet]="productImage"></ng-container>
           <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
         </div>
@@ -281,11 +295,12 @@
               [class]="imageButtonClass"
               (click)="altMethod(true)">
 
-        <div *ngIf="!menuItem.urlImageMain || disableImages">
+        <!-- {{imageUrl}} -->
+        <div *ngIf="!imageUrl || disableImages">
           <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
         </div>
 
-        <div *ngIf="menuItem.urlImageMain  && !disableImages">
+        <div *ngIf="imageUrl  && !disableImages">
           <ng-container [ngTemplateOutlet]="productImage"></ng-container>
           <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
         </div>

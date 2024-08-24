@@ -195,7 +195,7 @@ export class UserSwitchingService implements  OnDestroy {
     }
     // console.log('failed login',user?.errorMessage , user)
     if (user?.errorMessage) {
-      this.snackBar.open(`${user?.errorMessage} ${user?.message}`, 'Failed Login', {duration: 1500})
+      this.snackBar.open(`${user?.errorMessage} ${user?.message}`, 'Failed Login', {duration: 4500})
     }
 
     return {user: user, sheet: null}
@@ -211,13 +211,14 @@ export class UserSwitchingService implements  OnDestroy {
     this.authenticationService.authenticationInProgress = true;
   }
 
-  didItemFail(item) { 
-    if (item?.message == 'failed') { 
+  didItemFail(item) {
+    if (item?.message == 'failed' || item?.errorMessage === 'Auth Failed' ) {
       return true
     }
-    if (item.errorMessage && item?.errorMessage != '') { 
+    if (item.errorMessage && item?.errorMessage != '') {
       return true
     }
+    return false;
   }
 
   login(userName: string, password: string, clockInOnly: boolean): Observable<any> {
@@ -239,7 +240,7 @@ export class UserSwitchingService implements  OnDestroy {
           user.errorMessage = 'Auth Failed'
           const result = this.userAutFailed(user) as IUserProfile
           return of(result);
-        } 
+        }
         user.message = 'success';
         user.errorMessage = null;
         const currentUser = this.setUserInfo(user, password);
@@ -252,7 +253,7 @@ export class UserSwitchingService implements  OnDestroy {
     let updateAuth$ = auth$.pipe(
       concatMap(data => {
         console.log('submit 3', data)
-        if (this.didItemFail(data)) { 
+        if (this.didItemFail(data)) {
           data.errorMessage = 'Auth Failed'
           return of(this.userAutFailed(data));
         }
@@ -268,21 +269,21 @@ export class UserSwitchingService implements  OnDestroy {
     let balanceSheet$ = updateAuth$.pipe(
       concatMap(user => {
         console.log('submit 4', user)
-        if (this.didItemFail(user)) { 
+        if (this.didItemFail(user)) {
           this.authenticationService.authenticationInProgress = false;
           user.errorMessage = 'Auth Failed'
           return of(this.userAutFailed(user));
         }
-        
+
         user.message = 'success'
         const userSheet = {sheet: null, user: user}
-        
+
         if (clockInOnly) return of(userSheet);
 
-        if  ( this.platformService.isApp() && deviceName ) { 
+        if  ( this.platformService.isApp() && deviceName ) {
           return this.promptBalanceSheet(user)
-        } 
-        
+        }
+
         // console.log('submit with no balancesheet', clockInOnly, userSheet)
 
         return of(userSheet);
@@ -293,7 +294,7 @@ export class UserSwitchingService implements  OnDestroy {
     let result$ = balanceSheet$.pipe(
       concatMap(data => {
         console.log('submit 5', data)
-        if (this.didItemFail(data)) { 
+        if (this.didItemFail(data)) {
           this.authenticationService.authenticationInProgress = false;
           return of(this.userAutFailed(data));
         }
@@ -302,7 +303,7 @@ export class UserSwitchingService implements  OnDestroy {
     );
 
     return result$;
- 
+
 }
 
   // getAuthorization()
@@ -425,7 +426,7 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
 
-  processPaymentLink(path : string) { 
+  processPaymentLink(path : string) {
     const [route, params] = path.split(';');
     const paramParts = params.split('=');
     const paramName = paramParts[0];
@@ -448,7 +449,7 @@ export class UserSwitchingService implements  OnDestroy {
       return 'user undefined'
     }
 
-    if (path.startsWith('/qr-payment')) { 
+    if (path.startsWith('/qr-payment')) {
       this.processPaymentLink(path)
       return;
     }

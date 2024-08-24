@@ -79,11 +79,15 @@ async ngOnInit() {
 
 
   getCatSource(item: IProductCategory) {
-    return this.getItemSrc(item.urlImageMain)
+     this.getItemSrc(item.urlImageMain)
   }
 
   getItemSrc(nameArray: string) {
     return this.awsBucket.getImageURLFromNameArray(this.bucketName, nameArray)
+  }
+
+  getImage(item) { 
+    return `https://${this.bucketName}.s3.amazonaws.com/${item?.urlImageMain}`
   }
 
 }

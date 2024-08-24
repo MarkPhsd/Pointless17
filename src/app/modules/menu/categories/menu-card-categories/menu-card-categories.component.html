@@ -17,12 +17,10 @@
 
     <div>
       <div class="text">{{item?.name  | truncateText: textLength  }}</div>
-      <div class="grid-item" *ngIf="!disableImages">
+      <div class="grid-item" *ngIf="!disableImages && imageName" >
         <img
-            loading   = "lazy"
             draggable = "false"
-            [src]     = "getItemSrc(imageName)"
-            onerror   = "this.src='assets/images/placeholderimage.png'"
+            [src]     = "urlImage"
             (click)   = "listItems(item.id)"
             class     = 'item-image'
             [alt]     = "item?.description">

@@ -9,7 +9,7 @@
         <div class="center-horiztonal">
           <div class="center-vertical" >
             <div>{{item.name}}</div>
-            <img  [src]="getCatSource(item)" alt="item">
+            <img *ngIf="bucketName && item.urlImageMain"  src = {{getImage(item)}} alt="item">
 
           </div>
         </div>

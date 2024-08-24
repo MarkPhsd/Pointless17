@@ -166,6 +166,7 @@
     "ngx-electron": "^2.2.0",
     "ngx-gallery": "^5.10.0",
     "ngx-google-analytics": "^14.0.1",
+    "ngx-image-compress": "^15.1.6",
     "ngx-image-viewer": "^1.0.13",
     "ngx-infinite-scroll": "^15.0.0",
     "ngx-json-viewer": "^3.1.0",

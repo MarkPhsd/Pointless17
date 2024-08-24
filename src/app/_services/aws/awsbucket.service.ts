@@ -134,16 +134,13 @@ export class AWSBucketService {
 
   getImageURLPath(bucket: string, imageName: string ): string {
     let path = ''
+    
+    console.log('getImageURLPath',  imageName);
+    if (!imageName || imageName ==='') { 
+      return ''
+    } 
+
     if (imageName) {
-
-      if (bucket && `${bucket}`.substring(0, 16 ) ===  'https://https://') {
-        const result =  bucket.split('https://')
-        bucket = result[1];
-      }
-
-      if (bucket) {
-        bucket = bucket.replace('https//', '')
-      }
 
       if (bucket && `${bucket}`.substring(0, 8 ) === 'https://') {
         path = `https://${bucket}${imageName}`
@@ -161,11 +158,18 @@ export class AWSBucketService {
 
     }
 
+    if (path) {
+      path = bucket.replace('https://https://', 'https://')
+      if (path === `https://${bucket}.s3.amazonaws.com/`) {
+        path = `https://${bucket}.s3.amazonaws.com/placeholderproduct.png`
+      }
+    }
+
+  
     return path;
   }
 
   getPlaceHolderImage(): string {
-    // "assets/images/placeholderimage.png"
     return "assets/images/placeholderimage.png" //  encodeURI(`${this.awsBucketURL}placeholderproduct.png`);
   }
 
@@ -176,7 +180,6 @@ export class AWSBucketService {
       return   encodeURI(`https://${bucket}.s3.amazonaws.com/${imageName}`);
     } else {
       return this.getPlaceHolderImage();
-      return   encodeURI(`https://${bucket}.s3.amazonaws.com/placeholderproduct.png`);
     }
   }
 
@@ -186,7 +189,7 @@ export class AWSBucketService {
 
     const imageName =  nameArray.split(",")
     bucket = bucket.replace('https//', '')
-   
+
     if (imageName) {
       if (imageName[0] == undefined || imageName[0] == '' || imageName[0] == ',' ) {
         return  this.getImageURLPath(bucket, "placeholderproduct.png")

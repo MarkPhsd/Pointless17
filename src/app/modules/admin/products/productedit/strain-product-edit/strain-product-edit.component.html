@@ -113,6 +113,8 @@
 
             <mat-label>Thumbnail</mat-label>
             <app-widget-uploader
+              [width]="thumbNailWidth"
+              [height]="thumbNailHeight"
               [(fileNames)]="thumbnail"
               (messageOut) ="setThumbNail($event)">
             </app-widget-uploader>
