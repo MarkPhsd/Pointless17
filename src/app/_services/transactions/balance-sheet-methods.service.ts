@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { IOrdersPaged, IUser } from 'src/app/_interfaces';
-import { OrdersService } from '..';
+import { AuthenticationService, OrdersService } from '..';
 import { SitesService } from '../reporting/sites.service';
 import { BalanceSheetSearchModel, BalanceSheetService, CashDrop, IBalanceSheet } from './balance-sheet.service';
 import { Capacitor } from '@capacitor/core';
@@ -47,6 +47,7 @@ export class BalanceSheetMethodsService {
     private electronService                : ElectronService,
     private siteService                     : SitesService,
     private balanceSheetService             : BalanceSheetService,
+    private authenticationService: AuthenticationService,
 
   ) {
     if ( this.platForm  === "Electron" || this.platForm === "android" || this.platForm === "capacitor")
@@ -87,15 +88,11 @@ export class BalanceSheetMethodsService {
     this._balanceSheetSearchModel.next(searchModel);
   }
 
-  promptBalanceSheet(user: IUser): Observable<any> {
+  promptBalanceSheet(user: IUser): Observable<{user: IUser, sheet: IBalanceSheet, err: any}> {
     if (this.platformService.isAppElectron || this.platformService.androidApp) {
       const site     = this.sitesService.getAssignedSite()
       const deviceName = this.getDeviceName();
-
-      localStorage.setItem('user', JSON.stringify(user))
-
-      if (!user)  { return of({sheet: null, user: user, err: null}) };
-
+      console.log('promptBalanceSheet', deviceName)
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
           if (data && data.errorMessage) {
@@ -127,8 +124,8 @@ export class BalanceSheetMethodsService {
   getCurrentBalanceSheet(): Observable<IBalanceSheet> {
     const deviceName = this.getDeviceName();
     const site = this.sitesService.getAssignedSite()
-    // const user = this.authenticationService._user.value;
-    // if (!user) {  return }
+    const user = this.authenticationService._user.value;
+    if (!user) {  return  of(null)}
     return   this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
       switchMap(sheet => {
         return  this.getSheetCalc(site, sheet)

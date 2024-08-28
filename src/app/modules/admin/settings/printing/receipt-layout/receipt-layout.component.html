@@ -28,8 +28,6 @@
           </div>
         </div>
 
-        
-
         <div *ngIf="footerText && orders && orders.length>0">
           <div *ngFor="let order of orders">
               <div [innerHTML]="getInterpolatedHTML(footerText, order)" >  </div>

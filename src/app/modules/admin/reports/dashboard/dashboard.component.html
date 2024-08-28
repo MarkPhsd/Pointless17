@@ -136,7 +136,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
     </div>
 
     <ng-template #itemReportButtons>
-      <div class="ps-flex-group-nowrap"  *ngIf="viewChartReports == 0" >
+      <div class="ps-flex-group-wrap"  *ngIf="viewChartReports == 0" >
         <div *ngFor="let item of itemReportList">
           <button mat-flat-button
                   style="width:150px;height:50px" color="primary"
@@ -234,8 +234,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
             </ng-container>
           </div>
-          <!-- ZRUN {{zrunID}} <br>
-          Range {{dateFrom}} - {{dateTo}} <br> -->
+         
           <sales-tax-report
                   [site]="site"
                   [dateFrom]  ="dateFrom"
@@ -246,7 +245,6 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <div header>
               <mat-icon >summarize</mat-icon> Sales - {{site.name}}
             </div>
-            <!-- <mat-icon>summarize</mat-icon> Sales - {{site.name}} -->
           </sales-tax-report>
 
           <payment-report
@@ -317,7 +315,6 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <div header>
               <mat-icon >summarize</mat-icon> Devices - {{site.name}}
             </div>
-            <!-- <mat-icon>credit_card</mat-icon> Devices - {{site.name}} -->
           </payment-report>
 
         </ng-container>
@@ -342,7 +339,6 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <div header>
               <mat-icon >summarize</mat-icon> Void Payments {{site.name}}
             </div>
-            <!-- <mat-icon>credit_card</mat-icon> Void Payments {{site.name}} -->
           </payment-report>
         </ng-template>
 
@@ -358,8 +354,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [notifier]="childNotifier"
                   [type]="'refunds'"
                   [zrunID]  ="zrunID"
-                  [autoPrint]="autoPrint"
-                  >
+                  [autoPrint]="autoPrint" >
             <mat-icon>credit_card</mat-icon> Refund Payments {{site.name}}
           </payment-report>
         </ng-template>
@@ -393,12 +388,17 @@ assets/htmlTemplates/salesreportStyles.html' -->
         <ng-container *ngIf="viewChartReports == 0">
           <ng-container *ngTemplateOutlet="departmentSalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="categorySalesView,context: {$implicit: site}"></ng-container>
+          <ng-container *ngTemplateOutlet="subCategorySalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="taxedCategorySalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="nonTaxedCategorySalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="itemSalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="itemTypeSalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="itemSizeSalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="uomSalesView,context: {$implicit: site}"></ng-container>
+          <ng-container *ngTemplateOutlet="brandSalesView,context: {$implicit: site}"></ng-container>
+          <ng-container *ngTemplateOutlet="vendorSalesView,context: {$implicit: site}"></ng-container>
+          
+
         </ng-container>
 
         <ng-template #departmentSales let-site>
@@ -490,8 +490,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [viewType] = "'sales'"
                   [taxFilter]="1"
                   [groupBy]="'category'"
-                  [zrunID]  ="zrunID"
-                  >
+                  [zrunID]  ="zrunID" >
                 <div class="header">
                   <mat-icon>menu</mat-icon> Non Taxed Category Sales
                   <mat-divider></mat-divider>
@@ -510,8 +509,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [removeGiftCard]="true"
                   [viewType] = "'sales'"
                   [groupBy]="'items'"
-                  [zrunID]  ="zrunID"
-                  >
+                  [zrunID]  ="zrunID">
                 <div class="header">
                   <mat-icon>menu</mat-icon> Item Sales
                   <mat-divider></mat-divider>
@@ -533,7 +531,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [zrunID]  ="zrunID"
                   >
                 <div class="header">
-                  <mat-icon>menu</mat-icon> Item Sales
+                  <mat-icon>menu</mat-icon> Item Count SAles   
                   <mat-divider></mat-divider>
                 </div>
             </item-sales-card>
@@ -618,6 +616,69 @@ assets/htmlTemplates/salesreportStyles.html' -->
             </item-sales-card>
           </div>
         </ng-template>
+
+        <ng-template #subCategorySales let-site>
+          <div>
+            <item-sales-card
+                  [notifier]="count"
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [groupBy]="'subCategory'"
+                  [zrunID]  ="zrunID"
+                  >
+                <div class="header">
+                  <mat-icon>menu</mat-icon> Sub Category
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+        </ng-template>
+
+        <ng-template #brandSales let-site>
+          
+          <div>
+            <item-sales-card
+                  [notifier]="count"
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [groupBy]="'brand'"
+                  [zrunID]  ="zrunID"
+                  >
+                <div class="header">
+                  <mat-icon>menu</mat-icon> Brand Sales
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+        </ng-template>
+
+        <ng-template #vendorSales let-site>
+          
+          <div>
+            <item-sales-card
+                  [notifier]="count"
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [removeGiftCard]="true"
+                  [viewType] = "'sales'"
+                  [groupBy]="'vendor'"
+                  [zrunID]  ="zrunID"
+                  >
+                <div class="header">
+                  <mat-icon>menu</mat-icon> Vendor Sales
+                  <mat-divider></mat-divider>
+                </div>
+            </item-sales-card>
+          </div>
+        </ng-template>
+
       </div>
 
       <div [hidden]="displayReports != 'labor'">

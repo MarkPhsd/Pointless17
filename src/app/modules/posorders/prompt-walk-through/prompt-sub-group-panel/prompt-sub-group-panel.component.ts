@@ -63,6 +63,8 @@ export class PromptSubGroupPanelComponent implements OnInit, OnDestroy {
     })
 
     this._accordionStep = this.promptWalkService.accordionStep$.subscribe( data => {
+
+
       this.accordionStep = data;
     })
   }

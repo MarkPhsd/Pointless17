@@ -704,7 +704,6 @@ export class PrintingService {
         )
         }).catch( err => {
           console.log('Print window Load URL error:',printerName , err, options)
-          // console.trace('Trace of Printing Error')
           this.siteService.notify(`Error occured: Check your printer. options: printer: ${printerName} - Error: ${JSON.stringify(options)}`,  'Close', 25000, 'red' )
           printWindow.close();
           printWindow = null;

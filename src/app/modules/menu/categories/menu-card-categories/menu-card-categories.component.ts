@@ -45,26 +45,16 @@ export class MenuCardCategoriesComponent implements OnInit {
     this.outPutNextPage.emit(true)
   }
 
-  // getItemSrc() {
-  //   if (this.item?.urlImageMain || this.item?.thumbNail) { 
-  //     const image = this.item?.thumbNail ?? this.item?.urlImageMain ;
-  //     this.urlImage = this.awsBucket.getImageURLPath(this.bucket, image)
-  //   }
-  // }
-
   getItemSrc(item:any) {
     const thumbnail = item?.thumbNail ?? item?.urlImageMain;
-    console.log(thumbnail, this.bucket)
+    // console.log(thumbnail, this.bucket)con
     if (thumbnail) {
       const thumbnail = item?.thumbNail ?? item?.urlImageMain;
       const imageName =  thumbnail.split(",")
       if (!imageName || imageName.length == 0) {
         return null
       }
-      //s3.amazonaws.com/
-      // https://coconutsfl.s3.amazonaws.com/
       const image =`https://${this.bucket}.s3.amazonaws.com/${imageName[0]}`
-      console.log('image', image)
       return image
     }
   }

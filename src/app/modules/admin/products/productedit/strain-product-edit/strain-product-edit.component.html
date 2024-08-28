@@ -55,8 +55,7 @@
     </mat-card-title>
 
     <mat-card-subtitle>
-      <div *ngIf="(action$ | async) as item; else action">
-      </div>
+      <div *ngIf="(action$ | async) as item; else action"> </div>
 
       <ng-template #action>
         <div *ngIf="message != '' && message != undefined">
@@ -103,20 +102,24 @@
             <div class="header">
               <h4><mat-icon>image</mat-icon>Images</h4>
             </div>
-            <mat-label>Images</mat-label>
 
+            <mat-label>Images</mat-label>
             <app-widget-uploader
-                [(fileNames)]="urlImageMain"
-                (messageOut) ="received_URLMainImage($event)"
-                (imageUrl)   ="updateUrlImageMain($event)">
+                [(fileNames)]    ="urlImageMain"
+                [createThumbNail]="thumbnail"
+                [isThumbNail]    ="false"
+                (outPutThumbNail)="setThumbNail($event)"
+                (messageOut)     ="updateUrlImageMain($event)" >
             </app-widget-uploader>
 
             <mat-label>Thumbnail</mat-label>
             <app-widget-uploader
-              [width]="thumbNailWidth"
-              [height]="thumbNailHeight"
-              [(fileNames)]="thumbnail"
-              (messageOut) ="setThumbNail($event)">
+                [isThumbNail]    ="true"
+                [width]          ="thumbNailWidth"
+                [height]         ="thumbNailHeight"
+                [(fileNames)]    ="thumbnail"
+                (outPutThumbNail)="setThumbNail($event)"
+                (messageOut)     ="setThumbNail($event)" >
             </app-widget-uploader>
 
             <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
@@ -388,13 +391,7 @@
         </button>
       </div>
   </div>
- <!-- <div *ngIf="fbProductsService.isCannabis(itemType) & jsonForm" style="width:125px;">
-  <app-value-fields
-      [inputForm]="jsonForm"
-      [fieldName]="'limitMultiplier'">
-    Limit Multiplier
-  </app-value-fields>
- </div> -->
+
 </ng-template>
 
 <ng-template #reOrderUnit>

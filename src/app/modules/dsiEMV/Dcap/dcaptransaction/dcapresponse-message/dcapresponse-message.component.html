@@ -2,10 +2,10 @@
   Result Mesage {{resultMessage}}
 </div>
 <div *ngIf="response">
-  <h4 *ngIf="saleComplete  || response?.textResponse">Response :    {{response?.textResponse}}</h4>
-  <h4 *ngIf="saleComplete  || response?.responseOrigin ">Response Origin :  {{response?.responseOrigin}}</h4>
+  <h4 *ngIf="saleComplete  || response?.TextResponse">Response :    {{response?.TextResponse}}</h4>
+  <h4 *ngIf="saleComplete  || response?.ResponseOrigin ">Response Origin :  {{response?.ResponseOrigin}}</h4>
   <h4 *ngIf="saleComplete  || response?.DSIXReturnCode"> DSIX Return Code : {{response?.DSIXReturnCode}}</h4>
-  <h4 >Status :       {{response?.cmdStatus}}</h4>
+  <h4 >Status :       {{response?.CmdStatus}}</h4>
   <!-- {{response | json}} -->
 </div>
 

@@ -6,6 +6,11 @@
   // other styling here
 }
 
+.android {
+  transition: none !important;
+  box-shadow: none !important;
+}
+
 .mat-card {
   padding: 3px;
   object-fit: cover;
@@ -13,9 +18,7 @@
 }
 
 .mat-card:hover {
-
   transform: scale(1.03);
-
   @include for-phone-only {
     transform: scale(1);
   }
@@ -37,12 +40,6 @@
 .mat-card-grid {
   max-width: 150px;
   padding: 0px;
-  // height: 116px;
-
-  @include for-phone-only {
-
-  }
-
 }
 
 .mat-card-grid-header-category {
@@ -58,7 +55,7 @@
   overflow: hidden;
 }
 
-.container {
+.item-container {
   position: relative;
   height: 100%;
   overflow: hidden;
@@ -69,7 +66,7 @@
   }
 }
 
-.container-mobile-app  {
+.item-container-mobile-app  {
   height: 100px;
   overflow: hidden;
   @include for-phone-only {
@@ -77,7 +74,7 @@
   }
 }
 
-.container-app  {
+.item-container-app  {
   height: 135px;
   @include for-phone-only {
     height    : 65px;
@@ -155,24 +152,16 @@
 
 .image-button-category {
   object-fit    : cover;
-  // transition    : box-shadow 400ms;
   border-radius : 5px;
   margin        : 0px;
   width         : 100%;
   padding-left   : 3px;
   padding-right  : 3px;
-  // font-weight: 400;
-  // font-size: 1em;
-  // white-space:normal;
-  // overflow: hidden;
-  // text-transform: capitalize;
-  // font-size   : 1.5em;
   height: 85px;
   overflow: hidden;
-  @include for-phone-only {
-    // font-size   : 1.5em;
-    height: auto;
 
+  @include for-phone-only {
+    height: auto;
   }
 }
 
@@ -427,7 +416,6 @@
   margin-bottom: 3px;
   font-size: 1rem;
   margin-top: 1px;
-  // top: -28px;
   position: relative;
 
   @supports (-webkit-touch-callout: none) {
@@ -439,13 +427,9 @@
   }
 }
 
-.item-name-center {
-
+.item-name-center-menu {
   margin-bottom: 3px;
   margin-top: 1px;
-  // top: -28px;
-  
-  //text layout
   text-align: center;
   justify-content: center;
   z-index: 102;

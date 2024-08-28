@@ -16,6 +16,8 @@ import { DCAPAndroidRStream, DcapRStream } from '../../services/dcap.service';
 import { DcapMethodsService } from '../../services/dcap-methods.service';
 import { PrintData, RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { AWSBucketService, AuthenticationService } from 'src/app/_services';
+import { NavigationService } from 'src/app/_services/system/navigation.service';
+
 // import  * from '@capacitor/capacitor-android-foreground-service';
 // import '@anuradev/capacitor-background-mode';
 // const { BackgroundMode } = Capacitor.Plugins;
@@ -106,7 +108,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   private timer: any;
   paymentResponse: IPaymentResponse;
   instructions: string;
-  
+
   initPOSDevice() {
     this.posDevice$      = this.uISettingsService.posDevice$.pipe(switchMap(data => {
       if (!data)  {
@@ -163,6 +165,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
      private authService : AuthenticationService,
      private uiSettingService       : UISettingsService,
      private awsBucketService       : AWSBucketService,
+     private navigationService     : NavigationService,
      public  paymentMethodsService : PaymentsMethodsProcessService,
      @Optional() private dialogRef: MatDialogRef<DsiEMVAndroidComponent>,
      @Inject(MAT_DIALOG_DATA) public data: any
@@ -239,6 +242,13 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
 
   forceClose() {
     if (this.dialogRef) {
+      //navigate to orders
+      // this.orderMethodsService.nav
+      if (this.saleComplete) {
+        this.orderMethodsService.refreshAllOrders()
+        this.navigationService.navPOSOrders()
+      }
+
       this.dialogRef.close()
     }
   }
@@ -446,17 +456,21 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   async intervalCheckResponse(timer: any) {
     let responseSuccess = '';
     const options = {}
+
+    //returns string. then test if there is any string value
     const paymentResponse = await dsiemvandroid.getResponse(options);
+
     if (paymentResponse && (paymentResponse.value !== '' )) {
       this.cancelResponse = false;
       this.processing = false;
       responseSuccess = 'complete';
       this.instructions = ''
       const response = this.dcapMethodsService.convertToObject(paymentResponse.value)
-     
+      // console.log('intervalCheckResponse', response)
+
       if (response) {
         const result =   this.readResult(response, "EMVSale");
-        console.log('result', result.success, result.message)
+        // console.log('result', result.success, result.message)
         if (result.success) {
           clearInterval(timer);
           await dsiemvandroid.clearResponse(options)
@@ -482,9 +496,8 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
         this.instructions = 'Please tap or insert card'
       }
 
-      // console.log('options', options)
-      // return ;
       if (options) {
+        console.log(options)
         const item = await dsiemvandroid.processSale(options);
         const stream =  this.dcapMethodsService.convertToObject(item.value)
         this.checkResponse_Transaction('EMVSALE');
@@ -677,7 +690,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     // const stream = this.dcapMethodsService.convertToObject(paymentresponse)
     // return this.finalizeTransaction(data)
     let item = this.readResult(stream, "EMVSALE")
-
+    console.log('payment response', item)
     if (item?.success) {
       //then clear things that have been running.
       this.order;
@@ -695,8 +708,6 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
           this.stream = stream
           this.payment  = data.payment;
           this.paymentResponse = data;
-
-
         }
         return of(data)
       }))
@@ -797,7 +808,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     item.pinPadIpAddress = device?.HostOrIP;
     item.pinPadIpPort    = device?.PinPadIpPort;
     item.userTrace       = device?.OperatorID;
-    if (this.payment.tipAmount>0 ) { 
+    if (this.payment.tipAmount>0 ) {
       item.gratuity = this.payment.tipAmount.toString();;
     }
     item.prodCertMode    = this.certProdMode(device?.MerchantID);
@@ -839,6 +850,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     const item = this.dcapMethodsService.readAndroidResult(cmdResponse);
     this.responseData = cmdResponse;
     console.log('TranType', tranType, item.success)
+
     if (tranType == 'EMVSALE' || tranType == 'EMVPreAuth' || tranType == 'AdjustByRecordNo') {
       this.saleComplete = item?.success;
     }

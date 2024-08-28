@@ -1,176 +1,154 @@
-  @page
-{
-    margin: 5mm 5mm 5mm 5mm;
+@page {
+  size: auto;
+  margin: 0mm 05mm 15mm 05mm;
 }
 
-
-  @media print {
-   .address ,  .companyName,  {
-        font-size: 12pt;
-        font-weight: 600;
-		align-items: center;
-		position: relative;
-		text-align: center;
-		font-size: .8em;
-    }
-  }
-
-  @media print {
-    .itemName, itemprice, .description, .quantity, .address ,  .companyName, .amountPaid, .total,  .item-price,.name, .method {
-        font-size: 12pt;
-        font-weight: 600;
-    }
-  }
-
-  .printsection {
-    font-size: .8em;
-  }
-
-  .printsection-58 {
-    font-size: .8em;
-  }
-
-  .address ,  .companyName {
+@media print {
+  .address {
+    font-size: 18pt;
+    font-weight: 600;
     align-items: center;
-    font-size: .8em;
-	align-items: center;
-	position: relative;
-	text-align: center;
-	font-size: .8em;
+    position: relative;
+    text-align: center;
   }
 
-  .itemName, itemprice, .quantity,
+  .company-name {
+    font-size: 13pt;
+    font-weight: 600;
     align-items: center;
-    font-size: .8em;
+    position: relative;
+    text-align: center;
   }
 
-  .amountPaid, .total,  .item-price {
-    font-size: .8em;
+  .itemName,
+  .itemprice,
+  .description,
+  .quantity,
+  .amountPaid,
+  .total,
+  .name,
+  .method {
+    font-size: 13pt;
+    font-weight: 600;
+  }
+
+  .kitchenFont {
+    font-size: 18pt;
+    font-weight: 600;
+    align-items: right;
+    position: relative;
     text-align: right;
   }
 
-  .name, .method {
-    font-size: .8em;
+  .kitchenItem {
+    font-size: 18pt;
+    font-weight: 600;
+    align-items: right;
+    position: relative;
+    text-align: right;
+  }
+
+  .header-info {
+    font-size: 14pt;
+    font-weight: 600;
+    align-items: left;
+    text-align: left;
+  }
+
+  .total,
+  .totals,
+  .amountPaid {
+    font-size: 13pt;
+    font-weight: 600;
+    align-items: right;
+    position: relative;
+    text-align: right;
+  }
+
+  .itemprice,
+  .item-price {
+    font-size: 13pt;
+    font-weight: 600;
+    align-items: right;
+    position: relative;
+    text-align: right;
+  }
+
+  .right-text {
+    font-size: 13pt;
+    font-weight: 600;
+    align-items: right;
+    position: relative;
+    text-align: right;
+  }
+
+  .company-name {
+    font-size: 1.2em;
+    font-weight: 600;
+    align-items: center;
+    position: relative;
+    text-align: center;
+  }
+
+  .address,
+  .companyname {
+    font-size: 0.8em;
+    align-items: center;
+    position: relative;
+    text-align: center;
+  }
+
+  .itemName,
+  .itemprice,
+  .quantity {
+    align-items: center;
+    font-size: 0.8em;
+  }
+
+  .amountPaid,
+  .total,
+  .item-price {
+    font-size: 0.8em;
+    text-align: right;
+  }
+
+  .name,
+  .method {
+    font-size: 0.8em;
   }
 
   .description {
-     font-size: .8em;
+    font-size: 0.8em;
   }
 
-
-  .grid-receipt  {
+  .grid-receipt {
     display: grid;
     grid-template-columns: 50px auto 80px;
-    grid-template-rows:  auto;
-  }
-
-  .grid-receipt-85 {
-    display: grid;
-    grid-template-columns: 50px auto 80px;
-    grid-template-rows:  auto;
-  }
-
-  .grid-receipt-80 {
-    display: grid;
-    grid-template-columns: 50px auto 80px;
-    grid-template-rows:  auto;
-  }
-
-  .grid-receipt-58  {
-    display: grid;
-    grid-template-columns: 20px auto auto;
-    grid-template-rows:  auto;
-    gap: 5px;
+    grid-template-rows: auto;
   }
 
   .grid-totals {
     display: grid;
     grid-template-columns: 120px auto auto;
     gap: 10px;
-    float: right
+    float: right;
     margin-top: 20px;
-  }
-
-  .grid-totals-85 {
-    display: grid;
-    grid-template-columns: 120px auto auto;
-    gap: 10px;
-    float: right
-    margin-top: 20px;
-  }
-
-  .grid-totals-80 {
-    display: grid;
-    grid-template-columns: 120px auto auto;
-    gap: 10px;
-    float: right
-    margin-top: 20px;
-  }
-
-  .grid-totals-58 {
-    display: grid;
-    grid-template-columns: 15px auto auto;
-    gap: 5px;
-    float: right
-    margin-top: 5px;
-  }
-
-  .grid-totals-4-col-85 {
-    display: grid;
-    grid-template-columns: 50px 50px auto auto;
-    gap: 10px;
-    float: right
-    margin-top: 20px;
-  }
-
-  .grid-totals-4-col-80 {
-    display: grid;
-    grid-template-columns: 50px 75px auto auto;
-    gap: 10px;
-    float: right
-    margin-top: 20px;
-  }
-
-  .grid-totals-4-col-58 {
-    display: grid;
-    grid-template-columns: 50px 75px auto auto;
-    gap: 5px;
-    float: right
-    margin-top: 5px;
-  }
-
-  .spacing-58 {
-    margin-top: 5px;
   }
 
   .spacing {
     margin-top: 20px;
   }
 
-  .image-container  {
-      position: absolute;
-      right: 0;
-      left: 50;
-      top: 0;
-      bottom: 0;
-  }
-
-  .items-span-columns-2{
+  .items-span-columns-2 {
     grid-column-end: span 2;
-  }
-
-  .items-span-columns-start-2 {
-    grid-column-start: span 2;
-  }
-
-  .items-span-columns-start-3 {
-    grid-column-start: span 3;
   }
 
   .items-span-columns-3 {
     grid-column-end: span 3;
   }
 
-  .margin-1 {
-    margin: 5px
+  .grid-totals-58.signature-line.spacing-58 {
+    margin-top: 50px !important;
+    margin-bottom: 30px !important;
   }
+}

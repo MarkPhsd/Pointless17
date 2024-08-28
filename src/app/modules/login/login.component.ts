@@ -164,7 +164,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.isApp = this.platformService.isApp()
+    this.isApp      = this.platformService.isApp()
     this.isElectron = this.platformService.isAppElectron
     this.androidApp = this.platformService.androidApp
 
@@ -498,11 +498,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(concatMap(result =>
         {
 
-          // console.log(result)
-          //if you assign these two lines, detail here why you have done that.
-          //for some reason they were here, but they prevented a login,
-          //after login it would log out. but reviewing these two lines does not
-          //reveal why.
           try {
             this.pollingService.clearPoll();
             this.spinnerLoading = false;
@@ -518,17 +513,30 @@ export class LoginComponent implements OnInit, OnDestroy {
           let user = result?.user ;
           let sheet = result?.sheet as IBalanceSheet;
           this.authenticationService.authenticationInProgress = false;
-          //if there is a sheet we login here with the user to prompt the sheet if needed.
-          if (sheet) {  if (this.loginApp(result)) {  return of('success') } }
-          if (result && result.username != undefined) { user = result }
+
+          if (user) { 
+            console.log('usermessage', user?.message, user?.errorMessage)
+          } else { 
+            console.log('no user')
+          }
           
-          // console.log('user message', user, result)
+          if (sheet) { 
+            console.log('sheet exists', sheet?.id)
+          } else { 
+            console.log('no sheet')
+          }
+
+          //if is app
+          if (sheet) {  
+            if (this.loginApp(result)) {  return of('success') } 
+          }
+
+          if (result && result.username != undefined) { user = result }
           
           try {
             if (user) {
           
               if (user && user?.errorMessage === 'failed') {
-                // console.log('login failed')
                 this.siteService.notify('Login failed', 'Close', 3000, 'red')
                 this.authenticationService.authenticationInProgress = false;
                 this.clearUserSettings()
@@ -538,8 +546,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
               if (this.returnlUrl) { 
                 if (result && result?.message && result?.message === 'success') {
-                  // console.log('login success 1')
-                  this.authenticationService.updateUser(user)
+                  console.log('process login 1')
                   this.userSwitchingService.processLogin(user, this.returnlUrl)
                   this.closeDialog();
                   return of('success')
@@ -547,10 +554,9 @@ export class LoginComponent implements OnInit, OnDestroy {
               }
             
               if (user && ( user?.message === 'success' || (result?.message === 'success'))) {
-        
+                console.log('process login 2')
                 let pass = false
                 this.authenticationService.authenticationInProgress = false;
-                // user.
                 if (!this.loginAction) {  this.userSwitchingService.assignCurrentOrder(user) }
                 if (this.loginAction?.name === 'setActiveOrder') {
                   this.userSwitchingService.processLogin(user, '/pos-payment')
@@ -571,9 +577,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     ))
   }
 
-  processUserLogin(user) {
-
-  }
 
   closeDialog() {
     // if (this.dialogOpen) {
@@ -590,18 +593,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.orderMethodsService.getLoginActions()
   }
 
-  loginApp(user) {
+  loginApp(result) {
     if (this.platformService.isApp()) {
-      this.loggedInUser   = user.user;
+      this.loggedInUser   = result.user;
       this.spinnerLoading = false
-      return this.userSwitchingService.loginApp(user)
+      return this.userSwitchingService.loginApp(result)
     }
     return false;
   }
 
   assingBackGround(image: string) {
     if (!image) {
-      image = 'https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg'
+      image = ''
      }
     const styles = { 'background-image': `url(${image})`  };
     this.backgroundImage = styles

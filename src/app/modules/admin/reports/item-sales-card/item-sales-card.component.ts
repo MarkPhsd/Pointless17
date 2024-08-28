@@ -87,11 +87,16 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     if (this.groupBy === 'serviceFees') {
       searchModel.groupByProduct = true;
       searchModel.getServiceFees = true
+      searchModel.groupBy = "serviceFees";
     }
+
     if (this.groupBy === 'items') {   searchModel.groupByProduct = true; }
     if (this.groupBy === 'category') {   searchModel.groupByCategory = true;  }
     if (this.groupBy === 'department') {   searchModel.groupByDepartment = true;  }
     if (this.groupBy === 'type') {   searchModel.groupByType = true;  }
+    if (this.groupBy === 'brand') {   searchModel.groupBy = "brand";  }
+    if (this.groupBy === 'subCategory') {   searchModel.groupBy = "subCategory";  }
+    if (this.groupBy === 'vendor') {   searchModel.groupBy = "vendor";  }
     if (this.removeGiftCard) {  }
 
     if (this.groupBy === 'void' || this.groupBy === 'voiditem') {

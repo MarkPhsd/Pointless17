@@ -7,14 +7,20 @@
           [(ngModel)]="pinToken" >
     </mat-form-field>
   </div>
-  <div style="margin:5px">
-      <button mat-raised-button (click)="setAPIToken()">
-      <mat-icon>save</mat-icon>Save Token</button>
-  </div>
 
-  <div style="margin:5px">
+  <span style="margin:5px">
+    <button mat-raised-button (click)="setAPIToken()">
+    <mat-icon>save</mat-icon>Save Token</button>
+  </span>
+
+  <span style="margin:5px">
     <button mat-raised-button  (click)="getToken()">
-    <mat-icon>save</mat-icon>Get Token</button>
-</div>
+    Get Token</button>
+  </span>
+
+  <span style="margin:5px">
+    <button mat-raised-button  (click)="clearTokenDevice()">
+    Clear Token & Device</button>
+  </span>
 </div>
 <div *ngIf="(action$ | async) as action"></div>

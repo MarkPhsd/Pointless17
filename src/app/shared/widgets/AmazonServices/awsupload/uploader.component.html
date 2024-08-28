@@ -21,18 +21,17 @@
   <button mat-button
           color="primary"
           (click)="fileDropRef"><mat-icon>upload</mat-icon>
+          Drop File
   </button>
 
 </div>
-
-
 
 <div>
     <div *ngIf="fileNames">
       <div *ngFor="let item of fileNames.split(','); let i = index ">
         <div *ngIf="item != ''"  class="container">
           <div>
-            {{ getItemName(item) }}
+            {{item}}
           </div>
           <div>
             <img class="uploaded-image" [src]="getImageURL(item)" [alt]="item">

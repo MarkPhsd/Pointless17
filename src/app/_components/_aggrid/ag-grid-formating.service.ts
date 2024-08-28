@@ -116,6 +116,18 @@ get rowClasses() {
       }
 
     },
+    "row-metrc-posted": (params) => {
+      const value = params.api.getValue("metrcResponse", params.node);
+      if (!value || value == undefined) { return false }
+      if (value === '') { return false }
+      if (value) {
+        return true
+      }
+
+    },
+    
+    //   "row-posted": params => params.api.getValue("packageCountRemaining", params.node)
+    // },
 
 
   }
@@ -142,6 +154,7 @@ initGridOptions(pageSize: number, columnDefs: any, enableSorting?: boolean)  {
     rowClassRules: this.rowClasses,
     enableFilter: true,
     enableSorting: sorting,
+    
   }
 
 }

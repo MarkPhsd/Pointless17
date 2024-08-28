@@ -213,7 +213,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
   enterValue(event) {
     this.value =  this.value + event
-    console.log(this.value, event)
+    // console.log(this.value, event)
     this.updateDisplayOutput()
   }
 
@@ -273,7 +273,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
   refreshDisplay() {
 
-    console.log(this.inputTypeValue, this.value, this.decimals, this.requireWholeNumber)
+    // console.log(this.inputTypeValue, this.value, this.decimals, this.requireWholeNumber)
     if (!this.value)  {
       this.setDefault();
       return
@@ -355,7 +355,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
       const item      = { itemName:  this.formatted, packageQuantity: this.formatted, }
       this.inputForm.patchValue(item)
     } else {
-      console.log('undefined formatted')
+      // console.log('undefined formatted')
       this.initForm();
     }
 
@@ -364,19 +364,19 @@ export class KeyPadComponent implements OnInit, OnChanges {
   returnEnterPress(){
 
     if (!this.value && this.cashValue) {
-      console.log('1cashvalue', this.cashValue)
+      // console.log('1cashvalue', this.cashValue)
       this.outPutReturnEnter.emit(this.cashValue);
       return;
     }
 
     if (!this.formatted) {
-      console.log('2cashvalue', this.cashValue, this.value)
+      // console.log('2cashvalue', this.cashValue, this.value)
       this.outPutReturnEnter.emit(this.value)
       return
     }
 
     this.refreshDisplay()
-    console.log('formatted', this.cashValue)
+    // console.log('formatted', this.cashValue)
     this.outPutReturnEnter.emit(this.formatted)
   }
 

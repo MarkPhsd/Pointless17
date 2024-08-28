@@ -31,7 +31,6 @@ export class PrintTemplatePopUpComponent implements OnInit, OnDestroy {
               )
   {
     if (data) {
-      // console.log('submiting this info for printing', data, data.length)
       this.printOrders = data as IPrintOrders[];
       this.printOrder  = this.printOrders[this.index]
       this.printingService._printOrder.next(this.printOrder)

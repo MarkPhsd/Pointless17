@@ -138,6 +138,7 @@ export class StrainProductEditComponent implements OnInit {
   unitTypeSelections = []   as IItemBasic[];
   unitSelectorSearchForm: FormGroup
   dialogData: any;
+  createThumbNail: boolean;
 
   constructor(private menuService: MenuService,
               public  route: ActivatedRoute,
@@ -164,18 +165,17 @@ export class StrainProductEditComponent implements OnInit {
   }
 
   refreshProductInfo(product: IProduct, itemType: IItemType) {
-
     if (itemType) {  this.itemType = itemType  }
-    if (product) {   this.product = product as IProduct  }
-
-    if (this.product.id) {
+    if (product) {   this.product  = product  }
+   
+    if (product.id) {
       this.initializeForm();
-      this.initMenuButtonJson(this.product);
+      this.initMenuButtonJson(product);
       this.initJSONForm(this.product.json)
-      this.id = this.product.id.toString();
+      this.id = product.id.toString();
 
-      if (this.product &&  itemType &&  itemType.id) {
-        if (!this.product.prodModifierType ) {
+      if (product &&  itemType &&  itemType.id) {
+        if (!product.prodModifierType ) {
           this.product.prodModifierType = parseInt(itemType?.id.toString());
         }
       }
@@ -183,15 +183,17 @@ export class StrainProductEditComponent implements OnInit {
   }
 
   setInit(data) {
-    //init all search forms that are not bound to data.
-    console.log ('set init data', data)
+
     try {
       this.initPbSearchForm();
       this.initUnitForm();
       this.initReOrderUnitSearchForm();
+
+      const product = data?.product;
+      const itemType = data?.itemType;
       if (data) {
         if (data.product) {
-          this.refreshProductInfo(data?.product, data?.itemType)
+          this.refreshProductInfo(product, itemType)
         }
       }
     } catch (error) {
@@ -300,14 +302,6 @@ export class StrainProductEditComponent implements OnInit {
     }
   }
 
-  // backColor: string;
-  // buttonColor: string;
-  // managerProtected: boolean;
-  // tareValue: number;
-  // pieceWeight: number;
-  // unitTypeSelections: string;
-  // limitMultiplier: number;
-
   get JSONAsString() {
     if (this.product) {
       if (this.jsonForm) {
@@ -345,8 +339,12 @@ export class StrainProductEditComponent implements OnInit {
     this.initFormFields();
     if (this.productForm && this.product) {
       this.productForm.patchValue(this.product)
-      this.urlImageMain = this.product.urlImageMain;
-      this.thumbnail = this.product.thumbnail;
+      this.urlImageMain = this.product?.urlImageMain;
+      this.thumbnail = this.product?.thumbnail;
+      this.createThumbNail = true;
+      if (this.thumbnail) { 
+        this.createThumbNail = false
+      }
     }
   };
 
@@ -356,11 +354,7 @@ export class StrainProductEditComponent implements OnInit {
 
   setValues(): boolean {
     this.product  = this.fbProductsService.setProductValues(this.product, this.productForm)
-    if (this.product) {
-      this.product.urlImageMain  = this.urlImageMain;
-      this.urlImageMain = this.product.urlImageMain;
-      return true
-    }
+    if (this.product) {   return true  }
   }
 
   assignItem(event) {
@@ -477,7 +471,7 @@ export class StrainProductEditComponent implements OnInit {
   updateItem(event) {
     const site = this.siteService.getAssignedSite()
     if (this.setValues())  {
-      if (this.product.webProduct) { this.product.webProduct = -1     }
+      if (this.product.webProduct) { this.product.webProduct   = -1     }
       if (!this.product.webProduct) {  this.product.webProduct = 0    }
       this.message = ""
       this.performingAction= true;
@@ -499,12 +493,15 @@ export class StrainProductEditComponent implements OnInit {
             this.message = 'Saved'
             this.performingAction = false;
 
-            return this.itemTypeService.getItemType(site,this.product.prodModifierType).pipe(switchMap(data => {
-              this.setInit({product: data, itemType: data})
-              return of(data)
-            }))
-          }
-      ))
+            this.urlImageMain     = this.product?.urlImageMain;
+            this.thumbnail        = this.product?.thumbnail;
+      
+            return this.itemTypeService.getItemType(site, this.product?.prodModifierType)
+        }
+      )).pipe(switchMap(data => {
+        this.setInit({product: this.product, itemType: data})
+        return of(data)
+      }))
     }
   };
 
@@ -554,12 +551,15 @@ export class StrainProductEditComponent implements OnInit {
 
   //image data
   received_URLMainImage(event) {
+
     let data = event
     this.urlImageMain = data
     if (this.product) {
       this.product.urlImageMain  = this.urlImageMain
+      this.productForm.patchValue({urlImageMain: data})
     }
-    if (this.id) {  this.updateItem(null); }
+
+    console.log('out put files received', event, this.product)
   };
 
 
@@ -583,14 +583,15 @@ export class StrainProductEditComponent implements OnInit {
   updateUrlImageMain($event) {
     this.urlImageMain = $event
     this.product.urlImageMain = $event
+    this.productForm.patchValue({urlImageMain: event})
   }
 
   setThumbNail(event) {
     this.thumbnail = event;
     this.product.thumbnail = event;
     this.productForm.patchValue({thumbnail: event})
+    console.log(this.product)
   }
-
 
   parentFunc(event){
     // console.log(event)

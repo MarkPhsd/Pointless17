@@ -6,7 +6,6 @@
 </div>
 
 <ng-template #orderPrepRefresh>
-  <!-- order prep refresh -->
   <div *ngIf="(orderSubscription$ | async) as orders;else loadingPrep">
   </div>
   <div *ngIf="(results$ | async) as results">
@@ -24,7 +23,7 @@
 <div>
   <div class="orders-container">
     <div  *ngIf="orders"
-          [id]="scrollStyle"
+          [id]                    ="scrollStyle"
           class                   ="orders-list"
           infiniteScroll
           [infiniteScrollDistance]="2"

@@ -252,6 +252,15 @@ import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-
 import { SiteFooterComponent } from './components/site-footer/site-footer.component';
 import { SiteCardComponent } from './widgets/site-card/site-card.component';
 import { OnlinePaymentCompletedComponent } from '../modules/payment-processing/online-payment-completed/online-payment-completed.component';
+
+import {
+  DataUrl,
+  DOC_ORIENTATION,
+  NgxImageCaptureModule,
+  NgxImageCompressService,
+  UploadResponse,
+} from 'ngx-image-compress';
+
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
 // import { ReceiptLayoutComponent } from '../modules/admin/settings/printing/receipt-layout/receipt-layout.component';
@@ -540,6 +549,7 @@ import { OnlinePaymentCompletedComponent } from '../modules/payment-processing/o
     YouTubePlayerModule,
     NgxJsonViewerModule,
     NgxColorsModule,
+    NgxImageCaptureModule,
   ],
 
   exports: [
@@ -779,6 +789,7 @@ import { OnlinePaymentCompletedComponent } from '../modules/payment-processing/o
     // { provide: GALLERY_CONFIG, useValue: { dots: true, imageSize: 'cover', previewFullscreen : true } },
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
     // {provude: Gallery},
+    NgxImageCompressService,
     KeyboardComponent,
   ]
 

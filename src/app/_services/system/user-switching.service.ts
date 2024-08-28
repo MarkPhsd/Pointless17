@@ -68,7 +68,7 @@ export class UserSwitchingService implements  OnDestroy {
 
   //enter or chain observables here.
   promptBalanceSheet(user: IUser): Observable<any> {
-    this.setUserInfo(user, user?.password)
+    // user = this.setUserInfo(user, user?.password)
     return this.sheetMethodsService.promptBalanceSheet(user)
   }
 
@@ -192,6 +192,7 @@ export class UserSwitchingService implements  OnDestroy {
     let message = user?.errorMessage;
     if (user?.errorMessage && !user.message) {
       user.message = 'User not found.'
+      user.errorMessage = 'Auth Failed'
     }
     // console.log('failed login',user?.errorMessage , user)
     if (user?.errorMessage) {
@@ -232,17 +233,17 @@ export class UserSwitchingService implements  OnDestroy {
     // Authentication stream
     let auth$ = this.authenticate(userLogin).pipe(
       concatMap(user => {
-
-        console.log('authenticate ', user)
+        console.log('submit 2 fail?', this.didItemFail(user) )
         if (this.didItemFail(user)) {
-          console.log('auth failed')
           this.authenticationService.authenticationInProgress = false;
           user.errorMessage = 'Auth Failed'
           const result = this.userAutFailed(user) as IUserProfile
+          result.errorMessage = 'Auth Failed'
           return of(result);
         }
         user.message = 'success';
         user.errorMessage = null;
+        //sets user don't need to set again
         const currentUser = this.setUserInfo(user, password);
         this.uiSettingService.initSecureSettings();
         return this.contactsService.getContact(site, user?.id);
@@ -252,10 +253,12 @@ export class UserSwitchingService implements  OnDestroy {
     // Authorization update stream
     let updateAuth$ = auth$.pipe(
       concatMap(data => {
-        console.log('submit 3', data)
+        console.log('submit 3 fail?', this.didItemFail(data) )
         if (this.didItemFail(data)) {
           data.errorMessage = 'Auth Failed'
-          return of(this.userAutFailed(data));
+          const result = this.userAutFailed(data) as IUserProfile
+          result.errorMessage = 'Auth Failed'
+          return of(result);
         }
         this.authenticationService.updateUserAuths(
           data?.clientType?.jsonObject ? JSON.parse(data?.clientType?.jsonObject) : null
@@ -268,11 +271,13 @@ export class UserSwitchingService implements  OnDestroy {
     // Handle balance sheet or pass through user data
     let balanceSheet$ = updateAuth$.pipe(
       concatMap(user => {
-        console.log('submit 4', user)
+        console.log('submit 4 fail?', this.didItemFail(user) )
         if (this.didItemFail(user)) {
           this.authenticationService.authenticationInProgress = false;
           user.errorMessage = 'Auth Failed'
-          return of(this.userAutFailed(user));
+          const result = this.userAutFailed(user) as IUserProfile
+          result.errorMessage = 'Auth Failed'
+          return of(result);
         }
 
         user.message = 'success'
@@ -280,11 +285,12 @@ export class UserSwitchingService implements  OnDestroy {
 
         if (clockInOnly) return of(userSheet);
 
-        if  ( this.platformService.isApp() && deviceName ) {
-          return this.promptBalanceSheet(user)
+        if  ( this.platformService.isApp() ) {
+          if (deviceName) {
+            console.log('prompt balance')
+            return this.promptBalanceSheet(user)
+          }
         }
-
-        // console.log('submit with no balancesheet', clockInOnly, userSheet)
 
         return of(userSheet);
       })
@@ -293,11 +299,15 @@ export class UserSwitchingService implements  OnDestroy {
     // Final result handling
     let result$ = balanceSheet$.pipe(
       concatMap(data => {
-        console.log('submit 5', data)
+        console.log('submit 5 fail?', this.didItemFail(data) )
         if (this.didItemFail(data)) {
           this.authenticationService.authenticationInProgress = false;
-          return of(this.userAutFailed(data));
+          data.errorMessage = 'Auth Failed'
+          const result = this.userAutFailed(data) as IUserProfile
+          result.errorMessage = 'Auth Failed'
+          return of(result);
         }
+        
         return of(data);
       })
     );
@@ -307,10 +317,11 @@ export class UserSwitchingService implements  OnDestroy {
 }
 
   // getAuthorization()
-  setUserInfo(user: IUser, password) {
+  setUserInfo(user: IUser, password):IUser {
 
     const currentUser = {} as IUser;
-    if (!user) { return {}}
+
+    if (!user) { return currentUser}
     if (!user.roles)     { user.roles = 'user' }
     if (!user.firstName) { user.firstName = user.username }
 
@@ -330,7 +341,6 @@ export class UserSwitchingService implements  OnDestroy {
     currentUser.lastName     = user?.lastName;
     currentUser.errorMessage = user.errorMessage
     currentUser.message      = user.message
-
     currentUser.token        = user?.token;
     if (user.preferences) {
       try {
@@ -369,7 +379,6 @@ export class UserSwitchingService implements  OnDestroy {
     currentUser.authdata     = user?.authdata
     localStorage.setItem('user', JSON.stringify(currentUser))
     this.authenticationService.updateUser(currentUser)
-    this.getStoredUser()
     return currentUser
   }
 
@@ -445,7 +454,7 @@ export class UserSwitchingService implements  OnDestroy {
   processLogin(user: IUser, path : string) {
 
     if (!user) {
-      console.log('no user', user)
+      // console.log('no user', user)
       return 'user undefined'
     }
 
@@ -455,7 +464,7 @@ export class UserSwitchingService implements  OnDestroy {
     }
 
     if (user && user.message == undefined) {
-      console.log('no user', user)
+      // console.log('no user', user)
       return 'user undefined'
     }
 
@@ -572,11 +581,10 @@ export class UserSwitchingService implements  OnDestroy {
     }
   }
 
-  loginApp(user) {
-    const currentUser   = user.user
-    const sheet         = user.sheet
+  loginApp(result) {
+    const currentUser   = result?.user
+    const sheet         = result?.sheet
 
-    // console.log(user)
     if (sheet) {
       if (sheet.message) {
         this.siteService.notify(`Message ${sheet.message}`, `Error`, 20000)
@@ -593,6 +601,7 @@ export class UserSwitchingService implements  OnDestroy {
       if (sheet.shiftStarted) {
         this.router.navigate(['/main-menu']);
       }
+      return true
     }
     return false
   }

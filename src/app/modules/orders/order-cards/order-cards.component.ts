@@ -13,6 +13,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 // import { share } from 'rxjs/operators';
 
@@ -22,7 +23,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
   styleUrls: ['./order-cards.component.scss']
 })
 export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
-
+  @ViewChild(InfiniteScrollDirective) infiniteScroll;
   action$: Observable<any>;
 
   @Input() prepOnExit : boolean;
@@ -534,6 +535,13 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
           this.endOfRecords = true;
           this.loading      = false
           this.value        = 100;
+        }
+
+        try {
+          this.infiniteScroll.disposeScroller.unsubscribe();
+          this.infiniteScroll.setup();
+        } catch (error) {
+          console.log('error scroll', error)
         }
         return of(data)
       }

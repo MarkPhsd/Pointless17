@@ -47,7 +47,7 @@ export class PromptPanelMenuItemsComponent implements OnInit {
   orderPromptGroup : IPromptGroup;
   _orderPromptGroup: Subscription;
   itemSelected = {} as IItemBasic
-  itemOption                   = 1;
+  itemOption      :number = 1;
   itemOptions = [
     {name: 'whole', id: 1},
     {name: 'LFT 1/2', id: 2},

@@ -20,6 +20,8 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   styleUrls: ['./receipt-layout.component.scss']
 })
 export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
+
+  private appendedStyleElement: HTMLStyleElement | null = null;
   nonIndentedIndex: number = 1;
   // {item: data, id: this.items[i].id, idRef: this.items[i].idRef}
   itemsText = [] as any[];
@@ -186,18 +188,15 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
     console.log('outputPrint')
     setTimeout(() => {
       const prtContent     = document.getElementById('printsection');
-      console.log('prtContent', )
+    
       if (!prtContent) {
         return
       }
       const content        = `${prtContent.innerHTML}`
-      console.log('content', )
+      
       if (!content) {
         return
       }
-      // if (this.enabledPrintReady) { return }
-      // this.enabledPrintReady = true;
-      console.log('content', 'prtContent')
 
       this.printingService.updatePrintReady({ready: true, index: this.index});
       this.printReady.emit(true)
@@ -230,7 +229,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
     
   ngOnInit() {
     if (this.templateInit) {
-      // this.action$ = this.initTemplateData(this.order)
       this.initTemlplateSubscription();
       return ;
     }
@@ -252,8 +250,13 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
+    console.log('on dstroy')
+    if (this.appendedStyleElement) {
+      console.log('remove style element', this.appendedStyleElement)
+      document.head.removeChild(this.appendedStyleElement);
+      this.appendedStyleElement = null;
+    }
+
     this.enabledPrintReady = false;
     if ( this._order) {  this._order.unsubscribe()}
   }
@@ -391,25 +394,49 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
     return  this.renderingService.interpolateText(item, html)
   }
 
+  // getStyles() {
+  //   const site                = this.siteService.getAssignedSite();
+  //   const receiptStyle$       = this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
+  //   return receiptStyle$.pipe(
+  //     switchMap( receiptStyles => {
+  //         if (receiptStyles) {
+  //           const styles    = this.renderingService.interporlateFromDB(receiptStyles.text)
+  //           const style     = document.createElement('style');
+  //           style.innerHTML = styles;
+  //           document.head.appendChild(style);
+  //         }
+  //         return of(receiptStyles)
+  //       }
+  //     ),
+  //     catchError(err => {
+  //       this.orderService.notificationEvent('Error getting styles for receipt', 'Error')
+  //       return of(null)
+  //     })
+  //   )
+  // }
+
   getStyles() {
-    const site                = this.siteService.getAssignedSite();
-    const receiptStyle$       = this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
+    const site = this.siteService.getAssignedSite();
+ 
+    const receiptStyle$ = this.settingService.getSettingByNameCached(site, 'ReceiptStyles');
     return receiptStyle$.pipe(
-      switchMap( receiptStyles => {
-          if (receiptStyles) {
-            const styles    = this.renderingService.interporlateFromDB(receiptStyles.text)
-            const style     = document.createElement('style');
-            style.innerHTML = styles;
-            document.head.appendChild(style);
-          }
-          return of(receiptStyles)
+      switchMap(receiptStyles => {
+        if (receiptStyles) {
+          const styles = this.renderingService.interporlateFromDB(receiptStyles.text);
+          const style = document.createElement('style');
+          style.innerHTML = styles;
+          document.head.appendChild(style);
+          
+          // Store the reference to the appended style element
+          this.appendedStyleElement = style;
         }
-      ),
+        return of(receiptStyles);
+      }),
       catchError(err => {
-        this.orderService.notificationEvent('Error getting styles for receipt', 'Error')
-        return of(null)
+        this.orderService.notificationEvent('Error getting styles for receipt', 'Error');
+        return of(null);
       })
-    )
+    );
   }
 
 }

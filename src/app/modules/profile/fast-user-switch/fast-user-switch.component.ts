@@ -22,8 +22,8 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 })
 export class FastUserSwitchComponent implements OnInit {
 
-  phoneDevice         : boolean;
-  smallDevice         :   boolean;
+  phoneDevice              : boolean;
+  @Input() smallDevice     :   boolean;
   public _pinCode            = new BehaviorSubject<string>(null);
   public pinCode$            = this._pinCode.asObservable();
   action$: Observable<any>;
@@ -82,13 +82,16 @@ export class FastUserSwitchComponent implements OnInit {
   ngOnInit(): void {
     this.isLocked = false;
     this.UIisLocked = false
+
+
     this.smallDevice = false;
     this.phoneDevice = false;
+
     if (811 >= window.innerWidth ) {
       this.smallDevice = true
     }
     if (500 >= window.innerWidth ) {
-      this.smallDevice = false;
+      this.smallDevice = true;
       this.phoneDevice = true
     }
     this.getBalanceSheet();
@@ -149,6 +152,9 @@ export class FastUserSwitchComponent implements OnInit {
     }
 
     if (userName && login) {
+  
+      
+
       this.submitLogin(userName, event, this.employeeAllowed)
       return;
     }
@@ -189,12 +195,15 @@ export class FastUserSwitchComponent implements OnInit {
               if (data.voidOrder) { result = true  }
             }
 
+        
             if (result) {
+        
               this.dialogRefOption.close(true);
             } else {
+         
               this.dialogRefOption.close(false);
             }
-
+            
             return of(data)
           }
           if (!data) {
@@ -236,7 +245,7 @@ export class FastUserSwitchComponent implements OnInit {
     try {
       this.dialogRefOption.close()
     } catch (error) {
-      console.log('error', error)
+      // console.log('error', error)
     }
   }
 
@@ -259,8 +268,9 @@ export class FastUserSwitchComponent implements OnInit {
 
       // console.log('checkBalanceSheet', user)
       if (!user) { return of(null)}
+
       return  this.balanceSheetService.getCurrentUserBalanceSheet(site, device ).pipe(switchMap(data => {
-        // console.log('checkBalanceSheet', data)
+        console.log('checkBalanceSheet', data)
         if (data) {
           // console.log('data.shiftStarted', data.shiftStarted)
           if (!data.shiftStarted  || data.shiftStarted == 0) {
@@ -273,12 +283,11 @@ export class FastUserSwitchComponent implements OnInit {
         }
         return of(data)
       }))
-    // }
-    return of(null)
+ 
   }
 
   submitLogin(userName: string, password: string, employeeIDAllowed?: number) {
-    console.log('submitLogin')
+  
     this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(
       switchMap(data =>
         {
@@ -319,7 +328,11 @@ export class FastUserSwitchComponent implements OnInit {
             if (this.platformService.isApp()) {
               this.loginApp(user)
               console.log('check balance sheet - return')
-              return this.checkBalanceSheet(user)
+              return this.checkBalanceSheet(user).pipe(switchMap(data => {
+                this.onCancel()
+                console.log('Sheet Data', data?.id)
+                return of(data)
+              }))
             }
 
             if (user.message && user.message.toLowerCase() === 'success') {
@@ -336,6 +349,7 @@ export class FastUserSwitchComponent implements OnInit {
               if (!pass) {
                 this.userSwitchingService.processLogin(user, '')
               }
+              this.onCancel()
               return of('success')
             }
           }

@@ -16,14 +16,14 @@
       [ngTemplateOutlet]="menuItemCard"
       [ngTemplateOutletContext]="{$implicit: promptMenuItem}">
     </ng-container>
-
+    
     <div  *ngIf="chosenCount || (chosenCount != '' && chosenCount != undefined)"
           class="button-item">
       <button mat-button
               class="buttons"
               color="warn"
               (click)="removeItem()">
-              {{chosenCount}}
+              {{chosenCount}}`
       <mat-icon >delete</mat-icon> Remove
       </button>
     </div>
@@ -54,8 +54,9 @@
       [promptModifier]  ="true"
       [smallDevice]     ="phoneDevice"
       [styleMatCard]    ='styleMatCard'
-      [disableImages]   ="posDevice?.disableMenuImages"
+      [disableImages]   ="true"
       [bucketName]      ="bucketName"
       (addItem)         ="addItem($event)" >
   </app-menu-item-card>
 </ng-template>
+<!-- posDevice?.disableMenuImages -->

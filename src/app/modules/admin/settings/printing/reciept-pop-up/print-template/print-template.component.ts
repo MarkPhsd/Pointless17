@@ -104,19 +104,6 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
       }
     )
 
-    // this._printReady = this.printingService.printReady$.subscribe(status => {
-    //   if(!this.receiptStyles) { return }
-    //   if (status && status.ready) {
-    //       if ((this.options && this.options.silent) || this.autoPrint) {
-    //         if (this.autoPrinted) { return }
-    //         const result = this.print()
-    //         if (result) {
-    //           this.autoPrinted = true;
-    //         }
-    //       }
-    //     }
-    //   }
-    // )
   }
 
   async printHTML(html) {
@@ -300,24 +287,22 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
 
       if (!contents) {
         this.siteService.notify('No content determined for receipt.', 'close', 3000, 'red' )
-        console.log('no contents in print electron');
+
         return;
       }
 
       if (!options) {
-         console.log('no options in print electron')
+
          return;
       }
 
       if (!this.printerName) {
         this.siteService.notify('No Printer name set for this terminal.', 'close', 3000, 'red' )
-        // console.log('no printerName in print electron');
         return;
       }
 
       if (contents && this.printerName, options) {
         const printResult =   await this.printingService.printElectronAsync( contents, this.printerName, options)
-        // console.log('printed?' ,printResult)
         return printResult
       }
 
@@ -336,6 +321,7 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
 
     if (content === '<!---->') { return }
 
+    // 
     const  title   = 'Receipt';
     const loadView = ({ title }) => {
       return (`

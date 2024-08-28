@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
 import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 
 import {  IPOSOrder, ISite } from 'src/app/_interfaces';
 import { OrdersService, ReportingService } from 'src/app/_services';
@@ -13,22 +12,18 @@ import { IItemBasic } from 'src/app/_services/menu/menu.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
+
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-// import 'ag-grid-community/dist/styles/ag-theme-material.css';
+
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { UnparseConfig } from 'ngx-papaparse';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
-
-// const fields = ['completeDate','clientType', 'oomp',  'oompb', 'value', 'packageLabel','quantityTotal','unitType',  'value', 'value', 'value', 'value', 'value', 'netTotal','orderID',
-//         , 'value', 'value', 'value', , 'value', 'value' , 'value', 'value', 'value' ]
 
 export interface metrcSalesReport {
   completeDate: string;
@@ -54,6 +49,9 @@ export interface metrcSalesReport {
   DiscountAmount: string;
   SubTotal: string;
   SalesTax: string;
+  metrcResponse: string;
+  metrcDate: string;
+  metrcPOSID: string;
 }
 
 @Component({
@@ -257,6 +255,17 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
                       maxWidth: 125,
                       flex: 2,
       },
+
+      {headerName: 'Response',  sortable: true,
+                field: 'metrcResponse',
+        width:    155,
+        minWidth: 155,
+        maxWidth: 155,
+        flex: 2,
+        
+      },
+
+
       {headerName: 'Sale Date',  sortable: true,
                     field: 'completeDate',
         width:    155,
@@ -402,6 +411,10 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         minWidth: 90,
         maxWidth: 90,},
     ]
+
+    this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize, this.columnDefs);
+  
+
   }
 
   initSearchModel() {

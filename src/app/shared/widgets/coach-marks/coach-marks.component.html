@@ -11,7 +11,7 @@
 
       <div class="one" [innerHtml]="text"></div>
 
-      <div class="ps-flex-group-nowrap">
+      <div class="ps-flex-group-wrap">
         <div >
           <button mat-button (click)="previous()"
                   *ngIf="isTheFirst">
@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <div class="ps-flex-group-nowrap">
+      <div class="ps-flex-group-wrap">
        <div  *ngFor="let item of coachMarksService.popovers; let i = index">
         <div
           *ngIf="item.componentProps.index == coachMarksService.currentPopover"

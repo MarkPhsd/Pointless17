@@ -16,7 +16,7 @@
                   class="center login pin-button"
                   *ngIf="platformService.isApp() && pinToken"
                   (click)="togglePIN = !togglePIN">
-            PIN Entry
+            PIN Entry 
         </button>
       </div>
     </div>
@@ -201,6 +201,7 @@
           <mat-card style='min-width:450px'>
             <div class="pin-entry">
               <app-fast-user-switch
+                [smallPOS]="smallDevice"
                 (outPutLogin)="pinLogin($event)"
               ></app-fast-user-switch>
             </div>

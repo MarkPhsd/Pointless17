@@ -253,7 +253,6 @@
 
 <ng-template #prepSummary>
   <div *ngIf="viewType ==3">
-    <!-- prepStatus {{prepStatus}} |  {{printLocation}} -->
     <item-sales-card
           [site]="site"
           [viewType]="'activeReportViewSummary'"
@@ -289,10 +288,23 @@
                (uiTransactions && uiTransactions.toggleUserOrAllOrders)"  >
     <button mat-button (click)="toggleShowAllOrders()">
       <div *ngIf="userAuthorization.user.userPreferences.showAllOrders">
-        <mat-icon>filter_alt_off</mat-icon>Show My Orders
+        <mat-icon>filter_alt_off</mat-icon>
+        <span *ngIf="!smallDevice">
+          Show My Orders
+        </span>
+        <span *ngIf="smallDevice">
+          Mine
+        </span>
+
       </div>
       <div *ngIf="!userAuthorization.user.userPreferences.showAllOrders">
-        <mat-icon>filter_alt</mat-icon>Show All Orders
+        <mat-icon>filter_alt</mat-icon>
+        <span *ngIf="!smallDevice">
+          Show All Orders
+        </span>
+        <span *ngIf="smallDevice">
+          All
+        </span>
       </div>
     </button>
   </span>

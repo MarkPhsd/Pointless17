@@ -536,9 +536,7 @@ mat-dialog-container {
 .row-male {
   background-color: #7575ac !important;
 }
-.row-metrc-posted {
-  background-color: #50e75c !important;
-}
+
 .row-female {
   background-color: #e9aad4 !important;
 }

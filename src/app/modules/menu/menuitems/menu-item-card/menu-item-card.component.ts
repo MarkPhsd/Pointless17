@@ -43,6 +43,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   @ViewChild('androidView')         androidView: TemplateRef<any> | undefined;
 
 
+
   @Output() outPutLoadMore = new EventEmitter()
   @Output() outPutUpdateCategory = new EventEmitter();
   @Output() addItem = new EventEmitter();
@@ -90,6 +91,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
   noImage: boolean;
   imageContainerClass = 'image-container';
+  buttonColorWidth: string;
 
   get priceViewBol() {
     if (this.isProduct && ((!this.smallDevice && this.androidApp) || !this.androidApp)) {
@@ -140,12 +142,12 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     if (this.menuItem.urlImageMain) {
       return 'item-name-center-image'
     }
-    return  'item-name-center'
+    return  'item-name-center-menu'
   }
 
   get imageButtonClass() {
     if (this.displayType === 'header-category') {
-      return 'image-button-category'
+      return `image-button-category`
     }
       // const imageName =  item.urlImageMain.split(",")
     if (this.menuItem.urlImageMain) {
@@ -177,22 +179,22 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   get containerclassValue() {
 
     if (this.displayType === 'header-category') {
-      return 'container-mobile-app'
+      return 'item-container-mobile-app'
     }
 
     if (this.smallDevice && this.androidApp) {
-      return 'container-mobile-app'
+      return 'item-container-mobile-app android'
     }
 
     if (this.disableImages) {
-      return 'container container-app-noimage'
+      return 'item-container container-app-noimage'
     }
 
     if (this.isApp) {
-      return 'container container-app'
+      return 'item-container item-container-app'
     }
 
-    return 'container container-mobile'
+    return 'item-container container-mobile'
   }
 
   get buttonViewBol() {
@@ -233,7 +235,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
   get menuNameViewBol() {
     if (this.menuItem &&
-     (this.menuItem.urlImageMain || this.menuItem.thumbNail)  && !this.disableImages) {
+     (this.menuItem.urlImageMain || this.menuItem.thumbnail)  && !this.disableImages) {
       return true
     }
     return false;
@@ -322,21 +324,25 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
       this.menuButtonJSON = item
       if (this.menuButtonJSON.buttonColor) {
         this.buttonColor = `background-color:${this.menuButtonJSON.buttonColor}`
+        this.buttonColorWidth =`width:100%;${this.buttonColor}`
       }
     }
     if (this.categoryIDSelected != 0 && this.categoryIDSelected == this.id) {
       const box = ''
       this.buttonColor = `background-color: #e1f5fe`
+      this.buttonColorWidth =`width:100%;${this.buttonColor}`
     }
 
     if (this.buttonColor) {
       this.buttonColor = this.buttonColor + ';' + this.styleMatCard
+      this.buttonColorWidth =`width:100%;${this.buttonColor}`
     } else {
       this.buttonColor = this.styleMatCard
+      this.buttonColorWidth =`width:100%;${this.buttonColor}`
     }
 
     this.buttonColor = `${this.buttonColor};${this.maxHeight}`
-
+    this.buttonColorWidth =`width:100%;${this.buttonColor}`
   }
 
   get isDiscountItem() {
@@ -541,7 +547,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   }
 
   getItemSrc(item:IMenuItem) {
-    const thumbnail = item?.thumbNail ?? item?.urlImageMain;
+    const thumbnail = item?.thumbnail ?? item?.urlImageMain;
     if (!thumbnail) {
       if (this.isApp) { 
          const image =`${this.bucketName}productplaceholder.png`
@@ -549,12 +555,17 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
       }
       return null
     } else {
-      const thumbnail = item?.thumbNail ?? item?.urlImageMain;
+      const thumbnail = item?.thumbnail ?? item?.urlImageMain;
       const imageName =  thumbnail.split(",")
       if (!imageName || imageName.length == 0) {
         return null
       }
       const image =`${this.bucketName}${imageName[0]}`
+
+      if (item?.name === 'CAPT MORGAN') {
+        console.log(item?.thumbnail, item?.urlImageMain  )
+      }
+
       return image
     }
   }

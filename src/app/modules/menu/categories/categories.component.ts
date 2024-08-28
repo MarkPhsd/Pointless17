@@ -300,7 +300,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   // }
 
   getItemSrc(nameArray: string) {
-    console.log('getItemSrc', nameArray)
+    // console.log('getItemSrc', nameArray)
     return this.awsBucket.getImageURLFromNameArray(this.bucket, nameArray)
   }
 
@@ -446,7 +446,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   editItem(menuItem) {
-    console.log('edit item', menuItem?.name)
+    // console.log('edit item', menuItem?.name)
     if (!menuItem) { return }
     this.action$ = this.productEditButtonService.openProductDialogObs(menuItem.id);
   }

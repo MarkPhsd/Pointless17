@@ -18,7 +18,6 @@ export class FbProductsService {
     setProductValues(product: IProduct, inputForm: UntypedFormGroup): IProduct {
     if (inputForm.valid) {
       product                 = inputForm.value;
-      // console.log(product.pB_MainID, inputForm.controls['pB_MainID'].value)
       product.barCodeID       = product.barcode
       return product
     }
@@ -236,6 +235,7 @@ export class FbProductsService {
         thumbnail                   :  [],
         baySection: [],
         bayName: [],
+    
       })
       return fb;
     }

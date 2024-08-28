@@ -285,6 +285,8 @@ export class RequestMessageService {
   getOpenRequestMessagesByOrder(site: ISite, searchModel: IRequestMessageSearchModel): Observable<IRequestMessage[]> {
     //this shouold perform the operation on the backend via the api.
     if (!this.userAuthorization.user) { return of(null)}
+    console.log('user', this.userAuthorization.user)
+
     const controller = "/RequestMessages/"
 
     const endPoint = "GetOpenRequestMessagesByOrder"

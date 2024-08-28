@@ -307,7 +307,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     if (id) {
       const site = this.sitesService.getAssignedSite();
 
-        
+
       return  this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
         concatMap(data => {
 
@@ -976,32 +976,29 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     if (rStream) {
       const validate = this.validateResponse( rStream, payment)
-      // console.log('validate', validate)
-      console.log('isApproved', this.isApproved(rStream?.CmdResponse?.CmdStatus, rStream?.CmdResponse?.TextResponse))
-      if (!validate) {
-        return of(null)
-      }
+      console.log('validate', validate)
+      if (!this.isApproved(rStream?.CmdResponse?.CmdStatus, rStream?.CmdResponse?.TextResponse)) {  return of(null)   }
 
-      const cmdResponse  = rStream?.CmdResponse;
-      const trans        = rStream?.TranResponse;
-      const status       = cmdResponse?.TextResponse;
-      const cmdStatus    = cmdResponse?.CmdStatus;
+        const cmdResponse  = rStream?.CmdResponse;
+        const trans        = rStream?.TranResponse;
+        const status       = cmdResponse?.TextResponse;
+        const cmdStatus    = cmdResponse?.CmdStatus;
 
-      payment   = this.applyEMVResponseToPayment(trans, payment)
+        payment   = this.applyEMVResponseToPayment(trans, payment)
 
-      if (this.isApproved(cmdStatus, rStream?.CmdResponse?.TextResponse)) {
-        let cardType       = trans?.CardType;
+        if (this.isApproved(cmdStatus, rStream?.CmdResponse?.TextResponse)) {
+          let cardType       = trans?.CardType;
 
-        if (!cardType || cardType === '0') {  cardType = 'credit'};
-        payment.transactionData = JSON.stringify(rStream)
-        payment.textResponse =  cmdResponse.CmdStatus.toLowerCase();
-        let paymentMethod    = {} as IPaymentMethod;
-        paymentMethod.name = cardType;
-        let response: IPaymentResponse;
+          if (!cardType || cardType === '0') {  cardType = 'credit'};
+          payment.transactionData = JSON.stringify(rStream)
+          payment.textResponse =  cmdResponse.CmdStatus.toLowerCase();
+          let paymentMethod    = {} as IPaymentMethod;
+          paymentMethod.name = cardType;
+          let response: IPaymentResponse;
 
-        const payment$ =   this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod)
+          const payment$ =   this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod)
 
-        return payment$
+          return payment$
       }
     }
     return of(null)

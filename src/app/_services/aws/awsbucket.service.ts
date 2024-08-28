@@ -134,19 +134,18 @@ export class AWSBucketService {
 
   getImageURLPath(bucket: string, imageName: string ): string {
     let path = ''
-    
-    console.log('getImageURLPath',  imageName);
-    if (!imageName || imageName ==='') { 
-      return ''
-    } 
+ 
+    if (!imageName || imageName ==='') {   return ''  } 
 
     if (imageName) {
-
+   
       if (bucket && `${bucket}`.substring(0, 8 ) === 'https://') {
         path = `https://${bucket}${imageName}`
       } else {
         path = `https://${bucket}.s3.amazonaws.com/${imageName}`
       }
+      
+      path = this.cleanPath(path)
 
     } else {
 
@@ -158,15 +157,16 @@ export class AWSBucketService {
 
     }
 
-    if (path) {
-      path = bucket.replace('https://https://', 'https://')
-      if (path === `https://${bucket}.s3.amazonaws.com/`) {
-        path = `https://${bucket}.s3.amazonaws.com/placeholderproduct.png`
-      }
-    }
+    path = this.cleanPath(path)
 
-  
     return path;
+  }
+
+  cleanPath(path) { 
+    if (path) {
+      path = path.replace('https://https://', 'https://')
+    }
+    return path
   }
 
   getPlaceHolderImage(): string {

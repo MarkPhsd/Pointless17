@@ -31,18 +31,19 @@
         (outPutReturnEnter)="enterPIN($event)">
         Enter PIN
       </app-key-pad>
-    </div>
+    </div> 
   </div>
 </div>
 
 <ng-template #checkUserStatus>
   <!-- this contains a message for cashiers -->
-  <div *ngIf="balanceSheet$ | async as sheet" style="margin-bottom:10px">
+   <!-- {{smallDevice}} / {{platformService.androidApp}} -->
+  <div *ngIf="!smallPOS && balanceSheet$ | async as sheet" style="margin-bottom:10px">
 
-    <div *ngIf="(sheet && (sheet.name && sheet.name)) != 'open' && isLocked">
+    <div *ngIf=" (sheet && (sheet.name && sheet.name)) != 'open' && isLocked">
      <h4>Current User:  <mat-icon>lock</mat-icon>    {{ sheet?.name}}</h4>
     </div>
-    <div *ngIf="(!sheet || sheet.id == 0 || sheet.name === 'open') || !isLocked">
+    <div *ngIf=" (!sheet || sheet.id == 0 || sheet.name === 'open') || !isLocked">
       <h4> Shift Status (for device):  Open</h4>
     </div>
   </div>
@@ -52,5 +53,5 @@
 </ng-template>
 
 <ng-template #timeClockView>
-  <button mat-raised-button class="center login pin-button" (click)="openTimeClock()"><mat-icon>hourglass_top</mat-icon>Time Clock</button>
+  <button *ngIf="!smallPOS"  mat-raised-button class="center login pin-button" (click)="openTimeClock()"><mat-icon>hourglass_top</mat-icon>Time Clock</button>
 </ng-template>

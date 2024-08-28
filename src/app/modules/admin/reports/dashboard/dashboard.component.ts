@@ -18,7 +18,7 @@ import { ReportingItemsSalesService } from 'src/app/_services/reporting/reportin
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
 import { TransferDataService } from 'src/app/_services/transactions/transfer-data.service';
-import { RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -40,21 +40,52 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   loadDynamicData:  boolean = false;
 
+  
+  reportList = [
+    {name: 'Re Order List', id: '1', icon: ''},
+    {name: 'Department Values', id: '2', icon: ''},
+    {name: 'Category Values', id: '3', icon: ''},
+    {name: 'Department Values', id: '8', icon: ''},
+    {name: 'SubCategory Values', id: '9', icon: ''},
+    {name: 'Brand Values', id: '7', icon: ''},
+    {name: 'Item Values', id: '4', icon: ''},
+    {name: 'New Customer Count Today', id: '5', icon: ''},
+    {name: 'New Customer Count 30 Days', id: '6', icon: ''},
+  ]
 
+  //    {id:10, visible: false, name: 'ServiceFees'},
   reportsListView = [
-    {id: 1, visible: false, name: 's' },
-    {id: 2, visible: false ,name: ''},
-    {id: 3, visible: false, name: '' },
-    {id: 4, visible: false, name: '' },
-    {id: 5, visible: false, name: '' },
+    {id: 1, visible: false, name: 'Category Sales' },
+    {id: 2, visible: false ,name: 'Taxed Category'},
+    {id: 3, visible: false, name: 'Non Tax Category' },
+    {id: 4, visible: false, name: 'Item Sales' },
+    {id: 5, visible: false, name: 'Item Voids View' },
     {id: 6, visible: false, name: '' },
-    {id: 7, visible: false, name: '' },
-    {id: 8, visible: false, name: '' },
-    {id: 9, visible: false, name: 'itemTypeSales' },
-    {id:10, visible: false, name: 'ServiceFees'},
+    {id: 7, visible: false, name: 'Payment Refunds' },
+    {id: 8, visible: false, name: 'Payment Voids' },
+    {id: 9, visible: false, name: 'Item Type Sales' },
     {id:12, visible: false, name: 'UOM'},
     {id:13, visible: false, name: 'ItemSizeGroup'},
+    {id:14, visible: false, name: 'SubCategory Sales'},
+    {id:15, visible: false, name: 'Brands Sales'},
+    {id:17, visible: false, name: 'Departments View'},
+    {id:18, visible: false, name: 'Vendor Sales'},
+  ]
 
+  //  {name: 'Service Fees',id: '10', icon:''},
+  itemReportList = [
+    {name: 'All Details', id: '0', icon: ''},
+    {name: 'Categories',  id: '1', icon: ''},
+    {name: 'Taxed Categories',       id: '2', icon: ''},
+    {name: 'Non Taxed Categories',   id: '3', icon: ''},
+    {name: 'All Items',   id: '4', icon: ''},
+    {name: 'Departments', id: '17', icon: ''},
+    {name: 'Item Types',  id: '9', icon:''},
+    {name: 'UOM Sales',   id: '12', icon:''},
+    {name: 'Item Grouped QTY',  id: '13', icon:''},
+    {name: 'Sub Category',id: '14', icon: ''},
+    {name: 'Brands',      id: '15', icon: ''},
+    {name: 'Vendor',      id: '18', icon: ''},
   ]
 
   reportCategoriesListForm: UntypedFormGroup;
@@ -70,30 +101,6 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     {name: 'Audit', value: 'audit', id: 4, icon: 'inventory'}
   ]
 
-  reportList = [
-    {name: 'Re Order List', id: '1', icon: ''},
-    {name: 'Department Values', id: '2', icon: ''},
-    {name: 'Category Values', id: '3', icon: ''},
-    {name: 'Department Values', id: '7', icon: ''},
-    {name: 'Item Values', id: '4', icon: ''},
-    {name: 'New Customer Count Today', id: '5', icon: ''},
-    {name: 'New Customer Count 30 Days', id: '6', icon: ''},
-  ]
-
-  itemReportList = [
-    {name: 'All Details', id: '0', icon: ''},
-    {name: 'Categories',  id: '1', icon: ''},
-    {name: 'Taxed ',      id: '2', icon: ''},
-    {name: 'Non Taxed',   id: '3', icon: ''},
-    {name: 'All Items',   id: '4', icon: ''},
-    {name: 'Departments', id: '7', icon: ''},
-    {name: 'Item Types',  id: '9', icon:''},
-    {name: 'Service Fees',id: '10', icon:''},
-    // {name: 'Item Sizes',  id: '11', icon:''},
-    {name: 'UOM Sales',   id: '12', icon:''},
-    {name: 'Item Grouped QTY',  id: '13', icon:''},
-  ]
-
   @ViewChild('customReport')      customReport: TemplateRef<any> | undefined;
   @ViewChild('departmentSales')       departmentSales: TemplateRef<any> | undefined;
   @ViewChild('categorySales')         categorySales: TemplateRef<any> | undefined;
@@ -105,21 +112,25 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   @ViewChild('uomSales')          uomSales: TemplateRef<any> | undefined;
   @ViewChild('itemSizeSales')     itemSizeSales: TemplateRef<any> | undefined;
 
+  @ViewChild('subCategorySales')  subCategorySales: TemplateRef<any> | undefined;
+  @ViewChild('brandSales')        brandSales: TemplateRef<any> | undefined;
+  @ViewChild('vendorSales')       vendorSales: TemplateRef<any> | undefined;
+
   @ViewChild('itemVoids')       itemVoids: TemplateRef<any> | undefined;
 
-  @ViewChild('siteReports')      siteReports: TemplateRef<any> | undefined;
-  @ViewChild('paymentVoids')     paymentVoids: TemplateRef<any> | undefined;
-  @ViewChild('paymentRefunds')   paymentRefunds: TemplateRef<any> | undefined;
-  @ViewChild('reportDesigner')   reportDesigner: TemplateRef<any> | undefined;
+  @ViewChild('siteReports')          siteReports: TemplateRef<any> | undefined;
+  @ViewChild('paymentVoids')         paymentVoids: TemplateRef<any> | undefined;
+  @ViewChild('paymentRefunds')       paymentRefunds: TemplateRef<any> | undefined;
+  @ViewChild('reportDesigner')       reportDesigner: TemplateRef<any> | undefined;
   @ViewChild('paymentPositiveNeg')   paymentPositiveNeg: TemplateRef<any> | undefined;
 
-  @ViewChild('reportCategories')     reportCategories: TemplateRef<any> | undefined;
-  @ViewChild('reportCategoriesList') reportCategoriesList: TemplateRef<any> | undefined;
+  @ViewChild('reportCategories')      reportCategories: TemplateRef<any> | undefined;
+  @ViewChild('reportCategoriesList')  reportCategoriesList: TemplateRef<any> | undefined;
   @ViewChild('reportDepartmentsList') reportDepartmentsList: TemplateRef<any> | undefined;
-  @ViewChild('designReportButton')   designReportButton: TemplateRef<any> | undefined;
+  @ViewChild('designReportButton')    designReportButton: TemplateRef<any> | undefined;
 
   @ViewChild('reportsView')   reportsView: TemplateRef<any> | undefined;
-  @ViewChild('chartsView')   chartsView: TemplateRef<any> | undefined;
+  @ViewChild('chartsView')    chartsView: TemplateRef<any> | undefined;
 
   emailSending           = false;
   showValues             = false;
@@ -232,7 +243,6 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
 
   initDateFilter() {
     this.completionDateForm  = this.getFormRangeInitial(this.completionDateForm);
-
     this.refreshZrunReports(this.completionDateForm.controls["start"].value , this.completionDateForm.controls["end"].value )
     this.subscribeToCompletionDatePicker();
     this.refreshCompletionDateSearch();
@@ -278,7 +288,6 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     const site = this.siteService.getAssignedSite()
     this.zrunID = null;
     this.action$ =  this.balanceSheetService.getSheet(site, event).pipe(switchMap(data => {
-
       const batchObj = this.siteService.convertToCamel(JSON.parse(data?.batchJSON))
       this.dateFrom = null;
       this.dateTo   = null;
@@ -296,13 +305,12 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     if (this.dateTo) {
       end = this.dateTo
     }
-    // console.log('refreshZRunReports', start, end)
+   
     const site = this.siteService.getAssignedSite()
     this.zrunID = null;
 
     this.initZrunForm()
     this.zrunReports$ = this.salesPaymentsService.listZrunsInDateRange(site, start, end).pipe(switchMap(data => {
-      // console.log('Zreports obs', data)
       if (data.resultMessage) {
         this.siteService.notify(`Error ${data.resultMessage}`, 'Error', 5000, 'red'  )
       }
@@ -606,16 +614,42 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
 
     // console.log('view', view)
     this.reportsListView.forEach(data => {
-      // console.log('view', view, data.id, view == data.id)
       if (view == data.id) {
+        // console.log('view', view, data.id, view == data.id)
         data.visible = true
-        // console.log('data', data, data.visible)
       }
     })
   }
 
+  get vendorSalesView() {
+    const filteredData = this.reportsListView.filter(data => data.id === 18 && data.visible);
+    if (filteredData.length > 0) {
+      return this.vendorSales
+    }
+    return null
+  }
+
+
+  get brandSalesView() {
+    const filteredData = this.reportsListView.filter(data => data.id === 15 && data.visible);
+    if (filteredData.length > 0) {
+      // console.log('brand sales visible')
+      return this.brandSales
+    }
+    return null
+  }
+
+  get subCategorySalesView() {
+    const filteredData = this.reportsListView.filter(data => data.id === 14 && data.visible);
+    if (filteredData.length > 0) {
+      return this.subCategorySales
+    }
+    return null
+  }
+
+
   get departmentSalesView() {
-    const filteredData = this.reportsListView.filter(data => data.id === 7 && data.visible);
+    const filteredData = this.reportsListView.filter(data => data.id === 17 && data.visible);
     if (filteredData.length > 0) {
       return this.departmentSales;
     }
@@ -654,6 +688,14 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     return null
   }
 
+  get serviceFeesView() {
+    const filteredData = this.reportsListView.filter(data => data.id === 10 && data.visible);
+    if (filteredData.length > 0) {
+      return this.serviceFees
+    }
+    return null
+  }
+
   get itemTypeSalesView() {
     const filteredData = this.reportsListView.filter(data => data.id === 9 && data.visible);
     if (filteredData.length > 0) {
@@ -663,7 +705,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   }
 
   get itemSizeSalesView() {
-    const filteredData = this.reportsListView.filter(data => data.id === 11 && data.visible);
+    const filteredData = this.reportsListView.filter(data => data.id === 13 && data.visible);
     if (filteredData.length > 0) {
       return this.itemSizeSales
     }
@@ -685,7 +727,6 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     }
     return null;
   }
-
 
 
   get itemVoidsView() {

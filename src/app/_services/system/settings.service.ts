@@ -396,6 +396,12 @@ export class SettingsService {
 
     if (!this.userAuthorizationService.user) {  of(null)  }
 
+    // console.log('dsi check user', this.userAuthorizationService.user)
+    
+    if (!this.deviceName) { 
+      return of(null)
+    }
+    // console.log('dsi check user', this.userAuthorizationService.user)
     //get device name
     const deviceName = this.deviceName
 

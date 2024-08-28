@@ -43,7 +43,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
   bucketName       : string;
   imageURL         : string;
   chosenCount      : string;
-
+  matCardClass     : string;
   posDevice$             : Observable<ITerminalSettings>;
   posDevice              : ITerminalSettings;
 
@@ -117,15 +117,21 @@ export class PromptPanelMenuItemComponent implements OnInit {
   }
 
   get matCardSytleValue() {
+
+    if (this.androidApp) {
+      this.matCardClass = 'mat-elevation-z0'
+    }
+
     if (this.phoneDevice ) {
-      return 'height:125px;'
+      return `height:100px;max-width:100px;${this.matCardClass}`
     }
     return ''
   }
 
+
+
   constructor(
      private promptGroupService        : PromptGroupService,
-     private orderService              : OrdersService,
      public orderMethodsService       : OrderMethodsService,
      private promptWalkService        : PromptWalkThroughService,
      private posOrderItemService      : POSOrderItemService,

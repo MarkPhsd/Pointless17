@@ -118,7 +118,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
         this.printView = data;
         if (!this.printView) {this.printView = 1; }
         if (this.printView == 1) { this.setOrderPrintView()}
-        if (this.printView == 2) { }// this.setOrderPrintView()
+        if (this.printView == 2) { }
         this.refreshView$ =  this.refreshViewObservable()
       }
     )
@@ -152,10 +152,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   async printViewCompleted(event) {
-    // console.log('auto Print after preview', this.autoPrint)
     if (this.autoPrint) {
       await this.print();
-      // console.log('about to exit')
       this.exit()
     }
   }
@@ -228,7 +226,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       switchMap(data => {
         return of(data)
         }),catchError(e => {
-            // console.log('e4' , e)
             this.siteService.notify('Error receipt view' + e, 'Alert', 2000)
             return of(null)
       }))
@@ -261,7 +258,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   //Step 1
   getDefaultReceipt() {
     const site            = this.siteService.getAssignedSite();
-    this.receiptName      =  'defaultElectronReceiptPrinterName'
+    this.receiptName      = 'defaultElectronReceiptPrinterName'
     const defaultReceipt$ = this.settingService.getSettingByNameCachedNoRoles(site, this.receiptName)
     return defaultReceipt$.pipe(
       switchMap(data => {
@@ -284,10 +281,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   initPrintView() {
-    // // this.printView = this.printingService.printView;
-    // if (!this.printingService.printView) {
-    //   this.printingService.updatePrintView(1);
-    // }
   }
 
   email() {
@@ -333,7 +326,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   initBalanceSheetDefaultLayoutsObservable() {
-    // 'apply balance sheet style'
     const site = this.siteService.getAssignedSite();
     const setting = {} as ISetting;
     return this.printingService.appyBalanceSheetStyleObservable().pipe(
@@ -347,7 +339,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   applyStylesObservable(): Observable<ISetting> {
-    // console.log('applyStylesObservable()')
     const site  = this.siteService.getAssignedSite();
     return this.printingService.appyStylesCachedObservable(site).pipe(
         switchMap( data => {
@@ -456,8 +447,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     const  ui  = this.uiSettingService._transactionUISettings.value as TransactionUISettings;
     if (this.platFormService.isAppElectron) {
       await this.printElectron();
-      //   uiTransactions  = {} as TransactionUISettings;
-      // uiTransactions$  : Observable<ISetting>;
       if (!ui?.disablePrintPrepOnPrint) { 
         this.sendOrder()
       }
@@ -511,7 +500,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       } as printOptions;
 
       if (!options) {
-        this.siteService.notify('No Options!.', 'close', 3000, 'red' )
+         this.siteService.notify('No Options!.', 'close', 3000, 'red' )
          return;
       }
 
@@ -521,7 +510,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       }
 
       if (contents && this.printerName, options) {
-        // console.log('printing', contents)
         const printResult = await this.printingService.printElectronAsync( contents, this.printerName, options)
         return printResult
       }
@@ -610,7 +598,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
       ).pipe(switchMap(payment => {
           if (payment) {
             this.payments = [];
-            // this.payments[0].
             this.payments.push(payment)
           } else {
             this.payments = this.tempPayments;
@@ -639,42 +626,3 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
 }
-
-  // async printAndroid() {
-  //   //create fake date for order. - get order info from postman to use.
-  //   //passorder info to new method PrintAndroidReceipt.'
-  //   //save selected printer to local storage
-  //   //set saved printer name /bt id to selection on load.
-  //   // const order = this.fakeData.getPOSOrderContents()
-  //   // this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
-  //   // this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
-  //   this.printingAndroidService.printTestAndroidReceipt( this.btPrinter)
-  // }
-
-  // async  getAndroidPrinterAssignment() {
-  //   if (this.platFormService.androidApp) {
-  //     this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
-  //     this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
-  //   }
-  // }
-
-
-  // async applyStyles(): Promise<ISetting> {
-  //   const site  = this.siteService.getAssignedSite();
-  //   this.receiptStyles  = await  this.printingService.appyStylesCached(site)
-  //   this.applyStyle(this.receiptStyles)
-  //   return  this.receiptStyles
-  // }
-
-    // async  initBalanceSheetDefaultLayouts() {
-  //   try {
-  //     // 'apply balance sheet style'
-  //     const site = this.siteService.getAssignedSite();
-  //     const setting = {} as ISetting;
-  //     setting.text  = await  this.printingService.appyBalanceSheetStyle()
-  //     this.receiptStyles =  setting;
-  //     this.applyStyle( this.receiptStyles)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }

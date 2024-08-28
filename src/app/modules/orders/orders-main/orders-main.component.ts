@@ -155,6 +155,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   }
 
   get summaryEnabled() {
+    if (this.platFormService.androidApp && this.smallDevice) {return null}
     if (!this.user) {return null}
     if (this.user?.roles == 'admin' || this.user?.roles == 'manager') {
       return this.summaryView

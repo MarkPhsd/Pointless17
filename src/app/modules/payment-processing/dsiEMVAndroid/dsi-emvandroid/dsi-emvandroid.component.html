@@ -96,6 +96,11 @@
   <div *ngIf="!enterTip">
     <mat-card>
       <div >{{instructions}}</div>
+      <!-- saleComplete : {{saleComplete}} <br>
+      errorMessage : {{errorMessage | json}}<br>
+      message : {{message | json}}<br>
+      cmdResponse : {{cmdResponse | json }}<br>
+      resultMessage : {{resultMessage | json }}<br> -->
       <app-dcapresponse-message
             [saleComplete]="saleComplete"
             [errorMessage]="errorMessage"

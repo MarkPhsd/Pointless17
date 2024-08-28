@@ -25,6 +25,10 @@ export class SetTokenComponent implements OnInit {
     console.log(localStorage.getItem('pinToken'))
   }
 
+  clearTokenDevice() {
+    localStorage.removeItem('devicename')
+    localStorage.removeItem('pinToken')
+  }
   getToken() {
     const site = this.siteService.getAssignedSite()
     this.action$ = this.systemService.getToken(site).pipe(switchMap(data => {

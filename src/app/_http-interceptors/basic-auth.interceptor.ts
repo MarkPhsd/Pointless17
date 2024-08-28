@@ -29,7 +29,11 @@ export class BasicAuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-      const user = this.authenticationService.userValue;
+      let user = this.authenticationService.userValue;
+
+      // if (!user) { 
+      //   user = this.authenticationService._user.value
+      // }
 
       const ebay = this.authenticationService.ebayHeader
 

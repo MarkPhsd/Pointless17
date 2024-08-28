@@ -3,7 +3,6 @@
 <div *ngIf="!prepView">
   <div class="mat-card-container"
     *ngIf="site && (sales$ | async) as summary; else loading">
-
     <ng-container
                 [ngTemplateOutlet]="reportView"
                 [ngTemplateOutletContext]="{$implicit: summary}">
@@ -21,6 +20,7 @@
     </ng-container>
   </div>
 </div>
+
 <ng-template #headerView>
   <div class="header-margin">
     <ng-content select=".header"></ng-content>
@@ -91,6 +91,11 @@
 </ng-template>
 
 <ng-template #salesView let-summary>
+
+  <div *ngIf="!sales.results && summary.resultMessage">
+    <mat-icon>alert</mat-icon>
+    {{reportName}} : {{groupBy}} : {{summary.resultMessage}}
+  </div>
   <div *ngIf="sales.results as sales">
     <ng-template #headerTemplate>
       <div class="header-grid info-width">
@@ -111,7 +116,7 @@
       <div class="header-grid">
         <div >PreTax Total   </div>
 
-        <div *ngIf="groupBy === 'transactionType'"> {{summary?.summary?.netSales | currency }}  </div>
+        <div *ngIf="groupBy === 'transactionType'"> {{summary?.summary?.netSales ?? 0 | currency }}  </div>
         <div *ngIf="groupBy != 'transactionType'" class="span-col">{{summary?.summary?.itemTotal ?? 0 | currency }}  </div>
 
         <div *ngIf="!autoPrint && groupBy != 'transactionType'" > Profit</div>
@@ -126,7 +131,7 @@
 
       <div class="header-grid">
         <div >QTY</div>
-        <div class="span-col">{{ summary?.summary?.quantity }} </div>
+        <div class="span-col">{{ summary?.summary?.quantity ?? 0 }} </div>
       </div>
 
     </ng-template>
@@ -143,13 +148,13 @@
       </app-sales-items>
     </ng-template>
 
-    <div *ngIf="autoPrint">
+    <div *ngIf="autoPrint && sales != null">
       <ng-container [ngTemplateOutlet]="headerTemplate"></ng-container>
       <ng-container [ngTemplateOutlet]="subTitleView"></ng-container>
       <ng-container [ngTemplateOutlet]="contentView"></ng-container>
     </div>
 
-    <mat-card *ngIf="!autoPrint">
+    <mat-card *ngIf="!autoPrint  && sales != null">
       <mat-card-title class="mat-card-title">
         <ng-container [ngTemplateOutlet]="headerTemplate"></ng-container>
       </mat-card-title>
