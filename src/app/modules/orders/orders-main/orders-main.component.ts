@@ -163,6 +163,12 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     return null;
   }
 
+  get isPaxDevice() { 
+    if (this.platFormService.androidApp && this.smallDevice) { 
+      return true;
+    }
+  }
+
   initStatusSubscriber() {
     this._prepStatus = this.printingService.prepStatus$.subscribe( data => {
       if (data) {

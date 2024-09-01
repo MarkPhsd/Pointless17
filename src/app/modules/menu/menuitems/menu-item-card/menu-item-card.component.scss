@@ -417,7 +417,7 @@
   font-size: 1rem;
   margin-top: 1px;
   position: relative;
-
+  white-space: normal;
   @supports (-webkit-touch-callout: none) {
     font-size: .8em;
   }
@@ -436,8 +436,9 @@
   font-weight:   500;
   font-size: 1rem;
   height: 95px;
-  text-wrap: auto;
+  text-wrap: wrap;
   position: relative;
+  white-space: normal;
 
   @supports (-webkit-touch-callout: none) {
     font-size: .8em;

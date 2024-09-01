@@ -50,6 +50,15 @@ export class RequestMessagesComponent implements OnInit {
   posDevice$: Observable<ITerminalSettings>;
   archiveAllMessagesVisible: boolean;
 
+  unSubscribeAll() {
+    if (this.observablesArraySubject) { 
+      this.observablesArraySubject.unsubscribe()
+    }
+    if (this.queueSubject) { 
+      this.queueSubject.unsubscribe()
+    }
+  }
+
   addObservable(newObservable: Observable<any>): void {
     const observableWithFinalize = newObservable.pipe(
       take(1),
@@ -169,8 +178,12 @@ export class RequestMessagesComponent implements OnInit {
 
     return messages$.pipe(
       concatMap(data => {
-        this.processMessages(data)
-        this.emitCount.emit(data?.length)
+        if (data) {
+          if (data?.length>0) { 
+            this.processMessages(data)
+            this.emitCount.emit(data?.length)
+          } 
+        }
         return of(data)
       })
     )
@@ -185,7 +198,7 @@ export class RequestMessagesComponent implements OnInit {
     }))
   }
 
-  archiveAll() {
+  archiveVoids() {
     const site = this.siteService.getAssignedSite()
     this.action$ = this.requestMessageService.archiveMessageVoids(site).pipe(switchMap(data => {
       this.refreshOrderMessages()
@@ -193,6 +206,13 @@ export class RequestMessagesComponent implements OnInit {
     }))
   }
 
+  archiveAll() {
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.requestMessageService.archiveMessagesAllMessages(site).pipe(switchMap(data => {
+      this.refreshOrderMessages()
+      return of(data)
+    }))
+  }
   processMessages(list:IRequestMessage[]): Observable<IRequestMessage[]> {
 
     if (!list) { return of(null)}
@@ -278,21 +298,13 @@ export class RequestMessagesComponent implements OnInit {
           }))
         this.addObservable(order$)
       }
-      // //need to fix this.
-      // if (data.method === 'printPaymentReceipt') {
-      //   const order$ = this.orderService.getOrder(site, data.orderID.toString(),false).pipe(switchMap(data => {
-      //      return this.paymentsMethodsProcessService.sendToPrep(data, true, this.uiTransaction  )
-      //     })).pipe(switchMap(data =>  {
-      //       return this._archiveMessage(data)
-      //     }))
-      //   this.addObservable(order$)
-      // }
+ 
       if (data.method === 'printReceipt') {
-        console.log('remote print receipt')
         if (!this.isStaff && !this.posDevice) { return }
         const order$ = this.orderService.getOrder(site, data.orderID.toString(), false).pipe(concatMap(data => {
-          //  console.log('print receipt', index)
            this.printingService.printOrder = data;
+           console.log('remote print receipt ORderr:', this.refreshTime, data.orderID,  data?.total, data?.posPayments[0]?.amountPaid)
+           this.orderMethodsService.selectedPayment = null;
            this.printingService.previewReceipt(true, data , this.posDevice.receiptPrinter);
            return of(data)
         })).pipe(concatMap(order =>  {
@@ -300,17 +312,8 @@ export class RequestMessagesComponent implements OnInit {
         }))
         this.addObservable(order$)
       }
-      // if (data.method === 'rePrintPrep') {
-      //   const order$ = this.orderService.getOrder(site, data.orderID.toString(), false).pipe(switchMap(data => {
-      //      return this.paymentsMethodsProcessService.sendToPrep(data, false, this.uiTransaction  )
-      //     })).pipe(switchMap(data =>  {
-      //       return this._archiveMessage(data)
-      //     }))
-      //   this.addObservable(order$)
-      // }
     });
     printMessages = []
-    // this.printJobs$ = printJobs$;
   }
 
   get isStaff() {
@@ -369,8 +372,11 @@ export class RequestMessagesComponent implements OnInit {
   ngOnInit(): void {
     let user = this.userAuthService.user
     if (this.user) { user = this.user; }
-
     this.initServices()
+  }
+
+  ngOnDestroy() { 
+    this.unSubscribeAll()
   }
 
   initServices() {

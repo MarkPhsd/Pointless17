@@ -23,12 +23,20 @@
 </ng-template>
 
 <div *ngIf="(messages$ | async) as messages; else loading">
-  <div *ngIf="archiveAllMessagesVisible">
+  <div *ngIf="messages">
     <button   mat-raised-button
               color="primary"
               style="height:45px"
               (click)="archiveAll()" >
           <mat-icon>archive</mat-icon>
+      Archive All
+    </button>
+
+    <button   mat-raised-button
+          color="primary"
+          style="height:45px"
+          (click)="archiveVoids()" >
+      <mat-icon>archive</mat-icon>
       Archive Voids
     </button>
   </div>

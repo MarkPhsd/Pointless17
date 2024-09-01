@@ -349,7 +349,15 @@ export class BalanceSheetService {
   getCurrentUserBalanceSheet(site: ISite, deviceName: string)  : Observable<IBalanceSheet> {
 
     const user = this.authenticationService._user.value;
-    if (!user) { 
+
+    let userTrue : boolean;
+    userTrue = false
+    if (user) { 
+      userTrue = true
+    }
+
+    console.log('getCurrentUserBalanceSheet service', userTrue, deviceName)
+    if (!userTrue) { 
       let item = {} as IBalanceSheet;
       item.id = 0;
       return of(item)
@@ -360,6 +368,10 @@ export class BalanceSheetService {
       item.id = 0;
       return of(item)
     }
+
+ 
+    user.authdata = ''
+    this.authenticationService.updateUser(user)
 
     if (deviceName === '' || !deviceName ) { deviceName = 'nothing'}
 

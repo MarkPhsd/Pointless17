@@ -19,6 +19,9 @@ interface IIsOnline {
   result: string;
 }
 export interface ITerminalSettings {
+
+
+  prepCheckDevice : boolean;
   medicalRecSales : number;
   receiptPrinter  : string;
   labelPrinter    : string;
@@ -348,10 +351,9 @@ export class SettingsService {
 
   getSettingByName(site: ISite, name: String):  Observable<ISetting> {
 
-    if (!name) { return of(null) }
-    if (name == undefined || name == null) { return of(null) }
-
-    // console.log('getSettingByName', name)
+    let setting = {} as ISetting;
+    if (!name) { return of(setting) }
+    if (name == undefined || name == null) { return of(setting) }
 
     const user =  JSON.parse(localStorage.getItem('user')) as IUser
     if (!user || !user.roles || !user.username ) {

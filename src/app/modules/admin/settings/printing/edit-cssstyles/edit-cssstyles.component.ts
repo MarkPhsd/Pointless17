@@ -15,7 +15,7 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
   styleUrls: ['./edit-cssstyles.component.scss']
 })
 export class EditCSSStylesComponent implements OnInit {
-
+  action$ : Observable<any>;
   @Input()  setting : ISetting;
   inputForm         : UntypedFormGroup;
   id                : string;
@@ -81,12 +81,15 @@ export class EditCSSStylesComponent implements OnInit {
     localStorage.removeItem('https://localhost:44309/api/settings/getSettingByName?name=ReceiptStyles')
   }
 
-  async resetDefault() {
+  resetDefault() {
     const result = window.confirm('Rest to default styles?')
     if (result) {
       const site = this.siteService.getAssignedSite();
-      const setting = await this.settingsService.setDefaultReceiptStyles(site)
-      this.setting = setting;
+      const setting =  this.settingsService.setDefaultReceiptStylesOBS(site).pipe(switchMap(data => {
+        this.setting = data;
+        return of(data)
+
+      }))
       this.initForm()
     }
   }
@@ -98,14 +101,11 @@ export class EditCSSStylesComponent implements OnInit {
 
   update() {
     const site = this.siteService.getAssignedSite();
-    this.settingsService.putSetting(site, this.setting.id, this.inputForm.value).subscribe(
-      { next: data =>  {
-          this.notify('Saved', 'Success')
-        },
-        error: err => {
-          this.notify(err, 'Failed')
-        }
-      }
+     this.action$ = this.settingsService.putSetting(site, this.setting.id, this.inputForm.value).pipe(
+       switchMap(data => {
+         this.notify('Saved', 'Success')
+          return of(data)
+       }) 
     )
   }
 
@@ -138,21 +138,23 @@ export class EditCSSStylesComponent implements OnInit {
 
   copy() {
     const site = this.siteService.getAssignedSite();
-    this.settingsService.postSetting(site, this.inputForm.value).subscribe(data =>  {
-      this.notify('Saved', 'Success')
-    }, err => {
-      this.notify(err, 'Failed')
-    })
+    this.action$ = this.settingsService.postSetting(site, this.inputForm.value).pipe(
+      switchMap(data => {
+         this.notify('Saved', 'Success')
+         return of(data)
+      }));
   }
 
   delete() {
     const result = window.confirm('Are you sure you want to delete this style sheet?')
     if (result) {
       const site = this.siteService.getAssignedSite();
-      this.settingsService.deleteSetting(site, this.setting.id).subscribe(data =>  {
-        this.dialogRef.close();
-      })
-    }
+      this.action$ =  this.settingsService.deleteSetting(site, this.setting.id).pipe(
+        switchMap(data => {
+          this.notify('Saved', 'Success')
+           return of(data)
+        }));
+      }
   }
 
 

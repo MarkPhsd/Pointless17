@@ -8,9 +8,9 @@
 
 <div *ngIf="order">
   <app-receipt-view
-    [autoPrint]="autoPrint"
-    [order]="order"
-    [options]  ='options'
-    (outPutExit)="exit($event)"
+    [autoPrint]  ="autoPrint"
+    [order]      ="order"
+    [options]    ='options'
+    (outPutExit) ="exit($event)"
 ></app-receipt-view>
 </div>

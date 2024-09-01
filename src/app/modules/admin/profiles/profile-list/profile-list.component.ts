@@ -13,8 +13,7 @@ import { Capacitor, Plugins } from '@capacitor/core';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -323,6 +322,13 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.columnDefs.push(item)
 
+        item =  {headerName: 'Company',  field: 'companyName',      sortable: true,
+          width   : 175,
+          minWidth: 175,
+          maxWidth: 275,
+        }
+        this.columnDefs.push(item)
+
         item =  {headerName: 'Type',  field: 'clientType.name',      sortable: true,
                 width   : 175,
                 minWidth: 175,
@@ -425,7 +431,6 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
     //ag-grid standard method
     getRowData(params, startRow: number, endRow: number):  Observable<ClientSearchResults>  {
       this.currentPage          = this.setCurrentPage(startRow, endRow)
-      // console.log('search model, current page', this.currentPage)
       const searchModel  =        this.initSearchModel();
       const site                = this.siteService.getAssignedSite()
       return this.contactService.getContactBySearchModel(site, searchModel)
@@ -450,8 +455,6 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
               if (!resp)         { return }
               this.isfirstpage   = resp.isFirstPage
               this.islastpage    = resp.isFirstPage
-              // console.log('get rows' , resp.currentPage, this.currentPage)
-              // this.currentPage   = resp.currentPage
               this.numberOfPages = resp.pageCount
               this.recordCount   = resp.recordCount
               if (this.numberOfPages !=0 && this.numberOfPages) {

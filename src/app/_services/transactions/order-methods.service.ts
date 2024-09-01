@@ -1,4 +1,4 @@
-import { HostListener, Injectable, OnDestroy } from '@angular/core';
+import { ElementRef, HostListener, Injectable, OnDestroy } from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
 import { AuthenticationService, MenuService, OrderPayload, OrdersService, TextMessagingService } from 'src/app/_services';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -38,9 +38,6 @@ import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switc
 import * as uuid from 'uuid';
 import { RequestMessagesComponent } from 'src/app/modules/admin/profiles/request-messages/request-messages.component';
 import { IRequestMessage } from '../system/request-message.service';
-import { error } from 'console';
-import { IPositionElements } from 'ngx-infinite-scroll';
-import { MenuItem } from 'electron';
 import { ClientTableService } from '../people/client-table.service';
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -67,6 +64,7 @@ export class DateValidators {
   providedIn: 'root'
 })
 export class OrderMethodsService implements OnDestroy {
+
 
 
   emailSubjects = [
@@ -1084,6 +1082,10 @@ export class OrderMethodsService implements OnDestroy {
     }
     return this.processItemPOSObservable( order, null, item, quantity, null , 0, 0,
                                           passAlong, this.assignPOSItems, unitTypeID, selectedProductPrice )
+  }
+
+  scanCheckInItem(barCode: string,  scanMode: boolean): Observable<IPOSOrder> {
+    return this.orderService.scanCheckInItem(barCode, scanMode)
   }
 
   addItemToOrderFromBarcode(barcode: string, input, assignedItem, inputQuantity?, unitTypeID?, cost?) {

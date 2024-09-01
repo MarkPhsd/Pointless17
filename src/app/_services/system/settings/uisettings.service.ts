@@ -22,6 +22,9 @@ export interface ContactFieldOptions {
 }
 
 export interface TransactionUISettings {
+
+  billOnHold: boolean;
+  paxA920AutoOpenCart: boolean;
   rewardsEnabled         : any;
   id                     : number;
   displayNotes           : boolean;
@@ -539,7 +542,8 @@ export class UISettingsService {
   }
 
   getPOSDeviceSettings(deviceName: string) {
-    return this.settingsService.getDeviceSettings(deviceName)
+    const site = this.siteService.getAssignedSite()
+    return this.settingsService.getSettingByNameCachedNoRoles(site, deviceName)
   }
 
   getPOSDevice(deviceName: string) {
@@ -867,6 +871,9 @@ export class UISettingsService {
 
   initForm(fb: UntypedFormGroup): UntypedFormGroup {
     return this._fb.group({
+
+      billOnHold : [],
+      paxA920AutoOpenCart : [],
       id                     : [],
       displayNotes           : [],
       displayView            : [],
@@ -903,7 +910,7 @@ export class UISettingsService {
       cardPointBoltEnabled   : [''],
       cardPointAndroidEnabled: [''],
       disableTipGratutity:  [],
-      dsiEMVAndroidEnabcardPointPreAuthled   : [''],
+      dsiEMVAndroidEnabled   : [''],
       dsiEMVNeteEpayEnabled  : [''],
       dsiEMVIP               : [''],
       dcapDisableDualPayOptions: [],
@@ -929,7 +936,7 @@ export class UISettingsService {
       showCustomerOption: [],
       splitEntry: [],
       idParseOnlyAgeConfirmation: [],
-      dsiEMVAndroidEnabled: [],
+     
       assignBarcodeAsSerial: [],
       minClientAge:  [],
       storeCreditAPI: [],
@@ -982,6 +989,9 @@ export class UISettingsService {
       dCapPayAPISurchargeValue     : [],
       dcapPayAPIMultiPrice         : [],
       dcapPayAPIDualPriceValue     : [],
+
+    
+
      })
   }
 

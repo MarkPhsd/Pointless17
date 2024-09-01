@@ -141,6 +141,13 @@
             <mat-label>Quick Scanning Device</mat-label>
           </mat-slide-toggle>
         </div>
+        
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="prepCheckDevice">
+            <mat-label>Prep Check Device</mat-label>
+          </mat-slide-toggle>
+        </div>
 
         <div *ngIf="(serviceType$ | async) as list ">
           <mat-form-field style="width: 200px" class="fields"

@@ -110,6 +110,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     }
     return false;
   }
+  
   generatePurchaseOrder() {
     const site = this.siteService.getAssignedSite()
     this.action$ = this.orderService.postPurchaseOrder(site, this.clientTable?.companyName, +this.id).pipe(switchMap(data => {

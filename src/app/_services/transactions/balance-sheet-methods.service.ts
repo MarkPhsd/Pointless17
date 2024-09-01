@@ -89,14 +89,15 @@ export class BalanceSheetMethodsService {
   }
 
   promptBalanceSheet(user: IUser): Observable<{user: IUser, sheet: IBalanceSheet, err: any}> {
+    
     if (this.platformService.isAppElectron || this.platformService.androidApp) {
       const site     = this.sitesService.getAssignedSite()
       const deviceName = this.getDeviceName();
-      console.log('promptBalanceSheet', deviceName)
+
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
           if (data && data.errorMessage) {
-            this.sitesService.notify(`Balance sheet error. ${data.errorMessage}`, 'Close', 3000, 'red')
+            this.sitesService.notify(`Balance sheet error. ${data.errorMessage}`, 'Close',6000, 'red')
             return of({sheet: null, user: user, err: null})
           }
           if (data.id == 0 )  {
@@ -108,7 +109,7 @@ export class BalanceSheetMethodsService {
           return of(item)
         }),
         catchError( e => {
-          this.sitesService.notify('Balance sheet error. User may not have employee assigned.' + e.toString(), 'Close', 3000, 'red')
+          this.sitesService.notify(JSON.stringify(e) + ' Error: promptBalanceSheet', 'Close', 10000, 'red')
           return of({sheet: null, user: user, err: e})
         })
       )
@@ -125,6 +126,8 @@ export class BalanceSheetMethodsService {
     const deviceName = this.getDeviceName();
     const site = this.sitesService.getAssignedSite()
     const user = this.authenticationService._user.value;
+
+ 
     if (!user) {  return  of(null)}
     return   this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
       switchMap(sheet => {

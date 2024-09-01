@@ -152,9 +152,6 @@ export class FastUserSwitchComponent implements OnInit {
     }
 
     if (userName && login) {
-  
-      
-
       this.submitLogin(userName, event, this.employeeAllowed)
       return;
     }
@@ -265,12 +262,11 @@ export class FastUserSwitchComponent implements OnInit {
     // if (user?.id) {
       const site = this.siteService.getAssignedSite()
       const device = localStorage.getItem('devicename')
-
-      // console.log('checkBalanceSheet', user)
+     
       if (!user) { return of(null)}
 
       return  this.balanceSheetService.getCurrentUserBalanceSheet(site, device ).pipe(switchMap(data => {
-        console.log('checkBalanceSheet', data)
+
         if (data) {
           // console.log('data.shiftStarted', data.shiftStarted)
           if (!data.shiftStarted  || data.shiftStarted == 0) {
@@ -278,9 +274,13 @@ export class FastUserSwitchComponent implements OnInit {
             this.router.navigate(['/balance-sheet-edit']);
           } else  {
             this.router.navigate(['/app-main-menu']);
-          }
-          // this.onCancel();
+          } 
+          this.onCancel()
+          return of(data)
         }
+        console.log('nav main menu')
+        this.router.navigate(['/app-main-menu']);
+        this.onCancel()
         return of(data)
       }))
  
@@ -327,10 +327,8 @@ export class FastUserSwitchComponent implements OnInit {
 
             if (this.platformService.isApp()) {
               this.loginApp(user)
-              console.log('check balance sheet - return')
+      
               return this.checkBalanceSheet(user).pipe(switchMap(data => {
-                this.onCancel()
-                console.log('Sheet Data', data?.id)
                 return of(data)
               }))
             }
@@ -347,7 +345,7 @@ export class FastUserSwitchComponent implements OnInit {
                 }
               }
               if (!pass) {
-                this.userSwitchingService.processLogin(user, '')
+                this.userSwitchingService.processLogin(user, 'app-main-menu') 
               }
               this.onCancel()
               return of('success')

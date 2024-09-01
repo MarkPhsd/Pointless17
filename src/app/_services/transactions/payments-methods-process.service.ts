@@ -981,8 +981,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
         const cmdResponse  = rStream?.CmdResponse;
         const trans        = rStream?.TranResponse;
-        const status       = cmdResponse?.TextResponse;
-        const cmdStatus    = cmdResponse?.CmdStatus;
+        const status       = cmdResponse?.TextResponse //?? cmdResponse?.textResponse;
+        const cmdStatus    = cmdResponse?.CmdStatus //?? cmdResponse?.cmdStatus;
 
         payment   = this.applyEMVResponseToPayment(trans, payment)
 
@@ -996,7 +996,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           paymentMethod.name = cardType;
           let response: IPaymentResponse;
 
-          const payment$ =   this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod)
+          const payment$ =   this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod).pipe(switchMap(data => {
+            if (data.order) { 
+              this.orderMethodsService.updateOrder(data.order)
+            }
+            return of(data)
+          }))
 
           return payment$
       }
@@ -1172,7 +1177,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     payment.refNumber     = trans?.RefNo;
     payment.dlNumber      = trans?.AcqRefData;
     payment.processData   = trans?.ProcessData;
-    payment.ccNumber      = trans?.RecordNo;
+    payment.ccNumber      = trans?.AcctNo;
     payment.recordNo      = trans?.RecordNo;
     payment.approvalCode  = trans?.AuthCode;
     payment.preAuth       = trans?.AuthCode
@@ -1190,7 +1195,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     payment.emvcvm        = trans?.CVM;
     payment.emvDate       = trans?.Date;
     payment.emvTime       = trans?.Time;
-
+    payment.exp           = trans?.ExpDate;
     payment.captureStatus = trans?.CaptureStatus;
 
     payment.saleType      = 1;

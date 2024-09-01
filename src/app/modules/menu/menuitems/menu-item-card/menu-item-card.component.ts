@@ -142,6 +142,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     if (this.menuItem.urlImageMain) {
       return 'item-name-center-image'
     }
+    // return 'item-name-center-image'
     return  'item-name-center-menu'
   }
 
@@ -549,10 +550,10 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   getItemSrc(item:IMenuItem) {
     const thumbnail = item?.thumbnail ?? item?.urlImageMain;
     if (!thumbnail) {
-      if (this.isApp) { 
-         const image =`${this.bucketName}productplaceholder.png`
-         return image 
-      }
+      // if (this.isApp) { 
+      //    const image =`${this.bucketName}productplaceholder.png`
+      //    return image 
+      // }
       return null
     } else {
       const thumbnail = item?.thumbnail ?? item?.urlImageMain;
@@ -561,10 +562,6 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
         return null
       }
       const image =`${this.bucketName}${imageName[0]}`
-
-      if (item?.name === 'CAPT MORGAN') {
-        console.log(item?.thumbnail, item?.urlImageMain  )
-      }
 
       return image
     }

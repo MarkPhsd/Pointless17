@@ -228,8 +228,8 @@ export class UserSwitchingService implements  OnDestroy {
     const site = this.siteService.getAssignedSite();
     const userLogin = { userName, password };
     const timeOut = 3000;
-    const  deviceName = localStorage.getItem('devicename');
-
+    const deviceName = localStorage.getItem('devicename');
+    let modUser : IUser;
     // Authentication stream
     let auth$ = this.authenticate(userLogin).pipe(
       concatMap(user => {
@@ -243,7 +243,7 @@ export class UserSwitchingService implements  OnDestroy {
         }
         user.message = 'success';
         user.errorMessage = null;
-        //sets user don't need to set again
+        modUser = user;
         const currentUser = this.setUserInfo(user, password);
         this.uiSettingService.initSecureSettings();
         return this.contactsService.getContact(site, user?.id);
@@ -285,9 +285,11 @@ export class UserSwitchingService implements  OnDestroy {
 
         if (clockInOnly) return of(userSheet);
 
+        const currentUser = this.setUserInfo(modUser, password);
+
         if  ( this.platformService.isApp() ) {
           if (deviceName) {
-            console.log('prompt balance')
+       
             return this.promptBalanceSheet(user)
           }
         }
@@ -300,6 +302,7 @@ export class UserSwitchingService implements  OnDestroy {
     let result$ = balanceSheet$.pipe(
       concatMap(data => {
         console.log('submit 5 fail?', this.didItemFail(data) )
+
         if (this.didItemFail(data)) {
           this.authenticationService.authenticationInProgress = false;
           data.errorMessage = 'Auth Failed'
@@ -599,7 +602,7 @@ export class UserSwitchingService implements  OnDestroy {
         return true
       }
       if (sheet.shiftStarted) {
-        this.router.navigate(['/main-menu']);
+        this.router.navigate(['/app-main-menu']);
       }
       return true
     }

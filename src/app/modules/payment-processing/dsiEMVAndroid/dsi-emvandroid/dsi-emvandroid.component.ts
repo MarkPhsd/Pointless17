@@ -17,6 +17,11 @@ import { DcapMethodsService } from '../../services/dcap-methods.service';
 import { PrintData, RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { AWSBucketService, AuthenticationService } from 'src/app/_services';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
 // import  * from '@capacitor/capacitor-android-foreground-service';
 // import '@anuradev/capacitor-background-mode';
@@ -73,7 +78,8 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   dsiDeviceList : any;
   secureDevice: any;
   viewSelectDeviceList = false;
-
+  _posDevice: Subscription;
+  posDevice       :  ITerminalSettings;
   ////////////////////////
   responseData: DCAPAndroidRStream
   response: any;
@@ -90,6 +96,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   uiHomePageSetting: UIHomePageSettings;
   uiHome$: Observable<UIHomePageSettings>;
   counter: number = 0;
+  printAction$ : Observable<any>;
 
   enterTip: boolean;
   tipPreSale: boolean;
@@ -111,14 +118,17 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
 
   initPOSDevice() {
     this.posDevice$      = this.uISettingsService.posDevice$.pipe(switchMap(data => {
+ 
       if (!data)  {
         const item = localStorage.getItem('devicename')
         return this.uISettingsService.getPOSDevice(item).pipe(switchMap(data => {
           this.setPaxInfo(data)
+          this.posDevice = data;
           this.uISettingsService.updatePOSDevice(data)
           return of(data)
         }))
       } else {
+        this.posDevice = data;
         this.setPaxInfo(data)
       }
       return of(data)
@@ -159,14 +169,17 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   constructor(
      public  dsiAndroidService: PointlessCCDSIEMVAndroidService,
      public  paymentsMethodsProcessService: PaymentsMethodsProcessService,
+     private paymentService: POSPaymentService,
      public  orderMethodsService: OrderMethodsService,
      private uISettingsService:    UISettingsService,
      private dcapMethodsService: DcapMethodsService,
      private authService : AuthenticationService,
+     private siteService: SitesService,
      private uiSettingService       : UISettingsService,
      private awsBucketService       : AWSBucketService,
      private navigationService     : NavigationService,
      public  paymentMethodsService : PaymentsMethodsProcessService,
+     private printingService: PrintingService,
      @Optional() private dialogRef: MatDialogRef<DsiEMVAndroidComponent>,
      @Inject(MAT_DIALOG_DATA) public data: any
   ){
@@ -508,15 +521,14 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   }
 
   async print() {
+    // this.printingService.printOrder(this.order)
     let item         = this.initTransaction()
     item.UseForms = ""
     item.tranCode    = "PrintReceipt";
     let printData    = this.responseData?.PrintData;
+    if (this.responseData?.PrintData) { 
 
-    console.log('print check response Data', this.responseData)
-
-    return;
-
+    }
     const printInfo = this.mergePrintDataToTransaction(printData, item)
     const printResult  =  dsiemvandroid.print(printInfo)
     this.checkResponse_Transaction('PRINT')
@@ -686,6 +698,13 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     }
   }
 
+  clearResponse() { 
+    this.errorMessage =null
+    this.message =""
+    this.resultMessage =""
+    this.cmdResponse = null
+  }
+
   processResponse(stream: DCAPAndroidRStream) {
     // const stream = this.dcapMethodsService.convertToObject(paymentresponse)
     // return this.finalizeTransaction(data)
@@ -708,6 +727,11 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
           this.stream = stream
           this.payment  = data.payment;
           this.paymentResponse = data;
+
+          if (data.orderCompleted) {
+            return this.paymentsMethodsProcessService.finalizeTransaction(this.paymentResponse)
+          }
+
         }
         return of(data)
       }))
@@ -738,10 +762,11 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     tran.authCode   = this.payment?.preAuth;
     tran.recordNo   = this.payment?.ccNumber;
     tran.RecordNo   = this.payment?.ccNumber;
+    
     tran.procesData = this.payment?.processData
     if (!this.payment.acqRefData) {
       try {
-        const rStream = JSON.parse(this.payment.transactionData) as RStream
+        const rStream = JSON.parse(this.payment?.transactionData) as RStream
         console.log(rStream)
         if (rStream) {
           if (rStream?.TranResponse?.AcqRefData) {
@@ -774,7 +799,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       tran.RecordNo   = this.payment?.recordNo;
     }
     tran.ProcessData = this.payment?.processData;
-    console.log('Tip Transaction', tran)
+ 
     return tran
   }
 
@@ -911,8 +936,61 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     }
   }
 
-}
+  remotePrint(message:string, exitOnSend: boolean, posDevice:ITerminalSettings) {
+    const order = this.order;
+    // console.log('remote print', this.posDevice?.remotePrepPrint)
+    if (posDevice) {
+      let pass = false
+      if (posDevice?.remotePrepPrint) {
+        if (message === 'printPrep') {
+          pass = true
+        }
+        if (message === 'rePrintPrep') {
+          pass = true
+        }
+        if (message == 'printReceipt') {
+          pass = true
+        }
+      }
+      if (posDevice?.remotePrint || pass) {
+        const serverName = this.uiTransactions?.printServerDevice;
+        let remotePrint = {message: message,
+                           deviceName:   this.posDevice?.deviceName,
+                           printServer: serverName,
+                           id: order.id,
+                           history: order.history} as any;
+        const site = this.siteService.getAssignedSite()
+        this.printAction$ =  this.paymentService.remotePrintMessage(site, remotePrint).pipe(switchMap(data => {
+         
+          if (data) {
+            this.siteService.notify('Print job sent', 'Close', 3000, 'green')
+          } else {
+            this.siteService.notify('Print Job not sent', 'Close', 3000, 'green')
+          }
 
+          if (posDevice?.exitOrderOnFire && message != 'printReceipt') {
+            //then exit the order.
+            this.orderMethodsService.clearOrder()
+          }
+          return of(data)
+        }))
+        return true;
+      }
+    }
+
+    return false
+  }
+
+  printReceipt(){
+    const order = this.order;
+    this.resultMessage = "Printing"
+    const remotePrint = this.remotePrint('printReceipt', this.posDevice?.exitOrderOnFire, this.posDevice);
+    if (remotePrint) {
+      return;
+    }
+  }
+
+}
  // processDcapTip(amount: number) {
   //   const device = localStorage.getItem('devicename')
   //   const site = this.siteService.getAssignedSite()
@@ -1083,5 +1161,3 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   //     this.response = response;
   //     return of(null)
   //   }
-
-  // }

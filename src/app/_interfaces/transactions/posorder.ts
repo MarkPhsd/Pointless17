@@ -234,6 +234,10 @@ export interface ClientType {
 }
 
 export interface PosOrderItem {
+  prepByDate    : string;
+  prepBy        : string;
+  deliveryBy    : string;
+  deliveryByDate: string;
   bayName                      : string;
   id:                            number;
   productID:                     number;

@@ -37,6 +37,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   @Output() outPutExit      = new EventEmitter();
   @Input()  printerName      : string;
   @Input()  options          : printOptions;
+  @Input()  order            : IPOSOrder;
+  @Input()  payments         : any[];
 
   _printView: Subscription;
   // printView               = 1;
@@ -64,7 +66,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   items             : any[];
   orders            : any;
-  payments          : any[];
+ 
   orderTypes        : any;
   platForm          = '';
   action$           : Observable<any>;
@@ -77,16 +79,12 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   btPrinter         : string;
   imageConversion   : any;
 
-  @Input() order    : IPOSOrder;
-
   _order                  : Subscription;
   subscriptionInitialized : boolean;
   electronReceiptSetting  : ISetting;
   _printReady             : Subscription;
   printReady              : boolean
-
   orderCheck            = 0;
-
   isElectronApp         : boolean;
   electronSetting       : ISetting;
   electronReceiptPrinter: string;
@@ -104,11 +102,11 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   layout$       : Observable<any>;
   order$        : Observable<any>;
   user          : any;
-  _user: Subscription;
+  _user         : Subscription;
   tempPayments  : PosPayment[];
 
-  printView: number;
-  groupID = 0
+  printView     : number;
+  groupID       = 0
 
   intSubscriptions() {
 
@@ -131,9 +129,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
               this.exit()
               return }
             if (this.print()) {
-              if (this.autoPrint) {
-                this.exit()
-              }
+              if (this.autoPrint) { this.exit()  }
               this.autoPrinted = true;
             }
           }
@@ -185,6 +181,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
     if (this.order) {
       this.printingService.printOrder = this.order;
+      
+      console.log(this.order.id)
     }
 
     this.isElectronApp = this.platFormService.isAppElectron
@@ -580,8 +578,6 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
      }
 
      return printOrder$.pipe(switchMap(data => {
-         return of(data)
-      })).pipe(switchMap(data => {
             this.order      = data;
             this.orders     = [];
             if (!data)       {return}

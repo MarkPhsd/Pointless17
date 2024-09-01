@@ -498,6 +498,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(concatMap(result =>
         {
 
+          // console.log('result', result?.sheet )
           try {
             this.pollingService.clearPoll();
             this.spinnerLoading = false;
@@ -547,6 +548,10 @@ export class LoginComponent implements OnInit, OnDestroy {
               if (this.returnlUrl) { 
                 if (result && result?.message && result?.message === 'success') {
                   console.log('process login 1')
+
+                  if (!this.returnlUrl) { 
+                    this.returnUrl = 'app-main-menu'
+                  }
                   this.userSwitchingService.processLogin(user, this.returnlUrl)
                   this.closeDialog();
                   return of('success')
@@ -561,9 +566,11 @@ export class LoginComponent implements OnInit, OnDestroy {
                 if (this.loginAction?.name === 'setActiveOrder') {
                   this.userSwitchingService.processLogin(user, '/pos-payment')
                   pass = true
+                  this.closeDialog();
+                  return of('success')
                 }
-                if (!pass) { this.userSwitchingService.processLogin(user, '')  }
 
+                this.userSwitchingService.processLogin(user, 'app-main-menu') 
                 this.closeDialog();
                 return of('success')
               }

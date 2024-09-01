@@ -34,22 +34,19 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input()  mainPanel      : boolean;
   @Output() outputRemoveItem  = new EventEmitter();
   @Input()  purchaseOrderEnabled: boolean;
-
-  //grid;
-  @Input() disableActions = false;
-
-  @Input() printLocation  : number;
-  @Input() prepStatus     : boolean;
-  @Input() prepScreen     : boolean;
-  @Input() site:            ISite;
-  @Input() qrOrder        = false;
-  @Input() enableExitLabel : boolean;
-  @Input() userAuths       :   IUserAuth_Properties;
-  @Input() displayHistoryInfo: boolean;
-  @Input() enableItemReOrder  : boolean = false;
-  @Input() phoneDevice: boolean;
-  @Input() cardWidth: string;
-  @Input() isStaff: boolean;
+  @Input()  disableActions = false;
+  @Input()  printLocation  : number;
+  @Input()  prepStatus     : boolean;
+  @Input()  prepScreen     : boolean;
+  @Input()  site:            ISite;
+  @Input()  qrOrder        = false;
+  @Input()  enableExitLabel : boolean;
+  @Input()  userAuths       :   IUserAuth_Properties;
+  @Input()  displayHistoryInfo: boolean;
+  @Input()  enableItemReOrder  : boolean = false;
+  @Input()  phoneDevice: boolean;
+  @Input()  cardWidth: string;
+  @Input()  isStaff: boolean;
 
   printAction$: Observable<any>;
   posDevice       :  ITerminalSettings;
@@ -65,25 +62,25 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   smallDevice    : boolean;
   animationState : string;
   _order         : Subscription;
-  order$        : Observable<IPOSOrder>
+  order$         : Observable<IPOSOrder>
   gridScroller   : '';
 
   bottomSheetOpen  : boolean ;
   _bottomSheetOpen : Subscription;
+  wideBar          : boolean;
+  posName          : string;
 
-  wideBar         : boolean;
-  posName: string;
-
-  nopadd = `nopadd`
+  nopadd      = `nopadd`
   conditionalIndex: number;
-
-  _posDevice: Subscription;
+  _posDevice  : Subscription;
   currentRoute: string;
   androidApp = this.platformService.androidApp;
   _scrollStyle = this.platformService.scrollStyleWide;
   private styleTag: HTMLStyleElement;
   // private customStyleEl: HTMLStyleElement | null = null;
   @ViewChild('scrollDiv') scrollDiv: ElementRef;
+  
+  scanMode : number;
 
   scrollStyle = this.platformService.scrollStyleWide;
   user$ = this.authService.user$.pipe(switchMap(data => {
@@ -100,8 +97,32 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       return false
     }
     return true
+    
   }
 
+  setScanMode(number) { 
+    this.scanMode = number
+  }
+
+  get currentItems() { 
+   
+      if (this.scanMode == 2) { 
+        return this.posOrderItems.filter(data => { 
+          if (!data.prepByDate) {
+            return data
+          }
+        })
+      }
+      if (this.scanMode == 2) { 
+        return this.posOrderItems.filter(data => { 
+          if (!data.deliveryByDate) {
+            return data
+          }
+        })
+      }
+
+      return this.posOrderItems
+  }
 
   routSubscriber() {
 
@@ -164,9 +185,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       if (!this.displayHistoryInfo) {
         this._order = this.orderMethodService.currentOrder$.subscribe( order => {
           this.order = order
-          // console.log('order update', this.order?.posOrderItems)
+ 
           if (this.order && this.order.posOrderItems)  {
-            this.sortPOSItems(this.order.posOrderItems);
+            this.posOrderItems = this.order.posOrderItems
+            this.sortPOSItems(this.currentItems);
           }
         })
       }
@@ -180,7 +202,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
             this.order = order
             // console.log('order update', this.order?.posOrderItems)
             if (this.order && this.order.posOrderItems)  {
-              this.sortPOSItems(this.order.posOrderItems);
+              this.posOrderItems = this.order.posOrderItems
+              this.sortPOSItems(this.currentItems);
             }
           })
         }
@@ -211,8 +234,9 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   sortPOSItems(orderItems: PosOrderItem[]) {
+    
     this.posOrderItems = this.sortItems(orderItems)
-    // console.log(this.posOrderItems)
+    
     setTimeout(() => {
       this.scrollToBottom();
     }, 200);
@@ -515,7 +539,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                            printServer: serverName,id: order.id,history: order.history} as any;
         const site = this.siteService.getAssignedSite()
         this.printAction$ =  this.paymentService.remotePrintMessage(site, remotePrint).pipe(switchMap(data => {
-          // console.log(data)
+
           if (data) {
             this.siteService.notify('Print job sent', 'Close', 3000, 'green')
           } else {

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { catchError, concatMap, switchMap } from 'rxjs/operators';
-import { IProduct, ISite } from 'src/app/_interfaces';
+import { IProduct, ISite, UnitType } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { METRCFacilities } from 'src/app/_interfaces/metrcs/facilities';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
@@ -125,7 +125,6 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
     let jsonInfo : ItemType_Properties
     let action$ = type$.pipe(concatMap(data => {
       type = data;
-
       try {
         if (data.json) {
           jsonInfo = JSON.parse(data.json) as ItemType_Properties
@@ -228,8 +227,48 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
     return true;
   }
 
+  deleteProductID() {
+    if (this.package) { 
+      this.package.productID = null;
+    }
+    this.inputForm.patchValue({productID: 0, productName: ''})
+  }
+
   openNewProductByType() {
-    // this.productButtonService.openNewItemSelector()
+    
+    const site= this.siteService.getAssignedSite()
+    let typeName = this.package?.productCategoryName;
+
+    let product = {} as IProduct
+    product.name = this.package.productName;
+    
+    let unit = {} as UnitType;
+    const unitType$ = this.unitTypeService.getUnitTypeByName(site, this.package.unitOfMeasureName)
+
+    //get item type
+    const type$ =    this.itemTypeService.getItemTypeByName(site, typeName)
+
+    let product$  = this.menuService.postProduct(site, product)
+
+    this.action$ = unitType$.pipe(concatMap(data => { 
+      unit = data;
+      if (data){
+        product.unitTypeID = +data?.id
+      }
+      return type$ 
+    })).pipe(switchMap(data => {
+      if (data){
+        product.prodModifierType = +data?.id
+      }
+      return this.menuService.postProduct(site, product)
+    })).pipe(switchMap( data => {
+
+        this.productButtonService.openNewItemSelector(
+
+      )
+      return of(data)
+    }))
+   
   }
 
   getCatalogItem(event) {

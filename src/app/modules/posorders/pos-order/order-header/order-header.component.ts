@@ -182,12 +182,12 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
     const diag = this.fbProductButtonService.openOrderEditor(this.order)
   }
 
-  remotePrint(message:string, exitOnSend: boolean) {
+  remotePrint(message:string, exitOnSend: boolean, posDevice:ITerminalSettings) {
     const order = this.order;
     // console.log('remote print', this.posDevice?.remotePrepPrint)
-    if (this.posDevice) {
+    if (posDevice) {
       let pass = false
-      if (this.posDevice?.remotePrepPrint) {
+      if (posDevice?.remotePrepPrint) {
         if (message === 'printPrep') {
           pass = true
         }
@@ -198,7 +198,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
           pass = true
         }
       }
-      if (this.posDevice?.remotePrint || pass) {
+      if (posDevice?.remotePrint || pass) {
         const serverName = this.uiTransactionSettings.printServerDevice;
         let remotePrint = {message: message,
                            deviceName:   this.posDevice?.deviceName,
@@ -207,17 +207,16 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
                            history: order.history} as any;
         const site = this.siteService.getAssignedSite()
         this.printAction$ =  this.paymentService.remotePrintMessage(site, remotePrint).pipe(switchMap(data => {
-
-          console.log('print job message', data)
+         
           if (data) {
             this.siteService.notify('Print job sent', 'Close', 3000, 'green')
           } else {
             this.siteService.notify('Print Job not sent', 'Close', 3000, 'green')
           }
 
-          if (this.posDevice?.exitOrderOnFire && message != 'printReceipt') {
+          if (posDevice?.exitOrderOnFire && message != 'printReceipt') {
             //then exit the order.
-            this.clearOrder()
+            this.orderMethodsService.clearOrder()
           }
           return of(data)
         }))
@@ -232,7 +231,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   printReceipt(){
     const order = this.order;
 
-    const remotePrint = this.remotePrint('printReceipt', this.posDevice?.exitOrderOnFire);
+    const remotePrint = this.remotePrint('printReceipt', this.posDevice?.exitOrderOnFire, this.posDevice);
     if (remotePrint) {
       return;
     }
@@ -248,7 +247,6 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
       }))
       return
     }
-
 
     this.printingService.previewReceipt(this.uiTransactionSettings?.singlePrintReceipt, order)
   }
@@ -288,7 +286,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   reSendOrder() {
     let extiOnFire : boolean
 
-    if (this.remotePrint('rePrintPrep', this.posDevice?.exitOrderOnFire)) {
+    if (this.remotePrint('rePrintPrep', this.posDevice?.exitOrderOnFire, this.posDevice)) {
       return
     }
 
@@ -306,7 +304,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   sendOrder() {
 
-    if (this.remotePrint('printPrep', this.posDevice?.exitOrderOnFire)) {
+    if (this.remotePrint('printPrep', this.posDevice?.exitOrderOnFire, this.posDevice)) {
       return
     }
 

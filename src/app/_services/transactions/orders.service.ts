@@ -13,6 +13,7 @@ import { ItemWithAction } from './posorder-item-service.service';
 import { IListBoxItem } from 'src/app/_interfaces/dual-lists';
 import { UserAuthorizationService } from '../system/user-authorization.service';
 import { POOrderImport } from '../data/fake-products.service';
+import { AuthenticationService } from '..';
 export interface POSOrdersPaged {
   paging : IPagedList
   results: IPOSOrder[]
@@ -50,7 +51,7 @@ export interface OrderActionResult {
 })
 
 export class OrdersService {
-
+  
 
   get platForm() {  return Capacitor.getPlatform(); }
 
@@ -58,10 +59,26 @@ export class OrdersService {
         private http: HttpClient,
         private _SnackBar: MatSnackBar,
         private siteService: SitesService,
+        private authenticationService:  AuthenticationService,
         private userAuthorizationService: UserAuthorizationService,
     )
   {
 
+  }
+
+  scanCheckInItem(barCode: string, scanMode: boolean): Observable<IPOSOrder> {
+
+    const site= this.siteService.getAssignedSite();
+
+    const controller = "/POSOrderItems/"
+
+    const endPoint  = "scanCheckInItem"
+
+    const parameters = `?barCode=${barCode}&scanMode=${scanMode}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url);
   }
 
   postPurchaseOrder(site: ISite, name: string, id: number) :  Observable<any> {
@@ -593,6 +610,9 @@ export class OrdersService {
 
     const parameters = ``
     const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    let item = {} as IPOSOrder
+    if (!this.authenticationService._user) { return of(item) }
 
     return this.http.post<IPOSOrder>(url, orderPayload).pipe( switchMap (
       data => {

@@ -185,7 +185,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   outputPrint() {
-    console.log('outputPrint')
+    // console.log('outputPrint')
     setTimeout(() => {
       const prtContent     = document.getElementById('printsection');
     
@@ -250,9 +250,9 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
-    console.log('on dstroy')
+    // console.log('on dstroy')
     if (this.appendedStyleElement) {
-      console.log('remove style element', this.appendedStyleElement)
+      // console.log('remove style element', this.appendedStyleElement)
       document.head.removeChild(this.appendedStyleElement);
       this.appendedStyleElement = null;
     }

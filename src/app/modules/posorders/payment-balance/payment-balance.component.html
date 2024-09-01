@@ -138,11 +138,15 @@
   <div *ngIf="dCapViewEnabled(item) && item?.paymentMethod?.isCreditCard" >
 
     <div *ngIf="(order.creditBalanceRemaining != 0 && totalAuthPayments > 0 )">
-      <button class="payment-buttons-sm" mat-raised-button color='primary' (click)="captureDCap(item, totalAuthPayments)">
+      <button class="payment-buttons-sm" mat-raised-button color='primary' 
+              (click)="captureDCap(item, totalAuthPayments)">
           <mat-label>Complete  <br> {{ totalAuthPayments | currency }}</mat-label>
       </button>
 
-      <button *ngIf="item?.tranCode === 'EMVPreAuth'" class="payment-buttons-sm" style="margin:5px" mat-raised-button color='warn' (click)="voidPayment(item)">
+      <button *ngIf="item?.tranCode === 'EMVPreAuth'" 
+              class="payment-buttons-sm" style="margin:5px" 
+              mat-raised-button color='warn' 
+              (click)="voidPayment(item)">
         <mat-label>Void Auth  <br> {{ totalAuthPayments | currency }}</mat-label>
       </button>
     </div>
@@ -337,7 +341,8 @@
     </div>
   </div>
 </ng-template>
-
+<!-- 
+      [hideButtonOptions]="hideButtonOptions" -->
 <ng-template #printButtonView let-item>
   <div *ngIf="!disableOptions && !qrOrder  && ((!getPaymentViewB(item) && order.completionDate) || item.completionDate)">
     <button mat-raised-button

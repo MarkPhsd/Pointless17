@@ -168,6 +168,8 @@
     </span>
 
     <app-order-cards
+      [isPaxDevice]="isPaxDevice"
+      [autoOpenCart]="uiTransactions?.paxA920AutoOpenCart"
       [prepOnExit]="uiTransactions?.prepOrderOnExit"
       [site]= 'site'
       [cardStyle]="'prep'">

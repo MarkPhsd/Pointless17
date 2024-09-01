@@ -260,6 +260,7 @@ import {
   NgxImageCompressService,
   UploadResponse,
 } from 'ngx-image-compress';
+import { OrderItemScannerComponent } from './widgets/search-list-selectors/order-item-scanner/order-item-scanner.component';
 
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
@@ -365,6 +366,7 @@ import {
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
     ListProductSearchInputComponent,
+    OrderItemScannerComponent,
     ListPrintersElectronComponent,
 
     MatDateRangeComponent,
@@ -563,6 +565,7 @@ import {
     DerpPipe,
     BrandTypeSelectComponent,
     ListProductSearchInputComponent,
+    OrderItemScannerComponent,
     FunctionButtonsListComponent,
     AuditPaymentComponent,
     AccordionComponent,

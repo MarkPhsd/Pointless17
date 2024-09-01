@@ -14,7 +14,6 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ConversionsService, IUnitConversion } from 'src/app/_services/measurement/conversions.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { UserPreferences } from 'src/app/_interfaces';
-import {  InventoryLocationsService } from 'src/app/_services/inventory/inventory-locations.service';
 import { LabTestResult, LabTestResultResponse, MetrcLabTestsService } from 'src/app/_services/metrc/metrc-lab-tests.service';
 
 @Component({
@@ -328,11 +327,8 @@ export class StrainsAddComponent implements OnInit {
         this.package = data
         this.package.labTestingState =          this.package.labTestingState.match(/[A-Z][a-z]+|[0-9]+/g).join(" ")
         this.facility = {} as                   IItemFacilitiyBasic;
-  
-
         if (this.package.unitOfMeasureName) {
           this.intakeConversion = this.conversionService.getConversionItemByName(this.package.unitOfMeasureName);
-          //convert the package quantity to the grams quantity
           if (!this.intakeConversion.value) {this.intakeConversion.value = 1};
           if (this.intakeConversion) {
             this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity;
@@ -380,7 +376,6 @@ export class StrainsAddComponent implements OnInit {
             sourceHarvestNames              : data?.itemFromFacilityName,
 
         })
-        console.log('json data', data)
         console.log(this.packageForm.value)
         this.setLabResultsInPackage(this.package?.labResults)
       } catch (error) {

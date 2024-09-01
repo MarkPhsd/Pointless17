@@ -2,7 +2,7 @@ import {Component, HostListener, OnInit, OnDestroy,
   ViewChild, ElementRef, QueryList, ViewChildren, Input, Output,EventEmitter, TemplateRef, OnChanges, SimpleChanges, Renderer2, ChangeDetectorRef}  from '@angular/core';
 import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
 import { AuthenticationService, OrdersService, POSOrdersPaged } from 'src/app/_services';
-import { ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { Observable, Subscription, catchError, delay, of, repeatWhen, switchMap, tap, throwError} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
@@ -14,6 +14,9 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+import { NavigationService } from 'src/app/_services/system/navigation.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { PosOrderItemsComponent } from '../../posorders/pos-order/pos-order-items/pos-order-items.component';
 
 // import { share } from 'rxjs/operators';
 
@@ -37,7 +40,9 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   isNearBottom        :   any;
   @Input() cardStyle = 'block';
   @Input() site: ISite;
-  results$: Observable<any>;
+  results$: Observable<any>;  
+  @Input() autoOpenCart : boolean;
+  @Input() isPaxDevice: boolean;
 
   // productSearchModel
   array               = [];
@@ -233,6 +238,17 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     private printingService: PrintingService,
     private userAuthorization: UserAuthorizationService,
     private cd: ChangeDetectorRef,
+
+      
+      public  toolbarUIService  : ToolBarUIService,
+      private  navigationService: NavigationService,
+      // public  printingService    : PrintingService,
+      private bottomSheet       : MatBottomSheet,
+      // private uiSettingsService: UISettingsService,
+      private platFormService: PlatformService,
+      public router:           Router,
+      
+
     )
   {
   }
@@ -373,9 +389,34 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
         if (data) {
           this.orderOutPut.emit(data)
           this.orderMethodsService.setActiveOrder(data)
+
+          // @Input() autoOpenCart : boolean;
+          // @Input() isPaxDevice: boolean;
+          if (this.autoOpenCart && this.isPaxDevice) { 
+            //then we auto nav to the posorder items;
+            this.toggleOpenOrderBar(data)
+          }
         }
       }
     )
+  }
+  
+  toggleOpenOrderBar(order) {
+    // if (!this.smallDevice) {
+    //   this.navigationService.toggleOpenOrderBar(this.isStaff)
+    //   return;
+    // }
+
+    if (this.smallDevice && this.platFormService.androidApp) {
+      this.router.navigate([ 'pos-items' , {mainPanel:true}]);
+      this.toolbarUIService.updateOrderBar(false)
+      this.toolbarUIService.resetOrderBar(true)
+      return
+    }
+
+    if (order) {
+      this.bottomSheet.open(PosOrderItemsComponent)
+    }
   }
 
   setActiveOrderObs(order) {

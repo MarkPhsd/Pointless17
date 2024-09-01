@@ -241,6 +241,7 @@ export class PosEditSettingsComponent implements OnInit {
       disableImages: [],
       disableMenuImages: [],
       quickScanningDevice: [],
+      prepCheckDevice: [],
     })
 
     this.dsiEMVSettings = this.fb.group({

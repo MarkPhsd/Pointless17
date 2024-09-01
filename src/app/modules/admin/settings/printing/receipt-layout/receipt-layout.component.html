@@ -59,18 +59,6 @@
           </div>
         </div>
 
-        <!-- <div      *ngIf="interpolatedItemTexts && interpolatedItemTexts.length>0"  class="section-item">
-          <div    *ngFor="let item of itemsText; let i = index">
-            <div    style="margin-bottom:5px"  *ngIf="(item.id == item.idRef || item.idRef == 0 || !item.idRef)">
-              <div  [class]="gridReceiptClass"
-                    [innerHTML]="interpolatedItemTexts[i]" >  </div>
-            </div>
-            <div style="margin-left:15px" *ngIf="(item.idRef && item.id != item.idRef && item.idRef != 0)">
-              <div  [class]="gridReceiptClass"
-                    [innerHTML]="interpolatedItemTexts[i]" >  </div>
-            </div>
-          </div>
-        </div> -->
     
         <div *ngIf="interpolatedItemTexts && interpolatedItemTexts.length > 0" class="section-item">
           <div *ngFor="let item of itemsText; let i = index">

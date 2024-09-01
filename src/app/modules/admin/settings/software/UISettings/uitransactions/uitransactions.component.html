@@ -220,6 +220,7 @@
               </mat-form-field>
           </div>
 
+    
           <div *ngIf="(categories$ | async) as list ">
             <mat-form-field style="width: 200px" class="fields"
                 appearance="outline">
@@ -413,7 +414,7 @@
               </app-value-fields>
             </div>
 
-
+            
 
 
           </div>
@@ -828,6 +829,20 @@
 
         <div class="toggle-fields">
           <mat-slide-toggle
+                    formControlName="paxA920AutoOpenCart">
+            <mat-label>Auto Open Cart (Small Devices)</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="billOnHold">
+            <mat-label>Enable Bill On Hold</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
                     formControlName="displayItemPOSTTotal" >
             <mat-label>Display tax + total per-item in order</mat-label>
           </mat-slide-toggle>
@@ -878,6 +893,8 @@
             <mat-label>Show customer option</mat-label>
           </mat-slide-toggle>
         </div>
+
+      
 
         <mat-label>Apply Table as Order Name</mat-label>
         <div class="toggle-fields">
@@ -1147,7 +1164,6 @@
       </div>
 
     <div>
-
 
     </div>
 

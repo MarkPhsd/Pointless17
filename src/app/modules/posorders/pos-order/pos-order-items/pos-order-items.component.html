@@ -15,6 +15,22 @@
 
 <ng-template #phoneDeviceView>
 
+  <!-- scanModePrep scanModeDelivery-->
+  <div class="ps-flex-group" *ngIf="posDevice?.prepCheckDevice">
+    <span class="item-span" >
+      <button  style="margin-left:5px; height:55px" color="primary" mat-flat-button (click)="setScanMode(1)"><mat-icon>shopping_cart_checkout</mat-icon>Prep 
+      <span *ngIf="scanMode ==1"> ON </span></button>
+    </span>
+    <span class="item-span" >
+      <button  style="margin-left:5px; height:55px" color="accent" mat-flat-button (click)="setScanMode(2)"><mat-icon>commuute</mat-icon>Driver
+        <span *ngIf="scanMode ==2"> ON </span></button>
+    </span>
+
+    <span class="item-span" *ngIf="scanMode != 0">
+      <order-item-scanner [scanMode]="scanMode"></order-item-scanner>
+    </span>
+  </div>
+
   <div class="grid-phone-scroll">
     <div class="item-span">
       <button *ngIf="!androidApp" style="height:55px" mat-button (click)="dismiss()"><mat-icon>close</mat-icon>Close</button>
@@ -25,8 +41,8 @@
 
       <span class="item-span" *ngIf="isNoPaymentPage">
         <button  style="height:55px"  mat-button (click)="viewPayment()"><mat-icon>money</mat-icon>
-          <span *ngIf="order?.balanceRemaining == 0"> Receipt</span>
-          <span *ngIf="order?.balanceRemaining != 0"> Pay</span> </button>
+          <span *ngIf="order?.completionDate"> Receipt</span>
+          <span *ngIf="!order.completionDate">Pay</span> </button>
       </span>
 
       <span class="item-span" *ngIf="isStaff">
@@ -36,6 +52,11 @@
       <span class="item-span"  *ngIf="isStaff">
         <button  style="height:55px"  mat-button color="warn" (click)="printOrder()"><mat-icon>print</mat-icon></button>
       </span>
+
+      <span style="margin-right:5px" class="item-span"  *ngIf="isStaff">
+        <mat-label>#{{order?.id}} | {{order?.tableName ?? order?.customerName}}</mat-label>
+      </span>
+
     </div>
 
 
@@ -57,7 +78,7 @@
 
   <div  #scrollMe
           [id]="scrollStyle"
-          *ngIf="posOrderItems && posOrderItems.length>0"
+          *ngIf="currentItems && currentItems.length>0"
           [style.width]  = "deviceWidthPercentage"
           [class]="mainStyle">
       <ng-container [ngTemplateOutlet]="posItemsListView"></ng-container>
@@ -67,7 +88,7 @@
 <ng-template #posItemsListView>
     <ion-item-sliding
                       [class]="nopadd"
-                      *ngFor="let item of posOrderItems;
+                      *ngFor="let item of currentItems;
                               let i = index;trackBy: trackByFN"
                       (ionSwipe)="swipeAction(i)"  >
 

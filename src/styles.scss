@@ -1374,3 +1374,128 @@ mat-dialog-container {
 .mat-elevation-z0 {
 	box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12)
 }
+
+/////////////////////////////////////
+
+.receipt-header-center {
+  align-items: center;
+  position: relative;
+  text-align: center;
+}
+
+.receipt-text-align-left {
+  align-items: left;
+  position: relative;
+  text-align: left;
+}
+
+.receipt-text-align-right {
+  align-items: right;
+  position: relative;
+  text-align: right;
+}
+
+.receipt-text-align-center {
+  align-items: center;
+  position: relative;
+  text-align: center;
+}
+
+.receipt-font-weight-600 { 
+  font-weight: 600;
+}
+.receipt-font-weight-500 { 
+  font-weight: 500;
+}
+
+.receipt-font-20 { 
+  font-size: 20pt;
+}
+.receipt-font-18 { 
+  font-size: 18pt;
+}
+.receipt-font-15 { 
+  font-size: 15pt;
+}
+.receipt-font-14 { 
+  font-size: 14pt;
+}	
+.receipt-font-13 { 
+  font-size: 13pt;
+}
+.receipt-font-12 { 
+  font-size: 12pt;
+}
+
+.receipt-grid-receipt-80 {
+  display: grid;
+  grid-template-columns: 50px auto 80px;
+}
+
+.receipt-grid-receipt-20px-auto-auto {
+  display: grid;
+  grid-template-columns: 20px auto auto;
+}
+
+.receipt-grid-120-auto-auto {
+  display: grid;
+  grid-template-columns: 120px auto auto;
+}
+
+.receipt-grid-120-auto {
+  display: grid;
+  grid-template-columns: 120px auto ;
+}
+
+.receipt-grid-75-100-75-100 {
+  display: grid;
+  grid-template-columns: 75px 100px 75px 100px;
+}
+
+.receipt-grid-auto-100 {
+  display: grid;
+  grid-template-columns: auto 100px;
+}
+
+.receipt-grid-100-auto {
+  display: grid;
+  grid-template-columns: 100px auto ;
+}
+.receipt-grid-200-auto {
+  display: grid;
+  grid-template-columns: 200px auto ;
+}
+
+.receipt-grid-gap-20 {
+  gap: 20px;
+}
+.receipt-grid-gap-10 {
+  gap: 10px;
+}
+
+.receipt-items-span-columns-2 {
+  grid-column-end: span 2;
+}
+
+.receipt-items-span-columns-4 {
+  grid-column-end: span 4;
+}
+
+.receipt-items-span-columns-3 {
+  grid-column-end: span 3;
+}
+
+.receipt-items-span-columns-start-2 {
+  grid-column-start: span 2;
+}
+
+.receipt-items-span-columns-start-3 {
+  grid-column-start: span 3;
+}
+
+.margin-top-25px {
+  margin-top:25px;
+}
+.margin-bottom-25px {
+  margin-top:25px;
+}

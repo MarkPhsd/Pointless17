@@ -11,9 +11,9 @@ import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { catchError, switchMap } from 'rxjs/operators';
+import {  switchMap } from 'rxjs/operators';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
-import { ISetting, IUser, PosOrderItem } from 'src/app/_interfaces';
+import { ISetting,  PosOrderItem } from 'src/app/_interfaces';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { AuthenticationService } from 'src/app/_services';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';

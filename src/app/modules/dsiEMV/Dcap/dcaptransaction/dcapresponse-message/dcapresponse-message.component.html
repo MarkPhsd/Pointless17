@@ -1,12 +1,12 @@
 <div *ngIf="resultMessage">
-  Result Mesage {{resultMessage}}
+  {{resultMessage}}
 </div>
 <div *ngIf="response">
-  <h4 *ngIf="saleComplete  || response?.TextResponse">Response :    {{response?.TextResponse}}</h4>
-  <h4 *ngIf="saleComplete  || response?.ResponseOrigin ">Response Origin :  {{response?.ResponseOrigin}}</h4>
-  <h4 *ngIf="saleComplete  || response?.DSIXReturnCode"> DSIX Return Code : {{response?.DSIXReturnCode}}</h4>
-  <h4 >Status :       {{response?.CmdStatus}}</h4>
-  <!-- {{response | json}} -->
+  <h4 style="margin-top:2px;margin-bottom:2px" *ngIf="saleComplete  || response?.TextResponse ?? response.textResponse">Response :    {{response?.TextResponse ?? response.textResponse}}</h4>
+  <h4 style="margin-top:2px;margin-bottom:2px" *ngIf="saleComplete  || response?.ResponseOrigin  ?? response.responseOrigin">Response Origin :  {{response?.ResponseOrigin  ?? response.responseOrigin}}</h4>
+  <h4 style="margin-top:2px;margin-bottom:2px" *ngIf="saleComplete  || response?.DSIXReturnCode  ?? response.dsixReturnCode"> DSIX Return Code : {{response?.DSIXReturnCode  ?? response.dsixReturnCode}}</h4>
+  <h4 style="margin-top:2px;margin-bottom:2px" >Status :       {{response?.CmdStatus ?? response?.cmdStatus}}</h4>
+  <h4 style="margin-top:2px;margin-bottom:2px" >{{response?.errorMessage }}</h4>
 </div>
 
 <div *ngIf="errorMessage">

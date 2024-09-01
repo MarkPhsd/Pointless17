@@ -17,18 +17,29 @@
          </app-product-search-selector>
        </div>
 
-      <div style="margin-top: 5px;" *ngIf="inputForm.controls['productID'].value">
+      <div style="margin-top: 5px;
+                  width: 45px;
+                  overflow: hidden;" *ngIf="inputForm.controls['productID'].value">
         <button mat-raised-button color="accent" (click)="openProductEditor(inputForm.controls['productID'].value)">
           <mat-icon>open_in_new</mat-icon>
         </button>
       </div>
 
-      <div style="margin-top: 5px;" *ngIf="!inputForm.controls['productID'].value">
-        <button mat-raised-button color="accent" (click)="openNewProductByType()">
+      <div style="margin-top: 5px;
+                width: 45px;
+                overflow: hidden;" *ngIf="!inputForm.controls['productID'].value">
+        <button mat-raised-button color="accent" (click)="openNewProduct(package)">
           <mat-icon>add</mat-icon>
         </button>
       </div>
 
+      <div style="margin-top: 5px;
+                  width: 45px;
+                  overflow: hidden;" *ngIf="inputForm.controls['productID'].value">
+        <button mat-raised-button color="warn" (click)="deleteProductID()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
     </div>
     <div style="width:150px" *ngIf="package?.unitOfMeasureName != 'Each'">
       <app-value-fields

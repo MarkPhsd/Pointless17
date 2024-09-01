@@ -124,7 +124,7 @@ export class UITransactionsComponent implements OnInit {
       } else {
         this.uiTransactions  = {} as TransactionUISettings;
         this.inputForm.patchValue( this.uiTransactions)
-        this.payPalEnabled = this.uiTransactions.payPalEnabled
+      this.payPalEnabled = this.uiTransactions.payPalEnabled
         this.vipCustomer$ = null;
       }
   }

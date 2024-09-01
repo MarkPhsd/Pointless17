@@ -51,10 +51,8 @@
     </div>
 
     <div>
-
-      <div >
-
-        <span class="flex-grid-column-nogap"  >
+      <div>
+        <span class="flex-grid-column-nogap" *ngIf="!hideButtonOptions" >
           <div *ngIf="(isApp) || (!isApp  && isUserStaff) && uiTransactionSettings ">
             <button mat-button (click)="qrCodeDisplayToggle()">
               <mat-icon>qr_code</mat-icon>QR Link

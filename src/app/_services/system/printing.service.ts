@@ -131,7 +131,7 @@ export class PrintingService {
                 private settingService    : SettingsService,
                 private siteService       : SitesService,
                 private uiSettingsService : UISettingsService,
-                ) {
+    ) {
   }
 
   getPrintReady(): Observable<boolean> {
@@ -1275,10 +1275,12 @@ export class PrintingService {
   };
 
   printSub(printerName: string, autoPrint?: boolean, order?: IPOSOrder) {
+
+    
     const dialogRef = this.dialog.open(RecieptPopUpComponent,
       { width: '425px',
         height: '90vh',
-        data: {autoPrint: autoPrint, printerName: printerName, order: order}
+        data: {autoPrint: autoPrint, printerName: printerName, order: order, payments: order?.posPayments}
       },
     )
     dialogRef.afterClosed().subscribe( result => {
