@@ -454,12 +454,9 @@ export class UserSwitchingService implements  OnDestroy {
     }
   }
 
-  processLogin(user: IUser, path : string) {
+  processLogin(user: IUser, path : string, data?) {
 
-    if (!user) {
-      // console.log('no user', user)
-      return 'user undefined'
-    }
+    if (!user) {   return 'user undefined' }
 
     if (path.startsWith('/qr-payment')) {
       this.processPaymentLink(path)
@@ -467,11 +464,9 @@ export class UserSwitchingService implements  OnDestroy {
     }
 
     if (user && user.message == undefined) {
-      // console.log('no user', user)
       return 'user undefined'
     }
-
-    // if account loccked out then change here.
+  
     if (user?.message.toLowerCase() === 'failed') {
       return user.errorMessage
     }
@@ -480,11 +475,15 @@ export class UserSwitchingService implements  OnDestroy {
       return 'No message response from API.'
     }
 
-    if (path) {
-      this.router.navigate([path]);
+    if (path && data) {
+      this.router.navigate([path,data]);
       return 'success'
     }
 
+    if (path && data) {
+      this.router.navigate([path]);
+      return 'success'
+    }
     if (user.message === 'success') {
       this.loginToReturnUrl();
       return 'success'
@@ -618,7 +617,7 @@ export class UserSwitchingService implements  OnDestroy {
     this.router.navigate(['/app-main-menu']);
   }
 
-  loginToReturnUrl() {
+  loginToReturnUrl(data?) {
 
     let returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
@@ -631,7 +630,10 @@ export class UserSwitchingService implements  OnDestroy {
       if (returnUrl === '/login') {  returnUrl = '/app-main-menu'}
     }
 
-    // console.log('returnUrl', returnUrl)
+    if (data)  {
+      this.router.navigate([returnUrl, data]);
+    }
+
     this.router.navigate([returnUrl]);
 
   }

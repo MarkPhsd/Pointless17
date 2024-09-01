@@ -226,21 +226,25 @@ export class QrPaymentComponent {
       let order$ : Observable<IPOSOrder>
 
      
-      if (user && user?.username  &&  user?.username != "Temp" && user.password) {
-        if (orderCode) {
-          order$ =this.orderService.getQROrder(site, orderCode);
-        }
-        if (id) {
-          order$ = this.orderService.getQRCodeOrder(site, id);
-        }
-      }
-      if (!user) {
-        if (orderCode) {
-          order$ =this.orderService.getQROrder(site, orderCode);
-        }
-        if (id) {
-          order$ = this.orderService.getQRCodeOrder(site, id)
-        }
+      // if (user && user?.username  &&  user?.username != "Temp" && user.password) {
+      //   if (orderCode) {
+      //     order$ =this.orderService.getQROrder(site, orderCode);
+      //   }
+      //   if (id) {
+      //     order$ = this.orderService.getQRCodeOrder(site, id);
+      //   }
+      // }
+      // if (!user) {
+      //   if (orderCode) {
+      //     order$ =this.orderService.getQROrder(site, orderCode);
+      //   }
+      //   if (id) {
+      //     order$ = this.orderService.getQRCodeOrder(site, id)
+      //   }
+      // }
+
+      if (orderCode) {
+        order$ =this.orderService.getQROrderAnon(site, orderCode);
       }
 
       if (!order$) {

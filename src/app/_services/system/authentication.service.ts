@@ -343,15 +343,19 @@ export class AuthenticationService {
       }
     }
 
-    openLoginDialog(returnUrl?: string) {
+    openLoginDialog(returnUrl?: string, orderCode?: string) {
       let width    = '400px'
       let dialogRef: any;
+
+      const data =  {returnUrl: returnUrl, orderCode: orderCode}
+
+      console.log('openLoginDialog', data)
       dialogRef = this.dialog.open(LoginComponent,
         { width    : width,
           minWidth : width,
           height   : '650px',
           minHeight: '650px',
-          data:    {returnUrl: returnUrl}
+          data:   data
         },
       )
       return dialogRef;

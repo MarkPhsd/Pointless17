@@ -95,7 +95,9 @@
 
           <span #coachingLabel >
             <div   class="button-margin" *ngIf="!mainPanel && isSale && isUserStaff &&
-                                                (posDevice && posDevice.labelPrinter && posDevice.enableExitLabel)">
+                                                (posDevice && 
+                                                posDevice.labelPrinter && 
+                                                posDevice.enableExitLabel)">
               <button   class="button" color="warn" mat-raised-button
                 (click)="printLabels()">
                 <mat-icon>book</mat-icon>
@@ -105,7 +107,9 @@
         </div>
       </div>
 
-      <div #coachingSplit class="button-row" *ngIf="isUserStaff && isSale && !platFormService.androidApp">
+      <div #coachingSplit class="button-row" *ngIf="isUserStaff && 
+                                                    isSale && 
+                                                    !platFormService.androidApp">
         <div  class="button-margin" >
           <split-entry-selector [order]="order"
                                 [isUserStaff]="isUserStaff"
@@ -116,7 +120,9 @@
         <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
         <div>
 
-          <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption && isSale && isUserStaff" >
+          <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption && 
+                                           isSale && 
+                                           isUserStaff" >
             <value-from-list-selector
                 [value] ="order.priceColumn"
                 (assignValue)="assignPriceColumn($event)">
@@ -136,7 +142,9 @@
   <div class="margin-5">
     <coach-marks-button
           (initPopOver)="initPopOver()"
-          [enabled]="user && user?.userPreferences &&  user?.userPreferences?.enableCoachMarks"></coach-marks-button>
+          [enabled]="user &&
+                     user?.userPreferences &&  
+                     user?.userPreferences?.enableCoachMarks"></coach-marks-button>
   </div>
 </ng-template>
 

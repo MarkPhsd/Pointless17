@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   loading    = false;
   submitted  = false;
   returnUrl  : string;
+  orderCode  : string;
   error      = '';
   companyName: string;
   id         : any;
@@ -77,7 +78,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   isElectron: any;
   androidApp: boolean;
   smallDevice: boolean;
-  returnlUrl: string;
 
   get smallPOS() {
     if (this.smallDevice && this.androidApp) {
@@ -157,9 +157,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   {
     if (data)  { this.dialogOpen = true  }
 
-    if (data?.returnUrl) {
-      this.returnlUrl = data?.returnUrl;
+    if (data?.orderCode)  {
+      this.orderCode = data?.orderCode
     }
+    if (data?.returnUrl) {
+      this.returnUrl = data?.returnUrl;
+    }
+
+    console.log('openLoginDialog', data)
     if (!data) {  this.redirects();  }
   }
 
@@ -185,16 +190,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     this.initForm();
     this.initSubscriptions()
-
-
     if (!this.platformService.isApp())  { this.amI21 = true  }
     if ( this.platformService.isApp())  { this.amI21 = false }
     this.refreshTheme();
     this.statusMessage = ''
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.refreshUIHomePageSettings();
     this.initDevice();
 
+    if (!this.returnUrl) { 
+      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    }
+    console.log('current returnurl', this.returnUrl)
   }
 
   initDevice() {
@@ -354,8 +360,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     localStorage.removeItem('devicename')
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
     this.statusMessage = ''
-
-
   }
 
   browseMenu() {
@@ -363,7 +367,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.userSwitchingService.clearLoggedInUser()
     this.userSwitchingService.browseMenu();
     this.statusMessage = ''
-
     this.closeDialog();
   }
 
@@ -496,9 +499,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   submitLogin(userName: string, password: string) {
     this.errorMessage = ''
     this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(concatMap(result =>
-        {
-
-          // console.log('result', result?.sheet )
+        {      
           try {
             this.pollingService.clearPoll();
             this.spinnerLoading = false;
@@ -507,8 +508,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             console.log('subscriber error', error)
           }
 
-          this.initForm();
-      
+          this.initForm();      
           //if is app then result is a combination of user and sheet
           //if is not app then result is the user.
           let user = result?.user ;
@@ -545,32 +545,61 @@ export class LoginComponent implements OnInit, OnDestroy {
                 return of('failed')
               }
 
-              if (this.returnlUrl) { 
+              if (this.returnUrl) { 
                 if (result && result?.message && result?.message === 'success') {
-                  console.log('process login 1')
+                  console.log('process login 1', this.returnUrl)
 
-                  if (!this.returnlUrl) { 
-                    this.returnUrl = 'app-main-menu'
+                  let returnUrl = 'app-main-menu'
+                  if (this.returnUrl) { 
+                    returnUrl = this.returnUrl
                   }
-                  this.userSwitchingService.processLogin(user, this.returnlUrl)
+
+                  console.log('submitLogin', returnUrl, this.orderCode);
+
+                  if (this.orderCode) { 
+                    const data = {orderCode: this.orderCode}
+                    console.log('processLogin', returnUrl)
+                    this.userSwitchingService.processLogin(user, returnUrl, data) 
+                  }
+                  
+                  if (!this.orderCode) { 
+                    const data = {orderCode: this.orderCode}
+                    console.log('processLogin', returnUrl)
+                    this.userSwitchingService.processLogin(user, returnUrl) 
+                  }
+
                   this.closeDialog();
                   return of('success')
                 }
               }
             
               if (user && ( user?.message === 'success' || (result?.message === 'success'))) {
-                console.log('process login 2')
+      
                 let pass = false
                 this.authenticationService.authenticationInProgress = false;
                 if (!this.loginAction) {  this.userSwitchingService.assignCurrentOrder(user) }
+                let returnUrl = 'app-main-menu'
+                
+                console.log('submitLogin', returnUrl, this.orderCode);
                 if (this.loginAction?.name === 'setActiveOrder') {
-                  this.userSwitchingService.processLogin(user, '/pos-payment')
-                  pass = true
-                  this.closeDialog();
-                  return of('success')
+                  returnUrl = '/pos-payment'
                 }
+                if (this.returnUrl) { 
+                  returnUrl = this.returnUrl
+                }
+         
 
-                this.userSwitchingService.processLogin(user, 'app-main-menu') 
+                console.log('submitLogin', returnUrl, this.orderCode);
+
+                if (this.orderCode) { 
+                  const data = {orderCode: this.orderCode}
+        
+                  this.userSwitchingService.processLogin(user, returnUrl, data) 
+                } else { 
+                  this.userSwitchingService.processLogin(user, returnUrl) 
+                }
+              
+                pass = true
                 this.closeDialog();
                 return of('success')
               }

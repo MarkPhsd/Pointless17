@@ -347,6 +347,15 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     }
   }
 
+  sendPasswordReset() {
+    if (this.clientTable) { 
+      this.action$ =  this.authenticationService.requestPasswordResetToken(this.clientTable.apiUserName).pipe(switchMap(data => { 
+        this.siteService.notify('Email sent', 'close', 3000)
+        return of(data)
+      }))
+    }
+  }
+
   validateMatchingPasswords() {
     try {
       this.confirmPassword.valueChanges.subscribe( data => {

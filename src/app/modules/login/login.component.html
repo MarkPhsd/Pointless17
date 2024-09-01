@@ -4,6 +4,7 @@
 <div *ngIf="(setPinPad$ | async) as loginAction"></div>
 <div *ngIf="(device$ | async) as device"> </div>
 
+
 <ng-container [ngTemplateOutlet]="loginMethodView"></ng-container>
 
 <ng-template #userEntryView>
@@ -56,7 +57,7 @@
           </mat-card-title>
 
           <mat-card-content>
-
+            <!-- returnUrl {{returnUrl}} -->
             <div  class="center"
                   *ngIf="loginForm"
                   [formGroup]="loginForm"

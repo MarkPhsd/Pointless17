@@ -41,6 +41,8 @@
                 | Account :  {{clientTable?.accountNumber}} 
               </h4>
               <h5>User Name: {{clientTable?.apiUserName}}</h5>
+
+             
             </div>
           </div>
 
@@ -55,6 +57,10 @@
                 [enableDelete]          = "true"
                 [enableStartOrder]      ="enableStartOrder"
               ></app-edit-buttons-standard>
+              <div *ngIf="clientTable?.apiUserName">
+                <!--  -->
+                <button mat-button color="accent" (click)="sendPasswordReset()">Send Password Reset</button>
+              </div>
             </div>
 
             <div [formGroup]="inputForm"

@@ -7,7 +7,6 @@
 <div class="centered-flex"
      *ngIf="(uiHomePageSetting$ | async) as uiHomePageSetting">
 
-
   <mat-card class="container">
     <div class="grid-about">
       <div>
@@ -21,7 +20,7 @@
     <mat-divider></mat-divider>
 
     <div class="centered-flex" >
-      <div >
+      <div>
         <h3>{{uiHomePageSetting?.displayCompanyName}}</h3>
         <app-logo [logoSize]="'large'" ></app-logo>
       </div>
@@ -32,8 +31,7 @@
       ...going to payment
     </div>
 
-    <div class="message-grid"
-          *ngIf="(message$ | async) as message">
+    <div class="message-grid" *ngIf="(message$ | async) as message">
       <div>
         {{message?.message}}
       </div>
@@ -45,13 +43,15 @@
     <div class="sendingMessage" *ngIf="sendingMessage">
       <mat-spinner [diameter]="50"></mat-spinner>
       ...sending
-      <button mat-raised-button (click)="cancelMessage()"><mat-icon>cancel</mat-icon>Cancel</button>
+      <button mat-raised-button (click)="cancelMessage()">
+        <mat-icon>cancel</mat-icon>Cancel
+      </button>
     </div>
 
-    <div class="navigating order-message" >
+    <div class="navigating order-message" *ngIf="order">
 
         <mat-card>
-          <mat-card-subtitle  *ngIf="order">
+          <mat-card-subtitle  >
 
             <div class="transaction-data-side-panel-smal" >
               <div *ngIf="order?.tableName" class="">Table   </div>
@@ -62,6 +62,8 @@
               <div class=""> User  {{ userAuth.user?.username }}</div>
             </div>
 
+            <!-- {{order.balanceRemaining }}
+            {{order |json }} -->
             <div class="buttons-header">
               <div *ngIf="order.balanceRemaining != 0">
                 <button mat-raised-button color="warn" (click)="requestService()">
@@ -99,13 +101,13 @@
           </mat-card-content>
         </mat-card>
 
-        <mat-card>
+        <mat-card *ngIf="order">
           <pos-order-items
                 [mainPanel]      ="true"
                 [qrOrder]        ='true'
                 [panelHeight]    ="orderItemsHeightStyle"
-                [disableActions] ='true'
-                [posOrderItems]   ='order.posOrderItems'
+                [disableActions] ='false'
+                [posOrderItems]   ='order?.posOrderItems'
                 [order]          ="order">
           </pos-order-items>
 

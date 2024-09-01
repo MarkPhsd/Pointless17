@@ -18,6 +18,7 @@ export class ChangepasswordComponent implements OnInit {
   error     = '';
   statusMessage: any;
   userName: string;
+  resetToken: string;
   //receive user
   @Input() user: IUser;
 
@@ -34,6 +35,7 @@ export class ChangepasswordComponent implements OnInit {
     //  }
 
     this.userName =   this.route.snapshot.paramMap.get('userName');
+    this.resetToken =   this.route.snapshot.paramMap.get('resetToken');
   }
 
   ngOnInit() {
@@ -41,7 +43,7 @@ export class ChangepasswordComponent implements OnInit {
           username:        [this.userName, Validators.required],
           confirmpassword: ['', Validators.required],
           password:        ['', [Validators.required, this.passwordValidator]],
-          resetcode:       ['', Validators.required],
+          resetcode:       [this.resetToken, Validators.required],
       });
 
 
