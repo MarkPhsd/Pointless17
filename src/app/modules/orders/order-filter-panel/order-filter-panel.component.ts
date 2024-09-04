@@ -820,8 +820,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
               }
             }
             this.refreshCompletionDateSearch()
-
-
       }
     })
   }

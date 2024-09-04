@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ISite, Paging } from 'src/app/_interfaces';
 import { Observable, of,switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { UserAuthorizationService } from './user-authorization.service';
-import { type } from 'os';
 import { SitesService } from '../reporting/sites.service';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { AuthenticationService } from '..';
@@ -87,18 +85,14 @@ export interface   IRequestMessagesResult {
 })
 export class RequestMessageService {
 
-
-
   defaultSubjects = [
     {name: 'Please Complete', type: 'ps', subject: 'Please Complete', template: true, message: 'Please review this order for prep. I would like it completed. I agree to pay when it the order is completed.', id: 1},
     {name: 'Please Review for Prep', type: 'ps', subject: 'Please Review for Prep', template: true,  message: 'Please review this order for prep. I would like it confirmed and then please contact me.', id: 2},
-
     {name: 'Ready for Pickup', type: 'oc', subject:  'Ready for Pickup',  balanceZero: false,  template: true, message: 'Your order has been completed for Pickup.', id: 3},
     {name: 'Order Ready for Delivery', type: 'oc', subject: 'Order Ready for Delivery',  balanceZero: false, template: true,  message: 'Your order has been completed. We will notify you when it is en route for delivery.', id: 5},
     {name: 'Please Pay', type: 'oc', subject: 'Please Pay',   balanceZero: false, template: true,  message: 'Your order has been completed. Please complete payment so we may schedule pickup or delivery.', id: 6},
     {name: 'Order Can Not be Completed', type: 'oc', balanceZero: false, template: true,  subject: 'Order Can Not be Completed', message: 'Your order can not be completed. We will notify you of why in a separate email.', id: 7},
     {name: 'Items Prepared', type: 'on', balanceZero: false, template: true,  subject: 'Your order has been prepared', message: 'Your order has been prepared.', id: 8},
-
   ]
 
   messageTypes = [
@@ -113,12 +107,11 @@ export class RequestMessageService {
   ];
 
   isAuthorized   = false;
-  constructor(private snackBar: MatSnackBar,
+  constructor(
               private siteService: SitesService,
               private http: HttpClient,
               private httpCache               : HttpClientCacheService,
               private userAuthorization: UserAuthorizationService,
-
               private authenticationService: AuthenticationService,
               ) {
 

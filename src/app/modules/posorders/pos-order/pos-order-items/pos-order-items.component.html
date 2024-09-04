@@ -6,9 +6,10 @@
 <ng-container [ngTemplateOutlet]="posItemsView"></ng-container>
 
 <ng-template #posOrderItemsPrepView>
+
   <div  *ngIf   = "posOrderItems && posOrderItems.length>0"
         [id]    = "scrollStyle"
-        [style] = "'height:calc(75vh - 300px);padding-bottom:2px;overflow-y:auto;overflow-x:hidden;'" >
+        [style] = "heightCacl" >
      <ng-container [ngTemplateOutlet]="posItemsListView"></ng-container>
   </div>
 </ng-template>
@@ -59,12 +60,13 @@
 
     </div>
 
-
+    <!-- {{heightCacl}} -->
     <div  #scrollMe
         [id]="scrollStyle"
         *ngIf="posOrderItems && posOrderItems.length>0"
         [style.width]  = "'85vw'"
         class="phone-device">
+
       <ng-container [ngTemplateOutlet]="posItemsListView"></ng-container>
     </div>
     <div class="phone-drag">

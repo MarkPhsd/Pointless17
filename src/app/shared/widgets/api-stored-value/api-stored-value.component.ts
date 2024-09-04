@@ -52,7 +52,6 @@ export class ApiStoredValueComponent implements OnInit {
     this.isApp = this.platformService.isApp();
   }
 
-
   typeHttps() {
     const value = this.inputForm.controls['apiUrl'].value;
     this.inputForm.patchValue({apiUrl: 'https://'})
@@ -76,15 +75,16 @@ export class ApiStoredValueComponent implements OnInit {
     })
   }
 
-
   ngOnInit(): void {
-    const currentAPIUrl = localStorage.getItem('storedApiUrl');
+    let currentAPIUrl = localStorage.getItem('storedApiUrl');
+    currentAPIUrl = currentAPIUrl.replace( 'https://', '')
+    currentAPIUrl = currentAPIUrl.replace( '/api', '')
+    
     this.inputForm = this.fb.group({
       apiUrl: [currentAPIUrl],
     });
     this.inputForm.valueChanges.subscribe(data => {
-      // console.log('data', data)
-      this.newAPI = data.apiUrl // JSON.stringify(data)
+      this.newAPI  = `https://${data.apiUrl}/api`
     })
   }
 
@@ -93,10 +93,11 @@ export class ApiStoredValueComponent implements OnInit {
     this.authenticationService.clearUserSettings()
     localStorage.setItem('rememberMe', 'true')
     const apiUrl = this.inputForm.controls['apiUrl'].value
-    const result =  this.appInitService.setAPIUrl(apiUrl)
+    const url = `https://${apiUrl}/api`
+    const result =  this.appInitService.setAPIUrl(url)
     if (!result || result == '') {return}
     this.appInitService.init();
-    this.currentAPIUrl = apiUrl;
+    this.currentAPIUrl = url;
   }
 
   clearUserSettings() {

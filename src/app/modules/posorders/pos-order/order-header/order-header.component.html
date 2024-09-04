@@ -60,14 +60,17 @@
           </div>
 
           <div style="margin-left:3px"  *ngIf="menuButtonList" class="button-row-55">
-            <function-buttons-list
-                  [list]="menuButtonList"
-                  [order]="order"
-                  [isAdmin]="isAdmin"
-                  [isUser] ="isUserStaff"
-                  [buttonSize]="'button-small'"
-                  [isStaff]="isStaff">
-            </function-buttons-list>
+            <div *ngIf="(uiHome$ | async) as uiHome">
+              <function-buttons-list
+                    [list]="menuButtonList"
+                    [order]="order"
+                    [isAdmin]="isAdmin"
+                    [isUser] ="isUserStaff"
+                    [buttonSize]="'button-small'"
+                    [adminEmail]="uiHome?.administratorEmail"
+                    [isStaff]="isStaff">
+              </function-buttons-list>
+            </div>
           </div>
         </span>
 

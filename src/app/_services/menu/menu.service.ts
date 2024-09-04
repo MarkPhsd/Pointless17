@@ -290,11 +290,11 @@ export class MenuService {
 
   cleanProduct(product: IProduct): IProduct {
 
-    if (product.barcode) {product.barcode = product.barcode.trim()}
-    if (product.name) {product.name = product.name.trim()}
-    if (product.sku) {product.sku = product.sku.trim()}
+    if (product.barcode)   {product.barcode = product.barcode.trim()}
+    if (product.name)       {product.name = product.name.trim()}
+    if (product.sku)        {product.sku = product.sku.trim()}
     if (product.barCodeAlt) {product.barCodeAlt = product.barCodeAlt.trim()}
-    if (product.barCodeID) {product.barCodeID = product.barCodeID.trim()}
+    if (product.barCodeID)  {product.barCodeID = product.barCodeID.trim()}
 
     return product
   }

@@ -6,6 +6,9 @@ import { SitesService } from '../reporting/sites.service';
 import { MessageService } from './message-service';
 import { RequestMessageService,IRequestMessage, IRequestMessageSearchModel } from './request-message.service';
 import { UserAuthorizationService } from './user-authorization.service';
+import { of, switchMap } from 'rxjs';
+import { SendGridService } from '../twilio/send-grid.service';
+import { UIHomePageSettings } from './settings/uisettings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +17,7 @@ export class RequestMessageMethodsService {
 
   constructor(private requestMessageService : RequestMessageService,
               private userAuthorization     : UserAuthorizationService,
+              private sendGridService: SendGridService,
               private siteService           : SitesService) { }
 
   communicationRequest(order: IPOSOrder, user: IUser, name: string,  message: string) {
@@ -119,6 +123,23 @@ export class RequestMessageMethodsService {
     return this.requestMessageService.saveMessage(site, message )
   }
 
+  requestVoidOrder(order: IPOSOrder,emailTo: string ) {
+    if (!order) {}
+    const site = this.siteService.getAssignedSite();
+    let message = {} as IRequestMessage
+    message.message = `Please void this order : ${order.id}`
+    message.subject = `Please void this order : ${order.id}`
+    message.type    = 'IR'
+    message.method  = `priceChange;id=${order.id}`
+    message.orderID = order.id
+    message = this.assignCustomerEmployee(order, message)
+    return this.requestMessageService.saveMessage(site, message ).pipe(switchMap(data => {
+      console.log(emailTo)
+      return this.sendGridService.sendTemplateOrder(order.id, order.history, emailTo, 'Staff Request', "", "Void Order Request", "Please void order :" + order?.id , ''   )
+      return of(data)
+    }))
+  }
+
   requestService(order: IPOSOrder ) {
     if (!order) {}
     const site = this.siteService.getAssignedSite();
@@ -146,6 +167,7 @@ export class RequestMessageMethodsService {
   assignCustomerEmployee(order: IPOSOrder, message: IRequestMessage) : IRequestMessage {
     message.employeeID    = order.employeeID;
     message.userRequested = order.employeeName;
+    // message.   = order.employeeName;
     if (this.userAuthorization.user) {
       message.senderID = this.userAuthorization.user?.id;
       message.senderName = `${this.userAuthorization?.user?.firstName}  ${this.userAuthorization?.user?.lastName}`

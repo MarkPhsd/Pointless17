@@ -16,6 +16,7 @@ import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { ThumbnailsMode } from 'ng-gallery';
 @Component({
   selector: 'pos-order-items',
   templateUrl: './pos-order-items.component.html',
@@ -48,6 +49,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input()  cardWidth: string;
   @Input()  isStaff: boolean;
 
+  @Input() heightCalcStyle  : string;
+  heightCacl = 'height:calc(75vh - 300px);padding-bottom:2px;overflow-y:auto;overflow-x:hidden;'
   printAction$: Observable<any>;
   posDevice       :  ITerminalSettings;
   initStylesEnabled : boolean; // for initializing for griddisplay
@@ -286,6 +289,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   {
     this.orderItemsPanel = 'item-list';
     this.isStaff = this.authService.isStaff;
+
+    if (this.heightCalcStyle === 'none') { 
+      this.heightCacl = '' // this.heightCalcStyle 
+    }
   }
 
   dismiss() {
@@ -459,6 +466,11 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   getItemHeight() {
     if (!this.myScrollContainer) {
       return
+    } 
+
+    if (this.heightCalcStyle === 'none') { 
+      this.myScrollContainer.nativeElement.style.height = '100%'
+      return 
     }
 
 

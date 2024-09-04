@@ -13,8 +13,8 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { RequestMessageService } from 'src/app/_services/system/request-message.service';
-import { ITerminalSettings } from 'src/app/_services/system/settings.service';
-import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
@@ -39,6 +39,8 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   @ViewChild('coachingFire', {read: ElementRef}) coachingFire: ElementRef;
   @ViewChild('coachingLabel', {read: ElementRef}) coachingLabel: ElementRef;
   @ViewChild('coachingRefresh', {read: ElementRef}) coachingRefresh: ElementRef;
+  uiHome$ :Observable<UIHomePageSettings>
+  uiHomePage: UIHomePageSettings;
 
   @ViewChild('qrCodeToggle') qrCodeToggle: TemplateRef<any>;
   qrCode$ : Observable<any>;
@@ -87,6 +89,10 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   }
 
   transactionUISettingsSubscriber() {
+    this.uiHome$ = this.settingService.getUIHomePageSettings().pipe(switchMap(data => { 
+      // this.uiHomePage = data;
+      return of(data)
+    }))
 
     try {
       this._uiTransactionSettings = this.uiSettingsService.transactionUISettings$.pipe( switchMap(data => {
@@ -125,8 +131,9 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   }
 
   constructor(
-    private ordersService:   OrdersService,
-    private paymentService: POSPaymentService,
+              private ordersService:   OrdersService,
+              private paymentService: POSPaymentService,
+             private settingService: SettingsService,
              public  router: Router,
              public  printingService: PrintingService,
              public  platFormService: PlatformService,

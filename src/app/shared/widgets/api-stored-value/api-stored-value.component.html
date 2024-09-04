@@ -8,7 +8,7 @@
 
   <mat-card-content>
       <p>In order to connect to your service, you must know your API.
-          Please input the URL to the API.</p>
+          Please input the just the domain of the API.</p>
       <p>The API url should look something like: https://mycompanyName.com/api</p>
       <div *ngIf="currentAPIUrl">
         <h4>
@@ -19,17 +19,17 @@
 
       <div [formGroup]="inputForm" *ngIf="inputForm">
         <mat-form-field appearance="outline"  class="fields" >
-          <mat-label >API Url</mat-label>
+          <mat-label >API Domain</mat-label>
           <input matInput
             type="text"
             formControlName="apiUrl">
         </mat-form-field>
       </div>
 
-      <button mat-raised-button color="primary"
+      <!-- <button mat-raised-button color="primary"
               (click)="typeHttps()">Type https://</button>
       <button mat-raised-button color="primary"
-              (click)="typeAPI()">Type /api</button>
+              (click)="typeAPI()">Type /api</button> -->
 
       <button mat-raised-button color="primary"
               (click)="setAPIUrl()">Save</button>

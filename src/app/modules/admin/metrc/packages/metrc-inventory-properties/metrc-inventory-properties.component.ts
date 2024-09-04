@@ -60,23 +60,26 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       this.inputForm.patchValue({productName: ``})
       const site = this.siteService.getAssignedSite();
       let searchModel = {} as ProductSearchModel;
-
-      if (this.package.itemStrainName)
-        // console.log( this.package, metrcPackage)
-        searchModel.exactNameMatch = true;
-        searchModel.name = metrcPackage?.productName ;
-        const list$ =  this.menuService.getItemBasicBySearch( site, searchModel ).pipe(
-          switchMap(data => {
-            if (data) {
-              if (data.length == 0) {return of('')}
-              if (!data[0] == undefined || data[0].id == undefined) {return of(null)}
-              return this.menuService.getMenuItemByID( site, data[0]?.id)
-            }}),
-            catchError( data => {
-              console.log('error' , data)
-              return of(null)
-            }
-          ))
+      console.log('assignDefaultCatalogItem',  metrcPackage.productName)
+      // if (this.package.itemStrainName) {
+      // }
+      // console.log( this.package, metrcPackage)
+      // searchModel =  {name: metrcPackage.productName, exactNameMatch: true} as ProductSearchModel;
+      searchModel.exactNameMatch = true;
+      searchModel.name = metrcPackage?.productName ;
+      console.log('search model', searchModel)
+      const list$ =  this.menuService.getItemBasicBySearch( site, searchModel ).pipe(
+        switchMap(data => {
+          if (data) {
+            if (data.length == 0) {return of('')}
+            if (!data[0] == undefined || data[0].id == undefined) {return of(null)}
+            return this.menuService.getMenuItemByID( site, data[0]?.id)
+          }}),
+          catchError( data => {
+            console.log('error' , data)
+            return of(null)
+          }
+      ))
 
         list$.subscribe(
             {next: data => {

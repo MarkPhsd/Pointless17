@@ -38,7 +38,7 @@ export interface ProductSearchModel {
   species?                   : string;
   web?                       : boolean;
   webMode?                    : boolean;
-  exactNameMatch?            : boolean;
+  exactNameMatch              : boolean;
   sku?                       : string;
   itemTypeIDList?            : number[];
   hideSubCategoryItems?      : boolean;

@@ -155,6 +155,8 @@ export class QrPaymentComponent {
   }
 
   resizePanel() {
+    // this.orderItemsHeightStyle = ''
+    // return ;
     this.uiSettingsService.remainingHeight$.subscribe(data => {
       if (this.mainPanel) {
         this.orderItemsHeightStyle = `calc(100vh -${ - 100}px)`

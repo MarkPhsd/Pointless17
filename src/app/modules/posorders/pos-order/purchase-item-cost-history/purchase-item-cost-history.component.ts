@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
 import { Observable, switchMap, of, Subscription } from 'rxjs';
 import { IPOSOrder, ISite, PosOrderItem } from 'src/app/_interfaces';
 import { HistoricalSalesPurchaseOrderMetrcs, ReportingService } from 'src/app/_services';
@@ -12,19 +13,26 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   styleUrls: ['./purchase-item-cost-history.component.scss']
 })
 export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnChanges {
-
+  searchModel: POSItemSearchModel
   @Input() order: IPOSOrder
   @Input() site: ISite;
   @Input() product: PosOrderItem;
   itemHistorySales$ : Observable<HistoricalSalesPurchaseOrderMetrcs>;
   loadingMessage: boolean;
   _lastItem: Subscription;
+  dateFrom: any;
+  dateTo: any;
+  itemSales$: Observable<HistoricalSalesPurchaseOrderMetrcs>;
 
   @Input() barcode: string;
   @Input() productID: number;
+
+  completionDateForm: UntypedFormGroup;
+  
   constructor(
     private siteService: SitesService,
     public orderMethodsService: OrderMethodsService,
+    private fb: FormBuilder,
     private reportingService: ReportingService ) { }
 
   ngOnInit( ): void {
@@ -34,6 +42,7 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
         this.itemHistorySales$ = this.getAssignedItems(data)
       }
     })
+    this.initCompletionDateForm()
   }
 
   ngOnChanges() {
@@ -52,6 +61,7 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
       }))
     }
   }
+
 
   ngOnDestroy() {
     this.itemHistorySales$ = null;
@@ -76,5 +86,53 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
   }
 
 
+  initCompletionDateForm() {
+    this.completionDateForm  = this.getEmptyRange() //this.getFormRangeInitial(this.scheduleDateForm)
+    this.searchModel.completionDate_From = this.completionDateForm.get("start").value;
+    this.searchModel.completionDate_To   = this.completionDateForm.get("end").value;
+    this.subscribeToCompletionDatePicker();
+  }
+
+  toggleDateRangeFilter() {
+    this.initCompletionDateForm()
+  }
+
+  subscribeToCompletionDatePicker() {
+    const form = this.subscribeToDateRangeData(this.completionDateForm)
+    if (!form) {return}
+    form.valueChanges.subscribe( res=> {
+      if (form.get("start").value &&
+          form.get("end").value) {
+          // this.refreshCompletionDateSearch()
+          const site = this.siteService.getAssignedSite()
+          this.itemSales$  =  this.reportingService.getMetrcsForPO(site, this.searchModel).pipe(switchMap(data => {
+            return of(data)
+          }))
+      }
+    })
+  }
+
+  subscribeToDateRangeData(form: UntypedFormGroup) {
+    if (form) {
+      form.get('start').valueChanges.subscribe( res=> {
+        if (!res) {return}
+        this.dateFrom = res
+      }
+    )
+
+    form.get('end').valueChanges.subscribe( res=> {
+      if (!res) {return}
+      this.dateTo = res
+      }
+    )
+    return form
+  }}
+
+  getEmptyRange() {
+    return  this.fb.group({
+      start: [],
+      end: []
+    })
+  }
 
 }

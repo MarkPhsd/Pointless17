@@ -104,12 +104,26 @@ mat-progress-bar {
   overflow-y: hidden;
   padding-right: 5px;
   margin: 5px;
+  @include for-phone-only  {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    // height: 45vh;
+    padding: 0px;
+    margin: 0p;
+  }
+
 }
 
 .orders-list {
   overflow-x: hidden;
   overflow-y: scroll;
   height: 80vh;
+  @include for-phone-only  {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 55vh;
+  }
+
 }
 
 .grid-item {

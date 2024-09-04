@@ -43,6 +43,7 @@ export class OrderCardComponent implements OnInit {
      if (window.innerWidth < 599) {
       this.orderNameLength = 12
       this.phoneDevice = true
+      this.tableFont = `${this.tableFont} table-font` 
      }
   
    }

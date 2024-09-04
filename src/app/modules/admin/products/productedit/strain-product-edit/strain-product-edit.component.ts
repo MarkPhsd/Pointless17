@@ -473,11 +473,11 @@ export class StrainProductEditComponent implements OnInit {
     if (this.setValues())  {
       if (this.product.webProduct) { this.product.webProduct   = -1     }
       if (!this.product.webProduct) {  this.product.webProduct = 0    }
-      this.message = ""
-      this.performingAction= true;
+      this.message          = ""
+      this.performingAction = true;
       this.product.json     = this.JSONAsString ;
       this.product.metaTags = this.itemTags;
-      this.product          = this.menuService.cleanProduct(this.product)
+      // this.product          = this.menuService.cleanProduct(this.product)
 
       const product$ = this.menuService.saveProduct(site, this.product);
       return product$.pipe(switchMap(
@@ -580,9 +580,9 @@ export class StrainProductEditComponent implements OnInit {
     return images
   }
 
-  updateUrlImageMain($event) {
-    this.urlImageMain = $event
-    this.product.urlImageMain = $event
+  updateUrlImageMain(event) {
+    this.urlImageMain = event
+    this.product.urlImageMain = event
     this.productForm.patchValue({urlImageMain: event})
   }
 
@@ -599,7 +599,6 @@ export class StrainProductEditComponent implements OnInit {
 
   removeAddOnSize(item: IItemBasic): void {
     const index = this.unitTypeSelections.indexOf(item);
-
     if (index >= 0) {
       this.unitTypeSelections.splice(index, 1);
     }

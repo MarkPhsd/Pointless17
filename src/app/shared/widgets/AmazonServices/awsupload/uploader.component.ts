@@ -52,7 +52,9 @@ export class UploaderComponent implements OnInit {
     this.imageRefresh();
   }
 
-
+  get fileNamesList(): string[] {
+    return (this.fileNames || '').split(',');
+  }
 
   imageRefresh() {
   }

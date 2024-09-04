@@ -75,7 +75,18 @@ export class DcapMethodsService {
     return result
   }
 
-  readAndroidResult(streamResponse: DCAPAndroidRStream) {
+  // if (obj?.RStream?.CmdResponse?.TextResponse === 'TRANSACTION NOT COMPLETE - In Process!') {
+  //   this.response     = null // obj
+  //   this.cmdResponse  = null // (obj?.RStream?.CmdResponse);
+  //   this.textResponse = null // (obj?.RStream?.CmdResponse?.TextResponse);
+  //   this.tranResponse = null // obj?.RStream?.TranResponse as TranResponse;
+
+  //   console.log('respose in progress')
+  //   return;
+  // }
+
+
+  readAndroidResult(streamResponse: DCAPAndroidRStream, tranType?: string) {
     // console.log('readresult', cmdResponse?.TextResponse, cmdResponse)
     let message: string;
     let resultMessage: string;
@@ -85,9 +96,14 @@ export class DcapMethodsService {
     processing = false;
 
     console.log('readResult', streamResponse)
-
     // CmdStatus
     const status = streamResponse?.CmdResponse.CmdStatus
+
+    if (tranType === 'AdjustByRecordNo') {
+      if (streamResponse?.CmdResponse?.TextResponse ==='TRANSACTION NOT COMPLETE - In Process!' ) {
+        return {success : false , message: 'continue', processing: processing, resultMessage:  streamResponse?.CmdResponse?.TextResponse};
+      }
+    }
 
     if (status ==   "Declined") {
       return {success : false , message: status, processing: processing, resultMessage:  streamResponse?.CmdResponse?.TextResponse};

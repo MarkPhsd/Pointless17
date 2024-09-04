@@ -1,5 +1,6 @@
 <div *ngIf="(processCreditCardResponse$ | async) as item"></div>
 <div *ngIf="(printAction$ | async) as print"></div>
+<div *ngIf="(log$ | async) as log"></div>
 
 <div class="cards" *ngIf="(transaction$ | async) as transaction">
   <div *ngIf="(posDevice$  | async) as item"></div>
@@ -82,10 +83,11 @@
           <button mat-raised-button color="accent" (click)="mssTextMessage()"><mat-icon>phone</mat-icon>Text</button>
         </div>
       </div>
-      <div class="grid-buttons" *ngIf="saleComplete && !enterTip">
-        <div >
-          <button mat-raised-button color="accent" (click)="print()"><mat-icon>print</mat-icon>Print (here)</button>
+      <div class="grid-buttons" >
+        <div *ngIf="saleComplete && !enterTip">
+          <button mat-raised-button color="accent" *ngIf="responseData?.PrintData" (click)="print()"><mat-icon>print</mat-icon>Print (here)</button>
         </div>
+
         <div>
           <button mat-raised-button color="warn" (click)="forceClose()">
             Close
@@ -93,15 +95,30 @@
         </div>
       </div>
 
-      <div class="grid-buttons" *ngIf="(payment.tipAmount == 0 || !payment.tipAmount)" >
+     
         <div style="margin:5px" *ngIf="payment?.amountPaid >0 && saleComplete && !enterTip">
           <button style="width:100px" color="accent" 
                   mat-raised-button 
                   (click)="saleComplete && enterTip = !enterTip">
-              Add Tip
+           
+              <div class="grid-buttons" *ngIf="(payment?.tipAmount == 0 || !payment?.tipAmount)" >
+                Add Tip
+              </div>
+              <div class="grid-buttons" *ngIf="(payment?.tipAmount > 0 )" >
+                Change Tip
+              </div>
           </button>
         </div>
-      </div>
+      <!-- </div> -->
+
+      <!-- <div style="margin:5px" *ngIf="saleComplete">
+        <button style="width:100px" color="accent" 
+                mat-raised-button 
+                (click)="saleComplete && enterTip = !enterTip">
+            Add Tip 2
+        </button>
+      </div> -->
+
     </mat-card-content>
   </mat-card>
 
@@ -137,7 +154,7 @@
     </mat-card>
   </div>
 
-  <div *ngIf="tipPreSale">
+  <div *ngIf="tipPreSale && !saleComplete">
     <tip-entry-amount
       [payment]            = "payment"
       (specifiedTipAmount) = "specifiedTipPreSale($event)"
@@ -145,11 +162,10 @@
     ></tip-entry-amount>
   </div>
 
-  <div class="tip-container" *ngIf="enterTip">
+  <div class="tip-container" *ngIf="enterTip && saleComplete">
     <tip-entry-amount
       [payment]            = "payment"
       (specifiedTipAmount) = "specifiedTip($event)"
-      (outPutTip)          = "customTipAmount($event)"
     ></tip-entry-amount>
   </div>
 

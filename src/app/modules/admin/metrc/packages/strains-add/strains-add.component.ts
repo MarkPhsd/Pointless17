@@ -43,13 +43,10 @@ export class StrainsAddComponent implements OnInit {
   package:                METRCPackage
   package$:               Observable<METRCPackage>;
   packageForm$: Observable<any>;
-
   facility = {} as        IItemFacilitiyBasic
   site:                   ISite;
   menuItem:               any ;
   showJSONData: boolean; //togggles the form and viewing raw data.
-
-
   //remove
   intakeConversion         = {}  as IUnitConversion;
   intakeconversionQuantity : number;  // this.intakeConversion.value * this.package.quantity
@@ -74,13 +71,11 @@ export class StrainsAddComponent implements OnInit {
           private inventoryAssignmentService: InventoryAssignmentService,
           )
   {
-
     if (data) {
       this.id = data.id
     } else {
       this.id = this.route.snapshot.paramMap.get('id');
     }
-  
   }
 
   async ngOnInit() {
@@ -92,25 +87,24 @@ export class StrainsAddComponent implements OnInit {
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
     this.initFields();
     this.packageForm$ = item$.pipe(switchMap(data => {
-        this.package = data;
-        if (this.package) {
-          if (this.package.productID) {
-            this.assignMenItem(+this.package.productID)
+          this.package = data;
+          if (this.package) {
+            if (this.package.productID) {
+              this.assignMenItem(+this.package.productID)
+            }
           }
+          if (!data.labResults || data.labResults == null ||  
+              data.labResults == 'null' || data.labResults == undefined) { 
+            return this.metrcLabService.getTest(site, data?.id)
+          }
+          return of(data)
         }
-        if (!data.labResults || data.labResults == null ||  
-             data.labResults == 'null' || data.labResults == undefined) { 
-          return this.metrcLabService.getTest(site, data?.id)
-        }
+      )).pipe(switchMap(data => {
+        this.initItemFormData(data) 
+        this.initPriceForm();
         return of(data)
       }
-   
-    )).pipe(switchMap(data => {
-      this.initItemFormData(data) 
-      this.initPriceForm();
-      return of(data)
-    }
-  ))
+    ))
   }
 
   setLabResultsInPackage( labResults: string) {
@@ -321,6 +315,7 @@ export class StrainsAddComponent implements OnInit {
     }
   }
 
+  
   initItemFormData(data: METRCPackage) {
     if (data) {
       try {
@@ -374,9 +369,8 @@ export class StrainsAddComponent implements OnInit {
             sourceHarvestNumber             : data?.itemFromFacilityLicenseNumber,
             sourceHarvestName               : data?.itemFromFacilityName,
             sourceHarvestNames              : data?.itemFromFacilityName,
-
         })
-        console.log(this.packageForm.value)
+        // console.log(this.packageForm.value)
         this.setLabResultsInPackage(this.package?.labResults)
       } catch (error) {
         console.log(error)
@@ -390,7 +384,7 @@ export class StrainsAddComponent implements OnInit {
 
   //move to service.
   getUnitConversionToGrams(unitName: string): IUnitConversion {
-    return   this.conversionService.getConversionItemByName(unitName)
+    return this.conversionService.getConversionItemByName(unitName)
   }
 
   initFields() {

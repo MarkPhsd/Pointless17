@@ -329,8 +329,9 @@
 </ng-template>
 
 <ng-template #voidActionView let-item>
+
   <div *ngIf="!disableOptions && (authData$ | async) as auth">
-    <div *ngIf="(auth?.voidPayment || isCashVoidAllowed(item)) && !PaxA920  && item.amountPaid!= 0 && !order.history" >
+    <div *ngIf="(auth?.voidPayment || isCashVoidAllowed(item, auth)) && !PaxA920  && item.amountPaid != 0 && !order.history" >
       <button mat-button
               [disabled]="(item.voidReason && item.voidReason != 0 && item.voidAmount == item.amountPaid)"
               class="payment-button-balance"

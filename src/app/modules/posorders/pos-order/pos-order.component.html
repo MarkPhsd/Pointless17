@@ -80,12 +80,8 @@
         </div>
 
         <div  (resized)="onResizedorderSpecialsPanel($event)" >
-
-
           <ng-container [ngTemplateOutlet]="rewardsView"></ng-container>
-
         </div>
-
       </div>
 
       <!-- height is fixed -->
@@ -207,9 +203,6 @@
               || (!mainPanel && !smallDevice)">
       <ng-container [ngTemplateOutlet]="getListViewType"></ng-container>
     </div>
-    <!-- <div *ngIf="phoneDevice"  class="order-items">
-      <ng-container [ngTemplateOutlet]="getListViewType"></ng-container>
-    </div> -->
 </div>
 
 <ng-template #displaySubMenu>
@@ -219,16 +212,11 @@
   </price-schedule-menu-list>
 
   <price-schedule-menu-items 
-
       [menuCategoryID]="menuCategoryID">
   </price-schedule-menu-items>
 </ng-template>
 
 <ng-template #receiveOrderView>
-
-  <!-- showLabelPrint {{showLabelPrint}} <br>}}
-  selectedItem {{selectedItem?.productName -->
-
   <div *ngIf=" !isNotPurchaseOrder ">
     <button mat-raised-button class="payment-buttons" color="accent" (click)="receiveOrder()">
       <mat-icon>download</mat-icon>
@@ -242,9 +230,7 @@
       <br>Print Labels
     </button>
   </div>
-
 </ng-template>
-
 
 <ng-template #itemViewType>
   <pos-order-items
@@ -289,7 +275,6 @@
     [mainPanel]="mainPanel">
   </pos-check-out-buttons>
 </ng-template>
-
 
 <ng-template #roundOrder>
   <button style="margin-top:5px;" mat-raised-button color="warn"
@@ -727,7 +712,6 @@
         </app-key-pad>
 
         <div>
-
           <button mat-raised-button
                 *ngIf="isInventoryMonitor"
                 color="primary"

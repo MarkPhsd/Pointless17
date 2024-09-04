@@ -5,15 +5,12 @@ import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService, OrdersService,AWSBucketService } from 'src/app/_services';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter, tap } from 'rxjs/operators';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -55,8 +52,6 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
            this.refreshSearch()
       )
     )
-
-
 
     get enableKeyboardView() {
       if (this.enableKeyboard) {
@@ -130,8 +125,6 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     constructor(private contactService: ContactsService,
-                private cd: ChangeDetectorRef,
-                private route: ActivatedRoute,
                 public orderMethodsService: OrderMethodsService,
                 private router: Router,
                 private fb: UntypedFormBuilder,
@@ -139,8 +132,6 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
                 private _snackBar: MatSnackBar,
                 private siteService: SitesService,
                 private agGridFormatingService: AgGridFormatingService,
-                private awsService: AWSBucketService,
-                private settingsService: SettingsService,
                 private uiSettingsService: UISettingsService,
               ) {
 
@@ -322,7 +313,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.columnDefs.push(item)
 
-        item =  {headerName: 'Company',  field: 'companyName',      sortable: true,
+        item =  {headerName: 'Company',  field: 'company',      sortable: true,
           width   : 175,
           minWidth: 175,
           maxWidth: 275,

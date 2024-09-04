@@ -9,6 +9,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuButtonGroups, IMenuButtonProperties, mb_MenuButton } from 'src/app/_services/system/mb-menu-buttons.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
 
 @Component({
   selector: 'function-buttons-list',
@@ -24,6 +25,7 @@ export class FunctionButtonsListComponent implements OnInit {
   @Input() isAdmin: boolean;
   @Input() isUser: boolean;
   @Input() isStaff: boolean;
+  @Input() adminEmail: string;
 
   @Input() list: IMenuButtonGroups;
   _order        :   Subscription;
@@ -38,6 +40,7 @@ export class FunctionButtonsListComponent implements OnInit {
     private ordersService:   OrdersService,
     private authenticationService: AuthenticationService,
     private fbProductButtonService: ProductEditButtonService,
+    private messageService: RequestMessageMethodsService,
    ) {
 
   }
@@ -106,7 +109,9 @@ export class FunctionButtonsListComponent implements OnInit {
       case 'price(0)':
         this.price(0);
         break;
-
+      case 'voidOrderRequest':
+          this.voidOrderRequest();
+          break;
       case 'lastOrder':
         this.setLastOrderActive()
         break;
@@ -115,6 +120,18 @@ export class FunctionButtonsListComponent implements OnInit {
         break;
     }
   }
+
+  voidOrderRequest() { 
+    const order = this.orderMethodsService.currentOrder
+    if (order) { 
+      const item$ = this.messageService.requestVoidOrder(order, this.adminEmail)
+      this.action$ =  item$.pipe(switchMap(data => {
+        this.siteService.notify("Request Sent", 'close', 2000, 'green')
+        return of(data)
+      }))
+    }
+  }
+
 
   setLastOrderActive() { 
     const order = this.orderMethodsService.lastOrder

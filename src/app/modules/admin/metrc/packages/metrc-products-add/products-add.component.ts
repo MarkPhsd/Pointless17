@@ -84,8 +84,6 @@ export class METRCProductsAddComponent implements OnInit {
     if (this.package) {
       if (this.package.json) {
         return JSON.parse(this.package?.json)
-
-        // this.package.productCategoryName
       }
     }
   }
@@ -146,11 +144,11 @@ export class METRCProductsAddComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.bucketName     = await this.awsBucket.awsBucket();
-    this.awsBucketURL   = await this.awsBucket.awsBucketURL();
-    this.unitsConverted = {} as IUnitsConverted;
-    this.site           =  this.siteService.getAssignedSite();
-    this.conversions    =  this.conversionService.getGramsConversions();
+    this.bucketName          = await this.awsBucket.awsBucket();
+    this.awsBucketURL        = await this.awsBucket.awsBucketURL();
+    this.unitsConverted      = {} as IUnitsConverted;
+    this.site                =  this.siteService.getAssignedSite();
+    this.conversions         =  this.conversionService.getGramsConversions();
     this.inventoryAssigments = [];
     this.inventoryLocations$ =  this.setInventoryLocation()
     this.initForm();
@@ -178,9 +176,7 @@ export class METRCProductsAddComponent implements OnInit {
       this.action$ =  this.package$.pipe(
         switchMap(data =>
         {
-          if (data) {
-            this.initItemFormData(data)
-          }
+          if (data) {  this.initItemFormData(data)  }
           return of(data)
         }
       ))
@@ -203,7 +199,7 @@ export class METRCProductsAddComponent implements OnInit {
           this.baseUnitsRemaining = +this.intakeconversionQuantity
           this.initialQuantity    = +this.intakeconversionQuantity
         }
-        console.log(' initItemFormData baseUnitsRemaining' , this.baseUnitsRemaining)
+        // console.log(' initItemFormData baseUnitsRemaining' , this.baseUnitsRemaining)
         this.package.labTestingState =          this.package?.labTestingState.match(/[A-Z][a-z]+|[0-9]+/g).join(" ")
         this.facility = {} as                   IItemFacilitiyBasic
         this.facility.displayName =             this.package?.itemFromFacilityName

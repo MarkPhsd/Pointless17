@@ -87,8 +87,8 @@ export class ProductEditButtonService {
     const site = this.siteService.getAssignedSite();
 
     dialogRef = this.dialog.open(EmployeeSelectPopUpComponent,
-      { width:        '500px',
-        minWidth:     '500px',
+      { width:        '375px',
+        minWidth:     '375px',
         height:       '550px',
         minHeight:    '550px',
         data   : selectedItems

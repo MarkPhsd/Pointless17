@@ -15,13 +15,15 @@ import { DSIEMVSettings, TransactionUISettings, UIHomePageSettings, UISettingsSe
 import { DCAPAndroidRStream, DcapRStream } from '../../services/dcap.service';
 import { DcapMethodsService } from '../../services/dcap-methods.service';
 import { PrintData, RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
-import { AWSBucketService, AuthenticationService } from 'src/app/_services';
+import { AWSBucketService, AuthenticationService, OrdersService } from 'src/app/_services';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { _getOptionScrollPosition } from '@angular/material/core';
+import { SystemService } from 'src/app/_services/system/system.service';
 
 // import  * from '@capacitor/capacitor-android-foreground-service';
 // import '@anuradev/capacitor-background-mode';
@@ -115,6 +117,8 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   private timer: any;
   paymentResponse: IPaymentResponse;
   instructions: string;
+  isComponentActive: boolean;
+  log$: Observable<any>;
 
   initPOSDevice() {
     this.posDevice$      = this.uISettingsService.posDevice$.pipe(switchMap(data => {
@@ -177,8 +181,10 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
      private siteService: SitesService,
      private uiSettingService       : UISettingsService,
      private awsBucketService       : AWSBucketService,
-     private navigationService     : NavigationService,
-     public  paymentMethodsService : PaymentsMethodsProcessService,
+     private navigationService      : NavigationService,
+     private orderService           : OrdersService,
+     public  paymentMethodsService  : PaymentsMethodsProcessService,
+     private systemService: SystemService,
      private printingService: PrintingService,
      @Optional() private dialogRef: MatDialogRef<DsiEMVAndroidComponent>,
      @Inject(MAT_DIALOG_DATA) public data: any
@@ -201,7 +207,6 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-
     const options = {}
     await dsiemvandroid.clearResponse(options)
     await this.dsiEMVReset();
@@ -219,10 +224,14 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.timer) {
-      clearInterval(this.timer);
+    this.isComponentActive = false;
+    if (this._order) {
+       this._order.unsubscribe();
     }
-  }
+    if (this.timer) {
+       clearInterval(this.timer);
+    }
+ }
 
   async initLogo() {
     const bucket = await this.awsBucketService.awsBucketURL()
@@ -347,6 +356,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       this.processing = true;
       let options  =  this.initTransaction();
       if (options) {
+        this.logTransaction(options)
         const item = await dsiemvandroid.emvParamDownload(options);
         const stream =  this.dcapMethodsService.convertToObject(item.value)
         this.checkResponse_Transaction('PARAMDOWNLOAD');
@@ -390,11 +400,11 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       }
       if (tranType === 'EMVSALE') {
         // Use an arrow function to maintain the 'this' context
-        await this.intervalCheckResponse(this.timer);
+        await this.intervalCheckResponse(this.timer, tranType);
       }
       if (tranType === 'AdjustByRecordNo') {
         // Use an arrow function to maintain the 'this' context
-        await this.intervalCheckResponse(this.timer);
+        await this.intervalCheckResponse(this.timer, tranType);
       }
       if (tranType === 'EMVCANCEL') {
         // Use an arrow function to maintain the 'this' context
@@ -444,15 +454,20 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     const options = {}
     const paymentResponse = await dsiemvandroid.adjustByRecordNo(options);
     if (paymentResponse && (paymentResponse.value !== '' )) {
-      this.cancelResponse = false;
-      this.processing = false;
-      responseSuccess = 'complete';
-      this.instructions = ''
       const response = this.dcapMethodsService.convertToObject(paymentResponse.value)
-      // console.log('intervalAdjutByRecordNoResponse')
+
       if (response) {
         const result =   this.readResult(response, "AdjustByRecordNo");
         console.log('result', result.success, result.message)
+        if (result?.message === 'continue') { 
+          //is probably getting a in process result;
+          return 
+        }
+
+        this.cancelResponse = false;
+        this.processing = false;
+        responseSuccess = 'complete';
+        this.instructions = ''
         if (result.success) {
           clearInterval(timer);
           await dsiemvandroid.clearResponse(options)
@@ -466,34 +481,57 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
 
   }
 
-  async intervalCheckResponse(timer: any) {
-    let responseSuccess = '';
-    const options = {}
+  async intervalCheckResponse(timer: any, tranType?: string) {
 
-    //returns string. then test if there is any string value
-    const paymentResponse = await dsiemvandroid.getResponse(options);
+    try {
+      let responseSuccess = '';
+      const options = {};
+  
+      if (!this.cancelResponse && !this.isComponentActive) {
+        console.log('clear interval')
+        clearInterval(timer);
+        return;
+      }
+      const paymentResponse = await dsiemvandroid.getResponse(options);
+     
+      if (paymentResponse && (paymentResponse.value !== '' )) {
 
-    if (paymentResponse && (paymentResponse.value !== '' )) {
-      this.cancelResponse = false;
-      this.processing = false;
-      responseSuccess = 'complete';
-      this.instructions = ''
-      const response = this.dcapMethodsService.convertToObject(paymentResponse.value)
-      // console.log('intervalCheckResponse', response)
+        const response = this.dcapMethodsService.convertToObject(paymentResponse.value);
+        if (response) { 
+          const result = this.readResult(response, tranType);
+          if (result?.message === 'continue') {
+            return
+          }
+        }
 
-      if (response) {
-        const result =   this.readResult(response, "EMVSale");
-        // console.log('result', result.success, result.message)
-        if (result.success) {
-          clearInterval(timer);
-          await dsiemvandroid.clearResponse(options)
-          this.processResponse(response)
+        this.cancelResponse = false;
+        this.processing = false;
+        responseSuccess = 'complete';
+        this.instructions = ''
+     
+        if (response) {
+            const result = this.readResult(response, tranType);
+            if (result.success) {
+              clearInterval(timer);
+              await dsiemvandroid.clearResponse(options);
+              if (tranType.toUpperCase() === 'EMVSALE') {
+                this.processResponse(response);
+              }
+              if (tranType.toUpperCase() === 'AdjustByRecordNo'.toUpperCase() || tranType.toUpperCase() ===  'Adjust'.toUpperCase() ) {
+                this.processAjustResponseStream(response);
+              }
+            }
+
+
+        } else { 
+            clearInterval(timer);
+            await dsiemvandroid.clearResponse(options);
         }
       }
-      clearInterval(timer);  // Clear the interval here when the condition is met'
-      await dsiemvandroid.clearResponse(options)
-    }
-
+    } catch (error) {
+      console.error('Error during intervalCheckResponse:', error);
+      clearInterval(timer);
+   }
   }
 
   async emvSale() {
@@ -510,7 +548,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       }
 
       if (options) {
-        console.log(options)
+        this.logTransaction(options)
         const item = await dsiemvandroid.processSale(options);
         const stream =  this.dcapMethodsService.convertToObject(item.value)
         this.checkResponse_Transaction('EMVSALE');
@@ -606,6 +644,9 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
           this.textResponse = (obj?.RStream?.CmdResponse?.TextResponse);
           this.tranResponse =  obj?.RStream?.TranResponse as TranResponse;
         }
+        
+      
+        console.log('Response',  this.textResponse )
 
         if (this.cmdResponse) {
           this.getCmdResponse.emit(this.cmdResponse)
@@ -625,7 +666,6 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   specifiedTip(event) {
     if (this.payment) {
       this.payment.tipAmount = event;
-      console.log('eventvalue', this.payment.tipAmount)
       this.processDcapTip(this.payment.tipAmount);
       this.enterTip = false;
     }
@@ -643,7 +683,6 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   specifiedTipPreSale(event) {
     if (this.payment) {
       this.payment.tipAmount = event;
-      // this.processDcapTip(this.payment?.tipAmount);
       this.tipPreSale = false;
     }
   }
@@ -651,30 +690,43 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   customTipAmountPreSale(event) {
     if (this.payment) {
       this.payment.tipAmount = event
-      // this.processDcapTip(this.payment?.tipAmount);
       this.tipPreSale = false;
       return;
     }
   }
 
   async processDcapTip(amount) {
+      
+      if (this.processing) { return }
+      this.processing = true
 
-      console.log('reset')
       await this.resetResponse();
-
       const tran = this.initTipTransaction(amount);
+
+      console.log('processDcapTip' ,tran);
+    
       if (tran) {
+        
+        this.logTransaction(tran)
         await dsiemvandroid.adjustByRecordNo(tran)
-        console.log('tran await')
         this.checkResponse_Transaction('AdjustByRecordNo');
+       
       }
+  }
+
+  logTransaction(tran) { 
+    let log = {} as any;
+    log.messageString = JSON.stringify(tran);
+    log.type = 'DCAPPaxA920';
+    log.subType = tran?.tranCode ?? tran?.trancode;
+    this.log$ = this.systemService.secureLogger( log )
   }
 
   processAjustResponseStream(stream: DCAPAndroidRStream) {
     // const stream = this.dcapMethodsService.convertToObject(paymentresponse)
     // return this.finalizeTransaction(data)
     let item = this.readResult(stream, "AdjustByRecordNo")
-
+    this.logTransaction(stream)
     if (item?.success) {
       //then clear things that have been running.
       this.order;
@@ -684,18 +736,34 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       item.PrintData = stream?.PrintData;
       item.TranResponse = stream?.TranResponse  as any;
 
-      this.payment.textResponse = JSON.stringify(item)
-      this.processCreditCardResponse$ = this.paymentsMethodsProcessService.adjustByRecordNoDCAP(item, this.payment,
-                                                                                          this.order).pipe(switchMap(data => {
+      this.payment.transactionData = JSON.stringify(item)
 
+      let payment = this.payment
+      
+      //the amount paid and received that have been returned include the total amount
+      //so we have to remove that from the total amount
+      payment.amountPaid = payment.amountPaid  - payment.tipAmount
+      payment.amountReceived = payment.amountPaid
+
+      this.processCreditCardResponse$ = this.paymentsMethodsProcessService.adjustByRecordNoDCAP(item, this.payment,
+                                                                                               this.order).pipe(switchMap(data => {
         if (data) {
           this.saved = true
           this.stream = stream
           this.payment  = data;
         }
-        return of(data)
+        return this.getOrder()
       }))
     }
+  }
+
+  getOrder() {
+    const site = this.siteService.getAssignedSite()
+    return this.orderService.getOrder(site, this.order.id.toString(), false).pipe(switchMap(data => {
+         this.orderMethodsService.updateOrder(data)
+        return of(data)
+      } 
+    ))
   }
 
   clearResponse() { 
@@ -708,8 +776,8 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   processResponse(stream: DCAPAndroidRStream) {
     // const stream = this.dcapMethodsService.convertToObject(paymentresponse)
     // return this.finalizeTransaction(data)
-    let item = this.readResult(stream, "EMVSALE")
-    console.log('payment response', item)
+    let item = this.readResult(stream, "processResponse")
+    this.logTransaction(stream)
     if (item?.success) {
       //then clear things that have been running.
       this.order;
@@ -750,6 +818,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   initTipTransaction(amount) {
     let tran        = this.initTransaction()
     tran.TranCode   = "AdjustByRecordNo"
+    tran.tranCode   = "AdjustByRecordNo"
     tran.TranType   = "Credit";
     tran.invoiceNo  = this.payment?.orderID;
     tran.ReturnClearExpDate = "Allow";
@@ -767,10 +836,11 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     if (!this.payment.acqRefData) {
       try {
         const rStream = JSON.parse(this.payment?.transactionData) as RStream
-        console.log(rStream)
+
         if (rStream) {
           if (rStream?.TranResponse?.AcqRefData) {
             tran.acqRefData = rStream?.TranResponse?.AcqRefData
+            tran.AcqRefData = rStream?.TranResponse?.AcqRefData
           }
           if (rStream?.TranResponse?.RecordNo) {
             tran.RecordNo = rStream?.TranResponse?.RecordNo;
@@ -872,11 +942,16 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   }
 
   readResult(cmdResponse: DCAPAndroidRStream, tranType: string) {
-    const item = this.dcapMethodsService.readAndroidResult(cmdResponse);
+    const item = this.dcapMethodsService.readAndroidResult(cmdResponse, tranType);
     this.responseData = cmdResponse;
+
+    if (item?.message === 'continue') {
+      return item
+    }
+
     console.log('TranType', tranType, item.success)
 
-    if (tranType == 'EMVSALE' || tranType == 'EMVPreAuth' || tranType == 'AdjustByRecordNo') {
+    if (tranType == 'EMVSALE' || tranType == 'EMVPreAuth' || tranType == 'AdjustByRecordNo' || tranType == 'Adjust') {
       this.saleComplete = item?.success;
     }
 

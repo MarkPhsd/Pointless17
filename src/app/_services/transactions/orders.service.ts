@@ -81,13 +81,17 @@ export class OrdersService {
     return this.http.get<IPOSOrder>(url);
   }
 
-  postPurchaseOrder(site: ISite, name: string, id: number) :  Observable<any> {
+  postPurchaseOrder(site: ISite, name: string, id: number, outPutAll?: boolean) :  Observable<any> {
     const controller = "/POSOrders/"
 
     const endPoint  = "postPurchaseOrder"
+    if (!outPutAll) { 
+      outPutAll = false
+    }
 
-    const parameters = `?name=${name}&vendorID=${id}`
+    const parameters = `?name=${name}&vendorID=${id}&outPutAll=${outPutAll}`
 
+    console.log(parameters)
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<any>(url);

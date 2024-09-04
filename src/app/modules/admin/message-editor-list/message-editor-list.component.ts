@@ -185,7 +185,7 @@ export class MessageEditorListComponent implements OnInit {
     //     flex: 2,
     //   }
     //   this.columnDefs.push(item)
-      item = {headerName: 'Name',     field: 'name',         sortable: true,
+      item = {headerName: 'Name',     field: 'userRequested',         sortable: true,
                     width   : 275,
                     minWidth: 175,
                     maxWidth: 275,

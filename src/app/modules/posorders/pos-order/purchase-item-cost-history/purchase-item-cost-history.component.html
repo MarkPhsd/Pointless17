@@ -26,6 +26,10 @@
     <div>Total Sales</div>
     <div>{{item?.totalSales }}</div>
   </div>
+  <div>
+    <ng-container [ngTemplateOutlet]="salesDateRange"></ng-container>
+   
+  </div>
 </div>
 
 <div *ngIf="loadingMessage">
@@ -36,3 +40,35 @@
   ..getting info
 </ng-template>
 
+
+<ng-template #salesDateRange>
+  <div>
+    <div>
+      <button  mat-raised-button
+            class="date-filter-buttton"
+            (click)="toggleDateRangeFilter()">
+            Completed Dates<mat-icon>date_range</mat-icon>
+      </button>
+    </div>
+    <mat-date-range
+      [inputForm] ="completionDateForm">
+    </mat-date-range>
+  </div>
+
+  <div *ngIf="(itemSales$ | async) as item">
+    <div class="grid-items" >
+      <div>This Month</div>
+      <div>{{item?.thisMonthsTotal}}</div>
+      <div>This/Last Week</div>
+      <div>{{item?.lastWeek }}</div>
+      <div>Last Month</div>
+      <div>{{item?.lastMonth }}</div>
+      <div>This Year</div>
+      <div>{{item?.thisYearTotal }}</div>
+      <div>Last Year Same Week</div>
+      <div>{{item?.lastYearSameWeekTotal}}</div>
+      <div>Last Year-Month</div>
+      <div>{{item?.lastYearMonth }}</div>
+    </div>
+  </div>  
+</ng-template>

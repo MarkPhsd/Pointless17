@@ -21,6 +21,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { DcapService } from '../../payment-processing/services/dcap.service';
 import { DcapMethodsService } from '../../payment-processing/services/dcap-methods.service';
 import { Capacitor } from '@capacitor/core';
+import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 
 @Component({
   selector: 'app-payment-balance',
@@ -104,7 +105,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private paymentService: POSPaymentService,
               private paymentMethodService: PaymentMethodsService,
               private uiSettingsService: UISettingsService,
-
+              private userSwitchingService:UserSwitchingService,
               private paymentMethodsProessService: PaymentsMethodsProcessService,
               public authenticationService: AuthenticationService,
               public  userAuthorization: UserAuthorizationService,
@@ -141,11 +142,14 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     }
 
     // this.userAuthorization.
-    this.authData$ = this.authenticationService.userAuths$;
-    // this.authenticationService.userAuths$.subscribe(data => {
-    //   this.authData = data;
-    //   // data.voidPayment
-    // })
+    // this_.user$.value.clientTypeID
+    // this.authData$ = this.userSwitchingService.user.()
+
+    this.authData$ = of(this.authenticationService._userAuths.value).pipe(switchMap(data => {
+      this.authData = data;
+      return of(data)
+    }))
+
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager,employee')
 
     if (this.href.substring(0, 11 ) === '/pos-payment') {
@@ -157,7 +161,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
 
-  isCashVoidAllowed(item: IPOSPayment) {
+  isCashVoidAllowed(item: IPOSPayment, auth: IUserAuth_Properties) {
     if (this.authData?.enableCashVoid) { 
       if (item?.paymentMethod?.isCash) { 
         return true

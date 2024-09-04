@@ -21,7 +21,16 @@
           </button>
         </div>
 
-        <div>
+        <div *ngIf="smallDevice">
+          <button class="button"
+                  mat-raised-button
+                  (click)="exitBottomSheet()">
+                  <mat-icon>refresh</mat-icon>
+            <span>Close</span>
+          </button>
+        </div>
+
+        <div *ngIf="!smallDevice">
           <button class="button"
                   mat-raised-button
                   (click)="refreshSearch()">

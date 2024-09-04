@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, } from 'rxjs';
 import { ICompany, ISite } from 'src/app/_interfaces';
+import { SitesService } from '../reporting/sites.service';
 
 export interface SchemaUpdateResults {
   name:               string;
@@ -18,6 +19,7 @@ export class SystemService {
 
 
 
+
   // GetSyncDatabaseSchema
   // CreateAPIViews
   // CreateViews
@@ -31,9 +33,18 @@ export class SystemService {
   public webApiStatus$           = this._webApiStatus.asObservable();
 
   constructor( private http: HttpClient,
-
+              private siteService: SitesService,
               )
   { }
+
+  secureLogger(log: any): any {
+    const site = this.siteService.getAssignedSite()
+    const controller = "/System/"
+    const endPoint = 'secureLogger'
+    const parameters = ''
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+    return this.http.post<string>(url, log);
+  }
 
   getToken(site:ISite) :Observable<string> {
     const controller = "/System/"

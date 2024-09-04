@@ -111,9 +111,9 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     return false;
   }
   
-  generatePurchaseOrder() {
+  generatePurchaseOrder(optionAll?: boolean) {
     const site = this.siteService.getAssignedSite()
-    this.action$ = this.orderService.postPurchaseOrder(site, this.clientTable?.companyName, +this.id).pipe(switchMap(data => {
+    this.action$ = this.orderService.postPurchaseOrder(site, this.clientTable?.companyName, +this.id, optionAll).pipe(switchMap(data => {
       //open the order;
       if (data) { 
         this.orderMethodsService.setActiveOrder(data)

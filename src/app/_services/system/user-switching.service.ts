@@ -630,6 +630,8 @@ export class UserSwitchingService implements  OnDestroy {
       if (returnUrl === '/login') {  returnUrl = '/app-main-menu'}
     }
 
+    console.log(returnUrl, data)
+
     if (data)  {
       this.router.navigate([returnUrl, data]);
     }
