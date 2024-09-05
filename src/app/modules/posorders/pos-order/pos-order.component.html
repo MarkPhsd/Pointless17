@@ -217,13 +217,20 @@
 </ng-template>
 
 <ng-template #receiveOrderView>
-  <div *ngIf=" !isNotPurchaseOrder ">
+  <div class="flex-grid" *ngIf="!isNotPurchaseOrder ">
     <button mat-raised-button class="payment-buttons" color="accent" (click)="receiveOrder()">
       <mat-icon>download</mat-icon>
       <br>Receive Items
     </button>
   </div>
-
+    
+  <div *ngIf=" !isNotPurchaseOrder ">
+    <button style="margin-left:5px" mat-raised-button class="payment-buttons" color="accent" (click)="removeZerValueItems()">
+      <mat-icon>delete</mat-icon>
+      <br>Drop 0 QTY
+    </button>
+  </div>
+ 
   <div *ngIf=" !isNotPurchaseOrder ">
     <button mat-raised-button class="payment-buttons" color="accent" (click)="showLabelPrint = !showLabelPrint">
       <mat-icon>label</mat-icon>
@@ -660,7 +667,20 @@
 
 <ng-template #purchaseItemHistory>
   <mat-card class="po-info-sales">
-    <purchase-item-cost-history [order]="order">Sales History</purchase-item-cost-history>
+
+    <div>
+      <mat-date-range
+        [hideRefresh]="true"
+        [inputForm] ="salesDateForm">
+      </mat-date-range>
+    </div>
+
+    <purchase-item-cost-history 
+      [dateTo]   ="dateTo"
+      [dateFrom] ="dateFrom"
+      [inputForm]="salesDateForm"
+      [order]    ="order">Sales History
+    </purchase-item-cost-history>
   </mat-card>
 </ng-template>
 

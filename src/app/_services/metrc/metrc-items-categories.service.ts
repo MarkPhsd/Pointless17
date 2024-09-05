@@ -24,7 +24,7 @@ export class MetrcItemsCategoriesService {
 
   importItemCategories(site: ISite): Observable<METRCItemsCategories[]> {
 
-    console.log('site',site)
+    console.log('site', site)
     if (!site || !site.id) { 
       this.sitesService.notify('No Site Assigned', "Close", 50000)
       return of(null)

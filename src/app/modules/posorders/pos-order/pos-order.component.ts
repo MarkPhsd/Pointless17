@@ -208,11 +208,15 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   bayName: string;
   bayNames = [];
 
-   categories$      : Observable<IMenuItem[]>;
-   departments$     : Observable<IMenuItem[]>;
-   productTypes$    : Observable<IItemType[]>;
+  salesDateForm: FormGroup;
+  categories$      : Observable<IMenuItem[]>;
+  departments$     : Observable<IMenuItem[]>;
+  productTypes$    : Observable<IItemType[]>;
 
-   menuToggleEnabled: boolean;
+  menuToggleEnabled: boolean;
+
+  dateFrom: any;
+  dateTo: any;
   // _assignedItems: Subscription;
   // assignedItems: PosOrderItem[]
   // initItemSubscription() {
@@ -479,6 +483,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.resizePanel()
   }
 
+
   onResizedorderCustomerPanel(event: ResizedEvent) {
     this.uiSettingsService.updatecustomerOrderHeight(event.newRect.height,this.windowHeight) //(this.orderCustomerPanel.nativeElement.offsetHeight)
     this.resizePanel()
@@ -676,7 +681,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.sidePanelWidth = this.el.nativeElement.offsetWidth;
     this.initSubscriptions();
     this.lastSelectedItemSubscriber();
+
+
     this.initReconcileSearchForm();
+    this.initSalesDateForm();
 
     if (this.sidePanelWidth < 210) {
       this.isNotInSidePanel = false
@@ -688,6 +696,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
     if (!this.toolbarUIService.swapMenuWithOrderBoolean) {
       this.toolbarUIService.hidetoolBars();
+    }
+  }
+
+  setDateRange(event) { 
+    if (event) { 
+      const range = event?.value;
+      // this.dateFrom = range.dateFrom;
+      // this.dateTo   = range.dateTol;
     }
   }
 
@@ -957,6 +973,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
         return true
       }
     }
+  }
+
+  removeZerValueItems() { 
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.orderService.deleteZeroQuantityItems(site,this.order.id)
   }
 
   sendToPrep() {
@@ -1305,6 +1326,22 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     return order$
   }
 
+  initSalesDateForm() {
+    this.salesDateForm = this.fb.group({
+      start: [],
+      end: []
+    })
+  
+    this.salesDateForm.valueChanges.subscribe( res=> {
+      if (this.salesDateForm.controls['start'].value){ 
+        this.dateFrom = this.salesDateForm.controls['start'].value
+      }
+      if (this.salesDateForm.controls['end'].value){ 
+        this.dateTo = this.salesDateForm.controls['end'].value
+      }
+      console.log(this.dateFrom, this.dateTo)
+    })
+  }
 
   initReconcileSearchForm() {
     this.searchForm   = this.fb.group( {

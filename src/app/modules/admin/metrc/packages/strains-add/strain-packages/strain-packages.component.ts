@@ -123,15 +123,19 @@ export class StrainPackagesComponent implements OnInit {
       this.unitsConverted = {} as IUnitsConverted;
       this.inventoryAssignments = [];
       this.inventoryLocations$ =  this.setInventoryLocation()
-      this.intakeConversion =  this.getUnitConversionToGrams(this.package.unitOfMeasureName)
+      this.intakeConversion =  this.getUnitConversionToGrams(this.package.unitOfMeasureName);
+      // this.setDefaultIntakeUnit()
       this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity
       this.baseUnitsRemaining = this.intakeconversionQuantity
       this.initialQuantity = this.intakeconversionQuantity
       
     }
 
+    setDefaultIntakeUnit() {
+      this.getAvailableUnitsByConversion('Grams')
+    }
     
-  setInventoryLocation() {
+    setInventoryLocation() {
     return  this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
       this.inventoryLocations = data
       if (data) {
@@ -139,6 +143,7 @@ export class StrainPackagesComponent implements OnInit {
           if (item.defaultLocation) {
             this.getLocationAssignment(item.id);
             this.inventoryLocationID = item.id;
+            this.packageForm.patchValue({inventoryLocationID: item.id})
           }
         });
       }
@@ -195,6 +200,7 @@ export class StrainPackagesComponent implements OnInit {
   }
 
   getAvailableUnitsByConversion(event) {
+
 
     if (!event) { return }
 
@@ -479,6 +485,8 @@ export class StrainPackagesComponent implements OnInit {
   }
 
   initPackageEntryForm(form: UntypedFormGroup){
+
+
     form = this.fb.group({
       conversionName:                   [ ''],
       inputQuantity:                    [ ''], //[ Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)] ],

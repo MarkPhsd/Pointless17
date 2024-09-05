@@ -17,6 +17,7 @@ export class MatDateRangeComponent {
   @Input() buttonViewEnabled: boolean = false;
   @Input() inputForm: UntypedFormGroup;
   @Output() outputDateRange  = new EventEmitter();
+
   @Input() hideRefresh: boolean;
 
   constructor(

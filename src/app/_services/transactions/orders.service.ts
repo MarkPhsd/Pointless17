@@ -51,6 +51,7 @@ export interface OrderActionResult {
 })
 
 export class OrdersService {
+
   
 
   get platForm() {  return Capacitor.getPlatform(); }
@@ -64,6 +65,19 @@ export class OrdersService {
     )
   {
 
+  }
+
+  deleteZeroQuantityItems(site: ISite, id: number): Observable<any> {
+
+    const controller = "/POSOrders/"
+
+    const endPoint  = "deleteZeroQuantityItems"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url);
   }
 
   scanCheckInItem(barCode: string, scanMode: boolean): Observable<IPOSOrder> {

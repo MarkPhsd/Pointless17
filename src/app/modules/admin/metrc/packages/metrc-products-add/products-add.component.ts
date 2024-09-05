@@ -224,15 +224,20 @@ export class METRCProductsAddComponent implements OnInit {
           cost:                             0,
           price:                            0,
           jointWeight:                      1,
-          facilityLicenseNumber:            facility,
+        
           intakeConversionValue:            this.intakeConversion?.value,
           active                        : active,
           sellByDate                    : data?.sellByDate,
-          labTestingPerformedDate       : data?.labTestingStateDate.toString(),
+   
           packagedDate                  : data?.packagedDate.toString(),
           expirationDate                : data?.expirationDate,
           useByDate                     : data?.useByDate,
-          productionBatchNumber         : data?.productionBatchNumber
+          labTestingPerformedDate       : data?.labTestingStateDate.toString(),
+
+          facilityLicenseNumber:         facility,
+          productionBatchNumber         : data?.productionBatchNumber,
+          itemFromFacilityLicenseNumber : data?.itemFromFacilityLicenseNumber,
+          itemFromFacilityName          : data?.itemFromFacilityName,
       })
         console.log('form initialized', this.packageForm.value)
       }

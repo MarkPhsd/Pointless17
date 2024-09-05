@@ -179,7 +179,6 @@ export class ItemCategoriesListComponent implements OnInit {
 
   importCategories() {
     const site = this.sitesService.getAssignedSite();
-    console.log('site', site)
     const import$ = this.metrcItemsCategoriesService.importItemCategories(site)
     import$.subscribe(data => {
       this.searchItems()

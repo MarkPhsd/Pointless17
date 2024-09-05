@@ -39,7 +39,17 @@ body {
 mat-card  {
   width: 100%;
 }
+mat-card-content {
+  margin: 5px;
+  padding: 5px;
+}
 
+.phone-display { 
+  display: none;
+  @include for-phone-only  {
+    display:block;
+  }
+}
 .buttons-header {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -58,10 +68,8 @@ button {
   width: 99%;
   max-width: 500px;
 }
-mat-card-content {
-  margin: 5px;
-  padding: 5px;
-}
+
+
 
 .loading {
   margin-top: 50px;

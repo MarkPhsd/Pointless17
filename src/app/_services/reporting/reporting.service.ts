@@ -470,6 +470,20 @@ export class ReportingService {
 
   }
 
+  getSalesByRange(site: ISite, search : POSItemSearchModel): Observable<HistoricalSalesPurchaseOrderMetrcs> {
+
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `getSalesByRange`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`;
+
+    return  this.http.put<HistoricalSalesPurchaseOrderMetrcs>(url, search);
+
+  }
+
   getReOrderList(site: ISite): Observable<MenuItem[]> {
     // https://localhost:44309/api/ReportItemSales/GetReOrderList
     const controller = `/Products/`

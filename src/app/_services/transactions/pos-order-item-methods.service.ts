@@ -26,7 +26,7 @@ export class PosOrderItemMethodsService {
       if (editField == 'itemPerDiscount') {
         const site = this.siteService.getAssignedSite();
         const list = this.orderMethodsService.assignPOSItems
-        console.log(this.orderMethodsService.assignPOSItems);
+        // console.log(this.orderMethodsService.assignPOSItems);
         //get selected items
         obs$ = this.posOrderItemService.applyItemPerDiscount(site, item, list ).pipe(switchMap( data => {
           this.orderMethodsService.updateOrderSubscription(data)

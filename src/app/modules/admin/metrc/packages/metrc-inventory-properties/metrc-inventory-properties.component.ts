@@ -55,23 +55,35 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
     }
   }
 
+  getMetrcPackageInfo(item: METRCPackage) { 
+    if (item) { 
+      if (item.json) { 
+        const itemPackage = JSON.parse(item.json) as any
+        console.log('itemPackage1', itemPackage, itemPackage.ProductName )
+        if (itemPackage.ProductName) { 
+          if (!item.productName) {
+            item.productName = itemPackage.ProductName;
+          }
+        }
+
+      }
+    }
+    return item;
+  }
+
   assignDefaultCatalogItem(metrcPackage: METRCPackage) {
+   
     if (metrcPackage && metrcPackage.productName) {
       this.inputForm.patchValue({productName: ``})
       const site = this.siteService.getAssignedSite();
       let searchModel = {} as ProductSearchModel;
-      console.log('assignDefaultCatalogItem',  metrcPackage.productName)
-      // if (this.package.itemStrainName) {
-      // }
-      // console.log( this.package, metrcPackage)
-      // searchModel =  {name: metrcPackage.productName, exactNameMatch: true} as ProductSearchModel;
       searchModel.exactNameMatch = true;
       searchModel.name = metrcPackage?.productName ;
-      console.log('search model', searchModel)
       const list$ =  this.menuService.getItemBasicBySearch( site, searchModel ).pipe(
         switchMap(data => {
+          console.log('metrcInfo', metrcPackage?.productName , 'data', data)
           if (data) {
-            if (data.length == 0) {return of('')}
+            if (data.length == 0) {return of(null)}
             if (!data[0] == undefined || data[0].id == undefined) {return of(null)}
             return this.menuService.getMenuItemByID( site, data[0]?.id)
           }}),

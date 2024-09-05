@@ -183,7 +183,7 @@
 <ng-template #siteSelectorView>
   <button aria-label="location_on"
           mat-button
-          *ngIf="!platformService.isApp() && !smallDevice"
+          *ngIf="!smallDevice"
           (click)="siteSelector()">
     <mat-icon>location_on</mat-icon>
   </button>

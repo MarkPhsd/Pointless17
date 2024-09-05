@@ -125,7 +125,7 @@ export class StrainsAddComponent implements OnInit {
             if (list.length>0) { 
               let lab = list[0]
               form.patchValue({labFacilityLicenseNumber: lab?.labFacilityLicenseNumber, 
-                              labFacilityName: lab.labFacilityName});
+                               labFacilityName: lab.labFacilityName});
             }
           }
         } catch (error) {
@@ -365,10 +365,14 @@ export class StrainsAddComponent implements OnInit {
             productionBatchNumber           : data?.productionBatchNumber,
             productName                     : data?.productName,
             productID                       : data?.productID,
-        
-            sourceHarvestNumber             : data?.itemFromFacilityLicenseNumber,
-            sourceHarvestName               : data?.itemFromFacilityName,
-            sourceHarvestNames              : data?.itemFromFacilityName,
+          
+            
+            itemFromFacilityNumber           : data?.itemFromFacilityLicenseNumber,
+            itemFromFacilityName             : data?.itemFromFacilityName,
+            receivedFromFacilityLicenseNumber: data?.receivedFromFacilityLicenseNumber,
+            receivedFromFacilityName         : data?.receivedFromFacilityName,
+            sourceHarvestNumber              : data?.sourceProductionBatchNumbers,
+            sourceHarvestName                : data?.sourceHarvestName,
         })
         // console.log(this.packageForm.value)
         this.setLabResultsInPackage(this.package?.labResults)

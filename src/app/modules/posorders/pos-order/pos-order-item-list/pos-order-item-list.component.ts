@@ -540,9 +540,9 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       const site = this.siteService.getAssignedSite()
       if (e.rowData.history) {
         this.action$ = this.posOrderItemService.getPOSOrderItembyHistory(site, e.rowData.id, e.rowData.history).pipe(switchMap(data => {
-          console.log('data', data, data.inventoryAssignmentID)
+          // console.log('data', data, data.inventoryAssignmentID)
           if (data.inventoryAssignmentID && data.inventoryAssignmentID != 0) {
-            console.log('open 2')
+            // console.log('open 2')
             this.inventoryAssignmentService.openInventoryItem(data.inventoryAssignmentID)
           }
           return of(data)
@@ -550,7 +550,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
        return;
       }
       this.action$ =  this.posOrderItemService.getPOSOrderItem(site, e.rowData.id).pipe(switchMap(data => {
-        console.log('data', data, data.inventoryAssignmentID)
+        // console.log('data', data, data.inventoryAssignmentID)
         if (data.inventoryAssignmentID && data.inventoryAssignmentID != 0) {
           console.log('open 3')
           this.inventoryAssignmentService.openInventoryItem(data.inventoryAssignmentID)
@@ -644,11 +644,12 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     const colName = event?.column?.colId
 
     const item = event.data as PosOrderItem
-
-    if (item.inventoryAssignmentID != 0) {
-      this.siteService.notify('Item values must be changed from inventory window', 'Close', 10000, 'green')
+    
+    if (item.inventoryAssignmentID && item.inventoryAssignmentID != 0) {
+      this.siteService.notify('Item values must be changed from inventory window: id:' + item.inventoryAssignmentID, 'Close', 10000, 'green')
       return;
     }
+
     if (colName === 'unitPrice') {
       item.unitPrice = event.value;
     }

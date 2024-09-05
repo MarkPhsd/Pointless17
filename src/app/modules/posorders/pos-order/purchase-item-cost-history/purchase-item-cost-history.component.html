@@ -5,6 +5,12 @@
 <span *ngIf="product">
   {{product?.productName}}
 </span>
+<div *ngIf="dateTo && dateFrom && product">
+  <button mat-button (click)="refreshSales()"><mat-icon>refresh</mat-icon> {{dateFrom | date: 'short'}} - {{dateTo  | date: 'short'}}</button>
+</div>
+<div>
+  <ng-container [ngTemplateOutlet]="salesDateRange"></ng-container>
+</div>
 
 <div *ngIf="(itemHistorySales$ | async) as item; else loading">
   <div class="grid-items" >
@@ -26,10 +32,7 @@
     <div>Total Sales</div>
     <div>{{item?.totalSales }}</div>
   </div>
-  <div>
-    <ng-container [ngTemplateOutlet]="salesDateRange"></ng-container>
-   
-  </div>
+
 </div>
 
 <div *ngIf="loadingMessage">
@@ -42,33 +45,9 @@
 
 
 <ng-template #salesDateRange>
-  <div>
-    <div>
-      <button  mat-raised-button
-            class="date-filter-buttton"
-            (click)="toggleDateRangeFilter()">
-            Completed Dates<mat-icon>date_range</mat-icon>
-      </button>
-    </div>
-    <mat-date-range
-      [inputForm] ="completionDateForm">
-    </mat-date-range>
-  </div>
-
   <div *ngIf="(itemSales$ | async) as item">
     <div class="grid-items" >
-      <div>This Month</div>
-      <div>{{item?.thisMonthsTotal}}</div>
-      <div>This/Last Week</div>
-      <div>{{item?.lastWeek }}</div>
-      <div>Last Month</div>
-      <div>{{item?.lastMonth }}</div>
-      <div>This Year</div>
-      <div>{{item?.thisYearTotal }}</div>
-      <div>Last Year Same Week</div>
-      <div>{{item?.lastYearSameWeekTotal}}</div>
-      <div>Last Year-Month</div>
-      <div>{{item?.lastYearMonth }}</div>
+      Sales  {{item | json}}
     </div>
-  </div>  
+  </div>
 </ng-template>

@@ -20,15 +20,14 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
   itemHistorySales$ : Observable<HistoricalSalesPurchaseOrderMetrcs>;
   loadingMessage: boolean;
   _lastItem: Subscription;
-  dateFrom: any;
-  dateTo: any;
+ 
   itemSales$: Observable<HistoricalSalesPurchaseOrderMetrcs>;
 
   @Input() barcode: string;
   @Input() productID: number;
-
-  completionDateForm: UntypedFormGroup;
-  
+  @Input() inputForm: UntypedFormGroup;
+  @Input() dateFrom: any;
+  @Input() dateTo: any;
   constructor(
     private siteService: SitesService,
     public orderMethodsService: OrderMethodsService,
@@ -37,9 +36,9 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
 
   ngOnInit( ): void {
     this._lastItem = this.orderMethodsService.lastSelectedItem$.subscribe(data => {
-      // this.itemHistorySales$ = this.getAssignedItems(data)
       if (!this.productID) {
         this.itemHistorySales$ = this.getAssignedItems(data)
+        this.getSalesByDateRange(data)
       }
     })
     this.initCompletionDateForm()
@@ -78,6 +77,7 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
         search.productName = item.productName;
         const site = this.siteService.getAssignedSite()
         this.loadingMessage = false
+        this.refreshSales()
         return this.reportingService.getMetrcsForPO(site, search)
       }
     }
@@ -87,9 +87,9 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
 
 
   initCompletionDateForm() {
-    this.completionDateForm  = this.getEmptyRange() //this.getFormRangeInitial(this.scheduleDateForm)
-    this.searchModel.completionDate_From = this.completionDateForm.get("start").value;
-    this.searchModel.completionDate_To   = this.completionDateForm.get("end").value;
+    this.inputForm  = this.initForm() //this.getFormRangeInitial(this.scheduleDateForm)
+    this.searchModel.completionDate_From = this.inputForm.get("start").value;
+    this.searchModel.completionDate_To   = this.inputForm.get("end").value;
     this.subscribeToCompletionDatePicker();
   }
 
@@ -98,18 +98,35 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
   }
 
   subscribeToCompletionDatePicker() {
-    const form = this.subscribeToDateRangeData(this.completionDateForm)
+    const form = this.subscribeToDateRangeData(this.inputForm)
     if (!form) {return}
     form.valueChanges.subscribe( res=> {
       if (form.get("start").value &&
           form.get("end").value) {
-          // this.refreshCompletionDateSearch()
           const site = this.siteService.getAssignedSite()
           this.itemSales$  =  this.reportingService.getMetrcsForPO(site, this.searchModel).pipe(switchMap(data => {
             return of(data)
           }))
       }
     })
+  }
+
+  refreshSales() { 
+    this.getSalesByDateRange(this.product)
+  }
+
+  getSalesByDateRange(product) { 
+    if (!this.dateFrom || !this.dateTo) { return}
+    if (!this.product) {return }
+    console.log('getSales')
+    const searchModel = {} as POSItemSearchModel
+    searchModel.completionDate_From = this.dateFrom
+    searchModel.completionDate_To = this.dateTo 
+    searchModel.productName = product.productName;
+    const site = this.siteService.getAssignedSite()
+    this.itemSales$  =  this.reportingService.getSalesByRange(site, searchModel).pipe(switchMap(data => {
+      return of(data)
+    }))
   }
 
   subscribeToDateRangeData(form: UntypedFormGroup) {
@@ -128,7 +145,7 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
     return form
   }}
 
-  getEmptyRange() {
+  initForm() {
     return  this.fb.group({
       start: [],
       end: []

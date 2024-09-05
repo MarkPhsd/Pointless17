@@ -127,7 +127,9 @@ export interface IInventoryAssignment {
   sourceHarvestName: string;
   sourceHarvestNumber: string;
   facilityLicenseNumber: string;
-  facilityLicenseName: string
+  facilityLicenseName: string;
+  itemFromFacilityLicenseNumber: string;
+  itemFromFacilityName: string
 }
 
 export interface inventoryJson {
@@ -685,7 +687,10 @@ export class InventoryAssignmentService {
         id:                                [''],
         label:                             [''],
         packageType:                       [''],
-
+        itemFromFacilityLicenseNumber:   [''],
+        itemFromFacilityName:   [''],
+        receivedFromFacilityLicenseNumber :[],
+        receivedFromFacilityName: [],
         locationID:                        [''],
         locationName:                      [''],
         locationTypeName:                  [''],
@@ -694,8 +699,6 @@ export class InventoryAssignmentService {
         unitOfMeasureName:                 [''],
         unitOfMeasureAbbreviation:         [''],
         patientLicenseNumber:              [''],
-        itemFromFacilityLicenseNumber:     [''],
-        itemFromFacilityName:              [''],
         itemStrainName:                    [''],
         note:                              [''],
         packagedDate:                      [''],
@@ -719,7 +722,6 @@ export class InventoryAssignmentService {
         receivedFromManifestNumber:        [''],
         receivedFrom:                      [''],
         facilityLicenseNumber:             [''],
-        receivedFromFacilityName:          [''],
         isOnHold:                          [''],
         archivedDate:                      [''],
         finishedDate:                      [''],

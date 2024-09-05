@@ -27,9 +27,8 @@
   <div *ngIf="!auths?.blindBalanceSheet">Credit Tips</div>
   <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet?.creditTips ?? 0 | currency}} </div>
 
-
-  <div *ngIf="!auths?.balanceSheetDisableBank  && !auths?.blindBalanceSheet">Remaing In Drawer </div>
-  <div *ngIf="!auths?.balanceSheetDisableBank  && !auths?.blindBalanceSheet" class="calculation"> {{ sheet?.endedWith ?? 0 | currency}} </div>
+  <div>Remaing In Drawer </div>
+  <div  class="calculation"> {{ sheet?.endedWith ?? 0 | currency}} </div>
 
   <div>Deposit:</div>
   <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> </div>
@@ -42,9 +41,9 @@
 
     <div *ngFor="let item of drops">
       <div  class="cash-drop-grid">
-          <div>Drop {{item.id }} </div>
-          <div  class="calculation">{{item.amount | currency}} </div>
-          <div  class="calculation">{{item.dropTime | date: ' h:mm:ss a'}} </div>
+          <div>Drop {{item?.id }} </div>
+          <div  class="calculation">{{item?.amount ?? 0 | currency}} </div>
+          <div  class="calculation">{{item?.dropTime | date: ' h:mm:ss a'}} </div>
       </div>
     </div>
 
@@ -56,7 +55,6 @@
 
   <div  *ngIf="!auths?.blindBalanceSheet && !auths?.balanceSheetDisableBank">Adjusted Balance</div>
     <div class="calculation"  *ngIf="!auths?.blindBalanceSheet && !auths?.balanceSheetDisableBank">
-
       <span *ngIf="currentBalance>=0">
         {{currentBalance ?? 0 | currency}}
       </span>

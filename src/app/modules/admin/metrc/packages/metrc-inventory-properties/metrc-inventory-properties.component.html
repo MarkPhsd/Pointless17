@@ -43,33 +43,51 @@
             </button>
         </div>
       </div>
-
-
     
     </div>
     <div style="width:150px" *ngIf="package?.unitOfMeasureName != 'Each'">
-      <app-value-fields
-        [inputForm]="inputForm"
-        [fieldName]="'labFacilityLicenseNumber'"
-      > Lab Faclicity Number</app-value-fields>
-
-       <app-value-fields
-        [inputForm]="inputForm"
-        [fieldName]="'labFacilityName'"
-      > Lab Facility Name</app-value-fields>
-
-       <app-value-fields
-        [inputForm]="inputForm"
-        [fieldName]="'sourceHarvestNumber'"
-      > Producer Number</app-value-fields> 
-
-       <app-value-fields
+        <app-value-fields
           [inputForm]="inputForm"
-          [fieldName]="'sourceHarvestName'"
-        >Producer Name
-      </app-value-fields>
+          [fieldName]="'itemFromFacilityLicenseNumber'"
+        > From Facility #</app-value-fields>
 
-      </div>
+        <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'itemFromFacilityName'"
+        > From Facility Name</app-value-fields>
+ 
+          <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'receivedFromFacilityLicenseNumber'"
+        > R From Facility #</app-value-fields>
+
+        <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'receivedFromFacilityName'"
+        > R From Facility Name</app-value-fields>
+        <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'labFacilityLicenseNumber'"
+        > Lab Facility Name</app-value-fields>
+        <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'labFacilityName'"
+        > Lab Facility Name</app-value-fields>
+
+        <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'sourceHarvestNumber'"
+        > Producer #</app-value-fields> 
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'sourceHarvestName'"
+          >Producer Name
+        </app-value-fields>
+
+ 
+
+    </div>
 
 
     <div>
