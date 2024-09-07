@@ -1,5 +1,7 @@
 
 export interface ProductSearchModel {
+  vendorID: number;
+  // productSupplierCatID: number;
   barcode?:                      string;
   name?:                         string;
   productID?                   : number;

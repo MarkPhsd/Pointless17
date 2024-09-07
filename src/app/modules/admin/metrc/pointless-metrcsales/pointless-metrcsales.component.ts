@@ -104,6 +104,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
    inputForm       : UntypedFormGroup;
    dateRange       : UntypedFormGroup;
    selected        : any[];
+   selectedResponse: any;
    selectedRows    : any;
    agtheme         = 'ag-theme-material';
    gridDimensions  = "width: 100%; height: calc(85vh -200px);"
@@ -602,8 +603,41 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     }
   }
 
+  //mutli select method for selection change.
   onSelectionChanged(event) {
-    if (!event) { return }
+
+    let selectedRows       = this.gridApi.getSelectedRows();
+    let selectedRowsString = '';
+    let maxToShow          = this.pageSize;
+    let selected           = []
+
+    // if (selectedRows.length == 0) { return }
+    // selectedRows.forEach(function (selectedRow, index) {
+    // if (index >= maxToShow) { return; }
+    // if (index > 0) {  selectedRowsString += ', ';  }
+    //   selected.push(selectedRow.id)
+    //   selectedRowsString += selectedRow.name;
+    // });
+
+    // if (selectedRows.length > maxToShow) {
+    // let othersCount = selectedRows.length - maxToShow;
+    // selectedRowsString +=
+    //   ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
+    // }
+    try {
+      console.log('event', event)
+      const item = selectedRows[0]
+      this.selected = item
+      this.selectedResponse = JSON.parse(item?.metrcResponse)
+      
+    } catch (error) {
+      console.log(error)      
+    }
+
+  }
+
+  clearSelectedData() { 
+    this.selectedResponse = null
   }
 
   editProductFromGrid(e) {

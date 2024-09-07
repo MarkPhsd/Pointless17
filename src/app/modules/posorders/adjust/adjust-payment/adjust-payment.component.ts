@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription,Observable, switchMap, EMPTY, of, catchError, concatMap } from 'rxjs';
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder, IPOSPayment, OperationWithAction } from 'src/app/_interfaces';
-import { IItemBasic, OrdersService } from 'src/app/_services';
+import { AuthenticationService, IItemBasic, OrdersService } from 'src/app/_services';
 
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -25,6 +25,7 @@ import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos
 import { TriposResult } from 'src/app/_services/tripos/triposModels';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 
 @Component({
   selector: 'app-adjust-payment',
@@ -53,7 +54,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   toggleVoid: boolean;
   inputForm: UntypedFormGroup;
   voidAmount: number;
-
+  userAuths       :   IUserAuth_Properties;
+  _userAuths      :   Subscription;
   initSubscriptions() {
     if (!this.manifest) {
       this._paymentWithAction = this.pOSPaymentService.paymentWithAction$.subscribe(data=> {
@@ -61,7 +63,23 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
       })
     }
+
+    this._userAuths = this.authenticationService.userAuths$.pipe(
+      switchMap(data => {
+      if (data) {
+        this.userAuths = data;
+        return of(data)
+      }
+      this.userAuths = JSON.parse(localStorage.getItem('userAuth')) as IUserAuth_Properties
+      if (this.userAuths) {
+        this.authenticationService.updateUserAuths(this.userAuths)
+      }
+      return of(this.userAuths)
+    })).subscribe(data => {
+
+    })
   }
+
 
   initVoidForm() {
     this.inputForm = this.fb.group({
@@ -76,6 +94,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 private siteService           : SitesService,
                 private orderService          : OrdersService,
                 private matSnackBar           : MatSnackBar,
+                private authenticationService : AuthenticationService,
                 private storeCreditService    : StoreCreditService,
                 private fb                    : UntypedFormBuilder,
                 private cardPointMethdsService: CardPointMethodsService,
@@ -97,27 +116,39 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         this.dsiEmv = data?.dsiEMVSettings;
         return of (data)
       }))
-      this.settings        =  data?.uiSetting;
-      const site           = this.siteService.getAssignedSite();
-      this.isAuthorized    = this.userAuthorization.isUserAuthorized('admin, manager')
-      let action = 2;
-      if (data.action) { action =  data?.action };
-      if (this.data.manifest) {
-        this.manifest = data?.manifest;
-        if (data.id) { 
-          this.id       = data.id.toString();
+
+      this.authenticationService.userAuths$.subscribe(authsData => { 
+        this.settings        =  data?.uiSetting;
+        const site           = this.siteService.getAssignedSite();
+        this.isAuthorized    = this.userAuthorization.isUserAuthorized('admin, manager')
+        this.userAuths       = authsData;
+       
+        let action = 2;
+        if (data.action) { action =  data?.action };
+        if (this.data.manifest) {
+          this.manifest = data?.manifest;
+          if (data.id) { 
+            this.id       = data.id.toString();
+          }
+          this.list$    = this.adjustMentService.getReasonsByFilter(site, 4);
+          this.resultAction = data
+          return
         }
-        this.list$    = this.adjustMentService.getReasonsByFilter(site, 4);
-        this.resultAction = data
-        return
-      }
-      this.resultAction  = data
-      this.pOSPaymentService.updateItemWithAction(data);
-      this.list$         = this.adjustMentService.getReasonsByFilter(site, action);
-      this.payment       = data.payment;
-      this.pOSPaymentService.getPOSPayment(site, this.payment.id, false).subscribe(data => {
-        this.voidPayment = data;
+        this.resultAction  = data
+        this.pOSPaymentService.updateItemWithAction(data);
+        this.list$         = this.adjustMentService.getReasonsByFilter(site, action);
+        this.payment       = data.payment;
+        this.pOSPaymentService.getPOSPayment(site, this.payment.id, false).subscribe(data => {
+
+          if (data?.paymentMethod?.isCash) { 
+            if (authsData?.enableCashVoid) { 
+              this.isAuthorized = true;
+            }
+          }
+          this.voidPayment = data;
+        })
       })
+    
     }
   }
 
@@ -239,7 +270,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       //establish the amount to void for tripos
       //later we will use for other payment processors.
       if (this.voidAmount == 0) {
-        this.setVoidAmount(this.resultAction.payment.amountPaid)
+        this.setVoidAmount(this.resultAction?.payment?.amountPaid)
       }
 
       if (this.resultAction) {
@@ -262,7 +293,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
             this.resultAction.payment = this.payment;
             const msg ='Unable to void this store credit. Before voiding this order, please ensure the card can be voided.';
-            const getPayment$ = this.pOSPaymentService.getPOSPayment(site, this.payment.id, false);
+            const getPayment$ = this.pOSPaymentService.getPOSPayment(site, this.payment?.id, false);
 
             this.action$ =
               getPayment$.pipe(
@@ -340,8 +371,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                   if (this.voidAmount != this.resultAction?.payment?.amountPaid + this.resultAction?.payment?.voidAmount) {
                     item.transactionId = this.payment.refNumber;
                   }
-
-
 
                   if (!this.voidAmount) {
                     this.voidAmount = this.resultAction.payment.amountPaid
@@ -486,7 +515,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
             this.action$ = this.updateVoidPaymentResponse(response$)
 
           } else {
-            // console.log('No Card Processor Used 2.');
+            console.log('No Card Processor Used 2.');
             response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)
             this.action$ = this.updateVoidPaymentResponse(response$)
           }
@@ -513,13 +542,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     console.log('apply tri pos result', data)
     this.resultAction.payment.amountPaid = 0;
     this.resultAction.payment.amountReceived = 0;
-    //preserve the original transaction code.
-    // this.resultAction.payment.refNumber = data.transactionId;
-    this.resultAction.payment.respcode = data.transactionId;
-    this.resultAction.payment.tranType = data._type;
+    this.resultAction.payment.respcode = data?.transactionId;
+    this.resultAction.payment.tranType = data?._type;
     this.resultAction.payment.voidReason = voidReason //this.resultAction.voidReason;
     this.resultAction.payment.transactionData = JSON.stringify(data);
-    this.resultAction.payment.refNumber = data.transactionId;
+    this.resultAction.payment.refNumber = data?.transactionId;
     return this.resultAction
   }
 
@@ -562,18 +589,12 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         this.updateVoidPayment(data)
         return of(data)
     }))
-
   }
 
   validateTriPOSVoid(data) {
     if (!data) {return false}
-    console.log(data)
-
-    if (data && data.isApproved) {
-      return true;
-    }
-
-    if (data.statusCode.toLowerCase() === "approved".toLowerCase()) {
+    if (data && data.isApproved) { return true;  }
+    if (data.statusCode && data.statusCode.toLowerCase() === "approved".toLowerCase()) {
       return true;
     }
     return false;
@@ -582,7 +603,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   updateVoidPayment(response: OperationWithAction) {
     const site = this.siteService.getAssignedSite();
     const item$ = this.updateOrderSubscription()
-
     if (response && response.result) {
       item$.subscribe( order => {
         this.orderMethodsService.updateOrderSubscription(order)
@@ -591,7 +611,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       });
       return
     }
-
   }
 
   voidDSIEmvPayment() {
@@ -604,7 +623,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-  //const device = localStorage.getItem('devicename')
   voidDCapPayment() {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
@@ -633,24 +651,13 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
               this.dialogRef.close();
             }, 50)
           }
-          
           return of(data)
         }))
       }
     }
   }
 
-
-  //const device = localStorage.getItem('devicename')
   voidPayAPISale(voidPayment) {
-      // if (this.voidPayment.trancode == 'EMVPreAuth') {
-      //   this.action$ =  this.paymentsMethodsService.processDcapCreditVoid(voidPayment).pipe(switchMap(data => {
-      //     setTimeout(() => {
-      //       this.closeDialog(null, null);
-      //     }, 50)
-      //     return of(data)
-      //   }))
-      // }
     console.log(voidPayment.voidReason)
     if (voidPayment) {
       this.action$ =  this.paymentsMethodsService.processPayAPIVoid(voidPayment).pipe(switchMap(data => {
@@ -658,15 +665,14 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
           this.siteService.notify(`Payment not voided: ${data?.resultMessage}`, 'close', 20000, 'red')
           return of(data)
         }
-
         setTimeout(() => {
           this.closeDialog(null, null);
         }, 50)
         return of(data)
       }))
     }
-
   }
+
   get isDSIEmvPayment() {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
@@ -682,23 +688,31 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     let response: OperationWithAction
     return response$.pipe(
       switchMap(response => {
+        console.log(response)
+
+        const result = response.result 
+        if (!result) {
+          this.notifyEvent(`Not voided. ${response.resultMessage}`, 'Result')
+          return of(null)
+        }
 
         if (response && response.result) {
           this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
         }
-
-        return this.orderService.getOrder(site, response.payment.orderID.toString(), false)
-
+        if (response.payment.orderID && response.payment.orderID.toString()) { 
+        
+          return this.orderService.getOrder(site, response.payment.orderID.toString(), false)
+        }
+        return of(null)
       }
     )).pipe(switchMap(data => {
-
-      // console.log('getting order', data)
-      this.orderMethodsService.updateOrderSubscription(data)
+      if (data) { 
+        this.orderMethodsService.updateOrderSubscription(data)
+      }
+      
       this.storeCreditMethodService.updateSearchModel(null)
-
       this.dialogRef.close();
-
-      if (data == null) { return }
+      if (data == null) { return of(null)}
       return of(response)
     }))
   }
@@ -719,13 +733,17 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   updateManifestSubscription(): Observable<InventoryManifest> {
     const site = this.siteService.getAssignedSite();
-    const orderID = this.resultAction.payment.orderID;
+    const orderID = this.resultAction?.payment?.orderID;
     return this.manifestService.get(site, +this.id)
   }
 
   updateOrderSubscription(): Observable<IPOSOrder> {
     const site = this.siteService.getAssignedSite();
-    const orderID = this.resultAction.payment.orderID;
+    const orderID = this.resultAction?.payment?.orderID;
+    if (!orderID) { 
+      this.siteService.notify('no OrderID', 'close', 2000)
+      return
+    }
     return this.orderService.getOrder(site, orderID.toString(), false)
   }
 

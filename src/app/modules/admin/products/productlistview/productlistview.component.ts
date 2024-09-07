@@ -148,6 +148,7 @@ productTypeID    : number;
 departmentID     : number;
 typeID           : number;
 brandID          : number;
+productSupplierCatID: number;
 active           : boolean;
 viewAll           = 1;
 requiresWork    : boolean;
@@ -347,6 +348,13 @@ constructor(  private _snackBar              : MatSnackBar,
     }
   }
 
+  setVendorID(event) { 
+    if (event && event.id) { 
+      this.productSupplierCatID = event.id;
+      this.refreshSearch(1);
+    }
+  }
+
   ngOnDestroy(): void {
     if(this._promptSubGroup){this._promptSubGroup.unsubscribe()}
   }
@@ -421,7 +429,7 @@ constructor(  private _snackBar              : MatSnackBar,
       minQuantityFilter : [],
       webWorkRequired   : [false],
       sort1: [],
-
+      productSupplierCatID: [this.productSupplierCatID],
       sortBy1: [],
       sortBy1Asc : [],
       sortBy2 : [],
@@ -922,6 +930,7 @@ constructor(  private _snackBar              : MatSnackBar,
     if (this.productTypeSearch)         { searchModel.itemTypeID  = +this.productTypeSearch.toString(); }
     if (this.brandID)                   { searchModel.brandID     = +this.brandID.toString(); }
     if (this.departmentID)              { searchModel.departmentID= +this.departmentID.toString()}
+    if (this.productSupplierCatID)      { searchModel.vendorID = +this.productSupplierCatID.toString()}
 
     const searchForm = this.searchForm.value;
 
@@ -1007,7 +1016,7 @@ constructor(  private _snackBar              : MatSnackBar,
     const site               = this.siteService.getAssignedSite()
     if (page != 0) { this.currentPage         = page}
     const model = this.initSearchModel();
-    console.log('refreshSearch', model)
+  
     this.onGridReady(this.params)
   }
 

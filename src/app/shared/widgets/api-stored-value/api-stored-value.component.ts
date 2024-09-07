@@ -77,8 +77,11 @@ export class ApiStoredValueComponent implements OnInit {
 
   ngOnInit(): void {
     let currentAPIUrl = localStorage.getItem('storedApiUrl');
-    currentAPIUrl = currentAPIUrl.replace( 'https://', '')
-    currentAPIUrl = currentAPIUrl.replace( '/api', '')
+
+    if (currentAPIUrl) { 
+      currentAPIUrl = currentAPIUrl.replace( 'https://', '')
+      currentAPIUrl = currentAPIUrl.replace( '/api', '')
+    }
     
     this.inputForm = this.fb.group({
       apiUrl: [currentAPIUrl],

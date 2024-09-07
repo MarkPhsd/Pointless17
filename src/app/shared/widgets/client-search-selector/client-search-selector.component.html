@@ -15,7 +15,7 @@
         <mat-option *ngFor="let item of results.results "
                     [value]="item">
           <div>
-            {{item.firstName}}  {{item.lastName}}
+            {{item.firstName}}  {{item.lastName}} | {{item?.companyName}}
             <div class="small-text">
               {{item.phone}} {{item.accountNumber}} {{item.email}}
             </div>

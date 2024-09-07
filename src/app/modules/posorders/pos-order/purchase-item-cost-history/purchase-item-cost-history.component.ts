@@ -2,7 +2,8 @@ import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
 import { Observable, switchMap, of, Subscription } from 'rxjs';
 import { IPOSOrder, ISite, PosOrderItem } from 'src/app/_interfaces';
-import { HistoricalSalesPurchaseOrderMetrcs, ReportingService } from 'src/app/_services';
+import { HistoricalSalesPurchaseOrderMetrcs, OrdersService, ReportingService } from 'src/app/_services';
+import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { IReportItemSales, ItemPOMetrics, POSItemSearchModel } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -32,6 +33,8 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
     private siteService: SitesService,
     public orderMethodsService: OrderMethodsService,
     private fb: FormBuilder,
+    private dateHelper: DateHelperService,
+    private orderService: OrdersService,
     private reportingService: ReportingService ) { }
 
   ngOnInit( ): void {
@@ -65,6 +68,9 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
   ngOnDestroy() {
     this.itemHistorySales$ = null;
     this.orderMethodsService.updateLastItemSelected(null)
+    this.orderService.completionDate_From = null// this.dateHelper.getFormattedByDate(this.searchModel.completionDate_From)
+    this.orderService.completionDate_To   = null// this.dateHelper.getFormattedByDate(this.searchModel.completionDate_To)
+    
   }
 
   getAssignedItems(item: PosOrderItem) {
@@ -88,8 +94,14 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
 
   initCompletionDateForm() {
     this.inputForm  = this.initForm() //this.getFormRangeInitial(this.scheduleDateForm)
-    this.searchModel.completionDate_From = this.inputForm.get("start").value;
-    this.searchModel.completionDate_To   = this.inputForm.get("end").value;
+    if (this.inputForm) { 
+      if (this.inputForm.get("start").value) {
+        this.searchModel.completionDate_From = this.inputForm.get("start").value;
+      }
+      if (this.inputForm.get("end").value) { 
+        this.searchModel.completionDate_To   = this.inputForm.get("end").value;
+      }
+    }
     this.subscribeToCompletionDatePicker();
   }
 
@@ -103,6 +115,8 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
     form.valueChanges.subscribe( res=> {
       if (form.get("start").value &&
           form.get("end").value) {
+          this.orderService.completionDate_From = this.dateHelper.getFormattedByDate(this.searchModel.completionDate_From)
+          this.orderService.completionDate_To   = this.dateHelper.getFormattedByDate(this.searchModel.completionDate_To)
           const site = this.siteService.getAssignedSite()
           this.itemSales$  =  this.reportingService.getMetrcsForPO(site, this.searchModel).pipe(switchMap(data => {
             return of(data)
@@ -118,16 +132,26 @@ export class PurchaseItemCostHistoryComponent implements OnInit, OnDestroy, OnCh
   getSalesByDateRange(product) { 
     if (!this.dateFrom || !this.dateTo) { return}
     if (!this.product) {return }
-    console.log('getSales')
+    
     const searchModel = {} as POSItemSearchModel
-    searchModel.completionDate_From = this.dateFrom
-    searchModel.completionDate_To = this.dateTo 
+    searchModel.completionDate_From = this.dateHelper.getFormattedByDate(this.dateFrom);
+    searchModel.completionDate_To = this.dateHelper.getFormattedByDate(this.dateTo);
     searchModel.productName = product.productName;
     const site = this.siteService.getAssignedSite()
-    this.itemSales$  =  this.reportingService.getSalesByRange(site, searchModel).pipe(switchMap(data => {
-      return of(data)
-    }))
-  }
+
+    this.orderService.completionDate_From = searchModel.completionDate_From;
+    this.orderService.completionDate_To = searchModel.completionDate_To;
+
+    let sales: any;
+    const order = this.orderMethodsService.currentOrder;
+    let order$ = this.orderService.getOrder(site, order?.id.toString(), false, this.orderService.completionDate_From, this.orderService.completionDate_To)
+    let sales$ = this.reportingService.getSalesByRange(site, searchModel)
+    // this.itemSales$  =  order$.pipe(switchMap(data => {
+    //     this.orderMethodsService.updateOrder(data)
+      return sales$.pipe(switchMap(data => { 
+        return of(data)
+      }))
+    }
 
   subscribeToDateRangeData(form: UntypedFormGroup) {
     if (form) {

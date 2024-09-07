@@ -92,7 +92,8 @@ export class QrPaymentComponent {
   ngOnInit(): void {
 
     // this.id = this.route.snapshot.paramMap.get('id');
-
+    localStorage.removeItem('loginAction');
+   
     if (!this.checkUserLoggedIn()) {
       return
     }
@@ -103,6 +104,9 @@ export class QrPaymentComponent {
     this.uiHomePageSetting$ = this.settingsService.getUIHomePageSettings();
     this.initTransactionUISettings()
     this.order$ = this.getOrder().pipe(switchMap(data => {
+
+
+
       this.order = data;
       return of(data)
     }))
@@ -202,7 +206,6 @@ export class QrPaymentComponent {
 
   getOrder(): Observable<IPOSOrder> {
 
-
     try {
       this.processing = true;
       const id = this.route.snapshot.paramMap.get('id');
@@ -216,35 +219,14 @@ export class QrPaymentComponent {
 
       const user = this.getUser()
 
-      console.log('get order', id, orderCode, setToPay, user)
       if (!id && !orderCode) {
         this.processing = false;
         return of(null)
       }
 
       this.action$ = null;
-
     
       let order$ : Observable<IPOSOrder>
-
-     
-      // if (user && user?.username  &&  user?.username != "Temp" && user.password) {
-      //   if (orderCode) {
-      //     order$ =this.orderService.getQROrder(site, orderCode);
-      //   }
-      //   if (id) {
-      //     order$ = this.orderService.getQRCodeOrder(site, id);
-      //   }
-      // }
-      // if (!user) {
-      //   if (orderCode) {
-      //     order$ =this.orderService.getQROrder(site, orderCode);
-      //   }
-      //   if (id) {
-      //     order$ = this.orderService.getQRCodeOrder(site, id)
-      //   }
-      // }
-
       if (orderCode) {
         order$ =this.orderService.getQROrderAnon(site, orderCode);
       }

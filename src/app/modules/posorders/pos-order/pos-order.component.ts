@@ -641,7 +641,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private serviceTypeService     : ServiceTypeService,
               private settingService         : SettingsService,
               private _bottomSheet           : MatBottomSheet,
-
               private inventoryAssignmentService: InventoryAssignmentService,
               private posOrderItemService    : POSOrderItemService,
               private coachMarksService      : CoachMarksService,
@@ -681,8 +680,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.sidePanelWidth = this.el.nativeElement.offsetWidth;
     this.initSubscriptions();
     this.lastSelectedItemSubscriber();
-
-
     this.initReconcileSearchForm();
     this.initSalesDateForm();
 
@@ -750,7 +747,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   get purchaseOrderItemView() {
     if (!this.userAuths?.editProduct) { return }
-    if (!this.smallDevice && !this.mainPanel) { return null }
+    if (this.smallDevice) { return }
+    if (!this.mainPanel) { return null }
     if (this.order && this.order.service && (this.order.service?.filterType == 1 || this.order.service?.name.toLowerCase() === 'purchase order')) {
       return this.purchaseItemSales;
     }
@@ -785,10 +783,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   //purchaseItemHistory
   get purchaseItemHistoryView() {
     if (!this.userAuths?.editProduct) { return }
-    if (!this.smallDevice &&  !this.mainPanel) { return null }
+    if (this.smallDevice) { return }
+    if (!this.mainPanel) { return null }
     if (this.order && this.order.service &&
       (this.order.service?.filterType == 1 || this.order.service?.name.toLowerCase() === 'purchase order')) {
-      return this.purchaseItemHistory;
+        return this.purchaseItemHistory;
     }
     return null
   }
@@ -796,12 +795,15 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   get importPurchaseOrderView() {
     if (this.showLabelPrint) { return null}
     if (!this.userAuths?.editProduct) { return }
-    if (!this.smallDevice &&  !this.mainPanel) { return null }
+    if (this.smallDevice) { return }
+    if (!this.mainPanel) { return null }
     if (!this.isNotPurchaseOrder) {
       return this.importPurchaseOrder;
     }
     return null
   }
+
+ 
 
   get labelPrintView() {
     if (this.showLabelPrint) { return this.labelPrintChild }

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Inject} from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { Observable} from 'rxjs';
+import { Observable, of, switchMap} from 'rxjs';
 import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -31,14 +31,14 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
   get f():                  UntypedFormGroup  { return this.inputForm as UntypedFormGroup};
   id: any;
   user = this.authenticationService._user.value;
-
+  action$:Observable<any>;
   constructor(
                 private _snackBar: MatSnackBar,
                 private fb: UntypedFormBuilder,
                 public route: ActivatedRoute,
                 private adjustmentReasonsService: AdjustmentReasonsService,
                 private siteService: SitesService,
-                private authenticationService: AuthenticationService,
+                public authenticationService: AuthenticationService,
                 private inventoryAssignmentService: InventoryAssignmentService,
                 private dialogRef: MatDialogRef<InventoryAdjustmentNoteComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: any,
@@ -65,7 +65,6 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
 
   getAdjustmentType(event) {
     this.adjustmentType = event.value
-
   }
 
   applyChanges() {
@@ -74,31 +73,36 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
     if (inv) {
       'get the item then update the item'
 
-      const note =  `${this.f.get('adjustmentNotes').value}. Previous value;${inv.packageCountRemaining}`
-      inv.adjustmentNote        =  note 
-      inv.adjustmentType        =  this.adjustmentType
-      // console.log('user', this.user)
+      const formNote = this.f.controls['adjustmentNotes'].value;
+      const adjustMent = this.f.controls['adjustmentType'].value;
+      const pacakgeCount = this.f.controls['packageCountRemaining'].value
+      const note =  `${formNote}. Previous value: ${inv?.packageCountRemaining}`
+      inv.adjustmentNote        =  note ;
+      inv.adjustmentType        =  adjustMent;
+
       if (this.user) { 
         inv.employeeName  = this.user.username
         inv.employeeID    = this.user.id;
       } 
       
-      inv.packageCountRemaining =  this.f.get('packageCountRemaining').value
+      inv.packageCountRemaining =  pacakgeCount
       if (inv.unitMulitplier == 0) { inv.unitMulitplier = 1}
       inv.baseQuantityRemaining = inv.packageCountRemaining * inv.unitMulitplier;
-      // inv.packageQuantity = inv.packageCountRemaining;
+ 
       const d = new Date();
       inv.adjustmentDate = d.toISOString()
 
       if (this.inventoryAssignment) {
-        this.inventoryAssignmentService.reconcileInventory(site, this.id, inv).subscribe(data => {
-          this.notifyEvent(`updated`, `Success` )
-          this.onCancel();
-        }, error => {
-          this.notifyEvent(`Update failed ${error}`, `Failure` )
-          this.inventoryAssignment = inv
-        })
+        this.action$ =  this.inventoryAssignmentService.reconcileInventory(site, this.id, inv).pipe(
+          switchMap(data => {
+              this.onCancel();
+              return of(data)
+          })
+        )
 
+        // , error => {
+        //   this.notifyEvent(`Update failed ${error}`, `Failure` )
+        //   this.inventoryAssignment = inv
       }
       this.initForm()
     }

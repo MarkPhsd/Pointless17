@@ -110,6 +110,7 @@ export class OrderMethodsService implements OnDestroy {
 
   overrideClear: boolean;
   orderSearchEmployeeID: number;
+
   public get assignedPOSItem() {return this.assignPOSItems }
 
   priceCategoryID: number;
@@ -233,12 +234,18 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   clearOrderSubscription() {
-    localStorage.removeItem('orderSubscription')
+    this.clearOrderSettings()
     this.toolbarServiceUI.updateOrderBar(false)
-    this.currentOrder = null;
     this._currentOrder.next(null)
     this.updateLastItemAdded(null)
     this.updateOrderSubscription(null);
+  }
+
+  clearOrderSettings() {
+    this.currentOrder = null;
+    this.orderService.completionDate_To   = '' //: string;
+    this.orderService.completionDate_From = '' //: string;
+    localStorage.removeItem('orderSubscription')
   }
 
   updateOrderSubscriptionLoginAction(order: IPOSOrder) {
@@ -288,6 +295,7 @@ export class OrderMethodsService implements OnDestroy {
     // console.trace('update order ', order)
     try {
       if (!order) {
+        this.clearOrderSettings()
         this.updateOrderSubscriptionOnly(null);
         this.setStateOrder(null)
         this.setActiveOrder(null)

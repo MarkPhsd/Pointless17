@@ -51,8 +51,8 @@ export interface OrderActionResult {
 })
 
 export class OrdersService {
-
-  
+  completionDate_From  : string; // searchModel.completionDate_From;
+  completionDate_To    : string; // searchModel.completionDate_To;
 
   get platForm() {  return Capacitor.getPlatform(); }
 
@@ -518,7 +518,7 @@ export class OrdersService {
 
   }
 
-  getOrder(site: ISite, id: string, history: boolean):  Observable<IPOSOrder>  {
+  getOrder(site: ISite, id: string, history: boolean, startDate?: string, endDate?: string):  Observable<IPOSOrder>  {
 
     const user = this.userAuthorizationService.user;
     if (!user) {
@@ -527,13 +527,21 @@ export class OrdersService {
     }
     if (history === undefined) {history = false};
 
+    if (this.completionDate_From && this.completionDate_To) { 
+      startDate = this.completionDate_From
+      endDate   = this.completionDate_To
+    }
+
+    if (!startDate) {startDate = '' }
+    if (!endDate)   {endDate = '' }
+
     const deviceName = localStorage.getItem('devicename')
 
     const controller = "/POSOrders/"
 
-    const endPoint  = "GetPOSOrder"
+    const endPoint  = "GetPOSOrderV2"
 
-    const parameters = `?ID=${id}&history=${history}&deviceName=${deviceName}`
+    const parameters = `?ID=${id}&history=${history}&deviceName=${deviceName}&startDate=${startDate}&endDate=${endDate}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 

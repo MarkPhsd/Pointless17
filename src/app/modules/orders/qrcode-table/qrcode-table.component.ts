@@ -53,6 +53,8 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    localStorage.removeItem('loginAction');
+    this.orderMethodsService.updateOrder(null)
     this.getUser();
     this.uiHomePageSetting$ = this.settingsService.getUIHomePageSettings();
     this.order$ = this.getOrder().pipe(switchMap(data => {

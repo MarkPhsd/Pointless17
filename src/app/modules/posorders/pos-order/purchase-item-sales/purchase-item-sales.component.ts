@@ -76,12 +76,9 @@ export class PurchaseItemSalesComponent implements OnInit,OnChanges,OnDestroy {
     }
 
     getAssignedItems(item: PosOrderItem) {
-      // this.product = null;
       if (this.order && this.order.service.filterType == 1) {
         this.loadingMessage = true
-        // this.product = item
         if (item && item.productName) {
-          // console.log('PurchaseItemSalesComponent', item)
           const search = {} as POSItemSearchModel;
           search.productName = item.productName;
           const site = this.siteService.getAssignedSite()

@@ -1,5 +1,7 @@
+<div *ngIf="(action$ | async) as action"></div>
 <form [formGroup]="inputForm" >
   <h4>Audit Note</h4>
+  <h5>{{authenticationService._user.value}}</h5>
   <div *ngIf="inputForm.controls.adjustmentType.errors?.required && inputForm.controls.adjustmentType.touched" class="error">
     <mat-icon color="warn">warning</mat-icon> Location required.
   </div>
@@ -18,7 +20,7 @@
       <div class="grid-item">
         <mat-form-field appearance="outline" id="customer-notes">
           <mat-label>Adjustment Notes</mat-label>
-            <textarea matInput rows="10"
+            <textarea matInput rows="5"
                       formControlName="adjustmentNotes"
             >
           </textarea>
@@ -45,7 +47,12 @@
     <mat-divider></mat-divider>
 
     <div >
-        <button mat-raised-button class="form-button" color="primary" (click)="update()">Update</button>
+        <button mat-raised-button 
+                class="form-button" 
+                color="primary" 
+                (click)="update()">
+          Update
+        </button>
     </div>
 
   </div>

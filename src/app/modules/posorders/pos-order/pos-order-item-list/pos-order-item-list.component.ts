@@ -213,7 +213,9 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
     let reconcilePass = false
     if (this.order.service && this.order?.service?.filterType == 2) {
-      reconcilePass = true;
+      if (this.order.service.name != 'purchase order') {
+        reconcilePass = true;
+      }
     }
 
     let  columnDefs =  [];
@@ -315,6 +317,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         editable: true,
         singleClickEdit: true
     }
+
     if (this.order.customerName != 'Inventory Monitor') {
       if (!reconcilePass) {
         if ((this.purchaseOrderEnabled || this.showCost) || reconcilePass) {
@@ -354,14 +357,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       columnDefs.push(editButtonColumn);
     }
 
-    const invButton = JSON.parse(JSON.stringify(editButtonColumn));
-    invButton.field = 'id';
-    invButton.headerName = 'INV.'
-    invButton.cellRendererParams.label =  'Intake'
-    invButton.cellRendererParams.onClick = this.editINV.bind(this)
-    columnDefs.push(invButton);
-
-
     let itemDelete =  { headerName: 'Delete', field: "id",
         cellRenderer: "btnCellRenderer",
         cellRendererParams: {
@@ -379,32 +374,68 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       columnDefs.push(itemDelete);
     }
 
-    nextColumn =  {headerName: 'Prior',     field: 'traceProductCount',
-          sortable: true,
-          width   : 100,
-          minWidth: 100,
-          maxWidth: 100,
-          flex    : 2,
-          editable: false,
-          singleClickEdit: false
-    }
-    columnDefs.push(nextColumn);
-
-     nextColumn =  {headerName: 'Balance',     field: 'traceProductCalc',
-          sortable: true,
-          width   : 100,
-          minWidth: 100,
-          maxWidth: 100,
-          flex    : 2,
-          editable: false,
-          singleClickEdit: false
-    }
-
     if (this.order?.customerName != 'Inventory Monitor') {
-      if (this.purchaseOrderEnabled || reconcilePass) {
-        columnDefs.push(nextColumn);
+      if (!reconcilePass) {
+        if (!this.purchaseOrderEnabled || this.showRetail) {
+          columnDefs.push(currencyTotalColumn);
+        }
       }
     }
+
+    if (reconcilePass) {
+      nextColumn =  {headerName: 'Prior',     field: 'traceProductCount',
+        sortable: true,
+        width   : 100,
+        minWidth: 100,
+        maxWidth: 100,
+        flex    : 2,
+        editable: false,
+        singleClickEdit: false
+      }
+      columnDefs.push(nextColumn);
+     
+      if (this.order?.customerName != 'Inventory Monitor') {
+        if (this.purchaseOrderEnabled || reconcilePass) {
+          nextColumn =  {headerName: 'Balance',     field: 'traceProductCalc',
+            sortable: true,
+            width   : 100,
+            minWidth: 100,
+            maxWidth: 100,
+            flex    : 2,
+            editable: false,
+            singleClickEdit: false
+          }
+          columnDefs.push(nextColumn);
+        }
+      }
+     
+    }
+   
+    if (this.purchaseOrderEnabled &&  !reconcilePass) {
+
+      nextColumn =  {headerName: 'InStock',     field: 'traceProductCount',
+        sortable: true,
+        width   : 100,
+        minWidth: 100,
+        maxWidth: 100,
+        flex    : 2,
+        editable: false,
+        singleClickEdit: false}
+      columnDefs.push(nextColumn);
+
+      nextColumn =  {headerName: 'Sold',     field: 'salesCount',
+        sortable: true,
+        width   : 100,
+        minWidth: 100,
+        maxWidth: 100,
+        flex    : 2,
+        editable: false,
+        singleClickEdit: false
+      }
+      columnDefs.push(nextColumn);
+  
+    }
+  
 
     nextColumn =  {headerName: 'Scanned',     field: 'traceOrderDate',
                     sortable: true,
@@ -430,8 +461,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                   maxWidth: 100,
                   flex    : 2,
                   editable: false,
-                  singleClickEdit: false
-      }
+                  singleClickEdit: false }
       columnDefs.push(nextColumn);
 
       nextColumn =  {headerName: 'Expected',     field: 'expectedInventoryCount',
@@ -441,19 +471,17 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                   maxWidth: 100,
                   flex    : 2,
                   editable: false,
-                  singleClickEdit: false
-      }
+                  singleClickEdit: false}
       columnDefs.push(nextColumn);
 
-      nextColumn =  {headerName: 'Current',     field: 'currentProductCount',
+      nextColumn =  {headerName: 'InStock',     field: 'currentProductCount',
                   sortable: true,
                   width   : 100,
                   minWidth: 100,
                   maxWidth: 100,
                   flex    : 2,
                   editable: false,
-                  singleClickEdit: false
-      }
+                  singleClickEdit: false}
       columnDefs.push(nextColumn);
 
       nextColumn =  {headerName: 'Diff',     field: 'monitorDescrepency',
@@ -463,8 +491,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
             maxWidth: 100,
             flex    : 2,
             editable: false,
-            singleClickEdit: false
-      }
+            singleClickEdit: false}
       columnDefs.push(nextColumn);
 
       nextColumn =  {headerName: 'InvID',     field: 'inventoryAssignmentID',
@@ -474,8 +501,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
             maxWidth: 100,
             flex    : 2,
             editable: false,
-            singleClickEdit: false
-      }
+            singleClickEdit: false}
       columnDefs.push(nextColumn);
     }
 

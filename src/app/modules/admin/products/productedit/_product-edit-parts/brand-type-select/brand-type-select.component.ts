@@ -103,11 +103,8 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
     if(site) {
       let model = this.initModel(this.id)
       let search$  = this.contactsService.getContactBySearch(site, this.id, 1, 10)
-      // console.log(this.fieldName, this.id)
       search$.subscribe( data => {
-        // console.log('getName ' + this.fieldName,  data?.results[0]?.company)
         if (data && data.results && data?.results[0]?.company) {
-          // this.setValues(this.searchForm, this.fieldName, data?.results[0]?.company );
           const item =  { idLookup: data?.results[0]?.company }
           this.searchForm.patchValue( item )
         }
@@ -194,6 +191,10 @@ export class BrandTypeSelectComponent implements  OnInit, AfterViewInit {
       form.patchValue( item )
     }
     if (fieldName === 'productSupplierCatID') {
+      let item =  { productSupplierCatID: data  }
+      form.patchValue( item )
+    }
+    if (fieldName === 'vendorID') {
       let item =  { productSupplierCatID: data  }
       form.patchValue( item )
     }

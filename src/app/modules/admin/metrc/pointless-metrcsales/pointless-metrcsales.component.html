@@ -7,11 +7,12 @@
       CSV Export
       <mat-icon>download</mat-icon>
     </button>
+
+  
     <span class="margin5">
       <ng-container [ngTemplateOutlet]="menuButtonContainer"></ng-container>
     </span>
   </div>
-  
 
  <div *ngIf="processing">
     <mat-spinner [diameter]="50"></mat-spinner>
@@ -41,8 +42,13 @@
      <div *ngIf="searchModel.currentPage">
         Current: {{searchModel.currentPage}}
      </div>
-
+ 
      <div *ngIf="exceptionMessage"><mat-icon>warning</mat-icon>{{exceptionMessage}}</div>
+  </div>
+
+  <div *ngIf="selectedResponse">
+    <button mat-button (click)="clearSelectedData()"><mat-icon>delete</mat-icon></button>
+    <mat-icon>info</mat-icon> {{ selectedResponse | json}}
   </div>
  </div>
 
