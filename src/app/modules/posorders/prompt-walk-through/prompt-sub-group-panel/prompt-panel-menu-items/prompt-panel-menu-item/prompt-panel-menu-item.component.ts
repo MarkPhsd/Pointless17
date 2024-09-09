@@ -46,7 +46,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
   matCardClass     : string;
   posDevice$             : Observable<ITerminalSettings>;
   posDevice              : ITerminalSettings;
-
+  imageUrl: string;
   styleMatCard     : string
   _promptGroup     : Subscription;
   promptGroup      : IPromptGroup
@@ -145,17 +145,30 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
    ngOnInit() {
     this.intSubscriptions();
+    this.styleMatCard = this.matCardSytleValue
+
+
     this.bucket$ = this.awsBucket.getAWSBucketObservable().pipe(
       switchMap(data => {
+        const prompt = this.promptMenuItem.prompt_Products
         this.bucketName =  data.preassignedURL;
+        const imageName = prompt?.thumbnail ?? prompt?.urlImageMain;
+        const path = this.getImageURL(this.bucketName, imageName )
+
+        this.imageURL = path
+
         if (this.promptMenuItem.prompt_Products?.name) {
-          this.imageURL = this.getItemSrc(this.promptMenuItem?.prompt_Products)
           return of(data)
         }
+
         return of('')
       })
     )
-    this.styleMatCard = this.matCardSytleValue
+
+  }
+
+  getImageURL( bucket,image ) {
+    return this.awsBucket.getImageURLPath(bucket , image)
   }
 
   get promptItemView() {
@@ -168,13 +181,6 @@ export class PromptPanelMenuItemComponent implements OnInit {
     return null;
   }
 
-  getItemSrc(prompt_Products) {
-    if (!prompt_Products || !prompt_Products?.urlImageMain) {
-      return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.png")
-    }
-    return this.awsBucket.getImageURLPath(this.bucketName, this.promptMenuItem.prompt_Products?.urlImageMain)
-  }
-
   //promptMenuItem.prompt_Products.name
   validateAddingItem(): IPromptGroup {
     return this.promptWalkService.canItemBeAdded( this.orderPromptGroup, this.index, this.subGroupInfo)
@@ -185,9 +191,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
     //should not call validate Adding Item to remove an item.
     let orderPromptGroup = this.validateAddingItem();
     if (!orderPromptGroup) { return }
-
     const currentSubPrompt = orderPromptGroup.selected_PromptSubGroups[this.index]
-
     this.removeItem$ =  this.getMenuItemToRemove().pipe(switchMap(
       data => {
         if (data) {
@@ -209,16 +213,11 @@ export class PromptPanelMenuItemComponent implements OnInit {
     if (!this.index) {
       // this.siteService.notify('No index is assigned', 'Close', 3000, 'yellow')
     }
-
     const mainItem = this.posItem.unitType
-
     const quantityItem = this.getQuantity()
-
     this.orderPromptGroup = this.promptWalkService.initPromptWalkThrough(this.order, this.promptGroup)
     if (!this.orderPromptGroup) { this.orderPromptGroup = {} as IPromptGroup}
-
     let orderPromptGroup = this.validateAddingItem();
-
     if (!orderPromptGroup) {
       this.siteService.notify('No prompt group assigned.', 'Close', 3000, 'yellow')
       return of(null)
@@ -302,9 +301,6 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
         const moveOnQuantity = currentSubPrompt.moveOnQuantity;
         const quantityMet  = currentSubPrompt.quantityMet;
-        // console.log('moveOnQuantity', moveOnQuantity)
-        // console.log('quantity met', quantityMet)
-        // console.log('move on met',  moveOnQuantity == currentSubPrompt.itemsSelected.length)
         if (quantityMet && moveOnQuantity == currentSubPrompt.itemsSelected.length) {
           this.nextStep()
           const lastGroupIndex = orderPromptGroup.selected_PromptSubGroups.length;

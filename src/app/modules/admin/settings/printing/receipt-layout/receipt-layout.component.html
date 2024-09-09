@@ -24,7 +24,7 @@
               <div  [class]="gridReceiptClass"
                     [innerHTML]="getInterpolatedHTML(itemText, item)" >  </div>
             </div>
-       
+
           </div>
         </div>
 
@@ -59,7 +59,7 @@
           </div>
         </div>
 
-    
+
         <div *ngIf="interpolatedItemTexts && interpolatedItemTexts.length > 0" class="section-item">
           <div *ngFor="let item of itemsText; let i = index">
             <div style="margin-bottom:5px" *ngIf="(item.id == item.idRef || item.idRef == 0 || !item.idRef)">
@@ -69,7 +69,6 @@
               <div [class]="gridReceiptClass" [innerHTML]="interpolatedItemTexts[i]"> </div>
             </div>
             <div *ngIf="isLastIndented(i) === 'section-bottom'">
-              <!-- {{isLastIndented(i)}} -->
               ----------------------------
               <mat-divider></mat-divider>
             </div>
@@ -86,7 +85,6 @@
             <div *ngFor="let payment of payments">
               <div *ngIf=" payment.paymentMethod">
 
-                <!-- If it's a swipped card then we process different than if it's a EMV Card -->
                 <ng-container [ngTemplateOutlet]="paymentsView"
                               [ngTemplateOutletContext]="{$implicit: payment}">
                 </ng-container>

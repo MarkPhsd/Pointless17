@@ -268,20 +268,22 @@ export class RenderingService {
             }
           }
 
-          // console.log('data', data?.idRef,data?.id, data?.productName)
-          //  itemTexts.push({item: data, id: this.items[i].id, idRef: this.items[i].idRef})
-          if (data.idRef && data.idRef == 0 || (data.id == data.idRef))  { 
-            if (data.productName) { 
-              data.productName = `${itemIndex}. ${data?.productName}`
+          if (data.idRef && data.idRef == 0 || (data.id == data.idRef))  {
+            if (data.productName) {
+              // // .data.productName = ` ${data?.conditionalIndex } ${data?.productName}`
+              // data.productName = ` ${data?.productName}`
+              let text = ` ${newText}`
+              newText = text;
               itemIndex = 1+itemIndex
             }
           }
 
           stringArray.push( this.interpolateText(data, newText))
-      
+
         }
       })
     }
+
     return stringArray
   }
 

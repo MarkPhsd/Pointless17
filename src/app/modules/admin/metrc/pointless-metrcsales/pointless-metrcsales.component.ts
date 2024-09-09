@@ -611,24 +611,14 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     let maxToShow          = this.pageSize;
     let selected           = []
 
-    // if (selectedRows.length == 0) { return }
-    // selectedRows.forEach(function (selectedRow, index) {
-    // if (index >= maxToShow) { return; }
-    // if (index > 0) {  selectedRowsString += ', ';  }
-    //   selected.push(selectedRow.id)
-    //   selectedRowsString += selectedRow.name;
-    // });
-
-    // if (selectedRows.length > maxToShow) {
-    // let othersCount = selectedRows.length - maxToShow;
-    // selectedRowsString +=
-    //   ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
-    // }
     try {
+      this.selectedResponse=null;
       console.log('event', event)
       const item = selectedRows[0]
       this.selected = item
-      this.selectedResponse = JSON.parse(item?.metrcResponse)
+      if (item && item.metrcResponse) { 
+        this.selectedResponse = JSON.parse(item?.metrcResponse)
+      }
       
     } catch (error) {
       console.log(error)      

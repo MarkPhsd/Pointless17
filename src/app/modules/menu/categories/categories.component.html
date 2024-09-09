@@ -43,7 +43,7 @@
     </mat-card-subtitle>
 
     <mat-card-content *ngIf="(bucket$ | async) as bucketItem">
-      
+
       <div   [style.height]="panelHeightStyle" [class]="classcontainer" >
         <div  *ngIf="categories"
               [class]="orderslist"
@@ -73,6 +73,7 @@
 </mat-card>
 
 <ng-template #categoryItemView let-item>
+  <!-- disableImages {{disableImages}} -->
   <menu-card-category
     [item]="item"
     [imageName]="item?.urlImageMain"

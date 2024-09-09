@@ -1,6 +1,6 @@
 {
   "name": "pointlesspos",
-  "version": "3.28.8",
+  "version": "3.30.1",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless POS",
@@ -46,6 +46,7 @@
         "url": "https://pointlesspos.com/download"
       }
     ],
+
     "win": {
       "icon": "app/assets/images/logosm.png"
     }

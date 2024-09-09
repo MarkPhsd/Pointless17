@@ -31,7 +31,7 @@
      <!-- options for app or web  -->
     <ng-container [ngTemplateOutlet]="buttonView"></ng-container>
     <ng-container [ngTemplateOutlet]="itemAppView"></ng-container>
-  
+
     <!-- only for show load more. -->
     <ng-container *ngIf="showLoadMore">
       <ng-container [ngTemplateOutlet]="isImageButtonView"></ng-container>
@@ -87,7 +87,7 @@
 </ng-template>
 
 <ng-template #typeDisplayTemplate>
-  <div  class="product-name" *ngIf="!ignoreType && menuItem?.id != -1 && 
+  <div  class="product-name" *ngIf="!ignoreType && menuItem?.id != -1 &&
                                     !menuItem.itemType">
     Type Required.
   </div>
@@ -195,11 +195,17 @@
   <div class="product-image-container"
               *ngIf    ="imageUrl && bucketName &&
                         !isCategory && !disableImages">
+
     <img
-        [src]   = "imageUrl"
-        [class]  ="productImageClass"
-        width="100%"
-      />
+      loading="lazy"
+      draggable="false"
+      width="100%"
+      [src]    ="imageUrl || 'assets/images/placeholderimage.png'"
+      onerror  = "this.src='assets/images/placeholderimage.png'"
+      (error)="onImageError($event)"
+      (click)="altMethod(true)"
+      [class]="productImageClass"
+      [alt]="menuItem?.name">
   </div>
 
 </ng-template>
@@ -207,9 +213,16 @@
 <ng-template #categoryImage>
   <div class="round-container product-image-container"
         *ngIf="imageUrl && bucketName && isCategory && !disableImages">
-    <img   [src]   = "imageUrl"   width="100%"
-           [class]  ="productImageClass"
-       />
+      <img
+        loading="lazy"
+        draggable="false"
+        width="100%"
+        [src]    ="imageUrl || 'assets/images/placeholderimage.png'"
+        onerror  = "this.src='assets/images/placeholderimage.png'"
+        (error)="onImageError($event)"
+        (click)="altMethod(true)"
+        [class]="productImageClass"
+        [alt]="menuItem?.name">
   </div>
 </ng-template>
 
@@ -219,12 +232,11 @@
           mat-mini-fab
           class="add-button"
           color="warn"
+          style="padding:0px"
           (click)="menuItemActionObs(true, true)" >
-
         <div *ngIf="!isProduct">
            <mat-icon>open_in_new</mat-icon>
         </div>
-
         <div *ngIf="isProduct ">
            <mat-icon>plus_one</mat-icon>
         </div>
@@ -246,7 +258,9 @@
 </ng-template>
 
 <ng-template #seeMoreInCategory>
-  <div class="category-open">
+  <div class="category-open" style="top: -15px;
+                                  position: relative;
+                                  height: 20px;padding:0px">
     <button mat-button (click)="menuItemActionObs(false)">
        <mat-icon *ngIf="!androidApp && !smallDevice" >open_in_new</mat-icon>
     </button>
@@ -285,6 +299,7 @@
               [style]="buttonColorWidth"
               [class]="imageButtonClass"
               (click)="altMethod(true)">
+
 
         <div *ngIf="!imageUrl || disableImages">
           <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>

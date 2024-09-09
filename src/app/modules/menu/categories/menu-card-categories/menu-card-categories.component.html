@@ -5,13 +5,29 @@
 
     <div>
       <div class="text">{{item?.name  | truncateText: textLength  }}</div>
-      <div class="grid-item" *ngIf="!disableImages && imageName" >
+
+      <div class="grid-item" *ngIf="!disableImages" >
+
         <img
-            draggable = "false"
-            [src]     = "urlImage"
-            (click)   = "listItems(item.id)"
-            class     = 'item-image'
-            [alt]     = "item?.description">
+          *ngIf     ="!imageName"
+          draggable = "false"
+          src       = "assets/images/placeholderimage.png"
+          (click)   = "listItems(item.id)"
+          class     ="item-image shine"
+          [alt]     = "item?.description">
+
+
+          <img
+              *ngIf    ="imageName"
+              loading  ="lazy"
+              draggable="false"
+              [src]    ="urlImage || 'assets/images/placeholderimage.png'"
+              onerror  = "this.src='assets/images/placeholderimage.png'"
+              (error)  ="onImageError($event)"
+              (click)  ="listItems(item.id)"
+              class    ="item-image shine"
+              [alt]    ="item?.name">
+
       </div>
       <div *ngIf="disableImages" style="height:50px"></div>
     </div>

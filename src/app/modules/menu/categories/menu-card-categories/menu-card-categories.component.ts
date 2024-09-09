@@ -23,10 +23,10 @@ export class MenuCardCategoriesComponent implements OnInit {
 
   ngOnInit(): void {
     const i = 0;
-    if (this.item && this.bucket) { 
+    if (this.item && this.bucket) {
       this.urlImage = this.getItemSrc(this.item)
-    } else { 
-      if (!this.item && this.bucket) { 
+    } else {
+      if (!this.item && this.bucket) {
         const image =`https://${this.bucket}.s3.amazonaws.com/placeholderproduct.png`
         this.urlImage = image;
       }
@@ -57,5 +57,10 @@ export class MenuCardCategoriesComponent implements OnInit {
       const image =`https://${this.bucket}.s3.amazonaws.com/${imageName[0]}`
       return image
     }
+  }
+
+  onImageError(event: Event) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'assets/images/placeholderimage.png'; // Angular will resolve this path correctly.
   }
 }

@@ -187,7 +187,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
 
 
   get enableItemDiscount() {
-    if (this.userAuths && this.userAuths?.enableItemDiscount) { 
+    if (this.userAuths && this.userAuths?.enableItemDiscount) {
       return true
     }
     return false
@@ -545,7 +545,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
         //   modifierNote: [],
         //   serialCode: [],
         // } )
-        
+
 
         this.inputForm.patchValue(this.orderItem)
         console.log('inputForm', this.inputForm.value)
@@ -649,7 +649,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     this.editProperties('price' , 'Change Price')
   }
 
-  editItemDiscount() { 
+  editItemDiscount() {
     this.editProperties('itemPerDiscount' , 'Item % Discount')
   }
 

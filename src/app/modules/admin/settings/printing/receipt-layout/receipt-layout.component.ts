@@ -188,12 +188,12 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
     // console.log('outputPrint')
     setTimeout(() => {
       const prtContent     = document.getElementById('printsection');
-    
+
       if (!prtContent) {
         return
       }
       const content        = `${prtContent.innerHTML}`
-      
+
       if (!content) {
         return
       }
@@ -215,18 +215,28 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
     private menuService:     MenuService,
     private fakeDataService : FakeDataService) { }
 
+  ngOnDestroy() {
+    // console.log('on dstroy')
+    if (this.appendedStyleElement) {
+      // console.log('remove style element', this.appendedStyleElement)
+      document.head.removeChild(this.appendedStyleElement);
+      this.appendedStyleElement = null;
+    }
+    this.nonIndentedIndex = 1;
+    this.enabledPrintReady = false;
+    if ( this._order) {  this._order.unsubscribe()}
+  }
 
-   ngOnChanges(changes: SimpleChanges) {
-    if (changes.itemsText || changes.interpolatedItemTexts) {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.items || changes.itemText) {
       this.nonIndentedIndex = 1;
-     
     }
   }
 
   getNonIndentedIndex(): number {
     return this.nonIndentedIndex++;
   }
-    
+
   ngOnInit() {
     if (this.templateInit) {
       this.initTemlplateSubscription();
@@ -249,17 +259,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
     )
   }
 
-  ngOnDestroy() {
-    // console.log('on dstroy')
-    if (this.appendedStyleElement) {
-      // console.log('remove style element', this.appendedStyleElement)
-      document.head.removeChild(this.appendedStyleElement);
-      this.appendedStyleElement = null;
-    }
-
-    this.enabledPrintReady = false;
-    if ( this._order) {  this._order.unsubscribe()}
-  }
 
  refreshData() {
     this.site = this.siteService.getAssignedSite();
@@ -296,30 +295,30 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
   isLastIndented(index: number): string | undefined {
     // Filter all indented items from the list
     const indentedItems = this.itemsText.filter(item => item.idRef && item.id !== item.idRef && item.idRef !== 0);
-    
+
     // Identify the current item
     const currentItem = this.itemsText[index];
-    
+
     // Check if the current item is indented
     const isIndented = currentItem.idRef && currentItem.id !== currentItem.idRef && currentItem.idRef !== 0;
-    
+
     if (isIndented) {
       // Find the next indented item, if it exists
       const nextIndentedIndex = indentedItems.indexOf(currentItem) + 1;
       const nextItem = indentedItems[nextIndentedIndex];
-      
+
       // Check if the next item is indented and if it is within the same group
       if (!nextItem || nextItem.idRef !== currentItem.idRef) {
         return 'section-bottom';
       }
     }
-  
+
     // Return undefined if the current item is not the last indented item
     return undefined;
   }
-  
+
   getInterpolatedData() {
-  
+
     if (!this.orders || !this.orders[0]) { return }
     this.scrubOrders(this.orders[0])
 
@@ -331,7 +330,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
       }
 
       if (this.items && this.itemText) {
-
         this.interpolatedItemTexts      = this.renderingService.refreshStringArrayData(this.itemText, this.items, 'items')
         let itemTexts = [] as any[]
         this.interpolatedItemTexts.forEach((data, i) => {
@@ -345,6 +343,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
       }
 
       if (this.payments && this.paymentsCreditText) {
+        this.payments = this.setPaymentData(this.payments)
         this.interpolatedCreditPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsCreditText, this.payments, 'payments')
       }
 
@@ -360,6 +359,15 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
     } catch (error) {
       // console.log(error)
     }
+  }
+
+  setPaymentData(payments) {
+    payments.forEach(data => {
+      if (data?.tipAmount ==0) {
+        data.tipAmount = null
+      }
+    })
+    return payments
   }
 
   getOrderTypeInfo(serviceTypeID: number) {
@@ -417,7 +425,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
 
   getStyles() {
     const site = this.siteService.getAssignedSite();
- 
+
     const receiptStyle$ = this.settingService.getSettingByNameCached(site, 'ReceiptStyles');
     return receiptStyle$.pipe(
       switchMap(receiptStyles => {
@@ -426,7 +434,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy, OnChanges {
           const style = document.createElement('style');
           style.innerHTML = styles;
           document.head.appendChild(style);
-          
+
           // Store the reference to the appended style element
           this.appendedStyleElement = style;
         }

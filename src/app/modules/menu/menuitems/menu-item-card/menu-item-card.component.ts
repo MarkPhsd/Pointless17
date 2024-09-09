@@ -67,6 +67,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   @Input() androidApp: boolean;
   @Input() isApp     = false;
 
+
   ///for use with prompts
   @Input() styleMatCard = ''
 
@@ -74,6 +75,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   @Input() displayType      : string ='product';
   @Input() buySell: boolean;
   @Input() promptModifier: boolean;
+
   containerclass: string
 
   @Output() outputRefresh = new EventEmitter()
@@ -139,7 +141,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     if (this.displayType === 'header-category') {
       return  'item-name-center-category'
     }
-    if (this.menuItem.urlImageMain) {
+    if (this.menuItem.urlImageMain  || this.menuItem.thumbnail  ) {
       return 'item-name-center-image'
     }
     // return 'item-name-center-image'
@@ -151,7 +153,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
       return `image-button-category`
     }
       // const imageName =  item.urlImageMain.split(",")
-    if (this.menuItem.urlImageMain) {
+    if (this.menuItem.urlImageMain  || this.menuItem.thumbnail ) {
           return 'image-button'
     }
     return 'image-button'
@@ -235,15 +237,15 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
 
   get menuNameViewBol() {
-    if (this.menuItem &&
-     (this.menuItem.urlImageMain || this.menuItem.thumbnail)  && !this.disableImages) {
+    if   ((this.menuItem && this.menuItem.urlImageMain)  && !this.disableImages) {
       return true
     }
     return false;
   }
 
   get menuNameView() {
-    if (this.menuItem && this.menuItem.urlImageMain  && !this.disableImages) {
+
+    if   ((this.menuItem && this.menuItem.urlImageMain)  && !this.disableImages) {
       return this.menuNameTemplate
     }
     return null;
@@ -273,7 +275,9 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     this.imageContainerClass = this.imageContainer
 
     if (!this.disableImages ) {
-      this.imageUrl  = this.getItemSrc(this.menuItem)
+      if (!this.imageUrl) {
+        this.imageUrl  = this.getItemSrc(this.menuItem)
+      }
       if (!this.imageUrl) { this.noImage = true  }
     } else {
       this.noImage = true
@@ -548,15 +552,13 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   }
 
   getItemSrc(item:IMenuItem) {
+    if (this.imageUrl) { return }
+
     const thumbnail = item?.thumbnail ?? item?.urlImageMain;
     if (!thumbnail) {
-      // if (this.isApp) { 
-      //    const image =`${this.bucketName}productplaceholder.png`
-      //    return image 
-      // }
-      return null
+         return null
     } else {
-      const thumbnail = item?.thumbnail ?? item?.urlImageMain;
+      const thumbnail =  item?.thumbnail ?? item?.urlImageMain;
       const imageName =  thumbnail.split(",")
       if (!imageName || imageName.length == 0) {
         return null
@@ -725,4 +727,8 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     this.siteService.notify(message, action, 5000, 'green')
   }
 
+  onImageError(event: Event) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'assets/images/placeholderimage.png'; // Angular will resolve this path correctly.
+  }
 }

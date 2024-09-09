@@ -121,18 +121,36 @@ get rowClasses() {
       if (!value || value == undefined) { return false }
       if (value === '') { return false }
       if (value) {
+        const errorsExist = this.getErrors(value)
+        if (errorsExist) { return false}
         return true
       }
+    },
+    "row-metrc-errors": (params) => {
+      const value = params.api.getValue("metrcResponse", params.node);
+      if (value === '') { return false }
+      const errorsExist = this.getErrors(value)
+      if (errorsExist) { return true}
+      return false;
 
     },
-    
-    //   "row-posted": params => params.api.getValue("packageCountRemaining", params.node)
-    // },
-
 
   }
 
 }
+
+getErrors(value) {
+  if (value) { 
+    const item = JSON.parse(value)  
+    console.log('item', item)
+    if (item?.Errors) { 
+      return  true 
+    }
+  }
+}
+
+
+
 
 initGridOptions(pageSize: number, columnDefs: any, enableSorting?: boolean)  {
 
