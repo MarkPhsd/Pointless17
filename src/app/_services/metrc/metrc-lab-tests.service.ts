@@ -76,7 +76,7 @@ export class MetrcLabTestsService {
 
   getHarvest(site: ISite, id: number): Observable<METRCPackage> {
 
-    const controller = '/MetrcLabTests/v2/';
+    const controller = '/MetrcLabTests/';
 
     const parameters = `?siteID=${site.id}&metrcID=${id}`;
 

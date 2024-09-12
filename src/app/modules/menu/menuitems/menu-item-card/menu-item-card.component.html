@@ -270,19 +270,7 @@
               [style]="buttonColorWidth"
               [class]="imageButtonClass"
               (click)="altMethod(false)">
-
-        <div *ngIf="!imageUrl || disableImages">
-          <div style="height:200px">
-            <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
-          </div>
-        </div>
-
-        <div *ngIf="imageUrl  && !disableImages">
-          <ng-container [ngTemplateOutlet]="productImage"></ng-container>
-          <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
-        </div>
-
-        <ng-container [ngTemplateOutlet]="discountItemDescription"></ng-container>
+        <ng-template [ngTemplateOutlet]="menuItemDisplay"></ng-template>
     </button>
   </span>
 </ng-template>
@@ -293,19 +281,25 @@
               [style]="buttonColorWidth"
               [class]="imageButtonClass"
               (click)="altMethod(true)">
-        <div *ngIf="!imageUrl || disableImages">
-          <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
-        </div>
 
-        <div *ngIf="imageUrl  && !disableImages">
-          <ng-container [ngTemplateOutlet]="productImage"></ng-container>
-          <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
-        </div>
-
-        <ng-container [ngTemplateOutlet]="discountItemDescription"></ng-container>
+      <ng-template [ngTemplateOutlet]="menuItemDisplay"></ng-template>
     </button>
   </span>
 </ng-template>
 
+<ng-template #menuItemDisplay>
+  <div *ngIf="!imageUrl || disableImages">
+    <div style="height:200px">
+      <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
+    </div>
+  </div>
+
+  <div *ngIf="imageUrl  && !disableImages">
+    <ng-container [ngTemplateOutlet]="productImage"></ng-container>
+    <ng-container [ngTemplateOutlet]="categoryImage"></ng-container>
+  </div>
+
+  <ng-container [ngTemplateOutlet]="discountItemDescription"></ng-container>
+</ng-template>
 
 

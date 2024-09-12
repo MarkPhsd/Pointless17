@@ -36,10 +36,6 @@ export class RequestMessageMethodsService {
     if (order.customerName) { orderName = order.customerName};
 
     message.message = requestMessage
-
-    // `${user.firstName} is requesting Item ${item.productName} ${item.unitName},${serialCode}
-    //                   having a quantity of ${item.quantity}, ${operationDescription}.`
-
     message.subject = `${requestMessage} ${order.id} - ${tableName} -  ${orderName}`;
     message.type    = 'OC'
     message.orderID = order.id
@@ -144,6 +140,8 @@ export class RequestMessageMethodsService {
     if (!order) {}
     const site = this.siteService.getAssignedSite();
     let message = {} as IRequestMessage
+
+
     message.message = `${order.tableName} is requesting service.`
     message.subject = `Service requested at table ${order.tableName}`
     message.type    = 'TSR'

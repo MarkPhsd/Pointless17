@@ -1007,8 +1007,12 @@ export class PrintingService {
             //   if (item.inventoryItem) { item = item.inventoryItem; }
             //then we should have the metrcPackage
             if (results[0])  {  metrcPackage = results[0] as METRCPackage }
-            item.metrcPackage = JSON.parse(metrcPackage.json)
-
+            if (metrcPackage) { 
+              item.metrcPackage = JSON.parse(metrcPackage.json)
+              if (metrcPackage.labResults) { 
+                item.metrcPackage.labResultsInfo =  JSON.parse(metrcPackage.labResults)  
+              }  
+            }
             console.log('inventory item', item)
             content = this.renderingService.interpolateText(item, data?.text);
           }

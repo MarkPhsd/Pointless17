@@ -3,6 +3,7 @@
 {{siteService.getAssignedSite() | json}} -->
 <div  *ngIf="(order$ | async) as order; else loadingOrder"></div>
 <div *ngIf="(action$ | async) as order"></div>
+<div *ngIf="(sendmessage$ | async) as order"></div>
 
 <div class="centered-flex"
      *ngIf="(uiHomePageSetting$ | async) as uiHomePageSetting">

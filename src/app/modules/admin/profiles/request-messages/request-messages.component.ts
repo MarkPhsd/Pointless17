@@ -454,7 +454,14 @@ export class RequestMessagesComponent implements OnInit {
   {
 
     if (data && data.id) {
-      this.orderID = data.id;
+      if (data.action =='orderMesssages') { 
+        this.orderID = data.order.id;
+        this.enableActions = false
+
+        console.log('order Messags', this.orderID)
+        return;
+      }
+      this.orderID = data.order.id;
       this.enableActions = false
       return;
     }
@@ -497,7 +504,7 @@ export class RequestMessagesComponent implements OnInit {
         return of(data)
       }))
     } else { 
-      console.log('pos Device Init Services 2', this.posDevice)
+      // console.log('pos Device Init Services 2', this.posDevice)
       this.initServicesByDevice()
     }
 

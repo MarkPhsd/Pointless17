@@ -877,7 +877,7 @@ export class OrderMethodsService implements OnDestroy {
         maxWidth:     'max-width: 100vw !important',
         height:       '90vh',
         minHeight:    '90vh',
-        data : order
+        data : {action: 'orderMessages', order: order}
       },
     )
   }

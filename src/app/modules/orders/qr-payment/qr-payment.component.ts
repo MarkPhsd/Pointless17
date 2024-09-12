@@ -104,9 +104,6 @@ export class QrPaymentComponent {
     this.uiHomePageSetting$ = this.settingsService.getUIHomePageSettings();
     this.initTransactionUISettings()
     this.order$ = this.getOrder().pipe(switchMap(data => {
-
-
-
       this.order = data;
       return of(data)
     }))

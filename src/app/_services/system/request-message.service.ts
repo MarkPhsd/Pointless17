@@ -46,8 +46,8 @@ export interface IRequestResponse {
   message: string;
   result : boolean;
 }
-
 export interface IRequestMessage {
+  emailMessage    : boolean;
   id	            : number;
   parameters      : string;
 	method          : string;
@@ -104,6 +104,7 @@ export class RequestMessageService {
     {name: 'Price Schedule', id: 'ps'},
     {name: 'Order Ready - Use Only One Template', id: 'on'},
     {name: 'Print Job', id: 'Print Job'},
+    {name: 'User Tracking', id: 'UT'}
   ];
 
   isAuthorized   = false;

@@ -5,7 +5,7 @@ import { IPOSOrder, IUser } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
-import { IRequestResponse } from 'src/app/_services/system/request-message.service';
+import { IRequestMessage, IRequestResponse, RequestMessageService } from 'src/app/_services/system/request-message.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -37,6 +37,7 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   message$          : Observable<IRequestResponse>;
   sendingMessage    : boolean;
   processing: boolean;
+  sendmessage$ : Observable<IRequestResponse>;
 
   constructor(
       private uiSettingsService: UISettingsService,
@@ -49,6 +50,7 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
       private authenticationService: AuthenticationService,
       private requestMessageMethods: RequestMessageMethodsService,
       private router         : Router,
+      private requestMessageService : RequestMessageService,
       // private route: AC
   ) { }
 
@@ -56,14 +58,46 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
     localStorage.removeItem('loginAction');
     this.orderMethodsService.updateOrder(null)
     this.getUser();
-    this.uiHomePageSetting$ = this.settingsService.getUIHomePageSettings();
+
+    console.log('init order')
+
+    this.uiHomePageSetting$ = this.settingsService.getUIHomePageSettings()
+
     this.order$ = this.getOrder().pipe(switchMap(data => {
+      const emailSource = this.route.snapshot.paramMap.get('emailSource');
+      console.log('received order', emailSource,data)
+      if (emailSource) { 
+        if (this.order) { 
+          this.sendmessage$ = this.notifyMessageReceived(this.order)
+        }
+      }
       return of(data)
     }))
-  }
 
+
+  }
+  
   ngOnDestroy() {
     this.action$ = null;
+  }
+
+  notifyMessageReceived(order: IPOSOrder) : Observable<IRequestResponse> { 
+    const site = this.siteService.getAssignedSite()
+    let message = {} as IRequestMessage
+    message.method  = `order;id=${order?.id}`
+    message.message = `User opened the order from email. ${message.method} - ${order?.customerName}`
+    message.subject = `Order Opened - ${order?.customerName}`
+    message.type    = 'UT'
+    message.userID  = order?.employeeID;
+    message.userRequested = order?.employeeName;
+    message.orderID = order?.id;
+  
+    message.emailMessage = true
+    return this.requestMessageService.saveMessage(site, message ).pipe(switchMap(data => {
+
+      // this.siteService.notify('tracker called', 'alert', 3000)
+      return of(data)
+    }))
   }
 
   navigateToLogin(){
@@ -129,6 +163,7 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
       this.setLoginActions()
       // /qr-receipt;orderCode=82515311298176916209
       const orderCode = this.route.snapshot.paramMap.get('orderCode');
+    
       const ref = this.authenticationService.openLoginDialog('qr-receipt', orderCode)
       return;
     }
@@ -158,16 +193,9 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
       console.log('site?.url', site?.url)
 
       let pass: boolean = false
-      //orderCode
-  
       if (orderCode) {
         order$ =this.orderService.getQROrderAnon(site, orderCode);
       }
-      // if (id) {
-      //   order$ = this.orderService.getQRCodeOrder(site, id)
-      // }
-  
-      // console.log(user, user?.username )
       if (!order$) {
         this.processing = false;
         return of(null)
@@ -176,11 +204,8 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
         this.processing = false;
         this.order = data;
         this.orderMethodsService.updateOrder(data)
-        console.log('data from order', data)
         return of(data)
       }));
-
-      // return this.navigateToOrder();
     } catch {
       this.processing = false;
       return of(null)

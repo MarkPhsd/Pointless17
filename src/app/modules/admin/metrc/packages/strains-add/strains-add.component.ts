@@ -94,12 +94,22 @@ export class StrainsAddComponent implements OnInit {
             }
           }
           if (!data.labResults || data.labResults == null ||
-              data.labResults == 'null' || data.labResults == undefined) {
+            data.labResults == 'null' || data.labResults == undefined) {
             return this.metrcLabService.getTest(site, data?.id)
           }
           return of(data)
         }
       )).pipe(switchMap(data => {
+        
+        if (!data.harvestResults || data.harvestResults == null ||
+          data.harvestResults == 'null' || data.harvestResults == undefined) {
+          return this.metrcLabService.getHarvest(site, data?.id)
+        }
+
+        return of(data)
+      }
+      )).pipe(switchMap(data => {
+      
         this.initItemFormData(data)
         this.initPriceForm();
         return of(data)
