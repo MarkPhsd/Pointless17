@@ -354,10 +354,9 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
+
   updateOrderSubscription(order: IPOSOrder) {
-
     this.storeCreditMethodService.updateSearchModel(null);
-
     this.updateOrder(order);
     this.setOrderCostInfo(order)
     if (!order || order == null) {

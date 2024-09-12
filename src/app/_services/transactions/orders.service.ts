@@ -51,6 +51,7 @@ export interface OrderActionResult {
 })
 
 export class OrdersService {
+
   completionDate_From  : string; // searchModel.completionDate_From;
   completionDate_To    : string; // searchModel.completionDate_To;
 
@@ -65,6 +66,18 @@ export class OrdersService {
     )
   {
 
+  }
+
+  setOrderFeatures(site: ISite, id: number, orderFeatures: any): Observable<IPOSOrder> {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "setOrderFeatures"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<IPOSOrder>(url, orderFeatures);
   }
 
   deleteZeroQuantityItems(site: ISite, id: number): Observable<any> {

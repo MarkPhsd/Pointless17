@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output,EventEmitter, Inject } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, concatMap, delay, finalize, Observable, of, repeatWhen, Subject, switchMap, take, throwError, timer } from 'rxjs';
+import { BehaviorSubject, catchError, concatMap, delay, finalize, forkJoin, Observable, of, repeatWhen, Subject, switchMap, take, throwError, timer } from 'rxjs';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -49,12 +49,13 @@ export class RequestMessagesComponent implements OnInit {
   private isProcessing = false;
   posDevice$: Observable<ITerminalSettings>;
   archiveAllMessagesVisible: boolean;
+  private _printServer: boolean;
 
   unSubscribeAll() {
-    if (this.observablesArraySubject) { 
+    if (this.observablesArraySubject) {
       this.observablesArraySubject.unsubscribe()
     }
-    if (this.queueSubject) { 
+    if (this.queueSubject) {
       this.queueSubject.unsubscribe()
     }
   }
@@ -86,6 +87,7 @@ export class RequestMessagesComponent implements OnInit {
       observable.subscribe({
         complete: () => {
           // Observable completed its work
+          console.log('process Que')
         },
         error: (err) => {
           console.error('Observable encountered an error: ', err);
@@ -178,11 +180,12 @@ export class RequestMessagesComponent implements OnInit {
 
     return messages$.pipe(
       concatMap(data => {
+        console.log('messages: ', data?.length, data)
         if (data) {
-          if (data?.length>0) { 
+          if (data?.length>0) {
             this.processMessages(data)
             this.emitCount.emit(data?.length)
-          } 
+          }
         }
         return of(data)
       })
@@ -235,38 +238,54 @@ export class RequestMessagesComponent implements OnInit {
     return of(resultList)
   }
 
-  get isPrintServer() {
-    let isDevice = false
-    if (!this.platFormService.isAppElectron) { return isDevice }
-    if (!this.uiTransaction?.printServerDevice) { return isDevice}
+  get isPrintServerCheck() {
+    return this._printServer
+  }
+
+  getIsPrintServer() {
+    let isDevice = false;
+    this._printServer = false;
+    if (!this.platFormService.isAppElectron) { 
+      console.log('Not running in Electron, skipping print server check.');
+      return isDevice; 
+    }
+  
+    if (!this.uiTransaction?.printServerDevice) {
+      console.log('No print server device configured.');
+      return isDevice;
+    }
+  
+    const deviceName = localStorage.getItem('devicename')
+    if (this.uiTransaction.printServerDevice != deviceName) {
+      console.log(`${deviceName} is the current device. ${this.uiTransaction?.printServerDevice} is the print server.`);
+      return false
+    }
+
+    console.log('Checking print server for device:', this.posDevice?.name);
 
     if (this.posDevice && (this.posDevice?.name === this.uiTransaction?.printServerDevice)) {
-      this.printServerDevice = this.posDevice
+      console.log('Print server mathes this device name:', this.posDevice?.name);
+      this.printServerDevice = this.posDevice;
     }
+  
     if (this.printServerDevice && this.printServerDevice.printServerEnable) {
-
-      if (this.initRefresh) {
-        this.setPrintServer(this.printServerDevice)
-        this.initRefresh = true
+      if (!this.initRefresh) {
+        console.log('Setting print server with device:', this.printServerDevice);
+        this.setPrintServer(this.printServerDevice);
+        this.initRefresh = true;
+        this._printServer = true;
       }
-      return true
-    }
-
-    const site = this.siteService.getAssignedSite()
-    this.printServerDevice$ = this.settingsService.getPOSDeviceSettings(site, this.uiTransaction.printServerDevice).pipe(
-      switchMap(data =>
-      {
-        isDevice =  this.setPrintServer(data)
-        return of(data)
-      }
-    ))
-
-    return isDevice
+      isDevice = true;
+    }  
+ 
+    return isDevice;
+  
   }
 
   setPrintServer(data: ITerminalSettings) {
     if (data?.printServerEnable) {
       if (data?.printServerTime != 0) {
+        this.printServerDevice = data;
         this.refreshTime = +data?.printServerTime
         this._refreshMessagingService(this.user)
         return true
@@ -277,44 +296,91 @@ export class RequestMessagesComponent implements OnInit {
   //depending on the type of job it is. we need to create an observable for each print job.
 
   collectPrintOrders(printMessages: IRequestMessage[]) {
-
-    // console.log(this.posDevice.name, this.uiTransaction.printServerDevice)
-    // if (!this.uiTransaction.printServerDevice) { return }
-    // console.log('pposDevice name: PrintServer', this.posDevice?.name, this.posDevice?.printServerEnable)
-    if (!this.posDevice?.printServerEnable) { return }
-
-    // const deviceName = localStorage.getItem('devicename')
-    // if (this.posDevice.name != deviceName) { return }
-    // console.log('pposDevice PrintServer', this.posDevice.printServerEnable)
-    const site = this.siteService.getAssignedSite()
-    let printJobs$ : Observable<any>[]
-    const cancelUpdate = true
+    console.log('collectPrintOrders', this.printServerDevice?.printServerEnable);
+    if (!this.printServerDevice?.printServerEnable) { return; }
+    const site = this.siteService.getAssignedSite();
+  
+    const printObservables: Observable<any>[] = [];
+  
     printMessages.forEach((data, index) => {
       if (data.method === 'printPrep') {
-        const order$ = this.orderService.getOrder(site, data.orderID.toString(),false).pipe(concatMap(order => {
-            return this.paymentsMethodsProcessService.sendToPrep(order, true, this.uiTransaction, cancelUpdate  )
-          })).pipe(concatMap(order =>  {
-            return this._archiveMessage(data, true)
-          }))
-        this.addObservable(order$)
+        const order$ = this.orderService.getOrder(site, data.orderID.toString(), false).pipe(
+          concatMap(order => {
+            return this.paymentsMethodsProcessService.sendToPrep(order, true, this.uiTransaction, true);
+          }),
+          concatMap(order => this._archiveMessage(data, true))
+        );
+        printObservables.push(order$);
       }
- 
+  
       if (data.method === 'printReceipt') {
-        if (!this.isStaff && !this.posDevice) { return }
-        const order$ = this.orderService.getOrder(site, data.orderID.toString(), false).pipe(concatMap(data => {
-           this.printingService.printOrder = data;
-           console.log('remote print receipt ORderr:', this.refreshTime, data.orderID,  data?.total, data?.posPayments[0]?.amountPaid)
-           this.orderMethodsService.selectedPayment = null;
-           this.printingService.previewReceipt(true, data , this.posDevice.receiptPrinter);
-           return of(data)
-        })).pipe(concatMap(order =>  {
-          return this._archiveMessage(data, true)
-        }))
-        this.addObservable(order$)
+        if (!this.isStaff && !this.posDevice) { return; }
+        const order$ = this.orderService.getOrder(site, data.orderID.toString(), false).pipe(
+          concatMap(order => {
+            this.printingService.printOrder = order;
+            console.log('remote print receipt Order:', this.refreshTime, order.orderID, 
+              order?.total, order?.posPayments[0]?.amountPaid);
+            this.orderMethodsService.selectedPayment = null;
+            this.printingService.previewReceipt(true, order, this.printServerDevice?.receiptPrinter);
+            return of(order);
+          }),
+          concatMap(order => this._archiveMessage(data, true))
+        );
+        printObservables.push(order$);
       }
     });
-    printMessages = []
+  
+    // Wait for all print jobs to complete
+    if (printObservables.length > 0) {
+      forkJoin(printObservables).subscribe({
+        next: () => {
+          console.log('All print jobs completed');
+          this.forceRefreshMessage();  // Trigger refresh after all jobs are done
+        },
+        error: (err) => {
+          console.error('Error in one or more print jobs:', err);
+          this.forceRefreshMessage();  // Still trigger refresh even if there's an error
+        }
+      });
+    }
+  
+    printMessages = [];
   }
+  
+  // collectPrintOrders(printMessages: IRequestMessage[]) {
+  //   console.log('collectPrintOrders', this.printServerDevice?.printServerEnable)
+  //   if (!this.printServerDevice?.printServerEnable) { return }
+  //   const site = this.siteService.getAssignedSite()
+
+  //   const cancelUpdate = true
+  //   printMessages.forEach((data, index) => {
+  //     console.log(data?.method, data?.orderID)
+  //     if (data.method === 'printPrep') {
+  //       const order$ = this.orderService.getOrder(site, data.orderID.toString(),false).pipe(concatMap(order => {
+  //           return this.paymentsMethodsProcessService.sendToPrep(order, true, this.uiTransaction, cancelUpdate  )
+  //         })).pipe(concatMap(order =>  {
+  //           return this._archiveMessage(data, true)
+  //         }))
+  //       this.addObservable(order$)
+  //     }
+
+  //     if (data.method === 'printReceipt') {
+  //       if (!this.isStaff && !this.posDevice) { return }
+  //       const order$ = this.orderService.getOrder(site, data.orderID.toString(), false).pipe(concatMap(data => {
+  //          this.printingService.printOrder = data;
+  //          console.log('remote print receipt Orderr:', this.refreshTime, data.orderID, 
+  //                        data?.total, data?.posPayments[0]?.amountPaid)
+  //          this.orderMethodsService.selectedPayment = null;
+  //          this.printingService.previewReceipt(true, data , this.printServerDevice?.receiptPrinter);
+  //          return of(data)
+  //       })).pipe(concatMap(order =>  {
+  //         return this._archiveMessage(data, true)
+  //       }))
+  //       this.addObservable(order$)
+  //     }
+  //   });
+  //   printMessages = []
+  // }
 
   get isStaff() {
     if (!this.user || !this.user?.roles) { return false}
@@ -335,13 +401,39 @@ export class RequestMessagesComponent implements OnInit {
   }
 
   initUserSubscriber() {
-    this.user$ =  this.authenticationService.user$.pipe(
-      switchMap(data => {
-        this.messages$ = null;
-        this.isPrintServer
-        return of(data)
+   
+    let user : IUser;;
+    this.user$ =  this.authenticationService.user$.pipe(switchMap(data => { 
+      user = data;
+      this.user  = data;
+      return of(data)
     }))
+
+      //   switchMap(data => {
+    // this.user$ =  this.authenticationService.user$.pipe(
+    //   switchMap(data => {
+    //     this.messages$ = null;
+    //     user = data;
+    //     const deviceName = localStorage.getItem('devicename');
+    //     return this.getDeviceInfo(deviceName)
+    // })).pipe(switchMap(data => { 
+    //   return of(user)
+    // }))
   }
+
+  getDeviceInfo(devicename) { 
+    const site = this.siteService.getAssignedSite();
+    return this.settingService.getPOSDeviceBYName(site, devicename).pipe(switchMap(data => {
+        if (!data) { return of(null)}
+        const device = JSON.parse(data.text) as ITerminalSettings;
+        this.settingService.updateTerminalSetting(device)
+        this.getIsPrintServer()
+        if (device.enableScale) {  }
+        this.posDevice = device;
+        return of(device)
+    }))
+}
+
 
   //list out messages.
   constructor(private requestMessageService: RequestMessageService,
@@ -370,35 +462,55 @@ export class RequestMessagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let user = this.userAuthService.user
-    if (this.user) { user = this.user; }
+    let user = this.userAuthService?.user
+    if (!this.user) { this.user  = user  }
     this.initServices()
   }
 
-  ngOnDestroy() { 
+  ngOnDestroy() {
     this.unSubscribeAll()
   }
-
-  initServices() {
-
-    const site = this.siteService.getAssignedSite()
-    const deviceName = localStorage.getItem('devicename')
     //we have to get these settings.
     //and for the printing if the device here is the same as the uitransactionserver
     //then we can use this as the print server
     //or if this is marked as the print server.
-    this.posDevice$ = this.settingService.getPOSDeviceSettings(site, deviceName).pipe(switchMap(data => {
-      this.posDevice = data;
-      // console.log('init service')
-      return of(data)
-    }))
+  initServices() {
+
+    const deviceName = localStorage.getItem('devicename')
+    if (!deviceName) { return }
+
+    console.log('device exists', this.posDevice)
+    if (this.posDevice)  {
+      this.initServicesByDevice()
+      return ;
+    }
+
+    if (!this.posDevice) {
+      const site = this.siteService.getAssignedSite()
+      this.posDevice$ = this.settingService.getPOSDeviceSettings(site, deviceName).pipe(switchMap(data => {
+        if (data) {
+          this.posDevice = data;
+        }
+        return of(data)
+      })).pipe(switchMap(data => {
+        this.initServicesByDevice()
+        return of(data)
+      }))
+    } else { 
+      console.log('pos Device Init Services 2', this.posDevice)
+      this.initServicesByDevice()
+    }
+
+  }
+
+  initServicesByDevice() { 
+    console.log('initServices')
     this.initUserSubscriber();
+    this.getIsPrintServer()
     if (this.orderID) {
       this.refreshOrderMessages()
-      return;
     }
     this.processQueue();
-
   }
 
   exit() {

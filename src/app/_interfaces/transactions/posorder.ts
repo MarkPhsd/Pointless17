@@ -154,10 +154,14 @@ export interface IPOSOrder {
   cashDiscountNet 	: number | null;
   cashDiscountTax	  : number | null;
   cashDiscountGross : number | null;
-  metrcGroup1: number;
-  metrcGroup2: number;
+  metrcGroup1   : number;
+  metrcGroup2   : number;
+  orderFeatures : JSONOrder;
 }
 
+export interface JSONOrder {
+   billOnHold : number ;
+}
  export interface ClientsPOSOrders {
   id:                        number;
   firstName:                 string;
@@ -238,6 +242,8 @@ export interface PosOrderItem {
   prepBy        : string;
   deliveryBy    : string;
   deliveryByDate: string;
+  qtyReceived: number;
+  receivedDate: string;
   bayName                      : string;
   id:                            number;
   productID:                     number;

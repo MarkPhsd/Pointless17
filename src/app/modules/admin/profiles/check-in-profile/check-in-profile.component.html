@@ -63,7 +63,7 @@
                   <button color="accent" mat-raised-button (click)="generatePurchaseOrder(true)"><mat-icon>list</mat-icon>ReOrder List +</button>
                 </span> 
               </span>
-              <div *ngIf="clientTable?.apiUserName">
+              <div *ngIf="clientTable?.apiUserName && (clientTable.email || clientTable.phone)">
                 <!--  -->
                 <button mat-button color="accent" (click)="sendPasswordReset()">Send Password Reset</button>
               </div>

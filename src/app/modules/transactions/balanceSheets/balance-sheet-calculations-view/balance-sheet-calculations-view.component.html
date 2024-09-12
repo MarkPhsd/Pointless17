@@ -28,13 +28,13 @@
   <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{sheet?.creditTips ?? 0 | currency}} </div>
 
   <div>Remaing In Drawer </div>
-  <div  class="calculation"> {{ sheet?.endedWith ?? 0 | currency}} </div>
+  <div  class="calculation"> {{ endingInDrawer ?? 0 | currency}} </div>
 
   <div>Deposit:</div>
-  <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> </div>
+  <div class="calculation"> </div>
 
   <div>{{depositDescription}}</div>
-  <div *ngIf="!auths?.blindBalanceSheet" class="calculation"> {{cashDepositCalc ?? 0 | currency}} </div>
+  <div class="calculation"> {{cashDepositCalc ?? 0 | currency}} </div>
 
   <div class="item-span cashdrop-border" *ngIf="drops && !auths.balanceSheetDisableCashDrops">
     <div class="title">Cash Drops</div>

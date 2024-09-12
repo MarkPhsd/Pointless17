@@ -247,6 +247,7 @@ export interface ItemWithAction {
 })
 
 export class POSOrderItemService {
+ 
 
   get platForm()              {  return Capacitor.getPlatform(); }
 
@@ -310,6 +311,19 @@ export class POSOrderItemService {
       }
     }
     return newItem;
+  }
+
+  postInventoryAction(site: ISite, arg1: { posItem: PosOrderItem; action: string; }) {
+  
+    const controller = "/POSOrderItems/"
+
+    const endPoint  = "postInventoryAction"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, arg1 );
   }
 
   setInventoryId(site: ISite, item: { id: number; inventoryID: number; }) :  Observable<any> {
@@ -599,7 +613,7 @@ export class POSOrderItemService {
 
     const endPoint  = "getPOSOrderItembyHistory"
 
-    const parameters = `?id=${id}&history${history}`
+    const parameters = `?id=${id}&history=${history}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
     // console.log(url)

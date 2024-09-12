@@ -24,6 +24,13 @@ export interface AvalibleInventoryResults {
   errorMessage: string;
 }
 export interface IInventoryAssignment {
+  initialLabTestingState: any;
+  receivedFromFacilityLicenseNumber: any;
+  receivedDateTime: any;
+  metrcItemID: any;
+  labTestingStateDate: any;
+  labTestingState: any;
+  receivedFromFacilityName: any;
   id:                    number;
   manifestID            :number;
   packageType:           string;

@@ -1,5 +1,9 @@
-<div *ngIf="(posDevice$ | async) as posDevice"></div>
+<div *ngIf="(posDevice$ | async) as posDevice">
+<div *ngIf="(user$ | async) as user"></div>
+</div>
+
 <ng-template #loading>
+  <span *ngIf="isPrintServerCheck"><mat-icon>print</mat-icon>Print Server</span>
 
   <div class="ps-flex-group-nowrap">
     <div class="simple-icon">
@@ -96,7 +100,7 @@
       <mat-card-content>
         <div *ngFor = "let item of messages"
               class = "message-list">
-             
+
           <app-request-message
             [enableActions]="enableActions"
             (archiveEvent)="toggleArchive(item)"
@@ -125,7 +129,7 @@
 <div *ngIf="messageRefresh$ | async"></div>
 <div *ngIf="(order$ | async) as order"></div>
 <div *ngIf="(action$ | async) as action"></div>
-<div *ngIf="(user$ | async) as user"></div>
+
 <div *ngIf="(printServerDevice$ | async) as device"></div>
 <div *ngFor="let observable of observablesArray$ | async">
   <ng-container *ngIf="observable | async as value">

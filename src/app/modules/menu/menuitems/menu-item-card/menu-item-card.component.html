@@ -74,7 +74,7 @@
 </ng-template>
 
 <ng-template #menuItemName>
-  <div [class]="itemNameCenterClass"  *ngIf="!androidApp || disableImages" (click)="altMethod(true)">
+  <div [class]="itemNameCenterClass"  *ngIf="!androidApp || disableImages">
     {{ menuItem?.name  | truncateText: 35   }}
     <div *ngIf="menuItem?.prodSecondLanguage">
       {{ menuItem?.prodSecondLanguage  | truncateText: 30  }}
@@ -92,8 +92,6 @@
     Type Required.
   </div>
 </ng-template>
-
-
 
 <ng-template #editItemView>
   <div class="edit-float-button">
@@ -203,7 +201,6 @@
       [src]    ="imageUrl || 'assets/images/placeholderimage.png'"
       onerror  = "this.src='assets/images/placeholderimage.png'"
       (error)="onImageError($event)"
-      (click)="altMethod(true)"
       [class]="productImageClass"
       [alt]="menuItem?.name">
   </div>
@@ -220,7 +217,6 @@
         [src]    ="imageUrl || 'assets/images/placeholderimage.png'"
         onerror  = "this.src='assets/images/placeholderimage.png'"
         (error)="onImageError($event)"
-        (click)="altMethod(true)"
         [class]="productImageClass"
         [alt]="menuItem?.name">
   </div>
@@ -291,16 +287,12 @@
   </span>
 </ng-template>
 
-
-
 <ng-template #browser_View>
   <span>
     <button   mat-flat-button
               [style]="buttonColorWidth"
               [class]="imageButtonClass"
               (click)="altMethod(true)">
-
-
         <div *ngIf="!imageUrl || disableImages">
           <ng-container [ngTemplateOutlet]="menuItemName" ></ng-container>
         </div>

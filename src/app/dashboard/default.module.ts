@@ -401,6 +401,7 @@ import { CookieConsentComponent } from '../cookie-consent/cookie-consent.compone
 import {NgcCookieConsentConfig} from 'ngx-cookieconsent';
 import {NgcCookieConsentModule} from 'ngx-cookieconsent';
 import { NewUserGuestComponent } from '../modules/profile/new-user-guest/new-user-guest.component';
+import { PosOrderItemEditorComponent } from '../modules/posorders/pos-order/pos-order-items/pos-order-item-edit/pos-order-item-edit.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -704,6 +705,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PosEditSettingsComponent,
     DcDirectSettingsComponent,
     PosOrderComponent,
+    PosOrderItemEditorComponent,
     PosOrderItemEditComponent,
     NewOrderItemComponent,
     PosOrderListComponent,

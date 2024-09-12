@@ -10,9 +10,8 @@ import { OrderMethodsService } from './order-methods.service';
 })
 export class PosOrderItemMethodsService {
 
-
   constructor(private orderService: OrdersService,
-              public orderMethodsService: OrderMethodsService,
+              private orderMethodsService: OrderMethodsService,
               private siteService: SitesService,
               private posOrderItemService: POSOrderItemService) {
         }
@@ -64,7 +63,10 @@ export class PosOrderItemMethodsService {
                 this.siteService.notify(data.resultMessage, 'Alert', 1500)
               }
             }
-            this.orderMethodsService.updateOrderSubscription(data)
+            if (data) { 
+              // console.log(this.orderMethodsService)
+              this.orderMethodsService.updateOrder(data)
+            }
             return of(data)
           }))
         }

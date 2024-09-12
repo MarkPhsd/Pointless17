@@ -338,8 +338,6 @@ export class RequestMessageService {
 
     console.log('getOpenRequestMessages', userTrue )
 
-    console.log('getOpenRequestMessage', userTrue)
-
     const controller = "/RequestMessages/"
 
     const endPoint = "getOpenRequestMessages"

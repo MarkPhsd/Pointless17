@@ -98,6 +98,24 @@ export class FbInventoryService {
       attribute    : [],
       json         : [],
       ebayPublished: [],
+      labFacilityName          : [], // packageItem?.labFacilityName;
+      labFacilityLicenseNumber : [], // packageItem?.labFacilityLicenseNumber;
+      sourceHarvestName        : [], // packageItem?.sourceHarvestName;
+      sourceHarvestNumber      : [], // packageItem?.sourceHarvestNumber;
+      facilityLicenseName      : [], // packageItem?.facilityLicenseName;
+      
+      initialLabTestingState : [], // packageItem?.initialLabTestingState;
+      itemFromFacilityLicenseNumber : [], // packageItem?.itemFromFacilityLicenseNumber;
+      itemFromFacilityName : [], // packageItem?.itemFromFacilityName;
+      receivedFromFacilityName : [], // packageItem?.receivedFromFacilityName;
+      receivedFromFacilityLicenseNumber : [], // packageItem?.receivedFromFacilityLicenseNumber;
+      receivedDateTime : [], // packageItem?.receivedDateTime;
+      packagedDate : [], // packageItem?.packagedDate;
+      metrcItemID : [], // packageItem?.metrcItemID;
+      labTestingStateDate : [], //  packageItem.labTestingStateDate;
+      labTestingPerformedDate : [], //  packageItem.labTestingStateDate;
+      labTestingState : [], //  packageItem.labTestingState;
+      
     })
 
     return fb;

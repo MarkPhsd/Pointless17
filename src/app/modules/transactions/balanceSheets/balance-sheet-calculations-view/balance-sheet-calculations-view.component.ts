@@ -27,6 +27,7 @@ export class BalanceSheetCalculationsViewComponent implements OnInit,OnDestroy {
 
   _sheet          : Subscription;
   depositDescription: string;
+  endingInDrawer: number;
   // (renderComplete)="renderCompleted($event)"
   initSubscriptions() {
     const site = this.siteService.getAssignedSite()
@@ -49,6 +50,7 @@ export class BalanceSheetCalculationsViewComponent implements OnInit,OnDestroy {
           if (auths.balanceSheetDisableBank) {
             this.depositDescription = 'Cash - Credit Tip'
             this.cashDepositCalc = +this.sheet?.cashIn -  this.sheet?.creditTips
+            this.endingInDrawer = +this.cashDepositCalc - +this.sheet?.endedWith;
           }
         }
       }

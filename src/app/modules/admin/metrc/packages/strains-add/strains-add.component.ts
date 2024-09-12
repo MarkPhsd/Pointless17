@@ -93,14 +93,14 @@ export class StrainsAddComponent implements OnInit {
               this.assignMenItem(+this.package.productID)
             }
           }
-          if (!data.labResults || data.labResults == null ||  
-              data.labResults == 'null' || data.labResults == undefined) { 
+          if (!data.labResults || data.labResults == null ||
+              data.labResults == 'null' || data.labResults == undefined) {
             return this.metrcLabService.getTest(site, data?.id)
           }
           return of(data)
         }
       )).pipe(switchMap(data => {
-        this.initItemFormData(data) 
+        this.initItemFormData(data)
         this.initPriceForm();
         return of(data)
       }
@@ -121,10 +121,10 @@ export class StrainsAddComponent implements OnInit {
         let labChecked : boolean
         // /
         try {
-          if (list) { 
-            if (list.length>0) { 
+          if (list) {
+            if (list.length>0) {
               let lab = list[0]
-              form.patchValue({labFacilityLicenseNumber: lab?.labFacilityLicenseNumber, 
+              form.patchValue({labFacilityLicenseNumber: lab?.labFacilityLicenseNumber,
                                labFacilityName: lab.labFacilityName});
             }
           }
@@ -136,7 +136,7 @@ export class StrainsAddComponent implements OnInit {
           const thcLevel = list.find(c => c.testTypeName.includes("Total THC (mg/g)"));
           if (thcLevel) {
             form.patchValue({thc: thcLevel?.testResultLevel });
-            form.patchValue({labFacilityLicenseNumber: thcLevel?.labFacilityLicenseNumber, 
+            form.patchValue({labFacilityLicenseNumber: thcLevel?.labFacilityLicenseNumber,
                              labFacilityName: thcLevel.labFacilityName});
 
             labChecked = true
@@ -145,7 +145,7 @@ export class StrainsAddComponent implements OnInit {
         } catch (error) {
           console.log(error)
         }
-        
+
         try {
             const thca = list.find(c => c.testTypeName.includes("Delta 9"));
             if (thca) {
@@ -278,14 +278,18 @@ export class StrainsAddComponent implements OnInit {
   }
 
   assignMenItem(id: number) {
+    console.log('assignMenItem id', id)
     if (id == 0) { return}
     this.menuService.getMenuItemByID(this.site, id).subscribe(data => {
+      // console.log('assignMenItem data', data)
       if (data) {
         this.menuItem = data
         const item = {productName: data.name, productID: data.id}
         this.packageForm.patchValue(item)
         return;
       }
+      this.package.productID = null;
+      this.package.productName = null;
       this.setProductNameEmpty(this.packageForm)
     })
   }
@@ -315,7 +319,7 @@ export class StrainsAddComponent implements OnInit {
     }
   }
 
-  
+
   initItemFormData(data: METRCPackage) {
     if (data) {
       try {
@@ -360,13 +364,13 @@ export class StrainsAddComponent implements OnInit {
             labTestingPerformedDate         : data?.labTestingStateDate,
             packagedDate                    : data?.packagedDate,
             expirationDate                  : data?.expirationDate,
-            
+
             useByDate                       : data?.useByDate,
             productionBatchNumber           : data?.productionBatchNumber,
             productName                     : data?.productName,
             productID                       : data?.productID,
-          
-            
+
+
             itemFromFacilityNumber           : data?.itemFromFacilityLicenseNumber,
             itemFromFacilityName             : data?.itemFromFacilityName,
             receivedFromFacilityLicenseNumber: data?.receivedFromFacilityLicenseNumber,

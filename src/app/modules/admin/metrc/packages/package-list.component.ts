@@ -253,7 +253,7 @@ export class PackageListComponent implements OnInit {
          flex: 2,
        },
      },
-      {headerName: 'Label', field: 'label', sortable: true, minWidth: 225},
+      {headerName: 'Label', field: 'label', sortable: true, minWidth: 250},
       {headerName: 'Source',  sortable: true, field: 'itemFromFacilityLicenseNumber',},
       {headerName: 'Strain/Product', field: 'item.name', sortable: true},
       {headerName: 'Quantity', field: 'quantity', sortable: true},

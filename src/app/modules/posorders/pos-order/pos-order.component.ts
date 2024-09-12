@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input,
          OnInit, Output, OnDestroy,  ViewChild, HostListener, Renderer2, TemplateRef } from '@angular/core';
 import { AuthenticationService, AWSBucketService, IItemBasicB, MenuService, OrdersService, TextMessagingService } from 'src/app/_services';
-import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
+import { IPOSOrder, JSONOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
 import { Observable, of, Subscription } from 'rxjs';
 import { concatMap, delay,  repeatWhen, switchMap  } from 'rxjs/operators';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
@@ -975,6 +975,23 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
         return true
       }
     }
+  }
+
+  setBillOnHold() {
+    const site = this.siteService.getAssignedSite()
+
+    if (!this.order.orderFeatures) { 
+      this.order.orderFeatures = {} as JSONOrder
+    }
+    this.order.orderFeatures.billOnHold = 1
+
+    const order$ = this.orderService.setOrderFeatures(site, this.order.id, this.order.orderFeatures);
+    this.action$ = order$.pipe(switchMap(data => { 
+      if (data) { 
+        this.orderMethodsService.updateOrder(this.order)
+      }
+      return of(data)
+    }));
   }
 
   removeZerValueItems() { 

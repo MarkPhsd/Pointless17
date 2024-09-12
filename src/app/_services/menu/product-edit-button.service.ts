@@ -14,7 +14,7 @@ import { employee, IPOSOrder, IPOSPayment, ISite, OperationWithAction, PosOrderI
 import { ClientTypeEditComponent } from 'src/app/modules/admin/clients/client-types/client-type-edit/client-type-edit.component';
 import { ServiceTypeEditComponent } from 'src/app/modules/admin/transactions/serviceTypes/service-type-edit/service-type-edit.component';
 import { AdjustItemComponent } from 'src/app/modules/posorders/adjust/adjust-item/adjust-item.component';
-import { ItemWithAction } from '../transactions/posorder-item-service.service';
+import { ItemWithAction, POSOrderItemService } from '../transactions/posorder-item-service.service';
 import { MenuPriceSelectionComponent } from 'src/app/modules/menu/menu-price-selection/menu-price-selection.component';
 import { IProduct } from 'src/app/_interfaces/raw/products';
 import { ItemType } from 'src/app/_interfaces/menu/price-schedule';
@@ -57,6 +57,8 @@ import { DCAPTransactionComponent } from 'src/app/modules/dsiEMV/Dcap/dcaptransa
 import { PosOrderEditorComponent } from 'src/app/modules/posorders/pos-order/pos-order-editor/pos-order-editor.component';
 import { EmployeeSelectPopUpComponent } from 'src/app/modules/admin/employees/employee-select-pop-up/employee-select-pop-up.component';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
+import { PosOrderItemMethodsService } from '../transactions/pos-order-item-methods.service';
+import { PosOrderItemEditorComponent } from 'src/app/modules/posorders/pos-order/pos-order-items/pos-order-item-edit/pos-order-item-edit.component';
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +70,8 @@ export class ProductEditButtonService {
             ( private dialog             : MatDialog,
               private siteService         : SitesService,
               private menuService         : MenuService,
+              private orderItemMethodsService    : PosOrderItemMethodsService,
+              private orderItemService    : POSOrderItemService,
               private paymentMethodService:PaymentMethodsService,
               private inventoryService    : InventoryAssignmentService,
               private itemTypeService     : ItemTypeService,
@@ -233,6 +237,14 @@ export class ProductEditButtonService {
       return of(null)
     }))
     return item$
+  }
+
+  openItemDetail(id: number, history: boolean) { 
+    const site = this.siteService.getAssignedSite();
+    return   this.orderItemService.getPOSOrderItembyHistory(site, id, history).pipe(switchMap(data => {
+
+      return of(data)
+    }))
   }
 
   openBuyInventoryItemDialogObs(menuItem: IMenuItem, order: IPOSOrder, openInventoryDialog?: boolean, buyFeatures?: any) {
@@ -544,7 +556,20 @@ export class ProductEditButtonService {
         },
       )
     )
+  }
 
+  openOrderItemEditor(item: any, action: string, orderItems: PosOrderItem[]):  Observable<MatDialogRef<PosOrderItemEditorComponent>> {
+    const site = this.siteService.getAssignedSite();
+    const data = { item: item, action: action, orderItems: orderItems}
+    return of(this.dialog.open(PosOrderItemEditorComponent,
+        {  width:      '500px',
+           maxWidth:   '500px',
+           height:     '50vh',
+           minHeight:  '800px',
+          data :        data
+        },
+      )
+    )
   }
 
   async openProductEditor(id: number,productTypeID: number ) {

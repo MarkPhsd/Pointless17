@@ -5,7 +5,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { AWSBucketService, OrdersService, POSOrdersPaged} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UntypedFormGroup } from '@angular/forms';
-import {  switchMap } from 'rxjs/operators';
+import {  concatMap, switchMap } from 'rxjs/operators';
 import { Observable, of, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
@@ -107,7 +107,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   showCost : boolean;
   showRetail: boolean;
   @Input() filteredList : PosOrderItem[]
-
+  fullPOSOrderItemList  : PosOrderItem[]
   initSubscriptions() {
     let clientID: number;
     if (this.userAuthorization.user && this.userAuthorization.user.roles === 'user') {
@@ -126,11 +126,35 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
               this.purchaseOrderEnabled = true;
           }
           this.refreshSearch()
-          if (data.posOrderItems) { return of(data.posOrderItems)  }
+          if (data.posOrderItems) { 
+            this.fullPOSOrderItemList = data.posOrderItems;
+            // billOnHoldRemaining
+            data.posOrderItems = this.calcSubitemValues(data.posOrderItems)
+            data.posOrderItems.filter(item => { 
+              return item.idRef != item.id || item.idRef == null || item.idRef == 0
+            })
+            return of(data.posOrderItems)  
+          }
         }
         return of([])
     })
 
+  }
+
+  calcSubitemValues(posOrderItems) { 
+    posOrderItems.forEach(mainItem => {
+      if (!mainItem.idRef) {  // If it's a main item (idRef is null)
+        // Find subitems belonging to this main item
+        const subItems = posOrderItems.filter(item => item.idRef === mainItem.id);
+        
+        // Sum the quantities of subitems
+        const subItemsTotalQuantity = subItems.reduce((sum, subItem) => sum + subItem.quantity, 0);
+    
+        // Calculate and set billOnHoldRemaining
+        mainItem.billOnHoldRemaining = mainItem.quantity - subItemsTotalQuantity;
+      }
+    });
+    return posOrderItems
   }
 
   ngOnChanges() {
@@ -250,13 +274,18 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(nameCol);
 
+    let fixEditQuantity: boolean
+    fixEditQuantity = true
+    if (this.order?.orderFeatures?.billOnHold == 1) {
+      fixEditQuantity = false
+    }
     let nextColumn =  {headerName: 'Quantity',     field: 'quantity',
           sortable: true,
           width   : 100,
           minWidth: 100,
           maxWidth: 100,
           flex    : 2,
-          editable: true,
+          editable: fixEditQuantity,
           singleClickEdit: true
     }
     columnDefs.push(nextColumn);
@@ -271,7 +300,20 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
           singleClickEdit: true
     }
     if (this.order.customerName != 'Inventory Monitor') {
-    columnDefs.push(nextColumn);
+       columnDefs.push(nextColumn);
+    }
+
+    const receivedColumn =  {headerName: 'Received',     field: 'qtyReceived',
+      sortable: true,
+      width   : 100,
+      minWidth: 100,
+      maxWidth: 100,
+      flex    : 2,
+      editable: false,
+      singleClickEdit: true
+    }
+    if (this.order?.orderFeatures?.billOnHold == 1) {
+      columnDefs.push(receivedColumn);
     }
 
     let currencyColumn = {headerName: 'Price',     field: 'unitPrice', sortable: true,
@@ -357,6 +399,22 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       columnDefs.push(editButtonColumn);
     }
 
+    let receiveBillITem = {headerName: 'Receive Amt',  field: 'id',
+      cellRenderer: "btnCellRenderer",
+      cellRendererParams: {
+        onClick: this.receiveQtyBillOnHold.bind(this),
+        label: 'receive',
+        getLabelFunction: this.getReceive.bind(this),
+        btnClass: 'btn btn-primary btn-sm'
+      },
+      minWidth: 125,
+      maxWidth: 125,
+      flex: 2,
+    }
+    if (this.purchaseOrderEnabled) {
+      columnDefs.push(receiveBillITem);
+    }
+
     let itemDelete =  { headerName: 'Delete', field: "id",
         cellRenderer: "btnCellRenderer",
         cellRendererParams: {
@@ -435,7 +493,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       columnDefs.push(nextColumn);
   
     }
-  
 
     nextColumn =  {headerName: 'Scanned',     field: 'traceOrderDate',
                     sortable: true,
@@ -530,6 +587,21 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       allColumnIds.push(column.colId);
     });
     this.gridOptions.columnApi.autoSizeColumns(allColumnIds, skipHeader);
+  }
+
+  receiveQtyBillOnHold(e) {
+    console.log(e, e.rowData?.id)
+    if (!e) { return }
+    if (e.rowData.id)  {
+      const site = this.siteService.getAssignedSite()
+      const item$ = this.posOrderItemService.getPOSOrderItembyHistory(site, e.rowData.id, this.order.history)
+      this.action$ =  item$.pipe(concatMap(data => { 
+        // 'get the list of these items'
+        const filteredItems = this.fullPOSOrderItemList.filter(item => (item.id !== data.id && item.idRef == data.id) );
+        const editor$ = this.productEditButtonService.openOrderItemEditor(data, 'billOnHold', filteredItems)
+        return editor$
+      }))
+    }
   }
 
   //initialize filter each time before getting data.
@@ -715,6 +787,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   saveSub(item: PosOrderItem, editField: string): Observable<IPOSOrder> {
     const order$ = this.posOrderItemMethodsService.saveSub(item, editField).pipe(
       switchMap(data => {
+        this.orderMethodsService.updateOrder(data)
         return of(data)
       }
     ))
@@ -799,7 +872,11 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       return 'Edit';
       else return 'Edit';
   }
-
+  getReceive(rowData) {
+    if(rowData && rowData.hasIndicator)
+      return 'receive';
+      else return '';
+  }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

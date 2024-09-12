@@ -223,7 +223,14 @@
       <br>Receive Items
     </button>
   </div>
-    
+
+  <div *ngIf="!isNotPurchaseOrder && (!order?.orderFeatures || order?.orderFeatures?.billOnHold == 0) ">
+    <button style="margin-left:5px" mat-raised-button class="payment-buttons" color="accent" (click)="setBillOnHold()">
+      <mat-icon>hand</mat-icon>
+      <br>Bill On Hold
+    </button>
+  </div>
+
   <div *ngIf=" !isNotPurchaseOrder ">
     <button style="margin-left:5px" mat-raised-button class="payment-buttons" color="accent" (click)="removeZerValueItems()">
       <mat-icon>delete</mat-icon>

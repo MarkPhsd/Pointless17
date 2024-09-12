@@ -1,0 +1,92 @@
+<div *ngIf="(action$ | async)"></div>
+<mat-card *ngIf="inputForm">
+  <mat-card-title>
+
+    <div class="header-container" >
+      <div>
+        <h4>
+          <div *ngIf="item.id != 0">
+            Edit   {{ item?.productName  }}  {{ item?.serialCode }} <br>
+            {{actionInstructions}}
+          </div>
+        </h4>
+      </div>
+
+      <div >
+        <div>
+          <app-edit-buttons-standard
+                [enableCopy]            ="false"
+                (outputeupdateItem)     ="updateSave($event)"
+                (outputupdateItemExit)  ="saveExit($event)"
+                (outputupdateonCancel)  ="onCancel(false)"
+          ></app-edit-buttons-standard>
+        </div>
+
+        <div *ngIf="action==='billOnHold'">
+          <button mat-raised-button color="accent" (click)="receiveItem()"><mat-icon>download</mat-icon>Receive Amount</button>
+        </div>
+
+      </div>
+    </div>
+  </mat-card-title>
+
+  <mat-card-content>
+    
+    <div class="ps-grid-items ">
+      <div> 
+        Ordered: {{item?.orderDate | date: 'short'}}
+      </div>
+      <div> 
+        Completed: {{item?.completionDate | date: 'short'}}
+      </div>
+    </div>
+
+    <div class="ps-grid-items " style="width:85px">
+      <app-value-fields
+          [enabled]="true"
+          [fieldType]="'number'"
+          [inputForm]="inputForm"
+          [fieldName]="'quantity'">
+        <div description>{{quantityActionType}}</div>
+      </app-value-fields>
+    </div>
+
+    <div [formGroup]="inputForm">
+      <mat-form-field class="form-field" appearance ='outline'>
+        <mat-label>Recieved Date</mat-label>
+        <input matInput
+               [ngxMatDatetimePicker]="picker_completionDate"
+               placeholder="End"
+               formControlName="receivedDate">
+        <mat-datepicker-toggle matSuffix [for]="picker_completionDate"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #picker_completionDate
+           [showSpinners]="true"
+           [showSeconds]="true"
+           [stepHour]="true"
+           [stepMinute]="true"
+           [stepSecond]="true"
+           [touchUi]="true"
+           [color]="'primary'"
+           [enableMeridian]="true"
+           [disableMinute]="false"
+           [hideTime]="false">
+        </ngx-mat-datetime-picker>
+      </mat-form-field>
+
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="action === 'billOnHold'">
+  <mat-card-subtitle>Received Items</mat-card-subtitle>
+  <mat-card-content>
+    
+    <div class="ps-grid-items " *ngFor="let item of orderSubItems">
+      <div>QTY: {{item?.quantity}}</div>
+      <div>Date: {{item?.receivedDate | date: 'short'}}</div>
+      <div>User: {{item?.employeeName }}</div>
+      <div><button mat-raised-button (click)="deleteSubItem(item)"><mat-icon>delete</mat-icon></button></div>
+    </div>
+
+  </mat-card-content>
+</mat-card>

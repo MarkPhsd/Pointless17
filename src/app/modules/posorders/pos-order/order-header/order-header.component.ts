@@ -191,7 +191,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   remotePrint(message:string, exitOnSend: boolean, posDevice:ITerminalSettings) {
     const order = this.order;
-    // console.log('remote print', this.posDevice?.remotePrepPrint)
+    
     if (posDevice) {
       let pass = false
       if (posDevice?.remotePrepPrint) {

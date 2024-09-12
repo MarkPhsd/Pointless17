@@ -3,7 +3,6 @@ import { ActivatedRoute,  } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, UntypedFormControl} from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, switchMap,  } from 'rxjs';
-import { CurrencyPipe } from '@angular/common';
 import * as numeral from 'numeral';
 import { IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.service';
 import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
@@ -538,16 +537,36 @@ export class StrainPackagesComponent implements OnInit {
     const packageItem = this.packageForm.value;
     
     this.inventoryAssignments.forEach((assignment, index) => {
-      assignment.thc = packageItem?.thc;
+      assignment.thc  = packageItem?.thc;
       assignment.thca = packageItem?.thca;
-      assignment.cbd = packageItem?.cbd;
-      assignment.labFacilityName = packageItem?.labFacilityName;
+      assignment.cbd  = packageItem?.cbd;
+
+      assignment.labFacilityName          = packageItem?.labFacilityName;
       assignment.labFacilityLicenseNumber = packageItem?.labFacilityLicenseNumber;
-      assignment.sourceHarvestName = packageItem?.sourceHarvestName;
-      assignment.sourceHarvestNumber = packageItem?.sourceHarvestNumber;
-      assignment.facilityLicenseName = packageItem?.facilityLicenseName;
-      assignment.facilityLicenseNumber = packageItem?.facilityLicenseNumber;
+      assignment.sourceHarvestName        = packageItem?.sourceHarvestName;
+      assignment.sourceHarvestNumber      = packageItem?.sourceHarvestNumber;
+      assignment.facilityLicenseName      = packageItem?.facilityLicenseName;
+      assignment.facilityLicenseNumber    = packageItem?.facilityLicenseNumber;
+
+      assignment.initialLabTestingState = packageItem?.initialLabTestingState;
+      assignment.itemFromFacilityLicenseNumber = packageItem?.itemFromFacilityLicenseNumber;
+      assignment.itemFromFacilityName = packageItem?.itemFromFacilityName;
+      assignment.receivedFromFacilityName = packageItem?.receivedFromFacilityName;
+      assignment.receivedFromFacilityLicenseNumber = packageItem?.receivedFromFacilityLicenseNumber;
+      assignment.receivedDateTime = packageItem?.receivedDateTime;
+      assignment.packagedDate = packageItem?.packagedDate;
+      assignment.packageType =  packageItem?.packageType;
+      assignment.metrcItemID = packageItem?.metrcItemID;
+      assignment.labTestingStateDate =  packageItem.labTestingStateDate;
+      assignment.labTestingPerformedDate =  packageItem.labTestingStateDate;
+      assignment.labTestingState =  packageItem.labTestingState;
+      assignment.labFacilityName =  packageItem.labFacilityName;
+      assignment.labFacilityLicenseNumber =  packageItem.labTestingStateDate;
+      assignment.json =  packageItem.json;
+      assignment.jointWeight =  packageItem.jointWeight;
+
     });
+    console.log('form value', this.packageForm.value)
 
     const inv$=  this.inventoryAssignmentService.addInventoryList(site, 
                                                                   this.inventoryAssignments[0].label,

@@ -293,6 +293,7 @@ export class PosOrderItemEditComponent  {
   onCancel() {
     this.authenticationService.updateUserAuthstemp(null);
     this.orderMethodsService._scanner.next(true)
+    console.log('onCancel')
     this.dialogRef.close();
     this.closeOnEnterPress.emit('true')
   }

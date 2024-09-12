@@ -333,36 +333,50 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   initDevice() {
-    const site = this.siteService.getAssignedSite();
+
     const devicename = localStorage.getItem('devicename');
 
     if (!devicename) { return ;}
-    // if (this.platFormService.isApp()) {
-    this.posDevice$ = this.settingService.getPOSDeviceBYName(site, devicename).pipe(switchMap(data => {
+ 
+    this.posDevice$ = this.getDeviceInfo(devicename)
+
+  }
+
+  getDeviceInfo(devicename) { 
+      const site = this.siteService.getAssignedSite();
+    return this.settingService.getPOSDeviceBYName(site, devicename).pipe(switchMap(data => {
       if (!data) { return of(null)}
       const device = JSON.parse(data.text) as ITerminalSettings;
       this.settingService.updateTerminalSetting(device)
       this.initPrintServer(device)
-      if (device.enableScale) {
-      }
+      if (device.enableScale) {  }
       this.posDevice = device;
       return of(device)
     }))
-    // }
   }
 
   homePageSubscriber(){
     try {
       this.matorderBar = 'mat-orderBar-wide'
-      this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
+      this._uiSettings = this.uiSettingsService.homePageSetting$.pipe (switchMap(data => {
         if (data) {
           this.uiSettings = data;
-          this.initIdle();
+       
           if (this.phoneDevice)  {
             this.matorderBar = 'mat-orderBar-wide'
             return
           }
           this.matorderBar = 'mat-orderBar-wide'
+        }
+
+        const devicename = localStorage.getItem('devicename');
+        if (devicename){ 
+          return this.getDeviceInfo(devicename)
+        }
+        return of(null)
+      })).subscribe(data => { 
+        if (data && data?.ignoreTimer) {
+          this.initIdle();
         }
       })
     } catch (error) {
@@ -552,12 +566,11 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initSubscriptions() {
-    this.setItemTypeList()
-    try {
-      this.initDevice();
-    } catch (error) {
-      console.log('device subscriber', error)
-    }
+    this.setItemTypeList();
+
+    this.homePageSubscriber();
+    // this.initDevice();
+
     this.matorderBar = 'mat-orderBar-wide'
     this.style = ""
     try {
@@ -575,10 +588,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     } catch (error) {
     }
 
-    try {
-      this.homePageSubscriber();
-    } catch (error) {
-    }
+   
 
     try {
       this.userSubscriber();
@@ -653,7 +663,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     const site = this.siteService.getAssignedSite();
     this.uiTransactions$ = this.initUITransactionSettings();
     this.splashLoader.stop();
-    // this.initDevice();
     this.userIdle.resetTimer();
     this.initLoginStatus();
     this.subscribeAddress();

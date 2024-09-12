@@ -316,12 +316,12 @@
       <div class="ps-flex-group-column">
 
         <app-request-messages
-          *ngIf="uiTransactionSetting"
-          [user]="user"
-          [posDevice]="posDevice"
-          [uiTransaction]="uiTransactionSetting"
+          *ngIf             ="uiTransactionSetting"
+          [user]            ="user"
+   
+          [uiTransaction]   ="uiTransactionSetting"
           [hideshowMessages]="true"
-          (emitCount)="emailMailCount($event)">
+          (emitCount)       ="emailMailCount($event)">
         </app-request-messages>
 
         <ng-container [ngTemplateOutlet]="lastOrderView"></ng-container>
@@ -429,6 +429,7 @@
     </div>
   </span>
 </ng-template>
+
 <ng-template #preferencesView>
   <span  *ngIf="user?.userPreferences; else loadingPref">
     <mat-divider></mat-divider>
@@ -491,10 +492,10 @@
   </div>
 </ng-template>
 
-<ng-template #userMessages>
+<!-- <ng-template #userMessages>
   <app-request-messages
     [user]="user"
     [hideshowMessages]="true"
     (emitCount)="emailMailCount($event)">
   </app-request-messages>
-</ng-template>
+</ng-template> -->

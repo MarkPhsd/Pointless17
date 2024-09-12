@@ -59,6 +59,14 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         return
       }
 
+      if (this.label && (this.label === 'receive' || this.label === 'Receive')) {
+        this.icon = 'download'
+        this.color = this.themeWarn
+        this.label = "receive"
+        this.buttonStyle = `${this.buttonStyle}`
+        return
+      }
+
       if (this.label && (this.label === 'delete' || this.label === 'Delete')) {
         this.icon = 'delete'
         this.color = this.themeWarn
