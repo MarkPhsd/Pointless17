@@ -633,7 +633,6 @@ export class OrderMethodsService implements OnDestroy {
               private userAuthorization       : UserAuthorizationService,
               private _snackBar               : MatSnackBar,
               private storeCreditMethodService: StoreCreditMethodsService,
-
              ) {
     this.isApp = this.platFormService.isApp()
     const order = this.getStateOrder();
@@ -641,7 +640,6 @@ export class OrderMethodsService implements OnDestroy {
       this.updateOrderSubscription(order)
     }
     this.initSubscriptions();
-
   }
 
   ngOnDestroy(): void {

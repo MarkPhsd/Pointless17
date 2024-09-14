@@ -223,7 +223,10 @@ export class FunctionButtonsListComponent implements OnInit {
 
   emailOrder() {
     console.log('Placeholder for Email Order');
-    this.action$ = this.orderMethodsService.emailOrder(this.order)
+    this.action$ = this.orderMethodsService.emailOrder(this.order).pipe(switchMap(data => { 
+      this.siteService.notify('Email Sent', 'Completed', 2000)
+      return of(data)
+    }))
     // Add the actual implementation here
   }
 

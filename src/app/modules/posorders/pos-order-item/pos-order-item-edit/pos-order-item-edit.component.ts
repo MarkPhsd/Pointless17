@@ -9,7 +9,6 @@ import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-o
 import { Observable, of, switchMap } from 'rxjs';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-pos-order-item-edit',
@@ -168,7 +167,8 @@ export class PosOrderItemEditComponent  {
     const item = this.getItemValue();
     item.quantity = event;
     this.action$ = this.saveSub(item, this.editField).pipe(switchMap(data => {
-      this.orderMethodsService.updateOrder(data)
+      // this.orderMethodsService.updateOrder(data)
+      this.orderMethodsService.updateOrderSubscription(data)
       this.onCancel();
       return of(data)
     }))
@@ -202,6 +202,8 @@ export class PosOrderItemEditComponent  {
     if (data?.resultMessage) {
       this.siteService.notify(data?.resultMessage, 'Close', 3000, 'red')
     }
+
+    console.log('id', this.orderMethodsService.getEmployeeID())
 
     this.orderMethodsService.updateOrder(data)
     this.onCancel();

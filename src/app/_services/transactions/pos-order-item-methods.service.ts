@@ -4,7 +4,8 @@ import { POSOrderItemService } from './posorder-item-service.service';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 import { Observable, of, switchMap } from 'rxjs';
-import { OrderMethodsService } from './order-methods.service';
+// import { OrderMethodsService } from './order-methods.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -28,7 +29,7 @@ export class PosOrderItemMethodsService {
         // console.log(this.orderMethodsService.assignPOSItems);
         //get selected items
         obs$ = this.posOrderItemService.applyItemPerDiscount(site, item, list ).pipe(switchMap( data => {
-          this.orderMethodsService.updateOrderSubscription(data)
+          // this.orderMethodsService.updateOrderSubscription(data)
           return of(data)
         }))
       }
@@ -36,7 +37,7 @@ export class PosOrderItemMethodsService {
       if (editField == 'quantity') {
         const site = this.siteService.getAssignedSite();
         obs$ = this.posOrderItemService.changeItemQuantity(site, item ).pipe(switchMap( data => {
-          this.orderMethodsService.updateOrderSubscription(data)
+          // this.orderMethodsService.updateOrderSubscription(data)
           return of(data)
         }))
       }
@@ -48,7 +49,7 @@ export class PosOrderItemMethodsService {
               if (data.resultMessage) {
                 this.siteService.notify(data.resultMessage, 'Alert', 1500)
               }
-              this.orderMethodsService.updateOrderSubscription(data)
+              // this.orderMethodsService.updateOrderSubscription(data)
             }
             return of(data)
           }))
@@ -65,7 +66,7 @@ export class PosOrderItemMethodsService {
             }
             if (data) { 
               // console.log(this.orderMethodsService)
-              this.orderMethodsService.updateOrder(data)
+              // this.orderMethodsService.updateOrder(data)
             }
             return of(data)
           }))
@@ -80,7 +81,7 @@ export class PosOrderItemMethodsService {
                 this.siteService.notify(data.resultMessage, 'Alert', 1500)
               }
             }
-            this.orderMethodsService.updateOrderSubscription(data)
+            // this.orderMethodsService.updateOrderSubscription(data)
             return of(data)
           }))
         }
@@ -94,7 +95,7 @@ export class PosOrderItemMethodsService {
                 this.siteService.notify(data.resultMessage, 'Alert', 1500)
               }
             }
-            this.orderMethodsService.updateOrderSubscription(data)
+            // this.orderMethodsService.updateOrderSubscription(data)
             return of(data)
           }))
         }
@@ -102,7 +103,7 @@ export class PosOrderItemMethodsService {
 
       if (editField == 'modifierNote') {
         obs$ = this.posOrderItemService.changeModifierNote(site, item ).pipe(switchMap( data => {
-          this.orderMethodsService.updateOrderSubscription(data)
+          // this.orderMethodsService.updateOrderSubscription(data)
           return of(data)
         }))
       }
@@ -124,7 +125,6 @@ export class PosOrderItemMethodsService {
     if (!multiplier|| multiplier == 0)  { return quantity}
     const packagesNeeded = Math.ceil(quantity / multiplier);
     return packagesNeeded;
-
   }
 
 

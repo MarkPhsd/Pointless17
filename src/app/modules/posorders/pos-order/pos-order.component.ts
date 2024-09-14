@@ -1266,9 +1266,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   sendOrderToCustomer() {
-
     this.order.clients_POSOrders.id
-
   }
 
   textNotify() {

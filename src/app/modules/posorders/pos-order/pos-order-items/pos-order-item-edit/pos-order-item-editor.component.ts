@@ -1,8 +1,7 @@
-import { DataRowOutlet } from '@angular/cdk/table';
 import { Component,Inject,OnInit, Optional, } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
-import { concatMap, concatWith, Observable, of, switchMap } from 'rxjs';
+import { concatMap, Observable, of, switchMap } from 'rxjs';
 import { PosOrderItem } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
@@ -12,8 +11,8 @@ import { POSOrderItemService } from 'src/app/_services/transactions/posorder-ite
 
 @Component({
   selector: 'pos-order-item-editor',
-  templateUrl: './pos-order-item-edit.component.html',
-  styleUrls: ['./pos-order-item-edit.component.scss']
+  templateUrl: './pos-order-item-editor.component.html',
+  styleUrls: ['./pos-order-item-editor.component.scss']
 })
 export class PosOrderItemEditorComponent implements OnInit {
 

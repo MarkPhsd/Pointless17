@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output,EventEmitter, Inject } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
+import { DATABASE } from '@faker-js/faker/definitions/database';
 import { BehaviorSubject, catchError, concatMap, delay, finalize, forkJoin, Observable, of, repeatWhen, Subject, switchMap, take, throwError, timer } from 'rxjs';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
@@ -32,6 +33,9 @@ export class RequestMessagesComponent implements OnInit {
   @Input() orderID: number;
   @Input() posDevice: ITerminalSettings
   @Input() uiTransaction  : TransactionUISettings;
+  
+  actions: string;
+
   searchModel: IRequestMessageSearchModel;
   messages$: Observable<IRequestMessage[]>;
   message$: Observable<IRequestResponse>;
@@ -452,30 +456,55 @@ export class RequestMessagesComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any
      )
   {
-
-    if (data && data.id) {
-      if (data.action =='orderMesssages') { 
+    console.log('data', data)
+    if (data && data.action) {
+      if (data.action === 'orderMessages') { 
+        console.log('data', data)
         this.orderID = data.order.id;
         this.enableActions = false
-
-        console.log('order Messags', this.orderID)
+        this.actions = data?.action
         return;
       }
+    }
+    if (data && data.id) { 
       this.orderID = data.order.id;
       this.enableActions = false
       return;
     }
+    
     this.enableActions = true
   }
 
   ngOnInit(): void {
     let user = this.userAuthService?.user
+    console.log('on init ', this.actions)
+    if (this.actions === 'orderMessages') { 
+      const orders$ = this._getOrderMessages()
+      this.messages$ = orders$.pipe(switchMap(data => { 
+        this.refreshMessages()
+        return of(data)
+      }))
+      return;
+    }
     if (!this.user) { this.user  = user  }
     this.initServices()
   }
 
   ngOnDestroy() {
     this.unSubscribeAll()
+  }
+
+  getOrderMessages() {
+    this.messages$ = this._getOrderMessages()
+  }
+
+  
+  _getOrderMessages() {
+    const site = this.siteService.getAssignedSite()
+    const search = {} as IRequestMessageSearchModel;
+    search.orderID = this.orderID;
+    console.log(search)
+    return this.requestMessageService.getOpenRequestMessagesByOrder(site, search)
   }
     //we have to get these settings.
     //and for the printing if the device here is the same as the uitransactionserver

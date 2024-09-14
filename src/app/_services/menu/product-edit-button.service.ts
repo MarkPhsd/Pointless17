@@ -58,7 +58,8 @@ import { PosOrderEditorComponent } from 'src/app/modules/posorders/pos-order/pos
 import { EmployeeSelectPopUpComponent } from 'src/app/modules/admin/employees/employee-select-pop-up/employee-select-pop-up.component';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { PosOrderItemMethodsService } from '../transactions/pos-order-item-methods.service';
-import { PosOrderItemEditorComponent } from 'src/app/modules/posorders/pos-order/pos-order-items/pos-order-item-edit/pos-order-item-edit.component';
+import { PosOrderItemEditorComponent } from 'src/app/modules/posorders/pos-order/pos-order-items/pos-order-item-edit/pos-order-item-editor.component';
+// import { PosOrderItemEditorComponent } from 'src/app/modules/posorders/pos-order/pos-order-items/pos-order-item-edit/pos-order-item-editor.component';
 
 @Injectable({
   providedIn: 'root'

@@ -29,6 +29,7 @@
 <div *ngIf="(messages$ | async) as messages; else loading">
   <div *ngIf="messages">
     <button   mat-raised-button
+              *ngIf="enableActions"
               color="primary"
               style="height:45px"
               (click)="archiveAll()" >
@@ -37,6 +38,7 @@
     </button>
 
     <button   mat-raised-button
+          *ngIf="enableActions"
           color="primary"
           style="height:45px"
           (click)="archiveVoids()" >
@@ -74,17 +76,18 @@
 
     <div>
       <button
-          mat-button
-          color="primary"
+          mat-raised-button
+          color="accent"
           (click)="refreshMessages()" >
           <mat-icon>refresh</mat-icon>
       </button>
     </div>
 
     <div *ngIf="orderID">
-      <button mat-button
+      <button mat-raised-button
+              color="primary"
               (click)="exit()">
-        <mat-icon>exit</mat-icon>
+        <mat-icon>close</mat-icon>
         Close
       </button>
     </div>
@@ -108,8 +111,8 @@
             <div message > {{item?.message}} </div>
             <div subject > {{item?.subject}} </div>
             <div body >    {{item?.message}} - {{item?.type}} </div>
-            <div *ngIf="item.requestDate" completed >   {{item?.requestDate | date: 'short'}} </div>
-            <div *ngIf="item.requestCompleted" requested >   {{item?.requestCompleted | date: 'short'}} </div>
+            <div *ngIf="item.requestDate" completed > Completed:  {{item?.requestDate | date: 'short'}} </div>
+            <div *ngIf="item.requestCompleted" requested > Requested:  {{item?.requestCompleted | date: 'short'}} </div>
           </app-request-message>
         </div>
 

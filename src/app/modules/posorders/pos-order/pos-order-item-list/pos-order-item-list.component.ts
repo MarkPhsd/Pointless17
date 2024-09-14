@@ -411,7 +411,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       maxWidth: 125,
       flex: 2,
     }
-    if (this.purchaseOrderEnabled) {
+    if (this.purchaseOrderEnabled && ( this.order?.orderFeatures?.billOnHold && this.order?.orderFeatures?.billOnHold != 0 ) ) {
       columnDefs.push(receiveBillITem);
     }
 

@@ -65,7 +65,7 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
 
     this.order$ = this.getOrder().pipe(switchMap(data => {
       const emailSource = this.route.snapshot.paramMap.get('emailSource');
-      console.log('received order', emailSource,data)
+      // console.log('received order', emailSource,data)
       if (emailSource) { 
         if (this.order) { 
           this.sendmessage$ = this.notifyMessageReceived(this.order)
