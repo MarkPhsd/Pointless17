@@ -1,3 +1,4 @@
+<div *ngIf="(bucket$ | async) as bucket"></div>
 <div  class="mat-form-field"
       style="width:120px"
       [formGroup]="searchForm">
@@ -20,7 +21,20 @@
                         (optionSelected)="onChange($event)">
       <mat-option *ngFor="let item of (results$ | async)?.results"
                   [value]="item">
+
+        <mat-card>
+          <div class="flex-start-row ">
+            <div>
               {{item.name}}
+              <span *ngIf="showUOM && item?.unitDescription">
+                ( {{item?.unitDescription}} )
+              </span>
+            </div>
+            <div>
+              <ng-container *ngTemplateOutlet="productImage,  context:  {$implicit: item}"></ng-container>
+            </div>
+          </div>
+        </mat-card>
       </mat-option>
     </mat-autocomplete>
 
@@ -39,3 +53,20 @@
       [formGroup]='formfieldValue'>
   <input formControlName="productID">
 </div>
+
+<ng-template #productImage let-item>
+  <div class="product-image-container"
+              *ngIf    ="item?.thumbnail && bucketName">
+
+    <img
+      loading="lazy"
+      draggable="false"
+      width="100%"
+      [src]    ="item?.thumbnail || 'assets/images/placeholderimage.png'"
+      onerror  = "this.src='assets/images/placeholderimage.png'"
+      (error)  ="onImageError($event)"
+      class    ="item-image"
+      [alt]    ="item?.name">
+  </div>
+
+</ng-template>

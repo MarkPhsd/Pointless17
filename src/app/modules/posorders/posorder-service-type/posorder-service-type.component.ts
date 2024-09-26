@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IServiceType, ISite, IUser, ServiceType } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
+import { AWSBucketService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -16,6 +16,8 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
 })
 export class POSOrderServiceTypeComponent implements OnDestroy  {
 
+  @Input() bucketName: string;
+  bucket$: Observable<string>;
   inputForm            : UntypedFormGroup;
   serviceTypes$        : Observable<IServiceType[]>;
   order                : IPOSOrder;
@@ -39,12 +41,19 @@ export class POSOrderServiceTypeComponent implements OnDestroy  {
     private sitesService      : SitesService,
     private userAuthorization: UserAuthorizationService,
     public platFormService   : PlatformService,
+    private awsBucketService : AWSBucketService,
     private serviceTypeService: ServiceTypeService, ) {
 
-    this.initSubscriptions();
-    const site = this.sitesService.getAssignedSite();
-    this.getPaymentMethods(site);
-  }
+      this.initSubscriptions();
+      const site = this.sitesService.getAssignedSite();
+      this.getPaymentMethods(site);
+
+      this.bucket$    = this.awsBucketService.awsBucketURLOBS().pipe(switchMap(data => {
+        this.bucketName = data
+        return of(data)
+      }));
+    }
+
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
@@ -66,7 +75,7 @@ export class POSOrderServiceTypeComponent implements OnDestroy  {
         if (!data) {
           this.serviceTypes$ = of(data)
         }
-        
+
         if (!this.platFormService.isApp()) {
 
           if (!data) { return of(null)}
@@ -90,7 +99,7 @@ export class POSOrderServiceTypeComponent implements OnDestroy  {
         }
 
         return of(data)
-    
+
     }))
   }
 
@@ -102,6 +111,11 @@ export class POSOrderServiceTypeComponent implements OnDestroy  {
       // this.orderService.updateOrderSubscription(this.order)
       this.outPutSelectServiceType.emit(item)
     }
+  }
+
+  onImageError(event: Event) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'assets/images/placeholderimage.png'; // Angular will resolve this path correctly.
   }
 
 }

@@ -687,7 +687,7 @@ mat-dialog-container {
   width: 175px;
 }
 
-.flex-basic { 
+.flex-basic {
   display: flex;
   gap: 20px;
 }
@@ -723,6 +723,16 @@ mat-dialog-container {
   justify-content: start;
   align-items: start;
 }
+
+.flex-start-row {
+  display: flex;
+  flex-direction: row;
+  row-gap: 10px;
+  flex-wrap: wrap;
+  justify-content: start;
+  align-items: start;
+}
+
 
 .flex-end {
   display: flex;
@@ -1409,29 +1419,29 @@ mat-dialog-container {
   text-align: center;
 }
 
-.receipt-font-weight-600 { 
+.receipt-font-weight-600 {
   font-weight: 600;
 }
-.receipt-font-weight-500 { 
+.receipt-font-weight-500 {
   font-weight: 500;
 }
 
-.receipt-font-20 { 
+.receipt-font-20 {
   font-size: 20pt;
 }
-.receipt-font-18 { 
+.receipt-font-18 {
   font-size: 18pt;
 }
-.receipt-font-15 { 
+.receipt-font-15 {
   font-size: 15pt;
 }
-.receipt-font-14 { 
+.receipt-font-14 {
   font-size: 14pt;
-}	
-.receipt-font-13 { 
+}
+.receipt-font-13 {
   font-size: 13pt;
 }
-.receipt-font-12 { 
+.receipt-font-12 {
   font-size: 12pt;
 }
 

@@ -1,5 +1,25 @@
+@import "/src/mixins.scss";
 .mat-form-field {
   margin-top: 5px;
   margin-bottom: 0px;
   // font-size: .8em;
+}
+
+
+.formFieldClass {
+  width: 100%;
+}
+.item-image {
+  object-fit  :   cover;
+  border-radius: 15px;
+  width       : 100%;
+  white-space : normal;
+  overflow    : hidden;
+  height  : 55px;
+
+  @include for-phone-only {
+    font-size  : 1.3em;
+    height    : 55px;
+    height    :55px;
+  }
 }

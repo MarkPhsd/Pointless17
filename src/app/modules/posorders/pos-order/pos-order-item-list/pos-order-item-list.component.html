@@ -4,10 +4,6 @@
     {{message}}
     <div *ngIf="(action$ | async) as item"></div>
   </div>
-  <div *ngIf="userAuths?.deleteInventory">
-    <button mat-raised-button [disabled]="!selected"><mat-icon>delete</mat-icon>Delete Selected</button> 
-  </div>
-
   <div *ngIf="value" class="loader">
     <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
   </div>

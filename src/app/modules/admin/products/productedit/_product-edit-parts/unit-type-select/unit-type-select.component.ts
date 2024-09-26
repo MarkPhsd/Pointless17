@@ -82,7 +82,9 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
     this.init();
     this.site = this.siteService.getAssignedSite();
 
-    if (this.id) { this.getName(this.id)  }
+    if (this.id) {
+      console.log('get item', this.id)
+      this.getName(this.id)  }
   }
 
   ngAfterViewInit() {
@@ -115,15 +117,15 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
     })
   }
 
-
-
   ngOnChanges() {
     if (this.setChange) {
       this.getName(this.id)
       this.setChange = false
       this.undoSetChange.emit(false)
     }
-
+    if (this.id) {
+      console.log('get item', this.id)
+      this.getName(this.id)  }
   }
 
   refreshSearch(search: any){
@@ -159,6 +161,8 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
     let unit = {} as any;
 
     if (this.product) {
+
+      console.log('product')
       if (this.formControlName == 'reOrderUnitTypeID') {
         unit = { reOrderUnitTypeID : item.id }
       } else {
@@ -208,7 +212,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
 
   setValue(item) {
     const value =  { searchField: item.name  }
-    this.searchForm.patchValue( value )
+    this.itemSelect.emit(item)
   }
 
   getName(id: number) {
@@ -254,6 +258,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
     let item = {} as UnitType;
 
     if (this.product) {
+      this.id = null;
       if (this.formControlName == 'reOrderUnitTypeID') {
         unit = { reOrderUnitTypeID : 0}
       } else {

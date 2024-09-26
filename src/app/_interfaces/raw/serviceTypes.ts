@@ -4,6 +4,7 @@ import { IMenuItem } from "../menu/menu-products";
 
 export interface IServiceType {
   id:                    number;
+  image: string;
   name:                  string;
   description           :string;
   positiveNegative:      number;
@@ -47,7 +48,7 @@ export interface IServiceType {
   json: string; //converts to serviceTypeFeatures
   serviceTypeFeatues: ServiceTypeFeatues;
   allRequestPrep: number;
-  
+
 }
 
 export interface ServiceTypeFeatues {

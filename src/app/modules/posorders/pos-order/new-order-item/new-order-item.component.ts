@@ -32,7 +32,7 @@ export class NewOrderItemComponent implements OnInit {
   product$: Observable<any>;
   menuItemSelected: IMenuItem;
   unitOptions: IItemBasic[]
-  menuItem      : IMenuItem; 
+  menuItem      : IMenuItem;
   @Input() autoSelectItemPOSearch: boolean; //autoSelectItemPOSearch
   @Input()  order: IPOSOrder;
   @Output() outPutRefresh  : EventEmitter<any> = new EventEmitter<any>();
@@ -139,7 +139,8 @@ export class NewOrderItemComponent implements OnInit {
         this.inputForm.patchValue(this.posOrderItem);
         this.getItemUnitOptions();
 
-        if (this.autoSelectItemPOSearch) { 
+        console.log('auto select', this.autoSelectItemPOSearch)
+        if (this.autoSelectItemPOSearch) {
           this.addItem()
         }
         return of(data)

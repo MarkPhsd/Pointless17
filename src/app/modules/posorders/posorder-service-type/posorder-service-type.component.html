@@ -1,7 +1,25 @@
-
+<div *ngIf="(bucket$ | async) as bucket"></div>
 <mat-card class="card-dimensions">
   <mat-card-content>
   <ng-content></ng-content> : {{order?.serviceType}}
+
+  <div *ngIf="serviceTypes$ | async as items">
+    <div *ngFor="let item of items">
+      <div>
+        <button mat-button (click)="applyServiceType(item)">
+          <div class="flex-start-row ">
+            <div>
+              {{item.name}}
+            </div>
+            <div>
+              <ng-container *ngTemplateOutlet="productImage,  context:  {$implicit: item}"></ng-container>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <app-mat-toggle-selector
         [class]            = "'card-height'"
         [list$]            = "serviceTypes$"
@@ -15,3 +33,18 @@
   </mat-card-content>
 </mat-card>
 
+<ng-template #productImage let-item>
+  <div class="product-image-container"
+              *ngIf    ="item?.image && bucketName">
+    <img
+      loading ="lazy"
+      draggable="false"
+      width    ="100%"
+      [src]    ="item?.image"
+      onerror  = "this.src='assets/images/placeholderimage.png'"
+      (error)  ="onImageError($event)"
+      class    ="item-image"
+      [alt]    ="item?.name">
+  </div>
+
+</ng-template>

@@ -25,6 +25,7 @@ export class ServiceTypeEditComponent implements OnInit {
   description            : string;
   action$                : Observable<any>;
   serviceTypeFeaturesForm : FormGroup;
+  image: string;
 
   constructor(
     private serviceTypeService      : ServiceTypeService,
@@ -45,7 +46,7 @@ export class ServiceTypeEditComponent implements OnInit {
     }
   }
 
-     ngOnInit() {
+    ngOnInit() {
       this.initializeForm();
       // this.bucketName =       await this.awsBucket.awsBucket();
       // this.awsBucketURL =     await this.awsBucket.awsBucketURL();
@@ -75,11 +76,10 @@ export class ServiceTypeEditComponent implements OnInit {
               this.serviceType = data as unknown as IServiceType;
               this.id          = this.serviceType.id;
               this.serviceColor = this.serviceType.serviceColor
+              this.image = this.serviceType?.image;
             }
             this.inputForm.patchValue(this.serviceType)
-
             this.patchFormValues()
-
             return of(data)
           }
         )),catchError( error => {
@@ -91,22 +91,28 @@ export class ServiceTypeEditComponent implements OnInit {
 
     };
 
+    applyImage(event)  {
+
+        this.image = event
+        this.serviceType.image = event
+        this.inputForm.patchValue({image: event})
+
+    }
+
     patchFormValues() {
-      if (!this.serviceType.json) { return }
       this.serviceTypeFeaturesForm = this.initFeaturesForm();
+      if (!this.serviceType.json) { return }
       const itemFeatures = JSON.parse(this.serviceType.json);
-    
-      // Patch simple values
+
       this.serviceTypeFeaturesForm.patchValue({
         weekDays: itemFeatures.weekDays,
         hoursAndDayID: itemFeatures.hoursAndDayID,
         seatEnabled: itemFeatures.seatEnabled,
         icon: itemFeatures.icon
       });
-    
-      // Patch the nameStringPairs FormArray
+
+      // Patch nameStringPairs
       const nameStringPairsArray = this.serviceTypeFeaturesForm.get('nameStringPairs') as FormArray;
-    
       itemFeatures.nameStringPairs.forEach((pair: any) => {
         const nameStringGroup = this.fb.group({
           name: [pair.name, Validators.required],
@@ -114,8 +120,23 @@ export class ServiceTypeEditComponent implements OnInit {
         });
         nameStringPairsArray.push(nameStringGroup);
       });
+
+      // Patch addressList
+      const addressListArray = this.addressList;
+      itemFeatures.addressList.forEach((address: any) => {
+        addressListArray.push(this.fb.group({
+          name: [address.name],
+          contactName: [address.contactName],
+          phone: [address.phone],
+          address: [address.address],
+          unit: [address.unit],
+          city: [address.city],
+          state: [address.state],
+          zip: [address.zip]
+        }));
+      });
     }
-    
+
 
     initFormFields() {
       this.inputForm  = this.fbServiceTypeService.initForm(this.inputForm)
@@ -203,23 +224,33 @@ export class ServiceTypeEditComponent implements OnInit {
       //then
     }
 
-
     initFeaturesForm() {
       return this.fb.group({
         weekDays: [[]],
         hoursAndDayID: [[]],
         seatEnabled: [false],
         icon: [''],
-        nameStringPairs: this.fb.array([])  // Initialize the FormArray
+        nameStringPairs: this.fb.array([]),
+        addressList: this.fb.array([])  // Treat addressList as FormArray for multiple addresses
       });
-
     }
-  
+    initAddress(): FormGroup {
+      return this.fb.group({
+        name: [''],
+        contactName: [''],
+        phone: [''],
+        address: [''],
+        unit: [''],
+        city: [''],
+        state: [''],
+        zip: ['']
+      });
+    }
     // Helper to get the form array
     get nameStringPairs(): FormArray {
       return this.serviceTypeFeaturesForm.get('nameStringPairs') as FormArray;
     }
-  
+
     // Add a new name-string pair to the form
     addNameStringPair() {
       try {
@@ -232,7 +263,7 @@ export class ServiceTypeEditComponent implements OnInit {
         console.log(error)
       }
     }
-  
+
     // Remove a name-string pair from the form
     removeNameStringPair(index: number) {
       try {
@@ -241,7 +272,7 @@ export class ServiceTypeEditComponent implements OnInit {
         console.log(error)
       }
     }
-  
+
     // Add a value to the values list of a specific name
     addValueToPair(index: number) {
       try {
@@ -251,7 +282,7 @@ export class ServiceTypeEditComponent implements OnInit {
         console.log(error)
       }
     }
-  
+
     // Remove a value from the values list of a specific name
     removeValueFromPair(pairIndex: number, valueIndex: number) {
       try {
@@ -261,4 +292,21 @@ export class ServiceTypeEditComponent implements OnInit {
         console.log(error)
       }
     }
+
+    // Helper to get the form array
+    get addressList(): FormArray {
+      return this.serviceTypeFeaturesForm.get('addressList') as FormArray;
+    }
+
+    // Add a new address to the addressList
+    addAddress() {
+      this.addressList.push(this.initAddress());
+    }
+
+    // Remove an address from the addressList
+    removeAddress(index: number) {
+      this.addressList.removeAt(index);
+    }
+
+
   }

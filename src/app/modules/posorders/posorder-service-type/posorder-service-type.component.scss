@@ -1,4 +1,4 @@
-
+@import "/src/mixins.scss";
 .card-dimensions {
   // width: 400px;
   // height: 400px;
@@ -14,4 +14,24 @@ mat-card {
 .instructions {
   margin-bottom: 5px;
   margin-top: 5px;
+}
+
+
+
+.formFieldClass {
+  width: 100%;
+}
+.item-image {
+  object-fit  :   cover;
+  border-radius: 15px;
+  width       : 100%;
+  white-space : normal;
+  overflow    : hidden;
+  height  : 55px;
+
+  @include for-phone-only {
+    font-size  : 1.3em;
+    height    : 55px;
+    height    :55px;
+  }
 }

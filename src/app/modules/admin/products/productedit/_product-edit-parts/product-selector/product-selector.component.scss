@@ -1,3 +1,18 @@
+@import "/src/mixins.scss";
 .formFieldClass {
   width: 100%;
+}
+.item-image {
+  object-fit  :   cover;
+  border-radius: 15px;
+  width       : 100%;
+  white-space : normal;
+  overflow    : hidden;
+  height  : 55px;
+
+  @include for-phone-only {
+    font-size  : 1.3em;
+    height    : 55px;
+    height    :55px;
+  }
 }

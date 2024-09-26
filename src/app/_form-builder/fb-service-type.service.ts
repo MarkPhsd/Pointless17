@@ -21,6 +21,7 @@ export class FbServiceTypeService {
     // const serializedDate = new Date(user?.dob)
          fb = this._fb.group({
             id:                    [''], //
+            image:                  [],
             name:                  ['', [Validators.required, Validators.maxLength(25)]], //
             positiveNegative:      [''], //number;
             isRegisterTransaction: [''], //boolean;
@@ -52,6 +53,7 @@ export class FbServiceTypeService {
             allowRequestPrep      : [],
             resaleType            : [],
             headerOrder           : [],
+            json: []
           }
         )
         return fb

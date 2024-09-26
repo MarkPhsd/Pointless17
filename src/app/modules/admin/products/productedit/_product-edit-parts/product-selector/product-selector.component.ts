@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subject, debounceTime, distinctUntilChanged, filter, fromEvent, switchMap, tap } from 'rxjs';
+import { Observable, Subject, debounceTime, distinctUntilChanged, filter, fromEvent, of, switchMap, tap } from 'rxjs';
 import { IProduct, ISite, PosOrderItem } from 'src/app/_interfaces';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import { MenuService } from 'src/app/_services';
+import { AWSBucketService, MenuService } from 'src/app/_services';
 import { PB_Components } from 'src/app/_services/partbuilder/part-builder-main.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
@@ -14,7 +15,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
   styleUrls: ['./product-selector.component.scss']
 })
 export class ProductSelectorComponent implements OnInit, AfterViewInit {
-
+  @Input() bucketName: string;
   @Input() showUOM          : boolean;
   @Input() product            : IProduct;
   @Input() pb_Component       : PB_Components
@@ -24,7 +25,7 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
   @Input()  index             : number;
   @Input()  outputType        = ''
   formfieldValue: UntypedFormGroup;
-
+  bucket$: Observable<string>;
   @Output() clearInputsEmit = new EventEmitter();
 
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -81,18 +82,21 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
   constructor(  private menuService : MenuService,
     private fb               : UntypedFormBuilder,
     public  route            : ActivatedRoute,
+    private awsBucketService : AWSBucketService,
     private siteService      : SitesService,
    ) {
     this.site = this.siteService.getAssignedSite();
     this.searchForm = this.fb.group({
       searchField: [],
+      unitDescription: [],
+      id: [],
       unitTypeID: [],
-      unitType: []
     })
     this.formfieldValue = this.fb.group({
-      productID: [],
+      id: [],
+      searchField: [],
+      unitDescription: [],
       unitTypeID: [],
-      unitType: []
     })
    }
 
@@ -109,9 +113,9 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
   initForm() {
     this.searchForm = this.fb.group({
       searchField: [],
+      id: [],
+      unitDescription: [],
       unitTypeID: [],
-      productID: [],
-      unitType: []
     })
   }
 
@@ -119,6 +123,14 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
     this.initForm();
     this.init();
     if (this.id) { this.getName(this.id)  }
+
+
+    if (!this.bucketName) {
+      this.bucket$    = this.awsBucketService.awsBucketURLOBS().pipe(switchMap(data => {
+            this.bucketName = data
+            return of(data)
+        }));
+    }
   }
 
   refreshSearch(search: any){
@@ -137,7 +149,10 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
       if (!item || !item.name){
         return ''
       }  else {
-        return item.name
+        // if (this.showUOM) {
+        //   return `${item?.name} ${item?.unitDescription}`
+        // }
+        return `${item?.name}`
       }
     }
   }
@@ -148,7 +163,7 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
     if (this.posOrderItem) {
       this.posOrderItem.productID = item.id;
       this.posOrderItem.productName = item.name;
-      this.searchForm.patchValue( {searchField: item.name, unitTypeID: item.unitTypeID} )
+      this.searchForm.patchValue( {id: item?.id, searchField: item?.name, unitTypeID: item?.unitTypeID} )
       this.itemSelect.emit(item)
       return;
     }
@@ -171,7 +186,7 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
     if(site) {
       this.menuService.getProduct(site, id).subscribe(data => {
         this.item = data;
-        const menuItem =  { searchField: data.name, unitTypeID: data?.unitTypeID  }
+        const menuItem =  { searchField: data.name,id: id, unitTypeID: data?.unitTypeID  }
         this.searchForm.patchValue( menuItem )
       })
     }
@@ -195,4 +210,28 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
   clearInput() {
     this.clearInputsEmit.emit('true')
   }
+
+  onImageError(event: Event) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'assets/images/placeholderimage.png'; // Angular will resolve this path correctly.
+  }
+
+  getItemSrc(item:IMenuItem) {
+    if (!this.bucketName) { return}
+    const thumbnail = item?.thumbnail ?? item?.urlImageMain;
+    if (!thumbnail) {
+         return null
+    } else {
+      const thumbnail =  item?.thumbnail ?? item?.urlImageMain;
+      const imageName =  thumbnail.split(",")
+      if (!imageName || imageName.length == 0) {
+        return null
+      }
+      const image =`${this.bucketName}${imageName[0]}`
+      return image
+    }
+  }
+
+
 }
+

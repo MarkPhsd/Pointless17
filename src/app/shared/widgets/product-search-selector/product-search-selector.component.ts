@@ -5,8 +5,9 @@ import { ISite } from 'src/app/_interfaces/site';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Subject, fromEvent } from 'rxjs';
-import { MenuService,  IItemBasic } from 'src/app/_services';
+import { Observable, Subject, fromEvent, of } from 'rxjs';
+import { MenuService,  IItemBasic, AWSBucketService } from 'src/app/_services';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 
 @Component({
   selector: 'app-product-search-selector',
@@ -17,7 +18,8 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-
+  @Input()bucketName: string;
+  bucket$: Observable<string>;
   @Input()  searchForm:       UntypedFormGroup;
   @Input()  itemType:         number; //removed default 1
   @Input()  metrcCategoryName : string;
@@ -62,6 +64,7 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
     private menuService: MenuService,
     private fb: UntypedFormBuilder,
     private siteService: SitesService,
+    private awsBucketService : AWSBucketService,
     )
   {
     this.site = this.siteService.getAssignedSite();
@@ -72,6 +75,12 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
     this.searchForm = this.fb.group({
         productName : ['']
     })
+    if (!this.bucketName) {
+      this.bucket$    = this.awsBucketService.awsBucketURLOBS().pipe(switchMap(data => {
+            this.bucketName = data
+            return of(data)
+        }));
+    }
   }
 
   refreshSearch(search: any){
@@ -99,5 +108,27 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
       }
     }
   }
+
+  onImageError(event: Event) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'assets/images/placeholderimage.png'; // Angular will resolve this path correctly.
+  }
+
+  getItemSrc(item:IMenuItem) {
+    if (!this.bucketName) { return}
+    const thumbnail = item?.thumbnail ?? item?.urlImageMain;
+    if (!thumbnail) {
+         return null
+    } else {
+      const thumbnail =  item?.thumbnail ?? item?.urlImageMain;
+      const imageName =  thumbnail.split(",")
+      if (!imageName || imageName.length == 0) {
+        return null
+      }
+      const image =`${this.bucketName}${imageName[0]}`
+      return image
+    }
+  }
+
 
 }

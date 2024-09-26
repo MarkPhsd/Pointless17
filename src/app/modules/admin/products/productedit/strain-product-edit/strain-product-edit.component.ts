@@ -167,7 +167,7 @@ export class StrainProductEditComponent implements OnInit {
   refreshProductInfo(product: IProduct, itemType: IItemType) {
     if (itemType) {  this.itemType = itemType  }
     if (product) {   this.product  = product  }
-   
+
     if (product.id) {
       this.initializeForm();
       this.initMenuButtonJson(product);
@@ -191,10 +191,8 @@ export class StrainProductEditComponent implements OnInit {
 
       const product = data?.product;
       const itemType = data?.itemType;
-      if (data) {
-        if (data.product) {
-          this.refreshProductInfo(product, itemType)
-        }
+      if (data.product) {
+        this.refreshProductInfo(product, itemType)
       }
     } catch (error) {
       console.log('error', error)
@@ -342,7 +340,7 @@ export class StrainProductEditComponent implements OnInit {
       this.urlImageMain = this.product?.urlImageMain;
       this.thumbnail = this.product?.thumbnail;
       this.createThumbNail = true;
-      if (this.thumbnail) { 
+      if (this.thumbnail) {
         this.createThumbNail = false
       }
     }
@@ -358,10 +356,11 @@ export class StrainProductEditComponent implements OnInit {
   }
 
   assignItem(event) {
+    console.log('assignItem', event.value, event)
     if (!event) { return }
     if (!event.unitTypeID) {return}
-    this.product.unitTypeID = event.unitTypeID
-    this.productForm.patchValue({unitTypeID: event?.unitTypeID})
+    this.product.unitTypeID = event.id
+    this.productForm.patchValue({unitTypeID: event?.id})
     this.action$ = this.updateItem(null)
   }
 
@@ -477,7 +476,6 @@ export class StrainProductEditComponent implements OnInit {
       this.performingAction = true;
       this.product.json     = this.JSONAsString ;
       this.product.metaTags = this.itemTags;
-      // this.product          = this.menuService.cleanProduct(this.product)
 
       const product$ = this.menuService.saveProduct(site, this.product);
       return product$.pipe(switchMap(
@@ -495,7 +493,7 @@ export class StrainProductEditComponent implements OnInit {
 
             this.urlImageMain     = this.product?.urlImageMain;
             this.thumbnail        = this.product?.thumbnail;
-      
+
             return this.itemTypeService.getItemType(site, this.product?.prodModifierType)
         }
       )).pipe(switchMap(data => {

@@ -149,16 +149,17 @@ get rowClasses() {
 }
 
 getErrors(value) {
-  if (value) { 
-    const item = JSON.parse(value)  
+  if (value) {
+    const item = JSON.parse(value)
     console.log('item', item)
-    if (item?.Errors) { 
-      return  true 
+    if (item?.Errors) {
+      return  true
     }
   }
 }
 
 multilineRenderer(params) {
+  console.log( params.data?.serialCode,  params.data?.productName)
   const productName = params.data?.productName || '';
   const barcode = params.data?.serialCode || '';
   return `${productName}<br>${barcode}`;

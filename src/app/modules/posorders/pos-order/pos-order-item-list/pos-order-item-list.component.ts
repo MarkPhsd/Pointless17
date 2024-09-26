@@ -27,9 +27,8 @@ function multilineRenderer(params): any {
   console.log(params.data)
   const productName = params.data?.productName || ''; // Fallback to empty string if undefined
   const barcode = params.data?.serialCode || ''; // Fallback to empty string if undefined
-  return `${productName}<br>${barcode}`;
+  return `${productName}  ${barcode}`;
 }
-
 
 @Component({
   selector: 'pos-order-item-list',
@@ -134,14 +133,14 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
               this.purchaseOrderEnabled = true;
           }
           this.refreshSearch()
-          if (data.posOrderItems) { 
+          if (data.posOrderItems) {
             this.fullPOSOrderItemList = data.posOrderItems;
             // billOnHoldRemaining
             data.posOrderItems = this.calcSubitemValues(data.posOrderItems)
-            data.posOrderItems.filter(item => { 
+            data.posOrderItems.filter(item => {
               return item.idRef != item.id || item.idRef == null || item.idRef == 0
             })
-            return of(data.posOrderItems)  
+            return of(data.posOrderItems)
           }
         }
         return of([])
@@ -149,15 +148,15 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
   }
 
-  calcSubitemValues(posOrderItems) { 
+  calcSubitemValues(posOrderItems) {
     posOrderItems.forEach(mainItem => {
       if (!mainItem.idRef) {  // If it's a main item (idRef is null)
         // Find subitems belonging to this main item
         const subItems = posOrderItems.filter(item => item.idRef === mainItem.id);
-        
+
         // Sum the quantities of subitems
         const subItemsTotalQuantity = subItems.reduce((sum, subItem) => sum + subItem.quantity, 0);
-    
+
         // Calculate and set billOnHoldRemaining
         mainItem.billOnHoldRemaining = mainItem.quantity - subItemsTotalQuantity;
       }
@@ -175,11 +174,8 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
                 private agGridService           : AgGridService,
                 private siteService             : SitesService,
                 private agGridFormatingService  : AgGridFormatingService,
-                private awsService              : AWSBucketService,
                 private userAuthorization       : UserAuthorizationService,
-                private _bottomSheet            : MatBottomSheet,
-                private readonly datePipe       : DatePipe,
-                private orderService            : OrdersService,
+               private orderService            : OrdersService,
                 private posOrderItemMethodsService: PosOrderItemMethodsService,
                 private posOrderItemService    : POSOrderItemService,
                 private productEditButtonService: ProductEditButtonService,
@@ -224,8 +220,6 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
   }
 
-
-
   @HostListener("window:resize", [])
   updateItemsPerPage() {
     this.smallDevice = false
@@ -239,7 +233,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   //requires addjustment of column defs, other sections can be left the same.
   initAgGrid(pageSize: number) {
     this.frameworkComponents = {
-      btnCellRenderer: ButtonRendererComponent, 
+      btnCellRenderer: ButtonRendererComponent,
       'multilineRenderer': multilineRenderer,
     };
     this.defaultColDef = {
@@ -273,26 +267,27 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(column);
 
-    let nameCol = {headerName: 'Name',   field: 'productName',
-              sortable: true,
-              width   : 205,
-              minWidth: 205,
-              flex    : 2,
-              cellRenderer: 'showMultiline',
-              wrapText: true,
-              cellStyle: {'white-space': 'normal', 'line-height': '1em'},
-              autoHeight: true,
-    }
-    columnDefs.push(nameCol);
+    // let nameCol = {headerName: 'Name',   field: 'productName',
+    //           sortable: true,
+    //           width   : 205,
+    //           minWidth: 205,
+    //           flex    : 2,
+    //           cellRenderer: 'showMultiline',
+    //           wrapText: true,
+    //           cellStyle: {'white-space': 'normal', 'line-height': '1em'},
+    //           autoHeight: true,
+    // }
+    // columnDefs.push(nameCol);
 
     let barcode = {
-      headerName: 'Barcode',
-      field: 'serialCode',
+      headerName: 'Product',
+      field: 'productName&serialCode',
       sortable: true,
       width: 205,
       minWidth: 205,
       flex: 2,
       wrapText: true,
+      valueGetter: multilineRenderer,
       cellStyle: { 'white-space': 'normal', 'line-height': '1em' },
       autoHeight: true,
     };
@@ -314,7 +309,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(nextColumn);
 
-       
+
     if (this.purchaseOrderEnabled &&  !reconcilePass) {
 
       nextColumn =  {headerName: 'InStock',     field: 'traceProductCount',
@@ -337,7 +332,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         singleClickEdit: false
       }
       columnDefs.push(nextColumn);
-  
+
     }
 
     nextColumn =  {headerName: 'UOM',     field: 'unitName',
@@ -501,7 +496,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
         singleClickEdit: false
       }
       columnDefs.push(nextColumn);
-     
+
       if (this.order?.customerName != 'Inventory Monitor') {
         if (this.purchaseOrderEnabled || reconcilePass) {
           nextColumn =  {headerName: 'Balance',     field: 'traceProductCalc',
@@ -516,7 +511,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
           columnDefs.push(nextColumn);
         }
       }
-     
+
     }
 
 
@@ -623,7 +618,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     if (e.rowData.id)  {
       const site = this.siteService.getAssignedSite()
       const item$ = this.posOrderItemService.getPOSOrderItembyHistory(site, e.rowData.id, this.order.history)
-      this.action$ =  item$.pipe(concatMap(data => { 
+      this.action$ =  item$.pipe(concatMap(data => {
         // 'get the list of these items'
         const filteredItems = this.fullPOSOrderItemList.filter(item => (item.id !== data.id && item.idRef == data.id) );
         const editor$ = this.productEditButtonService.openOrderItemEditor(data, 'billOnHold', filteredItems)
@@ -770,7 +765,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     const colName = event?.column?.colId
 
     const item = event.data as PosOrderItem
-    
+
     if (item.inventoryAssignmentID && item.inventoryAssignmentID != 0) {
       this.siteService.notify('Item values must be changed from inventory window: id:' + item.inventoryAssignmentID, 'Close', 10000, 'green')
       return;
@@ -865,13 +860,13 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
   }
 
-  deleteSelected() { 
-    if (this.userAuths.deleteInventory && this.selected) { 
+  deleteSelected() {
+    if (this.userAuths.deleteInventory && this.selected) {
       const site = this.siteService.getAssignedSite()
-      this.action$ = this.posOrderItemService.deletePOSOrderItems(site, this.order.id, this.selected).pipe(switchMap(data => { 
-        if (data.resultErrorDescription) { 
+      this.action$ = this.posOrderItemService.deletePOSOrderItems(site, this.order.id, this.selected).pipe(switchMap(data => {
+        if (data.resultErrorDescription) {
           this.siteService.notify('Not authorized:' + data?.resultErrorDescription, 'close', 6000)
-        } else { 
+        } else {
           this.orderMethodsService.setActiveOrder(data.order);
         }
         return of(data)

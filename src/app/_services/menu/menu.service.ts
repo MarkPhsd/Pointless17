@@ -68,6 +68,7 @@ export interface IProductSearchResults {
    active      : boolean;
    department: string;
    subCategory: string;
+   UnitDescription: string;
 }
 
 export interface IComponentUsageResults {
