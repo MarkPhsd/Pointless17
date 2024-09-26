@@ -1,0 +1,15 @@
+@import "/src/mixins.scss";
+.display {
+  @include for-phone-only  {
+    display: none; 
+  }
+}
+
+.flex-menu {
+  padding-top: 5px;
+  padding-left: 5px;
+  display: flex;
+  flex-direction: row; /* Change this to row for horizontal layout */
+  justify-content: flex-start; /* Align items to the start of the row */
+  align-items: center; /* Vertically center items */
+}

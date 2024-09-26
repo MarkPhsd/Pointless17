@@ -90,9 +90,11 @@
         </button>
       </div>
 
+
       <div *ngIf="(auth?.accessHistoryReports && (showScheduleFilter && scheduleDateForm)) ">
         <div  style="width:185px">
           <mat-date-range
+              [autoRefresh]="true"
               [inputForm] = "scheduleDateForm" >
               Schedule Dates
           </mat-date-range>

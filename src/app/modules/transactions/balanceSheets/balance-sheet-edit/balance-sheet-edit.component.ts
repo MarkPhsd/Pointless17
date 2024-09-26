@@ -165,6 +165,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 public  coachMarksService  : CoachMarksService,
                 private siteService       : SitesService,
                 private settingsService   : SettingsService,
+                private balanceSheetService             : BalanceSheetService,
               )
   {
 
@@ -351,6 +352,15 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
         return of(data)
       }
     ))
+  }
+
+  getStartingValue() {
+    if (!this.sheet) {return }
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.balanceSheetService.getLastBalanceEndingValue(site,this.sheet.id).pipe(switchMap(data => { 
+      this.sheetMethodsService.updateBalanceSheet(data)
+      return of(data)
+    }))
   }
 
   setEnabledFeatures() {

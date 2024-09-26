@@ -765,33 +765,23 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   initScheduledDateForm() {
-    // if (!this.showScheduleFilter || !this.scheduleDateForm) {
-    //   console.log('init form')
-    //   if (this.searchModel) {
-    //     this.searchModel.scheduleDate_From = null;
-    //     this.searchModel.scheduleDate_To = null;
-    //   }
-    //   this.scheduleDateForm = this.fb.group({
-    //     start: [],
-    //     end: [],
-    //   })
 
-    //   console.log('schedule value', this.scheduleDateForm.value)
-    //   return
-    // }
-
-    if (!this.showScheduleFilter) {
-       this.searchModel.scheduleDate_From = null;
-      this.searchModel.scheduleDate_To = null;
+    if (!this.showScheduleFilter ) {
+      if (this.searchModel) {
+        this.searchModel.scheduleDate_From = null;
+        this.searchModel.scheduleDate_To = null;
+      }
       this.scheduleDateForm = null;
-      return;
+      return
     }
 
-    this.scheduleDateForm = this.getFormRangeInitial(this.scheduleDateForm)
-    // console.log('schedule value', this.scheduleDateForm.value)
+    this.scheduleDateForm  = this.getEmptyRange() //this.getFormRangeInitial(this.scheduleDateForm)
     this.searchModel.scheduleDate_From = this.scheduleDateForm.get("start").value;
     this.searchModel.scheduleDate_To   = this.scheduleDateForm.get("end").value;
-    this.subscribeToScheduledDatePicker()
+    this.searchModel.searchOrderHistory = false
+    this.subscribeToScheduledDatePicker();
+
+
   }
 
   getFormRangeInitial(inputForm: UntypedFormGroup) {

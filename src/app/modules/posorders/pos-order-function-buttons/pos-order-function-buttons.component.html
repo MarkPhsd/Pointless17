@@ -457,67 +457,12 @@
 
     </span>
 
-    </mat-menu>
+  </mat-menu>
 
 </ng-template>
 
 <ng-template #communicationsView>
 
-  <button aria-label="user menu"
-          mat-raised-button
-          [matMenuTriggerFor]="menu"
-          #menuTrigger="matMenuTrigger"
-          (click)="menuTrigger.openMenu()" >
-    <mat-icon >email</mat-icon>
-    Notify
-  </button>
-
-  <mat-menu class="mat-menu-panel"
-            [overlapTrigger]="false"
-            #menu="matMenu">
-
-    <span (mouseleave)="menuTrigger.closeMenu()">
-
-      <div *ngIf="order.balanceRemaining == 0 && isStaff">
-
-        <div *ngIf="(messagesZero$ | async) as list">
-          <div *ngFor="let item of list">
-
-              <button mat-raised-button
-                      color="primary"
-                      (click)="sendMessage(item, order)">
-                {{item?.subject}}
-              </button>
-            </div>
-
-        </div>
-      </div>
-
-      <div *ngIf="order.balanceRemaining != 0 && isStaff">
-
-        <div *ngIf="(messagesNotZero$ | async) as list">
-          <div *ngFor="let item of list">
-
-            <button mat-raised-button
-                    color="primary"
-                    (click)="sendMessage(item, order)">
-                {{item?.subject}}
-            </button>
-
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <button mat-raised-button
-                color="warn"
-                (click)="orderMethodsService.openOrderMessages(order)">
-           <mat-icon>open_in_new</mat-icon>View Messages
-        </button>
-      </div>
-
-    </span>
-
-  </mat-menu>
+  <message-menu-sender [order]="order" [isStaff]="isStaff"></message-menu-sender>
 
 </ng-template>

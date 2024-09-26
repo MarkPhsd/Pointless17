@@ -18,6 +18,8 @@ import { ActivatedRoute, Route } from '@angular/router';
 import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 import { MenuService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+
+
 @Component({
   selector: 'app-pos-edit-settings',
   templateUrl: './pos-edit-settings.component.html',
@@ -53,6 +55,7 @@ export class PosEditSettingsComponent implements OnInit {
   id: any;
   androidDisplay: any;
   processing$: Observable<any>;
+  isDisplayDevice: boolean ;
 
   categories$  : Observable<IMenuItem[]>;
   medOrRecStoreList = [
@@ -180,8 +183,19 @@ export class PosEditSettingsComponent implements OnInit {
     const site = this.sitesService.getAssignedSite()
     this.serviceType$ = this.serviceTypeService.getAllServiceTypes(site);
     this.categories$ = this.menuService.getListOfCategoriesAll(site);
+    const savedValue = localStorage.getItem('displayDevice');
+    console.log('saved value', savedValue)
+    this.isDisplayDevice = savedValue === 'true';
   }
-
+  
+  setDeviceDisplay() {
+    console.log(' this.isDisplayDevice.toString()',  this.isDisplayDevice.toString())
+    localStorage.setItem('displayDevice', this.isDisplayDevice.toString());
+    const savedValue = localStorage.getItem('displayDevice');
+    console.log('saved value', savedValue)
+    this.isDisplayDevice = savedValue === 'true';
+  }
+  
   async createZPLFolderData() {
     // if (this.app)
     await this.fileSystemService.makeDirectory('c:\\pointless');
@@ -266,6 +280,7 @@ export class PosEditSettingsComponent implements OnInit {
       deviceValue     : [],
       supressedForms  : [],
       v2: [],
+      sendToBack:  [],
     })
 
     if (this.terminal) {
@@ -295,9 +310,20 @@ export class PosEditSettingsComponent implements OnInit {
     return null
   }
 
+  sendToBack() {
+    this.dsiEMVSettings.patchValue({sendToBack: true})
+    this.saveTerminalSetting(false)
+  }
+ 
+  bringToFront() {
+    this.dsiEMVSettings.patchValue({sendToBack: false})
+    this.saveTerminalSetting(false)
+  }
   saveTerminalSetting(close: boolean) {
+    
     const site = this.sitesService.getAssignedSite()
-    const item = this.inputForm.value as ITerminalSettings;
+    let item = this.inputForm.value as ITerminalSettings;
+    item.id = this.setting.id;
     item.dsiEMVSettings = this.dsiEMVSettings.value as DSIEMVSettings
     const text = JSON.stringify(item);
     this.setting.name   = item.name;

@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser }  from 'src/app/_interfaces';
+import { Observable, of, switchMap } from 'rxjs';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
   selector: 'app-changepassword',
@@ -21,10 +23,12 @@ export class ChangepasswordComponent implements OnInit {
   resetToken: string;
   //receive user
   @Input() user: IUser;
-
+  action$ : Observable<any>;
+  
   constructor(
       private formBuilder: UntypedFormBuilder,
       private route: ActivatedRoute,
+      private siteService: SitesService,
       private router: Router,
       private authenticationService: AuthenticationService
   )
@@ -95,10 +99,13 @@ export class ChangepasswordComponent implements OnInit {
       this.loading = true;
 
       if(this.f.password.value == this.f.confirmpassword.value){
-        this.authenticationService.updatePassword(user).subscribe(data => {
-          this.statusMessage = "Updated. Routing to login."
+        this.action$ = this.authenticationService.updatePassword(user).pipe(
+          switchMap(data => {
+          this.statusMessage = data?.message
+          this.siteService.notify(data?.message, 'Close', 10000 )
           this.router.navigate(['/login']);
-        })
+          return of(data)
+        }))
       }else
       {
         this.statusMessage = "Passwords do not match."

@@ -8,12 +8,13 @@ import { AppInitService, IAppConfig } from '../system/app-init.service';
 import { PlatformService } from '../system/platform.service';
 import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition } from '@angular/material/legacy-snack-bar';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SitesService {
-
+  public ipAddressCurrent : any;
 
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   sites: ISite[];
@@ -67,13 +68,68 @@ export class SitesService {
                private appInitService  : AppInitService,
                private platformSevice  : PlatformService,
                private httpClient      : HttpClient,
-               private httpCache: HttpClientCacheService,
+               private httpCache       : HttpClientCacheService,
+               public  deviceService   : DeviceDetectorService,
                private snackBar        : MatSnackBar,
 
     ) {
-
     this.apiUrl   = this.appInitService.apiBaseUrl()
+  }
 
+  getIpAddress(): Observable<any> {
+    // const ipApiUrl = 'https://geolocation-db.com/json/'
+    const ipApiUrl = "https://ipinfo.io/json?token=cb36c1b021a341"
+
+    if (this.ipAddressCurrent) { 
+      return of(this.ipAddressCurrent)
+    }
+
+    return this.http.get(ipApiUrl).pipe(switchMap(data => { 
+      const value = data as any;
+
+      if (!data) { 
+        this.ipAddressCurrent = {id: 'uknown'}
+        return of(this.ipAddressCurrent)
+      }
+
+      this.ipAddressCurrent = value
+      return of(value)
+    }))
+  }
+
+  
+  checkDeviceFontScaling(): string {
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    if (devicePixelRatio > 2) {
+      return 'large text settings enabled';
+    } else if (devicePixelRatio < 2) {
+      return 'normal or small text settings';
+    } else {
+      return 'uses default text settings';
+    }
+  }
+
+  getApplicationInfo(userName: string, ignoreAppCheck?: boolean) {
+    // if (this.platformSevice.isApp && !ignoreAppCheck) { 
+    //   //then we don't care
+    //   return ''
+    // }
+    const message = this.getApplicationObject(userName)
+    const stringMessage = JSON.stringify(message)
+    return stringMessage
+  }
+
+  getApplicationObject(userName: string) {
+    let location : any
+    if (this.ipAddressCurrent) { 
+      location = this.ipAddressCurrent
+    }
+    const item   = this.deviceService.getDeviceInfo();
+    const height = window.innerHeight;
+    const width  = window.innerWidth;
+    const scaling = this.checkDeviceFontScaling()
+    const message = { userName: userName, location: location, width: width,  height: height,  scaling: scaling, info: item };
+    return message
   }
 
   toCamelCase(str) {

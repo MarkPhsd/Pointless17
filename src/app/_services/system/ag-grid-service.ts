@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import { ColDef } from 'ag-grid-community';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class AgGridService {
+
+
 
   constructor() { }
 
@@ -17,6 +20,8 @@ export class AgGridService {
         suppressMenu: true
       }
     };
+
+   
 
     getRightFourRenderer(params: any) {
       try {

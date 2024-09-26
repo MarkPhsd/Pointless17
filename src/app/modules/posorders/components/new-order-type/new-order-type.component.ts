@@ -12,6 +12,7 @@ import { ChangeDueComponent } from '../balance-due/balance-due.component';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { options } from 'numeral';
 
 @Component({
   selector: 'new-order-type',
@@ -27,7 +28,7 @@ export class NewOrderTypeComponent  {
   @Input() payment: IPOSPayment;
   @Input() showCancel = true;
 
-  updateItems: boolean = true;
+  updateItems: boolean ;
   serviceType  : IServiceType;
   serviceTypes$: Observable<IServiceType[]>;
   action$: Observable<any>;
@@ -57,6 +58,11 @@ export class NewOrderTypeComponent  {
       return;
     }
     this.serviceTypes$ = this.serviceTypeService.getSaleTypesCached(site)
+    this.updateItems = true;
+    const itemList = this.orderMethodsService.assignPOSItems;
+    if (itemList.length>0) { 
+      this.updateItems = false;
+    }
   }
 
 
@@ -104,14 +110,34 @@ export class NewOrderTypeComponent  {
   changeOrderType(event) {
     const site = this.siteService.getAssignedSite();
 
-    if (event && event.filterType && event.filterType != 0 ) {
-      this.updateItems = true;
+    // if (event && event.filterType && event.filterType != 0 ) {
+    //   this.updateItems = true;
+    // }
+
+    
+    const order = this.orderMethodsService.currentOrder;
+    
+    const itemList = this.orderMethodsService.assignPOSItems;
+    let options = 0 
+    if (this.updateItems) { 
+      options = 1
     }
 
-    const order = this.orderMethodsService.currentOrder;
+    const list = [] 
+    if (itemList) { 
+      itemList.forEach(data => { 
+        list.push(data.id)
+      })
+     
+    }
+    if (list) { 
+      if (list.length>0) {
+        options = 0
+      }
+    }
+    const changeItemType = {id: order.id, history: order.history, updateItems : options, itemList: list, orderTypeID: event.id};
 
-    const item$ = this.orderService.changeOrderType(site, order.id, 
-                                                    event.id, this.updateItems, order.history)
+    const item$ = this.orderService.changeOrderTypeV3(site, changeItemType)
     this.process$ = item$.pipe(
       switchMap(data => {
         this.message = 'Processed';
@@ -131,6 +157,10 @@ export class NewOrderTypeComponent  {
       })
     )
     return
+  }
+
+  removeSelectedItem(index){ 
+    this.orderMethodsService.assignPOSItems.splice(index)
   }
 
   newOrderWithPayload(serviceType: IServiceType){

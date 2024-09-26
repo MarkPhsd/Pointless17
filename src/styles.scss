@@ -808,6 +808,12 @@ mat-dialog-container {
   grid-template-columns: 100px 100px;
 }
 
+.grid-serviceTypeItems {
+  display: grid;
+  gap:10px;
+  grid-template-columns: 250px 175px;
+}
+
 // Reporting
 .ps-general-padding {
   margin: 5px;
@@ -835,7 +841,6 @@ mat-dialog-container {
   display: grid;
   grid-template-columns:  repeat( auto-fit, minmax(75px, 1fr) );
   gap: 5px;
-  // margin: 5px;
   padding:2px
 }
 

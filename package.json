@@ -1,6 +1,6 @@
 {
-  "name": "pointlesspos",
-  "version": "3.32.2",
+  "name": "pointlespos",
+  "version": "3.35.4",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -26,6 +26,7 @@
     "emergency": " npm run deploy --domain=emergencyroom",
     "ockosher": " npm run deploy --domain=ockosherstore",
     "noshhouse": " npm run deploy --domain=noshhouse",
+    "nycliquor": " npm run deploy --domain=nycliquor",
     "coconuts": " npm run deploy --domain=coconutsfl",
     "coconutspcb": " npm run deploy --domain=coconutspcb",
     "liquorpos": " npm run deploy --domain=liquorpos",

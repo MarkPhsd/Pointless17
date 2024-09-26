@@ -132,6 +132,14 @@
 
           <div class="toggle-fields">
             <mat-slide-toggle
+                      formControlName="autoSelectItemPOSearch"
+                      >
+              <mat-label>Auto Add Item in PO On Loockup</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
                       formControlName="enableQuickMenu"
                       >
               <mat-label>Enable Retail Quick Menu</mat-label>
@@ -145,6 +153,8 @@
               <mat-label>Require Enter/Tab to Lookup</mat-label>
             </mat-slide-toggle>
           </div>
+
+   
 
           <div class="toggle-fields">
             <mat-slide-toggle
@@ -540,6 +550,9 @@
           <mat-card>
             <mat-card-title>
               <h3>Datacap </h3>
+              <div>
+                <button color="accent" (click)="emailDCApSettings()"><mat-icon>email</mat-icon></button>
+              </div>
             </mat-card-title>
             <mat-card-content>
 
@@ -850,6 +863,13 @@
 
         <div class="toggle-fields">
           <mat-slide-toggle
+                    formControlName="displayServiceType" >
+            <mat-label>Show Service Type</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
                     formControlName="displayEditCardOnHeader" >
             <mat-label>Display edit cart buttons on header</mat-label>
           </mat-slide-toggle>
@@ -982,11 +1002,6 @@
 
         <div style="width:150px">
           <mat-label>Print Server Device</mat-label>
-          <!-- <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'printServerDevice'">
-              Print Server Device
-          </app-value-fields> -->
 
           <div *ngIf="(posDeviceList$ | async) as list ">
             <mat-form-field style="width: 200px" class="fields"

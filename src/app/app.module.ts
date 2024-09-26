@@ -67,6 +67,8 @@ import { ResizeDirective } from './_directives/resize.directive';
 
 import {NgcCookieConsentConfig} from 'ngx-cookieconsent';
 import {NgcCookieConsentModule} from 'ngx-cookieconsent';
+import { AppConfigService } from './_services/system/app-config.service';
+import { DisplayToggleAndroidComponent } from './modules/admin/grid-menu-layout/dashboard-menu/display-toggle-android/display-toggle-android.component';
 
 // const cookieConfig:NgcCookieConsentConfig = {
 //   cookie: {
@@ -83,6 +85,13 @@ import {NgcCookieConsentModule} from 'ngx-cookieconsent';
 //   theme: 'edgeless',
 //   type: 'opt-out'
 // };
+
+
+export function initializeApp(appConfigService: AppConfigService) {
+  return (): Promise<any> => {
+    return appConfigService.loadConfig();
+  };
+}
 
 const cookieConfig:NgcCookieConsentConfig = {
   cookie: {
@@ -208,6 +217,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     GridManagerEditComponent,
     GridComponentPropertiesComponent,
     GridDesignerInfoComponent,
+    DisplayToggleAndroidComponent,
  
     DashboardMenuComponent,
     OrderTotalBoardComponent,
@@ -283,6 +293,12 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
       deps: [AppInitService],
       multi: true
     },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: initializeApp,
+    //   deps: [AppConfigService],
+    //   multi: true
+    // },
     Title
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

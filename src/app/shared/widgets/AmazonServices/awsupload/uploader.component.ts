@@ -90,8 +90,8 @@ export class UploaderComponent implements OnInit {
           if (this.createThumbNail) { 
             if (this.height == 0 || this.width == 0) { 
               this.isThumbNail = true;
-              this.height = 125
-              this.width  = 125
+              this.height = 200
+              this.width  = 200
               await this.compressAndUpload(file);
               this.isThumbNail = false;
               console.log('upload file', file)

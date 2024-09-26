@@ -5,10 +5,6 @@
     <app-set-token></app-set-token>
 
     <div class="device-info">
-
-      <div>
-        Debug on this device.
-      </div>
       <div>
         <h3>Enable Bug Nofitications and Submit form</h3>
         <mat-label>This feature requires a restart of the app or browser refresh. Please press the
@@ -17,6 +13,9 @@
         </mat-label>
 
         <div>
+          <div>
+            Debug on this device.
+          </div>
           <mat-checkbox [(ngModel)]="debugOnThisDevice"
                         (change) ='setDebugOnThisDevice()'
                         color="primary">
@@ -28,14 +27,16 @@
       </div>
     </div>
 
-    <div class="device-info">
+    <div class="device-info" *ngIf="(ipAddress$ | async) as item" >
       <div>
-        Device Info
+        <div>
+          Device Info 
+        </div>
+        {{deviceInfo }}
       </div>
-      <div>
-        {{this.deviceService.getDeviceInfo() | json}}
-      </div>
+    </div>
 
+    <div class="device-info" style="width:500px" >
       <div>
        Mobile Device
       </div>
@@ -43,7 +44,7 @@
       <div>
         <mat-checkbox [(ngModel)]="isMobile"
                       color="primary">
-              </mat-checkbox>
+        </mat-checkbox>
       </div>
 
       <div>

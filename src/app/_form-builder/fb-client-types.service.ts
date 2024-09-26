@@ -112,7 +112,7 @@ export class FbClientTypesService {
       balanceSheetTransactionTypes: [],
       balanceSheetDisableBank: [],
       balanceSheetDisableCashDrops: [],
-
+      displayTipCalcForServers: [],
       splitItemOverRide: [],
     })
     return fb

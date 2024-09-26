@@ -180,8 +180,15 @@ export class OrderItemScannerComponent implements  OnDestroy, OnInit {
   }
 
   addItemToOrder(barcode: string): Observable<unknown> {
+    console.log('barcode' , barcode)
     this.initForm()
-    return this.orderMethodService.scanCheckInItem(barcode,  this.scanMode).pipe(switchMap(data => {
+    if (!this.order) {return}
+    if (!barcode) { return }
+    if (!this.scanMode) {
+      this.siteService.notify('Select Driver or Prep', 'close',4000)
+      return 
+    }
+    return this.orderMethodService.scanCheckInItem(barcode,  this.scanMode, this.order.id).pipe(switchMap(data => {
       this.orderMethodService.updateOrder(data)
       return of(data)
     }))

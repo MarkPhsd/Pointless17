@@ -93,19 +93,24 @@ export class OrdersService {
     return this.http.get<IPOSOrder>(url);
   }
 
-  scanCheckInItem(barCode: string, scanMode: boolean): Observable<IPOSOrder> {
+  scanCheckInItem(barCode: string, scanMode: boolean, orderID: number): Observable<IPOSOrder> {
 
+
+    const newItem = {} as any;
+    newItem.barcode = barCode;
+    newItem.orderID = orderID;
+    newItem.scanMode = scanMode 
     const site= this.siteService.getAssignedSite();
 
     const controller = "/POSOrderItems/"
 
     const endPoint  = "scanCheckInItem"
 
-    const parameters = `?barCode=${barCode}&scanMode=${scanMode}`
+    const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.get<IPOSOrder>(url);
+    return this.http.post<IPOSOrder>(url, newItem);
   }
 
   postPurchaseOrder(site: ISite, name: string, id: number, outPutAll?: boolean) :  Observable<any> {
@@ -955,6 +960,20 @@ export class OrdersService {
 
   }
 
+
+  changeOrderTypeV3(site: ISite, update: any): Observable<IPOSOrder> {
+
+    const controller = "/POSOrders/";
+
+    const endPoint = "changeOrderTypeV3";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<any>( url, update )
+
+  }
 
   getT_Order(site: ISite, id: number, history: boolean): Observable<OrderToFrom> {
 

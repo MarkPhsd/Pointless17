@@ -3,7 +3,8 @@
 <div *ngIf="!hideMenu">
   <mat-toolbar   [color]="matToolbarColor">
     <mat-toolbar-row>
-      <div class="menu-grid-menu">
+      <!-- <div class="menu-grid-menu"> -->
+        
         <div class="icon-position">
           <app-logo [logoSize]="'small'"></app-logo>
         </div>
@@ -16,7 +17,7 @@
           </button>
         </div>
 
-        <div  *ngIf="allowDesign">
+        <div class="display" *ngIf="allowDesign">
           <button (click)="toggleMenu()"
                   aria-label="menu"
                   mat-button>
@@ -24,7 +25,7 @@
           </button>
         </div>
 
-        <div  *ngIf="allowDesign">
+        <div class="display" *ngIf="allowDesign">
           <button (click)="hide()"
                   aria-label="menu"
                   mat-button>
@@ -32,19 +33,15 @@
           </button>
         </div>
 
-      </div>
-
-      <div>
         <app-dashboard-menu></app-dashboard-menu>
-      </div>
 
-      <div>
-        <app-toggle-theme></app-toggle-theme>
-      </div>
-
-      <div>
-        <api-status-display></api-status-display>
-      </div>
+        <span class="display">
+          <app-toggle-theme></app-toggle-theme>
+        </span>
+        
+        <span class="display">
+          <api-status-display></api-status-display>
+        </span>
 
     </mat-toolbar-row>
   </mat-toolbar>

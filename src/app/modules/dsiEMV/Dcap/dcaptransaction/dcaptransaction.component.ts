@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit, Optional,OnDestroy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
-import { Observable, catchError, concatMap, of, switchMap } from 'rxjs';
-import { IPOSPayment, IPOSOrder } from 'src/app/_interfaces';
+import { Observable, Subject, catchError, concatMap, of, switchMap, takeUntil, timer } from 'rxjs';
+import { IPOSPayment, IPOSOrder, ISetting } from 'src/app/_interfaces';
+import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -13,17 +14,25 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
 import { DcapService,DcapRStream, DCAPPaymentResponse } from 'src/app/modules/payment-processing/services/dcap.service';
 import { LoggerService } from 'src/app/modules/payment-processing/services/logger.service';
-
+import { dsiemvandroid } from 'dsiemvandroidplugin';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 @Component({
   selector: 'app-dcaptransaction',
   templateUrl: './dcaptransaction.component.html',
   styleUrls: ['./dcaptransaction.component.scss']
 })
 export class DCAPTransactionComponent implements OnInit, OnDestroy {
+
   resultMessage: any;
   textResponse: string;
+  androidApp = this.platformService.androidApp;
+  dsiEmv : DSIEMVSettings
+  paxApp: boolean;
   get isDev() { return this.siteService.isDev  }
   action$: Observable<any>;
+  cancelAction$: Observable<any>;
+  setting$: Observable<any>;
+  actionSetting$: Observable<any>;
   processing$: Observable<any>;
   manual: boolean = false;
   posPayment: IPOSPayment;
@@ -40,19 +49,49 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
   result: any;
   response: DcapRStream;
   ui: TransactionUISettings
-  dsiEmv : DSIEMVSettings
+
   amount: number;
   jsonView: boolean;
   jsonData: any;
-  uiSettings$: Observable<TransactionUISettings>;
   autoActionData: any;
+
+  uiSettings$: Observable<TransactionUISettings>;
   terminalSettings$: Observable<ITerminalSettings>;
+  
   saleComplete: boolean;
   creditOnly: boolean;
   debitOnly : boolean;
+
+  smallDevice: boolean;
+  isAdmin : boolean;
+
+  remainingTime: number = 0;
+  private stopTimer$ = new Subject<void>(); // For stopping the timer when component is destroyed
+
+  // Start the timer based on the passed duration
+  startTimer(duration: number): void {
+    this.remainingTime = duration;
+    
+    timer(0, 1000)  // Emit values every second
+      .pipe(takeUntil(this.stopTimer$))  // Stop if component is destroyed
+      .subscribe(val => {
+        this.remainingTime = duration - val;  // Decrease the remaining time
+        if (this.remainingTime <= 0) {
+          this.stopTimer();  // Clear timer when done
+        }
+      });
+  }
+ // Stop and clean up the timer
+  stopTimer(): void {
+    this.stopTimer$.next(); // Notify all subscribers to stop
+    this.stopTimer$.complete(); // Complete the subject to clean up
+  }
+
+
   constructor(
+    public   platformService      : PlatformService,
     public  userAuthService       : UserAuthorizationService,
-    public  auth                  : UserAuthorizationService,
+    public  authenticationService  : AuthenticationService,
     public  paymentMethodsService : PaymentsMethodsProcessService,
     public  paymentService        : POSPaymentService,
     private siteService           : SitesService,
@@ -61,8 +100,8 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
     private uiSettingService      : UISettingsService,
     private fb                    : UntypedFormBuilder,
     private dCapService           : DcapService,
-    private dcapMethodsService : DcapMethodsService,
-    private loggerService       : LoggerService,
+    private dcapMethodsService    : DcapMethodsService,
+    private loggerService         : LoggerService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     @Optional() private dialogRef  : MatDialogRef<DCAPTransactionComponent>)
     {
@@ -90,38 +129,53 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
       this.amount =  data?.value;
       this.autoActionData = data;
       this.manual = data?.manualPrompt;
+
+
       this.creditOnly = data?.creditOnly;
       this.debitOnly  = data?.debitOnly;
       if (!data?.manualPrompt) {
         this.manual = false;
       }
 
-    }
 
-    ngOnDestroy() { 
-      this.orderMethodsService._scanner.next(true)
-    }
-
-      autoActions(data) {
-        // console.log('auto pay', data?.autoPay, data?.value)
-        if (data?.autoPay) {
-          if (data?.value> 0 ) {
-            this.payAmount();
-            return;
-          }
-          if (data?.value<0) {
-            this.refundAmount();
-            return;
-          }
-        }
-
-        if (data?.autoAuth) {
-          if (data?.value>0) {
-            this.preAuth();
-            return;
-          }
+      this.isAdmin = this.authenticationService.isAdmin;
+          
+      if (this.authenticationService.deviceInfo) {
+        this.smallDevice = this.authenticationService.deviceInfo.phoneDevice 
+        if (this.authenticationService.deviceInfo.smallDevice) { 
+          this.smallDevice  = true
         }
       }
+    }
+
+    autoActions(data) {
+      if (this.authenticationService.deviceInfo) {
+        this.smallDevice = this.authenticationService.deviceInfo.phoneDevice 
+        if (this.authenticationService.deviceInfo.smallDevice) { 
+          this.smallDevice  = true
+          this.autoActionData = false;
+          data.autoPay = false;
+        }
+      }
+
+      if (data?.autoPay) {
+        if (data?.value> 0 ) {
+          this.payAmount();
+          return;
+        }
+        if (data?.value<0) {
+          this.refundAmount();
+          return;
+        }
+      }
+
+      if (data?.autoAuth) {
+        if (data?.value>0) {
+          this.preAuth();
+          return;
+        }
+      }
+    }
 
       initForm() {
         this.inputForm = this.fb.group({
@@ -133,14 +187,59 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
         this.initForm()
         const i = 0;
         this.initTerminalSettings()
+       
       }
+
+      
+      ngOnDestroy() { 
+        this.actionSetting$ =  this.saveSetting(true).pipe(switchMap(data => { 
+          this.orderMethodsService._scanner.next(true)
+          this.stopTimer();
+          this.bringtoFront()
+          return of(data)
+        }))
+      }
+
+
+      sendDisplayToBack(){
+        this.actionSetting$ = this.saveSetting(false)
+      }
+
+      sendDisplayToFront(){ 
+        this.actionSetting$ = this.saveSetting(true)
+      }
+
+      saveSetting(sendToBack: boolean) { 
+
+        if (!this.terminalSettings) { return of(null) }
+
+        if (!this.terminalSettings.dsiEMVSettings) { return of({})}
+        this.terminalSettings.dsiEMVSettings.sendToBack = sendToBack;
+        const site = this.siteService.getAssignedSite();
+
+        const item = this.terminalSettings;
+        const text = JSON.stringify(item);
+        let setting = {} as ISetting;
+        setting.name   = item.name;
+        setting.text   = text;
+        setting.filter = 421
+        const id = item.id;
+        
+        return this.settingsService.putSetting(site, item.id, setting).pipe(
+          switchMap( data => {
+            return of(data)
+        }));
+    
+      }
+
 
       initTerminalSettings() {
         this.terminalSettings$ = this.settingsService.terminalSettings$.pipe(concatMap(data => {
 
           this.terminalSettings = data;
           this.dsiEmv = data?.dsiEMVSettings;
-
+          this.isPax;
+          this.sendDisplayToBack()
           if (!data) {
             const site = this.siteService.getAssignedSite();
             const device = localStorage.getItem('devicename');
@@ -216,6 +315,16 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
         }
       }
 
+      initTimer() {
+        // this.timer = setInterval(async () => {
+
+        if (this.dsiEmv.timerBringToFront === 0 ) { 
+          this.dsiEmv.timerBringToFront = 45
+        }
+        this.startTimer(this.dsiEmv.timerBringToFront)
+        // })
+      }
+
       payAmountV2() {
         if (!this.validateTransactionData()) { return }
         if (this.terminalSettings) {
@@ -223,13 +332,15 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           const site = this.siteService.getAssignedSite()
           this.initMessaging()
           this.processing = true;
+
+          this.initTimer();
           let sale$ = this.getPaymentManualChipv2().pipe(concatMap(data => {
             this.posPayment = data?.payment;
             this.result = data?.response;
             if (!data?.success) {
               this.response = data?.response;
             }
-
+        
             return this.processResultsV2(data)
           }))
           this.processing$ = sale$
@@ -247,7 +358,6 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           if (this.dsiEmv.v2) {
 
             if (this.debitOnly) {
-              // console.log('debitOnly')
               this.processing$ =  this.dCapService.payAmountV2Debit(this.terminalSettings?.name , this.posPayment).pipe(concatMap(data => {
                 this.result = data;
                 return this.processResultsV2(data)
@@ -256,7 +366,6 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
             }
 
             if (this.creditOnly) {
-              console.log('creditOnly')
               this.processing$ =  this.dCapService.payAmountV2Credit(this.terminalSettings?.name , this.posPayment).pipe(concatMap(data => {
                 this.result = data;
                 return this.processResultsV2(data)
@@ -268,9 +377,10 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
               this.result = data;
               return this.processResultsV2(data)
             }))
-            return
-          }
 
+            return
+
+          }
 
           this.processing$ = this.getPaymentManualChip().pipe(concatMap(data => {
             this.result = data;
@@ -278,6 +388,24 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           }))
 
         }
+      }
+
+      get isPax() { 
+        const data = this.terminalSettings;
+        if (data?.dsiEMVSettings) {
+          if (data?.dsiEMVSettings?.deviceValue) {
+            this.paxApp = true
+            return true;
+          }
+        }
+      }
+
+      async bringtoFront() { 
+        console.log('pax', this.isPax)
+        if (!this.isPax) { return }
+        const options = {}
+        this.stopTimer()
+        await dsiemvandroid.bringToFront(options)
       }
 
       getPaymentManualChipv2() {
@@ -301,10 +429,12 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
       }
 
       processResultsV2(paymentResponse: DCAPPaymentResponse): Observable<any> {
+        // this.bringtoFront()
         if (!paymentResponse) {
           this.loggerService.publishObject('Credit processResults No Response', paymentResponse)
           this.processing = false;
           this.message = 'Processing failed, reason unknown.';
+          this.bringtoFront()
           return of(null);
         }
 
@@ -312,7 +442,7 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           const device = this.terminalSettings?.name;
           this.order  = paymentResponse?.order;
           this.posPayment = paymentResponse?.payment;
-
+      
           const item$ = this.paymentMethodsService.processDCAPResponseV2(
                         this.posPayment,
                         this.order);
@@ -320,6 +450,7 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           return item$.pipe(concatMap( data => {
               this.processing = false;
               if (paymentResponse?.success) {
+                // this.bringtoFront()
                 this.close();
                 return of(data);
               }
@@ -330,12 +461,14 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
             }
           ))
         } else {
+         
           console.log(paymentResponse?.response)
           this.processing = false;
           let message = paymentResponse?.errorMessage
           message = `Result failed: reason: ${message} - ${paymentResponse?.response?.TextResponse} - ${paymentResponse?.response?.CaptureStatus}`
           this.message = 'Processing failed, ' + message;
           this.response = paymentResponse?.response;
+          this.bringtoFront()
           return of(null)
         }
 
@@ -385,6 +518,7 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           this.processing$ = this.dCapService.payAmount(this.terminalSettings?.name , this.posPayment).pipe(concatMap(data => {
             this.processing = false;
             this.result = data;
+            this.bringtoFront()
             return of(data);
           }))
         }
@@ -414,6 +548,7 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           return  this.dCapService.transactionCancel(device).pipe(switchMap(data => {
             this.processing = false;
             this.result = data;
+            this.bringtoFront()
             this._close()
             return of(data);
           }))
@@ -423,15 +558,17 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
 
       _reset() {
         if (this.terminalSettings) {
-          const device = this.terminalSettings.name;
+          const device = this.terminalSettings?.name;
           this.initMessaging()
           this.processing = true;
           return  this.dCapService.transactionCancel(device).pipe(switchMap(data => {
             this.processing = false;
             this.result = data;
+            this.bringtoFront();
             return of(data);
           }))
         }
+
         return of(null)
       }
 
@@ -464,14 +601,7 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
       }
 
       close() {
-        
         this._close()
-        // this.processing$ = this._reset().pipe(switchMap(data => {
-        //   setTimeout(() => {
-
-        //   }, 50);
-        //   return of(data)
-        // }))
       }
 
       _close() { 
@@ -480,7 +610,7 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
       }
 
       cancel() { 
-        this.processing$ = this._cancelTransaction()
+        this.cancelAction$ = this._cancelTransaction()
       }
 
       get _tipValue() {
@@ -510,6 +640,5 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
         this.textResponse = item?.textResponse;
         return item;
       }
-
 
 }

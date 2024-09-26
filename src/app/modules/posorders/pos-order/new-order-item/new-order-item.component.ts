@@ -32,7 +32,8 @@ export class NewOrderItemComponent implements OnInit {
   product$: Observable<any>;
   menuItemSelected: IMenuItem;
   unitOptions: IItemBasic[]
-  menuItem      : IMenuItem;
+  menuItem      : IMenuItem; 
+  @Input() autoSelectItemPOSearch: boolean; //autoSelectItemPOSearch
   @Input()  order: IPOSOrder;
   @Output() outPutRefresh  : EventEmitter<any> = new EventEmitter<any>();
   @Output() saveUpdate  : EventEmitter<any> = new EventEmitter<any>();
@@ -41,6 +42,7 @@ export class NewOrderItemComponent implements OnInit {
   setChange: boolean;
   baseCaseQTY: IItemBasicValue;
   repOrderUnitType$: Observable<UnitType>
+
   constructor(private fb: FormBuilder,
               private menuService: MenuService,
               private siteService: SitesService,
@@ -136,6 +138,10 @@ export class NewOrderItemComponent implements OnInit {
 
         this.inputForm.patchValue(this.posOrderItem);
         this.getItemUnitOptions();
+
+        if (this.autoSelectItemPOSearch) { 
+          this.addItem()
+        }
         return of(data)
       }))
     }

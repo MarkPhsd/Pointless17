@@ -15,6 +15,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class ProductSelectorComponent implements OnInit, AfterViewInit {
 
+  @Input() showUOM          : boolean;
   @Input() product            : IProduct;
   @Input() pb_Component       : PB_Components
   @Input() posOrderItem:      PosOrderItem;
@@ -84,10 +85,14 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
    ) {
     this.site = this.siteService.getAssignedSite();
     this.searchForm = this.fb.group({
-      searchField: []
+      searchField: [],
+      unitTypeID: [],
+      unitType: []
     })
     this.formfieldValue = this.fb.group({
-      productID: []
+      productID: [],
+      unitTypeID: [],
+      unitType: []
     })
    }
 
@@ -104,6 +109,9 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
   initForm() {
     this.searchForm = this.fb.group({
       searchField: [],
+      unitTypeID: [],
+      productID: [],
+      unitType: []
     })
   }
 
@@ -140,7 +148,7 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
     if (this.posOrderItem) {
       this.posOrderItem.productID = item.id;
       this.posOrderItem.productName = item.name;
-      this.searchForm.patchValue( {searchField: item.name} )
+      this.searchForm.patchValue( {searchField: item.name, unitTypeID: item.unitTypeID} )
       this.itemSelect.emit(item)
       return;
     }
@@ -163,8 +171,8 @@ export class ProductSelectorComponent implements OnInit, AfterViewInit {
     if(site) {
       this.menuService.getProduct(site, id).subscribe(data => {
         this.item = data;
-        const price =  { searchField: data.name  }
-        this.searchForm.patchValue( price )
+        const menuItem =  { searchField: data.name, unitTypeID: data?.unitTypeID  }
+        this.searchForm.patchValue( menuItem )
       })
     }
   }

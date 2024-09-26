@@ -3,7 +3,7 @@
   <div  *ngIf="sheet && sheet != undefined"  class="header-grid info-width printFont-14">
 
     <div >Type</div>
-    <div class="span-col"> {{ sheetType }}</div>
+    <div class="span-col"> {{ sheetType }} | {{sheet?.type}}</div>
 
     <div class="">Sheet ID</div>
     <div class=" span-col"> ({{sheet?.id}})</div>

@@ -4,5 +4,6 @@
   "appGateMessage": "Are you over 21? If so press yes to continue.",
   "company": "Pointless POS",
   "logo"   : "https://cafecartel.com/temp/logo.png",
-  "enableAnimations": false
+  "enableAnimations": false,
+  "version": "3.33.4"
 }

@@ -5,6 +5,10 @@
     "underscore",
     "jest",
   ],
+  "include": [
+    "src/**/*.ts",
+    "src/custom.window.d.ts"
+  ],
   "typeRoots": [
     "node_modules/@types",
     "@types/jest",

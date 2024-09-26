@@ -85,6 +85,9 @@ export interface METRCPackage {
   json        : string;
   labResults  : string;
   harvestResults: string;
+  harvestDate: string;
+  cbd: string;
+  tch: string;
 }
 
 export interface Item {

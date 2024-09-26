@@ -113,7 +113,7 @@ export class ItemTypeComponent implements OnInit {
           this.loading_initTypes = false;
         },
         error: err => {
-          this.itemTypeMethodsService.notify(`Error. ${err}`, 'Failure', 2000)
+          this.itemTypeMethodsService.notify(`Error. ${err}`, 'Failure', 15000)
           this.loading_initTypes = false;
         }
       })

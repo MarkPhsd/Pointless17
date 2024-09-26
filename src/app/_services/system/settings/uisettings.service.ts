@@ -21,8 +21,23 @@ export interface ContactFieldOptions {
   account: boolean;
 }
 
-export interface TransactionUISettings {
+export interface ProcessorInfo {  
+  batchTypeSetting: number; // 0 is auto, 1 is user, 2 is user auto
+  batchTypeEcomSetting: number; // 0 is auto, 1 is user, 2 is user auto
+  emvSupport: number;      
+  cardHolderVerification: number;
+  localBatchReport: number;
+  localDuplicateChecking: number;
+  storeAndForward: number;
+  contactlessSupport: number;
+  emvContactlessCvmLimit: number;
+  chinaUnionPaySupport: number;
+  customNotes: string;
+}
 
+
+export interface TransactionUISettings {
+  autoSelectItemPOSearch: boolean;
   billOnHold: boolean;
   paxA920AutoOpenCart: boolean;
   rewardsEnabled         : any;
@@ -177,7 +192,10 @@ export interface DSIEMVSettings {
   partialAuth: boolean;
   deviceValue: string;
   supressedForms: boolean;
+  promptConfirmAmount: boolean;
+  timerBringToFront: number;
   v2: boolean;
+  sendToBack: boolean;
 }
 
 export interface DSIEMVAndroidSettings {
@@ -856,7 +874,9 @@ export class UISettingsService {
       DisplayTextHandle: [''],
       enabled:     [''],
       partialAuth: [],
-      v2: []
+      supressedForms: [],
+      promptConfirmAmount: [],
+      v2: [],
     })
     return fb
   }
@@ -869,9 +889,25 @@ export class UISettingsService {
     return fb
   }
 
+  initProcessorForm() { 
+      ///credit settings
+      return this._fb.group({
+      processor_batchTypeSetting :[] , //0 is auto, 1 is user, 2, is user auto
+      processor_batchTypeEcomSetting :[] , //0 is auto, 1 is user, 2, is user auto
+      processor_EMVSupport: [],      
+      processor_CardHolderVerification: [],
+      processor_LocalBatchReport: [],
+      processor_LocalDuplicateChecking: [],
+      processor_StoreAndForward: [],
+      processor_ContactlessSupport: [],
+      processor_EMVContactlessCVMLimit: [],
+      processor_ChinaUnionPaySupport: [],
+      })
+  }
+
   initForm(fb: UntypedFormGroup): UntypedFormGroup {
     return this._fb.group({
-
+      autoSelectItemPOSearch : [],
       billOnHold : [],
       paxA920AutoOpenCart : [],
       id                     : [],
@@ -990,8 +1026,14 @@ export class UISettingsService {
       dcapPayAPIMultiPrice         : [],
       dcapPayAPIDualPriceValue     : [],
 
-    
-
+      // disableMenuItemExpandInApp : [],
+      enableRetailQuickMenu : [],
+      // expoTemplateID  : [],
+      
+      // expoTemplateID: [''],
+      // disableMenuItemExpandInApp: [''],
+      // disableRequestOptions: [''],
+      // disableNonCrediTip: [''], 
      })
   }
 

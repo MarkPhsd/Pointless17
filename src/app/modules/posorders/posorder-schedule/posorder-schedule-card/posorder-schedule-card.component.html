@@ -1,7 +1,7 @@
 <mat-card *ngIf="order">
   <mat-card-subtitle>
      <button mat-raised-button
-             [disabled]="order.completionDate"
+             [disabled]="order.completionDate || (!isStaff && order.completionDate)"
              color="primary"
              (click)="schedule()">
       <mat-icon>edit</mat-icon>Schedule
@@ -28,6 +28,7 @@
       <div class="grid-item-span">
         {{order.productOrderMemo}}
       </div>
+      <!-- {{order?.preferredScheduleDate}} -->
 
       <div *ngIf="this.getOrderSchedule(order) != null">
         <mat-icon>calendar</mat-icon>

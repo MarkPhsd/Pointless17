@@ -1089,8 +1089,8 @@ export class OrderMethodsService implements OnDestroy {
                                           passAlong, this.assignPOSItems, unitTypeID, selectedProductPrice )
   }
 
-  scanCheckInItem(barCode: string,  scanMode: boolean): Observable<IPOSOrder> {
-    return this.orderService.scanCheckInItem(barCode, scanMode)
+  scanCheckInItem(barCode: string,  scanMode: boolean, orderID: number): Observable<IPOSOrder> {
+    return this.orderService.scanCheckInItem(barCode, scanMode, orderID)
   }
 
   addItemToOrderFromBarcode(barcode: string, input, assignedItem, inputQuantity?, unitTypeID?, cost?) {
@@ -1908,10 +1908,17 @@ export class OrderMethodsService implements OnDestroy {
     let width = '500px'
     let maxWidth = '500px'
     let minWidth = '500px'
+
+ 
+  
     if (this.IsSmallDevice) {
       width     =       '100%'
-      minWidth  =  '100% !important'
+      minWidth  =   '100% !important'
       maxWidth  =   '100% !important'
+    }
+    const innerWidth = window.innerWidth
+    if (700 > innerWidth) {
+      width     =       '100vw !important'
     }
 
     item =  this.menuService.getPricesFromProductPrices(item)
@@ -2339,14 +2346,14 @@ export class OrderMethodsService implements OnDestroy {
    @HostListener("window:resize", [])
    fieldPrompt(item) {
       let width = '500px'
+      let height = '500px'
       if (window.innerWidth < 768) {
-        width = '100% !important'
+         height  = '100vh !important';
+         width   = '100vw !important';
       }
-      // console.log('fieldPrompt', window.innerWidth, width);
-      //'100% !important'
-
+      
       console.log('width', width)
-      let dialogRef =  this.editDialog.editDialog(item, width, '500px');
+      let dialogRef =  this.editDialog.editDialog(item, width, height);
       dialogRef.afterClosed().subscribe(data => {
         if (data && data.result) {
           this.updateProcess();

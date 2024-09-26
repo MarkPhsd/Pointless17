@@ -1,4 +1,5 @@
 <!-- (swipeleft)="onSwipeLeft()" -->
+<div *ngIf="(ipAddress$ | async) as action"></div>
 <div class="boundary" #myContainer >
   <ion-app>
     <ng-container [ngTemplateOutlet]="isKeyBoardVisible"></ng-container>

@@ -13,6 +13,15 @@ export interface rowItem {
   headerName: string;
   sortable: boolean;
 }
+
+function multilineRenderer(params): any {
+  console.log(params.data?.barcode, params.data?.productName)
+  const productName = params.data?.productName || ''; // Fallback to empty string if undefined
+  const barcode = params.data?.serialCode || ''; // Fallback to empty string if undefined
+  return `${productName}-${barcode}`;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -149,16 +158,18 @@ getErrors(value) {
   }
 }
 
+multilineRenderer(params) {
+  const productName = params.data?.productName || '';
+  const barcode = params.data?.serialCode || '';
+  return `${productName}<br>${barcode}`;
+}
 
 
-
-initGridOptions(pageSize: number, columnDefs: any, enableSorting?: boolean)  {
-
-  let sorting: boolean;
-
-  sorting = true;
-
-  if (enableSorting) {  sorting = enableSorting };
+initGridOptions(pageSize: number, columnDefs: any, enableSorting?: boolean) {
+  let sorting = true;
+  if (enableSorting) {
+    sorting = enableSorting;
+  }
 
   return {
     pagination: true,
@@ -172,9 +183,10 @@ initGridOptions(pageSize: number, columnDefs: any, enableSorting?: boolean)  {
     rowClassRules: this.rowClasses,
     enableFilter: true,
     enableSorting: sorting,
-    
-  }
-
+    frameworkComponents: {
+      showMultiline: this.multilineRenderer, // Register the renderer function here
+    },
+  };
 }
 
 initGridOptionsFormated(pageSize: number, columnDefs: any) {

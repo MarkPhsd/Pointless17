@@ -1,8 +1,25 @@
 <div *ngIf="(action$ | async) as newOrder; else action"></div>
 <div *ngIf="(dCapReset$ | async) as reset"></div>
 <div *ngIf="(terminalSettings$ | async) as terminal"></div>
+<div *ngIf="(printAction$ | async) as newOrder; else action"></div>
 
-
+<ng-template #headerInfo>
+  <div class="action-center">
+    <div>
+      <div>
+        <mat-label class="h3" *ngIf="payment?.amountPaid">   Payment: {{ payment.amountPaid | currency }} </mat-label><br>
+      </div>
+      <div>
+        <mat-label class="h3" *ngIf="payment?.tipAmount >0"> Gratuity: {{ payment.tipAmount  | currency}} </mat-label><br>
+      </div>
+      <div>
+        <mat-label class="h3"  color ="accent" *ngIf="!isUser && payment.completionDate && payment.amountPaid>0">
+          Change Due: {{ changeDue | currency }}
+        </mat-label>
+      </div>
+    </div>
+  </div>
+</ng-template>
 <ng-template #action>
 
 </ng-template>
@@ -19,68 +36,61 @@
 
         <div class="tip-grid">
 
-          <div class="action-center">
-            <mat-label class="h3" *ngIf="payment?.amountPaid">Payment: {{ payment.amountPaid | currency }} </mat-label>
-            <mat-label class="h3" *ngIf="payment?.tipAmount >0"> Gratuity: {{ payment.tipAmount  | currency}} </mat-label>
-            <br>
-            <mat-label class="h3"  color ="accent" *ngIf="!isUser && payment.completionDate"> Change Due: {{ changeDue | currency }}</mat-label>
-          </div>
+          <ng-container [ngTemplateOutlet]="headerInfo"></ng-container>
 
-          <div *ngIf="!isUser" class="action-center">
+          <div *ngIf="!isUser && !isPax" class="action-center">
             <mat-label>Scan to Start New Order</mat-label>
             <list-product-search-input></list-product-search-input>
           </div>
 
           <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
 
-          <div  *ngIf="!uiTransactions?.disableTipGratutity && isUser || 
-                        ((payment && payment?.account) 
-                        || (paymentMethod && paymentMethod?.isCreditCard && !uiTransactions?.disableTipGratutity))">
-            <tip-entry-amount
-              [payment]            = "payment"
-              [paymentMethod]      = "paymentMethod"
-              (specifiedTipAmount) = "specifiedTip($event)"
-            ></tip-entry-amount>
-        
-            <div style="width:100%" *ngIf="proccessing">
-              <mat-spinner [diameter]="50"></mat-spinner><br>
-              ...processing
+            <div *ngIf="!isPax">
+              <div  *ngIf="!uiTransactions?.disableTipGratutity && isUser ||
+                            ((payment && payment?.account)
+                            || (paymentMethod && paymentMethod?.isCreditCard && !uiTransactions?.disableTipGratutity))">
+                <tip-entry-amount
+                  [payment]            = "payment"
+                  [paymentMethod]      = "paymentMethod"
+                  (specifiedTipAmount) = "specifiedTip($event)"
+                ></tip-entry-amount>
+              </div>
+
+
+              <div style="width:100%" *ngIf="proccessing">
+                <mat-spinner [diameter]="50"></mat-spinner><br>
+                ...processing
+              </div>
             </div>
-          </div>
         </div>
       </div>
     </div>
 
     <mat-card *ngIf="step == 2">
-      <div class="action-center">
-        <div class="action-center">
-          <mat-label class="h3" *ngIf="payment?.amountPaid">   Payment: {{ payment.amountPaid | currency }} </mat-label>
-          <mat-label class="h3" *ngIf="payment?.tipAmount >0"> Gratuity: {{ payment.tipAmount  | currency}} </mat-label>
-          <br>
-          <mat-label class="h3"  color ="accent" *ngIf="!isUser && payment.completionDate && payment.amountPaid>0">
-            Change Due: {{ changeDue | currency }}
-          </mat-label>
+
+
+      <ng-container [ngTemplateOutlet]="headerInfo"></ng-container>
+
+      <div *ngIf="!androidApp">
+        <div  *ngIf=" !uiTransactions?.disableTipGratutity && isUser ||
+                    ((payment && payment?.account)
+                    || (paymentMethod && paymentMethod?.isCreditCard && !uiTransactions?.disableTipGratutity))">
+          <tip-entry-amount
+            [payment]            = "payment"
+            [paymentMethod]      = "paymentMethod"
+            (specifiedTipAmount) = "specifiedTip($event)"
+            (outPutTip)          = "customTipAmount($event)"
+          ></tip-entry-amount>
+
+          <div style="width:100%" *ngIf="proccessing">
+            <mat-spinner [diameter]="50"></mat-spinner><br>
+            ...processing
+          </div>
+          <ng-container [ngTemplateOutlet]="action"></ng-container>
+
         </div>
       </div>
 
-      <div  *ngIf="!uiTransactions?.disableTipGratutity && isUser || 
-                  ((payment && payment?.account) 
-                  || (paymentMethod && paymentMethod?.isCreditCard && !uiTransactions?.disableTipGratutity))">
-        <tip-entry-amount
-          [payment]            = "payment"
-          [paymentMethod]      = "paymentMethod"
-          (specifiedTipAmount) = "specifiedTip($event)"
-          (outPutTip)          = "customTipAmount($event)"
-        ></tip-entry-amount>
-
-        <div style="width:100%" *ngIf="proccessing">
-          <mat-spinner [diameter]="50"></mat-spinner><br>
-          ...processing
-        </div>
-        <ng-container [ngTemplateOutlet]="action"></ng-container>
-        
-      </div>
-    
       <mat-card-actions>
         <ng-container [ngTemplateOutlet]="actionCenterView" ></ng-container>
       </mat-card-actions>
@@ -111,23 +121,57 @@
             <span *ngIf="isApp">Print</span>
     </button>
 
+
+
     <button mat-button
+           class="tip-button"
+           *ngIf="!androidApp"
+           (click)="viewReceipt()">
+          <mat-icon>receipt</mat-icon>
+          View Receipt
+    </button>
+
+    <button mat-button
+            class="tip-button"
+            *ngIf="!isUser && !androidApp"
+            (click)="changeStep()">
+            <mat-icon>arrow_forward_ios</mat-icon>Next
+    </button>
+
+
+    <div *ngIf="isPax">
+      <button color="warn"
+              mat-raised-button
+              aria-label="logout"
+              class="nav-item nav-link"
+              (click)="logout()">
+              Exit
+        <mat-icon>exit_to_app</mat-icon>
+      </button>
+    </div>
+
+
+    <button mat-button
+            *ngIf="!isPax"
             class="tip-button"
             (click)="close()"><mat-icon>close</mat-icon>
             Exit</button>
 
-    <button mat-button
-          class="tip-button"
-          (click)="viewReceipt()"><mat-icon>receipt</mat-icon>
-            View Receipt</button>
 
-    <button mat-button
-            class="tip-button"
-            *ngIf="!isUser"
-            (click)="changeStep()">
-            <mat-icon>arrow_forward_ios</mat-icon>Next
+    <button
+            *ngIf="!isPax"
+            color="warn"
+            mat-raised-button
+            (click)="logout()">
+            Log Out
+      <mat-icon>exit_to_app</mat-icon>
     </button>
+
   </div>
+
+
+
+
 </ng-template>
 
 <ng-template #newOrderButton>

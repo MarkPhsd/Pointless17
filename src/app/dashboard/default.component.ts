@@ -40,10 +40,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('appMenuSearchBar')   appMenuSearchBar: TemplateRef<any>;
   @ViewChild('appOrderBar')        appOrderBar: TemplateRef<any>;
   @ViewChild('menuBarView')        menuBarView: TemplateRef<any>;
-  @ViewChild('userBarView')  userBarView: TemplateRef<any>;
-  @ViewChild('appSiteFooter')  appSiteFooter: TemplateRef<any>;
+  @ViewChild('userBarView')         userBarView: TemplateRef<any>;
+  @ViewChild('appSiteFooter')       appSiteFooter: TemplateRef<any>;
   @ViewChild("footer") footer: ElementRef;
-
+  ipAddress$ : Observable<any>;
   itemTypeList$: Observable<IItemType[]>;
   printOrders$ : Observable<IPOSOrder[]>;
   departmentID     =0
@@ -374,7 +374,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           return this.getDeviceInfo(devicename)
         }
         return of(null)
-      })).subscribe(data => { 
+      })).subscribe(data => {
+         
         if (data && data?.ignoreTimer) {
           this.initIdle();
         }
@@ -667,6 +668,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initLoginStatus();
     this.subscribeAddress();
     this.subscribSendOrder()
+
+    if (!this.platFormService.isApp) { 
+      this.ipAddress$ = this.siteService.getIpAddress()
+    }
   }
 
   getHelp() {

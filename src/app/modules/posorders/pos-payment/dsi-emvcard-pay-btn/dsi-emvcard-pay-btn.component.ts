@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IPaymentMethod } from 'ngx-paypal';
 import { Observable } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
@@ -14,6 +14,12 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
   styleUrls: ['./dsi-emvcard-pay-btn.component.scss']
 })
 export class DsiEMVCardPayBtnComponent implements OnInit {
+
+  
+  @ViewChild('regularStyle') regularStyle: TemplateRef<any>;
+  @ViewChild('footerStyle') footerStyle: TemplateRef<any>;
+
+  @Input() footerButton: boolean;
   @Input() dCap : boolean;
   @Input() order: IPOSOrder;
   @Input() uiTransactions: TransactionUISettings;
@@ -117,6 +123,12 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
     return valueResult
   }
 
+  get  buttonView() {
+    if (this.footerButton) {
+      return this.footerStyle;
+    }
+    return this.regularStyle;
+  }
   // @Input() order: IPOSOrder;
   // @Input() uiTransactions: TransactionUISettings;
   // @Input() platForm: string;

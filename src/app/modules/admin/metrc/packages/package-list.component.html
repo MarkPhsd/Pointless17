@@ -16,6 +16,11 @@
               Search
           </div>
         </search-debounce-input>
+
+        <button *ngIf="importPackageEnabled" style="height:35px;margin-top:15px;margin-left:5px"
+                mat-raised-button
+                color="primary"
+                (click)="importPackageFromLabel()"><mat-icon>download</mat-icon>Download Package</button>
       </div>
 
       <div >
@@ -39,7 +44,7 @@
         </app-mat-select>
       </div>
 
-      <div 
+      <div
            *ngIf="site && facilities && !loadingFacilities">
         <mat-form-field
                 class="selector-small"
@@ -76,7 +81,7 @@
            ....loading facilities
       </div>
 
-      <div style="width:285px;" class="flex-dates" *ngIf="(site && facilityNumber) && !importing" >  
+      <div style="width:285px;" class="flex-dates" *ngIf="(site && facilityNumber) && !importing" >
         <mat-date-range
             [hideRefresh]="true"
             [inputForm] = "scheduleDateForm" >
@@ -131,6 +136,7 @@
       </div>
   </div>
 </div>
+
 <mat-card
   *ngIf="errorMessage || message">
   <div><mat-icon color="warn">alert</mat-icon>{{errorMessage}}</div>

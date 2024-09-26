@@ -239,7 +239,8 @@
 </ng-template>
 
 <ng-template #labelButtonView>
-  <div *ngIf="!userAuthService?.isUser && enableExitLabel && orderItem?.printLocation">
+ 
+  <div *ngIf="!userAuthService?.isUser && enableExitLabel && orderItem?.printLocation ">
     <button mat-button  color="accent" (click)="printLabel(orderItem)">
       <mat-icon  class="mat-icon-label">print</mat-icon>   Label
     </button>
@@ -248,7 +249,7 @@
 
 <ng-template #exitlabelButtonView>
 
-  <div *ngIf="userAuthService?.isStaff && enableExitLabel && mainPanel  && orderItem?.printLocation>0">
+  <div *ngIf="userAuthService?.isStaff && enableExitLabel && mainPanel  && orderItem?.printLocation != 0">
     <!-- {{userAuthService?.isStaff }} | {{mainPanel}} {{orderItem?.printLocation}} -->
     <button mat-button  class="exit-label-button" color="accent" (click)="printLabel(orderItem)">
       <mat-icon>print</mat-icon>
@@ -267,7 +268,8 @@
 </ng-template>
 
 <ng-template #threeDotsLabel>
-  <div *ngIf="platFormService.isAppElectron && userAuthService?.isStaff && enableExitLabel && (orderItem?.printLocation && orderItem?.printLocation>0)">
+  <!-- loc {{orderItem?.printLocation}} label {{enableExitLabeloh }} -->
+  <div *ngIf="platFormService.isAppElectron && userAuthService?.isStaff && enableExitLabel && (orderItem?.printLocation && orderItem?.printLocation!= 0)">
     <button mat-button  class="exit-label-button" color="accent" (click)="printLabel(orderItem)">
       <mat-icon>print</mat-icon>
       <br>
@@ -377,9 +379,17 @@
     <span *ngIf="purchaseOrderEnabled">
       Cost : {{ quantity }}  @  {{ wholeSale | currency }} = {{ wholeSale*quantity | currency}}
     </span>
-
-    <span  *ngIf="( mainPanel || wideBar) && orderItem?.serialCode && !prepScreen && (orderItem?.serialCode != orderItem.id)">
-      SN#/({{ orderItem?.serialCode }})
+    <span *ngIf="deliveryPrep">
+      ID#/({{ orderItem?.id }})
+    </span>
+    <span  *ngIf="deliveryPrep || (( mainPanel || wideBar) && orderItem?.serialCode && !prepScreen && (orderItem?.serialCode != orderItem.id))">
+      <span>
+        SN#/({{ orderItem?.serialCode }})
+      </span>
+    </span>
+    <!-- {{orderItem?.serviceType}} -->
+    <span *ngIf="orderItem.serviceType != orderServiceType">
+      {{orderItem?.serviceType}}
     </span>
 
     <span class="notes item-info"

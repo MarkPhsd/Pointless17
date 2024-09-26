@@ -4,24 +4,19 @@ import { Component, QueryList,  ViewChildren,ChangeDetectorRef, ElementRef,
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthenticationService } from './_services';
 import { IUser }  from 'src/app/_interfaces';
-// import { fadeInAnimation } from './_animations';
 import { UntypedFormControl } from '@angular/forms';
 import { Platform, IonRouterOutlet } from '@ionic/angular';
-// import { LicenseManager} from "ag-grid-enterprise";
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
-// import { ElectronService } from 'ngx-electron';
 import { isDevMode } from '@angular/core';
 import { AppInitService } from './_services/system/app-init.service';
 import { Capacitor } from '@capacitor/core';
 import { UISettingsService } from './_services/system/settings/uisettings.service';
-// import { InputTrackerService } from './_services/system/input-tracker.service';
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
-// import { BalanceSheetMethodsService } from './_services/transactions/balance-sheet-methods.service';
-// import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 import { PlatformService } from './_services/system/platform.service';
-// import { SplashScreen } from '@capacitor/splash-screen';
+import { SitesService } from './_services/reporting/sites.service';
+
 
 // LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 @Component({
@@ -53,6 +48,8 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
   appUrl : string;
   keyboardDimensions = 'height:300px;width:700px'
   devMode = false;
+  ipAddress$: Observable<any>;
+  
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
   get platFormName() {  return Capacitor.getPlatform(); }
   initSubscription() {
@@ -68,6 +65,8 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
     }
   }
 
+  
+
   // private idle: Idle,
   constructor(
       private platForm             : Platform,
@@ -77,9 +76,12 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
       private uiSettingsService    : UISettingsService,
       private statusBar            : StatusBar,
       private viewContainerRef     : ViewContainerRef,
-      private platformService: PlatformService,
+      private platformService      : PlatformService,
+      private siteService          : SitesService,
       private renderer: Renderer2,
   ) {
+
+    this.ipAddress$ = this.siteService.getIpAddress()
 
     this.setTitle();
     this.initSubscription();

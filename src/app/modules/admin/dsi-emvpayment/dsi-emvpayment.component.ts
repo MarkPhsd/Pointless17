@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { Router } from '@angular/router';
-// import  'dsiemv-android-plugin';
-// import { Transaction, DSIEMVAndroid } from 'dsiemv-android-plugin';
-
-// import { Plugins } from '@capacitor/core';
-// const { DSIEMVAndroidPlugin, TransactionPlugin } = Plugins;
 
 @Component({
   selector: 'app-dsi-emvpayment',

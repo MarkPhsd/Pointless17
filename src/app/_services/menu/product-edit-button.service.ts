@@ -398,25 +398,42 @@ export class ProductEditButtonService {
 
   editDialog(item, width, height  ) {
     let dialogRef: any;
-    // console.log('width', width)
-    let minWidth = '300px'
-    let maxWidth = '100vh'
-    if (window.innerWidth < 768) {
-      width=        '100%'
-      minWidth=     '100%'
-      maxWidth=     'max-width: 100% !important'
+
+    const innerWidth = window.innerWidth
+    if (768 > innerWidth ) {
+      width = '100vw !important'
     }
 
     dialogRef = this.dialog.open(PosOrderItemEditComponent,
-      { width     :  width,
-        minWidth  :  minWidth,
-        height    : '600px',
-        minHeight : '600px',
+      { width     : width,
+        maxWidth  : width,
+        minWidth  : width,
+        height    : height,
+        minHeight : height,
         data      : item
       },
     )
-
     return dialogRef
+    // let dialogRef: any;
+    // // console.log('width', width)
+    // let minWidth = '399px'
+    // let maxWidth = '100vh'
+    // if (window.innerWidth < 768) {
+    //   // width=        '100%'
+    //   // minWidth=     '100%'
+    //   // maxWidth=     'max-width: 100% !important'
+    // }
+
+    // dialogRef = this.dialog.open(PosOrderItemEditComponent,
+    //   { width     :  width,
+    //     minWidth  :  minWidth,
+    //     height    : '600px',
+    //     minHeight : '600px',
+    //     data      : item
+    //   },
+    // )
+
+ 
   }
 
   openUnitTypeEditor(data: UnitType): MatDialogRef<UnitTypeEditComponent> {

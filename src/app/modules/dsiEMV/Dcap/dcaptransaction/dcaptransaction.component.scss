@@ -1,3 +1,10 @@
+@import "/src/mixins.scss";
+
+.container  { 
+  @include for-phone-only  {
+    margin-top: 20px;
+ }
+}
 .button-grid {
   display: flex;
   flex-direction: row;
@@ -23,4 +30,14 @@ button {
   margin: 5px;
   font-size: 1.1em;
   font-weight: 400;
+}
+
+
+.pay-button-dc {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  @include for-phone-only  {
+    font-size: .9rem;
+    width: 150px;
+  }
 }

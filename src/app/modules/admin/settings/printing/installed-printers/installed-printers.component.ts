@@ -654,10 +654,19 @@ export class InstalledPrintersComponent implements OnInit {
     )
   }
 
-  openEditor(id: number) {
+  openEditor(id: number, type?: number) {
     const site = this.siteService.getAssignedSite();
-    if (!id) { return }
-    const obs$ = this.settingService.getSetting(site, id);
+
+    let obs$ = this.settingService.getSetting(site, id)
+    if (!id && type ==2) { 
+      const setting = {} as ISetting;
+      setting.name = 'Label' 
+      setting.description = 'labels'
+      obs$ = this.settingService.postSetting(site, setting)
+    }
+
+
+    // const obs$ = ;
     obs$.subscribe( data => {
       const dialogConfig = [
         { data: { id: id } }

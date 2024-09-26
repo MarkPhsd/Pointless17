@@ -6,7 +6,6 @@ import { ISite, Paging } from 'src/app/_interfaces';
 
 import {
   METRCPackage,
-  METRCPackageTypes,
   PackageFilter,
   METRCPackagesAdjustReasonsGet,
   METRCPackagesCreatePOST,
@@ -23,7 +22,7 @@ import {
 
 export interface ImportPackages {
    siteID: number
-   facility: String; 
+   facility: String;
    startDate: String;
    endDate : String;
 }
@@ -38,7 +37,7 @@ export interface PackageSearchResultsPaged {
 })
 
 export class MetrcPackagesService {
-  
+
 
   //example date range &lastModifiedStart=2021-02-26T17:30:00Z&lastModifiedEnd=2021-02-27T17:30:00Z
   activeDateRange = ``
@@ -61,6 +60,19 @@ export class MetrcPackagesService {
       return this.http.delete<METRCPackage>(url);
 
     }
+
+    importByPackageLabel(site: ISite, label: any, facilityNumber: string): Observable<any> {
+      const controller = '/METRCPackages/'
+
+      const endPoint = `ImportPackageByLabel`
+
+      const parameters = `?siteName=${site?.name}&label=${label}&facilityNumber=${facilityNumber}`;
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`;
+
+      return this.http.get<PackageSearchResultsPaged>(url);
+    }
+
 
     importActiveBySearch(site: ISite, packageImport: ImportPackages): Observable<PackageSearchResultsPaged> {
       const controller = '/METRCPackages/'

@@ -29,6 +29,7 @@ import { UUID } from 'angular2-uuid';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { MetrcPackagesService } from '../metrc/metrc-packages.service';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
+import { SystemService } from './system.service';
 
 export interface ItemLabelPrintOut  {
   completed: boolean;
@@ -131,6 +132,7 @@ export class PrintingService {
                 private settingService    : SettingsService,
                 private siteService       : SitesService,
                 private uiSettingsService : UISettingsService,
+                private systemService: SystemService,
     ) {
   }
 
@@ -928,6 +930,7 @@ export class PrintingService {
           }
 
           labelInventoryID = this.getInventoryLabelID(data?.itemType)
+          console.log('getting label type ', labelInventoryID)
           if ( labelInventoryID !=0 && printer?.text )  {
             return  this.settingService.getSetting(site, labelInventoryID)
           }
@@ -997,35 +1000,66 @@ export class PrintingService {
 
       })).pipe(
         concatMap( results => {
+
+          let itemError : boolean
+          let itemParseError$: Observable<any>;
+
           if (!results) { return of(null) }
           const data = results[2];
           if (!data)    { return of(null) }
           let metrcPackage = {} as METRCPackage
           let content : any;
 
+          console.log('item.inventory', item.inventory)
           if (item.inventory) {
-            //   if (item.inventoryItem) { item = item.inventoryItem; }
-            //then we should have the metrcPackage
             if (results[0])  {  metrcPackage = results[0] as METRCPackage }
-            if (metrcPackage) { 
-              item.metrcPackage = JSON.parse(metrcPackage.json)
-              if (metrcPackage.labResults) { 
-                item.metrcPackage.labResultsInfo =  JSON.parse(metrcPackage.labResults)  
-              }  
+            if (+item?.inventory?.cbd == 0) {
+              item.inventory.cbd = '< LOQ'
             }
-            console.log('inventory item', item)
+            if (item?.inventory?.json) {
+              metrcPackage = JSON.parse(item?.inventory?.json)
+              item.metrcPackage = metrcPackage// JSON.parse(metrcPackage.json)
+            }
+
+            if (metrcPackage) {
+              if (metrcPackage.json) {
+                try {
+                  if (metrcPackage.labResults) {
+                    item.metrcPackage.labResultsInfo =  JSON.parse(metrcPackage.labResults)
+                  }
+                } catch (error) {
+                  itemError  = true;
+                  console.log('Error parsing metrcPackage Data', JSON.stringify(error))
+                  itemParseError$ = this.logTransaction(error.toString())
+                }
+              }
+            }
+            console.log('metrcPackage', metrcPackage)
+            // console.log('inventory package', item.inventory)
+            // console.log('print inventory item', item)
+            // console.log('isInventory print', item.inventory != null && item.inventory != undefined)
             content = this.renderingService.interpolateText(item, data?.text);
           }
 
-          if (!item.inventory) {
+          if (!item.inventory && !content) {
             this.validationNotificationExitLabel(labelInventoryID, item, results, this.menuItem)
             content = this.renderingService.interpolateText(item, data?.text);
           }
 
           this.postLabelToList(printer, joinLabels, content)
           if (!item.printed || (data && !data.printed)) {
-            return this.orderItemService.setItemAsPrinted(site, item )
+            return this.orderItemService.setItemAsPrinted(site, item ).pipe(switchMap(data => {
+              if (itemError) {
+                return itemParseError$
+              }
+              return of(data)
+            }))
           }
+
+          if (itemError) {
+            return itemParseError$
+          }
+
           return of(null);
       })).pipe(
         concatMap( data => {
@@ -1037,6 +1071,15 @@ export class PrintingService {
 
       return result$
   }
+
+  logTransaction(tran) {
+    let log = {} as any;
+    log.messageString = JSON.stringify(tran);
+    log.type = 'LabelPrinting';
+    log.subType = "Error"
+    return this.systemService.secureLogger( log )
+  }
+
 
   postLabelToList(printer: any, joinLabels: boolean, content: any)  {
     if (!printer.text) { printer.text = this.labelPrinter; }
@@ -1282,7 +1325,7 @@ export class PrintingService {
 
   printSub(printerName: string, autoPrint?: boolean, order?: IPOSOrder) {
 
-    
+
     const dialogRef = this.dialog.open(RecieptPopUpComponent,
       { width: '425px',
         height: '90vh',

@@ -706,6 +706,7 @@
 
 <ng-template #newItemEntry>
   <new-order-item
+    [autoSelectItemPOSearch]='uiTransactionSetting?.autoSelectItemPOSearch'
     (saveUpdate)="hideNewItemEntryForm($event)"
     [order]="order"
   ></new-order-item>

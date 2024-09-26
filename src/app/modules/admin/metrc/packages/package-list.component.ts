@@ -35,7 +35,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 })
 
 export class PackageListComponent implements OnInit {
-
+  importPackageEnabled: boolean = false;
   @ViewChild('agGrid') agGrid: AgGridAngular;
   //for list selecting.
   @Input() hideAdd         : boolean;
@@ -204,6 +204,9 @@ export class PackageListComponent implements OnInit {
       numberOfdays  : [10],
     });
 
+    this.searchForm.get('itemName')?.valueChanges.subscribe((value: string) => {
+      this.importPackageEnabled = value && value.length === 24;
+    });
 
     this.sites$ = this.siteService.getSites()
     .pipe(switchMap(data => {
@@ -211,7 +214,7 @@ export class PackageListComponent implements OnInit {
         this.selectedSiteID  = data[0].id
         this.site = data[0]
         this.searchForm.patchValue({selectedSiteID: this.site?.id})
-        // console.log(this.searchForm.value)
+
         this.packageImport.siteID = this.selectedSiteID
         this.refreshFilters(this.site)
       }
@@ -407,6 +410,21 @@ export class PackageListComponent implements OnInit {
       })
 
     }
+  }
+
+  importPackageFromLabel() {
+    //1A40103000049DB000004760
+
+    const label = this.searchForm.get('itemName').value;
+    const site   = this.siteService.getAssignedSite()
+    const facility = this.facilityNumber
+    const confirm = window.confirm("This will reset this package in your system and redownload it. It will not affect your current inventory values.")
+    if (!confirm) { return }
+    this.action$ = this.metrcPackagesService.importByPackageLabel(site, label, facility).pipe(switchMap(data => {
+      this.siteService.notify('You have reimported this package', 'close', 40000)
+      return of(data)
+    }))
+
   }
 
   setMessage(data:PackageSearchResultsPaged) {

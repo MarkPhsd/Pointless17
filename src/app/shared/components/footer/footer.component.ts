@@ -42,7 +42,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   _user             : Subscription;
   deviceInfo        : IDeviceInfo;
   userChecked       : boolean;
-androidApp        = this.platFormService.androidApp;
+  androidApp        = this.platFormService.androidApp;
   _uiConfig      : Subscription;
   uiConfig       = {} as TransactionUISettings;
 
@@ -208,12 +208,37 @@ androidApp        = this.platFormService.androidApp;
         path = 'pos-payment'
       }
     }
-    this.navigationService.makePayment(false, this.smallDevice, this.isStaff, this.order.completionDate, path)
+    this.navigationService.makePayment(false, this.smallDevice, this.isStaff, this.order?.completionDate, path)
   }
 
 
   filterBottomSheet() {
     this.bottomSheet.open(OrderFilterPanelComponent);
   }
+
+  roundToPrecision(value: number, precision: number): number {
+    const factor = Math.pow(10, precision);
+    return Math.round(value * factor) / factor;
+  }
+
+  get cashDiscount() {
+    const ui = this.uiConfig;
+
+    if (ui?.dcapSurchargeOption == 3) {
+      return this.roundToPrecision( this.order?.subTotal * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (ui?.dcapSurchargeOption == 2) {
+      return this.roundToPrecision( this.order?.subTotal * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (ui?.dcapSurchargeOption == 1 ) {
+      return this.roundToPrecision( this.order?.balanceRemaining * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+    if (!ui?.dcapSurchargeOption && ui.dcapDualPriceValue ) {
+      return this.roundToPrecision( this.order?.balanceRemaining * (1 + +ui.dcapDualPriceValue) , 5)
+    }
+
+    return  this.order?.creditBalanceRemaining 
+  }
+
 
 }

@@ -322,10 +322,15 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     delete$.subscribe(
       {
         next: data => {
+          if (data.errorMessage) { 
+            this.notifyEvent(data?.errorMessage, 'Success')
+            return 
+          }
           if (data.id) {
             this.notifyEvent('Item Deleted. ', 'Success')
             return
           }
+
           this.notifyEvent(JSON.stringify(data), 'Result')
           return
         },

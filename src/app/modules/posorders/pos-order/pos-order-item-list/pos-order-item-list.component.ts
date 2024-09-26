@@ -23,6 +23,14 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 
+function multilineRenderer(params): any {
+  console.log(params.data)
+  const productName = params.data?.productName || ''; // Fallback to empty string if undefined
+  const barcode = params.data?.serialCode || ''; // Fallback to empty string if undefined
+  return `${productName}<br>${barcode}`;
+}
+
+
 @Component({
   selector: 'pos-order-item-list',
   templateUrl: './pos-order-item-list.component.html',
@@ -216,6 +224,8 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
   }
 
+
+
   @HostListener("window:resize", [])
   updateItemsPerPage() {
     this.smallDevice = false
@@ -229,7 +239,8 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   //requires addjustment of column defs, other sections can be left the same.
   initAgGrid(pageSize: number) {
     this.frameworkComponents = {
-      btnCellRenderer: ButtonRendererComponent
+      btnCellRenderer: ButtonRendererComponent, 
+      'multilineRenderer': multilineRenderer,
     };
     this.defaultColDef = {
       flex: 2,
@@ -274,6 +285,19 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
     }
     columnDefs.push(nameCol);
 
+    let barcode = {
+      headerName: 'Barcode',
+      field: 'serialCode',
+      sortable: true,
+      width: 205,
+      minWidth: 205,
+      flex: 2,
+      wrapText: true,
+      cellStyle: { 'white-space': 'normal', 'line-height': '1em' },
+      autoHeight: true,
+    };
+    columnDefs.push(barcode);
+
     let fixEditQuantity: boolean
     fixEditQuantity = true
     if (this.order?.orderFeatures?.billOnHold == 1) {
@@ -289,6 +313,32 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
           singleClickEdit: true
     }
     columnDefs.push(nextColumn);
+
+       
+    if (this.purchaseOrderEnabled &&  !reconcilePass) {
+
+      nextColumn =  {headerName: 'InStock',     field: 'traceProductCount',
+        sortable: true,
+        width   : 100,
+        minWidth: 100,
+        maxWidth: 100,
+        flex    : 2,
+        editable: false,
+        singleClickEdit: false}
+      columnDefs.push(nextColumn);
+
+      nextColumn =  {headerName: 'Sold',     field: 'salesCount',
+        sortable: true,
+        width   : 100,
+        minWidth: 100,
+        maxWidth: 100,
+        flex    : 2,
+        editable: false,
+        singleClickEdit: false
+      }
+      columnDefs.push(nextColumn);
+  
+    }
 
     nextColumn =  {headerName: 'UOM',     field: 'unitName',
           sortable: true,
@@ -468,31 +518,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       }
      
     }
-   
-    if (this.purchaseOrderEnabled &&  !reconcilePass) {
 
-      nextColumn =  {headerName: 'InStock',     field: 'traceProductCount',
-        sortable: true,
-        width   : 100,
-        minWidth: 100,
-        maxWidth: 100,
-        flex    : 2,
-        editable: false,
-        singleClickEdit: false}
-      columnDefs.push(nextColumn);
-
-      nextColumn =  {headerName: 'Sold',     field: 'salesCount',
-        sortable: true,
-        width   : 100,
-        minWidth: 100,
-        maxWidth: 100,
-        flex    : 2,
-        editable: false,
-        singleClickEdit: false
-      }
-      columnDefs.push(nextColumn);
-  
-    }
 
     nextColumn =  {headerName: 'Scanned',     field: 'traceOrderDate',
                     sortable: true,
@@ -564,6 +590,8 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
     this.columnDefs = columnDefs;
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
+    // this.gridOptions.api.setColumnDefs(this.columnDefs); // Optional to force update
+
   }
 
   deleteItem(e) {
@@ -886,4 +914,5 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   }
 
 }
+
 

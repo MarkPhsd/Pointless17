@@ -82,11 +82,14 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   @Input() mainPanel      : boolean;
   @Input() wideBar        = false;
   @Input() disableActions = false;
+  @Input() deliveryPrep   : boolean;
   @Input() prepScreen     : boolean = false;
   @Input() enableExitLabel : boolean;
   @Input() displayHistoryInfo: boolean;
   @Input() enableItemReOrder  : boolean = false;
   @Input() isStaff: boolean;
+  @Input() orderServiceType: string;
+  
   textNameLength : number = 30;
 
   @Input() cardWidth: string;
@@ -180,10 +183,15 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
         }
       }
     }
-
-
   }
 
+
+  get itemPrintable() {
+    if (this.menuItem.itemType.labelRequired) {
+
+    }
+    return false;
+  }
 
 
   get enableItemDiscount() {
@@ -437,6 +445,8 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
     this.packages = this.getEstPackages(this.orderItem).toString();
 
     this.getReOrderMenuItem()
+
+    this.updateItemsPerPage()
   }
 
   refreshItemType() {
@@ -713,7 +723,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
                       requireWholeNumber: requireWholeNumber,
                       instructions: instructions}
 
-        console.log(item, editField, requireWholeNumber)
+        // console.log(item, editField, requireWholeNumber)
         let height  = '600px';
 
         if (editField == 'quantity') {

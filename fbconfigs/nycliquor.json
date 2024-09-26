@@ -1,0 +1,10 @@
+{
+  "apiUrl": "https://pointlessposdemo2.com:4446/api",
+  "useAppGate" : false,
+  "appGateMessage": "Are you over 21? If so press yes to continue.",
+  "company": "Pointless POS",
+  "logo"   : "https://cafecartel.com/temp/logo.png",
+  "enableAnimations": false,
+  "googleTracking": "G-6BNWKZ7VY8",
+  "version": "3.34.2"
+}

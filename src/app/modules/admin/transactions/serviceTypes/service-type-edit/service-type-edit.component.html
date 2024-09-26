@@ -244,17 +244,27 @@
             <ng-container [ngTemplateOutlet]="serviceColorPicker"></ng-container>
           </div>
 
-
-          <!-- <div>
+          <div *ngIf='serviceTypeFeaturesForm' [formGroup]='serviceTypeFeaturesForm'>
             <mat-form-field appearance="outline">
-              <mat-label >Filter Type </mat-label>
+              <mat-label >Icon </mat-label>
               <input matInput
                     type             ="number"
-                    formControlName  ="filterType"
+                    formControlName  ="sortOrder"
+                    class="form-control" >
+              <mat-hint>Sort value for Items.</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <div *ngIf='serviceTypeFeaturesForm' [formGroup]='serviceTypeFeaturesForm'>
+            <mat-form-field appearance="outline">
+              <mat-label >Icon </mat-label>
+              <input matInput
+                    type             ="text"
+                    formControlName  ="icon"
                     class="form-control" >
               <mat-hint>Set zero for sales, 1 for Purchase Orders</mat-hint>
             </mat-form-field>
-          </div> -->
+          </div>
 
         </div>
 
@@ -312,7 +322,60 @@
         </div>
       </div>
     </mat-card-content>
+
+    <mat-card *ngIf="serviceTypeFeaturesForm">
+      <mat-card-subtitle>
+        Features
+      </mat-card-subtitle>
+      <mat-card-content>
+        <form [formGroup]="serviceTypeFeaturesForm">
+          <!-- Other form fields -->
+        
+          <div formArrayName="nameStringPairs">
+            <div *ngFor="let pair of nameStringPairs.controls; let i = index" [formGroupName]="i">
+              <!-- Name Input -->
+              <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" placeholder="Enter name">
+              </mat-form-field>
+        
+              <!-- Values Input -->
+              <div formArrayName="values">
+                <div *ngFor="let value of pair.get('values').controls; let j = index">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Value</mat-label>
+                    <input matInput [formControlName]="j" placeholder="Enter value">
+                  </mat-form-field>
+                  <button mat-icon-button color="warn" (click)="removeValueFromPair(i, j)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+        
+                <button mat-stroked-button color="primary" type="button" (click)="addValueToPair(i)">
+                  Add Value
+                </button>
+              </div>
+        
+              <button mat-icon-button color="warn" (click)="removeNameStringPair(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+        
+            <button mat-stroked-button color="accent" type="button" (click)="addNameStringPair()">
+              Add Name-Value Pair
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
   </mat-card>
+
+  <!-- weekDays: any[];
+  hoursAndDayID: any[];
+  seatEnabled: boolean;
+  icon: string; -->
+
 </div>
 
 <ng-template #serviceColorPicker>

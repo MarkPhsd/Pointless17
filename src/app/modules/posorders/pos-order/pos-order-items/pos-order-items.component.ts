@@ -12,11 +12,12 @@ import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { AuthenticationService, OrdersService } from 'src/app/_services';
+import { AuthenticationService,  } from 'src/app/_services';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
-import { ThumbnailsMode } from 'ng-gallery';
+import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
+
 @Component({
   selector: 'pos-order-items',
   templateUrl: './pos-order-items.component.html',
@@ -109,13 +110,14 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   get currentItems() { 
    
-      if (this.scanMode == 2) { 
+      if (this.scanMode == 1) { 
         return this.posOrderItems.filter(data => { 
           if (!data.prepByDate) {
             return data
           }
         })
       }
+      
       if (this.scanMode == 2) { 
         return this.posOrderItems.filter(data => { 
           if (!data.deliveryByDate) {
@@ -280,10 +282,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                 private settingService: SettingsService,
                 private authService : AuthenticationService,
                 private renderer: Renderer2,
-                private orderMethodsService: OrderMethodsService,
                 private paymentService: POSPaymentService,
                 private navigationService : NavigationService,
                 private _bottomSheetService  : MatBottomSheet,
+                private messagingService: RequestMessageMethodsService,
                 private router: Router
               )
   {
@@ -518,11 +520,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     this.orderMethodService.toggleOpenOrderBarSub(+this.order.id);
     this.dismiss();
   }
-  trackByFN(_, {id, unitName, unitPrice, quantity,
-                modifierNote, serialCode, printed,
-                serviceType, taxTotal , wicebt}: IPOSOrderItem): number {
-    return id;
-  }
 
   printOrder() {
     this.remotePrint('printReceipt', false)
@@ -577,8 +574,43 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     }
   }
 
+  completePrepTypeNotifier(){
+    if (this.scanMode == 1 || this.scanMode==2) {
+      const order = this.order  
+      if (order) { 
+
+        let message = ''
+        if (this.scanMode == 1) { 
+          message = 'Prep work on order completed.'
+        }
+        if (this.scanMode == 2) { 
+          message = 'Driver has confirmed order for delivery.'
+        }
+
+        if (!message) { return }
+
+
+        const item$ =  this.uiSettingService.homePageSetting$.pipe(switchMap(data => { 
+          const email  = data?.salesReportsEmail ?? data?.administratorEmail
+          return   this.messagingService.prepCompleted(order,  message, email )
+        })).pipe(switchMap(data => {
+          this.siteService.notify("Request Sent", 'close', 2000, 'green')
+          return of(data)
+        }))
+       
+        this.action$ = item$
+      }
+    }
+  }
+
+  trackByFN(_, {id, unitName, unitPrice, quantity,
+        modifierNote, serialCode, printed,
+        serviceType, taxTotal , wicebt}: IPOSOrderItem): number {
+    return id;
+  }
+
   clearOrder() {
-    this.orderMethodsService.clearOrder()
+    this.orderMethodService.clearOrder()
   }
 
 }

@@ -20,8 +20,6 @@
         (click)="exportLogsToTxt()">
       Export Log
     </button>
-
-
     
     <button mat-raised-button
         color="primary"
@@ -56,10 +54,15 @@
     </div>
   </div>
 
+  <div *ngIf="(config$ | async) as config">
+    <h4 >APP Version: {{config?.version}}</h4>
+  </div>
   <div *ngIf=" (apiVersion$ | async) as version ">
     <h4 >API Version: {{version}}</h4>
   </div>
-  <h4>API Database Release: <span *ngIf="(version$ | async) as version">{{version.option1}}</span></h4>
+  <span *ngIf="(version$ | async) as version">
+    <h4 *ngIf="version.option1">API Database Release: {{version.option1}}</h4>
+  </span>
 </div>
 
 <div class="results">

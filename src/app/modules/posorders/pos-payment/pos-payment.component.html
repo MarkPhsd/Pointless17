@@ -5,7 +5,8 @@
 
 <div *ngIf="( posDevice$ | async) as item">
   <div class="action-center"  *ngIf="androidPaxA920Payment">
-    <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
+    <ng-container [ngTemplateOutlet]="disEMVCreditOnlyCardButton"></ng-container>
+    <ng-container [ngTemplateOutlet]="disEMVDebitOnlyCardButton"></ng-container>
   </div>
 </div>
 
@@ -174,7 +175,7 @@
 
                         <ng-container [ngTemplateOutlet]="payApiView"></ng-container>
                         <!-- dCapAllowCreditOnlyOption -->
-                        <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
+                        <!-- <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container> -->
 
                         <ng-container [ngTemplateOutlet]="disEMVCreditOnlyCardButton"></ng-container>
                         <ng-container [ngTemplateOutlet]="disEMVDebitOnlyCardButton"></ng-container>
@@ -618,7 +619,7 @@
 
 <ng-template #disEMVCreditOnlyCardButton>
   <dsi-emvcard-pay-btn
-      *ngIf="(isApp || isStaff) && devicename && !PaxA920
+      *ngIf="(isApp || isStaff) && devicename
              && uiTransactions?.dCapAllowCreditOnlyOption"
       [autoPay]="true"
       [preAuth]="false"
@@ -637,7 +638,7 @@
 
 <ng-template #disEMVDebitOnlyCardButton>
   <dsi-emvcard-pay-btn
-      *ngIf="(isApp || isStaff) && devicename && !PaxA920
+      *ngIf="(isApp || isStaff) && devicename
             && uiTransactions?.dCapAllowCreditOnlyOption
             && uiTransactions?.dCapDualPayEnableDebit"
       [autoPay]="true"
@@ -656,7 +657,7 @@
 
 <ng-template #disEMVCardButton>
   <dsi-emvcard-pay-btn
-      *ngIf="(isApp || isStaff) && devicename && !PaxA920
+      *ngIf="(isApp || isStaff) && devicename 
             && !uiTransactions.dCapAllowCreditOnlyOption"
       [autoPay]="true"
       [preAuth]="false"
@@ -675,7 +676,7 @@
 
 <ng-template #disEMVCardManualButton>
   <dsi-emvcard-pay-btn
-      *ngIf="(isApp || isStaff) && devicename && !PaxA920"
+      *ngIf="(isApp || isStaff) && devicename"
       [autoPay]="true"
       [manual]="true"
       [preAuth]="false"

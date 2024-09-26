@@ -561,8 +561,8 @@ export class StrainPackagesComponent implements OnInit {
       assignment.labTestingPerformedDate =  packageItem.labTestingStateDate;
       assignment.labTestingState =  packageItem.labTestingState;
       assignment.labFacilityName =  packageItem.labFacilityName;
-      assignment.labFacilityLicenseNumber =  packageItem.labTestingStateDate;
-      assignment.json =  packageItem.json;
+      assignment.labFacilityLicenseNumber =  packageItem?.labFacilityLicenseNumber;
+      assignment.json        =  packageItem.json;
       assignment.jointWeight =  packageItem.jointWeight;
 
     });

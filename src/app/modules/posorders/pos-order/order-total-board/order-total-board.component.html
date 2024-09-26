@@ -1,7 +1,7 @@
 <span *ngIf="(order$ | async) as order">
-  <div *ngIf="order">
+  <mat-card *ngIf="order">
     <app-order-total
       [order]="order">
     </app-order-total>
-  </div>
+  </mat-card>
 </span>

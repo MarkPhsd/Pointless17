@@ -66,6 +66,22 @@ export class EmailSMTPService {
 
   }
 
+  emailDCAPProperties(emailModel: EmailModel):  Observable<any> {
+
+    const site = this.siteService.getAssignedSite();
+
+    const controller = "/FluentMail/"
+
+    const endPoint = 'emailDCAPProperties';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, emailModel);
+
+  }
+
   credentialTest(emailModel: EmailModel):  Observable<any> {
 
     const site = this.siteService.getAssignedSite();

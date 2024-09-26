@@ -18,17 +18,20 @@ mat-toolbar {
 }
 
 
-
-mat-toolbar-row {
-  padding: 3px;
-  display: flex;
-  flex-direction: row;
-  justify-content:space-between;
-  margin: 5px;
-  width: 100%;
-  align-items: flex-start;
+.display {
+  @include for-phone-only  {
+    display: none; 
+  }
 }
 
+mat-toolbar-row {
+  padding-top: 5px;
+  padding-left: 5px;
+  display: flex;
+  flex-direction: row; /* Change this to row for horizontal layout */
+  justify-content: flex-start; /* Align items to the start of the row */
+  align-items: center; /* Vertically center items */
+}
 
 mat-divider {
   margin-top: 5px;
@@ -178,11 +181,17 @@ mat-accordion {
 }
 
 .menu-grid-menu {
-  display: grid;
-  gap: 15px;
-  grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
-  // width: 245px;
-  min-width: 250px;
+  // display: grid;
+  // gap: 15px;
+  // grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
+  // // width: 245px;
+  // min-width: 250px;
+  // display: flex;
+  // flex-direction: column;
+  // column-gap: 10px;
+  // flex-wrap: nowrap;
+  // justify-content:flex-start
+  
 }
 
 .icon-position {

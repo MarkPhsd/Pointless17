@@ -1,0 +1,18 @@
+@import "/src/mixins.scss";
+button {
+  width: 115px;
+  height: 65px;
+
+  @include for-phone-only  {
+    width: 115px;
+    height: 65px;
+  }
+}
+button{
+  text-overflow: ellipsis;
+  text-size-adjust: auto  ;
+  overflow: hidden;
+  white-space: normal;
+  line-height: 1em;
+  text-align: center;
+}

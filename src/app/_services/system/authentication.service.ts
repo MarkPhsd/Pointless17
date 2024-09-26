@@ -120,7 +120,7 @@ export class AuthenticationService {
 
       if (!user ){
         this._user.next(null)
-        this.siteSerivce._user.next(null)
+        this.siteService._user.next(null)
         return
       }
 
@@ -138,7 +138,7 @@ export class AuthenticationService {
 
       // console.log('user pref', user, user?.userPreferences)
       this._user.next(user)
-      this.siteSerivce._user.next(user)
+      this.siteService._user.next(user)
     }
 
     updatePreferences(preferences: UserPreferences) {
@@ -164,7 +164,7 @@ export class AuthenticationService {
         private appInitService   : AppInitService,
         private platFormservice  : PlatformService,
         private toolbarUIService : ToolBarUIService,
-        private siteSerivce      : SitesService,
+        private siteService      : SitesService,
         private dialog           : MatDialog,
     ) {
 
@@ -394,21 +394,29 @@ export class AuthenticationService {
 
     requestUserSetupToken(userName: string): Observable<IUserExists> {
 
-      const api = this.siteSerivce.getAssignedSite().url
+      const api = this.siteService.getAssignedSite().url
       const url = `${api}/users/RequestUserSetupToken`
 
-      // console.log(url)
-      return  this.http.post<any>(url, {userName: userName})
+      const messsage = this.getTracker(userName)
+     
+      return this.http.post<any>(url, { userName: userName, message: messsage });
     };
 
-    requestPasswordResetToken(userName: string): Observable<any>  {
-      const api = this.siteSerivce.getAssignedSite().url
-      const url = `${api}/users/RequestPasswordResetToken`
-      return this.http.post<any>(url, {userName: userName})
-    };
+    requestPasswordResetToken(userName: string): Observable<any> {
+      const api = this.siteService.getAssignedSite().url;
+      const url = `${api}/users/RequestPasswordResetToken`;
+      
+      const messsage = this.getTracker(userName)
+     
+      return this.http.post<any>(url, { userName: userName, message: messsage });
+    }
+    
+    getTracker(userName: string, ignoreAppCheck?: boolean) { 
+      return this.siteService.getApplicationInfo(userName);
+    }
 
     assignUserNameAndPassword(user: IUser): Observable<IUserExists>  {
-      const api = this.siteSerivce.getAssignedSite().url
+      const api = this.siteService.getAssignedSite().url
       const url = `${api}/users/CreateNewUserName`
       return  this.http.post<any>(url, user)
     };
@@ -416,28 +424,35 @@ export class AuthenticationService {
     createTempUser() : Observable<any> {
       //check local storage.
       //if local user exists then return that as observable
-
       const user = localStorage.getItem('user');
       if (user) {
         return of(user);
       }
 
-      const api = this.siteSerivce.getAssignedSite().url
+      const api = this.siteService.getAssignedSite().url
       const url = `${api}/users/CreateTempUser`
       return  this.http.get<any>(url);
 
     }
 
     updatePassword(user: IUser): Observable<any> {
-      const api = this.siteSerivce.getAssignedSite().url
+      const api = this.siteService.getAssignedSite().url
       const url = `${api}/users/updatePassword`
-      return  this.http.post<any>(url, user)
+      // return  this.http.post<any>(url, user)
+
+      const message = this.getTracker(user?.username)
+      user.message = message;
+      return this.http.post<any>(url, user);
     }
 
     requestNewUser(user: IUser): Observable<IUserExists> {
-      const api = this.siteSerivce.getAssignedSite().url
+      const api = this.siteService.getAssignedSite().url
       const url = `${api}/users/RequestNewUser`
-      return  this.http.post<any>(url, user)
+      // return  this.http.post<any>(url, user)
+
+      const message = this.getTracker(user?.username)
+      user.message = message;
+      return this.http.post<any>(url, user);
     }
 
     //get app toolbar

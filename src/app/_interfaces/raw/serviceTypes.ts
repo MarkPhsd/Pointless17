@@ -47,12 +47,21 @@ export interface IServiceType {
   json: string; //converts to serviceTypeFeatures
   serviceTypeFeatues: ServiceTypeFeatues;
   allRequestPrep: number;
+  
 }
 
 export interface ServiceTypeFeatues {
   weekDays: any[];
   hoursAndDayID: any[];
   seatEnabled: boolean;
+  icon: string;
+  sortOrder: number;
+  nameStringPairs: NameStringListPair[]; // New property
+}
+
+export interface NameStringListPair {
+  name: string;
+  values: string[];
 }
 
 export interface weekDays {

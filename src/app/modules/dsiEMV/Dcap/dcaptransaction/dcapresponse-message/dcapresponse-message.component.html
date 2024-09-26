@@ -12,6 +12,9 @@
 <div *ngIf="errorMessage">
   <h3><mat-icon color="warn">warning</mat-icon>  {{errorMessage}}</h3>
 </div>
+<div *ngIf="message">
+  <h3> {{message}}</h3>
+</div>
 
 <div *ngIf="processing">
   <h4>Check Device</h4>

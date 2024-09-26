@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, TemplateRef, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
@@ -8,7 +8,7 @@ import { DateHelperService } from 'src/app/_services/reporting/date-helper.servi
   templateUrl: './mat-date-range.component.html',
   styleUrls: ['./mat-date-range.component.scss']
 })
-export class MatDateRangeComponent {
+export class MatDateRangeComponent implements OnInit, AfterViewInit{
 
   @ViewChild('desktopTemplate') desktopTemplate: TemplateRef<any>;
   @ViewChild('touchTemplate') touchTemplate: TemplateRef<any>;
@@ -19,10 +19,28 @@ export class MatDateRangeComponent {
   @Output() outputDateRange  = new EventEmitter();
 
   @Input() hideRefresh: boolean;
+  @Input() autoRefresh: boolean;
 
   constructor(
     private dateHelperService: DateHelperService,
-    public authService: AuthenticationService) { }
+    public authService: AuthenticationService) {
+     
+    }
+
+  ngOnInit() {
+    if (this.autoRefresh) { 
+      this.emitDatePickerData()
+    }
+  }
+
+  ngAfterViewInit() { 
+    if (this.autoRefresh) { 
+      setTimeout(() => {
+        this.emitDatePickerData()
+      }, 150);
+
+    } 
+  }
 
   get buttonView() {
     if (this.buttonViewEnabled) {

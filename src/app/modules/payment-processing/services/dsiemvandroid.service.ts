@@ -243,6 +243,20 @@ export class PointlessCCDSIEMVAndroidService {
   }
 
 
+  getResetInfo(deviceSettings: DSIEMVSettings) {
+    let options = {} as any;
+    const setting = this.transaction as Transaction;
+    let prodCertMode = this.certProdMode(deviceSettings.MerchantID)
+
+    return {  secureDevice   : deviceSettings.deviceValue, 
+                  merchantID     : deviceSettings.MerchantID,
+                  pinPadIpAddress: deviceSettings.HostOrIP, 
+                  padPort        : deviceSettings.IpPort, 
+                  pOSPackageID   : deviceSettings.POSPackageID,
+                  prodCertMode   : prodCertMode 
+                }
+  }
+
   async dsiEMVReset(deviceSettings: DSIEMVSettings) {
     try {
       const setting = this.transaction as Transaction;

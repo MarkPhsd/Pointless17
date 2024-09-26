@@ -10,5 +10,6 @@ interface NodeModule {
 interface Window {
   process: any;
   require: any;
+  dataLayer: any[];
 }
 

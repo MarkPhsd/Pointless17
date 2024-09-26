@@ -19,6 +19,21 @@
     ]
   },
   {
+    "target": "nycliquor",
+    "public": "dist/CCSApp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  {
     "target": "androidpointlesspos",
     "public": "dist/CCSApp",
     "ignore": [

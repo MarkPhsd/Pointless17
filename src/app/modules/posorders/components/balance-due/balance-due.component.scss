@@ -17,6 +17,10 @@
 .h3 {
   font-size:  2.5em;
   font-weight: 650;
+  @include for-phone-only  {
+    font-size:  1.2rem;
+    font-weight: 650;
+  }
 }
 
 .tip-button-grid {
@@ -49,6 +53,9 @@
   display              : grid;
   grid-template-columns: 1rf;
   gap                  : 5px;
+  @include for-phone-only  {
+     margin-top: 30px;
+  }
 }
 
 .action-center {

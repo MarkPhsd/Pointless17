@@ -1,8 +1,26 @@
 <div *ngIf=" (action$ | async) as action"></div>
+<div *ngIf=" (cancelAction$ | async) as action"></div>
+<div *ngIf="(  setting$ | async) as action"></div>
+<div *ngIf="( actionSetting$ | async) as action"></div>
+<div *ngIf="!terminalSettings">
+  Warning No Terminal Settings.
+  <button mat-button (click)="close()">Close</button>
+</div>
 
-<div *ngIf="(uiSettings$  | async) as ui">
+<div *ngIf="!ui">
+  Warning no UI Settings
+  <button mat-button (click)="close()">Close</button>
+</div>
+
+<div class="container" *ngIf="(uiSettings$  | async) as ui">
+
+  <div *ngIf="!terminalSettings">
+    Warning no terminal settings
+    <button mat-button (click)="close()">Close</button>
+  </div>
 
   <div *ngIf="(terminalSettings$  | async) as terminalSettings; else loading">
+  
 
     <div *ngIf="(!dsiEmv || (!dsiEmv?.TranDeviceID || dsiEmv?.TranDeviceID === '')) || !posPayment">
       <div *ngIf="!posPayment">
@@ -39,36 +57,48 @@
 
         <div class="button-grid">
           <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
-            <button [disabled]="processing" color="primary" mat-raised-button (click)="reverseAuthorization()">Reverse Authorization</button>
+            <button  class="pay-button-dc" [disabled]="processing" color="primary" mat-raised-button 
+                    (click)="reverseAuthorization()">Reverse Authorization</button>
           </div>
 
           <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
-            <button [disabled]="processing" color="primary"    mat-raised-button (click)="authorizeAmount()">Authorize</button>
+            <button  class="pay-button-dc" [disabled]="processing" color="primary"    mat-raised-button 
+                    (click)="authorizeAmount()">Authorize</button>
           </div>
 
           <div *ngIf="posPayment.amountPaid > 0 ">
-            <button  [disabled]="processing" color="primary"   mat-raised-button (click)="payAmount()">Pay Amount</button>
+            <button class="pay-button-dc"
+                     [disabled]="processing" color="primary"   mat-raised-button 
+                     (click)="payAmount()">Pay Amount</button>
           </div>
 
           <div *ngIf="posPayment.amountPaid < 0 ">
-            <button [disabled]="processing"  color="warn"      mat-raised-button (click)="refundAmount()">Refund</button>
+            <button class="pay-button-dc"
+                    [disabled]="processing"  color="warn"      
+                    mat-raised-button 
+                    (click)="refundAmount()">Refund</button>
           </div>
 
           <div *ngIf="posPayment.tranType">
-            <button  color="warn"  mat-raised-button (click)="_close()">Reset & Close</button>
+            <button  class="pay-button-dc"  color="warn"  mat-raised-button (click)="_close()">Reset & Close</button>
           </div>
 
           <div *ngIf="!posPayment.tranType">
-            <button  color="warn"  mat-raised-button (click)="cancel()">Cancel</button>
+            <button   class="pay-button-dc" color="warn"  mat-raised-button (click)="cancel()"><mat-icon>close</mat-icon>Cancel</button>
+          </div>
+          
+          <div  *ngIf="smallDevice">
+            <button  class="pay-button-dc" color="accent" mat-raised-button (click)="reset()">Reset</button>
           </div>
 
-          <div *ngIf="!posPayment.tranType">
-            <button  color="warn"  mat-raised-button (click)="paramDownload()">Param Download</button>
+          <div *ngIf="smallDevice">
+            <button  class="pay-button-dc"  color="warn"  mat-raised-button (click)="close()"><mat-icon>exit</mat-icon> Exit</button>
           </div>
+  
         </div>
 
-        <div *ngIf="(processing$ | async) as result">
-          <button mat-button (click)="jsonView = !jsonView"><mat-icon>list</mat-icon>
+        <div *ngIf="(processing$ | async) as result" >
+          <button mat-button (click)="jsonView = !jsonView" *ngIf="isAdmin"><mat-icon>list</mat-icon>
             <span *ngIf="!jsonView">View Data</span>   <span *ngIf="jsonView">Hide Data</span>
           </button>
         </div>
@@ -76,11 +106,11 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <div>
+        <div *ngIf="!smallDevice">
           <button  color="warn"  mat-raised-button (click)="close()">Exit</button>
         </div>
 
-        <div  class="button-grid">
+        <div  class="button-grid" *ngIf="!androidApp">
           <div>
             <mat-button-toggle-group
                   name         = "type"
@@ -100,7 +130,7 @@
             </mat-button-toggle-group>
           </div>
 
-          <div class="button-grid">
+          <div class="button-grid" *ngIf="!smallDevice">
             <button  color="warn" mat-raised-button (click)="reset()">Reset</button>
           </div>
         </div>
@@ -150,6 +180,6 @@
 </div>
 
 <ng-template #loading>
-  <button mat-raised-button (click)="_close()">Close</button>
+  <button mat-raised-button (click)="cancel()">Close</button>
   <mat-spinner diameter="50"></mat-spinner>
 </ng-template>

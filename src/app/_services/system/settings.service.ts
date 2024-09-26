@@ -19,8 +19,7 @@ interface IIsOnline {
   result: string;
 }
 export interface ITerminalSettings {
-
-
+  id: number;
   prepCheckDevice : boolean;
   medicalRecSales : number;
   receiptPrinter  : string;

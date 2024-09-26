@@ -68,6 +68,10 @@
 
           <span #coachingStartShift></span>
 
+          <!-- <div  class="button" *ngIf="sheet?.type == 4 && !sheet.endTime && sheet.shiftStarted != 1"> 
+            <button style="height:60px; line-height:1em" color="accent" mat-raised-button (click)="getStartingValue()">Last Sheet <br> Cash Amount</button>
+          </div> -->
+
           <div class="button" style="margin-left:15px" *ngIf ="!sheet.endTime && sheet.shiftStarted != 1">
             <button style="height:60px; line-height:1em" color="warn" mat-raised-button (click)="startShift()">Start Sheet</button>
           </div>

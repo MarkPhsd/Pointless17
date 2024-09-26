@@ -3,6 +3,7 @@ import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, } from 'rxjs';
 import { ICompany, ISite } from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
+import { AuthenticationService } from '..';
 
 export interface SchemaUpdateResults {
   name:               string;
@@ -16,9 +17,6 @@ export interface SchemaUpdateResults {
   providedIn: 'root'
 })
 export class SystemService {
-
-
-
 
   // GetSyncDatabaseSchema
   // CreateAPIViews
@@ -34,15 +32,25 @@ export class SystemService {
 
   constructor( private http: HttpClient,
               private siteService: SitesService,
+              private authenticationService: AuthenticationService,
               )
   { }
 
-  secureLogger(log: any): any {
+  secureLogger(log: any):Observable<string> {
     const site = this.siteService.getAssignedSite()
     const controller = "/System/"
     const endPoint = 'secureLogger'
     const parameters = ''
     const url = `${site.url}${controller}${endPoint}${parameters}`
+    try {
+      if (this.authenticationService.userValue) { 
+        log.userName = this.authenticationService?.userValue?.username;
+      }
+      log.siteName = site?.name;
+      log.deviceName = localStorage.getItem('devicename');
+    } catch (error) {
+      
+    }
     return this.http.post<string>(url, log);
   }
 

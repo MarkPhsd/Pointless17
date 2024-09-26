@@ -1,7 +1,7 @@
 
 import { Component,  Inject, OnInit } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { IServiceType, IServiceTypePOSPut } from 'src/app/_interfaces';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
@@ -16,7 +16,7 @@ import { catchError, of, switchMap, Observable } from 'rxjs';
 })
 export class ServiceTypeEditComponent implements OnInit {
 
-  serviceColor: string;
+  serviceColor          : string;
   id                     : number;
   serviceType            : IServiceType;
   bucketName             : string;
@@ -24,12 +24,14 @@ export class ServiceTypeEditComponent implements OnInit {
   inputForm              : UntypedFormGroup;
   description            : string;
   action$                : Observable<any>;
+  serviceTypeFeaturesForm : FormGroup;
 
   constructor(
     private serviceTypeService      : ServiceTypeService,
     private siteService             : SitesService,
     private snack                   : MatSnackBar,
     private fbServiceTypeService    : FbServiceTypeService,
+    private fb: FormBuilder,
     private dialogRef: MatDialogRef<ServiceTypeEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
 
@@ -75,6 +77,9 @@ export class ServiceTypeEditComponent implements OnInit {
               this.serviceColor = this.serviceType.serviceColor
             }
             this.inputForm.patchValue(this.serviceType)
+
+            this.patchFormValues()
+
             return of(data)
           }
         )),catchError( error => {
@@ -85,6 +90,32 @@ export class ServiceTypeEditComponent implements OnInit {
       // }
 
     };
+
+    patchFormValues() {
+      if (!this.serviceType.json) { return }
+      this.serviceTypeFeaturesForm = this.initFeaturesForm();
+      const itemFeatures = JSON.parse(this.serviceType.json);
+    
+      // Patch simple values
+      this.serviceTypeFeaturesForm.patchValue({
+        weekDays: itemFeatures.weekDays,
+        hoursAndDayID: itemFeatures.hoursAndDayID,
+        seatEnabled: itemFeatures.seatEnabled,
+        icon: itemFeatures.icon
+      });
+    
+      // Patch the nameStringPairs FormArray
+      const nameStringPairsArray = this.serviceTypeFeaturesForm.get('nameStringPairs') as FormArray;
+    
+      itemFeatures.nameStringPairs.forEach((pair: any) => {
+        const nameStringGroup = this.fb.group({
+          name: [pair.name, Validators.required],
+          values: this.fb.array(pair.values.map((value: string) => this.fb.control(value)))
+        });
+        nameStringPairsArray.push(nameStringGroup);
+      });
+    }
+    
 
     initFormFields() {
       this.inputForm  = this.fbServiceTypeService.initForm(this.inputForm)
@@ -98,6 +129,10 @@ export class ServiceTypeEditComponent implements OnInit {
       if (this.serviceType) {
         serviceType.serviceColor = this.serviceColor;
       }
+
+      const featuresValue = this.serviceTypeFeaturesForm.value;
+      const json = JSON.stringify(featuresValue);
+      serviceType.json = json;
 
       const item$ = this.serviceTypeService.saveServiceType(site, serviceType)
       if (serviceType.retailServiceType) {
@@ -169,5 +204,61 @@ export class ServiceTypeEditComponent implements OnInit {
     }
 
 
+    initFeaturesForm() {
+      return this.fb.group({
+        weekDays: [[]],
+        hoursAndDayID: [[]],
+        seatEnabled: [false],
+        icon: [''],
+        nameStringPairs: this.fb.array([])  // Initialize the FormArray
+      });
 
-}
+    }
+  
+    // Helper to get the form array
+    get nameStringPairs(): FormArray {
+      return this.serviceTypeFeaturesForm.get('nameStringPairs') as FormArray;
+    }
+  
+    // Add a new name-string pair to the form
+    addNameStringPair() {
+      try {
+        const nameStringGroup = this.fb.group({
+          name: ['', Validators.required],
+          values: this.fb.array([this.fb.control('')])  // Initialize with one empty string
+        });
+        this.nameStringPairs.push(nameStringGroup);
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  
+    // Remove a name-string pair from the form
+    removeNameStringPair(index: number) {
+      try {
+        this.nameStringPairs.removeAt(index);
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  
+    // Add a value to the values list of a specific name
+    addValueToPair(index: number) {
+      try {
+        const values = this.nameStringPairs.at(index).get('values') as FormArray;
+        values.push(this.fb.control(''));
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  
+    // Remove a value from the values list of a specific name
+    removeValueFromPair(pairIndex: number, valueIndex: number) {
+      try {
+        const values = this.nameStringPairs.at(pairIndex).get('values') as FormArray;
+        values.removeAt(valueIndex);
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }

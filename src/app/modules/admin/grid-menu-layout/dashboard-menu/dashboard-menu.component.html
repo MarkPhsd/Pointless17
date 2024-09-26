@@ -1,13 +1,16 @@
 <div *ngIf="(action$ | async) as action"></div>
 
-<div class="ps-flex-group">
-  <div>
+<div class="flex-menu">
+  <div class="display">
     <button mat-button (click)="refresh()"><mat-icon>refresh</mat-icon></button>
   </div>
+
   <div>
     <ng-container [ngTemplateOutlet]="collectionViewEnabled"></ng-container>
   </div>
-</div>
+</div> 
+
+
 
 <ng-template #collectionView>
   <div  class="grid-items">
@@ -25,4 +28,4 @@
   </div>
 </ng-template>
 
-
+<display-toggle-android></display-toggle-android>

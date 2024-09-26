@@ -108,8 +108,6 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   assignedItems   : Subscription;
   refundItems     : boolean;
   action$ : Observable<any>;
-  messagesNotZero$ = this.requestMessageService.getTemplateBalanceIsNotZeroMessages()  // Observable<IRequestMessage[]>;
-  messagesZero$ = this.requestMessageService.getTemplateBalanceIsZeroMessages() //   Observable<IRequestMessage[]>;
   locations$ = this.locationsService.getLocationsCached();
 
   transactionUISettingsSubscriber() {

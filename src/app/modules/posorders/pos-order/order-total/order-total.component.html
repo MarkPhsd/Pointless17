@@ -1,40 +1,40 @@
 <div *ngIf="ui$ | async as ui"></div>
-  <div [class]="transactionDataClass" *ngIf="order" >
+<div [class]="transactionDataClass" *ngIf="order" >
 
-    <div class="total-headers foreground-color" *ngIf="!purchaseOrderEnabled">Sub   </div>
-    <div class="totals foreground-color" *ngIf="!purchaseOrderEnabled"> {{ order?.subTotal | currency }}</div>
+  <div class="total-headers foreground-color" *ngIf="!purchaseOrderEnabled">Sub   </div>
+  <div class="totals foreground-color" *ngIf="!purchaseOrderEnabled"> {{ order?.subTotal | currency }}</div>
 
-    <div class="total-headers foreground-color" *ngIf="purchaseOrderEnabled  && order?.service?.filterType != 2">Cost</div>
-    <div class="totals foreground-color"        *ngIf="purchaseOrderEnabled  && order?.service?.filterType != 2"> {{ order.cost | currency }}</div>
+  <div class="total-headers foreground-color" *ngIf="purchaseOrderEnabled  && order?.service?.filterType != 2">Cost</div>
+  <div class="totals foreground-color"        *ngIf="purchaseOrderEnabled  && order?.service?.filterType != 2"> {{ order.cost | currency }}</div>
 
-    <div class="total-headers foreground-color"  *ngIf="!purchaseOrderEnabled">Tax  </div>
-    <div class="totals foreground-color"  *ngIf="!purchaseOrderEnabled"> {{ order.taxTotal | currency }}</div>
+  <div class="total-headers foreground-color"  *ngIf="!purchaseOrderEnabled">Tax  </div>
+  <div class="totals foreground-color"  *ngIf="!purchaseOrderEnabled"> {{ order.taxTotal | currency }}</div>
 
-    <div class="total-headers foreground-color" *ngIf="order.wicTotal && order.wicTotal != 0">WIC  </div>
-    <div class="totals foreground-color"        *ngIf="order.wicTotal && order.wicTotal != 0"> {{ order?.wicTotal | currency }}</div>
+  <div class="total-headers foreground-color" *ngIf="order.wicTotal && order.wicTotal != 0">WIC  </div>
+  <div class="totals foreground-color"        *ngIf="order.wicTotal && order.wicTotal != 0"> {{ order?.wicTotal | currency }}</div>
 
-    <div class="total-headers foreground-color" *ngIf="order.ebtTotal && order.ebtTotal != 0">EBT  </div>
-    <div class="totals foreground-color"        *ngIf="order.ebtTotal && order.ebtTotal != 0"> {{ order?.ebtTotal | currency }}</div>
+  <div class="total-headers foreground-color" *ngIf="order.ebtTotal && order.ebtTotal != 0">EBT  </div>
+  <div class="totals foreground-color"        *ngIf="order.ebtTotal && order.ebtTotal != 0"> {{ order?.ebtTotal | currency }}</div>
 
-    <div class="total-headers foreground-color" *ngIf="order.gratuity && order.gratuity != 0">Service %{{ ( (order?.gratuity / order?.subTotal) * 100 ).toFixed(0) }} </div>
-    <div class="totals foreground-color"        *ngIf="order.gratuity && order.gratuity != 0"> {{ order?.gratuity | currency }}</div>
+  <div class="total-headers foreground-color" *ngIf="order.gratuity && order.gratuity != 0">Service %{{ ( (order?.gratuity / order?.subTotal) * 100 ).toFixed(0) }} </div>
+  <div class="totals foreground-color"        *ngIf="order.gratuity && order.gratuity != 0"> {{ order?.gratuity | currency }}</div>
 
-    <div class="grand-total-headers foreground-color" *ngIf="!purchaseOrderEnabled">Total</div>
-    <div class="grand-totals foreground-color" *ngIf="!purchaseOrderEnabled"> {{ order.total | currency }}</div>
+  <div class="grand-total-headers foreground-color" *ngIf="!purchaseOrderEnabled">Total</div>
+  <div class="grand-totals foreground-color" *ngIf="!purchaseOrderEnabled"> {{ order.total | currency }}</div>
 
-    <div class="total-headers foreground-color">Items </div>
-    <div class="totals foreground-color">{{ order.itemCount }}</div>
+  <div class="total-headers foreground-color">Items </div>
+  <div class="totals foreground-color">{{ order.itemCount }}</div>
 
-    <div class="total-headers foreground-color" *ngIf="!order.completionDate && ui && ui?.dcapMultiPrice &&  ui?.dcapDualPriceValue > 0 " >  Credit  Price ({{ui?.dcapSurchargeOption}}) </div>
-    <div class="total-headers foreground-color" *ngIf="!order.completionDate &&ui && ui?.dcapMultiPrice &&  ui?.dcapDualPriceValue < 0 " >   Non Credit Price ({{ui?.dcapSurchargeOption}}) </div>
+  <div class="total-headers foreground-color" *ngIf="!order.completionDate && ui && ui?.dcapMultiPrice &&  ui?.dcapDualPriceValue > 0 " >  Credit  Price ({{ui?.dcapSurchargeOption}}) </div>
+  <div class="total-headers foreground-color" *ngIf="!order.completionDate &&ui && ui?.dcapMultiPrice &&  ui?.dcapDualPriceValue < 0 " >   Non Credit Price ({{ui?.dcapSurchargeOption}}) </div>
 
-    <div class="totals foreground-color"  *ngIf="!order.completionDate && ui && ui?.dcapMultiPrice != 0">{{ cashDiscount | currency  }}</div>
+  <div class="totals foreground-color"  *ngIf="!order.completionDate && ui && ui?.dcapMultiPrice != 0">{{ cashDiscount | currency  }}</div>
 
-    <!-- <div *ngIf="isAdmin || isManager"> add auth -->
-    <ng-container [ngTemplateOutlet]="isInventoryView"></ng-container>
-    <!-- </div> -->
+  <!-- <div *ngIf="isAdmin || isManager"> add auth -->
+  <ng-container [ngTemplateOutlet]="isInventoryView"></ng-container>
+  <!-- </div> -->
 
-  </div>
+</div>
 
 <ng-template #inventory>
   <div  class="total-headers foreground-color">Initial Value: </div>

@@ -24,6 +24,7 @@ export interface AvalibleInventoryResults {
   errorMessage: string;
 }
 export interface IInventoryAssignment {
+  errorMessage: string;
   initialLabTestingState: any;
   receivedFromFacilityLicenseNumber: any;
   receivedDateTime: any;

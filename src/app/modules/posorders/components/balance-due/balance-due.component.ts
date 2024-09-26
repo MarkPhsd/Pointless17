@@ -2,11 +2,11 @@ import { Component, OnInit,Input, Inject, ChangeDetectorRef } from '@angular/cor
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { Observable, of,Subscription } from 'rxjs';
-import {  catchError, concatMap, switchMap } from 'rxjs/operators';
+import { interval, Observable, of,Subject,Subscription, timer } from 'rxjs';
+import {  catchError, concatMap, switchMap, take, takeUntil } from 'rxjs/operators';
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder, IPOSPayment, IServiceType } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
+import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { IBalanceDuePayload } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -23,7 +23,8 @@ import { DcapPayAPIService } from 'src/app/modules/payment-processing/services/d
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { Router } from '@angular/router';
-
+import { dsiemvandroid } from 'dsiemvandroidplugin';
+import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 @Component({
   selector: 'app-balance-due',
   templateUrl: './balance-due.component.html',
@@ -50,6 +51,7 @@ export class ChangeDueComponent implements OnInit  {
   @Input() payment      : any;
   finalizer: boolean;
   _finalizer: Subscription;
+  printAction$ : Observable<any>;
 
   step                  = 1;
   changeDue             : any;
@@ -61,6 +63,31 @@ export class ChangeDueComponent implements OnInit  {
   vice           : ITerminalSettings
   posDevice: ITerminalSettings;
   _posDevice          : Subscription;
+  paxApp : boolean;
+  androidApp = this.platFormService.androidApp;
+
+  remainingTime: number = 0;
+  private stopTimer$ = new Subject<void>(); // For stopping the timer when component is destroyed
+
+  // Start the timer based on the passed duration
+  startTimer(duration: number): void {
+    this.remainingTime = duration;
+
+    timer(0, 1000)  // Emit values every second
+      .pipe(takeUntil(this.stopTimer$))  // Stop if component is destroyed
+      .subscribe(val => {
+        this.remainingTime = duration - val;  // Decrease the remaining time
+        if (this.remainingTime <= 0) {
+          this.bringtoFront()
+          this.stopTimer();  // Clear timer when done
+        }
+      });
+  }
+ // Stop and clean up the timer
+  stopTimer(): void {
+    this.stopTimer$.next(); // Notify all subscribers to stop
+    this.stopTimer$.complete(); // Complete the subject to clean up
+  }
 
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
@@ -68,7 +95,27 @@ export class ChangeDueComponent implements OnInit  {
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
   }
 
+  get isPax() {
+    const data = this.terminalSettings;
+    if (data?.dsiEMVSettings) {
+      if (data?.dsiEMVSettings?.deviceValue) {
+        this.paxApp = true
+        return true;
+      }
+    }
+  }
+
+  async bringtoFront() {
+    console.log('pax', this.isPax)
+    if (!this.isPax) { return }
+    const options = {}
+    await dsiemvandroid.bringToFront(options)
+  }
+
   constructor(
+              private authenticationService : AuthenticationService,
+              private userAuthService         :UserAuthorizationService,
+              private userSwitchingService  : UserSwitchingService,
               private platFormService: PlatformService,
               private userAuthorization: UserAuthorizationService,
               private paymentService: POSPaymentService,
@@ -113,6 +160,8 @@ export class ChangeDueComponent implements OnInit  {
     if (this.step == 1) {
       this.orderMethodsService.setScanner( )
     }
+    this.isPax;
+    this.bringtoFront()
   }
 
   initTerminalSettings() {
@@ -154,9 +203,9 @@ export class ChangeDueComponent implements OnInit  {
     if (order && order != null) {
       this.paymentMethodProcessService.sendOrderProcessLockMethod(this.orderMethodsService.currentOrder)
     }
-   
+
     let categoryID = 0
- 
+
     if (this.posDevice) {
       if (this.posDevice?.defaultOrderTypeID  && this.posDevice?.defaultOrderTypeID != 0) {
         const serviceType$ = this.serviceTypeService.getType(site, this.posDevice.defaultOrderTypeID)
@@ -210,14 +259,26 @@ export class ChangeDueComponent implements OnInit  {
     }
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.printingCheck();
     this.initAuthorization();
     this.initTransactionUISettings();
-    this.initTerminalSettings()
+    this.initTerminalSettings();
+    this.isPax;
+    await this.bringtoFront()
+    this.startRepeatingFunction()
   }
+
+  startRepeatingFunction() {
+    interval(1000) // emit every second
+      .pipe(take(15)) // limit to 15 iterations
+      .subscribe(() => {
+        this.bringtoFront()
+      });
+  }
+
 
   initTransactionUISettings() {
     this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
@@ -269,42 +330,106 @@ export class ChangeDueComponent implements OnInit  {
     this.toolbarServiceUI.updateOrderBar(false);
   }
 
-  printReceipt() {
-    if (this.payment && (this.payment.groupID && this.payment.groupID != 0)) {
-      const site = this.siteService.getAssignedSite();
-       this.printing$ = this.orderService.getPOSOrderGroupTotal(site, this.payment.orderID, this.payment.groupID).pipe(switchMap(data => {
-        this.printingService.printOrder = data;
+
+  printReceipt(){
+    const order = this.order;
+
+    const remotePrint = this.remotePrint('printReceipt', this.posDevice?.exitOrderOnFire, this.posDevice);
+    if (remotePrint) {
+      return;
+    }
+
+    if (this.uiTransactions.prepOrderOnExit) {
+      this.printAction$ = this.paymentMethodProcessService.sendOrderOnExit(order).pipe(switchMap(data => {
+        const site = this.siteService.getAssignedSite()
+        return this.orderService.getOrder(site, order.id.toString(), order.history)
+      })).pipe(switchMap(data => {
+        this.orderMethodsService.updateOrder(data)
         this.printingService.previewReceipt(this.uiTransactions?.singlePrintReceipt, data);
         return of(data)
       }))
-      return;
+      return
     }
-    this.printingService.previewReceipt(this.uiTransactions?.singlePrintReceipt)
+
+    this.printingService.previewReceipt(this.uiTransactions?.singlePrintReceipt, order)
   }
 
+  remotePrint(message:string, exitOnSend: boolean, posDevice:ITerminalSettings) {
+    const order = this.order;
+
+    if (posDevice) {
+      let pass = false
+      if (posDevice?.remotePrepPrint) {
+        if (message === 'printPrep') {
+          pass = true
+        }
+        if (message === 'rePrintPrep') {
+          pass = true
+        }
+        if (message == 'printReceipt') {
+          pass = true
+        }
+      }
+      if (posDevice?.remotePrint || pass) {
+        const serverName = this.uiTransactions.printServerDevice;
+        let remotePrint = {message: message,
+                           deviceName:   this.posDevice?.deviceName,
+                           printServer: serverName,
+                           id: order.id,
+                           history: order.history} as any;
+        const site = this.siteService.getAssignedSite()
+        this.printAction$ =  this.paymentService.remotePrintMessage(site, remotePrint).pipe(switchMap(data => {
+
+          if (data) {
+            this.siteService.notify('Print job sent', 'Close', 3000, 'green')
+          } else {
+            this.siteService.notify('Print Job not sent', 'Close', 3000, 'green')
+          }
+
+          if (posDevice?.exitOrderOnFire && message != 'printReceipt') {
+            //then exit the order.
+            this.orderMethodsService.clearOrder()
+          }
+          return of(data)
+        }))
+        return true;
+      }
+    }
+
+    return false
+  }
+
+
   close() {
-    this.paymentMethodProcessService._sendOrderOnExit.next(null)
-    this.paymentMethodProcessService._sendOrderAndLogOut.next(null)
-    this.orderMethodService.clearOrder();
-    this._closeOnly()
+    try {
+      this.paymentMethodProcessService._sendOrderOnExit.next(null)
+      this.paymentMethodProcessService._sendOrderAndLogOut.next(null)
+      this.orderMethodService.clearOrder();
+      this._closeOnly()
+    } catch (error) {
+
+    }
   }
 
   _closeOnly() {
-    this.orderMethodsService._scanner.next(true)
-    this.dialogRef.close()
+    try {
+      this.orderMethodsService._scanner.next(true)
+      this.dialogRef.close()
+    } catch (error) {
+
+    }
   }
 
-  viewReceipt() { 
+  viewReceipt() {
     const url = 'pos-payment'
     this.router.navigateByUrl(url)
-    // this.router.navigate['pos-payment']
     this._closeOnly()
   }
 
   customTipAmount(amount) {
     const payment = this.payment;
     if (!payment) {
-  
+
     }
     if (payment) {
       // Ensure amount has 2 decimal places
@@ -312,7 +437,7 @@ export class ChangeDueComponent implements OnInit  {
       this.tip(formattedAmount);
     }
   }
-  
+
   specifiedTip(amount: number) {
     const payment = this.payment;
     if (!payment) {
@@ -375,7 +500,7 @@ export class ChangeDueComponent implements OnInit  {
 
     console.log('processDcapTip')
 
-    
+
     this.proccessing = true;
     return process$.pipe(switchMap(data => {
       console.log(data, data.cmdStatus, data.textResponse)
@@ -407,7 +532,7 @@ export class ChangeDueComponent implements OnInit  {
     const process$ = this.dCapService.adustByRecordNoV2(device, this.payment, amount);
     this.proccessing = true;
     return process$.pipe(switchMap(data => {
-   
+
        const result = data as any;
         if (!data.success) {
           this.siteService.notify(result?.response?.textResponse, 'close', 10000, 'red', 'top')
@@ -473,6 +598,40 @@ export class ChangeDueComponent implements OnInit  {
       this.methodsService.processCapture(item, this.order.balanceRemaining,
                                                    this.uiTransactions)
     }
+  }
+
+  logout() {
+    this.close()
+    if (this.uiTransactions?.prepOrderOnExit) {
+      //switch order to current order
+      const order = this.orderMethodsService.currentOrder
+      if (!order) {
+        this.postLogout()
+        return
+      }
+      this.action$ = this.paymentMethodProcessService.sendOrderOnExit(order).pipe(switchMap(data => {
+        // console.log('logout send data sendOrderOnExit', data)
+        if (data) {
+
+        }
+        this.postLogout()
+        return of(data)
+      }))
+      return;
+    }
+    this.postLogout()
+  }
+
+
+  postLogout() {
+    if (this.authenticationService.authenticationInProgress) {
+      this.userSwitchingService.clearLoggedInUser();
+      return
+    }
+
+    if (this.authenticationService.authenticationInProgress) { return }
+    this.userSwitchingService.clearLoggedInUser();
+    // this.smallDeviceLimiter();
   }
 
   notify(message: string, title: string, duration: number) {

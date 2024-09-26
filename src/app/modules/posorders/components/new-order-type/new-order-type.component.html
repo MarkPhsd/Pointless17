@@ -10,8 +10,9 @@
 
     <div *ngIf="orderMethodsService.toggleChangeOrderType">
       <mat-label>Update all Items</mat-label>
+
       <mat-button-toggle-group
-            [ngModel]="updateItems">
+            [(ngModel)]="updateItems">
           <mat-button-toggle [value]="true">
             Yes
           </mat-button-toggle>
@@ -33,22 +34,39 @@
    </mat-card-subtitle>
    <mat-card-content>
      <!-- [toggleWidth]="'width: 250px'" -->
-    <app-mat-toggle-selector
-        class="toggle-selector"
-        [buttonDimensions]="'button-dimensions'"
-        [list$]="serviceTypes$"
-        [hideAllOption]="'true'"
-        (outPutID)="orderByType($event)">
 
-        <div *ngIf="orderMethodsService.toggleChangeOrderType">
-          Change Order Type
-        </div>
-        <div *ngIf="!orderMethodsService.toggleChangeOrderType">
-           Start new Order
-        </div>
+    <div class="grid-serviceTypeItems">
+      <div>
+        <app-mat-toggle-selector
+            class="toggle-selector"
+            [buttonDimensions]="'button-dimensions'"
+            [list$]="serviceTypes$"
+            [hideAllOption]="'true'"
+            (outPutID)="orderByType($event)">
+    
+            <div *ngIf="orderMethodsService.toggleChangeOrderType">
+              Change Order Type
+            </div>
+            <div *ngIf="!orderMethodsService.toggleChangeOrderType">
+               Start new Order
+            </div>
+    
+        </app-mat-toggle-selector>
+      </div>
 
-    </app-mat-toggle-selector>
-   </mat-card-content>
+      <div *ngIf="orderMethodsService.assignPOSItems as items">
+        <div *ngIf="items.length>0">
+          <h4>Selected Items</h4>
+          <div *ngFor="let item of items; let i = index">
+            <button  style="margin-left: 5px"  mat-icon-button (click)="removeSelectedItem(i)">
+              {{item?.productName}} <mat-icon color="warn">delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+  </mat-card-content>
    <mat-card-actions>
     <button *ngIf="showCancel"
             mat-button
@@ -57,4 +75,6 @@
      </button>
   </mat-card-actions>
  </mat-card>
+
+
 <div *ngIf="(action$ | async) as action"></div>

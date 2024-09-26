@@ -18,6 +18,7 @@ import { ElectronService } from 'ngx-electron';
 })
 export class BalanceSheetMethodsService {
 
+
   get platForm() {  return Capacitor.getPlatform(); }
   deviceName: string;
   isApp                       = false;

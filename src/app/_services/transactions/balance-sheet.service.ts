@@ -215,7 +215,6 @@ export interface BalanceSheetSearchModel {
 
 export class BalanceSheetService {
 
-
   constructor(
     private authenticationService: AuthenticationService,
     private platFormService: PlatformService,
@@ -237,6 +236,19 @@ export class BalanceSheetService {
 
     return this.http.get<any>(url);
   }
+
+  getLastBalanceEndingValue(site: ISite, id: number): Observable<IBalanceSheet> {
+    const controller = "/BalanceSheets/"
+
+    const endPoint  = "GetLastBalanceEndingValue"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+  }
+
 
   getSheetType(sheet: IBalanceSheet) {
 

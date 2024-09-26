@@ -18,8 +18,13 @@
 
   <!-- scanModePrep scanModeDelivery-->
   <div class="ps-flex-group" *ngIf="posDevice?.prepCheckDevice">
+
+    <span class="item-span" *ngIf="scanMode && scanMode != 0">
+      <order-item-scanner [scanMode]="scanMode"></order-item-scanner>
+    </span>
+
     <span class="item-span" >
-      <button  style="margin-left:5px; height:55px" color="primary" mat-flat-button (click)="setScanMode(1)"><mat-icon>shopping_cart_checkout</mat-icon>Prep 
+      <button  style="margin-left:5px; height:55px" color="primary" mat-flat-button (click)="setScanMode(1)"><mat-icon>shopping_cart_checkout</mat-icon>Prep
       <span *ngIf="scanMode ==1"> ON </span></button>
     </span>
     <span class="item-span" >
@@ -27,38 +32,59 @@
         <span *ngIf="scanMode ==2"> ON </span></button>
     </span>
 
-    <span class="item-span" *ngIf="scanMode != 0">
-      <order-item-scanner [scanMode]="scanMode"></order-item-scanner>
-    </span>
+    <ng-container [ngTemplateOutlet]='communicationsView'></ng-container>
   </div>
 
   <div class="grid-phone-scroll">
     <div class="item-span">
-      <button *ngIf="!androidApp" style="height:55px" mat-button (click)="dismiss()"><mat-icon>close</mat-icon>Close</button>
 
-      <span class="item-span" *ngIf="!isNoPaymentPage">
-        <button  style="height:55px"  mat-button (click)="viewCart()"><mat-icon>shopping_cart</mat-icon>Cart</button>
-      </span>
+      <div class="grid-items">
 
-      <span class="item-span" *ngIf="isNoPaymentPage">
-        <button  style="height:55px"  mat-button (click)="viewPayment()"><mat-icon>money</mat-icon>
-          <span *ngIf="order?.completionDate"> Receipt</span>
-          <span *ngIf="!order.completionDate">Pay</span> </button>
-      </span>
+        <div  *ngIf="!androidApp">
+          <button style="height:55px" mat-button (click)="dismiss()"><mat-icon>close</mat-icon>Close</button>
+        </div>
 
-      <span class="item-span" *ngIf="isStaff">
-        <button  style="height:55px"  mat-button color="warn" (click)="sendOrder()"><mat-icon>local_fire_department</mat-icon>Fire</button>
-      </span>
+        <div *ngIf="!isNoPaymentPage">
+          <button  style="height:55px"  mat-button (click)="viewCart()"><mat-icon>shopping_cart</mat-icon>Cart</button>
+        </div>
 
-      <span class="item-span"  *ngIf="isStaff">
-        <button  style="height:55px"  mat-button color="warn" (click)="printOrder()"><mat-icon>print</mat-icon></button>
-      </span>
+        <div  *ngIf="isNoPaymentPage && !posDevice?.prepCheckDevice" >
+          <button  style="height:55px"  mat-button (click)="viewPayment()"><mat-icon>money</mat-icon>
+            <span *ngIf="order?.completionDate"> Receipt</span>
+            <span *ngIf="!order.completionDate">Pay</span> </button>
+        </div>
 
-      <span style="margin-right:5px" class="item-span"  *ngIf="isStaff">
-        <mat-label>#{{order?.id}} | {{order?.tableName ?? order?.customerName}}</mat-label>
+        <div *ngIf="isStaff  && !posDevice?.prepCheckDevice">
+          <button  style="height:55px"  mat-button color="warn" (click)="sendOrder()"><mat-icon>local_fire_department</mat-icon>Fire</button>
+        </div>
+
+        <div *ngIf="isStaff  && !posDevice?.prepCheckDevice">
+          <button  style="height:55px"  mat-button color="warn" (click)="printOrder()"><mat-icon>print</mat-icon></button>
+        </div>
+
+        <div  *ngIf="isStaff">
+          <div>
+            <mat-label>#{{order?.id}} </mat-label> <br>
+            {{order?.tableName ?? order?.customerName}}
+          </div>
+        </div>
+
+        <div *ngIf="posDevice?.prepCheckDevice && currentItems">
+          Remaining {{currentItems.length}}
+        </div>
+
+      </div>
+
+      <span *ngIf="posDevice?.prepCheckDevice">
+        <div *ngIf="currentItems.length == 0 || !currentItems">
+          <button  style="height:55px"  mat-raised-button color="accent" (click)="completePrepTypeNotifier()">
+            Notify Complete
+          </button>
+        </div>
       </span>
 
     </div>
+
 
     <!-- {{heightCacl}} -->
     <div  #scrollMe
@@ -88,17 +114,19 @@
 </ng-template>
 
 <ng-template #posItemsListView>
+
     <ion-item-sliding
                       [class]="nopadd"
                       *ngFor="let item of currentItems;
                               let i = index;trackBy: trackByFN"
                       (ionSwipe)="swipeAction(i)"  >
 
-      <div *ngIf="uiConfig">  
+      <div *ngIf="uiConfig">
         <ion-item *ngIf="item" >
           <pos-order-item
                       [class]      ="gridScroller"
                       [index]      ="i"
+                      [orderServiceType]="order?.serviceType"
                       [quantity]   ="item?.quantity"
                       [unitPrice]  ="item?.unitPrice"
                       [total]      ="item?.total"
@@ -121,6 +149,7 @@
                       [wideBar]             ="wideBar"
                       [smallDevice]         ="phoneDevice"
                       [prepScreen]          ="prepScreen"
+                      [deliveryPrep]        = "scanMode == 1 || scanMode == 2"
                       [enableExitLabel]     = "enableExitLabel"
                       [disableActions]      = "disableActions"
                       [isStaff]             ="isStaff"
@@ -160,3 +189,8 @@
 
 </ng-template>
 
+<ng-template #communicationsView>
+
+  <message-menu-sender [order]="order" [isStaff]="isStaff"></message-menu-sender>
+
+</ng-template>

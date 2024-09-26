@@ -236,6 +236,7 @@
         </div>
        </div>
 
+      <ng-container [ngTemplateOutlet]="displayDevice"></ng-container>
       <ng-container [ngTemplateOutlet]="printServer"></ng-container>
 
       <h2><mat-icon>credit_card</mat-icon>Payment Processing Settings</h2>
@@ -380,6 +381,37 @@
    </div>
 </ng-template>
 
+<ng-template #displayDevice>
+  <mat-card>
+    <mat-card-subtitle>
+      <h3>
+        Use PAX Device As Customer Display
+      </h3>
+    </mat-card-subtitle>
+    <mat-card-content>
+   
+      <mat-slide-toggle
+            (change)="setDeviceDisplay()"
+            [(ngModel)]="isDisplayDevice">
+        <mat-label>Display Enabled</mat-label>
+      </mat-slide-toggle>
+      <br>
+      <mat-label>
+        To run the send to back/front commands, your display device should be running; and assigned to the same terminal as this one. 
+        However, on the display device, the display feature should be enabled.
+      </mat-label>
+
+      <div>
+        <button color="accent" mat-button (click)="sendToBack()">Send To Back</button>
+      </div>
+      <div>
+        <button color="accent" mat-button (click)="bringToFront()">Bring To Front</button>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+
 <ng-template #printServer>
   <mat-card  *ngIf="inputForm" [formGroup]="inputForm">
     <mat-card-title>
@@ -465,7 +497,7 @@
 <ng-template #dsiEMVSettingsView>
   <app-dc-direct-settings
     [isDSIEnabled]="isDSIEnabled"
-    [dsiEMVSettings]="dsiEMVSettings"
+    [dsiEMVSettings]="terminal?.dsiEMVSettings"
     [inputForm]="dsiEMVSettings"
     [terminal]="terminal">
   </app-dc-direct-settings>

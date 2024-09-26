@@ -3,7 +3,6 @@ import { Component,EventEmitter,Inject,Input,OnDestroy,OnInit, Optional, Output 
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Capacitor} from '@capacitor/core';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
-import { NgxXml2jsonService } from 'ngx-xml2json';
 import { Observable,switchMap,of , Subscription} from 'rxjs';
 import { IPOSPayment, IPaymentResponse } from 'src/app/_interfaces';
 import { TranResponse, Transaction } from './../../models/models';
@@ -12,7 +11,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPOSOrder,} from 'src/app/_interfaces';
 import { DSIEMVSettings, TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { DCAPAndroidRStream, DcapRStream } from '../../services/dcap.service';
+import { DCAPAndroidRStream } from '../../services/dcap.service';
 import { DcapMethodsService } from '../../services/dcap-methods.service';
 import { PrintData, RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { AWSBucketService, AuthenticationService, OrdersService } from 'src/app/_services';
@@ -20,7 +19,6 @@ import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
-import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { _getOptionScrollPosition } from '@angular/material/core';
 import { SystemService } from 'src/app/_services/system/system.service';
@@ -128,11 +126,13 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
         return this.uISettingsService.getPOSDevice(item).pipe(switchMap(data => {
           this.setPaxInfo(data)
           this.posDevice = data;
+          this.dsiEMVSettings = data?.dsiEMVSettings;
           this.uISettingsService.updatePOSDevice(data)
           return of(data)
         }))
       } else {
         this.posDevice = data;
+        this.dsiEMVSettings = data?.dsiEMVSettings;
         this.setPaxInfo(data)
       }
       return of(data)
@@ -141,7 +141,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
 
   setPaxInfo(data) {
     if (data.dsiEMVSettings) {
-      if (data?.dsiEMVSettings?.deviceValue == 'EMV_A920PRO_DATACAP_E2E') {
+      if (data?.dsiEMVSettings?.deviceValue) {
         this.PaxA920 = true
         this.dsiEMVSettings = data?.dsiEMVSettings
       }
@@ -236,7 +236,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   async initLogo() {
     const bucket = await this.awsBucketService.awsBucketURL()
     this.uiHome$ = this.uiSettingService.homePageSetting$.pipe(switchMap(data => {
-      const image  = `${bucket}${data?.backgroundImage}`
+      const image  = `${bucket}${data?.tinyLogo}`
       if (data?.displayCompanyName) {
         this.companyName = data?.displayCompanyName;
       }
@@ -356,7 +356,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       this.processing = true;
       let options  =  this.initTransaction();
       if (options) {
-        this.logTransaction(options)
+        this.logTransaction(options, 'request')
         const item = await dsiemvandroid.emvParamDownload(options);
         const stream =  this.dcapMethodsService.convertToObject(item.value)
         this.checkResponse_Transaction('PARAMDOWNLOAD');
@@ -392,11 +392,11 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       //PARAMDOWNLOAD
       if (tranType === 'PARAMDOWNLOAD') {
         // Use an arrow function to maintain the 'this' context
-        await this.intervalCheckReset(this.timer);
+        await this.intervalCheckReset(this.timer, tranType);
       }
       if (tranType === 'RESET') {
         // Use an arrow function to maintain the 'this' context
-        await this.intervalCheckReset(this.timer);
+        await this.intervalCheckReset(this.timer, tranType);
       }
       if (tranType === 'EMVSALE') {
         // Use an arrow function to maintain the 'this' context
@@ -430,7 +430,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     }
   }
 
-  async intervalCheckReset(timer: any) {
+  async intervalCheckReset(timer: any, tranType?: string) {
     // console.log('intervaleCheckReset')
     let responseSuccess = '';
     const options = {}
@@ -444,7 +444,8 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       if (response) {
         clearInterval(timer);  // Clear the interval here when the condition is met'
         await dsiemvandroid.clearResponse(options)
-        this.readResult(response, "EMVRESET")
+        this.readResult(response, tranType)
+        this.logTransaction(response, 'Response')
       }
     }
   }
@@ -497,6 +498,9 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       if (paymentResponse && (paymentResponse.value !== '' )) {
 
         const response = this.dcapMethodsService.convertToObject(paymentResponse.value);
+
+   
+
         if (response) { 
           const result = this.readResult(response, tranType);
           if (result?.message === 'continue') {
@@ -547,8 +551,9 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
         this.instructions = 'Please tap or insert card'
       }
 
+      
       if (options) {
-        this.logTransaction(options)
+        this.logTransaction(options, 'Request')
         const item = await dsiemvandroid.processSale(options);
         const stream =  this.dcapMethodsService.convertToObject(item.value)
         this.checkResponse_Transaction('EMVSALE');
@@ -574,11 +579,16 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
 
   async bringToFront() {
     let item         = this.initTransaction()
-    item.UseForms = ""
+    item.UseForms    = ""
     item.tranCode    = "PrintReceipt";
-    let printData    = this.responseData?.PrintData;
-    const printInfo = this.mergePrintDataToTransaction(printData, item)
-    const printResult  = await dsiemvandroid.bringToFront(printInfo)
+    if (this.responseData?.PrintData) { 
+      let printData    = this.responseData?.PrintData;
+      const printInfo = this.mergePrintDataToTransaction(printData, item)
+      const printResult  = await dsiemvandroid.bringToFront(printInfo)
+    } else { 
+      
+      await dsiemvandroid.bringToFront({})
+    }
   }
 
   async resetDeviceAsync() {
@@ -707,18 +717,19 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     
       if (tran) {
         
-        this.logTransaction(tran)
+        this.logTransaction(tran, 'Request')
         await dsiemvandroid.adjustByRecordNo(tran)
         this.checkResponse_Transaction('AdjustByRecordNo');
        
       }
   }
 
-  logTransaction(tran) { 
+  logTransaction(tran, requestResponse) { 
+    console.log('log ', tran, requestResponse)
     let log = {} as any;
     log.messageString = JSON.stringify(tran);
-    log.type = 'DCAPPaxA920';
-    log.subType = tran?.tranCode ?? tran?.trancode;
+    log.type = 'DCAPPaxAndroid';
+    log.subType = `${tran?.tranCode ?? tran?.trancode} ${requestResponse}`;
     this.log$ = this.systemService.secureLogger( log )
   }
 
@@ -726,7 +737,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     // const stream = this.dcapMethodsService.convertToObject(paymentresponse)
     // return this.finalizeTransaction(data)
     let item = this.readResult(stream, "AdjustByRecordNo")
-    this.logTransaction(stream)
+    this.logTransaction(stream, 'Response')
     if (item?.success) {
       //then clear things that have been running.
       this.order;
@@ -735,9 +746,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       item.CmdResponse = stream?.CmdResponse;
       item.PrintData = stream?.PrintData;
       item.TranResponse = stream?.TranResponse  as any;
-
       this.payment.transactionData = JSON.stringify(item)
-
       let payment = this.payment
       
       //the amount paid and received that have been returned include the total amount
@@ -777,7 +786,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     // const stream = this.dcapMethodsService.convertToObject(paymentresponse)
     // return this.finalizeTransaction(data)
     let item = this.readResult(stream, "processResponse")
-    this.logTransaction(stream)
+    this.logTransaction(stream, 'Response')
     if (item?.success) {
       //then clear things that have been running.
       this.order;
@@ -884,7 +893,8 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     item.pinPadIpPort    = device?.PinPadIpPort;
     item.userTrace       = device?.OperatorID;
     item.prodCertMode    = this.certProdMode(device?.MerchantID)
-    item.UseForms        = this.useSuppressForms(device.supressedForms)
+
+    // item.UseForms        = this.useSuppressForms(device.supressedForms)
     item.invoiceNo       = this.payment?.orderID.toString();
     item.pOSPackageID    = device?.POSPackageID
     item.tranCode        = value?.tranCode;
@@ -900,6 +910,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     item.secureDevice    = device?.deviceValue;
     item.amount          = value?.amount;
     item.merchantID      = device?.MerchantID;
+    item.MerchantID      = device?.MerchantID;
     item.pinPadIpAddress = device?.HostOrIP;
     item.pinPadIpPort    = device?.PinPadIpPort;
     item.userTrace       = device?.OperatorID;
@@ -911,7 +922,9 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     item.invoiceNo       = this.payment?.orderID.toString();
     item.pOSPackageID    = device?.POSPackageID
     item.tranCode        = value?.tranCode;
-    item.UseForms        = this.useSuppressForms(device.supressedForms)
+    if (this.useSuppressForms(device?.supressedForms)) {
+      item.UseForms        = this.useSuppressForms(device?.supressedForms)
+    }
     this.transaction     = item;
     item.RefNo           = this.payment?.orderID.toString();
     item.refNo           = this.payment?.orderID.toString();
@@ -925,9 +938,10 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   }
 
   useSuppressForms(suppressedForms: boolean) {
-    if (this.isDevMode) { return }
+    return null;
+    if (this.isDevMode) { return  'Supressed' }
     if (suppressedForms) {return 'Supressed'}
-    return ''
+    return 'Supressed'
   }
 
   initMessaging() {
@@ -952,6 +966,11 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     console.log('TranType', tranType, item.success)
 
     if (tranType == 'EMVSALE' || tranType == 'EMVPreAuth' || tranType == 'AdjustByRecordNo' || tranType == 'Adjust') {
+      this.saleComplete = item?.success;
+    }
+
+    
+    if (tranType == 'EMVRESET' || tranType == 'RESET' ) {
       this.saleComplete = item?.success;
     }
 
@@ -1064,175 +1083,4 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       return;
     }
   }
-
 }
- // processDcapTip(amount: number) {
-  //   const device = localStorage.getItem('devicename')
-  //   const site = this.siteService.getAssignedSite()
-  //   const process$ = this.dCapService.adustByRecordNo(device, this.payment, amount)
-  //   return process$.pipe(switchMap(data => {
-  //     if (data && data.TextResponse && data.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) {
-  //       if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) {
-  //         this.siteService.notify(data.cmdResponse + ' ' + data.textResponse, 'close',50000, 'red' )
-  //         return of(null)
-  //       }
-  //     }
-  //     return this.getOrderUpdate(this.payment.orderID.toString(), site)
-  //   }))
-  // }
-
-// async _emvParamDownload() {
-//   try {
-//     await this.resetResponse();
-//     const transaction       = this.dsiAndroidService.transaction
-//     this.processing     = true;
-//     const options           = this.dsiAndroidService.transaction as any;
-//     options.BTDevice        = transaction.bluetoothDeviceName
-//     options.secureDevice    = transaction.secureDevice;
-//     options.merchantID      = transaction.merchantID;
-//     options.pinPadIpAddress = transaction.pinPadIpAddress;
-//     options.padPort         = transaction.padPort;
-//     const item              = await dsiemvandroid.emvParamDownload(options)
-//     await this.checkResponse();
-//   } catch (error) {
-//     this.message = error;
-//   }
-// }
-
-// async emvParamDownload() {
-//   try {
-//     await this.resetResponse();
-//     const transaction       = this.dsiAndroidService.transaction
-//     this.processing     = true;
-
-//     const device = this.dsiEMVSettings
-//     const options           = this.dsiAndroidService.transaction as any;
-//     options.BTDevice        = transaction.bluetoothDeviceName
-//     options.secureDevice    = device.SecureDevice;
-//     options.merchantID      = device.MerchantID;
-//     options.merchantID      = device.HostOrIP;
-//     options.padPort         = transaction.padPort;
-
-//     const ip = { value: ' value.'}
-//     try {
-//       // const item            = await dsiemvandroid.emvParamDownload(options)
-//       this.message = 'Param Download...'
-//       await this.checkResponse();
-//       const message = {'response': '', value: ''};
-//     } catch (error) {
-//       console.log('response', error)
-//     }
-
-//   } catch (error) {
-//     this.message = error;
-//   }
-// }
-  // async  checkbtResponse() {
-  //   let responseSuccess = ''
-  //   while (responseSuccess === '') {
-  //     const value = {value: 'get'}
-  //     const item = await this.getbtResponse();
-
-  //     if ((item && item.value != '') || this.cancelResponse) {
-  //       this.cancelResponse = false;
-  //       this.processing = false;
-  //       this.resultMessage = ''
-  //       responseSuccess = 'complete'
-  //       this.message = '';
-  //       this.request = '';
-  //       return;
-  //     }
-  //   };
-  // }
-
-  // async getbtResponse(){
-  //   const options = {'response': '', value: ''};
-  //   let item: any;
-  //   // const item = await dsiemvandroid.getbtResponse(options);
-  //   console.log('getbtResponse 1', item)
-  //   try {
-  //     if (item.value) {
-  //       if (item.value.substring(0, 5) === '<?xml' ||  item.value.substring(0, 5) === '<TStr' || item.value.substring(0, 5) === '<RStr') {
-  //         this.cancelResponse = true;
-  //         const parser = new DOMParser();
-  //         item.value =  item?.value.replace('#', '')
-  //         const xml = parser.parseFromString(item.value, 'text/xml');
-  //         const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
-  //         // const obj = {} as any;
-  //         console.log('cmdResponse', obj?.RStream?.CmdResponse)
-  //         console.log('cmdResponse', obj?.RStream?.CmdResponse.TextResponse)
-  //         this.tranResponse  = obj?.TranResponse;
-
-  //         if (item.value.substring(0, 5) === '<RStr') {
-  //           this.cmdResponse = obj?.RStream?.CmdResponse.CmdStatus;
-  //           this.textResponse = obj?.RStream?.CmdResponse.TextResponse;
-  //         }
-  //         if (item.value.substring(0, 5) === '<?xml') {
-  //           this.cmdResponse = obj?.CmdResponse.CmdStatus;
-  //           this.textResponse = obj?.CmdResponse.TextResponse;
-  //         }
-
-  //         this.cancelResponse = false;
-  //         this.processing = false;
-  //         return item;
-  //       }
-  //     }
-  //   } catch (error) {
-  //     this.cancelResponse = false;
-  //     this.processing = false;
-  //   }
-  //   this.message = item;
-  //   this.transactionResponse = item?.value;
-  // }
-  // async getRequest() {
-  //   const options = {'response': '', value: ''};
-  //   let item: any;
-
-  //   if (item && item.value) {
-  //     try {
-  //       if (item.value.substring(0, 5) === '<?xml' || item.value.substring(0, 5) === '<RStr') {
-  //         item.value =  item?.value.replace('#', '')
-  //         item.value =  item?.value.replace('\n', '')
-  //         const parser = new DOMParser();
-  //         const xml = parser.parseFromString(item.value, 'text/xml');
-  //         const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
-  //         return  obj
-  //       }
-  //     } catch (error) {
-  //       console.log('item', item)
-  //       return   JSON.parse(item.value)
-  //     }
-  //   }
-  //   return  item
-  // }
-
-  // processResults(response: DCAPAndroidRStream): Observable<any> {
-  //   if (!response) {
-  //     this.processing = false;
-  //     this.message = 'Processing failed, reason unknown.'
-  //     return of(null)
-  //   }
-  //   let item = this.readResult(response, "EMVSALE")
-  //   if (item?.success) {
-  //     const device = this.dsiEMVSettings.deviceValue
-  //     const item$ = this.paymentMethodsService.processDCAPResponse(
-  //                   response,
-  //                   this.payment,
-  //                   this.order,
-  //                   device );
-
-  //     return item$.pipe(concatMap( data => {
-  //         this.processing = false;
-  //         if (data && item?.success) {
-  //           this.close();
-  //           return of(data)
-  //         }
-  //         return of(null)
-  //       }
-  //     ))
-  //   } else {
-  //     this.processing = false
-  //     this.message = 'Processing failed, ' + JSON.stringify(response)
-  //     this.response = response;
-  //     return of(null)
-  //   }

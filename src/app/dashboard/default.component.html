@@ -1,6 +1,7 @@
 
 <!-- <app-cookie-consent></app-cookie-consent> --> 
 <!---->
+<div *ngIf="(ipAddress$ | async) as item"></div>
  <div *ngIf="(uiTransactions$ | async) as settings"> </div>
 <div *ngIf="(printAction$ | async) as printAction"></div> 
 <div *ngIf="(posDevice$ | async) as posDevice"></div> 

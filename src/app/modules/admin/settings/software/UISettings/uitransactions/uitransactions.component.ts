@@ -8,6 +8,7 @@ import { AuthenticationService, IItemBasic, MenuService } from 'src/app/_service
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { EmailSMTPService } from 'src/app/_services/system/email-smtp';
 import { IMenuButtonGroups, MBMenuButtonsService } from 'src/app/_services/system/mb-menu-buttons.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -60,10 +61,18 @@ export class UITransactionsComponent implements OnInit {
       private paymentService: DcapPayAPIService,
       private authenticationService: AuthenticationService,
       private mbMenuGroupService: MBMenuButtonsService,
+      private emailSMTPService: EmailSMTPService,
   ) {
   }
 
 
+  emailDCApSettings() { 
+    const model = {emailTo: 'markp@pointlesspos.com', name: 'mark phillips'} as any
+    this.action$ = this.emailSMTPService.emailDCAPProperties(model).pipe(switchMap(data => { 
+      this.sitesService.notify('Check email', 'close', 3000)
+      return of(data)
+    }))
+  }
   ngOnInit() {
 
     this.isAdmin = this.authenticationService.isAdmin;

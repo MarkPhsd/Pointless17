@@ -32,8 +32,10 @@
 
     <div class="mat-item">
 
-      <span class="item-span" *ngIf="refreshCreditCardButton && !order?.completionDate" style="margin-bottom:3px">
-        <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButton"></ng-container>
+      <span class="item-span" 
+            *ngIf="refreshCreditCardButton && !order?.completionDate" 
+            style="margin-bottom:3px">
+        <ng-container [ngTemplateOutlet]="disEMVCreditOnlyCardButton"></ng-container>
       </span>
 
       <button mat-raised-button
@@ -109,13 +111,35 @@
     [devicename]="deviceName"
     [uiTransactions]="uiConfig"
     [platForm]="platForm"
-    [creditBalanceRemaining]="order?.creditBalanceRemaining"
+    [creditBalanceRemaining]="cashDiscount"
     [stripeTipValue]="0"
     [footerButton]="true"
-    [paymentAmount]="order?.balanceRemaining" >
+    [paymentAmount]="cashDiscount" >
     <div footerstyle>
       <mat-icon color="warn">credit_card</mat-icon>
       Credit
     </div>
   </dsiemvandroid-pay-btn>
+
+</ng-template>
+
+<ng-template #disEMVCreditOnlyCardButton>
+  
+  <dsi-emvcard-pay-btn
+      *ngIf="(androidApp || isStaff) && deviceName"
+      [autoPay]="true"
+      [preAuth]="false"
+      [order]="order"
+      [devicename]="deviceName"
+      [uiTransactions]="uiConfig"
+      [platForm]="platForm"
+      [creditBalanceRemaining]="cashDiscount"
+      [paymentAmount]="cashDiscount"
+      [footerButton]="true"
+      [creditOnly]="true">
+    <div footerstyle>
+      <mat-icon color="warn">credit_card</mat-icon>
+      Credit 
+    </div>
+  </dsi-emvcard-pay-btn>
 </ng-template>

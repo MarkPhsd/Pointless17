@@ -42,8 +42,6 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   @ViewChild('materialView')        materialView: TemplateRef<any> | undefined;
   @ViewChild('androidView')         androidView: TemplateRef<any> | undefined;
 
-
-
   @Output() outPutLoadMore = new EventEmitter()
   @Output() outPutUpdateCategory = new EventEmitter();
   @Output() addItem = new EventEmitter();
@@ -66,7 +64,6 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   @Input() disableImages: boolean;
   @Input() androidApp: boolean;
   @Input() isApp     = false;
-
 
   ///for use with prompts
   @Input() styleMatCard = ''
@@ -252,7 +249,6 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   }
 
   constructor(
-    private awsBucket: AWSBucketService,
     public  route: ActivatedRoute,
     private orderMethodsService: OrderMethodsService,
     private menuService: MenuService,

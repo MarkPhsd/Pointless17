@@ -8,6 +8,7 @@ import { TransferDataService } from 'src/app/_services/transactions/transfer-dat
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { LoggerService } from 'src/app/modules/payment-processing/services/logger.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-database-schema',
@@ -30,7 +31,11 @@ export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
   processingVisible :    boolean;
   databaseMessage   :    string;
   closeDateForm: FormGroup
+
+  config$ : Observable<any>;
+  
   constructor(
+              private http: HttpClient,
               private systemService:     SystemService,
               private sitesService:      SitesService,
               private settingService: SettingsService,
@@ -48,6 +53,7 @@ export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
     this.apiVersion$ = this.systemService.getAPIVersion(site);
     this.version$ = this.settingService.getSettingByName(site, 'PointlessAPIVersion');
     this.initDateForm()
+    this.config$ =  this.http.get('assets/app-config.json')
   }
 
   exportLogsToTxt() { 

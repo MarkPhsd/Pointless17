@@ -119,6 +119,24 @@ export class RequestMessageMethodsService {
     return this.requestMessageService.saveMessage(site, message )
   }
 
+  prepCompleted(order: IPOSOrder, messageInfo: string, emailTo: string ) {
+    if (!order) {return}
+    const site = this.siteService.getAssignedSite();
+    let message = {} as IRequestMessage
+    message.message = `${messageInfo} ${order.id}`
+    message.subject = `${messageInfo} : ${order.id}`
+    message.type    = 'TSR'
+    message.method  = `order;id=${order.id}`
+    message.orderID = order.id
+    message = this.assignCustomerEmployee(order, message)
+
+    let messageText = message?.message;
+    console.log('prepCompleted',messageInfo)
+    return this.requestMessageService.saveMessage(site, message ).pipe(switchMap(data => {
+      return this.sendGridService.sendTemplateOrder(order.id, order.history, emailTo, 'Staff Request', "",  messageText, messageText , message.method  )
+    }))
+  }
+
   requestVoidOrder(order: IPOSOrder,emailTo: string ) {
     if (!order) {}
     const site = this.siteService.getAssignedSite();
@@ -165,7 +183,6 @@ export class RequestMessageMethodsService {
   assignCustomerEmployee(order: IPOSOrder, message: IRequestMessage) : IRequestMessage {
     message.employeeID    = order.employeeID;
     message.userRequested = order.employeeName;
-    // message.   = order.employeeName;
     if (this.userAuthorization.user) {
       message.senderID = this.userAuthorization.user?.id;
       message.senderName = `${this.userAuthorization?.user?.firstName}  ${this.userAuthorization?.user?.lastName}`

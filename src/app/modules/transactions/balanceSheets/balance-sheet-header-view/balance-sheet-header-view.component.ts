@@ -155,8 +155,7 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
   }
 
   renderCompleted(event) {
-    console.log('sheet',this.autoPrint, this.sheet)
-
+    // console.log('sheet',this.autoPrint, this.sheet)
     this.renderComplete.emit('balance-sheet-header-view')
   }
 

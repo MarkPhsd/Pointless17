@@ -17,14 +17,6 @@
   }
 }
 
-button{
-  text-overflow: ellipsis;
-  text-size-adjust: auto  ;
-  overflow: hidden;
-  white-space: normal;
-  line-height: 1em;
-  text-align: center;
-}
 
 .buttons-container {
   --gap: 5px;
@@ -54,4 +46,12 @@ button {
     width: 115px;
     height: 65px;
   }
+}
+button{
+  text-overflow: ellipsis;
+  text-size-adjust: auto  ;
+  overflow: hidden;
+  white-space: normal;
+  line-height: 1em;
+  text-align: center;
 }

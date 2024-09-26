@@ -185,7 +185,8 @@ assets/htmlTemplates/salesreportStyles.html' -->
       <button mat-flat-button  style="width:150px;height:50px"color="warn"
               (click)="showView(5)">Item Voids</button>
 
-      <button *ngIf="zrunID" style="width:150px;height:50px" mat-raised-button (click)="deleteDuplicates()" color="warn">Delete Duplicates ({{zrunID}})</button>
+      <button *ngIf="zrunID" style="width:150px;height:50px" 
+              mat-raised-button (click)="deleteDuplicates()" color="warn">Delete Duplicates ({{zrunID}})</button>
 
     </div>
 
