@@ -1,6 +1,6 @@
 import { Component, OnInit, Input,OnDestroy, EventEmitter, Output } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { IPOSOrder, IServiceType } from 'src/app/_interfaces';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
+import { IPOSOrder, IServiceType, ServiceAddress, ServiceTypeFeatues } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -13,6 +13,8 @@ import { UntypedFormGroup,UntypedFormBuilder, Validators, FormGroup } from '@ang
   styleUrls: ['./posorder-shipping-address.component.scss']
 })
 export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
+  selectedAddressIndex: number | null = null;
+  addressList:  ServiceAddress[]; // Assume you are getting this from the service or API
 
   @Input() inputForm            : FormGroup;
   @Input() serviceType          : IServiceType;
@@ -21,11 +23,18 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
   @Input() order                : IPOSOrder;
   _order               : Subscription;
   errorMessage         : string;
+  serviceInit: boolean;
   @Output() outPutSaveAddress = new EventEmitter();
   @Output() outPutBack = new EventEmitter<number>();
+
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
+      console.log('this order', this.order)
+      if (!this.serviceInit && !this.serviceType) {
+        this.initServiceTypeInfo();
+        this.serviceInit = true
+      }
     })
   }
 
@@ -38,8 +47,10 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initSubscriptions();
-    this.initServiceTypeInfo();
-   }
+    if (this.order) {
+      this.initServiceTypeInfo()
+    }
+  }
 
    ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
@@ -47,12 +58,44 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
     if ( this._order) { this._order.unsubscribe()}
    }
 
-  initServiceTypeInfo() {
-    const site = this.sitesService.getAssignedSite();
-    if (!this.order) {return}
-    this.serviceType$ = this.serviceTypeService.getTypeCached(site, this.order.serviceTypeID)
+  // Example initialization of addresses
+  initializeAddresses(): void {
+    // this.addressList = this.serviceType?.serviceTypeFeatues?.addressList
   }
 
+  initServiceTypeInfo() {
+    const site = this.sitesService.getAssignedSite();
+
+    if (!this.order) {
+      console.log('no order')
+      return
+    }
+    this.serviceType$ = this.serviceTypeService.getTypeCached(site, this.order.serviceTypeID).pipe(switchMap(data => {
+      // console.log('initServiceTypeInfo', data)
+      const features = JSON.parse(data.json) as ServiceTypeFeatues;
+      // console.log('features', features)
+      this.addressList = features.addressList
+      // console.log('addresses', this.addressList)
+      this.initializeAddresses()
+      return of(data)
+    }))
+  }
+
+  selectAddress(index: number): void {
+
+    // You can use this.selectedAddressIndex to work with the selected address.
+    this.selectedAddressIndex = index;
+    const selectedAddress = this.addressList[index]; // Get the selected address
+
+    this.inputForm.patchValue({
+      address: selectedAddress.address,  // Primary address line
+      address2: selectedAddress.unit || '',  // Unit or secondary address
+      city: selectedAddress.city,
+      state: selectedAddress.state,
+      zip: selectedAddress.zip,
+    });
+
+  }
 
   resetForm() {
     this.inputForm = this.fb.group({
@@ -102,7 +145,7 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
     }
   }
 
-  back() { 
+  back() {
     this.outPutBack.emit(-1)
   }
 }

@@ -49,9 +49,12 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input()  phoneDevice: boolean;
   @Input()  cardWidth: string;
   @Input()  isStaff: boolean;
-
+  @Input() chartWidth: string;
+  @Input() chartHeight: string;
   @Input() heightCalcStyle  : string;
-  heightCacl = 'height:calc(75vh - 300px);padding-bottom:2px;overflow-y:auto;overflow-x:hidden;'
+
+  displayDevice: boolean;
+  heightCacl = ''
   printAction$: Observable<any>;
   posDevice       :  ITerminalSettings;
   initStylesEnabled : boolean; // for initializing for griddisplay
@@ -73,7 +76,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   _bottomSheetOpen : Subscription;
   wideBar          : boolean;
   posName          : string;
-
+  chartCheck: boolean;
   nopadd      = `nopadd`
   conditionalIndex: number;
   _posDevice  : Subscription;
@@ -83,7 +86,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   private styleTag: HTMLStyleElement;
   // private customStyleEl: HTMLStyleElement | null = null;
   @ViewChild('scrollDiv') scrollDiv: ElementRef;
-  
+
   scanMode : number;
 
   scrollStyle = this.platformService.scrollStyleWide;
@@ -96,30 +99,31 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     return of(data)
   }))
 
+
   get isNoPaymentPage() {
     if (this.currentRoute === 'pos-payment') {
       return false
     }
     return true
-    
+
   }
 
-  setScanMode(number) { 
+  setScanMode(number) {
     this.scanMode = number
   }
 
-  get currentItems() { 
-   
-      if (this.scanMode == 1) { 
-        return this.posOrderItems.filter(data => { 
+  get currentItems() {
+
+      if (this.scanMode == 1) {
+        return this.posOrderItems.filter(data => {
           if (!data.prepByDate) {
             return data
           }
         })
       }
-      
-      if (this.scanMode == 2) { 
-        return this.posOrderItems.filter(data => { 
+
+      if (this.scanMode == 2) {
+        return this.posOrderItems.filter(data => {
           if (!data.deliveryByDate) {
             return data
           }
@@ -138,6 +142,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   get posItemsView() {
     if (this.prepScreen) {
       return this.posOrderItemsPrepView
@@ -190,7 +195,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       if (!this.displayHistoryInfo) {
         this._order = this.orderMethodService.currentOrder$.subscribe( order => {
           this.order = order
- 
+
           if (this.order && this.order.posOrderItems)  {
             this.posOrderItems = this.order.posOrderItems
             this.sortPOSItems(this.currentItems);
@@ -239,9 +244,9 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   sortPOSItems(orderItems: PosOrderItem[]) {
-    
+
     this.posOrderItems = this.sortItems(orderItems)
-    
+
     setTimeout(() => {
       this.scrollToBottom();
     }, 200);
@@ -292,9 +297,24 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     this.orderItemsPanel = 'item-list';
     this.isStaff = this.authService.isStaff;
 
-    if (this.heightCalcStyle === 'none') { 
-      this.heightCacl = '' // this.heightCalcStyle 
+    this.heightCacl ='height:calc(75vh - 300px);padding-bottom:2px;overflow-y:auto;overflow-x:hidden;';
+
+    if (this.heightCalcStyle === 'none') {
+      this.heightCacl = '' // this.heightCalcStyle
     }
+
+    if (window.innerWidth < 599) {   this.phoneDevice = true  }
+    if (this.checkIfMenuBoardExists()) {
+      this.displayDevice = true
+      this.nopadd = 'nopadd-display'
+    }
+
+    // if (this.pax)
+  }
+
+  checkIfMenuBoardExists(): boolean {
+    const url = this.router.url;
+    return url.includes('menu-board');
   }
 
   dismiss() {
@@ -308,7 +328,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.routSubscriber();
-    if (window.innerWidth < 599) {   this.phoneDevice = true  }
+
     let uiHomePage = this.uiSettingService.homePageSetting;
     this.wideBar   = true;
 
@@ -332,8 +352,11 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   initStyles() {
 
+
     if (this.prepScreen)  {  this.orderItemsPanel = 'item-list-prep';  }
     if (!this.prepScreen) {  this.orderItemsPanel = 'item-list';  }
+
+
 
     if (this.prepScreen) {
       this.deviceWidthPercentage = '265px'
@@ -351,6 +374,12 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
     if (!this.mainPanel && !this.qrOrder) {
       this.mainStyle = `main-panel ${this.orderItemsPanel}`
+      return;
+    }
+
+    if (this.platformService.androidApp) {
+      this.panelHeight = ''
+      this.heightCacl = 'padding-bottom:2px;overflow-y:auto;overflow-x:hidden;' // this.heightCalcStyle
       return;
     }
 
@@ -373,6 +402,12 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       this.mainStyle = `phone-panel ${this.orderItemsPanel}`
       this.panelHeight = ''
     }
+
+    if (this.platformService.androidApp || this.phoneDevice) {
+      this.panelHeight = ''
+      this.heightCacl = 'padding-bottom:2px;overflow-y:auto;overflow-x:hidden;' // this.heightCalcStyle
+    }
+
   }
 
   getTransactionUI() {
@@ -399,7 +434,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     if (window.innerWidth < 500) {
       this.deviceWidthPercentage = '95%'
     }
-    
+
     // this.getItemHeight()
     //the heights of this panel are what control
     //the inside scroll section.
@@ -466,17 +501,38 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   getItemHeight() {
-    if (!this.myScrollContainer) {
-      return
-    } 
 
-    if (this.heightCalcStyle === 'none') { 
-      this.myScrollContainer.nativeElement.style.height = '100%'
-      return 
+    if (this.chartHeight || this.chartCheck) {
+      // console.log('chartHeight', this.chartHeight)
+      this.chartCheck = true
+      if (!this.chartHeight) {
+        this.myScrollContainer.nativeElement.style.height  = `${this.chartHeight}`;
+      }
+      return
     }
 
+    if (window.innerWidth < 599) {   this.phoneDevice = true  }
 
-    if (this.phoneDevice) {  
+    if (!this.myScrollContainer) {
+      return
+    }
+
+    if (this.displayDevice) {
+      this.myScrollContainer.nativeElement.style.height  = '';
+      return
+    }
+
+    if (this.platformService.androidApp) {
+      this.myScrollContainer.nativeElement.style.height  = '100%';
+      return;
+    }
+
+    if (this.heightCalcStyle === 'none') {
+      this.myScrollContainer.nativeElement.style.height = '100%'
+      return
+    }
+
+    if (this.phoneDevice) {
       this.myScrollContainer.nativeElement.style.height = '100%'
       return;
     }
@@ -485,9 +541,11 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       return
     }
 
+    console.log('get item height', this.phoneDevice)
     const divTop = this.myScrollContainer.nativeElement.getBoundingClientRect().top;
     const viewportBottom = window.innerHeight;
     const remainingHeight = viewportBottom - divTop;
+
 
     if (!this.disableActions) {
       this.myScrollContainer.nativeElement.style.height  = `${remainingHeight-10}px`;
@@ -495,6 +553,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     if (this.disableActions) {
       this.myScrollContainer.nativeElement.style.height  = `${remainingHeight - 50}px`;
     }
+
   }
 
   scrollToBottom(): void {
@@ -576,28 +635,28 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   completePrepTypeNotifier(){
     if (this.scanMode == 1 || this.scanMode==2) {
-      const order = this.order  
-      if (order) { 
+      const order = this.order
+      if (order) {
 
         let message = ''
-        if (this.scanMode == 1) { 
+        if (this.scanMode == 1) {
           message = 'Prep work on order completed.'
         }
-        if (this.scanMode == 2) { 
+        if (this.scanMode == 2) {
           message = 'Driver has confirmed order for delivery.'
         }
 
         if (!message) { return }
 
 
-        const item$ =  this.uiSettingService.homePageSetting$.pipe(switchMap(data => { 
+        const item$ =  this.uiSettingService.homePageSetting$.pipe(switchMap(data => {
           const email  = data?.salesReportsEmail ?? data?.administratorEmail
           return   this.messagingService.prepCompleted(order,  message, email )
         })).pipe(switchMap(data => {
           this.siteService.notify("Request Sent", 'close', 2000, 'green')
           return of(data)
         }))
-       
+
         this.action$ = item$
       }
     }

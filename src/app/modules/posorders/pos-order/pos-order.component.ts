@@ -373,9 +373,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })
   }
 
-  setDefaultFirstMenu(event) { 
+  setDefaultFirstMenu(event) {
     this.menuCategoryID = event
-    if (event) { 
+    if (event) {
       // console.log('setDefaultFirstMenu', event)
     }
   }
@@ -513,7 +513,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })
   }
 
-  initQuickMenus(event) { 
+  initQuickMenus(event) {
     console.log(event,event.value)
     this.menuToggleEnabled = event;
 
@@ -696,8 +696,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
-  setDateRange(event) { 
-    if (event) { 
+  setDateRange(event) {
+    if (event) {
       const range = event?.value;
       // this.dateFrom = range.dateFrom;
       // this.dateTo   = range.dateTol;
@@ -803,7 +803,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     return null
   }
 
- 
+
 
   get labelPrintView() {
     if (this.showLabelPrint) { return this.labelPrintChild }
@@ -980,21 +980,21 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   setBillOnHold() {
     const site = this.siteService.getAssignedSite()
 
-    if (!this.order.orderFeatures) { 
+    if (!this.order.orderFeatures) {
       this.order.orderFeatures = {} as JSONOrder
     }
     this.order.orderFeatures.billOnHold = 1
 
     const order$ = this.orderService.setOrderFeatures(site, this.order.id, this.order.orderFeatures);
-    this.action$ = order$.pipe(switchMap(data => { 
-      if (data) { 
+    this.action$ = order$.pipe(switchMap(data => {
+      if (data) {
         this.orderMethodsService.updateOrder(this.order)
       }
       return of(data)
     }));
   }
 
-  removeZerValueItems() { 
+  removeZerValueItems() {
     const site = this.siteService.getAssignedSite()
     this.action$ = this.orderService.deleteZeroQuantityItems(site,this.order.id)
   }
@@ -1348,12 +1348,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       start: [],
       end: []
     })
-  
+
     this.salesDateForm.valueChanges.subscribe( res=> {
-      if (this.salesDateForm.controls['start'].value){ 
+      if (this.salesDateForm.controls['start'].value){
         this.dateFrom = this.salesDateForm.controls['start'].value
       }
-      if (this.salesDateForm.controls['end'].value){ 
+      if (this.salesDateForm.controls['end'].value){
         this.dateTo = this.salesDateForm.controls['end'].value
       }
       console.log(this.dateFrom, this.dateTo)
@@ -1399,7 +1399,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (posItem) {
 
       let item = {id: posItem.id, quantity: event} as PosOrderItem
-      console.log('item', item)
+      // console.log('item', item)
       this.action$ = this.posOrderItemService.changeItemQuantityReconcile(site, item).pipe(switchMap(data => {
         this.orderMethodsService.updateOrderSubscription(data)
         this.reconcileValueForm = this.fb.group({

@@ -106,7 +106,7 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   async bringtoFront() {
-    console.log('pax', this.isPax)
+    // console.log('pax', this.isPax)
     if (!this.isPax) { return }
     const options = {}
     await dsiemvandroid.bringToFront(options)

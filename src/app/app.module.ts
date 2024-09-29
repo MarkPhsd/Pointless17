@@ -70,6 +70,8 @@ import {NgcCookieConsentModule} from 'ngx-cookieconsent';
 import { AppConfigService } from './_services/system/app-config.service';
 import { DisplayToggleAndroidComponent } from './modules/admin/grid-menu-layout/dashboard-menu/display-toggle-android/display-toggle-android.component';
 
+
+
 // const cookieConfig:NgcCookieConsentConfig = {
 //   cookie: {
 //     domain: 'window.location.hostname' // or 'your.domain.com' // it is mandatory to set a domain, for cookies to work properly (see https://goo.gl/S2Hy2A)
@@ -113,16 +115,16 @@ const cookieConfig:NgcCookieConsentConfig = {
   },
   elements:{
     messagelink: `
-    <span id="cookieconsent:desc" class="cc-message">{{message}} 
-      <a aria-label="learn more about cookies" tabindex="0" class="cc-link" href="{{cookiePolicyHref}}" target="_blank" rel="noopener">{{cookiePolicyLink}}</a>, 
-      <a aria-label="learn more about our privacy policy" tabindex="1" class="cc-link" href="{{privacyPolicyHref}}" target="_blank" rel="noopener">{{privacyPolicyLink}}</a> and our 
+    <span id="cookieconsent:desc" class="cc-message">{{message}}
+      <a aria-label="learn more about cookies" tabindex="0" class="cc-link" href="{{cookiePolicyHref}}" target="_blank" rel="noopener">{{cookiePolicyLink}}</a>,
+      <a aria-label="learn more about our privacy policy" tabindex="1" class="cc-link" href="{{privacyPolicyHref}}" target="_blank" rel="noopener">{{privacyPolicyLink}}</a> and our
       <a aria-label="learn more about our terms of service" tabindex="2" class="cc-link" href="{{tosHref}}" target="_blank" rel="noopener">{{tosLink}}</a>
     </span>
     `,
   },
   content:{
     message: 'By using our site, you acknowledge that you have read and understand our ',
-    
+
     cookiePolicyLink: 'Cookie Policy',
     cookiePolicyHref: 'https://cookie.com',
 
@@ -194,7 +196,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
 @NgModule({
   declarations: [
 
-    
+
     AgGridTestComponent,
     AgGridImageFormatterComponent,
     AgGridToggleComponent,
@@ -218,7 +220,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     GridComponentPropertiesComponent,
     GridDesignerInfoComponent,
     DisplayToggleAndroidComponent,
- 
+
     DashboardMenuComponent,
     OrderTotalBoardComponent,
     LimitValuesCardComponent,
@@ -233,7 +235,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
 
   imports: [
     IonicModule.forRoot(),
-    NgcCookieConsentModule.forRoot(cookieConfig),
+
     // G-6BNWKZ7VY8
     // NgxGoogleAnalyticsModule.forRoot('traking-code'),
     // NgxGoogleAnalyticsModule.forRoot(await getTrackingCode()) ,
@@ -269,6 +271,8 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     IonicModule,
     AgGridImageFormatterComponent,
     AgGridToggleComponent,
+
+
   ],
 
   providers: [

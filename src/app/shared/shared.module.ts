@@ -252,6 +252,7 @@ import { DsiEMVCardPayBtnComponent } from '../modules/posorders/pos-payment/dsi-
 import { SiteFooterComponent } from './components/site-footer/site-footer.component';
 import { SiteCardComponent } from './widgets/site-card/site-card.component';
 import { OnlinePaymentCompletedComponent } from '../modules/payment-processing/online-payment-completed/online-payment-completed.component';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 
 import {
   DataUrl,
@@ -555,6 +556,8 @@ import { MessageMenuSenderComponent } from '../modules/admin/message-editor-list
     NgxJsonViewerModule,
     NgxColorsModule,
     NgxImageCaptureModule,
+    NgxDaterangepickerMd.forRoot(),
+
   ],
 
   exports: [
@@ -667,6 +670,9 @@ import { MessageMenuSenderComponent } from '../modules/admin/message-editor-list
     LogoComponent,
     Label1by8Component,
     MatDateRangeComponent,
+
+    // NgcCookieConsentModule.forRoot(cookieConfig),
+    NgxDaterangepickerMd,
     MatMenuBasicComponent,
     MatToggleSelectorComponent,
     MatSelectComponent,
@@ -681,7 +687,7 @@ import { MessageMenuSenderComponent } from '../modules/admin/message-editor-list
     MenuSearchBarComponent,
     MenuTinyComponent,
     MessageMenuSenderComponent,
-    
+
     UserBarComponent,
     MetrcSummaryComponent,
     AverageHourlySalesLaborChartComponent,

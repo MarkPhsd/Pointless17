@@ -1,9 +1,35 @@
+<!-- data range -->
+ <!-- <input  type="text" matInput
+        ngxDaterangepickerMd
+        [locale]="{applyLabel: 'ok', format: 'DD-MM-YYYY'}"
+        startKey="start"
+        endKey="end"
+        [(ngModel)]="selected"
+        name="daterange"/> -->
+
+<!-- [ranges]="ranges"
+<mat-form-field appearance="outline">
+  <mat-label >Date Range</mat-label>
+  <input matInput   type="text" ngxDaterangepickerMd  startKey="start" endKey="end" [(ngModel)]="model">
+</mat-form-field> -->
+
+
+<!-- <ngx-daterangepicker-material
+    [ranges]="ranges"
+  (datesUpdated )="datesUpdated ($event)"
+  (rangeClicked)="rangeClicked($event)"
+  (choosedDate)="selectedRange($event)">
+</ngx-daterangepicker-material> -->
+<!--
+<ng-container [ngTemplateOutlet]="ngxDateRangeSelector"></ng-container> -->
+
 <div class="container" *ngIf="inputForm">
-  <button [hidden]="hideRefresh" class="button" 
+  <button [hidden]="hideRefresh" class="button"
           mat-button (click)="emitDatePickerData()">
       <mat-icon>refresh</mat-icon>
   </button>
   <ng-container [ngTemplateOutlet]="magPickerView"></ng-container>
+
 </div>
 
 <ng-template #touchTemplate>
@@ -66,9 +92,26 @@
   <mat-button-toggle-group
     name        ="toggleOpenClosedAll"
     class       ="toggle-view"
-    (c)    ="moveDate($event)" >
+    (click)         ="moveDate($event)" >
     <mat-button-toggle class="toggle-min" (click)="moveDate(-1)" value=-1><mat-icon>remove</mat-icon></mat-button-toggle>
     <mat-button-toggle class="toggle-min" (click)="moveDate(0)"value=0> <mat-icon>date</mat-icon>Today</mat-button-toggle>
     <mat-button-toggle class="toggle-min" (click)="moveDate(1)" value=1 ><mat-icon>add</mat-icon> </mat-button-toggle>
   </mat-button-toggle-group>
+</ng-template>
+
+<ng-template #ngxDateRangeSelector>
+
+  <!-- <input type="text" matInput
+    ngxDaterangepickerMd
+    [locale]="{applyLabel: 'ok', format: 'DD-MM-YYYY'}"
+    startKey="start"
+    endKey="end"
+    [(ngModel)]="selected"
+    name="daterange"/> -->
+<!--
+  <ngx-daterangepicker-material
+    (datesUpdated )="datesUpdated ($event)"
+    (rangeClicked)="rangeClicked($event)"
+    (choosedDate)="selectedRange($event)">
+  </ngx-daterangepicker-material> -->
 </ng-template>

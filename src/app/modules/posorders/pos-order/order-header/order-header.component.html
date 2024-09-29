@@ -3,7 +3,7 @@
 <span *ngIf="order">
 
   <div>
-      <ng-container [ngTemplateOutlet]="qrCodeDisplayView"></ng-container>
+    <ng-container [ngTemplateOutlet]="qrCodeDisplayView"></ng-container>
   </div>
 
   <ng-template #qrCodeToggle>
@@ -98,8 +98,8 @@
 
           <span #coachingLabel >
             <div   class="button-margin" *ngIf="!mainPanel && isSale && isUserStaff &&
-                                                (posDevice && 
-                                                posDevice.labelPrinter && 
+                                                (posDevice &&
+                                                posDevice.labelPrinter &&
                                                 posDevice.enableExitLabel)">
               <button   class="button" color="warn" mat-raised-button
                 (click)="printLabels()">
@@ -110,8 +110,8 @@
         </div>
       </div>
 
-      <div #coachingSplit class="button-row" *ngIf="isUserStaff && 
-                                                    isSale && 
+      <div #coachingSplit class="button-row" *ngIf="isUserStaff &&
+                                                    isSale &&
                                                     !platFormService.androidApp">
         <div  class="button-margin" >
           <split-entry-selector [order]="order"
@@ -123,8 +123,8 @@
         <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
         <div>
 
-          <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption && 
-                                           isSale && 
+          <div class="menu-buttons" *ngIf="authenticationService?.userAuths?.priceColumnOption &&
+                                           isSale &&
                                            isUserStaff" >
             <value-from-list-selector
                 [value] ="order.priceColumn"
@@ -146,7 +146,7 @@
     <coach-marks-button
           (initPopOver)="initPopOver()"
           [enabled]="user &&
-                     user?.userPreferences &&  
+                     user?.userPreferences &&
                      user?.userPreferences?.enableCoachMarks"></coach-marks-button>
   </div>
 </ng-template>

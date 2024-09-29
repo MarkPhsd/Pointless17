@@ -187,7 +187,7 @@ export class PosEditSettingsComponent implements OnInit {
     console.log('saved value', savedValue)
     this.isDisplayDevice = savedValue === 'true';
   }
-  
+
   setDeviceDisplay() {
     console.log(' this.isDisplayDevice.toString()',  this.isDisplayDevice.toString())
     localStorage.setItem('displayDevice', this.isDisplayDevice.toString());
@@ -195,7 +195,7 @@ export class PosEditSettingsComponent implements OnInit {
     console.log('saved value', savedValue)
     this.isDisplayDevice = savedValue === 'true';
   }
-  
+
   async createZPLFolderData() {
     // if (this.app)
     await this.fileSystemService.makeDirectory('c:\\pointless');
@@ -314,13 +314,14 @@ export class PosEditSettingsComponent implements OnInit {
     this.dsiEMVSettings.patchValue({sendToBack: true})
     this.saveTerminalSetting(false)
   }
- 
+
   bringToFront() {
     this.dsiEMVSettings.patchValue({sendToBack: false})
     this.saveTerminalSetting(false)
   }
+
   saveTerminalSetting(close: boolean) {
-    
+
     const site = this.sitesService.getAssignedSite()
     let item = this.inputForm.value as ITerminalSettings;
     item.id = this.setting.id;

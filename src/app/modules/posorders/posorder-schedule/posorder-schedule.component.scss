@@ -12,10 +12,10 @@
 }
 
 .header-less-tabs .mat-tab-header { display: none; }
-.mat-tab-header { 
+.mat-tab-header {
   visibility: hidden;
 }
-.mat-tab-group { 
+.mat-tab-group {
   .mat-tab-header {
     display: none;
     visibility: hidden;
@@ -38,14 +38,14 @@ mat-tab {
   object-fit: cover;
 }
 
-.instructions-small-view { 
+.instructions-small-view {
   display: none;
   @include for-phone-only  {
     display: flex;
   }
 }
 
-.instructions-large-view { 
+.instructions-large-view {
   display: flex;
   @include for-phone-only  {
     display: none;
@@ -98,4 +98,13 @@ mat-tab {
   position:absolute;
   right:   25px;
   bottom:  25px;
+}
+.name-string-card {
+  width: 300px;
+  margin: 1em;
+}
+.button-name-pair {
+  width:200px;
+  height: 50px;
+  margin: .5em;
 }

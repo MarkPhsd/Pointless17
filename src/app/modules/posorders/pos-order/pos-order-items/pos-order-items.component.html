@@ -5,7 +5,6 @@
 <ng-container [ngTemplateOutlet]="posItemsView"></ng-container>
 
 <ng-template #posOrderItemsPrepView>
-
   <div  *ngIf   = "posOrderItems && posOrderItems.length>0"
         [id]    = "scrollStyle"
         [style] = "heightCacl" >
@@ -39,25 +38,25 @@
 
       <div class="grid-items">
 
-        <div  *ngIf="!androidApp">
+        <div  *ngIf="!androidApp && !disableActions">
           <button style="height:55px" mat-button (click)="dismiss()"><mat-icon>close</mat-icon>Close</button>
         </div>
 
-        <div *ngIf="!isNoPaymentPage">
+        <div *ngIf="!isNoPaymentPage && !disableActions">
           <button  style="height:55px"  mat-button (click)="viewCart()"><mat-icon>shopping_cart</mat-icon>Cart</button>
         </div>
 
-        <div  *ngIf="isNoPaymentPage && !posDevice?.prepCheckDevice" >
+        <div  *ngIf="isNoPaymentPage && !posDevice?.prepCheckDevice && !disableActions" >
           <button  style="height:55px"  mat-button (click)="viewPayment()"><mat-icon>money</mat-icon>
             <span *ngIf="order?.completionDate"> Receipt</span>
             <span *ngIf="!order.completionDate">Pay</span> </button>
         </div>
 
-        <div *ngIf="isStaff  && !posDevice?.prepCheckDevice">
+        <div *ngIf="isStaff  && !posDevice?.prepCheckDevice && !disableActions" >
           <button  style="height:55px"  mat-button color="warn" (click)="sendOrder()"><mat-icon>local_fire_department</mat-icon>Fire</button>
         </div>
 
-        <div *ngIf="isStaff  && !posDevice?.prepCheckDevice">
+        <div *ngIf="isStaff  && !posDevice?.prepCheckDevice && !disableActions" >
           <button  style="height:55px"  mat-button color="warn" (click)="printOrder()"><mat-icon>print</mat-icon></button>
         </div>
 
@@ -74,7 +73,7 @@
 
       </div>
 
-      <span *ngIf="posDevice?.prepCheckDevice">
+      <span *ngIf="posDevice?.prepCheckDevice  && !disableActions">
         <div *ngIf="currentItems.length == 0 || !currentItems">
           <button  style="height:55px"  mat-raised-button color="accent" (click)="completePrepTypeNotifier()">
             Notify Complete
@@ -85,13 +84,13 @@
     </div>
 
 
-    <!-- {{heightCacl}} -->
+
     <div  #scrollMe
         [id]="scrollStyle"
         *ngIf="posOrderItems && posOrderItems.length>0"
         [style.width]  = "'85vw'"
         class="phone-device">
-
+   
       <ng-container [ngTemplateOutlet]="posItemsListView"></ng-container>
     </div>
     <div class="phone-drag">
@@ -102,18 +101,21 @@
 </ng-template>
 
 <ng-template #posOrderItemsView>
-
-  <div  #scrollMe
-          [id]="scrollStyle"
-          *ngIf="currentItems && currentItems.length>0"
+  <!-- ScrollMe controls the calculated height. it uses a view child container to adjust the height dynamically -->
+  
+  <div    #scrollMe
+          [id]           = "scrollStyle"
+          *ngIf          = "currentItems && currentItems.length>0"
+          [style.height] = "chartHeight"
           [style.width]  = "deviceWidthPercentage"
-          [class]="mainStyle">
+          style          = "overflow: auto"
+          [class]        = "mainStyle"
+          >
       <ng-container [ngTemplateOutlet]="posItemsListView"></ng-container>
   </div>
 </ng-template>
 
 <ng-template #posItemsListView>
-
     <ion-item-sliding
                       [class]="nopadd"
                       *ngFor="let item of currentItems;

@@ -298,7 +298,7 @@ export class SettingsService {
   getPOSDeviceBYName(site: ISite, name: String):  Observable<ISetting> {
 
     const user =  JSON.parse(localStorage.getItem('user')) as IUser;
-    
+
     if (user?.roles === 'user') {
       // console.log('user?roles', user?.roles)
       return of(null)
@@ -325,7 +325,7 @@ export class SettingsService {
     const user =  JSON.parse(localStorage.getItem('user')) as IUser
     if (!user) { return of(null)};
     if (!name) { return of(null)};
-    
+
     if (user?.roles === 'user') {
       console.log('user?roles', user?.roles)
       return of(null)
@@ -341,6 +341,7 @@ export class SettingsService {
     return this.http.get<ISetting>(url).pipe(switchMap(data => {
       if (data?.text) {
         const item = JSON.parse(data?.text) as ITerminalSettings
+        item.id = data.id;
         return of(item)
       }
       return of(null)
@@ -398,8 +399,8 @@ export class SettingsService {
     if (!this.userAuthorizationService.user) {  of(null)  }
 
     // console.log('dsi check user', this.userAuthorizationService.user)
-    
-    if (!this.deviceName) { 
+
+    if (!this.deviceName) {
       return of(null)
     }
     // console.log('dsi check user', this.userAuthorizationService.user)

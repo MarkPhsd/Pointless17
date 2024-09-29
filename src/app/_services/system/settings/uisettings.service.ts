@@ -21,10 +21,10 @@ export interface ContactFieldOptions {
   account: boolean;
 }
 
-export interface ProcessorInfo {  
+export interface ProcessorInfo {
   batchTypeSetting: number; // 0 is auto, 1 is user, 2 is user auto
   batchTypeEcomSetting: number; // 0 is auto, 1 is user, 2 is user auto
-  emvSupport: number;      
+  emvSupport: number;
   cardHolderVerification: number;
   localBatchReport: number;
   localDuplicateChecking: number;
@@ -564,8 +564,14 @@ export class UISettingsService {
     return this.settingsService.getSettingByNameCachedNoRoles(site, deviceName)
   }
 
-  getPOSDevice(deviceName: string) {
-    return this.getPOSDeviceSettings(deviceName).pipe(
+  getPOSDevice(deviceName: string, noCache?: boolean) {
+    let setting$ =this.getPOSDeviceSettings(deviceName);
+    if (noCache) {
+      const site = this.siteService.getAssignedSite()
+      setting$ = this.settingsService.getSettingByName(site, deviceName)
+    }
+
+    return setting$.pipe(
       switchMap(data => {
         if (data && data?.text) {
           try {
@@ -578,6 +584,8 @@ export class UISettingsService {
         return of(null)
       }));
   }
+
+
 
   updatePOSDevice(data: ITerminalSettings) {
     this.posDeviceInfo = data;
@@ -889,12 +897,12 @@ export class UISettingsService {
     return fb
   }
 
-  initProcessorForm() { 
+  initProcessorForm() {
       ///credit settings
       return this._fb.group({
       processor_batchTypeSetting :[] , //0 is auto, 1 is user, 2, is user auto
       processor_batchTypeEcomSetting :[] , //0 is auto, 1 is user, 2, is user auto
-      processor_EMVSupport: [],      
+      processor_EMVSupport: [],
       processor_CardHolderVerification: [],
       processor_LocalBatchReport: [],
       processor_LocalDuplicateChecking: [],
@@ -972,7 +980,7 @@ export class UISettingsService {
       showCustomerOption: [],
       splitEntry: [],
       idParseOnlyAgeConfirmation: [],
-     
+
       assignBarcodeAsSerial: [],
       minClientAge:  [],
       storeCreditAPI: [],
@@ -1029,11 +1037,11 @@ export class UISettingsService {
       // disableMenuItemExpandInApp : [],
       enableRetailQuickMenu : [],
       // expoTemplateID  : [],
-      
+
       // expoTemplateID: [''],
       // disableMenuItemExpandInApp: [''],
       // disableRequestOptions: [''],
-      // disableNonCrediTip: [''], 
+      // disableNonCrediTip: [''],
      })
   }
 

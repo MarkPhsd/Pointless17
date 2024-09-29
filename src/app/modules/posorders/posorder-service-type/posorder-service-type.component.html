@@ -2,14 +2,15 @@
 <mat-card class="card-dimensions">
   <mat-card-content>
   <ng-content></ng-content> : {{order?.serviceType}}
+  <mat-divider style="margin-bottom:10px"></mat-divider>
 
   <div *ngIf="serviceTypes$ | async as items">
-    <div *ngFor="let item of items">
-      <div>
-        <button mat-button (click)="applyServiceType(item)">
-          <div class="flex-start-row ">
+    <div *ngFor="let item of items" >
+      <div >
+        <button mat-flat-button class="service-buttons" color="accent" (click)="applyServiceType(item)">
+          <div class="flex-start-row-space-around">
             <div>
-              {{item.name}}
+              <h3>{{item.name}}</h3>
             </div>
             <div>
               <ng-container *ngTemplateOutlet="productImage,  context:  {$implicit: item}"></ng-container>
@@ -19,28 +20,18 @@
       </div>
     </div>
   </div>
-
-  <app-mat-toggle-selector
-        [class]            = "'card-height'"
-        [list$]            = "serviceTypes$"
-        [hideAllOption]    = "'true'"
-        [textLength]       = "textLength"
-        [toggleDimensions] = "'toggle-group-tall'"
-        [buttonDimensions] = "'button-dimensions-tall'"
-        (outPutItem)       = "applyServiceType($event)"
-      >
-    </app-mat-toggle-selector>
   </mat-card-content>
 </mat-card>
 
 <ng-template #productImage let-item>
+
   <div class="product-image-container"
               *ngIf    ="item?.image && bucketName">
     <img
       loading ="lazy"
       draggable="false"
       width    ="100%"
-      [src]    ="item?.image"
+      src      ="{{bucketName}}{{item?.image}}"
       onerror  = "this.src='assets/images/placeholderimage.png'"
       (error)  ="onImageError($event)"
       class    ="item-image"

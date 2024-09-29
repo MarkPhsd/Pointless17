@@ -30,8 +30,9 @@
       </div>
     </mat-card-subtitle>
 
-    <mat-card-content>
+    <mat-card-content>  
 
+      <!-- {{inputForm.value | json}} -->
       <div *ngIf="inputForm && dashBoardContent; else loading;"
            [formGroup]="inputForm"
            class="info-container" >
@@ -186,7 +187,6 @@
                 <app-value-fields
                     [inputForm]="inputForm"
                     [fieldName]="'chartWidth'"
-                    [fieldType]="'number'"
                     [fieldsClass]="'field-small'">
                     Width
                   </app-value-fields>

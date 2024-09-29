@@ -723,7 +723,7 @@ export class GridsterLayoutService {
     let model = [] as DashboardContentModel[];
     let id = this.getRandomInt(1, 100000)// +this.dashboardArray.length + 1
 
-    console.log('component type', componentType)
+    // console.log('component type', componentType)
 		switch (componentType) {
       case 'youtube' :
         model =  this.applyItem(id, 'YouTube', 'YouTube', YoutubePlayerComponent, ev);
@@ -785,7 +785,7 @@ export class GridsterLayoutService {
          { return data.name.toLowerCase() === componentName.toLowerCase()}
       )
 
-      console.log('apply item componentName', componentName)
+      // console.log('apply item componentName', componentName)
       if (componentName.toLowerCase() === 'catalogschedule'.toLowerCase()) {
         properties.type = 'menu'
         properties.cardValueType = 'catalogschedule'
@@ -1038,7 +1038,7 @@ export class GridsterLayoutService {
 				// We check if component key in our dashboardCollection
 				// is equal to our component name key in our componentCollection
         if (dashboard.componentName) {
-          console.log('serialize', dashboard.componentName, component.name.toLowerCase())
+          // console.log('serialize', dashboard.componentName, component.name.toLowerCase())
           if (dashboard.componentName.toLowerCase() === component.name.toLowerCase()) {
             dashboard.component = component?.name;
           }

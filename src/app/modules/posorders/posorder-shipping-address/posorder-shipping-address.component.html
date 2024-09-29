@@ -1,4 +1,6 @@
+  <div *ngIf="(serviceType$ | async) as serviceType">
 
+  </div>
     <mat-card>
       <mat-card-subtitle>
         Delivery Address
@@ -22,6 +24,7 @@
       <mat-card-content>
         <div class="grid-container">
           <div *ngIf="inputForm"
+              class="input-form"
               [formGroup]="inputForm">
 
             <app-value-fields
@@ -57,12 +60,16 @@
           </div>
 
           <div *ngIf="!platFormService.isApp()">
+
             <div  *ngIf="serviceType && serviceType.shippingInstructions"
                   class="instructions">
               <h3>{{serviceType.name}}</h3>
               <mat-hint>
                 <div [innerHTML]="serviceType.shippingInstructions" ></div>
               </mat-hint>
+            </div>
+            <div>
+              <ng-container [ngTemplateOutlet]="addressListInfo"></ng-container>
             </div>
           </div>
 
@@ -85,4 +92,22 @@
       </mat-card-content>
     </mat-card>
 
-
+    <ng-template #addressListInfo>
+      <mat-card *ngIf="addressList  && addressList.length > 0">
+        <mat-card-title> Select an address to pick up from.</mat-card-title>
+        <div *ngFor="let address of addressList; let i = index">
+          <button mat-flat-button (click)="selectAddress(i)">
+            <mat-card  class="address-card">
+              <mat-card-title>{{address?.name}}</mat-card-title>
+              <mat-card-content>
+                <p><strong>Contact:</strong> {{ address?.contactName }}</p>
+                <p><strong>Phone:</strong> {{ address?.phone }}</p>
+                <p><strong>Address:</strong> {{ address?.address }}, Unit: {{ address?.unit }}</p>
+                <p><strong>City:</strong> {{ address?.city }}</p>
+                <p><strong>State:</strong> {{ address?.state }} | <strong>Zip:</strong> {{ address?.zip }}</p>
+              </mat-card-content>
+            </mat-card>
+          </button>
+        </div>
+      </mat-card>
+    </ng-template>

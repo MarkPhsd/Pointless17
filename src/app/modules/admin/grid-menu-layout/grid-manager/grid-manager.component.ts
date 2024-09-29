@@ -1,4 +1,4 @@
-import { Component,  OnDestroy,  OnInit, Renderer2 } from '@angular/core';
+import { Component,  HostListener,  OnDestroy,  OnInit, Renderer2 } from '@angular/core';
 import { GridsterLayoutService   } from 'src/app/_services/system/gridster-layout.service';
 import { DashboardModel  } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 import { GridManagerEditComponent } from '../grid-manager-edit/grid-manager-edit.component';
@@ -42,6 +42,9 @@ export class GridManagerComponent implements OnInit, OnDestroy {
               private authenticationService: AuthenticationService,
               private fb: FormBuilder ){};
 
+
+
+  
 	// On component init we store Widget Marketplace in a WidgetModel array
 	ngOnInit(): void {
     this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);

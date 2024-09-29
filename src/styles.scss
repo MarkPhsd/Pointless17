@@ -733,6 +733,14 @@ mat-dialog-container {
   align-items: start;
 }
 
+.flex-start-row-space-around {
+  display: flex;
+  flex-direction: row;
+  row-gap: 10px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: start;
+}
 
 .flex-end {
   display: flex;
@@ -1516,4 +1524,17 @@ mat-dialog-container {
 }
 .margin-bottom-25px {
   margin-top:25px;
+}
+
+
+//
+.pointless-logo {
+  width: 25px;
+}
+
+.grid-about {
+  display: grid;
+  grid-template-columns: 45px 1fr;
+  gap: 10px;
+  margin: 5px;
 }

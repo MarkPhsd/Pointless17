@@ -437,7 +437,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   resetSearch() {
-    console.log('reset search')
+    // console.log('reset search')
     this.initSearchFilter();
     this.initSubscriptions();
     this.disableFilterUpdate = false
@@ -487,7 +487,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     const employees$      = this.employeeService.getEmployeeBySearchListOnly(site)
     this.employees$      = employees$.pipe(switchMap(data => {
 
-      console.log('data', data)
+      // console.log('data', data)
         this.dialogRef = this.productEditButtonService.selectEmployee(data)
         this.dialogRef.afterClosed().subscribe(result => {
           if (result) {
@@ -673,7 +673,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   refreshOrderSearch(searchPhrase) {
     this.searchModel = {} as IPOSOrderSearchModel;
 
-    console.log('refreshOrderSearch')
+    // console.log('refreshOrderSearch')
     // this.searchModel.serviceTypeID = 0
     // this.searchModel.employeeID    = 0
 

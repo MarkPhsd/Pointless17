@@ -24,7 +24,7 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 
 function multilineRenderer(params): any {
-  console.log(params.data)
+  // console.log(params.data)
   const productName = params.data?.productName || ''; // Fallback to empty string if undefined
   const barcode = params.data?.serialCode || ''; // Fallback to empty string if undefined
   return `${productName}  ${barcode}`;
@@ -613,7 +613,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   }
 
   receiveQtyBillOnHold(e) {
-    console.log(e, e.rowData?.id)
+    // console.log(e, e.rowData?.id)
     if (!e) { return }
     if (e.rowData.id)  {
       const site = this.siteService.getAssignedSite()
@@ -631,7 +631,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
   editProductFromGrid(e) {
-    console.log(e, e.rowData?.productID)
+    // console.log(e, e.rowData?.productID)
     if (!e) { return }
     if (e.rowData.productID)  {
       this.editItemWithId(e.rowData.productID);
@@ -673,7 +673,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
       this.action$ =  this.posOrderItemService.getPOSOrderItem(site, e.rowData.id).pipe(switchMap(data => {
         // console.log('data', data, data.inventoryAssignmentID)
         if (data.inventoryAssignmentID && data.inventoryAssignmentID != 0) {
-          console.log('open 3')
+          // console.log('open 3')
           this.inventoryAssignmentService.openInventoryItem(data.inventoryAssignmentID)
         }
          return of(data)

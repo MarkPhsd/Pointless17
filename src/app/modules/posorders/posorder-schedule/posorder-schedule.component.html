@@ -77,8 +77,8 @@
               [order]="order"
               [inputForm]="inputFormNotes">
             </pos-order-notes>
-
-            <!-- <ng-container [ngTemplateOutlet]="payOptionView"></ng-container> -->
+            <!-- {{inputFormNotes.value | json}} -->
+            <ng-container [ngTemplateOutlet]="packageInfo"></ng-container>
           </div>
 
           <div class="instructions-small-view">
@@ -138,14 +138,13 @@
 </div>
 
 <ng-template #instructionsView>
-  <div class="instructions" *ngIf="!platFormService.isApp()">
-    <div  *ngIf="serviceType" >
-      <div *ngIf="serviceType">
+  <div class="instructions" *ngIf="serviceType && !platFormService.isApp()">
+
         <div *ngIf="instructions"
              style="margin:10px"
              [innerHtml]="serviceType?.instructions"></div>
-      </div>
-    </div>
+
+
   </div>
 </ng-template>
 
@@ -160,4 +159,23 @@
       <mat-icon aria-label="save">credit_card</mat-icon> Pay
     </button>
   </div>
+</ng-template>
+
+<ng-template #packageInfo>
+  <mat-card *ngIf="nameStringPairs && nameStringPairs.length > 0">
+    <mat-card-title>Select an option</mat-card-title>
+
+    <div *ngFor="let pair of nameStringPairs; let nameIndex = index">
+      <mat-card class="name-string-card">
+        <mat-card-title>{{ pair?.name }}</mat-card-title>
+        <mat-card-content>
+          <div *ngFor="let value of pair?.values; let valueIndex = index">
+            <button class="button-name-pair" color ="accent" mat-flat-button (click)="selectValue(nameIndex, valueIndex)">
+              {{ value }}
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card>
 </ng-template>

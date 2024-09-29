@@ -2,7 +2,7 @@ import { Component, OnInit, Input,OnDestroy } from '@angular/core';
 import { UntypedFormGroup,UntypedFormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
-import { IPOSOrder, IServiceType, IUser,   } from 'src/app/_interfaces';
+import { IPOSOrder, IServiceType, IUser, ServiceTypeFeatues,   } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
@@ -45,6 +45,8 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   shippingInstructions
   scheduleInstructions;
   dateTimeFormat = 'y-MM-dd h:mm:ss a'
+  nameStringPairs: any;
+  selectedNamePairValueIndex: number;
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.pipe(
       switchMap( data => {
@@ -62,8 +64,9 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
       return of(item)
     })).subscribe(data => {
       this.serviceType = data;
-
       if (data) {
+        const features = JSON.parse(data.json) as ServiceTypeFeatues;
+        this.nameStringPairs = features.nameStringPairs; // Initialize nameStringPairs from features
         this.instructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.instructions);
         this.shippingInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.shippingInstructions);
         this.scheduleInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.scheduleInstructions);
@@ -106,6 +109,63 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
 
     }
   }
+
+  // selectValue(nameIndex: number, valueIndex: number): void {
+  //   this.selectedNamePairValueIndex = valueIndex; // Track selected value index
+  //   const selectedPair = this.nameStringPairs[nameIndex];
+  //   const selectedValue = selectedPair.values[valueIndex];
+
+  //   // You can patch this value in form or use it for other logic
+  //   console.log(`Selected ${selectedValue} from ${selectedPair.name}`);
+
+  //   this.inputFormNotes =  this.fb.group({
+  //     productOrderMemo  :[addTextToCurrentValue, Validators.maxLength(500)],
+  //   })
+
+  // }
+
+    // Method to select and patch productOrderMemo
+    // selectValue(nameIndex: number, valueIndex: number): void {
+    //   const selectedPair = this.nameStringPairs[nameIndex];
+    //   const selectedValue = selectedPair.values[valueIndex];
+
+    //   const newInfo = `${selectedPair.name} ${selectedValue}  `
+    //   // Get the current memo value from the form
+    //   let currentMemo = this.inputForm.get('productOrderMemo')?.value || '';
+
+    //   if (!currentMemo.includes(newInfo)) {
+    //     // Append the value if it's not already there
+    //     currentMemo = currentMemo ? `${currentMemo}, ${newInfo}` : newInfo;
+
+    //     // Patch the form with the updated memo
+    //     this.inputFormNotes.patchValue({
+    //       productOrderMemo: currentMemo
+    //     });
+    //     console.log(currentMemo, newInfo, this.inputFormNotes.value )
+    //     return;
+    //   }
+    // }
+
+    // Method to select and patch productOrderMemo
+    selectValue(nameIndex: number, valueIndex: number): void {
+      const selectedPair = this.nameStringPairs[nameIndex];
+      const selectedValue = selectedPair.values[valueIndex];
+
+      const newInfo = `${selectedPair.name} ${selectedValue}`; // New info to add
+      // Get the current memo value from the form
+      let currentMemo = this.inputFormNotes.get('productOrderMemo')?.value || '';
+
+      if (!currentMemo.includes(newInfo)) {
+        // Append the value if it's not already there
+        currentMemo = currentMemo.trim() ? `${currentMemo}, ${newInfo}` : newInfo;
+
+        // Patch the form with the updated memo
+        this.inputFormNotes.patchValue({
+          productOrderMemo: currentMemo
+        });
+        console.log(currentMemo, newInfo, this.inputFormNotes.value); // Debug output
+      }
+    }
 
   initScheduleDateForm() {
     this.scheduleForm = this.fb.group( {

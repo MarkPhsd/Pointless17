@@ -89,7 +89,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
   }
 
   transactionUISettingsSubscriber() {
-    this.uiHome$ = this.settingService.getUIHomePageSettings().pipe(switchMap(data => { 
+    this.uiHome$ = this.settingService.getUIHomePageSettings().pipe(switchMap(data => {
       // this.uiHomePage = data;
       return of(data)
     }))
@@ -191,7 +191,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   remotePrint(message:string, exitOnSend: boolean, posDevice:ITerminalSettings) {
     const order = this.order;
-    
+
     if (posDevice) {
       let pass = false
       if (posDevice?.remotePrepPrint) {
@@ -214,7 +214,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
                            history: order.history} as any;
         const site = this.siteService.getAssignedSite()
         this.printAction$ =  this.paymentService.remotePrintMessage(site, remotePrint).pipe(switchMap(data => {
-         
+
           if (data) {
             this.siteService.notify('Print job sent', 'Close', 3000, 'green')
           } else {
@@ -355,7 +355,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   _refreshOrder() {
     const site = this.siteService.getAssignedSite()
-    return this.ordersService.getOrder(site, this.order.id.toString(), this.order.history).pipe(switchMap(data => {
+    return this.ordersService.getOrder(site, this.order.id.toString(), this.order?.history).pipe(switchMap(data => {
       this.orderMethodsService.updateOrder(data)
       return of(data)
     }))

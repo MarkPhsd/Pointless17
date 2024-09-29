@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -92,6 +92,17 @@ export class GridComponentPropertiesComponent implements OnInit {
     }
   }
 
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.ctrlKey && event.key === 's') {
+      // Prevent default browser save behavior
+      event.preventDefault();
+      // Your custom save logic here
+      this.update(false)
+      console.log('Ctrl+S pressed!');
+    }
+  }
+  
   ngOnInit() {
     this.chartTypes = this.layoutService.cartTypeCollection;
     if (!this.dashBoardContent) { return }

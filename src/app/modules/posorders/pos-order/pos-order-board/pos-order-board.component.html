@@ -1,7 +1,9 @@
 <div *ngIf="order$ && (order$ | async) as order"
-    [style.height]="chartHeight">
+   >
   <pos-order-items
     [disableActions]="disableActions"
+    [chartHeight]="chartHeight"
+    [chartWidth]="chartWidth"
     [order]="order">
   </pos-order-items>
 </div>

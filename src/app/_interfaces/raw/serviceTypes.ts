@@ -58,6 +58,18 @@ export interface ServiceTypeFeatues {
   icon: string;
   sortOrder: number;
   nameStringPairs: NameStringListPair[]; // New property
+  addressList: ServiceAddress[]
+}
+
+export interface ServiceAddress {
+  name: string;
+  contactName: string;
+  phone: string;
+  address: string;
+  unit: string;
+  city: string;
+  state: string;
+  zip: string;
 }
 
 export interface NameStringListPair {

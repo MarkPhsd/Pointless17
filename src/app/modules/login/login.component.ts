@@ -197,7 +197,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.refreshUIHomePageSettings();
     this.initDevice();
 
-    if (!this.returnUrl) { 
+    if (!this.returnUrl) {
       this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
     console.log('current returnurl', this.returnUrl)
@@ -395,7 +395,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
   }
 
-  registerUser()  { 
+  registerUser()  {
     this.closeDialog();
     this.router.navigate(['/register-user']);
   }
@@ -499,7 +499,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   submitLogin(userName: string, password: string) {
     this.errorMessage = ''
     this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(concatMap(result =>
-        {      
+        {
           try {
             this.pollingService.clearPoll();
             this.spinnerLoading = false;
@@ -508,35 +508,35 @@ export class LoginComponent implements OnInit, OnDestroy {
             console.log('subscriber error', error)
           }
 
-          this.initForm();      
+          this.initForm();
           //if is app then result is a combination of user and sheet
           //if is not app then result is the user.
           let user = result?.user ;
           let sheet = result?.sheet as IBalanceSheet;
           this.authenticationService.authenticationInProgress = false;
 
-          if (user) { 
-            console.log('usermessage', user?.message, user?.errorMessage)
-          } else { 
+          if (user) {
+            // console.log('usermessage', user?.message, user?.errorMessage)
+          } else {
             console.log('no user')
           }
-          
-          if (sheet) { 
+
+          if (sheet) {
             console.log('sheet exists', sheet?.id)
-          } else { 
+          } else {
             console.log('no sheet')
           }
 
           //if is app
-          if (sheet) {  
-            if (this.loginApp(result)) {  return of('success') } 
+          if (sheet) {
+            if (this.loginApp(result)) {  return of('success') }
           }
 
           if (result && result.username != undefined) { user = result }
-          
+
           try {
             if (user) {
-          
+
               if (user && user?.errorMessage === 'failed') {
                 this.siteService.notify('Login failed', 'Close', 3000, 'red')
                 this.authenticationService.authenticationInProgress = false;
@@ -545,60 +545,51 @@ export class LoginComponent implements OnInit, OnDestroy {
                 return of('failed')
               }
 
-              if (this.returnUrl) { 
+              if (this.returnUrl) {
                 if (result && result?.message && result?.message === 'success') {
-                  console.log('process login 1', this.returnUrl)
 
                   let returnUrl = 'app-main-menu'
-                  if (this.returnUrl) { 
+                  if (this.returnUrl) {
                     returnUrl = this.returnUrl
                   }
 
-                  console.log('submitLogin', returnUrl, this.orderCode);
-
-                  if (this.orderCode) { 
+                  if (this.orderCode) {
                     const data = {orderCode: this.orderCode}
-                    console.log('processLogin', returnUrl)
-                    this.userSwitchingService.processLogin(user, returnUrl, data) 
+                    this.userSwitchingService.processLogin(user, returnUrl, data)
                   }
-                  
-                  if (!this.orderCode) { 
+
+                  if (!this.orderCode) {
                     const data = {orderCode: this.orderCode}
-                    console.log('processLogin', returnUrl)
-                    this.userSwitchingService.processLogin(user, returnUrl) 
+                    this.userSwitchingService.processLogin(user, returnUrl)
                   }
 
                   this.closeDialog();
                   return of('success')
                 }
               }
-            
+
               if (user && ( user?.message === 'success' || (result?.message === 'success'))) {
-      
+
                 let pass = false
                 this.authenticationService.authenticationInProgress = false;
                 if (!this.loginAction) {  this.userSwitchingService.assignCurrentOrder(user) }
                 let returnUrl = 'app-main-menu'
-                
-                console.log('submitLogin', returnUrl, this.orderCode);
+
                 if (this.loginAction?.name === 'setActiveOrder') {
                   returnUrl = '/pos-payment'
                 }
-                if (this.returnUrl) { 
+                if (this.returnUrl) {
                   returnUrl = this.returnUrl
                 }
-         
 
-                console.log('submitLogin', returnUrl, this.orderCode);
-
-                if (this.orderCode) { 
+                if (this.orderCode) {
                   const data = {orderCode: this.orderCode}
-        
-                  this.userSwitchingService.processLogin(user, returnUrl, data) 
-                } else { 
-                  this.userSwitchingService.processLogin(user, returnUrl) 
+
+                  this.userSwitchingService.processLogin(user, returnUrl, data)
+                } else {
+                  this.userSwitchingService.processLogin(user, returnUrl)
                 }
-              
+
                 pass = true
                 this.closeDialog();
                 return of('success')
@@ -609,7 +600,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
           return of(null)
         }
-        
+
     ))
   }
 

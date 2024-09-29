@@ -24,45 +24,60 @@ export class DisplayToggleAndroidComponent implements OnInit {
     this.androidApp = platFormService.androidApp
   }
 
-  ngOnInit() {
+    ngOnInit() {
 
-    const isDisplayDevice = localStorage.getItem('displayDevice');
-    if (!isDisplayDevice) { return }
-      if (this.androidApp && this.deviceName) { 
-        this.startCheckStatus()
+      const isDisplayDevice = localStorage.getItem('displayDevice');
+      this.startCheckStatus()
+      if (!isDisplayDevice) { return }
+        if (this.androidApp && this.deviceName) {
+      }
+    }
+    ngOnDestroy() {
+      if (this.checkStatusSubscription) {
+        this.checkStatusSubscription.unsubscribe();
+      }
+    }
+    async bringtoFront() {
+      const options = {}
+
+      if (this.androidApp && this.deviceName) {
+        await dsiemvandroid.bringToFront(options)
       }
     }
 
-    async bringtoFront() { 
+    async sendToBack() {
       const options = {}
-      await dsiemvandroid.bringToFront(options)
-    }
-
-    async sendToBack() { 
-      const options = {}
-      await dsiemvandroid.sendToBack(options)
-    }
-
-
-   checkStatus() { 
-    this.posDevice$ = this.uiService.getPOSDevice(this.deviceName).pipe(switchMap(data =>  { 
-      this.posDevice = data;
-      
-      if (this.posDevice.dsiEMVSettings.sendToBack) {
-        this.sendToBack()    
-        return of(data)
+      if (this.androidApp && this.deviceName) {
+        await dsiemvandroid.sendToBack(options)
       }
-      this.bringtoFront()
-      return of(data) 
     }
-    ));
-   }
 
-   startCheckStatus() {
-    // Create an observable that emits every 1 second
-    this.checkStatusSubscription = interval(1000).subscribe(() => {
-      this.checkStatus();
-    });
-  }
+    checkStatus() {
+      this.uiService.getPOSDevice(this.deviceName, true).subscribe({
+        next: (data) => {
+          this.posDevice = data;
+          // console.log('front or back', data.dsiEMVSettings.sendToBack, data.dsiEMVSettings);
+
+          if (this.posDevice.dsiEMVSettings.sendToBack) {
+            console.log('status in back');
+            this.sendToBack();
+          } else {
+            console.log('bringing to front');
+            this.bringtoFront();
+          }
+        },
+        error: (err) => {
+          console.error('Error checking POS device status:', err);
+          // You can choose to handle retries, logging, or notifications here
+        },
+      });
+    }
+
+    startCheckStatus() {
+      const isDisplayDevice = localStorage.getItem('displayDevice');
+      if (!isDisplayDevice) { return }
+      this.checkStatusSubscription = interval(1000).subscribe(() => this.checkStatus());
+    }
+
 
 }

@@ -6,8 +6,10 @@ mat-card  {
 
 .side-panel-small {
   display      : grid;
-  grid-template-columns: 55px 1fr;
-  width        : 165px;
+  // grid-template-columns: 55px 1fr;
+  // width        : 165px;
+  max-width: 400px;
+  grid-template-columns: 1fr 1fr;
   overflow-y   : auto;
   overflow-x   : hidden;
   font-size    : large;

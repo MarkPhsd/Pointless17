@@ -18,8 +18,8 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-  @Input()bucketName: string;
-  bucket$: Observable<string>;
+  @Input()  bucketName: string;
+  bucket$:  Observable<string>;
   @Input()  searchForm:       UntypedFormGroup;
   @Input()  itemType:         number; //removed default 1
   @Input()  metrcCategoryName : string;
@@ -27,7 +27,7 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
   @Input()  productName:      string;
   @Input()  doNotPassName     :string;
   @Input()  formControlName = 'productName';
-  @Input() filter: ProductSearchModel; //productsearchModel;
+  @Input()  filter: ProductSearchModel; //productsearchModel;
 
   searchPhrase:               Subject<any> = new Subject();
   searchModel                 =  {} as ProductSearchModel;

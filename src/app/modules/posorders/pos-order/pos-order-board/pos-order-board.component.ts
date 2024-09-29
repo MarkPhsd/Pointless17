@@ -21,7 +21,7 @@ export class PosOrderBoardComponent implements OnInit {
   @Input() disableActions: boolean;
   @Input() chartHeight: string;
   @Input() refreshTime = 1;
-
+  @Input() chartWidth: string;
   constructor(
     private siteService:  SitesService,
     private orderService: OrdersService,

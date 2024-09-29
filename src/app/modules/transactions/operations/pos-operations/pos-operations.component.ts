@@ -86,7 +86,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   validateSales$: Observable<any>;
   batchSummary$: Observable<any>;
   batchData: any;
-  
+
   terminalSettings$: Observable<ITerminalSettings>;
   terminalSettings: ITerminalSettings
   dsiEmv: DSIEMVSettings
@@ -154,17 +154,17 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     this.refreshInfo()
   }
 
-  initSalesReportsBatch() { 
+  initSalesReportsBatch() {
     this.validateSales$ = this.balanceSheetService.validateDaysSales(this.site).pipe(
       switchMap(data => {
           this.refreshInit()
           return of(data)
       })).pipe(
-        switchMap(data => { 
+        switchMap(data => {
           this.viewdcapBatchSummary()
           return of(data)
       }))
-    
+
   }
 
   get paymentPositiveNegView() {
@@ -229,7 +229,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   initTransactionUISettings() {
       this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
         switchMap(data => {
-          console.log('ui data reporting',data )
+          // console.log('ui data reporting',data )
           if (data) {
             this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
             this.viewdcapBatchSummary();
@@ -383,7 +383,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     if (this.uiTransactions?.dCapEnabled) {
       const device = localStorage.getItem('devicename')
       return this.dcapService.batchSummary(device).pipe(
-        switchMap(data => { 
+        switchMap(data => {
         this.batchData = data;
         return of(data)
       }))
@@ -394,8 +394,8 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
   get dcapbatchClose() {
     if (this.uiTransactions?.dCapEnabled) {
       const device = localStorage.getItem('devicename')
-      return this.dcapService.batchClose(device).pipe(concatMap(data => { 
-          if (data) { 
+      return this.dcapService.batchClose(device).pipe(concatMap(data => {
+          if (data) {
             this.siteService.notify('Batch', 'close', 3000)
           }
           return of(data)

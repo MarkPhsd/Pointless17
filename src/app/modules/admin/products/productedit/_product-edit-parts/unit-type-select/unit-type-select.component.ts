@@ -124,7 +124,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
       this.undoSetChange.emit(false)
     }
     if (this.id) {
-      console.log('get item', this.id)
+      // console.log('get item', this.id)
       this.getName(this.id)  }
   }
 

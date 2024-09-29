@@ -2,6 +2,7 @@
 <div *ngIf=" (cancelAction$ | async) as action"></div>
 <div *ngIf="(  setting$ | async) as action"></div>
 <div *ngIf="( actionSetting$ | async) as action"></div>
+<div *ngIf="(saving$ | async) as item"></div>
 <div *ngIf="!terminalSettings">
   Warning No Terminal Settings.
   <button mat-button (click)="close()">Close</button>
@@ -20,7 +21,7 @@
   </div>
 
   <div *ngIf="(terminalSettings$  | async) as terminalSettings; else loading">
-  
+
 
     <div *ngIf="(!dsiEmv || (!dsiEmv?.TranDeviceID || dsiEmv?.TranDeviceID === '')) || !posPayment">
       <div *ngIf="!posPayment">
@@ -34,7 +35,7 @@
 
     <mat-card *ngIf="dsiEmv">
       <mat-card-title>
-        # {{posPayment.id}} | V2 {{dsiEmv.v2}}
+        # {{posPayment.id}} | V2 {{dsiEmv.v2}} | Display In back {{ dsiEmv.sendToBack }}
         <h3>
         Total  {{posPayment?.amountPaid | currency}}
         </h3>
@@ -57,25 +58,25 @@
 
         <div class="button-grid">
           <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
-            <button  class="pay-button-dc" [disabled]="processing" color="primary" mat-raised-button 
+            <button  class="pay-button-dc" [disabled]="processing" color="primary" mat-raised-button
                     (click)="reverseAuthorization()">Reverse Authorization</button>
           </div>
 
           <div *ngIf="ui?.allowPreAuth && (posPayment.amountPaid > 0)">
-            <button  class="pay-button-dc" [disabled]="processing" color="primary"    mat-raised-button 
+            <button  class="pay-button-dc" [disabled]="processing" color="primary"    mat-raised-button
                     (click)="authorizeAmount()">Authorize</button>
           </div>
 
           <div *ngIf="posPayment.amountPaid > 0 ">
             <button class="pay-button-dc"
-                     [disabled]="processing" color="primary"   mat-raised-button 
+                     [disabled]="processing" color="primary"   mat-raised-button
                      (click)="payAmount()">Pay Amount</button>
           </div>
 
           <div *ngIf="posPayment.amountPaid < 0 ">
             <button class="pay-button-dc"
-                    [disabled]="processing"  color="warn"      
-                    mat-raised-button 
+                    [disabled]="processing"  color="warn"
+                    mat-raised-button
                     (click)="refundAmount()">Refund</button>
           </div>
 
@@ -86,7 +87,7 @@
           <div *ngIf="!posPayment.tranType">
             <button   class="pay-button-dc" color="warn"  mat-raised-button (click)="cancel()"><mat-icon>close</mat-icon>Cancel</button>
           </div>
-          
+
           <div  *ngIf="smallDevice">
             <button  class="pay-button-dc" color="accent" mat-raised-button (click)="reset()">Reset</button>
           </div>
@@ -94,7 +95,7 @@
           <div *ngIf="smallDevice">
             <button  class="pay-button-dc"  color="warn"  mat-raised-button (click)="close()"><mat-icon>exit</mat-icon> Exit</button>
           </div>
-  
+
         </div>
 
         <div *ngIf="(processing$ | async) as result" >

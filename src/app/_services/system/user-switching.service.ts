@@ -233,7 +233,7 @@ export class UserSwitchingService implements  OnDestroy {
     // Authentication stream
     let auth$ = this.authenticate(userLogin).pipe(
       concatMap(user => {
-        console.log('submit 2 fail?', this.didItemFail(user) )
+        // console.log('submit 2 fail?', this.didItemFail(user) )
         if (this.didItemFail(user)) {
           this.authenticationService.authenticationInProgress = false;
           user.errorMessage = 'Auth Failed'
@@ -253,7 +253,7 @@ export class UserSwitchingService implements  OnDestroy {
     // Authorization update stream
     let updateAuth$ = auth$.pipe(
       concatMap(data => {
-        console.log('submit 3 fail?', this.didItemFail(data) )
+        // console.log('submit 3 fail?', this.didItemFail(data) )
         if (this.didItemFail(data)) {
           data.errorMessage = 'Auth Failed'
           const result = this.userAutFailed(data) as IUserProfile
@@ -271,7 +271,7 @@ export class UserSwitchingService implements  OnDestroy {
     // Handle balance sheet or pass through user data
     let balanceSheet$ = updateAuth$.pipe(
       concatMap(user => {
-        console.log('submit 4 fail?', this.didItemFail(user) )
+        // console.log('submit 4 fail?', this.didItemFail(user) )
         if (this.didItemFail(user)) {
           this.authenticationService.authenticationInProgress = false;
           user.errorMessage = 'Auth Failed'
@@ -289,7 +289,7 @@ export class UserSwitchingService implements  OnDestroy {
 
         if  ( this.platformService.isApp() ) {
           if (deviceName) {
-       
+
             return this.promptBalanceSheet(user)
           }
         }
@@ -301,7 +301,7 @@ export class UserSwitchingService implements  OnDestroy {
     // Final result handling
     let result$ = balanceSheet$.pipe(
       concatMap(data => {
-        console.log('submit 5 fail?', this.didItemFail(data) )
+        // console.log('submit 5 fail?', this.didItemFail(data) )
 
         if (this.didItemFail(data)) {
           this.authenticationService.authenticationInProgress = false;
@@ -310,7 +310,7 @@ export class UserSwitchingService implements  OnDestroy {
           result.errorMessage = 'Auth Failed'
           return of(result);
         }
-        
+
         return of(data);
       })
     );
@@ -466,7 +466,7 @@ export class UserSwitchingService implements  OnDestroy {
     if (user && user.message == undefined) {
       return 'user undefined'
     }
-  
+
     if (user?.message.toLowerCase() === 'failed') {
       return user.errorMessage
     }
@@ -630,7 +630,7 @@ export class UserSwitchingService implements  OnDestroy {
       if (returnUrl === '/login') {  returnUrl = '/app-main-menu'}
     }
 
-    console.log(returnUrl, data)
+    // console.log(returnUrl, data)
 
     if (data)  {
       this.router.navigate([returnUrl, data]);

@@ -12,12 +12,20 @@
   <div class="centered centered-flex ">
 
     <div>
+      <div class="grid-about">
+        <div>
+          <img class="pointless-logo"
+              onerror   = "this.src='../assets/images/logo.png'"
+              src       = '../assets/images/logo.png' >
+        </div>
+        <div><a href="https://pointlesspos.com">PointlessPOS</a></div>
+      </div>
       <div  class="pin-entry">
         <button  mat-raised-button
                   class="center login pin-button"
                   *ngIf="platformService.isApp() && pinToken"
                   (click)="togglePIN = !togglePIN">
-            PIN Entry 
+            PIN Entry
         </button>
       </div>
     </div>

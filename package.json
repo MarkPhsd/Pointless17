@@ -1,6 +1,6 @@
 {
   "name": "pointlespos",
-  "version": "3.35.4",
+  "version": "3.35.8",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -130,6 +130,7 @@
     "crypto-browserify": "^3.12.0",
     "css-star-rating": "^1.2.4",
     "css-what": "^5.0.1",
+    "dayjs": "^1.11.13",
     "dom-to-image": "^2.6.0",
     "dsiemvandroidplugin": "file:../temp/plugins/dsiemvandroidplugin",
     "ebay-api": "^8.6.0",
@@ -163,6 +164,7 @@
     "ngx-colors": "^3.5.2",
     "ngx-cookieconsent": "^5.0.0",
     "ngx-csv-parser": "^1.1.1",
+    "ngx-daterangepicker-material": "6.0",
     "ngx-device-detector": "^2.1.1",
     "ngx-electron": "^2.2.0",
     "ngx-gallery": "^5.10.0",
