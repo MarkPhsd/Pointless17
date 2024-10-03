@@ -17,6 +17,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
+import { IMenuButtonGroups, MBMenuButtonsService } from 'src/app/_services/system/mb-menu-buttons.service';
 
 @Component({
   selector: 'pos-order-items',
@@ -49,12 +50,13 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input()  phoneDevice: boolean;
   @Input()  cardWidth: string;
   @Input()  isStaff: boolean;
-  @Input() chartWidth: string;
-  @Input() chartHeight: string;
-  @Input() heightCalcStyle  : string;
-
+  @Input()  chartWidth: string;
+  @Input()  chartHeight: string;
+  @Input()  heightCalcStyle  : string;
+  @Input()  isUserStaff = false
   displayDevice: boolean;
   heightCacl = ''
+  menuButtonList$ : Observable<IMenuButtonGroups>
   printAction$: Observable<any>;
   posDevice       :  ITerminalSettings;
   initStylesEnabled : boolean; // for initializing for griddisplay
@@ -74,6 +76,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   bottomSheetOpen  : boolean ;
   _bottomSheetOpen : Subscription;
+  _user: Subscription;
   wideBar          : boolean;
   posName          : string;
   chartCheck: boolean;
@@ -88,6 +91,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @ViewChild('scrollDiv') scrollDiv: ElementRef;
 
   scanMode : number;
+  isAdmin: boolean;
 
   scrollStyle = this.platformService.scrollStyleWide;
   user$ = this.authService.user$.pipe(switchMap(data => {
@@ -98,6 +102,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     this.setScrollBarColor(data?.userPreferences?.headerColor)
     return of(data)
   }))
+  uiHomePage: import("c:/Users/18587/repos/Pointless151/src/app/_services/system/settings/uisettings.service").UIHomePageSettings;
 
 
   get isNoPaymentPage() {
@@ -143,6 +148,18 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     });
   }
 
+  userSubscriber() {
+    this._user = this.authService.user$.subscribe(data => {
+      if (data?.roles == 'admin' || data?.roles == 'manager') {
+        this.isAdmin = true
+      }
+      if (data?.roles == 'employee') {
+        this.isStaff = true
+      }
+    })
+  }
+
+
   get posItemsView() {
     if (this.prepScreen) {
       return this.posOrderItemsPrepView
@@ -160,12 +177,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   initSubscriptions() {
-    try {
-      this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
-        if (data) {    this.uiConfig = data; }
-      })
-    } catch (error) {
-    }
+
 
     try {
       this._posDevice = this.uiSettingsService.posDevice$.subscribe(data => {
@@ -291,6 +303,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                 private navigationService : NavigationService,
                 private _bottomSheetService  : MatBottomSheet,
                 private messagingService: RequestMessageMethodsService,
+                private mbMenuGroupService: MBMenuButtonsService,
                 private router: Router
               )
   {
@@ -335,6 +348,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     if (!uiHomePage) {
       this.settingService.getUIHomePageSettings().subscribe(data => {
         uiHomePage = data;
+        this.uiHomePage = data
       })
     }
 
@@ -342,21 +356,24 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
     this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
       this.uiConfig = data;
+      if (data) {
+        const site = this.siteService.getAssignedSite()
+        if (data.multiButtonPrepHeader) {
+          this.menuButtonList$ = this.mbMenuGroupService.getGroupByID(site,data.multiButtonPrepHeader)
+        }
+      }
       if (!data) {   this.getTransactionUI()   }
+      return of(data)
     })
 
     this.initSubscriptions();
     this.initStyles();
-    // this.getItemHeight()
+
   }
 
   initStyles() {
-
-
     if (this.prepScreen)  {  this.orderItemsPanel = 'item-list-prep';  }
     if (!this.prepScreen) {  this.orderItemsPanel = 'item-list';  }
-
-
 
     if (this.prepScreen) {
       this.deviceWidthPercentage = '265px'

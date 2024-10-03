@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Optional,OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, Optional,OnDestroy, Input } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Observable, Subject, catchError, concatMap, of, switchMap, takeUntil, timer } from 'rxjs';
@@ -16,6 +16,8 @@ import { DcapService,DcapRStream, DCAPPaymentResponse } from 'src/app/modules/pa
 import { LoggerService } from 'src/app/modules/payment-processing/services/logger.service';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 @Component({
   selector: 'app-dcaptransaction',
   templateUrl: './dcaptransaction.component.html',
@@ -56,9 +58,10 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
   jsonView: boolean;
   jsonData: any;
   autoActionData: any;
-
+  void$: Observable<any>;
   uiSettings$: Observable<TransactionUISettings>;
   terminalSettings$: Observable<ITerminalSettings>;
+  requestVoid$: Observable<any>;
 
   saleComplete: boolean;
   creditOnly: boolean;
@@ -104,6 +107,8 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
     private dCapService           : DcapService,
     private dcapMethodsService    : DcapMethodsService,
     private loggerService         : LoggerService,
+    private productEditButtonService: ProductEditButtonService,
+    private paymentMethodService: PaymentMethodsService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     @Optional() private dialogRef  : MatDialogRef<DCAPTransactionComponent>)
     {
@@ -217,10 +222,8 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
       }
 
       saveTerminalSetting(close: boolean) {
-
         let item = this.terminalSettings
         // Ensure dsiEMVSettings.sendToBack is set correctly based on the close parameter
-        item.dsiEMVSettings = this.dsiEmv as DSIEMVSettings;
         item.dsiEMVSettings.sendToBack = close;
         item.id = this.setting.id;
         const text = JSON.stringify(item);
@@ -235,10 +238,8 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
       _putSetting(setting : ISetting) {
         const site = this.siteService.getAssignedSite();
         const id =   this.setting.id;
-        // console.log('setting', setting)
         return this.settingsService.putSetting(site, id, setting).pipe(
           switchMap(data => {
-            // console.log('save settings', data)
             if (!data) {
               return of(null)
             }
@@ -259,7 +260,6 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
         this.terminalSettings$ = terminalSettings$.pipe(concatMap(data => {
 
           this.setting = data;
-          // this.settingID = data?.id;
           if (!data?.text) { return of(null)}
           this.terminalSettings = JSON.parse(data.text) as ITerminalSettings;
           this.dsiEmv = this.terminalSettings?.dsiEMVSettings;
@@ -269,6 +269,10 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           }
           return of(data)
         })).pipe(switchMap(data => {
+          
+          this.terminalSettings.dsiEMVSettings.checkPartialAuthCompleted = 0;
+          this.terminalSettings.dsiEMVSettings.checkPartialAuth = 0;
+
           return this.saveTerminalSetting(true)
         })).pipe(concatMap(data => {
           if (this.autoActionData) {
@@ -286,6 +290,7 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
       getPOSDeviceSettings(site, device) {
         return this.settingsService.getPOSDeviceSettings(site, device).pipe(concatMap(data => {
           this.settingsService.updateTerminalSetting(data)
+          this.terminalSettings = data;
           this.dsiEmv = data?.dsiEMVSettings;
           return of(data)
         }))
@@ -356,7 +361,7 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
       payAmountV2() {
         if (!this.validateTransactionData()) { return }
         if (this.terminalSettings) {
-          const device = this.terminalSettings.name;
+          const device = this.terminalSettings?.name;
           const site = this.siteService.getAssignedSite()
           this.initMessaging()
           this.processing = true;
@@ -365,6 +370,9 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           let sale$ = this.getPaymentManualChipv2().pipe(concatMap(data => {
             this.posPayment = data?.payment;
             this.result = data?.response;
+
+            // console.log('payAmountV2' , data) 
+
             if (!data?.success) {
               this.response = data?.response;
             }
@@ -383,11 +391,10 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           this.initMessaging()
           this.processing = true;
 
-          if (this.dsiEmv.v2) {
-
             if (this.debitOnly) {
               this.processing$ =  this.dCapService.payAmountV2Debit(this.terminalSettings?.name , this.posPayment).pipe(concatMap(data => {
                 this.result = data;
+                // console.log('payamount manual', data)
                 return this.processResultsV2(data)
               }))
               return;
@@ -396,6 +403,7 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
             if (this.creditOnly) {
               this.processing$ =  this.dCapService.payAmountV2Credit(this.terminalSettings?.name , this.posPayment).pipe(concatMap(data => {
                 this.result = data;
+                // console.log('payamount credit', data)
                 return this.processResultsV2(data)
               }))
               return;
@@ -403,17 +411,9 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
 
             this.processing$ = this.getPaymentManualChipv2().pipe(concatMap(data => {
               this.result = data;
+              // console.log('payamount manual', data)
               return this.processResultsV2(data)
             }))
-
-            return
-
-          }
-
-          this.processing$ = this.getPaymentManualChip().pipe(concatMap(data => {
-            this.result = data;
-            return this.processResults(data)
-          }))
 
         }
       }
@@ -458,13 +458,23 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
 
       processResultsV2(paymentResponse: DCAPPaymentResponse): Observable<any> {
 
+
         if (!paymentResponse) {
           this.loggerService.publishObject('Credit processResults No Response', paymentResponse)
           this.processing = false;
           this.message = 'Processing failed, reason unknown.';
-          // console.log('bring to front, processResultsV2')
           this.bringtoFront()
           return of(null);
+        }
+
+            // console.log('paymentResponse', paymentResponse)
+
+        let voidReqestParital$ : Observable<any>;
+        voidReqestParital$ = of({})
+        
+        // console.log('paymentResponse?.errorMessage', paymentResponse?.errorMessage)
+        if (paymentResponse?.errorMessage === 'Partial Approval') {
+           voidReqestParital$ = this.partialApprovalAlert(paymentResponse?.payment)
         }
 
         if (paymentResponse?.success) {
@@ -476,11 +486,12 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
                         this.posPayment,
                         this.order);
 
-          return item$.pipe(concatMap( data => {
+          return voidReqestParital$.pipe(concatMap(data => {
+               return item$
+            }
+          )).pipe(concatMap( data => {
               this.processing = false;
               if (paymentResponse?.success) {
-                // this.bringtoFront()
-                this.close();
                 return of(data);
               }
               if (!paymentResponse?.success) {
@@ -488,7 +499,12 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
               }
               return of(null);
             }
-          ))
+          )).pipe(switchMap(data => {
+
+            this.close();
+
+            return of(data)
+          }))
         } else {
 
           // console.log(paymentResponse?.response)
@@ -501,8 +517,44 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           this.bringtoFront()
           return of(null)
         }
+      }
+
+      //int this case we just wantt to switch on the alert for the customer display
+      partialApprovalAlert(payment: IPOSPayment) {
+
+        if (!this.terminalSettings.dsiEMVSettings) { return }
+        this.terminalSettings.dsiEMVSettings.checkPartialAuth = payment?.id
+
+        return this.saveTerminalSetting(false).pipe(switchMap(data => {
+          this.voidPayment(payment)
+          return of(data)
+        }))
 
       }
+
+      voidPayment(payment: IPOSPayment) {
+        //run void method.
+        const message = 'Paypal can be voided from the POS Sales, but must be completed in the paypal account itself.'
+        const method$ = this.getPaymentMethod(payment.paymentMethodID)
+        if (payment.history) {
+          this.siteService.notify('Payments that have been batched can not be voided here. Speak with administration.', 'Close', 4000)
+          return
+        }
+        this.void$ = method$.pipe(switchMap( data=> {
+            const itemdata = { payment: payment, uiSettings: this.ui}
+            // console.log('using data', itemdata)
+            this.productEditButtonService.openVoidPaymentDialog(itemdata)
+            return of(data)
+            }
+          )
+        )
+      }
+
+
+      getPaymentMethod(id: number) {
+        const site = this.siteService.getAssignedSite()
+        return this.paymentMethodService.getCacheMethod(site ,id)
+    }
 
       processResults(response: DcapRStream): Observable<any> {
         if (!response) {

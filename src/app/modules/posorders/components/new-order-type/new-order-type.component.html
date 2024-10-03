@@ -1,3 +1,5 @@
+ <div *ngIf="(order$ | async) as order"></div>
+
  <mat-card>
    <mat-card-title>
       <button class="payment-buttons" mat-button (click)="newOrder()">
@@ -33,7 +35,7 @@
 
    </mat-card-subtitle>
    <mat-card-content>
-     <!-- [toggleWidth]="'width: 250px'" -->
+
 
     <div class="grid-serviceTypeItems">
       <div>
@@ -43,14 +45,14 @@
             [list$]="serviceTypes$"
             [hideAllOption]="'true'"
             (outPutID)="orderByType($event)">
-    
+
             <div *ngIf="orderMethodsService.toggleChangeOrderType">
               Change Order Type
             </div>
             <div *ngIf="!orderMethodsService.toggleChangeOrderType">
                Start new Order
             </div>
-    
+
         </app-mat-toggle-selector>
       </div>
 
@@ -65,7 +67,7 @@
         </div>
       </div>
     </div>
-   
+
   </mat-card-content>
    <mat-card-actions>
     <button *ngIf="showCancel"

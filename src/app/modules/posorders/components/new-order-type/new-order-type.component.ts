@@ -21,6 +21,7 @@ import { options } from 'numeral';
 })
 export class NewOrderTypeComponent  {
 
+  order$: Observable<any>;
   process$: Observable<any>;
   message: string;
   @Input() paymentMethod: IPaymentMethod;
@@ -60,15 +61,26 @@ export class NewOrderTypeComponent  {
     this.serviceTypes$ = this.serviceTypeService.getSaleTypesCached(site)
     this.updateItems = true;
     const itemList = this.orderMethodsService.assignPOSItems;
-    if (itemList.length>0) { 
+    if (itemList.length>0) {
       this.updateItems = false;
+    }
+
+    if (!this.order) {
+      if (this.orderMethodsService.toggleChangeOrderType) {
+        this.order$ = this.orderMethodsService.currentOrder$.pipe(switchMap(data => {
+          if (data) {
+            this.order = data;
+          }
+          return of(data  )
+        }))
+      }
     }
   }
 
 
   newOrder(){
     const site = this.siteService.getAssignedSite();
-    const order$ = this.orderMethodsService.newDefaultOrder(site).pipe(switchMap(data => {
+    this.action$ = this.orderMethodsService.newDefaultOrder(site).pipe(switchMap(data => {
       this.onCancel()
       return of(data)
     }))
@@ -110,27 +122,28 @@ export class NewOrderTypeComponent  {
   changeOrderType(event) {
     const site = this.siteService.getAssignedSite();
 
-    // if (event && event.filterType && event.filterType != 0 ) {
-    //   this.updateItems = true;
-    // }
+    let order: IPOSOrder
 
-    
-    const order = this.orderMethodsService.currentOrder;
-    
+    if (this.order) {
+      order = this.order
+    } else  {
+      order = this.orderMethodsService.currentOrder;
+    }
     const itemList = this.orderMethodsService.assignPOSItems;
-    let options = 0 
-    if (this.updateItems) { 
+
+    let options = 0
+    if (this.updateItems) {
       options = 1
     }
 
-    const list = [] 
-    if (itemList) { 
-      itemList.forEach(data => { 
+    const list = []
+    if (itemList) {
+      itemList.forEach(data => {
         list.push(data.id)
       })
-     
+
     }
-    if (list) { 
+    if (list) {
       if (list.length>0) {
         options = 0
       }
@@ -159,7 +172,7 @@ export class NewOrderTypeComponent  {
     return
   }
 
-  removeSelectedItem(index){ 
+  removeSelectedItem(index){
     this.orderMethodsService.assignPOSItems.splice(index)
   }
 

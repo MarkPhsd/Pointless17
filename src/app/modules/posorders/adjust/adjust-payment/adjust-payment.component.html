@@ -1,7 +1,42 @@
 <div *ngIf="(deviceSettings$ | async) as deviceSettings"></div>
 <div *ngIf="(terminalSettings$ | async) as terminal"></div>
 <div *ngIf="(action$  | async) as item"></div>
-<div *ngIf="resultAction && (voidPayment || manifest)">
+<div *ngIf="(voidPartial$  | async) as item"></div>
+
+<div *ngIf="action ==22">
+  <mat-card>
+    <mat-card>Partial Amount Approved <br>
+      {{payment.amountPaid | currency }}
+    </mat-card>
+    <mat-card-subtitle>Your payment is incomplete.</mat-card-subtitle>
+    <mat-card-content>
+
+      <div *ngIf="voidPartialProcessing">
+        ...Processing<br>
+        <mat-spinner [diameter]="50">
+        </mat-spinner>
+      </div>
+
+      <mat-label stlyle="margin:1em;font-size:1.4em">
+        The entire amount was not authorized.
+      </mat-label>
+
+      <mat-label stlyle="margin:1em;font-size:1.5em">
+        You may press accept to accept this amount. Then pay the remaining.
+      </mat-label>
+
+      <mat-label stlyle="margin:1em;font-size:1.5em">
+        Or you may Void and pay another way.
+      </mat-label>
+
+      <mat-card-actions>
+        <button class="payment-buttons" style="margin:1em" mat-raised-button color="accent" (click)="acceptPayment()">Accept </button>
+        <button class="payment-buttons" style="margin:1em"  mat-raised-button color="warn" (click)="voidPartialPayment()">Void Payment </button>
+      </mat-card-actions>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div *ngIf="action != 22 && (resultAction && (voidPayment || manifest))">
   <mat-card>
     <mat-card-content>
       <div *ngIf="settings.triposEnabled && terminalSettings">

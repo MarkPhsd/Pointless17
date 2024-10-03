@@ -34,7 +34,7 @@
 
         <div *ngIf="auths?.editEmail">
           <app-value-fields
-                        
+
                         [inputForm]="inputForm"
                         [fieldName]="'phone'">
             Phone
@@ -273,5 +273,16 @@
 
       </div>
     </div>
+
+    <div>
+      <app-value-fields
+                      [inputForm]="inputForm"
+                      [fieldName]="'accountNumber'">
+          Account Number
+      </app-value-fields>
+    </div>
+
+
+
   </div>
 </div>

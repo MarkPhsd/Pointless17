@@ -67,6 +67,7 @@ export class OrderHeaderComponent implements OnInit , OnChanges, OnDestroy {
 
   isStaff: boolean;
   isAdmin: boolean;
+
   menuButtonList: IMenuButtonGroups;
   _menuButton: Subscription;
 

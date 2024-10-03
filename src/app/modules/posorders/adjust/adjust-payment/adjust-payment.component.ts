@@ -5,7 +5,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { ActivatedRoute } from '@angular/router';
 import { Subscription,Observable, switchMap, EMPTY, of, catchError, concatMap } from 'rxjs';
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
-import { IPOSOrder, IPOSPayment, OperationWithAction } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSPayment, ISetting, OperationWithAction } from 'src/app/_interfaces';
 import { AuthenticationService, IItemBasic, OrdersService } from 'src/app/_services';
 
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
@@ -16,7 +16,7 @@ import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.s
 import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
-import { DSIEMVSettings, TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
+import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
@@ -26,7 +26,8 @@ import { TriposResult } from 'src/app/_services/tripos/triposModels';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
-
+// import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog } from '@angular/material/legacy-dialog';
 @Component({
   selector: 'app-adjust-payment',
   templateUrl: './adjust-payment.component.html',
@@ -34,21 +35,25 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 })
 export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
+  action: number;
   private _paymentWithAction : Subscription
   public  resultAction  : OperationWithAction;
   private id              : string;
   manifest                : InventoryManifest;
   list$                   : Observable<IItemBasic[]>;
+  terminalSettings$: Observable<ITerminalSettings>;
   setting                 : IItemBasic;
   settingID               : number;
   isAuthorized            = false;
   payment                 : IPOSPayment;
   voidPayment             : IPOSPayment;
   action$                 : Observable<any>;
+  voidPartial$   : Observable<any>;
+  voidPartialProcessing: boolean;
   voidAction$ : Observable<any>;
   settings: TransactionUISettings;
   terminalSettings: ITerminalSettings;
-  terminalSettings$: Observable<ITerminalSettings>;
+
   dsiEmv : DSIEMVSettings
   deviceSettings$ : Observable<any>;
   toggleVoid: boolean;
@@ -105,6 +110,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 private manifestService       : ManifestInventoryService,
                 private settingsService       : SettingsService,
                 private orderMethodsService   : OrderMethodsService,
+                private uiSettingService      : UISettingsService,
+                private dialog                : MatLegacyDialog,
                 private dialogRef             : MatDialogRef<AdjustPaymentComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: OperationWithAction,
                 )
@@ -117,17 +124,26 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         return of (data)
       }))
 
-      this.authenticationService.userAuths$.subscribe(authsData => { 
+      if (data.action == 22) {
+        this.payment = data?.payment;
+        this.voidPayment = this.payment;
+        this.isAuthorized = true;
+        this.action = 22;
+        this.resultAction = data
+        return;
+      }
+
+      this.authenticationService.userAuths$.subscribe(authsData => {
         this.settings        =  data?.uiSetting;
         const site           = this.siteService.getAssignedSite();
         this.isAuthorized    = this.userAuthorization.isUserAuthorized('admin, manager')
         this.userAuths       = authsData;
-       
+
         let action = 2;
         if (data.action) { action =  data?.action };
         if (this.data.manifest) {
           this.manifest = data?.manifest;
-          if (data.id) { 
+          if (data.id) {
             this.id       = data.id.toString();
           }
           this.list$    = this.adjustMentService.getReasonsByFilter(site, 4);
@@ -140,15 +156,15 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         this.payment       = data.payment;
         this.pOSPaymentService.getPOSPayment(site, this.payment.id, false).subscribe(data => {
 
-          if (data?.paymentMethod?.isCash) { 
-            if (authsData?.enableCashVoid) { 
+          if (data?.paymentMethod?.isCash) {
+            if (authsData?.enableCashVoid) {
               this.isAuthorized = true;
             }
           }
           this.voidPayment = data;
         })
       })
-    
+
     }
   }
 
@@ -623,16 +639,140 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
+  voidPartialPayment() {
+
+      const site = this.siteService.getAssignedSite();
+      this.resultAction.voidReason = "Partial Void"
+      this.resultAction.voidReasonID = 0
+      this.resultAction.action = 22;
+      const method = this.resultAction.paymentMethod;
+      let response$: Observable<OperationWithAction>;
+
+      if (this.resultAction) {
+        const voidPayment = this.voidPayment;
+        this.resultAction.payment = voidPayment;
+
+        const paymentMethod = this.payment.paymentMethod;
+        if (this.dsiEmv) {
+          if (this.dsiEmv?.v2) {
+            if (voidPayment) {
+              this.action$ =  this.paymentsMethodsService.processDcapCreditVoidV2(this.resultAction).pipe(switchMap(data => {
+                if (data) {
+                  setTimeout(() => {
+                    // this.dialogRef.close();
+                    this.acceptPayment()
+                  }, 50)
+                }
+                return of(data)
+              }))
+              return;
+            }
+          }
+        }
+    }
+  }
+
+  // acceptPayment() {
+
+  //   console.log('accept payment')
+  //   const site = this.siteService.getAssignedSite()
+  //   const device = localStorage.getItem('devicename')
+  //   const device$ = this.getPOSDeviceSettings(site, device).pipe(switchMap(data => {
+  //     data.dsiEMVSettings.checkPartialAuthCompleted = 0;
+  //     data.dsiEMVSettings.checkPartialAuth = 0;
+  //     this.settingsService.updateTerminalSetting(data)
+  //     this.terminalSettings = data;
+  //     console.log('accept payment', data, this.terminalSettings.dsiEMVSettings)
+  //     return this.saveTerminalSetting(false)
+  //   })).pipe(switchMap(data => {
+  //     this.settingsService.updateTerminalSetting(this.terminalSettings)
+     
+  //     setTimeout(this.closePrompt , 200)
+  //     return of(data)
+  //   }))
+
+  //   this.action$ = device$;
+
+  // }
+
+  acceptPayment() {
+    const void$ = this.clearVoidCheck()
+
+    const  device$ = void$.pipe(
+      switchMap(data => {
+        this.settingsService.updateTerminalSetting(this.terminalSettings);
+        // console.log('About to call setTimeout');
+        setTimeout(this.closePrompt.bind(this), 200);
+        // console.log('setTimeout is called');
+        this.voidPartialProcessing = false
+        return of(data);
+      })
+    );
+    this.voidPartial$ = device$
+  }
+
+  clearVoidCheck() {
+    console.log('accept payment');
+    this.voidPartialProcessing = true
+    const site = this.siteService.getAssignedSite();
+    const device = localStorage.getItem('devicename');
+    const device$ = this.getPOSDeviceSettings(site, device).pipe(
+      switchMap(data => {
+        data.dsiEMVSettings.checkPartialAuthCompleted = 0;
+        data.dsiEMVSettings.checkPartialAuth = 0;
+        this.settingsService.updateTerminalSetting(data);
+        this.terminalSettings = data;
+        return this.saveTerminalSetting(false);
+      }))
+    return device$
+  }
+  
+
+  closePrompt() {
+    console.log('close prompt')
+
+    this.voidPartialProcessing = false
+    try {
+      if (this.dialog) {
+        this.dialog.closeAll();
+      } else {
+        console.warn('Dialog service is undefined.');
+      }
+    } catch (error) {
+      console.log('Close prompt Error', error)
+    }
+  }
+
   voidDCapPayment() {
+
+    if (!this.voidPayment) { 
+      this.acceptPayment() 
+      return;
+    }
+
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
       this.resultAction.payment = voidPayment;
 
-      if (this.dsiEmv) { 
-        if (this.dsiEmv?.v2) { 
+      const dsiEMV = this.terminalSettings.dsiEMVSettings;
+      if (dsiEMV) {
+        if (dsiEMV?.v2) {
           if (voidPayment) {
-            this.action$ =  this.paymentsMethodsService.processDcapCreditVoidV2(this.resultAction).pipe(switchMap(data => {
-              if (data) { 
+
+            const void$ = this.clearVoidCheck()
+            const action$ = this.paymentsMethodsService.processDcapCreditVoidV2(this.resultAction);
+
+            this.action$ =  void$.pipe(switchMap(data => { 
+              return action$
+            })).pipe(switchMap(data => {
+             
+              console.log('data.errorMessage',  data)
+              if (data) {
+                if (data?.errorMessage ) {
+                  if (data.errorMessage != 'Partial Approval') { 
+                    this.siteService.notify(data?.errorMessage, 'close', 10000)
+                  }
+                }
                 setTimeout(() => {
                   this.dialogRef.close();
                 }, 50)
@@ -646,7 +786,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
       if (voidPayment) {
         this.action$ =  this.paymentsMethodsService.processDcapCreditVoid(voidPayment).pipe(switchMap(data => {
-          if (data) { 
+          if (data) {
             setTimeout(() => {
               this.dialogRef.close();
             }, 50)
@@ -690,7 +830,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       switchMap(response => {
         console.log(response)
 
-        const result = response.result 
+        const result = response.result
         if (!result) {
           this.notifyEvent(`Not voided. ${response.resultMessage}`, 'Result')
           return of(null)
@@ -699,17 +839,17 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         if (response && response.result) {
           this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
         }
-        if (response.payment.orderID && response.payment.orderID.toString()) { 
-        
+        if (response.payment.orderID && response.payment.orderID.toString()) {
+
           return this.orderService.getOrder(site, response.payment.orderID.toString(), false)
         }
         return of(null)
       }
     )).pipe(switchMap(data => {
-      if (data) { 
+      if (data) {
         this.orderMethodsService.updateOrderSubscription(data)
       }
-      
+
       this.storeCreditMethodService.updateSearchModel(null)
       this.dialogRef.close();
       if (data == null) { return of(null)}
@@ -740,7 +880,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   updateOrderSubscription(): Observable<IPOSOrder> {
     const site = this.siteService.getAssignedSite();
     const orderID = this.resultAction?.payment?.orderID;
-    if (!orderID) { 
+    if (!orderID) {
       this.siteService.notify('no OrderID', 'close', 2000)
       return
     }
@@ -752,6 +892,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+
+    this.saveTerminalSetting(false).subscribe(data => { })
     if (this._paymentWithAction) {
       this._paymentWithAction.unsubscribe();
     }
@@ -763,4 +905,56 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       verticalPosition: 'top'
     })
   }
+
+  getPOSDeviceSettings(site, device) {
+    return this.settingsService.getPOSDeviceSettings(site, device).pipe(concatMap(data => {
+      this.settingsService.updateTerminalSetting(data)
+      this.dsiEmv = data?.dsiEMVSettings;
+      return of(data)
+    }))
+  }
+
+  saveTerminalSetting(close: boolean) {
+    let item = this.terminalSettings
+
+    if (item) {
+      console.log('terminal', item)
+    }
+    // Ensure dsiEMVSettings.sendToBack is set correctly based on the close parameter
+  
+    item.dsiEMVSettings.sendToBack = close;
+    item.id = this.terminalSettings?.id;
+    const text = JSON.stringify(item);
+    let setting: ISetting = {} as ISetting;
+    setting.name = item.name;
+    setting.text = text;
+    if (item.id) {
+      setting.id = item.id;
+    } else {
+      if (this.setting) {
+        setting.id =  this.setting.id;
+      }
+    }
+
+    setting.filter = 421;
+    return this._putSetting(setting)
+  }
+
+  _putSetting(setting : ISetting) {
+    const site = this.siteService.getAssignedSite();
+    const id =   setting?.id;
+    return this.settingsService.putSetting(site, id, setting).pipe(
+      switchMap(data => {
+        if (!data) {
+          return of(null)
+        }
+        const terminal = JSON.parse(data?.text) as ITerminalSettings;
+        this.uiSettingService.updatePOSDevice(terminal);
+        this.dsiEmv = terminal.dsiEMVSettings;
+        return of(data);
+      })
+    );
+  }
+
+
 }

@@ -202,7 +202,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
   initForm() {
     this.searchForm = this.fb.group({
-      itemName : ['']
+      itemName : [''],
     })
     this.dateRange = new UntypedFormGroup({
       startDate: new UntypedFormControl(),
@@ -263,7 +263,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         minWidth: 155,
         maxWidth: 155,
         flex: 2,
-        
+
       },
 
 
@@ -414,7 +414,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     ]
 
     this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize, this.columnDefs);
-  
+
 
   }
 
@@ -485,7 +485,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     this.searchModel.pageNumber = 1;
 
     this.searchModel.refunds = false
-    if (this.refunds) { 
+    if (this.refunds) {
       this.searchModel.refunds = true
     }
 
@@ -616,17 +616,17 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       console.log('event', event)
       const item = selectedRows[0]
       this.selected = item
-      if (item && item.metrcResponse) { 
+      if (item && item.metrcResponse) {
         this.selectedResponse = JSON.parse(item?.metrcResponse)
       }
-      
+
     } catch (error) {
-      console.log(error)      
+      console.log(error)
     }
 
   }
 
-  clearSelectedData() { 
+  clearSelectedData() {
     this.selectedResponse = null
   }
 
@@ -759,10 +759,11 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         options.quotes = false;
         options.header = false;
         options.skipEmptyLines = true;
+
+
         this.gridApi.exportDataAsCsv({ columnKeys: fields, allColumns: false,
                                         fileName: 'metrc' + this.dateFrom, skipColumnHeaders: true, suppressQuotes: true});
-      //   return;
-      // }
+
     }
 
     capitalizeFirstLetter(string) {

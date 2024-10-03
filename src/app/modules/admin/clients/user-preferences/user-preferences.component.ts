@@ -61,6 +61,7 @@ export class UserPreferencesComponent implements OnInit {
       messagingPreference: [],
       metrcKey: [],
       metrcUseMetrcLabel: [],
+      customerDisplayPin: [],
     })
 
     this.inputForm.patchValue(this.user?.userPreferences)

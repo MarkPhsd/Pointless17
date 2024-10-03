@@ -25,6 +25,9 @@
       <button  style="margin-left:5px; height:55px" color="primary" mat-flat-button (click)="setScanMode(1)"><mat-icon>shopping_cart_checkout</mat-icon>Prep
       <span *ngIf="scanMode ==1"> ON </span></button>
     </span>
+
+
+
     <span class="item-span" >
       <button  style="margin-left:5px; height:55px" color="accent" mat-flat-button (click)="setScanMode(2)"><mat-icon>commuute</mat-icon>Driver
         <span *ngIf="scanMode ==2"> ON </span></button>
@@ -78,19 +81,20 @@
           <button  style="height:55px"  mat-raised-button color="accent" (click)="completePrepTypeNotifier()">
             Notify Complete
           </button>
+
+          <ng-container [ngTemplateOutlet]="menuFunctionButtons"></ng-container>
+
+
         </div>
       </span>
-
     </div>
-
-
 
     <div  #scrollMe
         [id]="scrollStyle"
         *ngIf="posOrderItems && posOrderItems.length>0"
         [style.width]  = "'85vw'"
         class="phone-device">
-   
+
       <ng-container [ngTemplateOutlet]="posItemsListView"></ng-container>
     </div>
     <div class="phone-drag">
@@ -102,7 +106,7 @@
 
 <ng-template #posOrderItemsView>
   <!-- ScrollMe controls the calculated height. it uses a view child container to adjust the height dynamically -->
-  
+
   <div    #scrollMe
           [id]           = "scrollStyle"
           *ngIf          = "currentItems && currentItems.length>0"
@@ -195,3 +199,21 @@
   <message-menu-sender [order]="order" [isStaff]="isStaff"></message-menu-sender>
 
 </ng-template>
+
+<ng-template #menuFunctionButtons>
+  <div style="margin-left:3px"  *ngIf="menuButtonList$ | async as list" class="button-row-55">
+    <div *ngIf="uiHomePage">
+      <function-buttons-list
+            [list]="list"
+            [order]="order"
+            [isAdmin]="isAdmin"
+            [isStaff]="isStaff"
+            [isUser] ="isUserStaff"
+            [buttonSize]="'button-small'"
+            [adminEmail]="uiHomePage?.administratorEmail"
+            >
+      </function-buttons-list>
+    </div>
+  </div>
+</ng-template>
+

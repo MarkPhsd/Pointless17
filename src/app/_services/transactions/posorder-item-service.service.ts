@@ -222,8 +222,10 @@ enum actions {
   void = 1,
   priceAdjust = 2,
   note = 3,
-  SaleAuth = 4
+  SaleAuth = 4,
+  refund = 10,
 }
+
 export interface ItemWithAction {
   posItem           : PosOrderItem;
   action            : actions;
@@ -247,7 +249,7 @@ export interface ItemWithAction {
 })
 
 export class POSOrderItemService {
- 
+
 
   get platForm()              {  return Capacitor.getPlatform(); }
 
@@ -314,7 +316,7 @@ export class POSOrderItemService {
   }
 
   postInventoryAction(site: ISite, arg1: { posItem: PosOrderItem; action: string; }) {
-  
+
     const controller = "/POSOrderItems/"
 
     const endPoint  = "postInventoryAction"

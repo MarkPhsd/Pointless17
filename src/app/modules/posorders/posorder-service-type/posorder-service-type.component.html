@@ -9,8 +9,8 @@
       <div >
         <button mat-flat-button class="service-buttons" color="accent" (click)="applyServiceType(item)">
           <div class="flex-start-row-space-around">
-            <div>
-              <h3>{{item.name}}</h3>
+            <div class="button-text">
+              <h4 style="font-size:1.2em">{{item.name}}</h4>
             </div>
             <div>
               <ng-container *ngTemplateOutlet="productImage,  context:  {$implicit: item}"></ng-container>

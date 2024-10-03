@@ -281,6 +281,7 @@ export class PosEditSettingsComponent implements OnInit {
       supressedForms  : [],
       v2: [],
       sendToBack:  [],
+      checkPartialAuth: [],
     })
 
     if (this.terminal) {

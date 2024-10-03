@@ -158,14 +158,16 @@
             Exit</button>
 
 
-    <button
-            *ngIf="!isPax"
+    <span *ngIf="(serviceType$ | async) as item">
+      <button 
+            *ngIf="!isPax && !item?.retailType" 
             color="warn"
             mat-raised-button
             (click)="logout()">
-            Log Out
-      <mat-icon>exit_to_app</mat-icon>
-    </button>
+          Log Out
+        <mat-icon>exit_to_app</mat-icon>
+      </button>
+    </span>
 
   </div>
 

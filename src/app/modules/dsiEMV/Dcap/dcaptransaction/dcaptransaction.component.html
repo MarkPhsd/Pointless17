@@ -3,6 +3,9 @@
 <div *ngIf="(  setting$ | async) as action"></div>
 <div *ngIf="( actionSetting$ | async) as action"></div>
 <div *ngIf="(saving$ | async) as item"></div>
+<div *ngIf="(void$ | async) as void"></div>
+<div *ngIf="(requestVoid$ | async) as voidRequest"></div>
+
 <div *ngIf="!terminalSettings">
   Warning No Terminal Settings.
   <button mat-button (click)="close()">Close</button>

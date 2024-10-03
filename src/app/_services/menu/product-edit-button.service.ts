@@ -240,7 +240,7 @@ export class ProductEditButtonService {
     return item$
   }
 
-  openItemDetail(id: number, history: boolean) { 
+  openItemDetail(id: number, history: boolean) {
     const site = this.siteService.getAssignedSite();
     return   this.orderItemService.getPOSOrderItembyHistory(site, id, history).pipe(switchMap(data => {
 
@@ -433,7 +433,7 @@ export class ProductEditButtonService {
     //   },
     // )
 
- 
+
   }
 
   openUnitTypeEditor(data: UnitType): MatDialogRef<UnitTypeEditComponent> {
@@ -967,6 +967,35 @@ export class ProductEditButtonService {
       })
       return dialogRef
     }
+  }
+
+  // / const item = {ui:ui, payment: data.payment, paymentMethod: data.payment.paymentMethod}
+  openVoidPartialVoid(item ) {
+    let payment   =  item.payment;
+    let uiSetting =  item.uiSettings;
+    if (!payment) {    return of(null)  }
+    let dialogRef: any;
+    const site = this.siteService.getAssignedSite();
+
+    let action      = {}  as OperationWithAction;
+    action.action   = 22
+    action.payment  = payment;
+    action.id       = payment.id
+
+    let method = {} as IPaymentMethod
+    // const method$ = this.paymentMethodService.getCacheMethod(site, item?.paymentMethod);
+    // return method$.pipe(switchMap(data => {
+    action.paymentMethod =  item?.paymentMethod;
+    action.uiSetting = uiSetting;
+    dialogRef = this.dialog.open(AdjustPaymentComponent,
+      { width:        '100VW !important',
+        minWidth:     '100VW !important',
+        height:       '100VH !important',
+        minHeight:    '100VH !important',
+        data     : action
+    })
+    return dialogRef
+    // }))
   }
 
   openPayPalTransaction(options: any ) {

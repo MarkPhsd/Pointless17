@@ -96,7 +96,6 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
     OverlayModule,
     NgxMatDatetimePickerModule,
     NgOptimizedImage,
-
     NgxMatNativeDateModule
   ],
   providers: [

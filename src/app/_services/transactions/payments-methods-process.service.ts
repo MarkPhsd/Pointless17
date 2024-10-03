@@ -466,15 +466,16 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     action.deviceName  = device;
 
     return this.dCapService.voidSaleByRecordNoV2(action).pipe(switchMap(data => {
+        console.log('processDcapCreditVoidV2', data)
         if (data) {
-            if (data.errorMessage) {
-              this.sitesService.notify(data?.errorMessage, 'close', 10000)
-            }
-            this.orderMethodsService.updateOrder(data?.order)
-
-            this.sitesService.notify('Voided - this order has been re-opened if closed.', 'Result', 10000, 'green' )
+          if (data.errorMessage) {
+            this.sitesService.notify(data?.errorMessage, 'close', 10000)
           }
-
+          if (data?.order) { 
+            this.orderMethodsService.updateOrder(data?.order)
+          }
+          this.sitesService.notify('Voided - this order has been re-opened if closed.', 'Result', 10000, 'green' )
+        }
         return of(data)
       })
     )

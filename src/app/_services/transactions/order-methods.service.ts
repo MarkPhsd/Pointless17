@@ -1006,6 +1006,10 @@ export class OrderMethodsService implements OnDestroy {
     return null
   }
 
+  postToShipDay(site:ISite, id:number): Observable<any> {
+    return this.orderService.postToShipDay(site,id)
+  }
+
   emailOrder(order: IPOSOrder) : Observable<any> {
     if (order && order.clientID) {
       if (order.clients_POSOrders.email) {
@@ -1459,7 +1463,7 @@ export class OrderMethodsService implements OnDestroy {
     return false;
   }
 
-  promptLogin(message) { 
+  promptLogin(message) {
     if (message == 'No user type') {
       this.validateUser()
       return true
@@ -1478,7 +1482,7 @@ export class OrderMethodsService implements OnDestroy {
         if (data && data.order) {   this.updateOrderSubscription(data.order);  }
 
         const result = this.promptLogin(data?.resultErrorDescription)
-        if (result) { return } 
+        if (result) { return }
 
         this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
         return;
@@ -1909,8 +1913,8 @@ export class OrderMethodsService implements OnDestroy {
     let maxWidth = '500px'
     let minWidth = '500px'
 
- 
-  
+
+
     if (this.IsSmallDevice) {
       width     =       '100%'
       minWidth  =   '100% !important'
@@ -2351,7 +2355,7 @@ export class OrderMethodsService implements OnDestroy {
          height  = '100vh !important';
          width   = '100vw !important';
       }
-      
+
       console.log('width', width)
       let dialogRef =  this.editDialog.editDialog(item, width, height);
       dialogRef.afterClosed().subscribe(data => {

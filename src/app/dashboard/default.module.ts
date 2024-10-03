@@ -417,7 +417,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     PayAPIComponent,
     PayAPIFrameComponent,
-    
+
     BrandClassEditorComponent,
     BrandFilterComponent,
     BrandEditorMainComponent,
@@ -464,7 +464,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     CloseDayValidationComponent,
     CreditCardPaymentsPrintListComponent,
 
-    
+
     CookieConsentComponent,
     //adminModule
     AdminbranditemComponent,

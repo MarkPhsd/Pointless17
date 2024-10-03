@@ -101,24 +101,24 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   //   }
   //   return false
   // }
-  
-  get isVendorProfile() { 
-    if (this.clientType && this.clientType.name ) { 
-      if (this.clientType.name.toLocaleLowerCase() == 'supplier' || this.clientType.name.toLocaleLowerCase() == 'vendor') { 
+
+  get isVendorProfile() {
+    if (this.clientType && this.clientType.name ) {
+      if (this.clientType.name.toLocaleLowerCase() == 'supplier' || this.clientType.name.toLocaleLowerCase() == 'vendor') {
         return true;
       }
     }
     return false;
   }
-  
+
   generatePurchaseOrder(optionAll?: boolean) {
     const site = this.siteService.getAssignedSite()
     this.action$ = this.orderService.postPurchaseOrder(site, this.clientTable?.companyName, +this.id, optionAll).pipe(switchMap(data => {
       //open the order;
-      if (data) { 
+      if (data) {
         this.orderMethodsService.setActiveOrder(data)
       }
-      if (!data) { 
+      if (!data) {
         this.siteService.notify ('No purchase order generated', 'close', 3000, 'red')
       }
       return of(data)
@@ -288,9 +288,9 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
           return false;
         }
 
-        if (type === 'patient') {
+        if (type === 'caregiver') {
           if (!client.insTertiaryNum) {
-            this.errorMessages.push('No OOMP value - Patient')
+            this.errorMessages.push('No OOMP value - Patient (2)')
             return false;
           }
           if (client.insTertiaryNum) {
@@ -303,7 +303,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 
         if (type === 'caregiver') {
           if (!client.medLicenseNumber) {
-            this.errorMessages.push('No OOMPB value')
+            this.errorMessages.push('No OOMPB value (caregiver)')
             return false;
           }
           if (client.medLicenseNumber) {
@@ -315,7 +315,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 
           //insTertiaryNum
           if (!client.insTertiaryNum) {
-            this.errorMessages.push('No OOMPB value')
+            this.errorMessages.push('No OOMPB value  (caregiver)')
             return false;
           }
           if (client.insTertiaryNum) {
@@ -348,8 +348,8 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   }
 
   sendPasswordReset() {
-    if (this.clientTable) { 
-      this.action$ =  this.authenticationService.requestPasswordResetToken(this.clientTable.apiUserName).pipe(switchMap(data => { 
+    if (this.clientTable) {
+      this.action$ =  this.authenticationService.requestPasswordResetToken(this.clientTable.apiUserName).pipe(switchMap(data => {
         this.siteService.notify('Email sent', 'close', 3000)
         return of(data)
       }))
@@ -647,25 +647,28 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   }
 
   postNewCheckIn() {
-    if (!this.clientTable) { return }
+    if (!this.clientTable) {
+      this.siteService.notify('No client found. Error', 'close', 1000, 'red')
+      return
+    }
     const site = this.siteService.getAssignedSite()
     const payload = this.orderMethodsService.getPayLoadDefaults(null)
     payload.order.clientID = this.clientTable.id;
 
     const postOrder$ = this.orderService.postOrderWithPayload(site, payload).pipe(switchMap(data => {
       this.orderMethodsService.updateOrder(data)
-      this.changeTransactionType(null)
+      this.changeTransactionType(data)
       return of(data)
     }))
     return postOrder$
   }
 
-  changeTransactionType(event) {
+  changeTransactionType(order) {
     this.orderMethodsService.toggleChangeOrderType = true;
     const bottomSheet = this._bottomSheet.open(NewOrderTypeComponent)
     this.bottomSheet$ = bottomSheet.afterDismissed()
     this.bottomSheet$.subscribe(data => {
-      this.orderMethodsService.updateOrder(null)
+      this.orderMethodsService.updateOrder(order)
       this.orderMethodsService.toggleChangeOrderType = false;
     })
   }
@@ -786,7 +789,6 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
           this.notifyEvent(result.resultMessage, 'Failed');
           return of(null)
         }
-
         return   this.postNewCheckIn()
     }))
 

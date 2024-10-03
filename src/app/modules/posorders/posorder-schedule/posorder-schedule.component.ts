@@ -163,7 +163,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
         this.inputFormNotes.patchValue({
           productOrderMemo: currentMemo
         });
-        console.log(currentMemo, newInfo, this.inputFormNotes.value); // Debug output
+        // console.log(currentMemo, newInfo, this.inputFormNotes.value); // Debug output
       }
     }
 
@@ -184,7 +184,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     const site = this.siteService.getAssignedSite();
     return this.requestMessageService.getTemplateMessages(site).pipe(
       switchMap(data => {
-        console.log('get schedule messages', data)
+        // console.log('get schedule messages', data)
         if (data) {
           data = data.filter(item => {
             return item.type.toLowerCase() == 'ps'
@@ -291,7 +291,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
 
   save() {
 
-    console.log(this.authenticationService._user.value)
+    // console.log(this.authenticationService._user.value)
 
     if (this.authenticationService._user.value) {
       const user = this.authenticationService._user.value as IUser;
@@ -365,7 +365,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   }
 
   navigate(event) {
-    console.log(this.selectedIndex, event, this.selectedIndex + event)
+    // console.log(this.selectedIndex, event, this.selectedIndex + event)
     this.updateSelectedIndex(this.selectedIndex + event);
   }
 

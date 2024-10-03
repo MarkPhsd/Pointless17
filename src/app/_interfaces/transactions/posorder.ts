@@ -525,7 +525,8 @@ export interface IPaymentResponse {
 enum actions {
   void = 1,
   priceAdjust = 2,
-  note = 3
+  note = 3,
+  partialVoid = 22
 }
 
 export interface OperationWithAction {
@@ -541,8 +542,9 @@ export interface OperationWithAction {
   purchaseOrderPayment: IPOSPayment;
   resultMessage     : string;
   uiSetting         : TransactionUISettings
-  voidAmount:       number;
-  deviceName: string;
+  voidAmount        : number;
+  deviceName        : string;
+  errorMessage      : string;
 }
 
 export interface IPaymentSearchModel {

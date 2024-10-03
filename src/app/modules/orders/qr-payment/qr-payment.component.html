@@ -9,8 +9,8 @@
     <div class="grid-about">
       <div>
         <img class="pointless-logo"
-            onerror   = "this.src='../assets/images/logo.png'"
-            src       = '../assets/images/logo.png' >
+            onerror   = "this.src='assets/images/logo.png'"
+            src       = 'assets/images/logo.png' >
       </div>
       <div>Powered By pointlesspos.com</div>
     </div>
@@ -44,12 +44,12 @@
       ...sending
       <button mat-raised-button (click)="cancelMessage()"><mat-icon>cancel</mat-icon>Cancel</button>
     </div>
- 
+
     <div *ngIf="order && setToPay">
 
       <div class="centered-flex">
-        <button style="width:150px;height:45px" 
-                mat-raised-button color="accent" 
+        <button style="width:150px;height:45px"
+                mat-raised-button color="accent"
                 (click)="setToPay = false">
           Review Order
         </button>

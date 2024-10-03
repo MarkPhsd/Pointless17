@@ -28,7 +28,7 @@ export class FbClientTypesService {
       voidNotification: [],
       balanceSheetStartNotification: [],
       discountNotification: [],
-
+      postShipDayOrder: [],
       allowBuy             : [],
       allowTransferOrder   : [],
       voidOrder            : [],

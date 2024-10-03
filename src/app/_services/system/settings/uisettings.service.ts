@@ -37,6 +37,9 @@ export interface ProcessorInfo {
 
 
 export interface TransactionUISettings {
+
+  multiButtonKPrepHeader  : number;
+  multiButtonPrepHeader  : number;
   autoSelectItemPOSearch: boolean;
   billOnHold: boolean;
   paxA920AutoOpenCart: boolean;
@@ -196,6 +199,8 @@ export interface DSIEMVSettings {
   timerBringToFront: number;
   v2: boolean;
   sendToBack: boolean;
+  checkPartialAuth: number;
+  checkPartialAuthCompleted: number;
 }
 
 export interface DSIEMVAndroidSettings {
@@ -915,6 +920,9 @@ export class UISettingsService {
 
   initForm(fb: UntypedFormGroup): UntypedFormGroup {
     return this._fb.group({
+
+      multiButtonKPrepHeader  : [],
+      multiButtonPrepHeader   : [],
       autoSelectItemPOSearch : [],
       billOnHold : [],
       paxA920AutoOpenCart : [],

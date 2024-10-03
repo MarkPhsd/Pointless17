@@ -114,7 +114,7 @@ export interface IUserAuth_Properties {
   voidNotification: boolean;
   balanceSheetStartNotification: boolean;
   discountNotification: boolean;
-
+  postShipDayOrder: boolean;
 
   displayTipCalcForServers: boolean;
 }

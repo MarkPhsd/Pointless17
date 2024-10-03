@@ -66,9 +66,9 @@ export class UITransactionsComponent implements OnInit {
   }
 
 
-  emailDCApSettings() { 
+  emailDCApSettings() {
     const model = {emailTo: 'markp@pointlesspos.com', name: 'mark phillips'} as any
-    this.action$ = this.emailSMTPService.emailDCAPProperties(model).pipe(switchMap(data => { 
+    this.action$ = this.emailSMTPService.emailDCAPProperties(model).pipe(switchMap(data => {
       this.sitesService.notify('Check email', 'close', 3000)
       return of(data)
     }))

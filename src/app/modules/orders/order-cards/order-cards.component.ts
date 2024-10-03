@@ -40,7 +40,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   isNearBottom        :   any;
   @Input() cardStyle = 'block';
   @Input() site: ISite;
-  results$: Observable<any>;  
+  results$: Observable<any>;
   @Input() autoOpenCart : boolean;
   @Input() isPaxDevice: boolean;
 
@@ -239,7 +239,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     private userAuthorization: UserAuthorizationService,
     private cd: ChangeDetectorRef,
 
-      
+
       public  toolbarUIService  : ToolBarUIService,
       private  navigationService: NavigationService,
       // public  printingService    : PrintingService,
@@ -247,7 +247,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
       // private uiSettingsService: UISettingsService,
       private platFormService: PlatformService,
       public router:           Router,
-      
+
 
     )
   {
@@ -392,7 +392,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
 
           // @Input() autoOpenCart : boolean;
           // @Input() isPaxDevice: boolean;
-          if (this.autoOpenCart && this.isPaxDevice) { 
+          if (this.autoOpenCart && this.isPaxDevice) {
             //then we auto nav to the posorder items;
             this.toggleOpenOrderBar(data)
           }
@@ -400,7 +400,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
       }
     )
   }
-  
+
   toggleOpenOrderBar(order) {
     // if (!this.smallDevice) {
     //   this.navigationService.toggleOpenOrderBar(this.isStaff)
@@ -495,7 +495,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     }
 
     if (this.viewType == 1 || this.viewType == 0 || this.viewType == 2) {
-      // console.log('regular search' , this.viewType)
       model.prepStatus = null;
       results$    = this.orderService.getOrderBySearchPaged(site, model) //.pipe(share());
     }
@@ -517,9 +516,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
       return of(null)
     }
 
-    // console.log('add to list', model, this.viewType, this.printingService._prepStatus.value)
     return this.getResults(results$, reset)
-
   }
 
   getResults(results$: Observable<POSOrdersPaged>, reset)  {
@@ -552,13 +549,20 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
         if (data.results) {
           this.loading      = false
           // this.orders = this.orders.concat(data.results)
+
+          // console.log('current orders', this.orders)
+          // console.log('new orders', data.results)
+
           this.orders = this.mergeAndDeduplicate(this.orders, data.results)
           if (this.viewType != 3) {
             this.cd.detectChanges()
           }
           const newLocal = this;
           this.orders.sort
+          // console.log('merged orders', this.orders)
           this.orders = this.getUniqueItems(this.orders)
+
+          // console.log('getUniqueItems orders', this.orders)
 
           this.totalRecords = data.paging.totalRecordCount;
           if ( this.orders.length == this.totalRecords ) {
@@ -594,19 +598,45 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
 
   }
 
+  // mergeAndDeduplicate(items1: IPOSOrder[], items2: IPOSOrder[]): IPOSOrder[] {
+  //   const merged: IPOSOrder[] = [...items1, ...items2];
+  //   const result: IPOSOrder[] = [];
+
+  //   const itemMap: Map<number, IPOSOrder> = new Map();
+
+  //   for (const item of merged) {
+  //     // Check if we already have an item with the same id
+
+  //     if (item.itemCount === 0) {
+  //       continue;
+  //     }
+
+  //     if (itemMap.has(item.id)) {
+  //       const existingItem = itemMap.get(item.id);
+  //       // Keep the item with the higher itemCount
+  //       if (existingItem && item.itemCount > existingItem.itemCount) {
+  //         itemMap.set(item.id, item);
+  //       }
+  //     } else {
+  //       itemMap.set(item.id, item);
+  //     }
+  //   }
+
+  //   // Convert the map back to an array
+  //   itemMap.forEach((value) => {
+  //     result.push(value);
+  //   });
+
+  //   return result;
+  // }
+
   mergeAndDeduplicate(items1: IPOSOrder[], items2: IPOSOrder[]): IPOSOrder[] {
     const merged: IPOSOrder[] = [...items1, ...items2];
     const result: IPOSOrder[] = [];
-
     const itemMap: Map<number, IPOSOrder> = new Map();
 
     for (const item of merged) {
       // Check if we already have an item with the same id
-
-      if (item.itemCount === 0) {
-        continue;
-      }
-
       if (itemMap.has(item.id)) {
         const existingItem = itemMap.get(item.id);
         // Keep the item with the higher itemCount
@@ -625,6 +655,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
 
     return result;
   }
+
 
   get isPrepViewEnabled() {
     if (this.viewType != 3) {

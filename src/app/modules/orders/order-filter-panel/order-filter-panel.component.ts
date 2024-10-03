@@ -228,6 +228,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
         this.searchOrderHistory = false;
 
         if (data && data.searchOrderHistory) {
+
           this.searchOrderHistory = true;
         }
         if (data) {
@@ -582,7 +583,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       }
       this.refreshTerminatedEmployees()
     }
-
   }
 
   updateOrderSearch(searchModel: IPOSOrderSearchModel) {
@@ -646,6 +646,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
     let item =  JSON.parse(JSON.stringify(search));
 
+    console.log('refresh search', item)
     if (this.toggleOpenClosedAll == "1") {  this.initCompletionDateForm()  }
     item.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
     item.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
@@ -660,12 +661,10 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       item.prepStatus         = 1;
     }
 
-
-
     this.orderMethodsService.orderSearchEmployeeID = this.employeeID
     item.employeeID = this.employeeID;
     this.refreshAllOrMyOrders(item);
-
+    console.log('refresh search', item)
     this.updateOrderSearch( JSON.parse(JSON.stringify(item)));
     return of('')
   }
@@ -728,6 +727,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.showDateFilter = !this.showDateFilter;
     if (this.isUser) {
       if (this.showDateFilter) {
+        console.log('toggleDateRangeFilter searchOrderHistory', true)
         this.searchModel.searchOrderHistory = true;
       } else {
         this.searchModel.searchOrderHistory = false;
@@ -804,6 +804,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
             if (this.isUser) {
               if (this.showDateFilter) {
+                console.log('show date filter' , this.showDateFilter)
                 this.searchModel.searchOrderHistory = true;
               } else {
                 this.searchModel.searchOrderHistory = false;

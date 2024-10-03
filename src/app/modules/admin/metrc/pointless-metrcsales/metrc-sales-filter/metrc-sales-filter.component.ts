@@ -203,6 +203,7 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
     this.searchModel.pageNumber  = 1;
     this.searchModel.currentPage = 1;
     this.searchModel.pageSize    = 1000000;
+    this.searchModel.nonSubmitted = false
     this.outputClearExceptions.emit(true)
     this.pointlessMetrcSalesReport.updateSearchModel( this.searchModel )
   }
@@ -224,8 +225,6 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
     this.reportZRUNIDSales(event)
   }
 
-
-
   initSearchModel() {
     const site = this.siteService.getAssignedSite()
     if (!site) { return }
@@ -236,6 +235,7 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
     this.searchModel.currentPage = 1;
     this.searchModel.pageSize    = 1000;
     this.searchModel.currentDay = true;
+    this.searchModel.nonSubmitted = false
     this.employees$      = this.employeeService.getAllActiveEmployees(site)
   }
 
@@ -246,7 +246,8 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
 
   initSearchForm() {
     this.searchForm = this.fb.group({
-      itemName : ['']
+      itemName : [''],
+
     })
     if (this.searchModel && this.searchModel.zRUN) {
       this.searchForm = this.fb.group({

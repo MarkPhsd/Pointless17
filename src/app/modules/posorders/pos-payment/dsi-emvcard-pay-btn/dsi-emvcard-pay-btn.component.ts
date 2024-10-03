@@ -49,13 +49,13 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.debitOnly) { 
-      this.themeClass = 'button-debit';
+      this.themeClass = 'button-debit payment-buttons';
     }
     if (this.creditOnly) { 
-      this.themeClass = 'button-credit';
+      this.themeClass = 'button-credit payment-buttons';
     }
     if (this.manual) { 
-      this.themeClass = 'button-manual';
+      this.themeClass = 'button-manual payment-buttons';
     }
     const i = 0
   }

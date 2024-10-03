@@ -166,7 +166,7 @@
 
         </div>
 
-        <div class="grid-views">
+        <div class="grid-views" *ngIf="(menuButtonList$ | async) as list ">
           <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Multi Function Button Lists</h4>
 
           <!-- <mat-label>These are options that display during the order to modify the item.</mat-label>
@@ -176,13 +176,45 @@
             </mat-slide-toggle>
           </div> -->
 
-          <div *ngIf="(menuButtonList$ | async) as list ">
+          <div >
             <mat-form-field style="width: 200px" class="fields"
                 appearance="outline">
               <mat-label>Order Header</mat-label>
                 <mat-select
                           type              = "number"
                           formControlName   = "multiButtonOrderHeader" >
+                  <mat-option
+                      *ngFor="let item of list"
+                      [value]="item?.id">
+                      {{item?.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field style="width: 200px" class="fields"
+                appearance="outline">
+              <mat-label>Prep Header (mobile)</mat-label>
+                <mat-select
+                          type              = "number"
+                          formControlName   = "multiButtonPrepHeader" >
+                  <mat-option
+                      *ngFor="let item of list"
+                      [value]="item?.id">
+                      {{item?.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field style="width: 200px" class="fields"
+                appearance="outline">
+              <mat-label>Prep Header (Stationary)</mat-label>
+                <mat-select
+                          type              = "number"
+                          formControlName   = "multiButtonKPrepHeader" >
                   <mat-option
                       *ngFor="let item of list"
                       [value]="item?.id">

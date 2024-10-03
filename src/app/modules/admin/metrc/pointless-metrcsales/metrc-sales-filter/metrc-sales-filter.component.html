@@ -38,6 +38,12 @@
         </mat-slide-toggle>
       </div>
 
+      <div *ngIf="searchModel">
+        <mat-slide-toggle [(ngModel)]="searchModel.nonSubmitted">
+          Non-Submitted
+        </mat-slide-toggle>
+      </div>
+
       <div *ngIf="searchModel"
           class="margin-5 keypad fields"
           >

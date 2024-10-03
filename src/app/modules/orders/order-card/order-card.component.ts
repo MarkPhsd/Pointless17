@@ -129,7 +129,7 @@ export class OrderCardComponent implements OnInit {
       return order.id;
     }
     if (order.history) {
-      return order.orderID_Temp;
+      return order.id;
     }
   }
 

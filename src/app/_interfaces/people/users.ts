@@ -41,5 +41,6 @@ export interface UserPreferences {
   headerColor: string;
   messagingPreference: number;
   metrcUseMetrcLabel: boolean;
+  customerDisplayPin: string;
 }
 

@@ -17,8 +17,9 @@ mat-card {
 }
 
 .service-buttons {
-  width: 300px;
-  height: 75px;
+  width: 250px;
+  height: 60px;
+  margin: .5em;
 }
 
 .formFieldClass {
@@ -30,11 +31,16 @@ mat-card {
   width       : 100%;
   white-space : normal;
   overflow    : hidden;
-  height  : 55px;
+  height  : 50px;
 
   @include for-phone-only {
     font-size  : 1.3em;
-    height    : 55px;
-    height    :55px;
+    height    : 50px;
   }
+}
+
+.button-text {
+  width: 150px;
+  text-align: left;
+  text-wrap:balance;
 }

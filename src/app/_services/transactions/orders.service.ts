@@ -52,6 +52,7 @@ export interface OrderActionResult {
 
 export class OrdersService {
 
+
   completionDate_From  : string; // searchModel.completionDate_From;
   completionDate_To    : string; // searchModel.completionDate_To;
 
@@ -67,6 +68,20 @@ export class OrdersService {
   {
 
   }
+
+
+  postToShipDay(site: ISite, id: number): Observable<any> {
+    const controller = "/ShipdayAPI/"
+
+    const endPoint  = "postOrder"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url);
+  }
+
 
   setOrderFeatures(site: ISite, id: number, orderFeatures: any): Observable<IPOSOrder> {
     const controller = "/POSOrders/"
@@ -99,7 +114,7 @@ export class OrdersService {
     const newItem = {} as any;
     newItem.barcode = barCode;
     newItem.orderID = orderID;
-    newItem.scanMode = scanMode 
+    newItem.scanMode = scanMode
     const site= this.siteService.getAssignedSite();
 
     const controller = "/POSOrderItems/"
@@ -117,7 +132,7 @@ export class OrdersService {
     const controller = "/POSOrders/"
 
     const endPoint  = "postPurchaseOrder"
-    if (!outPutAll) { 
+    if (!outPutAll) {
       outPutAll = false
     }
 
@@ -545,7 +560,7 @@ export class OrdersService {
     }
     if (history === undefined) {history = false};
 
-    if (this.completionDate_From && this.completionDate_To) { 
+    if (this.completionDate_From && this.completionDate_To) {
       startDate = this.completionDate_From
       endDate   = this.completionDate_To
     }

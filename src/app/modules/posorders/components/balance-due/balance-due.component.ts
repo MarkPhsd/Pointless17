@@ -52,7 +52,7 @@ export class ChangeDueComponent implements OnInit  {
   finalizer: boolean;
   _finalizer: Subscription;
   printAction$ : Observable<any>;
-
+  serviceType$ : Observable<any>;
   step                  = 1;
   changeDue             : any;
   serviceType           : IServiceType;
@@ -105,6 +105,7 @@ export class ChangeDueComponent implements OnInit  {
     }
   }
 
+
   async bringtoFront() {
     // console.log('pax', this.isPax)
     if (!this.isPax) { return }
@@ -114,7 +115,6 @@ export class ChangeDueComponent implements OnInit  {
 
   constructor(
               private authenticationService : AuthenticationService,
-              private userAuthService         :UserAuthorizationService,
               private userSwitchingService  : UserSwitchingService,
               private platFormService: PlatformService,
               private userAuthorization: UserAuthorizationService,
@@ -162,6 +162,29 @@ export class ChangeDueComponent implements OnInit  {
     }
     this.isPax;
     this.bringtoFront()
+  }
+
+  async ngOnInit() {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+
+    
+    this.printingCheck();
+    this.initAuthorization();
+    this.initTransactionUISettings();
+    this.initTerminalSettings();
+    this.isPax;
+    await this.bringtoFront()
+    this.startRepeatingFunction()
+  
+    if (this.order) {
+      const site = this.siteService.getAssignedSite()
+      this.serviceType$ = this.serviceTypeService.getTypeCached(site, this.order.serviceTypeID).pipe(switchMap(data => { 
+        return of(data)
+      }))
+    }
+    
+  
   }
 
   initTerminalSettings() {
@@ -259,17 +282,7 @@ export class ChangeDueComponent implements OnInit  {
     }
   }
 
-  async ngOnInit() {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    this.printingCheck();
-    this.initAuthorization();
-    this.initTransactionUISettings();
-    this.initTerminalSettings();
-    this.isPax;
-    await this.bringtoFront()
-    this.startRepeatingFunction()
-  }
+ 
 
   startRepeatingFunction() {
     interval(1000) // emit every second
@@ -297,9 +310,9 @@ export class ChangeDueComponent implements OnInit  {
       this.printing$ = this.processSendOrder(this.order)
       return of(data)
     })).pipe(switchMap(data => {
-      console.log('Auto Print Receipt on Close', this.uiTransactions?.autoPrintReceiptOnClose)
+      // console.log('Auto Print Receipt on Close', this.uiTransactions?.autoPrintReceiptOnClose)
       if (this.uiTransactions?.autoPrintReceiptOnClose) {
-        console.log('Print Order', this.order?.id)
+        // console.log('Print Order', this.order?.id)
         this.printingService.previewReceipt(true, this.order)
       }
       return of(data)
@@ -310,10 +323,10 @@ export class ChangeDueComponent implements OnInit  {
     const device = localStorage.getItem('devicename')
     if (ui.dCapEnabled && device) {
       this.dCapReset$ = this.dCapService.resetDevice(device).pipe(switchMap(data => {
-        console.log('data cap reset')
+        // console.log('data cap reset')
         return of(data)
       }), catchError(data => {
-        console.log('data cap reset error')
+        console.log('data cap reset error', data)
         return of(data)
       }))
     }
@@ -441,7 +454,7 @@ export class ChangeDueComponent implements OnInit  {
   specifiedTip(amount: number) {
     const payment = this.payment;
     if (!payment) {
-      console.log('no payment', amount)
+      // console.log('no payment', amount)
     }
     if (payment) {
       // Ensure amount has 2 decimal places
@@ -498,12 +511,11 @@ export class ChangeDueComponent implements OnInit  {
     const device = localStorage.getItem('devicename')
     const process$ = this.dCapService.adustByRecordNo(device, this.payment, amount);
 
-    console.log('processDcapTip')
-
+    // console.log('processDcapTip')
 
     this.proccessing = true;
     return process$.pipe(switchMap(data => {
-      console.log(data, data.cmdStatus, data.textResponse)
+      // console.log(data, data.cmdStatus, data.textResponse)
       if (data.cmdStatus && data.cmdStatus.ToLower() == 'error') {
         this.siteService.notify(data?.cmdResponse + ' ' + data?.textResponse, 'close',50000, 'red' )
         return this.getOrderUpdate(this.payment.orderID.toString(), site)
@@ -532,7 +544,6 @@ export class ChangeDueComponent implements OnInit  {
     const process$ = this.dCapService.adustByRecordNoV2(device, this.payment, amount);
     this.proccessing = true;
     return process$.pipe(switchMap(data => {
-
        const result = data as any;
         if (!data.success) {
           this.siteService.notify(result?.response?.textResponse, 'close', 10000, 'red', 'top')
@@ -564,7 +575,7 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   applytoPOS(payment:IPOSPayment, amount, site) {
-    console.log('applytoPOS')
+    // console.log('applytoPOS')
     payment.tipAmount = amount;
     const payment$ =  this.paymentService.putPOSPayment(site, payment);
     //process tip via credit card service.

@@ -93,7 +93,7 @@ export class FunctionButtonsListComponent implements OnInit {
       case 'qrLink':
           this.qrLink();
           break;
-      case 'price1': 
+      case 'price1':
       case 'price(1)':
         this.price(1);
         break;
@@ -115,15 +115,19 @@ export class FunctionButtonsListComponent implements OnInit {
       case 'lastOrder':
         this.setLastOrderActive()
         break;
+      case 'postToShipDay':
+        this.postToShipDay()
+        break;
+
       default:
         console.log('Function not found');
         break;
     }
   }
 
-  voidOrderRequest() { 
+  voidOrderRequest() {
     const order = this.orderMethodsService.currentOrder
-    if (order) { 
+    if (order) {
       const item$ = this.messageService.requestVoidOrder(order, this.adminEmail)
       this.action$ =  item$.pipe(switchMap(data => {
         this.siteService.notify("Request Sent", 'close', 2000, 'green')
@@ -133,9 +137,9 @@ export class FunctionButtonsListComponent implements OnInit {
   }
 
 
-  setLastOrderActive() { 
+  setLastOrderActive() {
     const order = this.orderMethodsService.lastOrder
-    if (order) { 
+    if (order) {
       this.orderMethodsService.setActiveOrder(order)
     }
   }
@@ -147,7 +151,7 @@ export class FunctionButtonsListComponent implements OnInit {
 
 
   price(value) {
-    if (this.order ) { 
+    if (this.order ) {
       if (this.authenticationService?.userAuths?.priceColumnOption &&  this.authenticationService?.isStaff) {
         this.assignPriceColumn(value)
       }
@@ -223,7 +227,7 @@ export class FunctionButtonsListComponent implements OnInit {
 
   emailOrder() {
     console.log('Placeholder for Email Order');
-    this.action$ = this.orderMethodsService.emailOrder(this.order).pipe(switchMap(data => { 
+    this.action$ = this.orderMethodsService.emailOrder(this.order).pipe(switchMap(data => {
       this.siteService.notify('Email Sent', 'Completed', 2000)
       return of(data)
     }))
@@ -233,6 +237,15 @@ export class FunctionButtonsListComponent implements OnInit {
   textOrder() {
     console.log('Placeholder for Text Order');
     // Add the actual implementation here
+  }
+
+  postToShipDay() {
+    console.log('Placeholder for Email Order');
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.orderMethodsService.postToShipDay(site,this.order.id).pipe(switchMap(data => {
+      this.siteService.notify(`Result ${data?.success} -  ${data?.response}`, 'Close', 10000)
+      return of(data)
+    }))
   }
 
   isVisible(item:mb_MenuButton) {

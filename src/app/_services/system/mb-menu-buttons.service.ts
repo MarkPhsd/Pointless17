@@ -54,6 +54,7 @@ export class MBMenuButtonsService {
     {id: 3, name:'Edit Order', icon: 'edit', function: 'editOrder',group: 'drawer'},
     {id: 4, name:'Email Order', icon: 'email', function: 'emailOrder',group: 'order'},
     {id: 13, name:'Last Order', icon: '', function: 'lastOrder',group: 'order'},
+    {id: 13, name:'POST To ShipDay', icon: 'email', function: 'postToShipDay',group: 'order'},
     {id: 5, name:'Price 1', icon: '', function: 'price(1)',group: 'order'},
     {id: 6, name:'Price 2', icon: '', function: 'price(2)',group: 'order'},
     {id: 7, name: 'Price 3', icon: '', function: 'price(3)',group: 'order'},
@@ -164,7 +165,7 @@ filterMenuButtons(menuButtons: mb_MenuButton[]): mb_MenuButton[] {
 
     const user =  JSON.parse(localStorage.getItem('user')) as IUser;
     if (!user) { return of(null)};
-    
+
     const controller = "/MB_MenuButtonGroups/"
 
     const endPoint = "GetGroup"
