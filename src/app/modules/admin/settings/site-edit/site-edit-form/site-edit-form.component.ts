@@ -5,6 +5,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { Observable, of, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { store, StoresService } from 'src/app/_services/system/stores.service';
 
 @Component({
   selector: 'app-site-edit-form',
@@ -20,11 +21,13 @@ export class SiteEditFormComponent implements OnInit {
   metrcEnabled = true;
 
   sitesForm: UntypedFormGroup;
+  stores$ : Observable<store[]>;
 
   constructor(
     private _snackBar   : MatSnackBar,
     private fb          : UntypedFormBuilder,
     private sitesService: SitesService,
+    private storeService: StoresService,
     private dialogRef   : MatDialogRef<SiteEditFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number
   )
@@ -41,7 +44,12 @@ export class SiteEditFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initForm()
+    this.initForm();
+    this.refreshStores()
+  }
+    
+  refreshStores() { 
+    this.stores$ = this.storeService.getStores()
   }
 
   initForm() {
@@ -58,6 +66,7 @@ export class SiteEditFormComponent implements OnInit {
       metrcUser         : [''],
       metrcKey          : [''],
       id                : [''],
+      storeID           : [''],
     })
     this.imgName = ""
   }

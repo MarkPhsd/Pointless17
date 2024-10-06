@@ -18,7 +18,6 @@
 
       <ng-container [ngTemplateOutlet]='divider'></ng-container>
 
-
       <ng-container [ngTemplateOutlet]='categoryFilterView'></ng-container>
 
       <ng-container [ngTemplateOutlet]='subcategoryFilter'></ng-container>
@@ -110,9 +109,10 @@
 </ng-template>
 
 <ng-template #categoryFilter>
+
     <div class="grid-flow-categories"
          style="margin-top:15px;"
-         *ngIf="categories && categories.length>0 && !smallDevice">
+         *ngIf="categories && categories.length > 1 && !smallDevice">
       <div  *ngFor="let item of categories;trackBy: trackByFN">
           <ng-container
             [ngTemplateOutlet]="menuItemCard"
@@ -124,7 +124,8 @@
 
 
 <ng-template #subcategoryFilter>
-  <div  style="margin-top:15px" *ngIf="uiHomePage.storeNavigation && subCategoriesList && subCategoriesList.length>0 && !smallDevice">
+ 
+  <div  style="margin-top:15px" *ngIf="uiHomePage.storeNavigation && subCategoriesList && subCategoriesList.length>1 && !smallDevice">
     <mat-card style="padding:0px;margin-top:5px">
       <div class="flex-row">
         <div  class="justify-content" style="position:relative;top:5px;margin:10px"><mat-icon>zoom_in</mat-icon></div>

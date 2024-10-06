@@ -59,6 +59,7 @@ import { EmployeeSelectPopUpComponent } from 'src/app/modules/admin/employees/em
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { PosOrderItemMethodsService } from '../transactions/pos-order-item-methods.service';
 import { PosOrderItemEditorComponent } from 'src/app/modules/posorders/pos-order/pos-order-items/pos-order-item-edit/pos-order-item-editor.component';
+import { StoresManagerComponent } from 'src/app/modules/admin/stores-manager/stores-manager.component';
 // import { PosOrderItemEditorComponent } from 'src/app/modules/posorders/pos-order/pos-order-items/pos-order-item-edit/pos-order-item-editor.component';
 
 @Injectable({
@@ -562,6 +563,18 @@ export class ProductEditButtonService {
       ))
   }
 
+  openStoreSelector(data: any) {
+    const site = this.siteService.getAssignedSite();
+    return this.dialog.open(StoresManagerComponent,
+        {  width:     '850px',
+          minWidth:   '850px',
+          height:     '750px',
+          minHeight:  '750px',
+          data :      data
+        }
+      )
+  }
+
   addInventoryDialog(data: any):  Observable<MatDialogRef<AddInventoryItemComponent>> {
     const site = this.siteService.getAssignedSite();
     console.log('opening with data', data)
@@ -572,8 +585,8 @@ export class ProductEditButtonService {
           minHeight:  '750px',
           data :      data
         },
-      )
-    )
+      ))
+    
   }
 
   openOrderItemEditor(item: any, action: string, orderItems: PosOrderItem[]):  Observable<MatDialogRef<PosOrderItemEditorComponent>> {

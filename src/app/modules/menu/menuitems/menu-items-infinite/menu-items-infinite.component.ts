@@ -686,6 +686,9 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
   }
 
   getNextMenuItem() {
+    if ( this.value >= 100) {
+      return null;
+    }
     let menuItem = {} as IMenuItem
     menuItem.id = -1;
     menuItem.name = 'Load More'
@@ -1038,8 +1041,9 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
         this.menuItems = this.removeDuplicates( this.menuItems )
         this.value     = ((this.menuItems.length   / this.totalRecords ) * 100).toFixed(0)
         this.menuItems = this.menuItems.filter(item => item.id !== -1)
-        if ( this.value < 100) {
-          if (!this.endOfRecords) {
+
+        if ( this.value >= 100) {
+          if (!this.endOfRecords ) {
             const lastItem = this.getNextMenuItem();
             this.menuItems.push(lastItem)
           }

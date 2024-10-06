@@ -9,6 +9,7 @@ import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-pag
 import { MatSort } from '@angular/material/sort';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { SiteEditFormComponent } from './site-edit-form/site-edit-form.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-site-edit',
@@ -35,13 +36,14 @@ export class SiteEditComponent implements OnInit {
   ccsSites                : ISite[]
   ccsSite$                : Observable<ISite>
 
-  columnsToDisplay = ['name', 'url', 'edit'];
+  columnsToDisplay = ['name', 'url', 'storeID', 'edit'];
 
   constructor(
             private _snackBar: MatSnackBar,
             private fb          : UntypedFormBuilder,
             private sitesService: SitesService,
             private dialog      : MatDialog,
+            private router      : Router,
   )
   {  }
 
@@ -49,6 +51,10 @@ export class SiteEditComponent implements OnInit {
     this.metrcEnabled = true
     this.pageSize = 10
     this.refreshTable();
+  }
+
+  navStores() {
+    this.router.navigate(['store-list']);
   }
 
   refreshTable(): void {

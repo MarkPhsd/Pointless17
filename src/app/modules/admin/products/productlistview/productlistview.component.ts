@@ -25,7 +25,6 @@ import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { EditSelectedItemsComponent } from '../productedit/edit-selected-items/edit-selected-items.component';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-// import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
@@ -935,7 +934,7 @@ constructor(  private _snackBar              : MatSnackBar,
     const searchForm = this.searchForm.value;
 
     // console.log('search', this.searchForm.value, searchForm.value)
-
+    searchModel.ignoreBinaryStoreValue = true
     searchModel.viewAll    = this.viewAll;
     searchModel.active     = this.active;
     searchModel.barcode    = searchModel.name

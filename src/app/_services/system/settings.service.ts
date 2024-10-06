@@ -567,6 +567,23 @@ export class SettingsService {
 
   }
 
+  setPartialAuthSetting(site: ISite, id: number, setting : ISetting):  Observable<ISetting> {
+
+    if (!id) { return null}
+
+    const controller = "/settings/"
+
+    const endPoint = 'setPartialAuthSetting';
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.put<ISetting>(url, setting);
+
+  }
+
+
   putSetting(site: ISite, id: number, setting : ISetting):  Observable<ISetting> {
 
     if (!id) { return null}

@@ -65,12 +65,20 @@ export class MatToggleSelectorComponent implements OnChanges {
       if (this.list$ && this.list$ != undefined) {
         this.action$ = this.list$.pipe(
           switchMap(data => {
-          this.subscribed = true
-          this.list = []
-          if (data) {
-            this.list = this.sortList(data)
-          }
-          return of(data)
+          
+            let list = data as any;
+            if (list.result)  { 
+              list = list.result
+            }
+       
+
+            console.log('data', data)
+            this.subscribed = true
+            this.list = []
+            if (list) {
+              this.list = this.sortList(list)
+            }
+          return of(list)
         }))
       }
     } catch (error) {
@@ -93,6 +101,7 @@ export class MatToggleSelectorComponent implements OnChanges {
       return list
     }
   }
+
   convertJSONList(list: IMenuItem[]) {
     if (this.type =='menuItem') {
       list = list as unknown as IMenuItem[]

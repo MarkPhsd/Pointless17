@@ -16,8 +16,10 @@ import { SearchModel } from 'src/app/_services/system/paging.service';
 import { menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
-
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { UIHomePageSettings } from 'src/app/_services/system/settings/uisettings.service';
+import { SettingsService } from 'src/app/_services/system/settings.service';
 @Component({
   selector: 'app-strain-product-edit',
   templateUrl: './strain-product-edit.component.html',
@@ -35,6 +37,9 @@ export class StrainProductEditComponent implements OnInit {
   @ViewChild('priceCategorySelectorTemplate') priceCategorySelectorTemplate : TemplateRef<any>;
   @ViewChild('groceryPromptTemplate') groceryPromptTemplate : TemplateRef<any>;
 
+  uiHome: UIHomePageSettings;
+  uiHome$ : Observable<UIHomePageSettings>;
+  
   thumbNailWidth: number = 110
   thumbNailHeight: number = 80
   get groceryPromptView() {
@@ -99,6 +104,11 @@ export class StrainProductEditComponent implements OnInit {
    return null;
   }
 
+  get storeSelectorEnabled() {
+    // if (this.uiHomePage.)
+    return true;
+  }
+
   get tareValueTemplateView() {
    const itemType = this.itemType;
    if (this.fbProductsService.isWeightedItem(itemType)) {
@@ -152,6 +162,8 @@ export class StrainProductEditComponent implements OnInit {
               private unitTypeMethodsService: UnitTypeMethodsService,
               public  labelingService: LabelingService,
               private unitTypeService: UnitTypesService,
+              private settingService: SettingsService,
+              private productEditButtonService: ProductEditButtonService,
               @Optional() private dialogRef: MatDialogRef<StrainProductEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any
     )
@@ -162,6 +174,11 @@ export class StrainProductEditComponent implements OnInit {
     if (!data) {
       this.id = this.route.snapshot.paramMap.get('id');
     }
+    this.uiHome$ = this.settingService.getUIHomePageSettings().pipe(switchMap(data => { 
+      this.uiHome = data;
+      return of(data)
+    }))
+    // this.uiHome.
   }
 
   refreshProductInfo(product: IProduct, itemType: IItemType) {
@@ -589,6 +606,20 @@ export class StrainProductEditComponent implements OnInit {
     this.product.thumbnail = event;
     this.productForm.patchValue({thumbnail: event})
     console.log(this.product)
+  }
+
+  openStoreSelector() { 
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.menuService.getMenuItemByID(site, this.product?.id).pipe(switchMap(data => { 
+      const dialogRef = this.productEditButtonService.openStoreSelector({menuItem: data, activeOnly: true})
+      dialogRef.afterClosed().subscribe(data => { 
+        if (data) { 
+          this.product = data
+        }
+      })
+      return of(data)
+    }))
+   
   }
 
   parentFunc(event){

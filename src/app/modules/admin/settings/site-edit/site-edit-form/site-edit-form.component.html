@@ -133,36 +133,24 @@
                         class="form-control" >
                 </mat-form-field>
               </div>
-            <!-- </div> -->
 
-            <!-- <div *ngIf="metrcEnabled">
-              <div>
-                <mat-form-field appearance="outline">
-                  <mat-label >METRC Key</mat-label>
-                  <input matInput type="text"
-                        formControlName="metrcKey"
-                        class="form-control" >
-                </mat-form-field>
+              <div *ngIf="(stores$ | async) as list">
+                <form-select-list [formFieldName]   = "'storeID'"
+                                  [searchForm]      = "sitesForm"
+                                  [listTypeValue]   ="'storeValue'"
+                                  [list]            = "list"
+                                  >
+                <div fieldSearchDescription>StoreID Name</div>
+                </form-select-list>
               </div>
 
-              <div>
-                <mat-form-field appearance="outline">
-                  <mat-label >Metrc User</mat-label>
-                  <input matInput type="text"
-                        formControlName="metrcUser"
-                        class="form-control" >
-                </mat-form-field>
-              </div>-->
             </div>
-
-
         </div>
 
         <div >
           <h3>Choose Site Image</h3>
           <app-widget-uploader   (messageOut)="received_URLMainImage($event)"
-                                 [(fileNames)]="imgName"
-                                >
+                                 [(fileNames)]="imgName"   >
           </app-widget-uploader>
         </div>
 

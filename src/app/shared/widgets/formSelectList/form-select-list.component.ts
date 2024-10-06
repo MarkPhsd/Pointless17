@@ -10,12 +10,14 @@ export class FormSelectListComponent implements OnInit , OnChanges{
 
   @ViewChild('listTypeString') listTypeString: TemplateRef<any>;
   @ViewChild('listTypeColumn') listTypeColumn: TemplateRef<any>;
-
+  @ViewChild('listTypeStore')  listTypeStore: TemplateRef<any>;
+  
   @Input()  list            : any[];
   @Input()  list$           : Observable<any[]>;
   @Input()  formFieldName   : string;
   @Input()  searchForm      : UntypedFormGroup;
   @Input()  showActiveInactive: boolean;
+  @Input()  listTypeValue : string 
   @Input()  formValue       : any;
   @Output() selectionChange       = new EventEmitter();
   @Output() selectionChangeValue = new EventEmitter();
@@ -35,6 +37,11 @@ export class FormSelectListComponent implements OnInit , OnChanges{
   }
 
   get listType() { 
+    if (this.listTypeValue) { 
+      if (this.listTypeValue === 'storeValue' || this.listTypeValue === 'storeValueBinary') {
+        return this.listTypeStore
+      }
+    }
     if (this.stringList) { 
       return this.listTypeString
     }

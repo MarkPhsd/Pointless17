@@ -127,6 +127,16 @@
           <div class="grid-view-sections">
             <div class="grid-views">
 
+              <div *ngIf="(stores$ | async) as list">
+                <form-select-list [formFieldName]   = "'binaryStoreValue'"
+                                  [searchForm]      = "inputForm"
+                                  [listTypeValue]   = "'storeValueBinary'"
+                                  [list]            = "list"    >
+                <div fieldSearchDescription>StoreID Name</div>
+                </form-select-list>
+              </div>
+
+
               <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Home Page Customer View</h4>
               <div class="toggle-fields">
                 <mat-slide-toggle formControlName="hideSearchBar">

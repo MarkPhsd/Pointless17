@@ -2,16 +2,44 @@
 
 <ng-container [ngTemplateOutlet]="listType"></ng-container>
 
+<ng-template #listTypeStore>
+  <div [formGroup]="searchForm"
+        *ngIf="searchForm">
+    <mat-form-field appearance="outline"
+                        class="form-fields">
+      <mat-select
+              type="'text'"
+              [formControlName]   = "formFieldName"
+              >
+
+        <div *ngIf="itemList">
+          <mat-option [value]="">
+            Clear
+          </mat-option>
+
+          <span *ngIf="this.listTypeValue === 'storeValueBinary'">
+            <mat-option  *ngFor="let item of list"
+                        [value]="item.binaryValue">
+              {{ item.name }} 
+            </mat-option>
+          </span>
+          <span *ngIf="this.listTypeValue != 'storeValueBinary'">
+            <mat-option  *ngFor="let item of list"
+                        [value]="item.binaryValue">
+              {{ item.name }}  
+            </mat-option>
+          </span>
+        </div>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</ng-template>
+
 <ng-template #listTypeString>
   <div [formGroup]="searchForm"
         *ngIf="searchForm">
     <mat-form-field appearance="outline"
                         class="form-fields">
-      <!-- <mat-label>
-        <ng-content select="#fieldSearchDescription"></ng-content>
-        <ng-content></ng-content>
-      </mat-label> -->
-
       <mat-select
               type="'text'"
               [formControlName]   = "formFieldName"

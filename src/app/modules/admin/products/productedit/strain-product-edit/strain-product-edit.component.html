@@ -1,3 +1,4 @@
+<div *ngIf="(uiHome$  | async) as uihome"></div>
 <ng-template #loading>
   <mat-spinner [diameter]="70"></mat-spinner>
 </ng-template>
@@ -21,6 +22,17 @@
               Edit Item:   {{ product?.name  }}  {{ product?.barcode }}
             </div>
           </h4>
+          <div *ngIf="storeSelectorEnabled">
+            <button style="height:45px" mat-raised-button color="accent" (click)="openStoreSelector()">
+              <span *ngIf="product?.storeBinaryValue">
+                <mat-icon>open_in_new</mat-icon>View Stores 
+              </span>
+              <span *ngIf="!product?.storeBinaryValue">
+                <mat-icon>open_in_new</mat-icon>Store Selector 
+              </span>
+            </button>
+            <br><mat-label class="mat-label"></mat-label>
+          </div>
         </div>
 
         <div >
@@ -39,6 +51,7 @@
           <app-activity-toggles
               [inputForm]="productForm">
           </app-activity-toggles>
+  
 
           <ng-container [ngTemplateOutlet]="managerProtectedToggle"></ng-container>
         </div>
@@ -554,6 +567,8 @@
         [fieldName]="'prodSecondLanguage'">
     Alt Language
   </app-value-fields>
+
+
 
 </ng-template>
 

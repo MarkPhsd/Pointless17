@@ -422,6 +422,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
   setActiveOrderObs(order) {
     const site  = this.siteService.getAssignedSite();
     let sendOrder$ : Observable<any>;
+
     if (this.orderMethodsService?.currentOrder && this.prepOnExit) {
       if (!this.orderMethodsService.currentOrder.history) {
         sendOrder$ = this.paymentMethodsProcess.sendToPrep(order, true, null, false)
@@ -429,7 +430,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     } else {
       sendOrder$ = of(null)
     }
-
+    
     let order$  =   this.orderService.getOrder(site, order.id, order.history )
     let newOrder$ : Observable<any>;
 

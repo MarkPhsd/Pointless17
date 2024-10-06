@@ -6,7 +6,7 @@
       <div class="field-center font-weight-600 row-span-2">
 
         <div *ngIf="order.history && order.orderID_Temp" class="font-1-5em">
-           {{order?.orderID_Temp}} 
+           {{order?.orderID_Temp ?? order?.id}} 
         </div>
 
         <div *ngIf="!order.history || !order.orderID_Temp" class="font-1-5em">

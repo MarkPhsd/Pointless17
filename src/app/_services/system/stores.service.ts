@@ -11,9 +11,11 @@ export interface store {
   id: number; // As Integer
   name : string;
   siteReferenceKey : number; // As Nullable(Of Integer)
-  binaryValue : number; //As Integer
+  binaryValue : bigint; //As Integer
   storeNumber : string;
   active : boolean; // As Nullable(Of Boolean)
+  errorMessage: string;
+  assign: boolean;
 }
 
 @Injectable({
@@ -30,6 +32,21 @@ export class StoresService {
     private appInitService  : AppInitService,
     ) {
       this.apiUrl =  this.appInitService.apiBaseUrl()
+    }
+
+    getActiveStores():  Observable<store[]> {
+
+      const site = this.siteService.getAssignedSite();
+      const controller = "/stores/"
+
+      const endPoint = 'getActiveStores';
+
+      const parameters = ``
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.get<store[]>(url);
+
     }
 
     getStores():  Observable<store[]> {
@@ -67,7 +84,7 @@ export class StoresService {
       const site = this.siteService.getAssignedSite();
       const controller = "/stores/"
 
-      const endPoint = 'getStore';
+      const endPoint = 'putStore';
 
       const parameters = ``
 

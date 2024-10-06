@@ -943,7 +943,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   _putSetting(setting : ISetting) {
     const site = this.siteService.getAssignedSite();
     const id =   setting?.id;
-    return this.settingsService.putSetting(site, id, setting).pipe(
+    return this.settingsService.setPartialAuthSetting(site, id, setting).pipe(
       switchMap(data => {
         if (!data) {
           return of(null)

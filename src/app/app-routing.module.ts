@@ -148,6 +148,7 @@ import { PosEditSettingsComponent } from './modules/admin/settings/pos-list/pos-
 import { PosOrderItemsComponent } from './modules/posorders/pos-order/pos-order-items/pos-order-items.component';
 import { QrPaymentComponent } from './modules/orders/qr-payment/qr-payment.component';
 import { OnlinePaymentCompletedComponent } from './modules/payment-processing/online-payment-completed/online-payment-completed.component';
+import { StoresManagerComponent } from './modules/admin/stores-manager/stores-manager.component';
 
 const routes: Routes = [
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
@@ -169,7 +170,6 @@ const routes: Routes = [
         //
 
         { path: 'posEditSettings', component: PosEditSettingsComponent, canActivate: [AuthGuard], data: {title: 'Ebay Auth Redirect', animation: 'isLeft'}},
-
 
         { path: 'buy-sell', component: BuySellMainComponent, canActivate: [AuthGuard], data: {title: 'Resale Brand Classes', animation: 'isLeft'}},
 
@@ -210,7 +210,10 @@ const routes: Routes = [
         { path: 'settings',  component: SettingsComponent, canActivate: [AuthGuard], data: {  title: 'Settings',  animation:  'isLeft'} },
         { path: 'sites',     component: SitesComponent,  canActivate: [AuthGuard], data: {  title: 'Sites',  animation:  'isLeft'} },
         { path: 'site-edit', component: SiteEditComponent,  canActivate: [AuthGuard], data: { animation:  'isLeft'} },
+        //StoresManagerComponent
+        { path: 'store-list', component: StoresManagerComponent, canActivate: [AuthGuard], data: {title: 'Store List', animation: 'isLeft'}},
 
+      
         { path: 'store-credit', component: StoreCreditListComponent, canActivate: [AuthGuard], data: {  title: 'Store Credit Search',  animation:  'isLeft'} },
         { path: 'pos-orders',   component: OrdersMainComponent, canActivate: [AuthGuard], data: {  title: 'Orders',  animation:  'isLeft'} },
         { path: 'currentorder', component: PosOrderComponent, canActivate: [AuthGuard], data: { title: 'Current Order', animation: 'isLeft'} },

@@ -13,8 +13,8 @@ export interface ISite {
     state:   string;
     zip:     string;
     phone:   string;
-
-    user: IUser;
+    storeID : number;
+    user    : IUser;
 
     metrcURL: string;
     metrcLicenseNumber: string;

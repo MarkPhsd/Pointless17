@@ -69,4 +69,7 @@ export interface ProductSearchModel {
   sortBy3?    : string;//=  searchForm.sortBy3Asc
   sortBy3Asc? : string;// =  searchForm.sortBy3Asc
   barCodeAltSearch: string;
+  ignoreBinaryStoreValue : boolean
+  overRideBinaryValue : boolean;
+  binaryStoreValue : any // As Nullable(Of Int64)
 }

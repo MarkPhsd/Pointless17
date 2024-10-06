@@ -15,6 +15,8 @@ export class CategorySelectComponent implements OnInit {
 
   @Input() fieldName = 'categoryID'
   @Input() type      = 'category'
+  @Input() overRideStore: boolean;
+
   @Input() inputForm :    UntypedFormGroup;
   categories$        :    Observable<IMenuItem[]>;
   @Output() outputCategoryID   :      EventEmitter<any> = new EventEmitter();

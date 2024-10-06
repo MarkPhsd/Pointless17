@@ -59,6 +59,7 @@ _searchItems$ = this.searchPhrase.pipe(
 //This is for the filter Section//
 brands$          : Observable<IUserProfile[]>;
 categories$      : Observable<IMenuItem[]>;
+categories: IMenuItem[]
 departments$     : Observable<IMenuItem[]>;
 productTypes$    : Observable<any[]>;
 
@@ -181,19 +182,7 @@ constructor(
     this.clientSearchResults$        = this.contactsService.getLiveBrands(site, clientSearchModel)
     // this.urlPath        = await this.awsService.awsBucketURL();
 
-    this.categories$    = this.menuService.getListOfCategories(site).pipe(switchMap(data => {
-        let result = data.filter(data => { return data.active} )
-        return of(result)
-      })
-    )
 
-    this.departments$   = this.menuService.getListOfDepartments(site).pipe(switchMap(data => {
-        let result = data.filter(data => { return data.active} )
-        return of(result)
-      })
-    )
-
-    this.productTypes$  = this.itemTypeService.getBasicTypesByUseType(site, 'product')
     this.isDevMode      = isDevMode()
     this.initSubscriptions();
     this.setStep(0)
@@ -251,6 +240,8 @@ constructor(
       brandID           : [brandID],
       categoryID        : [categoryID],
     })
+
+    this.resetAll()
   }
 
   ngAfterViewInit() {
@@ -351,13 +342,24 @@ constructor(
     this.departments$ = null;
 
     const site           = this.siteService.getAssignedSite()
-    this.departments$    = this.menuService.getListOfDepartments(site)
-    this.categories$     = this.menuService.getListOfCategories(site);
+    
+    this.categories$    = this.menuService.getListOfCategoriesV2(site, false).pipe(switchMap(data => {
+      let result = data.filter(data => { return data.active} )
+        return of(result)
+      })
+    )
 
-    if (this.platForm.toLowerCase() === 'android') {
-      Keyboard.hide();
+    this.departments$   = this.menuService.getListOfDepartmentsV2(site, false).pipe(switchMap(data => {
+        let result = data.filter(data => { return data.active} )
+        return of(result)
+      })
+    )
+
+    this.productTypes$  = this.itemTypeService.getBasicTypesByUseType(site, 'product')
+      if (this.platForm.toLowerCase() === 'android') {
+        Keyboard.hide();
+      }
     }
-  }
 
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms

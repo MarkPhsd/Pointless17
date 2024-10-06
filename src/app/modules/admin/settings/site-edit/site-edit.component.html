@@ -17,6 +17,11 @@
   </button>
 </span>
 
+<button mat-icon-button (click)='navStores()'>
+  <mat-icon>store</mat-icon>Store List
+</button>
+ 
+
 <div *ngIf="dataSource">
   <div  class="table-container">
     <div class="table-container mat-elevation-z2">
@@ -35,6 +40,12 @@
               <th mat-header-cell *matHeaderCellDef> Url </th>
               <td mat-cell *matCellDef="let element"> {{element.url}} </td>
           </ng-container>
+
+          <ng-container matColumnDef="storeID">
+            <mat-header-cell *matHeaderCellDef> Store </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.storeID}} </mat-cell>
+          </ng-container>
+        
 
           <ng-container matColumnDef="edit">
               <th mat-header-cell *matHeaderCellDef> Edit </th>

@@ -1,0 +1,41 @@
+
+<mat-card>
+  <mat-card-title>Stores List</mat-card-title>
+  <mat-card-subtitle>
+    <div *ngIf="diaglog" >  {{menuItem?.name}} {{menuItem?.itemType?.name}}</div>
+  </mat-card-subtitle>
+  <mat-card-content>
+
+    <div class="flex-group-row">
+      
+      <div>
+        <button class="buttons"  mat-raised-button (click)="refreshData()"><mat-icon>refresh</mat-icon>Refresh</button>
+      </div>
+
+      <button *ngIf="diaglog" class="buttons" mat-button color="warn" (click)="close()"><mat-icon>close</mat-icon>Close</button>
+    
+      <button *ngIf="diaglog" class="buttons" mat-button color="primary" (click)="assign()"> <mat-icon>publish</mat-icon> Assign Stores </button>
+    </div>
+  
+    
+    <div *ngIf="stores$">
+      <ag-grid-angular
+            #agGrid
+            [style]="gridStyle"
+            id="mySearchGrid"
+            class="ag-theme-material"
+            [columnDefs]="columnDefs"
+            [defaultColDef]="defaultColDef"
+            [rowSelection]="rowSelection"
+            [rowData]="stores$ | async"
+            (gridReady)="onGridReady($event)"
+            [frameworkComponents]="frameworkComponents"
+            (cellClicked)        ='onCellClicked($event)'
+            (cellValueChanged)   ='cellValueChanged($event)' >
+      </ag-grid-angular>
+    </div>
+  </mat-card-content>
+</mat-card>
+<div *ngIf="(action$ | async) as action"></div>
+<!-- Real-time JSON view of grid data -->
+<pre>{{ displayedGridData | json }}</pre>

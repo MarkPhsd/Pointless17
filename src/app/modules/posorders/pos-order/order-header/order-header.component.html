@@ -24,10 +24,10 @@
           </span>
 
           <span *ngIf="!order.history">
-            Order {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
+            # {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
           </span>
           <span *ngIf="order.history">
-            Order {{order?.purchaseOrderNumber | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
+            # ( {{ order?.id | truncateRight: 5}}) | {{order?.purchaseOrderNumber ?? order?.orderID_Temp | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
           </span>
 
           <span #coachingRefresh *ngIf="isApp || isUserStaff">

@@ -1,9 +1,10 @@
-import { Component,  Input, OnInit, ViewChild } from '@angular/core';
-import { ISite, IUserProfile }  from 'src/app/_interfaces';
-import { AuthenticationService, DashboardService, ReportingService, UserService} from 'src/app/_services';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ISite }  from 'src/app/_interfaces';
+import { ReportingService} from 'src/app/_services';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sites',
@@ -15,7 +16,7 @@ export class SitesComponent implements OnInit {
 
   TableData: any[];
 
-  displayedColumns: string[] = ['Name',  'status'];
+  displayedColumns: string[] = ['Name',  'status', 'storeID'];
 
   sites: ISite[] = [];
   dataSource:  MatTableDataSource<ISite>;W
@@ -25,9 +26,10 @@ export class SitesComponent implements OnInit {
   constructor(
               private  reportingService: ReportingService,
               private sitesService: SitesService,
+              private router: Router,
               ) {
+  }
 
-    }
   ngOnInit(): void {
     this.refreshComponent();
   }
@@ -40,13 +42,11 @@ export class SitesComponent implements OnInit {
         this.dataSource = new MatTableDataSource<ISite>(this.sites);
 
         for (let site of this.sites) {
-
           this.reportingService.getSiteStatus(site).subscribe(
-
             values => {
                 site.status = "ok"
             },
-              error => {
+            error => {
                site.status = error
             }
 

@@ -1,3 +1,5 @@
+<!-- <div ></div> -->
+
 <mat-sidenav-container>
   <div class="grid-container c1">
     <div  class="form-width"
@@ -76,7 +78,7 @@
 
             <div  class="mat-toggle-list"  >
               <app-mat-toggle-selector
-                  *ngIf             = "(categories$ | async) as list"
+                  *ngIf= "(categories$ | async) as list"
                   [mouseOver]       = "false"
                   [showIcon]        = "true"
                   [toggleDimensions]= "toggleCatHeight"
@@ -146,7 +148,6 @@
                   (outPutItem)      = "refreshCategorySearch($event)"
                   [textLength]      = "21"
                   [id]              = "productTypeID"
-
                   [list]            = "list">
               </app-mat-toggle-selector>
             </div>

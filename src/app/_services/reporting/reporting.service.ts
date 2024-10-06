@@ -334,7 +334,7 @@ export class ReportingService {
 
   getSiteStatus(site: ISite): Observable<any> {
     let parameters = "values"
-    return  this.http.get<any[]>(`${site.url}${parameters}`)
+    return  this.http.get<ISite[]>(`${site.url}${parameters}`)
   };
 
   getSales(site: ISite, dateFrom: string, dateTo: string, groupBY: string,

@@ -35,9 +35,9 @@ export interface ProcessorInfo {
   customNotes: string;
 }
 
-
 export interface TransactionUISettings {
-
+  
+  binaryStoreValue        : any;
   multiButtonKPrepHeader  : number;
   multiButtonPrepHeader  : number;
   autoSelectItemPOSearch: boolean;
@@ -238,6 +238,7 @@ export interface CmdResponse{
 }
 
 export interface UIHomePageSettings {
+  binaryStoreValue: any;
   mobileEnabled: boolean;
   pinPadDefaultOnApp: boolean;
   lockTerminalToBalanceSheet: boolean;
@@ -801,6 +802,7 @@ export class UISettingsService {
       resaleMenu: [],
       staffcatalogScheduleMenuEnabled: [],
       catalogScheduleMenuEnabled: [],
+      binaryStoreValue: [],
      })
     return fb
   }

@@ -5,6 +5,7 @@ import { ISetting } from 'src/app/_interfaces';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { StoresService } from 'src/app/_services/system/stores.service';
 @Component({
   selector: 'uihome-page-settings',
   templateUrl: './uihome-page-settings.component.html',
@@ -23,12 +24,13 @@ export class UIHomePageSettingsComponent implements OnInit {
   saving$     : Observable<any>;
   message     : string;
   showEmailSettings = false;
-
+  stores$       : Observable<any>;
   toolTips = this.labelingService.homePageToolTips;
 
   constructor(
     private labelingService: LabelingService,
     private settingsService  : SettingsService,
+    private storeService     : StoresService,
     private uISettingsService: UISettingsService) { }
 
   ngOnInit() {
@@ -54,7 +56,13 @@ export class UIHomePageSettingsComponent implements OnInit {
         console.log(error  + ' error initializing settings')
         return of(error)
        });
+       this.refreshStores()
   }
+
+  refreshStores() { 
+    this.stores$ = this.storeService.getActiveStores()
+  }
+
 
   initializeImages(data: UIHomePageSettings) {
     if (!data) {return }

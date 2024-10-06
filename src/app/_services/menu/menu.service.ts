@@ -124,6 +124,7 @@ export interface IItemBasicValue extends IItemBasic {
 
 export class MenuService {
 
+
   genders =  [{ id:0, name: 'Male'}, { id: 1, name: 'Female'}, {id: null,name: 'Any' } ]
   public searchModel         : ProductSearchModel
   public _searchModel       = new BehaviorSubject<ProductSearchModel>(null);
@@ -643,7 +644,21 @@ export class MenuService {
     return  this.httpCache.get<any[]>(uri)
 
   }
+  getGetCategoriesListActiveV2(site: ISite, type: string, option: number, overRideStore: boolean):  Observable<IMenuItem[]>  {
 
+    const controller =  '/MenuItems/'
+
+    const endPoint = 'getGetCategoriesListActiveV2'
+
+    const parameters = `?TypeofCategoryasName=${type}&activeOption=${option}&overRideStore=${overRideStore}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const uri =  this.sitesService.getCacheURI(url)
+
+    return  this.httpCache.get<any[]>(uri)
+
+  }
 
   getGetCategoriesListActive(site: ISite, type: string, option: number):  Observable<IMenuItem[]>  {
 
@@ -677,6 +692,22 @@ export class MenuService {
 
   }
 
+  getGetCategoriesListByIDV2(site: ISite, type: string, id: number, overRideStore: boolean):  Observable<IMenuItem[]>  {
+
+    const controller =  '/MenuItems/'
+
+    const endPoint = 'getGetCategoriesListByIDV2'
+
+    const parameters = `?TypeofCategoryasName=${type}&id=${id}&overRideStore=${overRideStore}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const uri =  this.sitesService.getCacheURI(url)
+
+    return  this.httpCache.get<any[]>(uri)
+
+  }
+
   getGetCategoriesListAll(site: ISite, type: string):  Observable<IMenuItem[]>  {
 
     const controller =  '/MenuItems/'
@@ -684,6 +715,23 @@ export class MenuService {
     const endPoint = 'GetGetCategoriesListAll'
 
     const parameters = `?TypeofCategoryasName=${type}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    // const uri =  this.sitesService.getCacheURI(url)
+
+    return  this.httpClient.get<any[]>(url)
+
+  }
+
+  
+  getGetCategoriesListAllV2(site: ISite, type: string, overRideStore: boolean):  Observable<IMenuItem[]>  {
+
+    const controller =  '/MenuItems/'
+
+    const endPoint = 'getGetCategoriesListAllV2'
+
+    const parameters = `?TypeofCategoryasName=${type}&overRideStore=${overRideStore}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -752,6 +800,36 @@ export class MenuService {
   getListOfSubCategoriesAll(site: ISite):  Observable<IMenuItem[]>  {
     return this.getGetCategoriesListAll(site, `subcategory`);
   }
+
+
+  getListOfCategoriesV2(site: ISite,  overRideStore: boolean):  Observable<IMenuItem[]>  {
+    return this.getGetCategoriesListActiveV2(site, `category`, 0, overRideStore);
+  }
+
+  getListOfDepartmentsV2(site: ISite,  overRideStore: boolean):  Observable<IMenuItem[]>  {
+    return this.getGetCategoriesListActiveV2(site, `department`, 0, overRideStore);
+  }
+
+  getListOfSubCategoriesV2(site: ISite,  overRideStore: boolean):  Observable<IMenuItem[]>  {
+    return this.getGetCategoriesListActiveV2(site, `subcategory`, 0, overRideStore);
+  }
+
+  getListOfSubCategoriesByCategoryV2(site: ISite, id: number, overRideStore: boolean):  Observable<IMenuItem[]>  {
+    return this.getGetCategoriesListByID(site, `subcategory`, id);
+  }
+
+  getListOfCategoriesAllV2(site: ISite, overRideStore: boolean):  Observable<IMenuItem[]>  {
+    return this.getGetCategoriesListAllV2(site, `category`, overRideStore);
+  }
+
+  getListOfDepartmentsAllV2(site: ISite,  overRideStore: boolean):  Observable<IMenuItem[]>  {
+    return this.getGetCategoriesListAllV2(site, `department`, overRideStore);
+  }
+
+  getListOfSubCategoriesAllV2(site: ISite, overRideStore: boolean):  Observable<IMenuItem[]>  {
+    return this.getGetCategoriesListAllV2(site, `subcategory`, overRideStore)
+  }
+
 
   getCategoryAsyncList(site: ISite): Observable<IProductCategory[]> {
 
@@ -1116,6 +1194,23 @@ export class MenuService {
 
     return this.httpClient.post<any>(url, product)
 
+  };
+
+  setBinaryValue(site: ISite, id: number, product: IProduct): Observable<IProduct> {
+
+    if (id && product) {
+
+      const controller = '/products/'
+
+      const endPoint = 'setBinaryValue'
+
+      const parameters = `?id=${id}`
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return  this.httpClient.put<any>(url, product)
+
+    }
   };
 
    putProduct(site: ISite, id: number, product: IProduct): Observable<IProduct> {
