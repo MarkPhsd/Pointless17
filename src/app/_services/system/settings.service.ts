@@ -54,6 +54,10 @@ export interface ITerminalSettings {
   quickScanningDevice: boolean;
   defaultOrderTypeID: number;
   defaultMenuCategoryID: number;
+
+  voiceOnAddItem: boolean;
+  voiceOnMessage: boolean;
+  voiceOnError  : boolean;
 }
 @Injectable({
   providedIn: 'root'

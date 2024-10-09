@@ -141,7 +141,7 @@
             <mat-label>Quick Scanning Device</mat-label>
           </mat-slide-toggle>
         </div>
-        
+
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="prepCheckDevice">
@@ -238,6 +238,7 @@
 
       <ng-container [ngTemplateOutlet]="displayDevice"></ng-container>
       <ng-container [ngTemplateOutlet]="printServer"></ng-container>
+      <ng-container [ngTemplateOutlet]="voiceService"></ng-container>
 
       <h2><mat-icon>credit_card</mat-icon>Payment Processing Settings</h2>
 
@@ -389,7 +390,7 @@
       </h3>
     </mat-card-subtitle>
     <mat-card-content>
-   
+
       <mat-slide-toggle
             (change)="setDeviceDisplay()"
             [(ngModel)]="isDisplayDevice">
@@ -397,7 +398,7 @@
       </mat-slide-toggle>
       <br>
       <mat-label>
-        To run the send to back/front commands, your display device should be running; and assigned to the same terminal as this one. 
+        To run the send to back/front commands, your display device should be running; and assigned to the same terminal as this one.
         However, on the display device, the display feature should be enabled.
       </mat-label>
 
@@ -504,3 +505,38 @@
 </ng-template>
 
 
+<ng-template #voiceService>
+  <mat-card>
+    <h3>Voice Services</h3>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="voiceOnMessage"  >
+        <mat-label>Voice on Message</mat-label>
+      </mat-slide-toggle>
+    </div>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="voiceOnError"  >
+        <mat-label>Voice on Error</mat-label>
+      </mat-slide-toggle>
+    </div>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="voiceOnAddItem"  >
+        <mat-label>Voice on Error</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Sample Message</mat-label>
+        <input matInput type="text"
+                 [(ngModel)]="sampleMessage"
+                class="form-control" >
+      </mat-form-field>
+    </div>
+    <div *ngIf="(voiceList$ | async) as voices"></div>
+    <button mat-raised-button color="accent" (click)="speakSample()">Try Text</button>
+  </mat-card>
+</ng-template>

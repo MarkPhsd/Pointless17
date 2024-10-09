@@ -192,6 +192,8 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
       useByValue: [],
       metrcPackageWeight: [],
       metrcGroup: [],
+      itemNameSuffix: [],
+      itemNamePrefix: [],
     })
 
     if (itemType.json) {
@@ -277,7 +279,7 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
     if (this.inputForm.valid) {
       const itemType =  this.setNonFormValues();
       console.log('update', itemType, this.itemRowColor)
-    
+
       if (this.itemTypes) {
         this.itemTypes.forEach( item => {
           const id = item.id;
@@ -372,7 +374,7 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
       item.printerName  = this.printerName;
       item.prepTicketID = this.prepTicketID;
       item.itemRowColor = this.itemRowColor
-      
+
       this.itemType     = item;
       return item;
     }

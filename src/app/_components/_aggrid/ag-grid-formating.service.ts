@@ -15,7 +15,7 @@ export interface rowItem {
 }
 
 function multilineRenderer(params): any {
-  console.log(params.data?.barcode, params.data?.productName)
+  // console.log(params.data?.barcode, params.data?.productName)
   const productName = params.data?.productName || ''; // Fallback to empty string if undefined
   const barcode = params.data?.serialCode || ''; // Fallback to empty string if undefined
   return `${productName}-${barcode}`;
@@ -141,7 +141,6 @@ get rowClasses() {
       const errorsExist = this.getErrors(value)
       if (errorsExist) { return true}
       return false;
-
     },
 
   }
@@ -151,7 +150,7 @@ get rowClasses() {
 getErrors(value) {
   if (value) {
     const item = JSON.parse(value)
-    console.log('item', item)
+    // console.log('item', item)
     if (item?.Errors) {
       return  true
     }
@@ -159,7 +158,7 @@ getErrors(value) {
 }
 
 multilineRenderer(params) {
-  console.log( params.data?.serialCode,  params.data?.productName)
+  // console.log( params.data?.serialCode,  params.data?.productName)
   const productName = params.data?.productName || '';
   const barcode = params.data?.serialCode || '';
   return `${productName}<br>${barcode}`;

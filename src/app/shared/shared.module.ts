@@ -263,6 +263,7 @@ import {
 } from 'ngx-image-compress';
 import { OrderItemScannerComponent } from './widgets/search-list-selectors/order-item-scanner/order-item-scanner.component';
 import { MessageMenuSenderComponent } from '../modules/admin/message-editor-list/message-menu-sender/message-menu-sender.component';
+import { TtsComponent } from './widgets/tts/tts.component';
 
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
@@ -387,7 +388,7 @@ import { MessageMenuSenderComponent } from '../modules/admin/message-editor-list
     MenuTinyComponent,
     MetrcSummaryComponent,
     MessageMenuSenderComponent,
-
+    TtsComponent,
     FunctionButtonsListComponent,
     AverageHourlySalesLaborChartComponent,
     MoveInventoryLocationComponent,
@@ -781,7 +782,7 @@ import { MessageMenuSenderComponent } from '../modules/admin/message-editor-list
     SimpleTinyComponent,
     NumericDirective,
     ValueFromListSelectorComponent,
-
+    TtsComponent,
     AggregateSelectorComponent,
     AndOrSelectorComponent,
     DesignerEditorComponent,

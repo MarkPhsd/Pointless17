@@ -40,7 +40,7 @@ export class PosEditSettingsComponent implements OnInit {
   saving$  : Observable<ISetting>;
   saving   : boolean;
   blueToothDeviceList: any;
-
+  voiceList$: Observable<boolean>;
   btPrinter: string;
   btPrinters$: any;
   btPrinters: any;
@@ -56,7 +56,7 @@ export class PosEditSettingsComponent implements OnInit {
   androidDisplay: any;
   processing$: Observable<any>;
   isDisplayDevice: boolean ;
-
+  sampleMessage : string;
   categories$  : Observable<IMenuItem[]>;
   medOrRecStoreList = [
     {id:0,name:'Any'},  {id:1,name:'Med'},  {id:2,name:'Rec'}
@@ -64,7 +64,7 @@ export class PosEditSettingsComponent implements OnInit {
 
   constructor(
     private fb                  : UntypedFormBuilder,
-    private sitesService        : SitesService,
+    public sitesService        : SitesService,
     private settingsService     : SettingsService,
     public  deviceService       : DeviceDetectorService,
     private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
@@ -96,8 +96,10 @@ export class PosEditSettingsComponent implements OnInit {
         return;
       }
 
-      this.initData(data)
+      this.initData(data);
+
   }
+
 
   initUiSettings() {
     this.uisettings$ = this.settingsService.getUITransactionSetting().pipe(switchMap(data => {
@@ -184,7 +186,7 @@ export class PosEditSettingsComponent implements OnInit {
     this.serviceType$ = this.serviceTypeService.getAllServiceTypes(site);
     this.categories$ = this.menuService.getListOfCategoriesAll(site);
     const savedValue = localStorage.getItem('displayDevice');
-    console.log('saved value', savedValue)
+
     this.isDisplayDevice = savedValue === 'true';
   }
 
@@ -192,7 +194,7 @@ export class PosEditSettingsComponent implements OnInit {
     console.log(' this.isDisplayDevice.toString()',  this.isDisplayDevice.toString())
     localStorage.setItem('displayDevice', this.isDisplayDevice.toString());
     const savedValue = localStorage.getItem('displayDevice');
-    console.log('saved value', savedValue)
+
     this.isDisplayDevice = savedValue === 'true';
   }
 
@@ -256,6 +258,9 @@ export class PosEditSettingsComponent implements OnInit {
       disableMenuImages: [],
       quickScanningDevice: [],
       prepCheckDevice: [],
+      voiceOnAddItem: [],
+      voiceOnMessage: [],
+      voiceOnError: [],
     })
 
     this.dsiEMVSettings = this.fb.group({
@@ -392,5 +397,21 @@ export class PosEditSettingsComponent implements OnInit {
     }
     return of(null)
   }
+
+  voiceMessage() {
+
+  }
+
+  speakSample() {
+    const ui = this.uiSettingService._transactionUISettings.value
+    if (ui.voiceServiceName) {
+      if ( this.sampleMessage) {
+        console.log(ui.voiceServiceName, this.sampleMessage)
+        this.sitesService.addTextToQueue(this.sampleMessage, ui.voiceServiceName);
+      }
+    }
+  }
+
+
 
 }

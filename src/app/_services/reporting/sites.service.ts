@@ -9,13 +9,14 @@ import { PlatformService } from '../system/platform.service';
 import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition } from '@angular/material/legacy-snack-bar';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { TtsService } from '../system/tts-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SitesService {
-  public ipAddressCurrent : any;
 
+  public  ipAddressCurrent : any;
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   sites: ISite[];
   site: ISite;
@@ -70,24 +71,30 @@ export class SitesService {
                private httpClient      : HttpClient,
                private httpCache       : HttpClientCacheService,
                public  deviceService   : DeviceDetectorService,
+               private ttsService      : TtsService ,
                private snackBar        : MatSnackBar,
 
     ) {
-    this.apiUrl   = this.appInitService.apiBaseUrl()
+    this.apiUrl   = this.appInitService.apiBaseUrl();
+
+  }
+
+  getVoices() {
+    return this.ttsService.getVoices()
   }
 
   getIpAddress(): Observable<any> {
     // const ipApiUrl = 'https://geolocation-db.com/json/'
     const ipApiUrl = "https://ipinfo.io/json?token=cb36c1b021a341"
 
-    if (this.ipAddressCurrent) { 
+    if (this.ipAddressCurrent) {
       return of(this.ipAddressCurrent)
     }
 
-    return this.http.get(ipApiUrl).pipe(switchMap(data => { 
+    return this.http.get(ipApiUrl).pipe(switchMap(data => {
       const value = data as any;
 
-      if (!data) { 
+      if (!data) {
         this.ipAddressCurrent = {id: 'uknown'}
         return of(this.ipAddressCurrent)
       }
@@ -97,7 +104,7 @@ export class SitesService {
     }))
   }
 
-  
+
   checkDeviceFontScaling(): string {
     const devicePixelRatio = window.devicePixelRatio || 1;
     if (devicePixelRatio > 2) {
@@ -110,7 +117,7 @@ export class SitesService {
   }
 
   getApplicationInfo(userName: string, ignoreAppCheck?: boolean) {
-    // if (this.platformSevice.isApp && !ignoreAppCheck) { 
+    // if (this.platformSevice.isApp && !ignoreAppCheck) {
     //   //then we don't care
     //   return ''
     // }
@@ -121,7 +128,7 @@ export class SitesService {
 
   getApplicationObject(userName: string) {
     let location : any
-    if (this.ipAddressCurrent) { 
+    if (this.ipAddressCurrent) {
       location = this.ipAddressCurrent
     }
     const item   = this.deviceService.getDeviceInfo();
@@ -174,8 +181,8 @@ export class SitesService {
     return  sites$.pipe(switchMap(data => {
 
       const assSite = this.getAssignedSite()
-      const sites  = data.filter(item => { 
-        if (assSite.url) { 
+      const sites  = data.filter(item => {
+        if (assSite.url) {
           return item.url == assSite.url;
         }
         return item == this.apiUrl;
@@ -208,7 +215,7 @@ export class SitesService {
     const options = { url: url, cacheMins: 45}
     return this.httpCache.get<ISite[]>(options);
   }
-  
+
 
   getSite(id: number):  Observable<ISite> {
     if (!id) { return of(this.getAssignedSite())}
@@ -489,7 +496,8 @@ export class SitesService {
     return of(null)
   }
 
-
-
+  addTextToQueue(message: string, voice: string) {
+    this.ttsService.addTextToQueue(message, voice)
+  }
 
 }

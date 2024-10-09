@@ -74,7 +74,7 @@ export class DepartmentMenuComponent implements OnInit, OnDestroy {
         return
       }
       this.department     = data;
-      this.departments$   = this.menuService.getGetDepartment(this.site, data.id)
+      this.departments$   = this.menuService.getDepartment(this.site, data.id)
       this.categoryID     = 0
       this.subCateogryID  = 0;
     })
@@ -116,7 +116,7 @@ export class DepartmentMenuComponent implements OnInit, OnDestroy {
 
   refreshDepartment(id: number) {
     const site = this.siteService.getAssignedSite();
-    this.departments$ = this.menuService.getGetDepartment(site, id)
+    this.departments$ = this.menuService.getDepartment(site, id)
     this.categoryID = 0
   }
 

@@ -151,6 +151,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   _site: Subscription;
   site$: Observable<ISite>;
 
+  voiceList$ : Observable<boolean>;
   initSiteSubscriber() {
 
 

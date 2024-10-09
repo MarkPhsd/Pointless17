@@ -1,14 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ColDef } from 'ag-grid-community';
 
-
-
 @Injectable({
   providedIn: 'root'
 })
 export class AgGridService {
-
-
 
   constructor() { }
 
@@ -21,8 +17,6 @@ export class AgGridService {
       }
     };
 
-   
-
     getRightFourRenderer(params: any) {
       try {
         if (!params.value || typeof params.value !== 'string' || params.value.length === 0) {
@@ -30,7 +24,7 @@ export class AgGridService {
         }
         return params.value.slice(-4);
       } catch (error) {
-        console.error('Error in getRightFour:', error);
+        // console.error('Error in getRightFour:', error);
       }
       return '';
     }

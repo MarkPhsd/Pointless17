@@ -629,11 +629,11 @@ export class MenuService {
   };
 
   //active only
-  getGetCategoriesList(site: ISite, type: string):  Observable<IMenuItem[]>  {
+  getCategoriesList(site: ISite, type: string):  Observable<IMenuItem[]>  {
 
     const controller =  '/MenuItems/'
 
-    const endPoint = 'GetGetCategoriesList'
+    const endPoint = 'GetCategoriesList'
 
     const parameters = `?TypeofCategoryasName=${type}`
 
@@ -644,11 +644,11 @@ export class MenuService {
     return  this.httpCache.get<any[]>(uri)
 
   }
-  getGetCategoriesListActiveV2(site: ISite, type: string, option: number, overRideStore: boolean):  Observable<IMenuItem[]>  {
+  getCategoriesListActiveV2(site: ISite, type: string, option: number, overRideStore: boolean):  Observable<IMenuItem[]>  {
 
     const controller =  '/MenuItems/'
 
-    const endPoint = 'getGetCategoriesListActiveV2'
+    const endPoint = 'getCategoriesListActiveV2'
 
     const parameters = `?TypeofCategoryasName=${type}&activeOption=${option}&overRideStore=${overRideStore}`
 
@@ -660,11 +660,11 @@ export class MenuService {
 
   }
 
-  getGetCategoriesListActive(site: ISite, type: string, option: number):  Observable<IMenuItem[]>  {
+  getCategoriesListActive(site: ISite, type: string, option: number):  Observable<IMenuItem[]>  {
 
     const controller =  '/MenuItems/'
 
-    const endPoint = 'getGetCategoriesListActive'
+    const endPoint = 'GetCategoriesListActive'
 
     const parameters = `?TypeofCategoryasName=${type}&activeOption=${option}`
 
@@ -676,11 +676,11 @@ export class MenuService {
 
   }
 
-  getGetCategoriesListByID(site: ISite, type: string, id: number):  Observable<IMenuItem[]>  {
+  getCategoriesListByID(site: ISite, type: string, id: number):  Observable<IMenuItem[]>  {
 
     const controller =  '/MenuItems/'
 
-    const endPoint = 'getGetCategoriesListByID'
+    const endPoint = 'getCategoriesListByID'
 
     const parameters = `?TypeofCategoryasName=${type}&id=${id}`
 
@@ -692,11 +692,11 @@ export class MenuService {
 
   }
 
-  getGetCategoriesListByIDV2(site: ISite, type: string, id: number, overRideStore: boolean):  Observable<IMenuItem[]>  {
+  getCategoriesListByIDV2(site: ISite, type: string, id: number, overRideStore: boolean):  Observable<IMenuItem[]>  {
 
     const controller =  '/MenuItems/'
 
-    const endPoint = 'getGetCategoriesListByIDV2'
+    const endPoint = 'getCategoriesListByIDV2'
 
     const parameters = `?TypeofCategoryasName=${type}&id=${id}&overRideStore=${overRideStore}`
 
@@ -708,11 +708,11 @@ export class MenuService {
 
   }
 
-  getGetCategoriesListAll(site: ISite, type: string):  Observable<IMenuItem[]>  {
+  getCategoriesListAll(site: ISite, type: string):  Observable<IMenuItem[]>  {
 
     const controller =  '/MenuItems/'
 
-    const endPoint = 'GetGetCategoriesListAll'
+    const endPoint = 'GetCategoriesListAll'
 
     const parameters = `?TypeofCategoryasName=${type}`
 
@@ -724,12 +724,12 @@ export class MenuService {
 
   }
 
-  
-  getGetCategoriesListAllV2(site: ISite, type: string, overRideStore: boolean):  Observable<IMenuItem[]>  {
+
+  getCategoriesListAllV2(site: ISite, type: string, overRideStore: boolean):  Observable<IMenuItem[]>  {
 
     const controller =  '/MenuItems/'
 
-    const endPoint = 'getGetCategoriesListAllV2'
+    const endPoint = 'getCategoriesListAllV2'
 
     const parameters = `?TypeofCategoryasName=${type}&overRideStore=${overRideStore}`
 
@@ -741,7 +741,7 @@ export class MenuService {
 
   }
 
-  getGetDepartmentList(site: ISite):  Observable<IDepartmentList[]>  {
+  getDepartmentList(site: ISite):  Observable<IDepartmentList[]>  {
     // https://localhost:44309/api/MenuCategories/GetDepartment?id=1488
     const controller =  '/MenuCategories/'
 
@@ -757,7 +757,7 @@ export class MenuService {
 
   }
 
-  getGetDepartment(site: ISite,id: any):  Observable<IDepartmentList[]>  {
+  getDepartment(site: ISite,id: any):  Observable<IDepartmentList[]>  {
 
     const controller =  '/MenuCategories/'
 
@@ -774,60 +774,60 @@ export class MenuService {
   }
 
   getListOfCategories(site: ISite):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListActive(site, `category`, 0);
+    return this.getCategoriesListActive(site, `category`, 0);
   }
 
   getListOfDepartments(site: ISite):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListActive(site, `department`, 0);
+    return this.getCategoriesListActive(site, `department`, 0);
   }
 
   getListOfSubCategories(site: ISite):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListActive(site, `subcategory`, 0);
+    return this.getCategoriesListActive(site, `subcategory`, 0);
   }
 
   getListOfSubCategoriesByCategory(site: ISite, id: number):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListByID(site, `subcategory`, id);
+    return this.getCategoriesListByID(site, `subcategory`, id);
   }
 
   getListOfCategoriesAll(site: ISite):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListAll(site, `category`);
+    return this.getCategoriesListAll(site, `category`);
   }
 
   getListOfDepartmentsAll(site: ISite):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListAll(site, `department`);
+    return this.getCategoriesListAll(site, `department`);
   }
 
   getListOfSubCategoriesAll(site: ISite):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListAll(site, `subcategory`);
+    return this.getCategoriesListAll(site, `subcategory`);
   }
 
 
   getListOfCategoriesV2(site: ISite,  overRideStore: boolean):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListActiveV2(site, `category`, 0, overRideStore);
+    return this.getCategoriesListActiveV2(site, `category`, 0, overRideStore);
   }
 
   getListOfDepartmentsV2(site: ISite,  overRideStore: boolean):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListActiveV2(site, `department`, 0, overRideStore);
+    return this.getCategoriesListActiveV2(site, `department`, 0, overRideStore);
   }
 
   getListOfSubCategoriesV2(site: ISite,  overRideStore: boolean):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListActiveV2(site, `subcategory`, 0, overRideStore);
+    return this.getCategoriesListActiveV2(site, `subcategory`, 0, overRideStore);
   }
 
   getListOfSubCategoriesByCategoryV2(site: ISite, id: number, overRideStore: boolean):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListByID(site, `subcategory`, id);
+    return this.getCategoriesListByID(site, `subcategory`, id);
   }
 
   getListOfCategoriesAllV2(site: ISite, overRideStore: boolean):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListAllV2(site, `category`, overRideStore);
+    return this.getCategoriesListAllV2(site, `category`, overRideStore);
   }
 
   getListOfDepartmentsAllV2(site: ISite,  overRideStore: boolean):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListAllV2(site, `department`, overRideStore);
+    return this.getCategoriesListAllV2(site, `department`, overRideStore);
   }
 
   getListOfSubCategoriesAllV2(site: ISite, overRideStore: boolean):  Observable<IMenuItem[]>  {
-    return this.getGetCategoriesListAllV2(site, `subcategory`, overRideStore)
+    return this.getCategoriesListAllV2(site, `subcategory`, overRideStore)
   }
 
 

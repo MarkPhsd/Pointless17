@@ -1,14 +1,19 @@
 <mat-card class="mat-card-view">
   <mat-card-content>
-    <div class="ps-item-margin">
-      <button mat-button (click)="resetSearch()">Reset <mat-icon>refresh</mat-icon></button>
-    </div>
-
-    <div class="keypad">
-      <div>
-        <ng-container [ngTemplateOutlet]="fields"></ng-container>
+    <div class="grid-items">
+      <div class="ps-item-margin">
+        <button mat-button (click)="resetSearch()">Reset <mat-icon></mat-icon></button>
       </div>
+
+        <div class="ps-item-margin">
+          <button mat-button (click)="refreshSearch()">Refresh <mat-icon>refresh</mat-icon></button>
+        </div>
     </div>
+      <div class="keypad">
+        <div>
+          <ng-container [ngTemplateOutlet]="fields"></ng-container>
+        </div>
+      </div>
 
     <ng-template #fields>
       <div class="grid-items">

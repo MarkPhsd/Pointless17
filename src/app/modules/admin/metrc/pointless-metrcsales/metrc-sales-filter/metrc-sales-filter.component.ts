@@ -181,7 +181,7 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
     this.outputClearExceptions.emit(true)
     if (! this.searchModel) {  this.searchModel = {} as PointlessMetrcSearchModel }
     this.searchModel.currentPage = 1;
-    this.searchModel.currentDay = false;
+    // this.searchModel.currentDay = false;
     this.assignDateSettings();
     this.pointlessMetrcSalesReport.updateSearchModel( this.searchModel )
   }
@@ -196,14 +196,16 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
         }
       }
     }
-    this.searchModel = {} as PointlessMetrcSearchModel
+    if (!this.searchModel) { 
+      this.searchModel = {} as PointlessMetrcSearchModel
+    }
     this.initDateForm()
     this.searchModel.name = name;
     this.searchModel.currentDay  = true;
     this.searchModel.pageNumber  = 1;
     this.searchModel.currentPage = 1;
     this.searchModel.pageSize    = 1000000;
-    this.searchModel.nonSubmitted = false
+    // this.searchModel.nonSubmitted = false
     this.outputClearExceptions.emit(true)
     this.pointlessMetrcSalesReport.updateSearchModel( this.searchModel )
   }

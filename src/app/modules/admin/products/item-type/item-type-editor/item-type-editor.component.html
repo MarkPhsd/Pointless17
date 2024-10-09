@@ -160,7 +160,7 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
-                
+
                 <mat-form-field appearance="outline" [formGroup]="jsonForm">
                   <mat-label>METRC Group</mat-label>
                   <mat-select
@@ -215,8 +215,8 @@
 
               <!-- // itemRowColor: [],
               sidePrepList: [], -->
-     
-            
+
+
 
               <div>
                 <mat-form-field appearance="outline">
@@ -279,7 +279,7 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-              
+
                 <div >
                   <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
                 </div>
@@ -377,7 +377,7 @@
                 <app-value-fields
                     [inputForm]="jsonForm"
                     [fieldName]="'sellByValue'">
-                    Sell By Value 
+                    Sell By Value
                 </app-value-fields>
 
                 <app-value-fields
@@ -385,14 +385,19 @@
                     [fieldName]="'useByValue'">
                     Use by Value
                 </app-value-fields>
-                
-                <!-- <app-value-fields
+
+                <app-value-fields
                     [inputForm]="jsonForm"
-                    [fieldName]="'metrcPackageWeight'">
-                    (Metrc) Package Weight
-                </app-value-fields> -->
-           
-             
+                    [fieldName]="'itemNamePrefix'">
+                  Prefix -Item Name
+                </app-value-fields>
+
+                <app-value-fields
+                    [inputForm]="jsonForm"
+                    [fieldName]="'itemNameSuffix'">
+                    Suffix -Item Name
+                </app-value-fields>
+
               </div>
           </div>
         </div>

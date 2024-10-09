@@ -33,7 +33,7 @@ export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
   closeDateForm: FormGroup
 
   config$ : Observable<any>;
-  
+
   constructor(
               private http: HttpClient,
               private systemService:     SystemService,
@@ -56,10 +56,10 @@ export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
     this.config$ =  this.http.get('assets/app-config.json')
   }
 
-  exportLogsToTxt() { 
+  exportLogsToTxt() {
     this.loggerService.exportLogsToTxt()
   }
-  
+
   initDateForm() {
     this.closeDateForm = this.fb.group({
       date: []
@@ -95,7 +95,6 @@ export class DatabaseSchemaComponent implements AfterViewInit, OnInit{
   cleanData() {
     this.processingVisible = true
     const site = this.sitesService.getAssignedSite();
-
 
     this.action$  =   this.systemService.cleanData(site).pipe(
       switchMap( data=> {

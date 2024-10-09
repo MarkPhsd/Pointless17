@@ -10,8 +10,10 @@ import { ClientTypeService } from 'src/app/_services/people/client-type.service'
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmailSMTPService } from 'src/app/_services/system/email-smtp';
 import { IMenuButtonGroups, MBMenuButtonsService } from 'src/app/_services/system/mb-menu-buttons.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { TtsService } from 'src/app/_services/system/tts-service.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { DcapPayAPIService } from 'src/app/modules/payment-processing/services/dcap-pay-api.service';
 
@@ -44,27 +46,42 @@ export class UITransactionsComponent implements OnInit {
   aquireKey$ : Observable<any>;
   payAPIKeyEnabled: boolean;
   disableNonCrediTip: boolean;
+  sampleMessage: string;
 
+  voiceList$: Observable<boolean>
   menuButtonList$ : Observable<IMenuButtonGroups[]>;
 
   dcapSurchargeOptionList = this.uISettingsService.dcapSurchargeOptionList;
+  voices: SpeechSynthesisVoice[];
+
   constructor(
       private uISettingsService: UISettingsService,
       private settingService   : SettingsService,
       private serviceTypeService: ServiceTypeService,
       private clientTypeService: ClientTypeService,
-      private sitesService     : SitesService,
+      public  sitesService     : SitesService,
       private clienTableSerivce: ClientTableService,
       private menuService: MenuService,
       private fb: UntypedFormBuilder,
-      public labelingService: LabelingService,
+      public  labelingService: LabelingService,
       private paymentService: DcapPayAPIService,
       private authenticationService: AuthenticationService,
       private mbMenuGroupService: MBMenuButtonsService,
       private emailSMTPService: EmailSMTPService,
+      private platFormService: PlatformService,
+      public ttsService : TtsService,
   ) {
   }
 
+  initVoiceList() {
+    if (!this.platFormService.androidApp) {
+      this.ttsService.isVoicesLoaded().subscribe((loaded) => {
+        if (loaded) {
+          this.voices = this.ttsService.getVoices();
+        }
+      });
+    }
+  }
 
   emailDCApSettings() {
     const model = {emailTo: 'markp@pointlesspos.com', name: 'mark phillips'} as any
@@ -97,6 +114,7 @@ export class UITransactionsComponent implements OnInit {
        localStorage.setItem('testVariable' ,  this.testForm.controls['testVariable'].value)
     })
     this.receiptList$ = this.getReceiptList();
+    this.initVoiceList()
   }
 
   initUITransactionSettings() {
@@ -250,6 +268,24 @@ export class UITransactionsComponent implements OnInit {
     }
     return true;
   }
+
+  speakSample() {
+    // const ui = this.uISettingsService._transactionUISettings.value
+    const ui = this.inputForm.value as TransactionUISettings;
+
+  if (ui.voiceServiceName) {
+        this.sitesService.addTextToQueue('Pointless Point of Sale Text To Speech', ui.voiceServiceName);
+    }
+  }
+
+  // Use the selected voice for TTS
+  speak() {
+    this.ttsService.addTextToQueue('Hello! This is the selected voice.');
+    // const ui = this.inputForm.value as TransactionUISettings;
+    // if (ui.voiceServiceName) {
+    // }
+  }
+
 
 }
 

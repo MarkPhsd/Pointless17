@@ -176,7 +176,7 @@
           {{ site?.name.toUpperCase() | truncateText : 12 }}
         </h2>
       </div>
-   
+
   </div>
 </ng-template>
 
@@ -318,7 +318,7 @@
         <app-request-messages
           *ngIf             ="uiTransactionSetting"
           [user]            ="user"
-   
+
           [uiTransaction]   ="uiTransactionSetting"
           [hideshowMessages]="true"
           (emitCount)       ="emailMailCount($event)">

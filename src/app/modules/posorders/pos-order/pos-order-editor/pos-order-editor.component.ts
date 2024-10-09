@@ -360,14 +360,43 @@ export class PosOrderEditorComponent implements OnInit {
   }
 
   deleteItem(event) {
-    this.dialogRef.close(true)
-    const warn =  window.confirm("Are you sure you want to delete this? This can not be undone.")
-    if (!warn) { return}
+
+    const currentUser = this.userAuthService.currentUser();
+    const pref = currentUser?.userPreferences
+    let acceptDelete : boolean
+    let warn: boolean;
+
+    if (pref?.disableWarnOrderDelete) {
+      acceptDelete = true;
+      warn = true
+    } else {
+      if (!pref?.disableWarnOrderDelete) {
+        acceptDelete =  window.confirm("Are you sure you want to delete this? This can not be undone.");
+        currentUser.userPreferences.disableWarnOrderDelete = true;
+        this.userAuthService.setUser(currentUser)
+        warn = false
+      }
+    }
+
+    if (warn) {
+      warn =  window.confirm("Are you sure you want to delete this? This can not be undone.")
+    }
+
+    if (!acceptDelete) { return}
     const site = this.siteService.getAssignedSite()
     this.action$ = this.orderService.deleteTOrder(site, this.order.id, this.history ).pipe(switchMap(data => {
-      setTimeout(() => {
-        this.dialogRef.close(true);
-      }, 100);
+      if (data === 'Deleted') {
+        this.orderMethodsService.updateOrder(null)
+        this.siteService.notify(data.toString(), 'close', 3000)
+        this.order = null;
+        this.posOrder = null;
+
+        // setTimeout(() => {
+        //   this.dialogRef.close(true);
+        // }, 200);
+      } else {
+        this.siteService.notify(data.toString(), 'close', 3000)
+      }
       return of(data)
     }))
   }

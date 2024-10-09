@@ -504,6 +504,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
   //ag-grid standard method
   onGridReady(params: any) {
 
+    this.exceptionMessage = ''
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
@@ -533,6 +534,15 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
           this.rowData = null;
           return;
         }
+
+        // if (this.searchModel.nonSubmitted) {
+        //   data.results = data.results.filter(item => { 
+        //     if (!item.metrcResponse) {
+        //       return item
+        //     }
+        //   })
+        // }
+
         this.processing = false;
         this.rowData    = data.results;
         this.getExceptions(data?.exceptions);

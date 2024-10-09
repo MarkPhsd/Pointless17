@@ -709,7 +709,7 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
       model.webMode = webMode;
       model.hideSubCategoryItems = true;
 
-    const departments$ = this.menuService.getGetDepartmentList(site).pipe(switchMap(data => {
+    const departments$ = this.menuService.getDepartmentList(site).pipe(switchMap(data => {
     this.departments = data;
       if (this.isApp || this.isStaff) {
         this.departments = data.filter(item => { return item.active })

@@ -28,7 +28,7 @@ import { TranResponse } from 'src/app/_services/dsiEMV/dsiemvtransactions.servic
 export class PosPaymentEditComponent implements OnInit, OnDestroy {
 
   orderHistory$   : Observable<IPOSOrder>
-  
+
   inputForm       : UntypedFormGroup;
 
   paymentMethod$  : Observable<IPaymentMethod>;
@@ -65,15 +65,15 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     this._payment = this.paymentService.currentPayment$.subscribe( payment => {
       this.payment   = payment
-     
+
       this.history = payment?.history;
       if (payment && payment.history) {
         this.deleteAllowed = false
       }
-      
-      if (this.history) { 
+
+      if (this.history) {
         const site  = this.siteService.getAssignedSite()
-        this.orderHistory$  = this.orderService.getOrder(site, payment?.id.toString(), true)
+        this.orderHistory$  = this.orderService.getOrder(site, payment?.orderID.toString(), true)
       }
 
     });

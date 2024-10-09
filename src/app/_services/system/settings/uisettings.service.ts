@@ -36,7 +36,8 @@ export interface ProcessorInfo {
 }
 
 export interface TransactionUISettings {
-  
+
+  voiceServiceName: string;
   binaryStoreValue        : any;
   multiButtonKPrepHeader  : number;
   multiButtonPrepHeader  : number;
@@ -922,7 +923,7 @@ export class UISettingsService {
 
   initForm(fb: UntypedFormGroup): UntypedFormGroup {
     return this._fb.group({
-
+      voiceServiceName: [],
       multiButtonKPrepHeader  : [],
       multiButtonPrepHeader   : [],
       autoSelectItemPOSearch : [],

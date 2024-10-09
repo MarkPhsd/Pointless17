@@ -127,6 +127,8 @@ export interface ItemType_Properties {
   useByValue: number;
   metrcPackageWeight: number;
   metrcGroup: number;
+  itemNamePrefix: string;
+  itemNameSuffix: string;
 }
 
 export interface ItemTypeCategory {
@@ -318,7 +320,7 @@ export class ItemTypeService {
     return this._itemTypeList.value;
   }
 
-  getItemTypeFromList(id: number): IItemType { 
+  getItemTypeFromList(id: number): IItemType {
     // console.log('value', this._itemTypeList.value)
     if (!this._itemTypeList.value) { return null}
     const list = this._itemTypeList.value
@@ -338,10 +340,10 @@ export class ItemTypeService {
     // const cache =  this.sitesService.getCacheURI(uri)
 
     const url = `${site.url}${controller}${endPoint}${parameters}`;
-    
+
     const cache = { url: url, cacheMins: 0 }
 
-    return  this.httpCache.get<IItemType[]>(cache).pipe(switchMap(data => { 
+    return  this.httpCache.get<IItemType[]>(cache).pipe(switchMap(data => {
       this._itemTypeList.next(data)
       return of(data)
     }))

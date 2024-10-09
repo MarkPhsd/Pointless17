@@ -34,11 +34,11 @@ export class PaymentReportDataComponent implements OnInit {
   @Input() autoPrint: boolean;
   @Input() surCharge: boolean
   @Input() batchData: any;
-  
+
   constructor(
     private popOutService: ProductEditButtonService,
     private reportingItemsSalesService: ReportingItemsSalesService,
-    private platFormService: PlatformService,
+    public platFormService: PlatformService,
     private printingService: PrintingService,
     private httpClient: HttpClient,
     )
@@ -88,15 +88,30 @@ export class PaymentReportDataComponent implements OnInit {
   // printAction$: Observable<any>;
   // printing: boolean;
 
+  // print() {
+  //   if (this.platFormService.isAppElectron) {
+  //     this.printAction$ =  this.setPrintStyles().pipe(switchMap(data => {
+  //       this.printElectron(data)
+  //       return of(data)
+  //     }))
+  //   }
+  // }
   print() {
     if (this.platFormService.isAppElectron) {
       this.printAction$ =  this.setPrintStyles().pipe(switchMap(data => {
         this.printElectron(data)
         return of(data)
       }))
+    } else {
+      // this.printingService.savePDF(this.printsection.nativeElement, this)
+      //document.getElementById('printsection')
+      if (!this.printsection.nativeElement) {
+        console.log('section is null')
+        return
+      }
+      this.printingService.convertToPDF( this.printsection.nativeElement  )
     }
   }
-
 
   setPrintStyles() {
     const styles$ = this.httpClient.get('assets/htmlTemplates/salesreportStyles.html', {responseType: 'text'});

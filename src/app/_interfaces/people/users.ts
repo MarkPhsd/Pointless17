@@ -27,6 +27,7 @@ export interface IUser {
 }
 
 export interface UserPreferences {
+  disableWarnOrderDelete: boolean;
   darkMode: boolean;
   swapMenuOrderPlacement: boolean;
   orderFilter: IPOSOrderSearchModel

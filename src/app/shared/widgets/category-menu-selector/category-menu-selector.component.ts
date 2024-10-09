@@ -186,7 +186,7 @@ export class CategoryMenuSelectorComponent implements OnInit {
 
     if (this.type === 'category' || this.type === 'department' || this.type === 'subcategory') {
       const category$ = this.menuService.getCategoryListNoChildren(site);
-      const department$ = this.menuService.getGetDepartmentList(site);
+      const department$ = this.menuService.getDepartmentList(site);
       const subCategory$ = this.menuService.getListOfSubCategories(site)
       let list$: Observable<any[]>;
 

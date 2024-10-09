@@ -455,10 +455,6 @@
                    Credit Card Fee
               </app-value-fields>
             </div>
-
-
-
-
           </div>
         </div>
 
@@ -1211,7 +1207,30 @@
       </div>
 
     <div>
+      <mat-card *ngIf="voices">
+        <h3>Voice Services</h3>
+        <div >
+          <mat-form-field style="width: 200px" class="fields"
+              appearance="outline">
+            <mat-label>Voice Service Name</mat-label>
+              <mat-select
+                        type              = "text"
+                        formControlName   = "voiceServiceName" >
+                <mat-option
+                    *ngFor="let item of voices"
+                    [value]="item?.name">
+                    {{item?.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
 
+        <button mat-raised-button color="accent" (click)="speakSample()">Sample Message</button>
+
+        <button mat-raised-button color="accent" (click)="speak()">Default Voice</button>
+
+
+      </mat-card>
     </div>
 
   </mat-card-content>
@@ -1230,3 +1249,14 @@
     </div>
   </mat-card-content>
 </mat-card>
+
+<ng-template #messageInfo>
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Sample Message</mat-label>
+      <input matInput type="text"
+               [(ngModel)]="sampleMessage"
+              class="form-control" >
+    </mat-form-field>
+  </div>
+</ng-template>

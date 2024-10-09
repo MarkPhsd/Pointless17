@@ -113,8 +113,6 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     })
   }
 
-
-
   constructor(  private snackBar                : MatSnackBar,
                 private pOSPaymentService       : POSPaymentService,
                 private agGridService           : AgGridService,

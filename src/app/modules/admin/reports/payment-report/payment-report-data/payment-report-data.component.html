@@ -61,7 +61,13 @@
             </div>
             <div>
               <button mat-raised (click)="print()">
-              <mat-icon>print</mat-icon></button>
+                <span *ngIf="platFormService.isAppElectron">
+                  <mat-icon>print</mat-icon>
+                </span>
+                <span *ngIf="!platFormService.isAppElectron">
+                  <mat-icon>save</mat-icon>
+                </span>
+              </button>
             </div>
             <div>
               <button mat-raised (click)="refresh()">

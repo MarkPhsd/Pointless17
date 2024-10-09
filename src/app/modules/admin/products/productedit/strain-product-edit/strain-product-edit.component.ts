@@ -6,7 +6,7 @@ import { IProduct } from 'src/app/_interfaces/raw/products';
 import { Observable, of } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
-import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { IItemType, ItemType_Properties, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { catchError, switchMap } from 'rxjs/operators';
 import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
@@ -39,7 +39,7 @@ export class StrainProductEditComponent implements OnInit {
 
   uiHome: UIHomePageSettings;
   uiHome$ : Observable<UIHomePageSettings>;
-  
+
   thumbNailWidth: number = 110
   thumbNailHeight: number = 80
   get groceryPromptView() {
@@ -174,7 +174,7 @@ export class StrainProductEditComponent implements OnInit {
     if (!data) {
       this.id = this.route.snapshot.paramMap.get('id');
     }
-    this.uiHome$ = this.settingService.getUIHomePageSettings().pipe(switchMap(data => { 
+    this.uiHome$ = this.settingService.getUIHomePageSettings().pipe(switchMap(data => {
       this.uiHome = data;
       return of(data)
     }))
@@ -494,6 +494,8 @@ export class StrainProductEditComponent implements OnInit {
       this.product.json     = this.JSONAsString ;
       this.product.metaTags = this.itemTags;
 
+      this.product = this.setPrefixPosFix(this.product)
+
       const product$ = this.menuService.saveProduct(site, this.product);
       return product$.pipe(switchMap(
           data => {
@@ -518,8 +520,43 @@ export class StrainProductEditComponent implements OnInit {
         return of(data)
       }))
     }
-  };
 
+
+  }
+
+  // setPrefixPosFix(product: IProduct) {
+  //   if (this.product) {
+  //     if (this.itemType) {
+  //       if (this.itemType.json) {
+  //         const itemProp = JSON.parse(this.itemType.json) as ItemType_Properties;
+  //         // itemNamePrefix: string;
+  //         // itemNameSuffix: string;
+  //         product.name = `${itemProp.itemNamePrefix} ${product.name} ${itemProp.itemNameSuffix}`
+  //       }
+  //     }
+  //   }
+  // }
+
+  setPrefixPosFix(product: IProduct) {
+    if (this.product) {
+      if (this.itemType) {
+        if (this.itemType.json) {
+          const itemProp = JSON.parse(this.itemType.json) as ItemType_Properties;
+          let { itemNamePrefix, itemNameSuffix } = itemProp;
+
+          // Ensure that prefix and suffix are only added if they are not already part of the name
+          if (itemNamePrefix && !product.name.startsWith(itemNamePrefix)) {
+            product.name = `${itemNamePrefix} ${product.name}`;
+          }
+
+          if (itemNameSuffix && !product.name.endsWith(itemNameSuffix)) {
+            product.name = `${product.name} ${itemNameSuffix}`;
+          }
+        }
+      }
+    }
+    return product;
+  }
 
 
   updateItemExit(event) {
@@ -608,18 +645,18 @@ export class StrainProductEditComponent implements OnInit {
     console.log(this.product)
   }
 
-  openStoreSelector() { 
+  openStoreSelector() {
     const site = this.siteService.getAssignedSite()
-    this.action$ = this.menuService.getMenuItemByID(site, this.product?.id).pipe(switchMap(data => { 
+    this.action$ = this.menuService.getMenuItemByID(site, this.product?.id).pipe(switchMap(data => {
       const dialogRef = this.productEditButtonService.openStoreSelector({menuItem: data, activeOnly: true})
-      dialogRef.afterClosed().subscribe(data => { 
-        if (data) { 
+      dialogRef.afterClosed().subscribe(data => {
+        if (data) {
           this.product = data
         }
       })
       return of(data)
     }))
-   
+
   }
 
   parentFunc(event){

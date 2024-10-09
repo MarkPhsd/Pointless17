@@ -28,7 +28,7 @@ export class CategorySelectComponent implements OnInit {
     const site =            this.sitesService.getAssignedSite();
     this.loadingItems = true;
     const type        = this.type;
-    const item$       = this.menuService.getGetCategoriesListAll(site, type)
+    const item$       = this.menuService.getCategoriesListAll(site, type)
 
     if (this.type.toLowerCase() == 'subcategory') {
       this.fieldName = 'subCategoryID'
