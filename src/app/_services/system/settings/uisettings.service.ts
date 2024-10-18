@@ -14,6 +14,7 @@ import { ElectronService } from 'ngx-electron';
 import { PlatformService } from '../platform.service';
 import { UserPreferencesComponent } from 'src/app/modules/admin/clients/user-preferences/user-preferences.component';
 import { IMenuButtonGroups } from '../mb-menu-buttons.service';
+import { TtsService } from '../tts-service.service';
 
 export interface ContactFieldOptions {
   id: number;
@@ -492,6 +493,7 @@ export class UISettingsService {
   }
 
   updateUISubscription(ui: TransactionUISettings) {
+    this.ttsService.setDefaultVoice(ui?.voiceServiceName)
     this._transactionUISettings.next(ui);
   }
 
@@ -515,6 +517,7 @@ export class UISettingsService {
       private dialog                : MatDialog,
       private platFormService   : PlatformService,
       private electronService: ElectronService,
+      private ttsService: TtsService,
       private settingsService: SettingsService) {
     this.initSecureSettings()
     this.getUIHomePageSettings();

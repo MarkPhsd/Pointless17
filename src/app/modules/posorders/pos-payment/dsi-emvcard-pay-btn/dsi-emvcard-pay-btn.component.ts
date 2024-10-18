@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IPaymentMethod } from 'ngx-paypal';
 import { Observable } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
@@ -13,8 +13,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
   templateUrl: './dsi-emvcard-pay-btn.component.html',
   styleUrls: ['./dsi-emvcard-pay-btn.component.scss']
 })
-export class DsiEMVCardPayBtnComponent implements OnInit {
-
+export class DsiEMVCardPayBtnComponent implements OnInit, OnChanges {
   
   @ViewChild('regularStyle') regularStyle: TemplateRef<any>;
   @ViewChild('footerStyle') footerStyle: TemplateRef<any>;
@@ -47,7 +46,6 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
     public  platFormService : PlatformService,) { }
 
   ngOnInit(): void {
-
     if (this.debitOnly) { 
       this.themeClass = 'button-debit payment-buttons';
     }
@@ -58,6 +56,10 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
       this.themeClass = 'button-manual payment-buttons';
     }
     const i = 0
+  }
+
+  ngOnChanges() {
+    return this.buttonView
   }
 
   processPayment(manual: boolean) {
@@ -115,7 +117,6 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
     const response  = await this.dsiProcess.pinPadReset( );
     this.sitesService.notify('PIN Pad Reset', 'Success', 1000)
   }
-
   
   roundToPrecision(value: number, precision: number): number {
     const factor = Math.pow(10, precision);
@@ -129,110 +130,5 @@ export class DsiEMVCardPayBtnComponent implements OnInit {
     }
     return this.regularStyle;
   }
-  // @Input() order: IPOSOrder;
-  // @Input() uiTransactions: TransactionUISettings;
-  // @Input() platForm: string;
-  // @Input() creditBalanceRemaining: number;
-  // @Input() stripeTipValue: string;
-  // @Input() paymentAmount: number;
-  // @Input() preAuth: boolean;
-  // @Input() autoPay: boolean;
-  // stripeEnabled: boolean;
-  // paymentMethod$: Observable<IPaymentMethod>;
-
-  // stepSelection: number;
-  // paymentMethod: IPaymentMethod;
-  // @Input() devicename : string;
-
-  // constructor(
-  //   private sitesService    : SitesService,
-  //   private dsiProcess      : DSIProcessService,
-  //   private paymentsMethodsService: PaymentsMethodsProcessService,
-  //   public  platFormService : PlatformService,) { }
-
-  // ngOnInit(): void {
-  //   const i = 0
-  // }
-
-  // processPayment(manual: boolean) {
-  //   if (this.uiTransactions && this.uiTransactions.dCapEnabled) {
-  //     if (this.preAuth) {
-  //       this.processDCAPPreAuthCardPayment(manual)
-  //       return;
-  //     }
-  //     this.processDCAPCreditCardPayment(manual)
-  //     return;
-  //   }
-  //   this.processDSICreditCardPayment(manual)
-  //   return;
-  // }
-
-  // processDSICreditCardPayment(manual: boolean) {
-  //   const order = this.order;
-  //   if (order) {
-  //     let amount = this.getValidAmount()
-  //     this.paymentsMethodsService.processSubDSIEMVCreditPayment(order, amount, manual)
-  //   }
-  // }
-
-  // processDCAPCreditCardPayment(manual: boolean) {
-  //   const order = this.order;
-  //   if (order) {
-  //     let amount = this.getValidAmount()
-  //     this.paymentsMethodsService.processDCAPVCreditPayment(order, amount, manual, this.autoPay, false)
-  //   }
-  // }
-
-  // processDCAPPreAuthCardPayment(manual: boolean) {
-  //   const order = this.order;
-  //   if (order) {
-  //     let amount = this.getValidAmount()
-  //     this.paymentsMethodsService.processDCAPVCreditPayment(order, amount, manual, false, true)
-  //   }
-  // }
-
-  // getValidAmount() {
-  //   const order = this.order;
-  //   let amount = this.creditBalanceRemaining
-  //   if (order) {
-  //     if (this.paymentAmount && this.paymentAmount !=0) {
-  //       amount = this.paymentAmount
-  //     }
-  //     if (amount > this.creditBalanceRemaining) {
-  //       amount  = this.creditBalanceRemaining
-  //     }
-  //   }
-  //   return amount
-  // }
-
-  // async dsiResetDevice() {
-  //   const response  = await this.dsiProcess.pinPadReset( );
-  //   this.sitesService.notify('PIN Pad Reset', 'Success', 1000)
-  // }
-
-  // processDCAPCreditCardPaymentSub(manual: boolean) {
-  //   const site = this.siteService.getAssignedSite();
-  //   const  posPayment = {} as IPOSPayment;
-  //   posPayment.orderID = order.id;
-  //   posPayment.zrun = order.zrun;
-  //   posPayment.reportRunID = order.reportRunID;
-
-  //   const payment$  = this.paymentService.postPOSPayment(site, posPayment)
-
-  //   const paymentProcess = {order: order, posPayment: posPayment, settings: settings, manualPrompt: manualPrompt, action: 1}
-
-  //   return payment$.pipe(
-  //     switchMap(data =>
-  //     {
-  //       data.amountPaid = amount;
-  //       paymentProcess.posPayment = data;
-  //       this.dialogRef = this.dialogOptions.openTriPOSTransaction(
-  //         paymentProcess
-  //       );
-  //       this._dialog.next(this.dialogRef)
-  //       return of(data)
-  //     }
-  //   ))
-  // }
-
+  
 }

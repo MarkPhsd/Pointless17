@@ -106,9 +106,6 @@ export class POSOrderServiceTypeComponent implements OnDestroy  {
   applyServiceType(item: IServiceType) {
     // this.item = item
     if (this.order && item) {
-      // this.order.serviceType = item.name;
-      // this.order.serviceTypeID = item.id;
-      // this.orderService.updateOrderSubscription(this.order)
       this.outPutSelectServiceType.emit(item)
     }
   }

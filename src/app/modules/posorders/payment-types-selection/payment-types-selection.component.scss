@@ -1,0 +1,52 @@
+@import "/src/mixins.scss";
+
+.card-dimensions {
+  // width: 400px;
+  // height: 400px;
+}
+
+mat-card {
+  height: 400px;
+  min-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.service-buttons {
+  width: 250px;
+  height: 60px;
+  margin: 0.5em;
+}
+
+.item-image {
+  object-fit: cover;
+  border-radius: 15px;
+  width: 100%;
+  height: 50px;
+}
+
+.button-text {
+  width: 150px;
+  text-align: left;
+  white-space: normal;
+}
+
+/* Flexbox container to ensure buttons flow left to right and wrap */
+.button-container {
+  display: flex;
+  flex-wrap: wrap; /* Ensures buttons wrap to the next line when needed */
+  justify-content: flex-start; /* Align buttons to the left */
+  gap: 10px; /* Adds space between buttons */
+}
+
+.flex-start-row-space-around {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.product-image-container {
+  width: 50px;
+  height: 50px;
+}

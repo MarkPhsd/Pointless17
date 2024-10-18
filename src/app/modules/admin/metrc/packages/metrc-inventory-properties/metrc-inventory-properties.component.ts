@@ -4,14 +4,13 @@ import { Observable, of } from 'rxjs';
 import { catchError, concatMap, switchMap } from 'rxjs/operators';
 import { IProduct, ISite, UnitType } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { METRCFacilities } from 'src/app/_interfaces/metrcs/facilities';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { MenuService } from 'src/app/_services';
 import { IItemType, ItemType_Properties, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
-import { MetrcFacilitiesService } from 'src/app/_services/metrc/metrc-facilities.service';
+
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
@@ -24,13 +23,14 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
   action$: Observable<any>;
   @Input()  inputForm   :      UntypedFormGroup;
   @Input()  package     :      METRCPackage;
+  @Input()  menuItem: IMenuItem;
   @Output() outputMenuItem    = new EventEmitter<any>();
   @Output() outputVendor      = new EventEmitter<any>();
   @Input()  filter: ProductSearchModel; //productsearchModel;
 
   facilityLicenseNumber: string;
   productionBatchNumber: string;
-  menuItem             : any ;
+
   site                 : ISite;
 
   constructor(
@@ -59,7 +59,7 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
     if (item) { 
       if (item.json) { 
         const itemPackage = JSON.parse(item.json) as any
-        console.log('itemPackage1', itemPackage, itemPackage.ProductName )
+        // console.log('itemPackage1', itemPackage, itemPackage.ProductName )
         if (itemPackage.ProductName) { 
           if (!item.productName) {
             item.productName = itemPackage.ProductName;
@@ -81,13 +81,14 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       searchModel.name = metrcPackage?.productName ;
       const list$ =  this.menuService.getItemBasicBySearch( site, searchModel ).pipe(
         switchMap(data => {
-          console.log('metrcInfo', metrcPackage?.productName , 'data', data)
+          // console.log('metrcInfo', metrcPackage?.productName , 'data', data)
           if (data) {
             if (data.length == 0) {return of(null)}
             if (!data[0] == undefined || data[0].id == undefined) {return of(null)}
             return this.menuService.getMenuItemByID( site, data[0]?.id)
           }}),
           catchError( data => {
+            this.siteService.notify(JSON.parse(data), 'Close',  5000, 'red');
             console.log('error' , data)
             return of(null)
           }
@@ -109,18 +110,21 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
               }
               if (!data) {
                 if (searchModel?.name) {
-                  const confirm = window.confirm(`${metrcPackage?.productName} does not exist. Do you want to create a new item?`)
-                  if (confirm) {
-                    this.openNewProduct(metrcPackage)
-                  }
+                  this.openNewProduct(metrcPackage)
+                  // const confirm = window.confirm(`${metrcPackage?.productName} does not exist. Do you want to create a new item?`)
+                  // if (confirm) {
+                  // }
                 }
               }
           },
-          error: err => {
-            console.log(err)
+          error: data => {
+            this.siteService.notify(JSON.parse(data), 'Close',  5000, 'red');
+         
           }
         }
       )
+
+    } else { 
       this.setProductNameEmpty(this.inputForm);
     }
   }
@@ -219,9 +223,10 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       return this.itemTypeService.getItemType(site, data?.prodModifierType )
     })).pipe(switchMap(data => {
 
-      console.log('type', data, product?.prodModifierType)
+
       if (data && productID) {
-        this.productButtonService.openProductEditor(productID, data?.id)
+         const diag$ = this.productButtonService.openProductEditor(productID, data?.id)
+        
       }
       return of(data)
     }))
@@ -293,7 +298,7 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
         this.menuService.getMenuItemByID(this.site, itemStrain.id).subscribe(data => {
             if (data) {
               this.menuItem = data
-              this.package.productID = this.menuItem?.id;
+              this.package.productID   = this.menuItem?.id.toString();
               this.package.productName = this.menuItem?.name
               this.outputMenuItem.emit(data)
             }

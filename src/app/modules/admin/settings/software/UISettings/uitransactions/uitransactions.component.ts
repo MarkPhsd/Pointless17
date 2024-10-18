@@ -270,20 +270,20 @@ export class UITransactionsComponent implements OnInit {
   }
 
   speakSample() {
-    // const ui = this.uISettingsService._transactionUISettings.value
     const ui = this.inputForm.value as TransactionUISettings;
-
-  if (ui.voiceServiceName) {
-        this.sitesService.addTextToQueue('Pointless Point of Sale Text To Speech', ui.voiceServiceName);
-    }
+    if (ui.voiceServiceName) {
+        this.ttsService.setDefaultVoice(ui.voiceServiceName)
+        this.ttsService.addTextToQueue('Pointless! Point of Sale Text To Speech');
+      }
   }
 
   // Use the selected voice for TTS
   speak() {
     this.ttsService.addTextToQueue('Hello! This is the selected voice.');
-    // const ui = this.inputForm.value as TransactionUISettings;
-    // if (ui.voiceServiceName) {
-    // }
+  }
+
+  speakFromSite() {
+    this.sitesService.speak('Hello! This is the selected voice.');
   }
 
 

@@ -613,7 +613,7 @@ export class ProductEditButtonService {
 
   private _opeEditProductEditor(id: number, productTypeID: number, itemType$: Observable<IItemType>, site: ISite) {
     const product$ = this.getItemForNewEditor(id, productTypeID)
-    this._openProductEditor(product$,itemType$)
+    return this._openProductEditor(product$,itemType$)
   }
 
   private _openAddProductOpenEditor(id: number, productTypeID: number, itemType$: Observable<IItemType>, site: ISite) {

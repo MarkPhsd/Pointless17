@@ -54,9 +54,9 @@
       <div>
         <span class="flex-grid-column-nogap" *ngIf="!hideButtonOptions" >
           <div *ngIf="(isApp) || (!isApp  && isUserStaff) && uiTransactionSettings ">
-            <button mat-button (click)="qrCodeDisplayToggle()">
+            <!-- <button mat-button (click)="qrCodeDisplayToggle()">
               <mat-icon>qr_code</mat-icon>QR Link
-            </button>
+            </button> -->
           </div>
 
           <div style="margin-left:3px"  *ngIf="menuButtonList" class="button-row-55">
@@ -70,6 +70,12 @@
                     [adminEmail]="uiHome?.administratorEmail"
                     [isStaff]="isStaff">
               </function-buttons-list>
+            </div>
+            <div  class="button-margin" >
+              <split-entry-selector [order]="order"
+                                    [isUserStaff]="isUserStaff"
+                                    [uiTransactionSettings]="uiTransactionSettings">
+              </split-entry-selector>
             </div>
           </div>
         </span>
@@ -113,12 +119,7 @@
       <div #coachingSplit class="button-row" *ngIf="isUserStaff &&
                                                     isSale &&
                                                     !platFormService.androidApp">
-        <div  class="button-margin" >
-          <split-entry-selector [order]="order"
-                                [isUserStaff]="isUserStaff"
-                                [uiTransactionSettings]="uiTransactionSettings">
-          </split-entry-selector>
-        </div>
+
 
         <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
         <div>

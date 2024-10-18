@@ -1,21 +1,26 @@
-<span *ngIf="devicename && (uiTransactions?.dsiEMVNeteEpayEnabled || uiTransactions?.dCapEnabled)
+<span *ngIf="devicename && 
+             (uiTransactions?.dsiEMVNeteEpayEnabled || uiTransactions?.dCapEnabled)
              && order && order?.balanceRemaining != 0">
-  <ng-container [ngTemplateOutlet]="buttonView"></ng-container>
+    <ng-container [ngTemplateOutlet]="footerStyle"></ng-container>
+
+    <button 
+          mat-raised-button
+          *ngIf="!footerButton"
+          [ngClass]="themeClass"
+          (click)="processPayment(manual)">
+      <ng-content></ng-content>
+    </button>
+
 </span>
 
-
 <ng-template #regularStyle>
-  <button 
-      mat-raised-button
-      [ngClass]="themeClass"
-      (click)="processPayment(manual)">
-  <ng-content></ng-content>
-  </button>
+
 </ng-template>
 
 <ng-template #footerStyle>
   <button mat-raised-button
        fxFill
+       *ngIf="footerButton"
        color="primary"
        (click)="processPayment(false)">
     <ng-content select="[footerstyle]"></ng-content>

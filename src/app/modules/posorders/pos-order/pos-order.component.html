@@ -136,38 +136,46 @@
         <mat-divider></mat-divider>
 
         <div >
-
           <div *ngIf="menuToggleEnabled">
             <ng-container [ngTemplateOutlet]="displaySubMenu"></ng-container>
           </div>
+          
+          <div class="button-layout-container">
+            <div *ngIf="mainPanel && uiTransactionSettings && !menuToggleEnabled"
+                  class="green-buttons">
+                <ng-container [ngTemplateOutlet]="cashPayCustom"></ng-container>
+                <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
+                <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
+                <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
+                <ng-container [ngTemplateOutlet]="cashPay20"></ng-container>
+                <ng-container [ngTemplateOutlet]="cashPay50"></ng-container>
+                <ng-container [ngTemplateOutlet]="cashPay100"></ng-container>
+            </div>
 
-          <div *ngIf="mainPanel && uiTransactionSettings && !menuToggleEnabled"
-                class="payment-buttons-container">
-              <ng-container [ngTemplateOutlet]="receiveOrderView"></ng-container>
-              <ng-container [ngTemplateOutlet]="stripePayButtonView"></ng-container>
-              <ng-container [ngTemplateOutlet]="disEMVCreditOnlyCardButton"></ng-container>
-              <ng-container [ngTemplateOutlet]="disEMVDebitOnlyCardButton"></ng-container>
-              <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
-              <ng-container [ngTemplateOutlet]="disEMVCardManualButton"></ng-container>
-              <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
-              <ng-container [ngTemplateOutlet]="dsiButtonView"></ng-container>
-              <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButtonView"></ng-container>
-              <ng-container [ngTemplateOutlet]="cardPointButtonView"></ng-container>
-              <ng-container [ngTemplateOutlet]="giftCardButtonView"></ng-container>
-              <ng-container [ngTemplateOutlet]="houseAccountButtonView"></ng-container>
-              <ng-container [ngTemplateOutlet]="wicEBTButtonView"></ng-container>
-              <ng-container [ngTemplateOutlet]="triPOSPaymentButtonView"></ng-container>
-              <ng-container [ngTemplateOutlet]="payButton"></ng-container>
-              <ng-container [ngTemplateOutlet]="cashPayCustom"></ng-container>
-              <ng-container [ngTemplateOutlet]="cashPayButtons"></ng-container>
-              <ng-container [ngTemplateOutlet]="cashPay5"></ng-container>
-              <ng-container [ngTemplateOutlet]="cashPay10"></ng-container>
-              <ng-container [ngTemplateOutlet]="cashPay20"></ng-container>
-              <ng-container [ngTemplateOutlet]="cashPay50"></ng-container>
-              <ng-container [ngTemplateOutlet]="cashPay100"></ng-container>
-              <ng-container [ngTemplateOutlet]="roundOrderView"></ng-container>
-              <ng-container [ngTemplateOutlet]="closeOrderButton"></ng-container>
+            <div *ngIf="mainPanel && uiTransactionSettings && !menuToggleEnabled"
+                  class="credit-buttons ">
+        
+                <ng-container [ngTemplateOutlet]="receiveOrderView"></ng-container>
+                <ng-container [ngTemplateOutlet]="stripePayButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="disEMVCreditOnlyCardButton"></ng-container>
+                <ng-container [ngTemplateOutlet]="disEMVDebitOnlyCardButton"></ng-container>
+                <ng-container [ngTemplateOutlet]="disEMVCardButton"></ng-container>
+                <ng-container [ngTemplateOutlet]="disEMVCardManualButton"></ng-container>
+                <ng-container [ngTemplateOutlet]="dCApPreAuthButton"></ng-container>
+                <ng-container [ngTemplateOutlet]="dsiButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="dsiEMVAndroidCardButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="cardPointButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="giftCardButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="houseAccountButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="wicEBTButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="triPOSPaymentButtonView"></ng-container>
+                <ng-container [ngTemplateOutlet]="payButton"></ng-container>
+        
+                <ng-container [ngTemplateOutlet]="roundOrderView"></ng-container>
+                <ng-container [ngTemplateOutlet]="closeOrderButton"></ng-container>
+            </div>
           </div>
+          
         </div>
 
         <div *ngIf="!mainPanel && uiTransactionSettings"
@@ -217,7 +225,8 @@
 </ng-template>
 
 <ng-template #receiveOrderView>
-  <div class="flex-grid" *ngIf="!isNotPurchaseOrder ">
+  
+  <div *ngIf="!isNotPurchaseOrder ">
     <button mat-raised-button class="payment-buttons" color="accent" (click)="receiveOrder()">
       <mat-icon>download</mat-icon>
       <br>Receive Items
@@ -244,6 +253,7 @@
       <br>Print Labels
     </button>
   </div>
+
 </ng-template>
 
 <ng-template #itemViewType>
@@ -299,8 +309,10 @@
 </ng-template>
 
 <ng-template #closeOrderButton>
-  <div  *ngIf="mainPanel && ((!isUser && (paymentsEqualTotal || order.completionDate)) ||
-               (order?.service?.filterType != 0))">
+
+  <div  *ngIf="mainPanel && (((!isUser && (paymentsEqualTotal || order.completionDate)) ||
+               (order?.service?.filterType && order?.service?.filterType != 0)))"
+               >
     <button mat-raised-button color="warn"  (click)="closeOrder()">
       <mat-icon >close</mat-icon>Close</button>
   </div>
@@ -384,8 +396,7 @@
 </ng-template>
 
 <ng-template #dsiEMVAndroidCardButton>
-  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder
-             ">
+  <div *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder ">
     <dsiemvandroid-pay-btn
         [order]="order"
         [devicename]="devicename"

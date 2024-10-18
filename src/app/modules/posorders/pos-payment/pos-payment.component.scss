@@ -326,3 +326,40 @@ mat-card {
   width: 135px;
   height: 75px;
 }
+
+
+
+.button-layout-container {
+  display: flex;
+  justify-content: space-between; /* Space between two sections */
+  gap: 20px; /* Gap between the two sections */
+  width: 100%; /* Ensure full width */
+  padding: 10px;
+}
+
+.green-buttons, .credit-buttons {
+  display: flex;
+  flex-wrap: wrap; /* Allows wrapping to the next line when space runs out */
+  gap: 10px; /* Gap between buttons */
+  flex-grow: 1; /* Ensures both sections take up equal space */
+}
+
+.green-buttons > *, .credit-buttons > * {
+  flex: 0 1 auto; /* Ensure buttons take up as much space as they need but can shrink */
+  margin: 5px;
+}
+
+@media (max-width: 768px) {
+  /* For phones or smaller screens */
+  .button-layout-container {
+    flex-direction: column; /* Stack the sections on top of each other */
+  }
+
+  .credit-buttons {
+    order: 1; /* Ensure credit buttons are on top */
+  }
+
+  .green-buttons {
+    order: 2; /* Ensure green buttons are underneath */
+  }
+}

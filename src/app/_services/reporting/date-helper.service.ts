@@ -3,6 +3,7 @@ import { formatDate as ngFormatDate } from "@angular/common";
 import { Inject } from "@angular/core";
 import { Injectable } from "@angular/core";
 import { LOCALE_ID } from "@angular/core";
+import { DateRangeValidator, DayTimeRangeValidator } from "src/app/_interfaces";
 // import * as moment from 'moment';
 // ----------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------- //
@@ -352,5 +353,151 @@ export class DateHelperService {
   public isValidDate(date) {
     return date && Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date);
   }
+
+      /**
+     * Helper function to format time from 24-hour (HH:MM) to 12-hour with AM/PM
+     * @param timeString - The time in 24-hour format (e.g., "14:05")
+     * @returns The time formatted in 12-hour with AM/PM (e.g., "02:05 PM")
+     */
+    formatTimeTo12Hour(timeString: string): string {
+      if (!timeString) return '';
+
+      const [hours, minutes] = timeString.split(':').map(Number);
+      const suffix = hours >= 12 ? 'PM' : 'AM';
+      const hours12 = ((hours + 11) % 12 + 1);  // Convert 24-hour to 12-hour format
+
+      return `${this.padZero(hours12)}:${this.padZero(minutes)} ${suffix}`;
+    }
+
+  /**
+   * Function to validate a date against a date range, time range, and excluded dates
+   * @param selectedDate The date selected from the date-time picker (as a Date object)
+   * @param dateRanges Array of DateRangeValidator containing allowed date ranges (date strings)
+   * @param timeRanges Array of DayTimeRangeValidator containing allowed time ranges for each day of the week
+   * @param excludedDates Array of DateRangeValidator containing excluded date ranges (date strings)
+   * @returns boolean whether the selected date is valid
+   */
+  validateDateTime(selectedDate: Date, dateRanges: DateRangeValidator[], timeRanges: DayTimeRangeValidator[], excludedDates: DateRangeValidator[]): boolean {
+    const selectedDay = selectedDate.getDay(); // 0 = Sunday, 6 = Saturday
+    const selectedTime = `${this.padZero(selectedDate.getHours())}:${this.padZero(selectedDate.getMinutes())}`;
+
+    // Check if the selected date is in any excluded date ranges
+    if (excludedDates && excludedDates.length > 0) {
+      const isExcluded = excludedDates.some(range => {
+        // Ensure startDate and endDate are defined and valid
+        if (!range.startDate || !range.endDate) {
+          return false; // Skip if dates are not valid
+        }
+
+        const startDate = new Date(range.startDate);
+        const endDate = new Date(range.endDate);
+
+        // Check if the selected date is within the excluded range
+        return selectedDate >= startDate && selectedDate <= endDate;
+      });
+
+      if (isExcluded) {
+        console.log('Selected date is within excluded date range');
+        return false; // Fail if in excluded date range
+      }
+    }
+
+    // Check if there are valid Date Ranges defined
+    if (dateRanges && dateRanges.length > 0) {
+      const isInDateRange = dateRanges.some(range => {
+        // Ensure startDate and endDate are defined and valid
+        if (!range.startDate || !range.endDate) {
+          return false; // Skip this range if dates are not valid
+        }
+
+        const startDate = new Date(range.startDate);
+        const endDate = new Date(range.endDate);
+
+        // Check if the selected date is within the range
+        return selectedDate >= startDate && selectedDate <= endDate;
+      });
+
+      if (!isInDateRange) {
+        console.log('Selected date is not within allowed date range');
+        return false; // Fail if not in date range
+      }
+    }
+
+    // Check if there are valid Time Ranges defined for the specific day
+    if (timeRanges && timeRanges.length > 0) {
+      const dayTimeRange = timeRanges.find(range => range.day === this.getDayString(selectedDay));
+      
+      // If the day is disabled, it should fail validation
+      if (dayTimeRange?.disabled) {
+        console.log(`Day ${this.getDayString(selectedDay)} is disabled.`);
+        return false; // Fail if the entire day is disabled
+      }
+
+      // If a time range is defined for the day and it is not disabled, check the time ranges
+      if (dayTimeRange && dayTimeRange.timeRanges.length > 0) {
+        const isInTimeRange = dayTimeRange.timeRanges.some(timeRange => {
+          // Skip if startTime or endTime are missing
+          if (!timeRange.startTime || !timeRange.endTime) {
+            return false;
+          }
+
+          return this.isTimeWithinRange(selectedTime, timeRange.startTime, timeRange.endTime);
+        });
+
+        if (!isInTimeRange) {
+          console.log('Selected time is not within allowed time range');
+          return false; // Fail if not in time range
+        }
+      }
+    }
+
+    return true; // Valid if all checks pass
+  }
+
+
+    /**
+     * Helper to compare two dates, ignoring the time part
+     * @param date1 First date to compare
+     * @param date2 Second date to compare
+     * @returns boolean whether the two dates are the same (ignoring time)
+     */
+    private isSameDate(date1: Date, date2: Date): boolean {
+      return date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate();
+    }
+
+
+
+  /**
+   * Helper to check if a time is within a time range
+   * @param selectedTime The time of the selected date in "HH:MM" format
+   * @param startTime Start time of the allowed range in "HH:MM" format
+   * @param endTime End time of the allowed range in "HH:MM" format
+   * @returns boolean whether the time is within the range
+   */
+  private isTimeWithinRange(selectedTime: string, startTime: string, endTime: string): boolean {
+    return selectedTime >= startTime && selectedTime <= endTime;
+  }
+
+  /**
+   * Helper to convert numeric day (0-6) to weekday string
+   * @param day Numeric day (0 = Sunday, 6 = Saturday)
+   * @returns String name of the weekday
+   */
+  private getDayString(day: number): string {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[day];
+  }
+
+  /**
+   * Helper to pad time values with leading zero if needed
+   * @param num Number to be padded
+   * @returns String with padded number (e.g., 9 -> '09')
+   */
+  private padZero(num: number): string {
+    return num < 10 ? `0${num}` : `${num}`;
+  }
+
 
 }

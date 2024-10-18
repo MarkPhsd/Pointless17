@@ -114,8 +114,8 @@ get rowClasses() {
       if (value) {
         return true
       }
-
     },
+
     "row-splitPayment": (params) => {
       // console.log('gender male',  params.api.getValue("id", params.node),  params.api.getValue("gender", params.node))
       // return params.api.getValue("groupNumber", params.node) >= 1
@@ -125,6 +125,7 @@ get rowClasses() {
       }
 
     },
+
     "row-metrc-posted": (params) => {
       const value = params.api.getValue("metrcResponse", params.node);
       if (!value || value == undefined) { return false }
@@ -135,6 +136,7 @@ get rowClasses() {
         return true
       }
     },
+
     "row-metrc-errors": (params) => {
       const value = params.api.getValue("metrcResponse", params.node);
       if (value === '') { return false }
@@ -143,8 +145,14 @@ get rowClasses() {
       return false;
     },
 
+    "row-metrc-submit-button": (params) => {
+      const value = params.api.getValue("metrcResponse", params.node);
+      if (value === '') { return true }
+      const respsonseExists = this.getErrors(value)
+      if (respsonseExists) { return true}
+      return false;
+    },
   }
-
 }
 
 getErrors(value) {
@@ -177,6 +185,31 @@ initGridOptions(pageSize: number, columnDefs: any, enableSorting?: boolean) {
     cacheBlockSize: pageSize,
     maxBlocksInCache: 50,
     rowModelType: 'infinite',
+    infiniteInitialRowCount: 0,
+    columnDefs: columnDefs,
+    rowSelection: 'multiple',
+    rowClassRules: this.rowClasses,
+    enableFilter: true,
+    enableSorting: sorting,
+    frameworkComponents: {
+      showMultiline: this.multilineRenderer, // Register the renderer function here
+    },
+  };
+}
+
+
+initGridOptionsClientSide(pageSize: number, columnDefs: any, enableSorting?: boolean) {
+  let sorting = true;
+  if (enableSorting) {
+    sorting = enableSorting;
+  }
+
+  return {
+    pagination: true,
+    paginationPageSize: pageSize,
+    cacheBlockSize: pageSize,
+    maxBlocksInCache: 50,
+    // rowModelType: 'clientSide',
     infiniteInitialRowCount: 0,
     columnDefs: columnDefs,
     rowSelection: 'multiple',

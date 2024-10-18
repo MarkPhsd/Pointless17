@@ -10,7 +10,7 @@
 
         <div>
           <app-edit-buttons-standard
-              (outputeupdateItem)     ="updateItem($event)"
+              (outputeupdateItem)     ="_updateItem()"
               (outputupdateItemExit)  ="updateItemExit($event)"
               (outputupdatedeleteItem)="deleteItem($event)"
               (outputupdateonCancel)  ="onCancel($event)"
@@ -207,6 +207,16 @@
             formControlName="instructions"
             [ngModel]="instructions">
          </simple-tinymce>
+      </div>
+
+      <div > 
+        <mat-label>Image</mat-label>
+        <!-- {{image}} | {{inputForm?.value?.image}} -->
+        <app-widget-uploader
+            [(fileNames)]    ="image"
+            [isThumbNail]    ="false"
+            (messageOut)     ="applyImage($event)" >
+        </app-widget-uploader>
       </div>
 
     </mat-card-content>

@@ -2,6 +2,22 @@
 
   </div>
     <mat-card>
+
+      <mat-card-actions *ngIf="isFormValid">
+        <button mat-raised-button
+                style="height:75px;width:125px"
+                color='primary'
+                (click)="back()">
+          Back
+        </button>
+        <button mat-raised-button
+                style="height:75px;width:125px"
+                color='primary'
+                (click)="save()">
+            Next
+        </button>
+      </mat-card-actions>
+
       <mat-card-subtitle>
         Delivery Address
 
@@ -60,41 +76,28 @@
           </div>
 
           <div *ngIf="!platFormService.isApp()">
-
-            <div  *ngIf="serviceType && serviceType.shippingInstructions"
+            <div >
+              <ng-container [ngTemplateOutlet]="addressListInfo"></ng-container>
+            </div>
+            <div  *ngIf="serviceType && serviceType?.shippingInstructions"
                   class="instructions">
               <h3>{{serviceType.name}}</h3>
               <mat-hint>
                 <div [innerHTML]="serviceType.shippingInstructions" ></div>
               </mat-hint>
             </div>
-            <div>
-              <ng-container [ngTemplateOutlet]="addressListInfo"></ng-container>
-            </div>
+
           </div>
 
         </div>
 
-        <mat-card-actions>
-          <button mat-raised-button
-                  style="height:75px;width:125px"
-                  color='primary'
-                  (click)="back()">
-            Back
-          </button>
-          <button mat-raised-button
-                  style="height:75px;width:125px"
-                  color='primary'
-                  (click)="save()">
-              Next
-          </button>
-        </mat-card-actions>
+
       </mat-card-content>
     </mat-card>
 
     <ng-template #addressListInfo>
-      <mat-card *ngIf="addressList  && addressList.length > 0">
-        <mat-card-title> Select an address to pick up from.</mat-card-title>
+      <mat-card-title> Select an address to pick up from.</mat-card-title>
+      <div  class="ps-flex-group-no-margin" *ngIf="addressList  && addressList.length > 0">
         <div *ngFor="let address of addressList; let i = index">
           <button mat-flat-button (click)="selectAddress(i)">
             <mat-card  class="address-card">
@@ -108,6 +111,6 @@
               </mat-card-content>
             </mat-card>
           </button>
-        </div>
-      </mat-card>
+          </div>
+      </div>
     </ng-template>

@@ -123,36 +123,41 @@ export class StrainPackagesComponent implements OnInit {
       this.inventoryAssignments = [];
       this.inventoryLocations$ =  this.setInventoryLocation()
       this.intakeConversion =  this.getUnitConversionToGrams(this.package.unitOfMeasureName);
-      // this.setDefaultIntakeUnit()
       this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity
       this.baseUnitsRemaining = this.intakeconversionQuantity
       this.initialQuantity = this.intakeconversionQuantity
+      this.setDefaultIntakeUnit()
       
     }
 
     setDefaultIntakeUnit() {
       this.getAvailableUnitsByConversion('Grams')
+      this.inputQuantity = this.package?.quantity;
+
+      const item =  { inputQuantity : this.package?.quantity}
+      // this.packageForm.patchValue{ item }
+      this.packageForm.patchValue(item)
     }
     
     setInventoryLocation() {
-    return  this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
-      this.inventoryLocations = data
-      if (data) {
-        data.forEach(item => {
-          if (item.defaultLocation) {
-            this.getLocationAssignment(item.id);
-            this.inventoryLocationID = item.id;
-            this.packageForm.patchValue({inventoryLocationID: item.id})
-          }
-        });
-      }
-      return of(data)
-    }))
-  }
+      return  this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
+        this.inventoryLocations = data
+        if (data) {
+          data.forEach(item => {
+            if (item.defaultLocation) {
+              this.getLocationAssignment(item.id);
+              this.inventoryLocationID = item.id;
+              this.packageForm.patchValue({inventoryLocationID: item.id})
+            }
+          });
+        }
+        return of(data)
+      }))
+    }
 
-  onjointValueChange(e) {
-    console.log(e)
-  }
+    onjointValueChange(e) {
+      console.log(e)
+    }
 
   getLocationAssignment(id): IInventoryLocation {
     return  this.inventoryLocations.find(data => id == data.id  )
@@ -566,7 +571,7 @@ export class StrainPackagesComponent implements OnInit {
       assignment.jointWeight =  packageItem.jointWeight;
 
     });
-    console.log('form value', this.packageForm.value)
+  
 
     const inv$=  this.inventoryAssignmentService.addInventoryList(site, 
                                                                   this.inventoryAssignments[0].label,

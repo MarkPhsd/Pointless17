@@ -1,0 +1,39 @@
+<div *ngIf="(bucket$ | async) as bucket"></div>
+<mat-card class="card-dimensions">
+  <mat-card-content>
+
+    <mat-divider style="margin-bottom:10px"></mat-divider>
+
+    <div *ngIf="list$ | async as items">
+      <!-- Apply Flexbox to this container to make buttons flow from left to right -->
+      <div class="button-container">
+        <div *ngFor="let item of items">
+          <button mat-flat-button class="service-buttons" color="accent" (click)="applySelected(item)">
+            <div class="flex-start-row-space-around">
+              <div class="button-text">
+                <h4 style="font-size:1.2em">{{item.name}}</h4>
+              </div>
+              <div> 
+                <ng-container *ngTemplateOutlet="productImage, context: {$implicit: item.itemFeatures}"></ng-container>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<ng-template #productImage let-item>
+  <div class="product-image-container" *ngIf="item?.image && bucketName">
+    <img
+      loading="lazy"
+      draggable="false"
+      width="100%"
+      src="{{bucketName}}{{item?.image}}"
+      onerror="this.src='assets/images/placeholderimage.png'"
+      (error)="onImageError($event)"
+      class="item-image"
+      [alt]="item?.name">
+  </div>
+</ng-template>

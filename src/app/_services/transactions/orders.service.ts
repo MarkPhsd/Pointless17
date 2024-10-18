@@ -14,6 +14,16 @@ import { IListBoxItem } from 'src/app/_interfaces/dual-lists';
 import { UserAuthorizationService } from '../system/user-authorization.service';
 import { POOrderImport } from '../data/fake-products.service';
 import { AuthenticationService } from '..';
+
+export interface IUpdateOrderType{
+  id: number; // As Integer
+  orderTypeID : number; //As Integer
+  itemList: any[]; // As List(Of Integer)
+  history : boolean;
+  updateItems : boolean; //As Integer
+}
+
+
 export interface POSOrdersPaged {
   paging : IPagedList
   results: IPOSOrder[]
@@ -53,6 +63,7 @@ export interface OrderActionResult {
 export class OrdersService {
 
 
+
   completionDate_From  : string; // searchModel.completionDate_From;
   completionDate_To    : string; // searchModel.completionDate_To;
 
@@ -69,6 +80,17 @@ export class OrdersService {
 
   }
 
+  removeOrderList(site: ISite, list: number[]) {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "removeOrderList"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<IPOSOrder>(url, {list: list, history: true});
+  }
 
   postToShipDay(site: ISite, id: number): Observable<any> {
     const controller = "/ShipdayAPI/"

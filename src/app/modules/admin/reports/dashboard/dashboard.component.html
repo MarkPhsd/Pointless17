@@ -248,7 +248,9 @@ assets/htmlTemplates/salesreportStyles.html' -->
             </div>
           </sales-tax-report>
 
+          <!-- [getGross]='true'   -->
           <payment-report
+                  [type]    ="'sales'"
                   [site]    ="site"
                   [dateFrom]="dateFrom"
                   [dateTo]  ="dateTo"

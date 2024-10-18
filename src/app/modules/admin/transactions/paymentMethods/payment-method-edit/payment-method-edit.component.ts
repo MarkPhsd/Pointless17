@@ -6,7 +6,7 @@ import {  UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { tap } from 'rxjs/operators';
-import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { IPaymentMethod, PaymentMethodsService, PaymentMethodFeatures } from 'src/app/_services/transactions/payment-methods.service';
 
 import { EMPTY, Observable } from 'rxjs';
 
@@ -16,19 +16,20 @@ import { EMPTY, Observable } from 'rxjs';
   styleUrls: ['./payment-method-edit.component.scss']
 })
 export class PaymentMethodEditComponent  implements OnInit {
-
+  image   : string;
   id                     :any;
   paymentMethod          :IPaymentMethod;
   bucketName             :string;
   awsBucketURL           :string;
   inputForm              :UntypedFormGroup;
+  featuresForm           :UntypedFormGroup;         
   instructions: string;
+  itemFeatures : PaymentMethodFeatures;
 
   constructor(
     private paymentMethodService    : PaymentMethodsService,
     private siteService             : SitesService,
     private snack                   : MatSnackBar,
-    private awsBucket               : AWSBucketService,
     private dialogRef: MatDialogRef<PaymentMethodEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
 
@@ -54,7 +55,6 @@ export class PaymentMethodEditComponent  implements OnInit {
 
       this.initFormFields()
       if (this.inputForm && this.id) {
-        console.log('initialize form')
         const site = this.siteService.getAssignedSite();
         const payments$ = this.paymentMethodService.getPaymentMethod(site, this.id).pipe(
             tap(data => {
@@ -63,6 +63,11 @@ export class PaymentMethodEditComponent  implements OnInit {
                 this.id         = data.id
                 this.inputForm.patchValue(this.paymentMethod)
               }
+
+              let itemFeatures = JSON.parse(this.paymentMethod?.json) as PaymentMethodFeatures
+              if (!itemFeatures) { itemFeatures = {} as  PaymentMethodFeatures}
+              this.itemFeatures = itemFeatures;
+              this.image = this.itemFeatures?.image;
             }
           )
         );
@@ -74,6 +79,8 @@ export class PaymentMethodEditComponent  implements OnInit {
       }
 
       if (!this.id)  {
+        let itemFeatures
+        if (!itemFeatures) { itemFeatures = {} as  PaymentMethodFeatures}
         this.paymentMethod = {} as IPaymentMethod;
         this.inputForm.patchValue(this.paymentMethod)
       }
@@ -86,11 +93,28 @@ export class PaymentMethodEditComponent  implements OnInit {
 
     updateItem(event): Observable<IPaymentMethod> {
         if (this.inputForm.valid) {
+          const payment = this.getPaymentInfo()            
           const site = this.siteService.getAssignedSite()
-          return this.paymentMethodService.saveItem(site, this.inputForm.value)
+          return this.paymentMethodService.saveItem(site, payment)
         }
-        return EMPTY;
+        this.siteService.notify('Form not valid', 'close', 5000, 'red')
     };
+    _updateItem() {
+      const item$ = this.updateItem(null).subscribe(data => {
+        if (!data) {
+          this.siteService.notify('Not saved', 'close', 5000, 'red')
+          return
+        }
+        this.siteService.notify('Saved', 'close', 5000, 'red')
+      })
+    }
+
+    getPaymentInfo() {
+      let payment = this.inputForm.value;
+      this.itemFeatures.image = this.image;
+      payment.json = JSON.stringify(this.itemFeatures);
+      return payment;
+    }
 
     update(item$: Observable<IPaymentMethod>, close: boolean){
       item$.subscribe(
@@ -105,6 +129,13 @@ export class PaymentMethodEditComponent  implements OnInit {
         }
         }
       )
+    }
+
+    applyImage(event)  {
+      this.image = event
+      let payment = this.inputForm.value;
+      this.itemFeatures.image = this.image;
+      payment.json = JSON.stringify(this.itemFeatures);
     }
 
     save(event) {

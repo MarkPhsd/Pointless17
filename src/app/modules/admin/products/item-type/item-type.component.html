@@ -1,5 +1,5 @@
 <!-- <div *ngIf="_itemTypes$ | async"></div> -->
-
+<div *ngIf="(action$ | async) as  action"></div>
 <mat-card>
   <mat-accordion class="example-headers-align" multi="false" >
 
@@ -15,6 +15,7 @@
           <div class="icon-setings">
               This list defines the types of items you use to sell, as well as features for gift cards and discounts.
           </div>
+
         </mat-panel-description>
       </mat-expansion-panel-header>
         <mat-card-title>
@@ -46,6 +47,19 @@
                       (click)="add()">
                   <mat-icon>add</mat-icon>Add</button>
                 </div>
+
+                <div  class="grid-item">
+                  <button mat-button color="primary"
+                      (click)="createItemTypesFromMetrcCategories()">
+                  <mat-icon>add</mat-icon>Metrc Types</button>
+                </div>
+
+                <div class="grid-item">
+                  <button mat-button color="primary"
+                      (click)="filterMetrcCategories()">
+                  <mat-icon>view</mat-icon>Metrc Types</button>
+                </div>
+                
 
               </div>
             </div>

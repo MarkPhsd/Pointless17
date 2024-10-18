@@ -2,8 +2,8 @@ import { Component, OnInit, Input,OnDestroy } from '@angular/core';
 import { UntypedFormGroup,UntypedFormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
-import { IPOSOrder, IServiceType, IUser, ServiceTypeFeatues,   } from 'src/app/_interfaces';
-import { AuthenticationService, OrdersService } from 'src/app/_services';
+import { DateRangeValidator, DayTimeRangeValidator, IPOSOrder, IServiceType, IUser, ServiceTypeFeatures,   } from 'src/app/_interfaces';
+import { AuthenticationService, IUpdateOrderType, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
@@ -26,6 +26,8 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   inputForm                 : FormGroup;
   scheduleForm              : FormGroup;
   order                     : IPOSOrder;
+  itemTypeFeatures : ServiceTypeFeatures;
+
   _order                    : Subscription;
   errorMessage    : string;
   SWIPE_ACTION    = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
@@ -47,6 +49,8 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   dateTimeFormat = 'y-MM-dd h:mm:ss a'
   nameStringPairs: any;
   selectedNamePairValueIndex: number;
+  action: Observable<any>;
+
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.pipe(
       switchMap( data => {
@@ -65,15 +69,17 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     })).subscribe(data => {
       this.serviceType = data;
       if (data) {
-        const features = JSON.parse(data.json) as ServiceTypeFeatues;
-        this.nameStringPairs = features.nameStringPairs; // Initialize nameStringPairs from features
-        this.instructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.instructions);
+        const features = JSON.parse(data.json) as ServiceTypeFeatures;
+        this.nameStringPairs      = features?.nameStringPairs; // Initialize nameStringPairs from features
+        this.instructions         = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.instructions);
         this.shippingInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.shippingInstructions);
         this.scheduleInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.scheduleInstructions);
+      
+        this.itemTypeFeatures = features;
       }
+      
     })
   }
-
   constructor(
     private orderService      : OrdersService,
     public orderMethodsService: OrderMethodsService,
@@ -85,8 +91,9 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     private dateHelperService : DateHelperService,
     public platFormService    : PlatformService,
     private requestMessageService: RequestMessageService,
-    private sanitizer: DomSanitizer,
-    private userAuthorization: UserAuthorizationService,
+    private sanitizer         : DomSanitizer,
+    private dateHelper        : DateHelperService,
+    private userAuthorization : UserAuthorizationService,
     private authenticationService: AuthenticationService,
     // public datepipe: DatePipe
     )
@@ -148,6 +155,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
 
     // Method to select and patch productOrderMemo
     selectValue(nameIndex: number, valueIndex: number): void {
+      if (!this.nameStringPairs) { return }
       const selectedPair = this.nameStringPairs[nameIndex];
       const selectedValue = selectedPair.values[valueIndex];
 
@@ -348,15 +356,15 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     if (!serviceType) { return }
     this.serviceType = serviceType;
     if (serviceType) {
-
+      
       if (serviceType.deliveryService) {
         this.updateSelectedIndex(1)
-        return
+        return // of(data)
       }
 
       if (serviceType.promptScheduleTime) {
         this.updateSelectedIndex(2)
-        return
+        return ///of(data)
       }
 
       this.showSaveButton = true;
@@ -399,15 +407,36 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   saveShippingTime(event) {
     const site = this.siteService.getAssignedSite();
     this.processingUpdate = true;
-    this.order.preferredScheduleDate =  this.dateHelperService.format(event, this.dateTimeFormat);
+    const shipDate = new Date(event) // this.dateHelperService.format(event, this.dateTimeFormat);
+
+    const itemFeatures = JSON.parse(this.order?.service?.json) as ServiceTypeFeatures;
+    let isValid: boolean 
+    isValid = false
+
+    if (!itemFeatures) { 
+      isValid = true 
+    } else { 
+      isValid = this.dateHelper.validateDateTime( shipDate,
+                          itemFeatures?.dateRanges.allowedDates, 
+                          itemFeatures?.weekDayTimeValidator.week, 
+                          itemFeatures?.excludedDates.allowedDates )
+    } 
+
+    if (isValid == false) { 
+      this.siteService.notify('This date selection falls outside of any valid time frame. ', 'Close', 1000, 'red')
+      return;
+    }
+
+
     this.action$ = this.orderService.putOrder(site, this.order).pipe(
-      switchMap(data => {
-        this.processingUpdate = false;
-        this.orderMethodsService.updateOrderSubscription(data)
-        this.updateSelectedIndex(3)
-        return of(data)
+        switchMap(data => {
+          this.processingUpdate = false;
+          this.orderMethodsService.updateOrderSubscription(data)
+          this.updateSelectedIndex(3)
+          return of(data)
       })
-    )
+    )    
+  
   }
 
   // Action triggered when user swipes
@@ -474,7 +503,6 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   sendMessage(item, order) {
     this.action$ = this.orderMethodsService.sendOrderForMessageService(item, order)
   }
-
 
 
 }

@@ -164,3 +164,12 @@ table
     grid-template-columns: 1fr 1fr 1fr;
     gap: 3px;
   }
+
+  .header-row {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    margin: 10px;
+  }
+  

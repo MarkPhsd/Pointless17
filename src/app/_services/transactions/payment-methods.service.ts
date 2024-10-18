@@ -24,6 +24,13 @@ export interface IPaymentMethod {
   preAuth     :    boolean;
   instructions:    string;
   addedPercentageFee: number;
+  json : string;
+  itemFeatures: PaymentMethodFeatures
+}
+
+export interface PaymentMethodFeatures { 
+  image: string;
+  icon: string;
 }
 
 @Injectable({

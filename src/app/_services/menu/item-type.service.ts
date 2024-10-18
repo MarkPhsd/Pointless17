@@ -320,6 +320,34 @@ export class ItemTypeService {
     return this._itemTypeList.value;
   }
 
+  createItemTypesFromMetrcCategories(site: ISite): Observable<any> {
+
+    const controller = '/ItemTypes/';
+
+    const parameters = ``;
+
+    const endPoint = 'CreateItemTypesFromMetrcCategories';
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`;
+
+    return  this.http.get<IItemType>(url).pipe(switchMap(data => { 
+      return this.createDepartmentsFromList(site)
+    }))
+  }
+
+  createDepartmentsFromList(site: ISite): Observable<any> {
+    const controller = '/menuItems/';
+
+    const parameters = ``;
+
+    const endPoint = 'CreateDepartmentsFromMetrcCategories';
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`;
+
+    return  this.http.get<any>(url);
+ }
+
+
   getItemTypeFromList(id: number): IItemType {
     // console.log('value', this._itemTypeList.value)
     if (!this._itemTypeList.value) { return null}

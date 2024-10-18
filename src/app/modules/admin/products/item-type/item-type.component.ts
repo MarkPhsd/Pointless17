@@ -15,6 +15,7 @@ import { ItemTypeDisplayAssignmentService } from 'src/app/_services/menu/item-ty
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
 import { ActivatedRoute } from '@angular/router';
+import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 
 @Component({
   selector: 'app-item-type',
@@ -56,6 +57,9 @@ export class ItemTypeComponent implements OnInit {
   selected               : any;
   itemTypes              : IItemType[];
 
+  metrcCatsExist: boolean;
+  action$: Observable<any>;
+
   itemTypes$            : Observable<IItemType[]>;
   // itemTypes$             : Subject<IItemType[]> = new Subject();
 
@@ -71,6 +75,7 @@ export class ItemTypeComponent implements OnInit {
                 private dialog: MatDialog,
                 private itemTypeService: ItemTypeService,
                 private menuService: MenuService,
+                private metrcCategoriesService: MetrcItemsCategoriesService,
                 private itemTypeDisplay: ItemTypeDisplayAssignmentService,
                 private awsService     : AWSBucketService,
                 private itemTypeMethodsService: ItemTypeMethodsService,
@@ -157,6 +162,24 @@ export class ItemTypeComponent implements OnInit {
     }))
   }
 
+  createItemTypesFromMetrcCategories() {
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.itemTypeService.createItemTypesFromMetrcCategories(site).pipe(switchMap(data => {
+      this.siteService.notify("List generated.", 'close', 4000, )
+      return of(data)
+    }))
+  }
+
+  checkIfMetrcCategoriesExist() {
+    const site = this.siteService.getAssignedSite()
+    this.metrcCategoriesService.getCategories( ).subscribe(data => { 
+      if (data) { 
+        this.metrcCatsExist = true;
+      }
+    })
+
+  }
+
   initGridResults() {
     this.initAGGridFeatures()
     this.frameworkComponents = {
@@ -213,7 +236,9 @@ export class ItemTypeComponent implements OnInit {
         sortable: false,
         autoHeight: true,
         cellRendererFramework: AgGridImageFormatterComponent
-      }
+      },
+     
+      {headerName: 'Metrc', field: 'metrcCategoryID', sortable: true, minWidth: 50},
     ]
     this.rowSelection = 'multiple';
     this.initGridOptions()
@@ -230,6 +255,20 @@ export class ItemTypeComponent implements OnInit {
       rowSelection: 'multiple',
     }
   }
+
+  filterMetrcCategories() {
+    const site = this.siteService.getAssignedSite()
+    this.itemTypes$  = this.itemTypeService.getTypeList(site).pipe(switchMap(data => { 
+      if (data) { 
+        let list = data.filter(item => { 
+          return item.metrcCategoryID>0 
+        })
+        return of(list)
+      }
+      return of(data)
+    }))
+  }
+  
 
   getLabel(rowData)
   {
@@ -294,38 +333,7 @@ export class ItemTypeComponent implements OnInit {
     });
   }
 
-  // openItemEditorSelected() {
-  //   let dialogRef: any;
-  //   let selectedItems = [];
 
-  //   if (!this.selected)  {
-  //     this._snackBar.open('No items selected.', '', {duration: 3000})
-  //     return
-  //   }
-
-  //   this.selected.forEach(data => {
-  //     const id = data
-  //     selectedItems.push(id);
-  //   })
-
-  //   // this.openEditor(selectedItems)
-  //   {
-  //     if (selectedItems) {
-  //       dialogRef = this.dialog.open(ItemTypeEditorComponent,
-  //         { width:        '700px',
-  //           minWidth:     '700px',
-  //           height:       '740px',
-  //           minHeight:    '740px',
-  //           data : { selectedItems: selectedItems }
-  //         },
-  //       )
-  //     }
-  //   }
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     this.refreshData();
-  //   });
-
-  // }
 
   //not implemented.
   editSelected() {

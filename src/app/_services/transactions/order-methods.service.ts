@@ -1099,13 +1099,18 @@ export class OrderMethodsService implements OnDestroy {
 
   addItemToOrderFromBarcode(barcode: string, input, assignedItem, inputQuantity?, unitTypeID?, cost?) {
     const site = this.siteService.getAssignedSite();
+    console.log('barCode', barcode)
+    
     const item$ = this.menuService.getMenuItemByBarcode(site, barcode, this.order?.clientID);
     let quantity = 1;
     if (inputQuantity) {  quantity = inputQuantity }
 
-    return   item$.pipe(switchMap( data => {
-      if ( !data ) {
 
+    return   item$.pipe(switchMap( data => {
+
+    
+      if ( !data ) {
+          //for inventory items that don't have an item attached yet. 
           return this.processItemPOSObservable( this.order, barcode, null, quantity, input, 0, 0,
                                                 assignedItem, this.assignPOSItems,
                                                 unitTypeID, null,
@@ -1316,11 +1321,14 @@ export class OrderMethodsService implements OnDestroy {
                             cost?: number) : Observable<ItemPostResults> {
 
 
+    console.log('processItem', order, barcode, item, quantity,)
 
     let tempItem = {} as ItemPostResults
     const user$ = this.getUserOrCreateUser()
     // return  user$.pipe(switchMap(data => { return of(tempItem)}))
     this.initItemProcess();
+
+
     if (!this.validateItem(item, barcode)) {  return of(null) }
     if (this.assignedPOSItem && !passAlongItem) { passAlongItem  = this.assignedPOSItem[0]; };
     order = this.validateOrder();
@@ -1484,7 +1492,7 @@ export class OrderMethodsService implements OnDestroy {
         const result = this.promptLogin(data?.resultErrorDescription)
         if (result) { return }
 
-        this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red');
+        this.siteService.notify(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert', 5000, 'red', 'vposTop', data.resultErrorDescription);
         return;
       }
 
@@ -2741,4 +2749,8 @@ export class OrderMethodsService implements OnDestroy {
       verticalPosition: 'bottom'
     });
   }
+
+
+
+
 }

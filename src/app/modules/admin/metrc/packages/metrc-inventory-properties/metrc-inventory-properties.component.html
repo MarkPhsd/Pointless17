@@ -1,5 +1,7 @@
 <div *ngIf="(action$ | async) as action"></div>
 
+
+ 
 <div *ngIf="inputForm && package"  [formGroup]="inputForm">
 
     <div class="grid-menu-search-selector">
@@ -15,6 +17,10 @@
              Search
            </div>
          </app-product-search-selector>
+      
+         <div *ngIf="menuItem && ((!menuItem.retail || menuItem.retail ==0) && (!menuItem.priceCategoryID || menuItem.priceCategoryID == 0))">
+            <mat-icon color="warn">warning</mat-icon><mat-label color="warn">No Price</mat-label>
+          </div>
        </div>
 
       <div>

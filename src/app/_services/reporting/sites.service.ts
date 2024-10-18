@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { BehaviorSubject, Observable, of, switchMap, } from 'rxjs';
@@ -10,12 +10,12 @@ import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarVerticalPosition as 
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { TtsService } from '../system/tts-service.service';
-
 @Injectable({
   providedIn: 'root'
 })
 export class SitesService {
 
+  initialzedVoice: boolean;
   public  ipAddressCurrent : any;
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   sites: ISite[];
@@ -72,6 +72,7 @@ export class SitesService {
                private httpCache       : HttpClientCacheService,
                public  deviceService   : DeviceDetectorService,
                private ttsService      : TtsService ,
+               private zone: NgZone,
                private snackBar        : MatSnackBar,
 
     ) {
@@ -161,6 +162,22 @@ export class SitesService {
     if (appCache.webEnabled) {
       return true
     }
+  }
+
+  getDemoMode() :  Observable<string> {
+    const site = this.getAssignedSite()
+   
+    const controller = '/system/'
+
+    const endPoint = `getDemoMode`
+
+    const parameters = ``
+
+    const licenseNumber  = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}${licenseNumber}`
+
+    return this.http.get<any>(url);
   }
 
   getSitesCache() :  Observable<ISite[]> {
@@ -464,7 +481,7 @@ export class SitesService {
     return this.getSite(id)
   }
 
-  notify(message: string, title: string, time: number, color?: string, vPOS?: string){
+  notify(message: string, title: string, time: number, color?: string, vPOS?: string, speak?: string){
     if (color) {
       if (color === 'red') { color = 'mat-warn'}
       if (color === 'yellow') { color = 'mat-accent'}
@@ -489,6 +506,28 @@ export class SitesService {
         panelClass: ['mat-toolbar', color]
       }
     );
+    this.speak(speak)
+  }
+
+  speak(speak) { 
+    this.zone.run(() => {
+      //   if (speak) { 
+      //     this.ttsService.addTextToQueue(speak)
+      //   }
+      // Ensure TTS is triggered even if called within a complex chain
+      if (speak && speak.trim()) {
+        console.log('Speaking:', speak);
+        setTimeout(() => {
+          let text = ''
+          if (!this.initialzedVoice) { 
+             text = 'p ....'
+             this.initialzedVoice= true;
+          }
+          this.ttsService.addTextToQueue(`{} ${speak}`); // Defer TTS call slightly
+        }, 10); // Adjust the delay as needed
+      }
+    });
+    
   }
 
   notifyObs(message: string, title: string, time: number, color?: string, vPOS?: string) : Observable<any> {

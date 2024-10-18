@@ -266,6 +266,7 @@ export class ItemCategoriesListComponent implements OnInit {
     )
 
     dialogRef.afterClosed().subscribe(result => {
+      this.searchItems()
       // console.log('The dialog was closed');
     });
 

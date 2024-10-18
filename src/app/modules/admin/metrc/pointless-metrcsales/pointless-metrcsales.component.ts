@@ -24,6 +24,7 @@ import { ReportingItemsSalesService } from 'src/app/_services/reporting/reportin
 import { UnparseConfig } from 'ngx-papaparse';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
+import { MetrcSalesService } from 'src/app/_services/metrc/metrc-sales.service';
 
 export interface metrcSalesReport {
   completeDate: string;
@@ -66,6 +67,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
   get PaginationPageSize(): number {return this.pageSize;  }
   get gridAPI(): GridApi {  return this.gridApi;  }
 
+  submitMetrcOrder$: Observable<any>;
   action$ : Observable<any>;
   dateFrom: string;
   dateTo: string;
@@ -147,19 +149,15 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
             this.currentPage        = 1
             searchModel.pageNumber  = 1;
             searchModel.pageSize    = 20;
+            searchModel.currentDay = false;
             this.searchModel        = searchModel;
             return;
           }
+          
+         
+          this.refreshSearch_sub()
 
-          if (data) {
-            // if (!this.searchModel.currentDay || this.searchModel.name) {
-            this.gridOptionsInfinite = this.agGridFormatingService.initGridOptions(1000000, this.columnDefs, false);
-            // }
-
-            this.refreshSearch_sub()
-            console.log('gridOptions', this.gridOptions)
-          }
-        }
+       }
       )
     } catch (error) {
       console.log('init subscription error', error)
@@ -169,14 +167,13 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
   constructor(
     private readonly datePipe: DatePipe,
     private agGridService: AgGridService,
-    private userAuthorization       : UserAuthorizationService,
     private fb                      : UntypedFormBuilder,
     private siteService: SitesService,
     private agGridFormatingService  : AgGridFormatingService,
-    private reportingServices: ReportingService,
     public  orderMethodsService: OrderMethodsService,
     private orderService: OrdersService,
     private dateHelperService: DateHelperService,
+    private metrcService: MetrcSalesService,
     private pointlessMetrcSalesReport: PointlessMETRCSalesService,
     private reportingItemsSalesService: ReportingItemsSalesService,
     ) {
@@ -190,6 +187,8 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     this.sites$ = this.siteService.getSites();
     this.site = this.siteService.getAssignedSite()
     this.initClasses();
+    this.gridOptionsInfinite = this.agGridFormatingService.initGridOptions(1000000, this.columnDefs, false);
+
     this.updateResize()
   }
 
@@ -245,6 +244,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     this.columnDefs =  [
       {
         field: 'orderID',
+        headerName: '',
         cellRenderer: "btnCellRenderer",
                       cellRendererParams: {
                         onClick: this.editProductFromGrid.bind(this),
@@ -256,6 +256,30 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
                       maxWidth: 125,
                       flex: 2,
       },
+      {
+        field: 'orderID',
+        headerName: '',
+        cellRenderer: (params) => {
+          // Create the submit button
+          const button = document.createElement('button');
+          button.innerHTML = 'Submit';
+          button.className = 'mat-raised-button btn btn-primary btn-sm';
+      
+          // Check if metrcResponse exists and disable the button if true
+          if (params?.data?.metrcResponse) {
+            button.disabled = true;
+            button.className = 'btn btn-primary btn-sm';
+          } else {
+            // Add event listener only if the button is enabled
+            button.addEventListener('click', () => this.submitTransaction(params));
+          }
+      
+          return button;
+        },
+        minWidth: 125,
+        maxWidth: 125,
+        flex: 2,
+      },
 
       {headerName: 'Response',  sortable: true,
                 field: 'metrcResponse',
@@ -265,7 +289,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         flex: 2,
 
       },
-
 
       {headerName: 'Sale Date',  sortable: true,
                     field: 'completeDate',
@@ -413,7 +436,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         maxWidth: 90,},
     ]
 
-    this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize, this.columnDefs);
+    // this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize, this.columnDefs);
 
 
   }
@@ -469,6 +492,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
   getRowData(params, startRow: number, endRow: number):  Observable<METRCSalesReportPaged>  {
     const site                = this.siteService.getAssignedSite()
 
+    console.log('getRowData')
     if (this.searchModel && this.searchModel.currentDay) {
       if (this.currentDayRan) {
         this.processing = false
@@ -514,9 +538,12 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
     this.onFirstDataRendered(this.params)
 
-    if (params == undefined) { return }
+    // if (params == undefined) {
+    //   console.log('params undefined')
+    //   return }
 
-    if (!params.startRow ||  !params.endRow) {
+    if (!params?.startRow ||  !params?.endRow) {
+      params = {}
       params.startRow = 1;
       params.endRow = this.pageSize;
     }
@@ -525,7 +552,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     if (this.searchModel.currentDay) {
       this.pageSize = 100000;
       this.initColumnDefs(1000000);
-      this.gridOptions = this.agGridFormatingService.initGridOptionsClientType(this.recordCount , this.columnDefs);
       this.getRowData(params, params.startRow, params.endRow).subscribe(data => {
         if (!data)  {
           this.rowData = null;
@@ -534,15 +560,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
           this.rowData = null;
           return;
         }
-
-        // if (this.searchModel.nonSubmitted) {
-        //   data.results = data.results.filter(item => { 
-        //     if (!item.metrcResponse) {
-        //       return item
-        //     }
-        //   })
-        // }
-
         this.processing = false;
         this.rowData    = data.results;
         this.getExceptions(data?.exceptions);
@@ -550,7 +567,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       })
       return;
     }
-
+  
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
       const items$    = this.getRowData(params, params.startRow, params.endRow)
@@ -570,6 +587,15 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
               }
             }
 
+            if (this.searchModel.nonSubmitted) {
+              data.results = data.results.filter(item => {
+                if (!item.metrcResponse || item.metrcResponse === '') {
+                  return item
+                }
+              })
+            }
+
+
             if (data.results) {
               let results  =  this.refreshImages(data.results)
               params.successCallback(results)
@@ -583,7 +609,9 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
     if (!datasource)   { return }
     if (!this.gridApi) { return }
+ 
     this.gridApi.setDatasource(datasource);
+
     this.autoSizeAll(true);
   }
 
@@ -656,6 +684,54 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     this.setActiveOrder({id: e.rowData.orderID, history: history})
   }
 
+  submitTransaction(params?) {
+
+    let e
+    if (params) { 
+      e = params
+    }
+
+    if (!e) { 
+      this.siteService.notify("Nothing Selected", 'close', 2000)
+      return
+    }
+
+    let history = false
+    if ( +e.rowData?.history == 1) {
+      history = true;
+    }
+    if (! e.rowData?.history || +e.rowData?.history == 0) {
+      history = false;
+    }
+
+    if (e && e.metrcResponse) {
+      this.selectedResponse = JSON.parse(e?.metrcResponse);
+      this.siteService.notify("This sale has appeared to already have been submitted", 'close', 2000)
+      return;
+    }
+    
+    console.log(e.data)
+
+    const orderID =  e.data.orderID;
+    this.submitMetrcOrder$ = this.metrcService.submitTransaction( {id: orderID} ).pipe(switchMap(data => {
+      this.selectedResponse = JSON.stringify(data)
+
+      // this.refreshSearch()
+
+      return of(data)
+    }))
+  }
+
+  uploadTransactions(params?) {
+    const site = this.siteService.getAssignedSite()
+    this.submitMetrcOrder$ = this.metrcService.uploadTransactions().pipe(switchMap(data => {
+      if (data) {
+        this.refreshSearch()
+      }
+      this.selectedResponse = JSON.stringify(data)
+      return of(data)
+    }))
+  }
 
   setActiveOrderByException(orderID: number,history: any) {
     if (+history == 1) {

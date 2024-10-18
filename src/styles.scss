@@ -971,6 +971,13 @@ mat-dialog-container {
   gap: 10px;
 }
 
+.ps-flex-group-no-margin {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
 .flex-grid-column-nogap {
   display: flex;
   flex-direction: row;
@@ -1537,4 +1544,59 @@ mat-dialog-container {
   grid-template-columns: 45px 1fr;
   gap: 10px;
   margin: 5px;
+}
+
+///ionic 
+ion-item-sliding {
+  --border-radius: 10px;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --background: #3c3c3c;
+  --color: white;
+  margin-bottom: 10px;
+  padding: 4px;
+  display: block;
+}
+
+ion-item {
+  --border-radius: 10px;
+  --box-shadow: none;
+  --background: #3c3c3c;
+  --color: white;
+  padding: 0px;
+  font-size: 14px;
+}
+
+ion-label {
+  color: #fff;
+  font-weight: bold;
+}
+
+.sub-item {
+  padding: 10px;
+  background-color: #595959;
+  color: #4a90e2; /* A blueish color for sub-items */
+  font-size: 12px;
+  margin-left: 20px; /* Slight indent to show hierarchy */
+  border-radius: 8px;
+}
+
+.sub-item ion-label {
+  color: #4a90e2;
+  font-weight: normal;
+}
+
+ion-item-options {
+  --background: #d32f2f; /* Red for delete or action */
+  --color: white;
+}
+
+ion-icon {
+  color: white;
+}
+
+/* Optional hover or focus effect */
+ion-item:hover,
+ion-item-sliding:hover {
+  background-color: #484848;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }

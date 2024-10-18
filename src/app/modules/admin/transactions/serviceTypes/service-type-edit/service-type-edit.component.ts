@@ -2,7 +2,7 @@
 import { Component,  Inject, OnInit } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FormArray, FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
-import { IServiceType, IServiceTypePOSPut } from 'src/app/_interfaces';
+import { IServiceType, IServiceTypePOSPut, ScheduleDateValidator, ScheduleValidator, ServiceTypeFeatures } from 'src/app/_interfaces';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
@@ -16,7 +16,7 @@ import { catchError, of, switchMap, Observable } from 'rxjs';
 })
 export class ServiceTypeEditComponent implements OnInit {
 
-  serviceColor          : string;
+  serviceColor           : string;
   id                     : number;
   serviceType            : IServiceType;
   bucketName             : string;
@@ -25,6 +25,7 @@ export class ServiceTypeEditComponent implements OnInit {
   description            : string;
   action$                : Observable<any>;
   serviceTypeFeaturesForm : FormGroup;
+  itemFeatures: ServiceTypeFeatures;
   image: string;
 
   constructor(
@@ -78,6 +79,23 @@ export class ServiceTypeEditComponent implements OnInit {
               this.serviceColor = this.serviceType.serviceColor
               this.image = this.serviceType?.image;
             }
+
+            this.itemFeatures = JSON.parse(this.serviceType?.json) as ServiceTypeFeatures;
+
+            if (!this.itemFeatures) { 
+              this.itemFeatures = {}  as ServiceTypeFeatures;
+            }
+            if (!this.itemFeatures.weekDayTimeValidator) { this.itemFeatures.weekDayTimeValidator = {} as ScheduleValidator}
+            if (!this.itemFeatures.dateRanges) { 
+              this.itemFeatures.dateRanges = {} as ScheduleDateValidator
+              this.itemFeatures.dateRanges = { allowedDates: [] };
+            }
+            //excludedDates
+            if (!this.itemFeatures.excludedDates) { 
+              this.itemFeatures.excludedDates = {} as ScheduleDateValidator
+              this.itemFeatures.excludedDates = { allowedDates: [] };
+            }
+            
             this.inputForm.patchValue(this.serviceType)
             this.patchFormValues()
             return of(data)
@@ -92,17 +110,17 @@ export class ServiceTypeEditComponent implements OnInit {
     };
 
     applyImage(event)  {
-
-        this.image = event
-        this.serviceType.image = event
-        this.inputForm.patchValue({image: event})
-
+      this.image = event
+      this.serviceType.image = event
+      this.inputForm.patchValue({image: event})
     }
 
     patchFormValues() {
       this.serviceTypeFeaturesForm = this.initFeaturesForm();
       if (!this.serviceType.json) { return }
       const itemFeatures = JSON.parse(this.serviceType.json);
+
+      this.itemFeatures = itemFeatures;
 
       this.serviceTypeFeaturesForm.patchValue({
         weekDays: itemFeatures.weekDays,
@@ -151,9 +169,14 @@ export class ServiceTypeEditComponent implements OnInit {
         serviceType.serviceColor = this.serviceColor;
       }
 
-      const featuresValue = this.serviceTypeFeaturesForm.value;
+      let featuresValue = this.serviceTypeFeaturesForm.value as ServiceTypeFeatures
+      featuresValue.weekDayTimeValidator = this.itemFeatures?.weekDayTimeValidator;
+      featuresValue.dateRanges = this.itemFeatures?.dateRanges;
+      featuresValue.excludedDates =this.itemFeatures.excludedDates;
       const json = JSON.stringify(featuresValue);
       serviceType.json = json;
+
+      console.log(featuresValue , json)
 
       const item$ = this.serviceTypeService.saveServiceType(site, serviceType)
       if (serviceType.retailServiceType) {
@@ -217,6 +240,39 @@ export class ServiceTypeEditComponent implements OnInit {
           this.snack.open("Item deleted", "Success", {duration:2000, verticalPosition: 'top'})
           this.onCancel(event)
       })
+    }
+
+    saveDateTimeValidator(event) { 
+      if (event) { 
+        console.log('event', event, event?.value)
+        if (!this.itemFeatures) { this.itemFeatures = {} as ServiceTypeFeatures}
+        if (this.itemFeatures) { 
+          this.itemFeatures.weekDayTimeValidator = event;
+          this.updateItem(null)
+        }
+      }
+    }
+
+    saveDateRangeValidator(event) { 
+      if (event) { 
+        console.log('event', event, event?.value)
+        if (!this.itemFeatures) { this.itemFeatures = {} as ServiceTypeFeatures}
+        if (this.itemFeatures) { 
+          this.itemFeatures.dateRanges = event;
+          this.updateItem(null)
+        }
+      }
+    }
+
+    saveExcludedDateRangeValidator(event) { 
+      if (event) { 
+        console.log('event', event, event?.value)
+        if (!this.itemFeatures) { this.itemFeatures = {} as ServiceTypeFeatures}
+        if (this.itemFeatures) { 
+          this.itemFeatures.excludedDates = event;
+          this.updateItem(null)
+        }
+      }
     }
 
     copyItem(event) {

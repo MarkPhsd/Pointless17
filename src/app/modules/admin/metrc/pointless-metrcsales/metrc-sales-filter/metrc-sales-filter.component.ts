@@ -181,7 +181,6 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
     this.outputClearExceptions.emit(true)
     if (! this.searchModel) {  this.searchModel = {} as PointlessMetrcSearchModel }
     this.searchModel.currentPage = 1;
-    // this.searchModel.currentDay = false;
     this.assignDateSettings();
     this.pointlessMetrcSalesReport.updateSearchModel( this.searchModel )
   }

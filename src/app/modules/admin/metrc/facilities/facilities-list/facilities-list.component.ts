@@ -124,7 +124,7 @@ export class FacilitiesListComponent {
 
   import() {
      const site = this.siteService.getAssignedSite()
-     console.log('site',site)
+
     if (!site?.id) { 
       this.siteService.notify('No site identified', 'close', 3000)
       return 

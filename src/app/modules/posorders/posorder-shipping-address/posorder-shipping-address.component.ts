@@ -1,6 +1,6 @@
 import { Component, OnInit, Input,OnDestroy, EventEmitter, Output } from '@angular/core';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
-import { IPOSOrder, IServiceType, ServiceAddress, ServiceTypeFeatues } from 'src/app/_interfaces';
+import { IPOSOrder, IServiceType, ServiceAddress, ServiceTypeFeatures } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -30,12 +30,20 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
-      console.log('this order', this.order)
-      if (!this.serviceInit && !this.serviceType) {
+      // if (!this.serviceInit && !this.serviceType) {
         this.initServiceTypeInfo();
         this.serviceInit = true
-      }
+      // }
     })
+  }
+
+  get isFormValid() { 
+    if (this.inputForm) {
+      if (this.inputForm.valid) { 
+        return true
+      }
+    }
+    return false
   }
 
   constructor(
@@ -70,11 +78,13 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
       console.log('no order')
       return
     }
-    this.serviceType$ = this.serviceTypeService.getTypeCached(site, this.order.serviceTypeID).pipe(switchMap(data => {
-      // console.log('initServiceTypeInfo', data)
-      const features = JSON.parse(data.json) as ServiceTypeFeatues;
-      // console.log('features', features)
-      this.addressList = features.addressList
+    this.serviceType$ = this.serviceTypeService.getTypeCached(site, this.order?.serviceTypeID).pipe(switchMap(data => {
+      console.log('initServiceTypeInfo', data)
+      const features = JSON.parse(data?.json) as ServiceTypeFeatures;
+      console.log('features', features)
+      if (features?.addressList) { 
+        this.addressList = features.addressList
+      }
       // console.log('addresses', this.addressList)
       this.initializeAddresses()
       return of(data)

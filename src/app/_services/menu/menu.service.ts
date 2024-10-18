@@ -124,6 +124,9 @@ export interface IItemBasicValue extends IItemBasic {
 
 export class MenuService {
 
+  private _menuItemUpdate       = new BehaviorSubject<IMenuItem>(null);
+  public  menuItemUpdate$       = this._menuItemUpdate.asObservable();
+
 
   genders =  [{ id:0, name: 'Male'}, { id: 1, name: 'Female'}, {id: null,name: 'Any' } ]
   public searchModel         : ProductSearchModel
@@ -176,6 +179,11 @@ export class MenuService {
       return true ;
     }
     return false
+  }
+
+  //triggers refresh of menu item
+  updateMenuItem(menuItem: IMenuItem) {
+    this._menuItemUpdate.next(menuItem)
   }
 
   updateSearchFilter(search: ProductSearchModel) {

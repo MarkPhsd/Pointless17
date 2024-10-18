@@ -1,6 +1,58 @@
 @import "/src/mixins.scss";
 
-mat-card {
+
+.toggle-group {
+  width: 150px;
+  margin-top: 10px;
+  margin-left: 5px;
+  text-align: left ;
+  @include for-phone-only  {
+    // width: 50px;
+    // margin-left: 5px;
+    // text-align: left
+  }
+}
+.spacer-10 {
+  margin-left: 10px;
+}
+
+button {
+  width: 150px;
+  height: 50px;
+}
+
+.buttons-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  gap: 5px;
+  margin-top: 5px;
+  // margin: 10px;
+}
+
+.toggle-buttons-wide {
+  width: 100px;
+  margin-left: 5px;
+  text-align: left;
+}
+
+
+.button-toggle {
+  // width: 150px;
+  // margin-left: 5px;
+  text-align: left;
+  @include for-phone-only  {
+    // width: 50px;
+    // margin-left: 5px;
+    // text-align: left;
+
+  }
+}
+
+/////////////drag and drop features
+
+.mat-split-card {
   width: 100%;
   min-width: 500px;
 }
@@ -15,14 +67,15 @@ mat-card {
 }
 
 .drag-drop-list {
-  border: solid 1px;
+  border: solid 1px #e0e0e0;
   min-height: 300px;
   overflow: hidden;
   display: block;
   margin-top: 10px;
-  background: rgba(0, 0, 0, 0.3);
-  color: #fff;
-  border-radius: 10px;
+  background-color: #fff;
+  color: #333;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .cdk-drag-preview {
@@ -50,25 +103,42 @@ mat-card {
 }
 
 .drag-drop-box {
-  padding: 10px;
+  padding: 15px;
   margin: 10px;
-  font-size: 14px;
-  background: rgb(30, 81, 97);
-  border-radius: 10px;
-  color: #fff;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  color: #333;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
   cursor: move;
-  box-shadow: 0 8px 6px -6px #000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  
+  /* Add drag icon */
+  position: relative;
+}
+
+.drag-drop-box::before {
+  content: '⠿'; /* or use an icon library here */
+  font-size: 18px;
+  margin-right: 10px;
+  color: #999;
+  display: inline-block;
+}
+
+.drag-drop-box:hover {
+  background-color: #f1f1f1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .type-list {
   height: 65vh;
   overflow-y: scroll;
 }
+
 .selection-list {
   height: 55vh;
   overflow-y: scroll;
@@ -88,79 +158,7 @@ mat-card {
   grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
   gap: 10px;
   @include for-phone-only  {
-    // grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
     display: flex;
     flex-direction: row;
   }
 }
-
-.span-column {
-  grid-column-end: span 2;
-  max-height: 800px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.dualListLeft, .dualListRight {
-  display: flex;
-}
-
-.drag-drop-container {
-  margin: 0;
-}
-
-.listboxform-wrap {
-  padding-top: 3em;
-  padding-bottom: 3em;
-}
-
-.toggle-buttons-wide {
-  width: 100px;
-  margin-left: 5px;
-  text-align: left;
-}
-
-
-.button-toggle {
-  // width: 150px;
-  // margin-left: 5px;
-  text-align: left;
-  @include for-phone-only  {
-    // width: 50px;
-    // margin-left: 5px;
-    // text-align: left;
-
-  }
-}
-
-.toggle-group {
-  width: 150px;
-  margin-top: 10px;
-  margin-left: 5px;
-  text-align: left ;
-  @include for-phone-only  {
-    // width: 50px;
-    // margin-left: 5px;
-    // text-align: left
-  }
-}
-
-.spacer-10 {
-  margin-left: 10px;
-}
-
-button {
-  width: 150px;
-  height: 50px;
-}
-
-.buttons-grid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  gap: 5px;
-  margin-top: 5px;
-  // margin: 10px;
-}
-

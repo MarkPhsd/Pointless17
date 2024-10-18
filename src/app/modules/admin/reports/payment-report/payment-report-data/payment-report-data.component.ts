@@ -3,7 +3,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { Observable, Subject, of, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
+import { ITaxReport, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { IPaymentSalesSummary } from 'src/app/_services/reporting/sales-payments.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
@@ -34,6 +34,10 @@ export class PaymentReportDataComponent implements OnInit {
   @Input() autoPrint: boolean;
   @Input() surCharge: boolean
   @Input() batchData: any;
+  @Input() salesReportOBS:any;
+
+  salesReport$: Observable<ITaxReport>;
+  processing  : boolean;
 
   constructor(
     private popOutService: ProductEditButtonService,
@@ -42,12 +46,11 @@ export class PaymentReportDataComponent implements OnInit {
     private printingService: PrintingService,
     private httpClient: HttpClient,
     )
-     {
-
-
-      }
-
-
+  {
+    // const item = {} as ITaxReport;
+    // item.grossSales;
+    
+  }
 
   get groupByPayment() {
     if (!this.groupBy) { return false}
@@ -63,10 +66,39 @@ export class PaymentReportDataComponent implements OnInit {
   ngOnInit(): void {
     const i = 0
     this.type = this.type.toUpperCase()
+    
+    if (this.salesReportOBS) { 
+      this.getSalesReport(this.salesReportOBS)
+    }
   }
+
+  getSalesReport(reportCriteria: any) { 
+    // if (!reportCriteria) {return }
+    // const item = reportCriteria;
+    // this.processing = true;
+    // if (item.zrunID) {
+    //   this.salesReport$ =  this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
+    //     .pipe(switchMap(data => {
+    //       // this.reportCriteria = data;
+    //       this.processing = false;
+    //       // this.outputComplete.emit('SalesTaxReportSummary')
+    //       return of(data)
+    //   }))
+    //   return
+    // }
+
+    // this.salesReport$ =  this.reportingItemsSalesService.putSalesTaxReport(this.site, item ).pipe(switchMap(data => {
+    //   // this.salesReport = data;
+    //   this.processing = false;
+    //   // this.outputComplete.emit('SalesTaxReport')
+    //   return of(data)
+    // }))
+  }
+
   refresh() {
     this.outPutRefresh.emit(true)
   }
+
   downloadCSV() {
     if (!this.sales) { return }
     this.reportingItemsSalesService.downloadFile(this.sales.paymentSummary, 'PaymentReport')
@@ -78,24 +110,6 @@ export class PaymentReportDataComponent implements OnInit {
     )
   }
 
-  // grid
-  // <button mat-raised (click)="print()">
-  // <mat-icon>print</mat-icon></button>
-  // <div *ngIf="printAction$ | async"></div>
-  // @ViewChild('printsection') printsection: ElementRef;
-  // @Input() styles: string;
-  // @Input() printerName: string;
-  // printAction$: Observable<any>;
-  // printing: boolean;
-
-  // print() {
-  //   if (this.platFormService.isAppElectron) {
-  //     this.printAction$ =  this.setPrintStyles().pipe(switchMap(data => {
-  //       this.printElectron(data)
-  //       return of(data)
-  //     }))
-  //   }
-  // }
   print() {
     if (this.platFormService.isAppElectron) {
       this.printAction$ =  this.setPrintStyles().pipe(switchMap(data => {

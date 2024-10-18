@@ -68,6 +68,7 @@
             <div *ngIf="filter">
               <metrc-inventory-properties
                     [inputForm]     ="packageForm"
+                    [menuItem]      ="menuItem"
                     [package]       ="package"
                     [filter]        ='filter'
                     (outputMenuItem)="getCatalogItem($event)"
@@ -118,7 +119,7 @@
                   [facilityLicenseNumber] ="facilityLicenseNumber"
                   [priceForm]             ="priceForm"
                   [packageForm]           ="packageForm"
-                  [saved]="saved"
+                  [saved]                 ="saved"
                   [package]               ="package">
                 </app-strain-packages>
               </span>

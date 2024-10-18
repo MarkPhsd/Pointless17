@@ -138,6 +138,9 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     if (this.displayType === 'header-category') {
       return  'item-name-center-category'
     }
+    if (!this.menuItem) { 
+      return  'item-name-center-category'
+    }
     if (this.menuItem.urlImageMain  || this.menuItem.thumbnail  ) {
       return 'item-name-center-image'
     }
@@ -218,7 +221,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   }
 
   get typeDisplayViewBol() {
-    if (this.menuItem?.id != -1 && !this.menuItem.itemType) {
+    if (this.menuItem?.id != -1 && !this.menuItem?.itemType) {
       return true
     }
     return  false
@@ -226,7 +229,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
 
   get typeDisplayView() {
-    if (this.menuItem?.id != -1 && !this.menuItem.itemType) {
+    if (this.menuItem?.id != -1 && !this.menuItem?.itemType) {
       return this.typeDisplayTemplate
     }
     return null;
@@ -234,7 +237,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
 
   get menuNameViewBol() {
-    if   ((this.menuItem && this.menuItem.urlImageMain)  && !this.disableImages) {
+    if   ((this.menuItem && this.menuItem?.urlImageMain)  && !this.disableImages) {
       return true
     }
     return false;
@@ -242,7 +245,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
   get menuNameView() {
 
-    if   ((this.menuItem && this.menuItem.urlImageMain)  && !this.disableImages) {
+    if   ((this.menuItem && this.menuItem?.urlImageMain)  && !this.disableImages) {
       return this.menuNameTemplate
     }
     return null;
@@ -348,7 +351,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
   get isDiscountItem() {
     const menuItem = this.menuItem;
-    if (menuItem && menuItem.itemType && menuItem.itemType.type == 'discounts') {
+    if (menuItem && menuItem.itemType && menuItem?.itemType?.type == 'discounts') {
       return true
     }
     return false;
@@ -375,7 +378,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   get enableEditItemBol() {
     if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
     if (this.authenticationService.isAdmin || this.allowEdit) {
-      if (this.menuItem.id > 0) {
+      if (this.menuItem && this.menuItem.id > 0) {
         return true
       }
     }
@@ -385,7 +388,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   get enableEditItem() {
     if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
     if (this.authenticationService.isAdmin || this.allowEdit) {
-      if (this.menuItem.id > 0) {
+      if (this.menuItem && this.menuItem.id > 0) {
         return this.editItemView
       }
     }
@@ -428,6 +431,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   get enableViewItemBol() {
     if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
     if (this.isApp && this.authenticationService.isAdmin || this.allowEdit && this.isApp) {
+      if (!this.menuItem) { return }
       if (this.menuItem.id > 0 && this.menuItem?.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
         return true
       }
@@ -435,7 +439,8 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
     const admin = this.authenticationService.isAdmin || this.allowEdit
     if (!this.isApp &&  admin ) {
-      if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
+      if (!this.menuItem) { return }
+      if (this.menuItem?.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
         return true
       }
     }
@@ -445,6 +450,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   get enableViewItem() {
     if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
     if (this.isApp && this.authenticationService.isAdmin || this.allowEdit && this.isApp) {
+      if (!this.menuItem) { return }
       if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
         return this.viewItemView
       }
@@ -452,6 +458,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
     const admin = this.authenticationService.isAdmin || this.allowEdit
     if (!this.isApp &&  admin ) {
+      if (!this.menuItem) { return }
       if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
         return this.viewItemView
       }
@@ -462,6 +469,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   get enableAddItemViewBol() {
     if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
     if (!this.isStaff) {
+      if (!this.menuItem) { return }
       if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
         return true
       }
@@ -469,6 +477,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
 
     const admin = this.authenticationService.isAdmin || this.allowEdit
     if (!this.isApp &&  admin ) {
+      if (!this.menuItem) { return }
       if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
         return true
       }
@@ -479,6 +488,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   get enableAddItemView() {
     if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
     if (!this.isStaff) {
+      if (!this.menuItem) { return }
       if (this.menuItem.id > 0 && this.menuItem.itemType && this.menuItem.itemType.useType && this.menuItem.itemType.type.toLowerCase() != 'grouping') {
         return this.viewItemView
       }

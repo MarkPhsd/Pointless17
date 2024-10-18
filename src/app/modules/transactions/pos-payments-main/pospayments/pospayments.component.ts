@@ -1,12 +1,12 @@
 import { Component, Output, OnInit,
   ViewChild ,ElementRef, EventEmitter, OnDestroy, Input, TemplateRef } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { AWSBucketService, AuthenticationService} from 'src/app/_services';
+import { AWSBucketService, AuthenticationService, OrdersService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Observable, Subject ,Subscription } from 'rxjs';
+import { Observable, of, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { IGetRowsParams,  GridApi, AgGridEvent } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
@@ -36,6 +36,8 @@ function myComparator(value1, value2) {
   styleUrls: ['./pospayments.component.scss']
 })
 export class POSPaymentsComponent implements  OnInit,  OnDestroy {
+
+
   @ViewChild('summaryView')  summaryView:TemplateRef<any>;
   toggleListGrid = true // displays list of payments or grid
   //search with debounce: also requires AfterViewInit()
@@ -48,7 +50,17 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   private readonly onDestroy = new Subject<void>();
   summary$
-  // //search with debounce
+  selectedSummary: any;
+  demoMode: boolean;
+  action$: Observable<any>;
+
+  demoMode$ = this.siteService.getDemoMode().pipe(switchMap(data => { 
+    if (data === '424242'){ 
+      this.demoMode = true;
+    }
+    return of(data)
+  }))
+
   searchItems$              : Subject<IPaymentSearchModel[]> = new Subject();
   _searchItems$ = this.searchPhrase.pipe(
     debounceTime(250),
@@ -114,6 +126,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   }
 
   constructor(  private snackBar                : MatSnackBar,
+                private orderService            : OrdersService,
                 private pOSPaymentService       : POSPaymentService,
                 private agGridService           : AgGridService,
                 private fb                      : UntypedFormBuilder,
@@ -255,7 +268,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
       field: 'id',
       cellRenderer: "btnCellRenderer",
                     cellRendererParams: {
-
+                        onClick: this.editItemFroMButton.bind(this),
                         label: 'Edit',
                         getLabelFunction: this.getLabel.bind(this),
                         btnClass: 'btn btn-primary btn-sm'
@@ -439,6 +452,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     this.currentPage         = 1
     const searchModel = this.initSearchModel();
     this.setSummary(searchModel)
+    this.selectedSummary= null;
     return this.refreshSearch_sub()
   }
 
@@ -657,35 +671,80 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     }
   }
 
+
+
   onSelectionChanged(event) {
-
-    let selectedRows       = this.gridApi.getSelectedRows();
+    let selectedRows = this.gridApi.getSelectedRows();
     let selectedRowsString = '';
-    let maxToShow          = this.pageSize;
-    let selected           = []
-
+    let maxToShow = this.pageSize;
+    let selected = [];
+  
+    // Initialize the totals
+    let totalAmountPaid = 0;
+    let totalTipAmount = 0;
+    let totalWithTip = 0;
+  
     selectedRows.forEach(function (selectedRow, index) {
-    if (index >= maxToShow) { return; }
-
-    if (index > 0) {  selectedRowsString += ', ';  }
-      selected.push(selectedRow.id)
+      if (index >= maxToShow) {
+        return;
+      }
+  
+      // Push the selected row ID for further operations
+      selected.push(selectedRow.id);
+  
+      // Sum the amount paid and tip amount
+      totalAmountPaid += selectedRow.amountPaid ? parseFloat(selectedRow.amountPaid) : 0;
+      totalTipAmount += selectedRow.tipAmount ? parseFloat(selectedRow.tipAmount) : 0;
+      
+      // Calculate total with tip
+      totalWithTip = totalAmountPaid + totalTipAmount;
+  
+      if (index > 0) {
+        selectedRowsString += ', ';
+      }
       selectedRowsString += selectedRow.name;
     });
-
+  
     if (selectedRows.length > maxToShow) {
-    let othersCount = selectedRows.length - maxToShow;
-    selectedRowsString +=
-      ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
+      let othersCount = selectedRows.length - maxToShow;
+      selectedRowsString +=
+        ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
     }
-
-    this.selected = selected
-
+  
+    // Update the selected items
+    this.selected = selected;
+  
+    // Create the summary object to store the totals
+    const summary = {
+      totalAmountPaid: totalAmountPaid.toFixed(2),
+      totalTipAmount: totalTipAmount.toFixed(2),
+      totalWithTip: totalWithTip.toFixed(2),
+    };
+  
+    // Log or display the summary object
+    console.log('Summary:', summary);
+    this.selectedSummary = summary;
     if (selected && selectedRows && selectedRows[0]) {
       const item = selectedRows[0];
       this.id = item.id;
-      const history = item.history
-      this.editItemWithId(item)
+      const history = item.history;
+      // this.editItemWithId(item);
     }
+  }
+
+  deleteSelected() { 
+    let list = [] as number[];
+    this.selected.forEach(item => { 
+      
+      list.push(item)
+      console.log(item)
+    })
+    console.log(list)
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.orderService.removeOrderList(site, list).pipe(switchMap(data => { 
+      this.siteService.notify('Removed', 'Close', 1000)
+      return of (data)
+    }))
   }
 
   getItem(id: number, history: boolean) {
@@ -698,7 +757,22 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     }
   }
 
-  async editItemWithId(payment:any) {
+  
+  editItemFroMButton(e) {
+    if (!e) {
+      // console.log('edit product from grid no data')
+      return
+    }
+    if (e.rowData.id)  {
+      // if (this.buttonName === 'Edit') {
+        this.editItemWithId(e.rowData);
+      //  } else {
+        // this.assignItem(e)
+      }
+  }
+  
+
+  editItemWithId(payment:any) {
     if(!payment) { return }
     if (payment && payment.rowData) {  payment = payment.rowData;}
     this.pOSPaymentService.updatePaymentSubscription(payment)

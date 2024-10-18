@@ -1,9 +1,18 @@
+<div *ngIf="(action$ | async) as action"></div>
 <div class="container" *ngIf="toggleListGrid">
   <div class="grid-list">
     <div>
 
-      <ng-container [ngTemplateOutlet]="sortSelectors"></ng-container>
+      <div class="header-row">
+        <ng-container [ngTemplateOutlet]="sortSelectors"></ng-container>
+        <ng-container [ngTemplateOutlet]="demoModeOption"></ng-container>
+        <div *ngIf="selectedSummary">
+          {{selectedSummary?.totalAmountPaid | currency}} | {{selectedSummary.totalTipAmount| currency}} |  | {{selectedSummary.totalWithTip| currency}} |
+        </div>
+      </div>
       <ng-container [ngTemplateOutlet]="summaryEnabled"></ng-container>
+
+
       <div *ngIf="value" class="loader">
         <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
       </div>
@@ -52,3 +61,23 @@
     >
   </app-sort-selectors>
 </ng-template>
+
+<ng-template #demoModeOption>
+  <div *ngIf="(demoMode$ | async) as item">
+    <!-- demoMode{{demoMode}} {{item | json}} -->
+     <!-- {{item}} -->
+    <div *ngIf="+item === 424242">
+      <button mat-raised-button color="warn"
+        (click)="deleteSelected()"
+        ><mat-icon>delete</mat-icon>
+        Remove Selected
+      </button>
+    </div> 
+
+  </div>
+</ng-template>
+
+<!-- totalAmountPaid: totalAmountPaid.toFixed(2),
+totalTipAmount: totalTipAmount.toFixed(2),
+totalWithTip: totalWithTip.toFixed(2),
+}; -->

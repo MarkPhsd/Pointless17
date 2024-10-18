@@ -131,7 +131,7 @@ export class EmployeeClockListComponent implements OnInit {
     this.viewType = 0;
 
     this._search = this.employeeClockService.searchModel$.subscribe(data => {
-      console.log('refreshSearchAny', data)
+      // console.log('refreshSearchAny', data)
       this.refreshSearchAny(data)
     })
   }
@@ -443,7 +443,7 @@ export class EmployeeClockListComponent implements OnInit {
       params.endRow = 500;
     };
 
-    console.log('pre datasource', params.startRow, params.endRow)
+    // console.log('pre datasource', params.startRow, params.endRow)
 
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
@@ -452,16 +452,20 @@ export class EmployeeClockListComponent implements OnInit {
 
       items$.subscribe(data =>
         {
-            this.refreshData(data)
-            let results  =  this.refreshImages(data?.results)
-            params.successCallback(results)
-            this.rowData = results
+            if (data) {
+              this.refreshData(data)
+              let results  =  this.refreshImages(data?.results)
+              params.successCallback(results)
+              this.rowData = results
+            } else { 
+              params.successCallback(null)
+            }
           }
         );
       }
     };
 
-    console.log('data source prepared')
+    // console.log('data source prepared')
     if (!this.gridApi) { return }
     this.gridApi.setDatasource(datasource);
     this.autoSizeAll(true)
@@ -544,7 +548,7 @@ export class EmployeeClockListComponent implements OnInit {
       return this.employeeClockService.listEmployeesBetweenPeriod(site, search)
     }
 
-    console.log('nothing returning. ')
+    return of(null)
   }
 
   _getRow(summary: boolean ): Observable<EmployeeClockResults> {

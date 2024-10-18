@@ -42,6 +42,20 @@ export class MetrcItemsCategoriesService {
 
   }
 
+  deleteMetrcCategory(site: ISite, id: number): Observable<any> { 
+ 
+    const controller = '/MetrcCategories/'
+
+    const endPoint   = `deleteMetrcCategory`
+
+    const parameters = `?id=${id}`
+
+    const url        = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.delete<METRCItemsCategories[]>(url);
+
+  }
+
   getCategories(): Observable<METRCItemsCategories[]> {
 
     const site = this.sitesService.getAssignedSite();

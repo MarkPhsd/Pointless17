@@ -1,11 +1,11 @@
-import { Component, Inject,  Input,  OnInit, } from '@angular/core';
+import { Component, Inject,  Input,  OnDestroy,  OnInit, } from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, UntypedFormControl} from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AWSBucketService,  AuthenticationService,  MenuService,  } from 'src/app/_services';
 import { ISite } from 'src/app/_interfaces/site';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
-import { Observable, of, switchMap } from 'rxjs';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { CurrencyPipe } from '@angular/common';
 import * as numeral from 'numeral';
 import { IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.service';
@@ -16,15 +16,19 @@ import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.ser
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ConversionsService, IUnitConversion, IUnitsConverted } from 'src/app/_services/measurement/conversions.service';
-import { UserPreferences } from 'src/app/_interfaces';
+import { IProduct, UserPreferences } from 'src/app/_interfaces';
+import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 
 @Component({
   selector: 'app-products-add',
   templateUrl: './products-add.component.html',
   styleUrls: ['./products-add.component.scss']
 })
-export class METRCProductsAddComponent implements OnInit {
+export class METRCProductsAddComponent implements OnInit, OnDestroy {
   //move to inventory
+
+  _menuItemUpdate : Subscription;
+  
   saved: boolean;
   action$ : Observable<any>;
   conversionName:         string;
@@ -40,7 +44,7 @@ export class METRCProductsAddComponent implements OnInit {
   inventoryLocations$:    Observable<IInventoryLocation[]>;
   inventoryLocations:     IInventoryLocation[];
   inventoryLocation:      IInventoryLocation;
-
+  
 
   cost:                   any;
   costValue:              number;
@@ -126,6 +130,7 @@ export class METRCProductsAddComponent implements OnInit {
           private siteService: SitesService,
           private menuService: MenuService,
           private metrcPackagesService: MetrcPackagesService,
+          private itemTypeService: ItemTypeService,
           private inventoryLocationsService: InventoryLocationsService,
           private dialogRef: MatDialogRef<METRCProductsAddComponent>,
           @Inject(MAT_DIALOG_DATA) public data: any,
@@ -152,8 +157,20 @@ export class METRCProductsAddComponent implements OnInit {
     this.inventoryAssigments = [];
     this.inventoryLocations$ =  this.setInventoryLocation()
     this.initForm();
+    this._menuItemUpdate = this.menuService.menuItemUpdate$.subscribe(data => { 
+      if (data) { 
+        this.menuItem = data;
+      }
+    })
   }
 
+
+  ngOnDestroy() {
+    if (this._menuItemUpdate) { 
+      this._menuItemUpdate.unsubscribe()
+    } 
+  }
+  
   setInventoryLocation() {
     return  this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
       this.inventoryLocations = data
@@ -648,7 +665,7 @@ export class METRCProductsAddComponent implements OnInit {
     element.target.value = this.cost;
   }
 
-   transformPriceAmount(element){
+  transformPriceAmount(element){
     this.priceValue = this.price
     this.price = this.currencyPipe.transform(this.price, '$');
     element.target.value = this.price;
@@ -662,38 +679,36 @@ export class METRCProductsAddComponent implements OnInit {
                                                                   this.inventoryAssigments)
     this.action$ = inv$.pipe(switchMap(data => { 
 
+      console.log('data', data)
       if (!data) { 
-        this.siteService.notify('Inventory Packages note imported', 'Failed', 2000, 'red');
+        this.siteService.notify('Inventory Packages not imported', 'Failed', 2000, 'red');
         return of(data)
       }
 
       this.siteService.notify('Inventory Packages Imported', 'Success', 2000, 'green');
+
       if (this.userPref?.metrcUseMetrcLabel) {
         if (this.inventoryAssigments[0].label === this.package.label) {
           if (data) {
             const item = data[0]
+            setTimeout(() => {
+              this.dialogRef.close()
+            }, 200);
             const dialogRef = this.inventoryAssignmentService.openInventoryItem(data[0].id)
           }
-          
         }
-        return of(data)
+      } else { 
+        setTimeout(() => {
+          this.dialogRef.close()
+        }, 200);
       }
+
+      return of(data)
     
     }))
 
   }
-    //     error: error => {
-    //       this.notifyEvent(`Inventory Packages failed: ${error}`, 'Failed');
-    //   }
-    // }
-    // )
 
-
-  // getSelectedMenuItem(event) {
-  //   if (event) {
-  //     this.menuItem = event;
-  //   }
-  // }
 
   getCatalogItem(event) {
     const itemStrain = event
@@ -706,19 +721,98 @@ export class METRCProductsAddComponent implements OnInit {
   }
 
   assignMenItem(id: number) {
+    console.log('assignMenItem id', id)
     if (id == 0) { return}
-    this.menuService.getMenuItemByID(this.site, id).subscribe(data => {
-      if (data) {
-        this.menuItem = data
-        this.package.productID = data?.id.toString();
-        this.package.productName = data?.name
-        const item = {productName: data.name, productID: data.id}
-        this.packageForm.patchValue(item)
-        return;
+
+    this.menuService.getMenuItemByID(this.site, id).pipe(switchMap(data => {
+        console.log('menu item', data?.name)
+        if (data) {
+          this.menuItem = data
+          const item = {productName: data.name, productID: data.id}
+          this.packageForm.patchValue(item)
+
+          console.log('menu item Item Type',this.menuItem.itemType)
+
+          if (!this.menuItem.itemType) { 
+            console.log("setItemType")
+            return this.setItemType(this.package?.productCategoryName)
+          } 
+
+          if (!this.menuItem.departmentID || this.menuItem.departmentID == 0) { 
+            console.log('departmentID', this.menuItem.departmentID)
+            return this.setItemDepartment(this.package?.productCategoryName)
+          }
+
+          this.package.productID = null;
+          this.package.productName = null;
+          this.setProductNameEmpty(this.packageForm)
+          return of(data)
+        }
+        return of(data)
       }
-      this.setProductNameEmpty(this.packageForm)
+    )).pipe(switchMap(data => { 
+      return this.menuService.getMenuItemByID(this.site, id)
+      
+    })).subscribe(data => { 
+      if (data) { 
+        this.packageForm.patchValue({productName: this.menuItem.name, productID: this.menuItem.id})
+      }
+      this.menuItem = data;
+      console.log(data)
     })
+    }
+
+  setItemType(productCategoryName: string) { 
+    return this.itemTypeService.getItemTypeByName(this.site, productCategoryName).pipe(switchMap(data => { 
+      console.log('setItemType', data)
+      if (!data) { 
+        const prod = {} as IProduct;
+        return of(prod)
+      }
+      this.menuItem.prodModifierType = data.id;
+      const site = this.siteService.getAssignedSite()
+      return this.menuService.getItemsNameBySearch(site, productCategoryName, 6)
+    })).pipe(switchMap(dept => {
+      console.log('depts', dept)
+      if (dept && dept[0]) { 
+        this.menuItem.departmentID = dept[0]?.id;
+      }
+      
+      return this.menuService.getProduct(this.site, this.menuItem.id)
+    })).pipe(switchMap(data => { 
+      if (!data || !data?.id) { 
+        return of(null)
+      }
+      data.departmentID =  this.menuItem.departmentID 
+      data.prodModifierType = this.menuItem.prodModifierType
+      return this.menuService.putProduct(this.site, this.menuItem.id, data)
+    })).pipe(switchMap(data => { 
+      return of(this.menuItem)
+    }))
   }
+
+  setItemDepartment(productCategoryName: string) {
+
+    console.log("setItemDepartment", productCategoryName)  
+    const site = this.siteService.getAssignedSite()
+    let catID: number = 0;
+
+    return this.menuService.getItemsNameBySearch(site, productCategoryName, 6).pipe(switchMap(dept => { 
+
+      console.log('depts', dept)
+      if (dept && dept[0]) { 
+        this.menuItem.departmentID = dept[0]?.id;
+        catID = dept[0].id;
+      }
+      return this.menuService.getProduct(this.site, this.menuItem.id)
+    })).pipe(switchMap(data => {
+      this.menuItem.departmentID = catID; 
+      data.departmentID = catID;
+      return this.menuService.putProduct(this.site, this.menuItem.id, data)
+    }
+    ))
+  }
+
 
   getSelectedVendorItem(event) {
     if (event) {

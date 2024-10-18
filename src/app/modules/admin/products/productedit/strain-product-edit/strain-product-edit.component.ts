@@ -373,7 +373,7 @@ export class StrainProductEditComponent implements OnInit {
   }
 
   assignItem(event) {
-    console.log('assignItem', event.value, event)
+    // console.log('assignItem',event.unitTypeID, event?.id, event.value, event)
     if (!event) { return }
     if (!event.unitTypeID) {return}
     this.product.unitTypeID = event.id
@@ -486,6 +486,8 @@ export class StrainProductEditComponent implements OnInit {
 
   updateItem(event) {
     const site = this.siteService.getAssignedSite()
+    // console.log('update item product', this.product)
+    let itemType: IItemType;
     if (this.setValues())  {
       if (this.product.webProduct) { this.product.webProduct   = -1     }
       if (!this.product.webProduct) {  this.product.webProduct = 0    }
@@ -516,12 +518,14 @@ export class StrainProductEditComponent implements OnInit {
             return this.itemTypeService.getItemType(site, this.product?.prodModifierType)
         }
       )).pipe(switchMap(data => {
-        this.setInit({product: this.product, itemType: data})
-        return of(data)
+          this.setInit({product: this.product, itemType: data})
+          return this.menuService.getMenuItemByID(site, this.product.id)
+        }
+      )).pipe(switchMap(data => { 
+        this.menuService.updateMenuItem(data)
+        return of(this.product)
       }))
     }
-
-
   }
 
   // setPrefixPosFix(product: IProduct) {

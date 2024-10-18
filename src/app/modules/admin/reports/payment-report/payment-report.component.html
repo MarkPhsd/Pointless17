@@ -13,6 +13,7 @@
         [zrunID]  ="zrunID"
         [autoPrint]="autoPrint"
         [batchData]="batchData"
+        [salesReportOBS]="salesReport"
         (outPutRefresh)="refreshReport($event)"
         >
       <ng-content></ng-content>
@@ -33,6 +34,7 @@
         [type]="'refunds'"
         [zrunID]="zrunID"
         [autoPrint]="autoPrint"
+       
         (outPutRefresh)="refreshReport($event)"
       >Payment Refunds </app-payment-report-data>
   </div>

@@ -1,0 +1,56 @@
+/* General card styling */
+.mat-card {
+  margin: .25em; /* Space between cards */
+  padding: 1em; /* Add padding inside the card */
+  border-radius: 8px; /* Rounded corners for a cleaner look */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+/* Styling for individual day cards */
+.day-card {
+  background-color: #f9f9f9; /* Light background for each day */
+  margin-bottom: 1em; /* Space between day cards */
+  padding: .25em;
+  border: 1px solid #ddd; /* Light border to define each day */
+  border-radius: 4px; /* Slightly rounded corners */
+  width: 275px;
+}
+
+/* Day title styling */
+.mat-card-title {
+  font-size: 1.2em; /* Slightly larger font for titles */
+  font-weight: bold;
+  margin-bottom: 0.5em; /* Space below title */
+}
+
+/* Flex container for displaying day cards in a vertical stack */
+.schedule-display {
+  display: flex;
+  flex-direction: row; /* Stack days vertically */
+  flex-wrap: wrap;
+
+}
+
+/* Styling for messages and time ranges inside each day card */
+.schedule-display p {
+  margin: 0.5em 0; /* Add some vertical spacing between text */
+  font-size: 1em;
+}
+
+/* Styling for individual time ranges */
+.range-card p {
+  margin: 0.2em 0; /* Reduce spacing for range text */
+  font-weight: 500; /* Slightly bolder text for time ranges */
+}
+
+/* Styling for the disabled message */
+.disabled-message {
+  color: red; /* Highlight disabled message in red */
+  font-weight: bold;
+  margin-bottom: 1em; /* Space between the disabled message and other content */
+}
+
+/* Strong tag should always appear bold */
+strong {
+  font-weight: bold; /* Ensure strong tag is bold */
+}

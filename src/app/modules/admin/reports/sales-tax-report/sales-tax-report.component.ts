@@ -59,7 +59,6 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
     private employeeClockService: EmployeeClockService,
     private siteService               : SitesService,
     private reportingItemsSalesService: ReportingItemsSalesService,
-    //to be moved to component.
     public platFormService: PlatformService,
     private printingService: PrintingService,
     private httpClient: HttpClient,
@@ -89,51 +88,59 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       this.siteService.notify('Error with time clock summary' + data.toString(), 'close', 2000, 'red')
       return of(item)
     }))
+    
+    let employeeID = this.employeeID 
+    this.getSalesReport(this.employeeID )
+  }
 
+  getSalesReport(employeeID: number) {
+          
     let item = {startDate: this.dateFrom, endDate: this.dateTo, zrunID: this.zrunID,
-                pendingTransactions: this.pendingTransactions,
-                scheduleDateEnd: this.scheduleDateEnd,
-                scheduleDateStart: this.scheduleDateStart } as IReportingSearchModel;
+      pendingTransactions: this.pendingTransactions,
+      scheduleDateEnd: this.scheduleDateEnd,
+      scheduleDateStart: this.scheduleDateStart } as IReportingSearchModel;
 
-    if (this.employeeID != 0) { item.employeeID = this.employeeID  }
-    console.log('putSalesTaxReport', item, item.employeeID)
-    if (item.scheduleDateEnd && item.scheduleDateStart) {
+      if (employeeID != 0) {
+         item.employeeID = employeeID  
+      }
+
+      if (item.scheduleDateEnd && item.scheduleDateStart) {
       this.sales$ =  this.reportingItemsSalesService.putSalesTaxReport(this.site, item ).pipe(switchMap(data => {
           this.sales = data;
           this.processing = false;
           return of(data)
-        })),catchError(data => {
-          console.log('data error', data)
-          return of(data )
-        })
+      })),catchError(data => {
+        console.log('data error', data)
+        return of(data )
+      })
       return
-    }
+      }
 
-    if (item.zrunID) {
+      if (item.zrunID) {
       this.sales$ = this.laborSummary$.pipe(switchMap(data => {
-        this.laborSummary = data;
-        return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
+      this.laborSummary = data;
+      return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
+         })).pipe(switchMap(data => {
+          this.sales = data;
+          this.processing = false;
+          this.outputComplete.emit('SalesTaxReport')
+          return of(data)
+      }))
+      return
+      }
+
+      if (!item.zrunID) { 
+      return  this.laborSummary$.pipe(switchMap(data => {
+          this.laborSummary = data;
+          return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
       })).pipe(switchMap(data => {
           this.sales = data;
           this.processing = false;
           this.outputComplete.emit('SalesTaxReport')
           return of(data)
         }))
-      return
+      }
     }
-    
-    if (!item.zrunID) { 
-      this.sales$ =  this.laborSummary$.pipe(switchMap(data => {
-        this.laborSummary = data;
-        return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
-      })).pipe(switchMap(data => {
-          this.sales = data;
-          this.processing = false;
-          this.outputComplete.emit('SalesTaxReport')
-          return of(data)
-      }))
-    }
-  }
 
   dataGridView() {
     this.popOutService.openDynamicGrid(

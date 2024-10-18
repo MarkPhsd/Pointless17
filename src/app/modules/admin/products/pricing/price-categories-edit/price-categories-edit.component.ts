@@ -464,23 +464,6 @@ export class PriceCategoriesEditComponent implements OnInit {
     this.toggleSearchSize[this.toggle] = !this.toggleSearchSize[this.toggle];
     return;
 
-    if (this.priceCategory.productPrices.length >= index -1) {
-      let newIndex = index
-      if (!this.priceCategory.productPrices[index]) {
-        newIndex =  this.priceCategory.productPrices.push(line)
-      }
-      if (unitType) {
-        this.priceCategory.productPrices[index].unitTypeID = unitTypeID;
-      }
-    }
-
-    return;
-    if (pricing && pricing.length>=index) {
-      pricing.at(index).patchValue(line)
-      pricing.at(index).patchValue({unitTypeID: unitTypeID})
-    }
-
-    this.toggleSearchSize[index] = !this.toggleSearchSize[index]
 
   }
 

@@ -514,9 +514,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   initQuickMenus(event) {
-    console.log(event,event.value)
     this.menuToggleEnabled = event;
-
   }
 
   initPurchaseOrderOption(id: number) {

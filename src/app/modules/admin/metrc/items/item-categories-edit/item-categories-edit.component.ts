@@ -9,6 +9,7 @@ import { ConversionsService } from 'src/app/_services/measurement/conversions.se
 import {
   METRCItemsCategories,
 } from 'src/app/_interfaces/metrcs/items';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
   selector: 'app-item-categories-edit',
@@ -18,7 +19,7 @@ import {
 export class ItemCategoriesEditComponent implements OnInit {
 
   id: any;
-
+  action$: Observable<any>
   category$: Observable<METRCItemsCategories>;
   category: METRCItemsCategories;
 
@@ -29,6 +30,7 @@ export class ItemCategoriesEditComponent implements OnInit {
     private metrcItemsCategoriesService: MetrcItemsCategoriesService,
     public route: ActivatedRoute,
     public fb: UntypedFormBuilder,
+    private siteService: SitesService,
     private dialogRef: MatDialogRef<METRCItemsCategories>,
     @Inject(MAT_DIALOG_DATA) public data: any
     )
@@ -91,7 +93,13 @@ export class ItemCategoriesEditComponent implements OnInit {
   }
 
   delete(event) {
-    window.alert('This feature is not implemented')
+    // window.alert('This feature is not implemented')
+    const site = this.siteService.getAssignedSite()
+    this.action$ = this.metrcItemsCategoriesService.deleteMetrcCategory(site, this.id).pipe(switchMap(data => { 
+      this.dialogRef.close(true)
+      // this.siteService.notify("Deleted please referesh")
+      return of(data)
+    }))
   }
 
   cancel(event) {

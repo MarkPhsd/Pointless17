@@ -19,7 +19,7 @@
     </div>
 
     <div>
-      <mat-card>
+      <mat-card class="mat-split-card">
         <mat-card-subtitle>
           <div class="span-column">
 
@@ -45,7 +45,7 @@
               <mat-card-actions >
                 <div class="buttons-grid">
                   <div>
-                    <button mat-raised-button color="primary" (click)="refreshOrder()">
+                    <button class="payment-buttons" mat-raised-button color="primary" (click)="refreshOrder()">
                       <mat-icon>refresh</mat-icon>Refresh Order
                     </button>
                   </div>
@@ -61,8 +61,8 @@
                     </div>
                   </div>
 
-                  <div *ngIf="changesOcurred">
-                    <button mat-raised-button color="primary" (click)="saveChanges()">
+                  <div *ngIf="changesOcurred" >
+                    <button class="payment-buttons" mat-raised-button color="primary" (click)="saveChanges()">
                       <mat-icon>save</mat-icon>Save Changes
                     </button>
                   </div>
@@ -95,8 +95,6 @@
           </div>
 
           <div class="grid-dual-list" *ngIf="!savingChanges; else savingChangesOn">
-            <!-- class="col-md-6 col-lg-6 col-sm-12 dualListLeft" -->
-
             <div class="drag-drop-container">
               Group 1
               <div
@@ -118,7 +116,7 @@
                 </div>
               </div>
             </div>
-
+          
             <div class="col-md-6 col-lg-6 col-sm-12 dualListRight" [hidden]="currentGroup == '1'">
               <div class="drag-drop-container">
                 Group {{currentGroup}}
@@ -129,7 +127,7 @@
                   [cdkDropListData]="selectedItems"
                   [cdkDropListConnectedTo]="[availables]"
                   (cdkDropListDropped)="drop($event)"
-                  class="drag-drop-list" >
+                  class="drag-drop-list">
                   <div
                     nbButton
                     outline
@@ -143,6 +141,7 @@
               </div>
             </div>
           </div>
+          
 
         </mat-card-content>
       </mat-card>

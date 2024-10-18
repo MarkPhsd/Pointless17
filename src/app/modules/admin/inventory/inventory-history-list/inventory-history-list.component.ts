@@ -278,7 +278,7 @@ export class InventoryHistoryListComponent implements OnInit, OnDestroy {
     const dialogRef =  this.inventoryAssignmentService.openInventoryItem(id)
     if (dialogRef) {
       dialogRef.afterClosed().subscribe(result => {
-      this.outputRefresh.emit('true')
+        this.outputRefresh.emit('true')
         if (result && result != 'false') {
           this.id = 0;
           this.inventoryAssignment = null;

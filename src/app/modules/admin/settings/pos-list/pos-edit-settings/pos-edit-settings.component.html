@@ -506,7 +506,7 @@
 
 
 <ng-template #voiceService>
-  <mat-card>
+  <mat-card [formGroup]="inputForm" *ngIf="inputForm">
     <h3>Voice Services</h3>
 
     <div class="toggle-fields">
@@ -524,7 +524,7 @@
     <div class="toggle-fields">
       <mat-slide-toggle
                 formControlName="voiceOnAddItem"  >
-        <mat-label>Voice on Error</mat-label>
+        <mat-label>Voice on Add Item</mat-label>
       </mat-slide-toggle>
     </div>
 

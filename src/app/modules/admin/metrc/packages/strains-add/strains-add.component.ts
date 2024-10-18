@@ -1,11 +1,11 @@
-import { Component,  Inject,   Input,   OnInit,} from '@angular/core';
+import { Component,  Inject,   Input,   OnDestroy,   OnInit,} from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl} from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { AWSBucketService, AuthenticationService, MenuService,  } from 'src/app/_services';
+import { AWSBucketService, AuthenticationService, IItemBasic, MenuService,  } from 'src/app/_services';
 import { ISite } from 'src/app/_interfaces/site';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
-import { Observable, of, switchMap } from 'rxjs';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.service';
 import { InventoryAssignmentService} from 'src/app/_services/inventory/inventory-assignment.service';
 import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.service';
@@ -13,8 +13,9 @@ import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ConversionsService, IUnitConversion } from 'src/app/_services/measurement/conversions.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import { UserPreferences } from 'src/app/_interfaces';
+import { IProduct, UserPreferences } from 'src/app/_interfaces';
 import { LabTestResult, LabTestResultResponse, MetrcLabTestsService } from 'src/app/_services/metrc/metrc-lab-tests.service';
+import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 
 @Component({
   selector: 'app-strains-add',
@@ -22,8 +23,10 @@ import { LabTestResult, LabTestResultResponse, MetrcLabTestsService } from 'src/
   styleUrls: ['./strains-add.component.scss']
 })
 
-export class StrainsAddComponent implements OnInit {
+export class StrainsAddComponent implements OnInit, OnDestroy {
 
+  _menuItemUpdate : Subscription;
+  
   productionBatchNumber:  string;
   facilityLicenseNumber:  string;
   action$: Observable<any>;
@@ -65,7 +68,9 @@ export class StrainsAddComponent implements OnInit {
           private menuService: MenuService,
           private authenticationService: AuthenticationService,
           private metrcPackagesService: MetrcPackagesService,
+          private itemTypeService: ItemTypeService,
           private metrcLabService: MetrcLabTestsService,
+     
           private dialogRef: MatDialogRef<StrainsAddComponent>,
           @Inject(MAT_DIALOG_DATA) public data: any,
           private inventoryAssignmentService: InventoryAssignmentService,
@@ -86,11 +91,13 @@ export class StrainsAddComponent implements OnInit {
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
     this.initFields();
+
     this.packageForm$ = item$.pipe(switchMap(data => {
           this.package = data;
           if (this.package) {
-            if (this.package.productID) {
-              this.assignMenItem(+this.package.productID)
+            if (this.package?.productID) {
+              this.assignMenItem(+this.package?.productID)
+              
             }
           }
           if (!data.labResults || data.labResults == null ||
@@ -100,22 +107,34 @@ export class StrainsAddComponent implements OnInit {
           return of(data)
         }
       )).pipe(switchMap(data => {
-        
         if (!data.harvestResults || data.harvestResults == null ||
           data.harvestResults == 'null' || data.harvestResults == undefined) {
           return this.metrcLabService.getHarvest(site, data?.id)
         }
-
         return of(data)
       }
       )).pipe(switchMap(data => {
-      
         this.initItemFormData(data)
         this.initPriceForm();
         return of(data)
       }
     ))
+    
+    this._menuItemUpdate = this.menuService.menuItemUpdate$.subscribe(data => { 
+      if (data) { 
+        this.menuItem = data;
+      }
+    })
+
   }
+
+
+  ngOnDestroy() {
+    if (this._menuItemUpdate) { 
+      this._menuItemUpdate.unsubscribe()
+    } 
+  }
+  
 
   setLabResultsInPackage( labResults: string) {
     let checked : boolean;
@@ -123,8 +142,9 @@ export class StrainsAddComponent implements OnInit {
 
     if (!labResults) { return };
     const results: LabTestResultResponse = JSON.parse(labResults);
-    const chem = {tch: 0, thc2:0, tcha:0,tcha2:0, cbd:0,cbd2:0,cbn:0,cbn2:0,cbda:0,cbda2:0}
+    const chem = {tch: 0, thc2:0, tcha:0,tcha2:0, cbd:0,cbd2:0,cbn:0,cbn2:0,cbda:0,cbda2:0};
     form.patchValue(chem)
+
     if (results) {
         const list = results.data as  LabTestResult[];
         const cbd = list.find(c => c.testTypeName.includes("Total CBD (mg/g;"));
@@ -236,6 +256,9 @@ export class StrainsAddComponent implements OnInit {
       if (!this.activeControl.value) {  metrcPackage.active = false  }
     }
 
+    // console.log('metrcPackage', metrcPackage)
+    // return 
+
     const package$       = this.metrcPackagesService.putPackage(site, this.id, metrcPackage)
     package$.subscribe( data => {
       this.notifyEvent('Item saved', 'Success')
@@ -244,6 +267,7 @@ export class StrainsAddComponent implements OnInit {
 
     this.saved = true
     this.packageForm.valueChanges.subscribe(data => {
+      this.assignMenItem(this.menuItem?.id) 
       this.saved = false;
     })
   }
@@ -290,18 +314,91 @@ export class StrainsAddComponent implements OnInit {
   assignMenItem(id: number) {
     console.log('assignMenItem id', id)
     if (id == 0) { return}
-    this.menuService.getMenuItemByID(this.site, id).subscribe(data => {
-      // console.log('assignMenItem data', data)
-      if (data) {
-        this.menuItem = data
-        const item = {productName: data.name, productID: data.id}
-        this.packageForm.patchValue(item)
-        return;
+
+    this.menuService.getMenuItemByID(this.site, id).pipe(switchMap(data => {
+        console.log('menu item', data?.name)
+        if (data) {
+          this.menuItem = data
+          const item = {productName: data.name, productID: data.id}
+          this.packageForm.patchValue(item)
+
+          console.log('menu item Item Type',this.menuItem.itemType)
+
+          if (!this.menuItem.itemType) { 
+            console.log("setItemType")
+            return this.setItemType(this.package?.productCategoryName)
+          } 
+
+          if (!this.menuItem.departmentID || this.menuItem.departmentID == 0) { 
+            console.log('departmentID', this.menuItem.departmentID)
+            return this.setItemDepartment(this.package?.productCategoryName)
+          }
+
+          this.package.productID = null;
+          this.package.productName = null;
+          this.setProductNameEmpty(this.packageForm)
+          return of(data)
+        }
+        return of(data)
       }
-      this.package.productID = null;
-      this.package.productName = null;
-      this.setProductNameEmpty(this.packageForm)
+    )).subscribe(data => { 
+
+      if (data) { 
+        this.packageForm.patchValue({productName: this.menuItem.name, productID: this.menuItem.id})
+        // this.setProductNameEmpty(this.packageForm)
+      }
+      this.menuItem = data;
+      console.log(data)
     })
+  }
+
+  setItemType(productCategoryName: string) { 
+    return this.itemTypeService.getItemTypeByName(this.site, productCategoryName).pipe(switchMap(data => { 
+      console.log('setItemType', data)
+      if (!data) { 
+        const prod = {} as IProduct;
+        return of(prod)
+      }
+      this.menuItem.prodModifierType = data.id;
+      const site = this.siteService.getAssignedSite()
+      return this.menuService.getItemsNameBySearch(site, productCategoryName, 6)
+    })).pipe(switchMap(dept => {
+      console.log('depts', dept)
+      if (dept && dept[0]) { 
+        this.menuItem.departmentID = dept[0]?.id;
+      }
+      
+      return this.menuService.getProduct(this.site, this.menuItem.id)
+    })).pipe(switchMap(data => { 
+      if (!data || !data?.id) { 
+        return of(null)
+      }
+      data.departmentID =  this.menuItem.departmentID 
+      data.prodModifierType = this.menuItem.prodModifierType
+      return this.menuService.putProduct(this.site, this.menuItem.id, data)
+    })).pipe(switchMap(data => { 
+      return of(this.menuItem)
+    }))
+  }
+
+  setItemDepartment(productCategoryName: string) {
+
+    console.log("setItemDepartment", productCategoryName)  
+    const site = this.siteService.getAssignedSite()
+    let catID: number = 0;
+
+    return this.menuService.getItemsNameBySearch(site, productCategoryName, 6).pipe(switchMap(dept => { 
+      if (dept && dept[0]) { 
+        this.menuItem.departmentID = dept[0]?.id;
+        catID = dept[0].id;
+      }
+      return this.menuService.getProduct(this.site, this.menuItem.id)
+    })).pipe(switchMap(data => {
+      this.menuItem.departmentID = catID; 
+      data.departmentID = catID;
+      return this.menuService.putProduct(this.site, this.menuItem.id, data)
+    }
+    ))
   }
 
   setProductNameEmpty(inputForm: UntypedFormGroup) {
@@ -377,9 +474,9 @@ export class StrainsAddComponent implements OnInit {
 
             useByDate                       : data?.useByDate,
             productionBatchNumber           : data?.productionBatchNumber,
+            
             productName                     : data?.productName,
             productID                       : data?.productID,
-
 
             itemFromFacilityNumber           : data?.itemFromFacilityLicenseNumber,
             itemFromFacilityName             : data?.itemFromFacilityName,

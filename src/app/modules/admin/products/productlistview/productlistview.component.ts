@@ -1051,7 +1051,7 @@ constructor(  private _snackBar              : MatSnackBar,
 
   //ag-grid standard method
   async onGridReady(params: any) {
-    if (params == undefined) { return }
+    // if (params == undefined) { return }
 
     if (params)  {
       this.params  = params
@@ -1067,6 +1067,9 @@ constructor(  private _snackBar              : MatSnackBar,
       items$.subscribe(data =>
         {
             const resp         =  data.paging
+            if (data && !data.paging) { 
+              this.siteService.notify(data.toString(), 'Close', 10000)
+            }
             if (!resp)         {return}
             this.isfirstpage   = resp.isFirstPage
             this.islastpage    = resp.isFirstPage

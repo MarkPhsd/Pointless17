@@ -28,10 +28,45 @@ export class MetrcSalesService {
 
 
   constructor( private http: HttpClient,
+              private siteService: SitesService,
                private auth: AuthenticationService,
               ) {
 
               }
+
+  uploadTransactions() {
+    const site = this.siteService.getAssignedSite();
+
+    const controller = '/METRCSales/'
+
+    const endPoint = `uploadTransactions`
+
+    const parameters = ``
+
+    const licenseNumber  = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}${licenseNumber}`
+
+    return this.http.get<any>(url);
+  }
+            
+
+  submitTransaction(data: { id: any; }): Observable<any> {
+    const site = this.siteService.getAssignedSite();
+
+    const controller = '/METRCSales/'
+
+    const endPoint = `postMETRCTransactionManual`
+
+    const parameters = `?id=${data.id}`
+
+    const licenseNumber  = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}${licenseNumber}`
+
+    return this.http.get<any>(url);
+  }
+
 
   getMETRCCustomerType(site: ISite): Observable<METRCCustomerTypeGet[]> {
 

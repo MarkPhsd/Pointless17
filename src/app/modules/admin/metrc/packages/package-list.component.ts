@@ -258,7 +258,7 @@ export class PackageListComponent implements OnInit {
      },
       {headerName: 'Label', field: 'label', sortable: true, minWidth: 250},
       {headerName: 'Source',  sortable: true, field: 'itemFromFacilityLicenseNumber',},
-      {headerName: 'Strain/Product', field: 'item.name', sortable: true},
+      {headerName: 'Strain/Product', field: 'productName', sortable: true},
       {headerName: 'Quantity', field: 'quantity', sortable: true},
       {headerName: 'UOM', field: 'unitOfMeasureName', sortable: true},
       {headerName: 'Package Date', field: 'packagedDate', sortable: true,},
@@ -656,14 +656,17 @@ export class PackageListComponent implements OnInit {
     const metrc$ = this.metrcPackagesService.getPackagesByID(id, this.site)
 
     metrc$.subscribe( data => {
-        if (data.item.quantityType === 'WeightBased') {
+
+        console.log(data)
+        if (data?.item?.quantityType === 'WeightBased') {
           this.openStrainsDialog(data.id)
           return
         }
-        if (data.item.quantityType === 'CountBased') {
+        if (data?.item?.quantityType === 'CountBased') {
           this.openProductsDialog(data.id)
           return
         }
+        this.siteService.notify('Item type not found. please contact admin', 'Close', 5000, 'red')
       }
     )
   }
@@ -692,9 +695,7 @@ export class PackageListComponent implements OnInit {
       },
     )
     dialogRef.afterClosed().subscribe(result => {
-      // if (result && result.completed) {
         this.refreshGrid()
-      // }
     });
   }
 

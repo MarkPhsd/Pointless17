@@ -264,6 +264,9 @@ import {
 import { OrderItemScannerComponent } from './widgets/search-list-selectors/order-item-scanner/order-item-scanner.component';
 import { MessageMenuSenderComponent } from '../modules/admin/message-editor-list/message-menu-sender/message-menu-sender.component';
 import { TtsComponent } from './widgets/tts/tts.component';
+import { ScheduleSelectorComponent } from './widgets/schedule-selector/schedule-selector.component';
+import { ScheduleDateRangeSelectorComponent } from './widgets/schedule-date-range-selector/schedule-date-range-selector.component';
+import { PaymentTypesSelectionComponent } from '../modules/posorders/payment-types-selection/payment-types-selection.component';
 
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
@@ -402,6 +405,8 @@ import { TtsComponent } from './widgets/tts/tts.component';
     // QrPaymentComponent,
     // PayAPIComponent,
     // PayAPIFrameComponent,
+    ScheduleSelectorComponent,
+    ScheduleDateRangeSelectorComponent,
     OnlinePaymentCompletedComponent,
     PagingInfoComponent,
     PagerBlobComponent,
@@ -410,6 +415,7 @@ import { TtsComponent } from './widgets/tts/tts.component';
     PaymentReportComponent,
     PaymentReportCardComponent,
     PaymentReportDataComponent,
+    PaymentTypesSelectionComponent,
     PieComponent,
     POSOrderScheduleCardComponent,
     PosOrderItemComponent,
@@ -671,7 +677,8 @@ import { TtsComponent } from './widgets/tts/tts.component';
     LogoComponent,
     Label1by8Component,
     MatDateRangeComponent,
-
+    ScheduleSelectorComponent,
+    ScheduleDateRangeSelectorComponent,
     // NgcCookieConsentModule.forRoot(cookieConfig),
     NgxDaterangepickerMd,
     MatMenuBasicComponent,
@@ -724,7 +731,7 @@ import { TtsComponent } from './widgets/tts/tts.component';
     //*** */
     SiteFooterComponent,
     PartUsageGraphComponent,
-
+    PaymentTypesSelectionComponent,
     ProfileMedInfoComponent,
     PaymentReportComponent,
     PosOrderItemComponent,

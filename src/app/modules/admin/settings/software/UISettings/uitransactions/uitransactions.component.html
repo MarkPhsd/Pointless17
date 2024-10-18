@@ -1216,6 +1216,10 @@
               <mat-select
                         type              = "text"
                         formControlName   = "voiceServiceName" >
+
+                <mat-option [value]=""> 
+                  Clear
+                </mat-option>
                 <mat-option
                     *ngFor="let item of voices"
                     [value]="item?.name">
@@ -1227,7 +1231,7 @@
 
         <button mat-raised-button color="accent" (click)="speakSample()">Sample Message</button>
 
-        <button mat-raised-button color="accent" (click)="speak()">Default Voice</button>
+        <button mat-raised-button color="accent" (click)="speakFromSite()">Default Voice</button>
 
 
       </mat-card>

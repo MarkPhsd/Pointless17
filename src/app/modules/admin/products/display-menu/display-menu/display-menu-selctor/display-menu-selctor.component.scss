@@ -1,22 +1,21 @@
-// @import url('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
-
 .drag-drop-container {
   width: 90%;
   margin: auto;
   vertical-align: top;
   min-width: 200px;
-  width: 200px;
+  max-width: 300px;
 }
 
 .drag-drop-list {
-  border: solid 1px;
+  border: solid 1px #e0e0e0;
   min-height: 60px;
   overflow: hidden;
   display: block;
   margin-top: 10px;
-  background: rgba(0, 0, 0, 0.3);
-  color: #fff;
-  border-radius: 10px;
+  background-color: #fff;
+  color: #333;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .cdk-drag-preview {
@@ -24,7 +23,7 @@
   border-radius: 4px;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
               0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
 .cdk-drag-placeholder {
@@ -44,19 +43,35 @@
 }
 
 .drag-drop-box {
-  padding: 10px;
+  padding: 15px;
   margin: 10px;
-  font-size: 14px;
-  background: rgb(30, 81, 97);
-  border-radius: 10px;
-  color: #fff;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  color: #333;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
   cursor: move;
-  box-shadow: 0 8px 6px -6px #000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  
+  /* Add drag icon */
+  position: relative;
+}
+
+.drag-drop-box::before {
+  content: '⠿'; /* You can use an icon library if you prefer */
+  font-size: 18px;
+  margin-right: 10px;
+  color: #999;
+  display: inline-block;
+}
+
+.drag-drop-box:hover {
+  background-color: #f1f1f1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .mat-button {
@@ -67,13 +82,14 @@
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  flex-wrap:  wrap;
+  flex-wrap: wrap;
 }
 
 .type-list {
   height: 65vh;
   overflow-y: scroll;
 }
+
 .selection-list {
   height: 55vh;
   overflow-y: scroll;
@@ -92,7 +108,6 @@
 
   .dualListLeft, .dualListRight {
     display: flex;
-
   }
 
   .listboxform-wrap {
@@ -116,7 +131,6 @@
   .grid-container {
     display: grid;
     grid-template-columns: 250px 1fr;
-
   }
   .grid-dual-list {
     display: grid;
@@ -140,9 +154,7 @@
   }
 }
 
-
 .item {
-  margin-top:  5px;
+  margin-top: 5px;
   margin-bottom: 10px;
-
 }

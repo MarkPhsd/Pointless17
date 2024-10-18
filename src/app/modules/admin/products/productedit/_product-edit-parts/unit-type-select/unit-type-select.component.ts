@@ -73,7 +73,6 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
                 private siteService      : SitesService,
               ) {
 
-
   }
 
 
@@ -137,20 +136,14 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
   }
 
   onChange(selected: any) {
-
     const item = selected.option.value;
-
     if (item) {
 
       this.selectItem(item)
+   
+      return
       this.item = item
       return item?.name
-
-      if (!item || !item.name){
-        return ''
-      }  else {
-        return item.name
-      }
 
     }
   }
@@ -162,7 +155,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
 
     if (this.product) {
 
-      console.log('product')
+      // console.log('product')
       if (this.formControlName == 'reOrderUnitTypeID') {
         unit = { reOrderUnitTypeID : item.id }
       } else {
@@ -170,6 +163,8 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
       }
       this.inputForm.patchValue(  unit  )
       this.setValue(item);
+      this.getName(item.id)
+      // 
       return;
     }
 
@@ -198,7 +193,6 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
       if (this.outputType === 'priceLine') {
         const data = {unitTypeID: item.id, index: this.index, unitName: item.name, unitType: item }
         this.itemSelect.emit(data)
-
         const value =  { searchField: item.name  }
         this.searchForm.patchValue( value )
         return
@@ -212,6 +206,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
 
   setValue(item) {
     const value =  { searchField: item.name  }
+    this.searchForm.patchValue( item )
     this.itemSelect.emit(item)
   }
 
@@ -222,6 +217,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
     if(site) {
       this.unitTypesService.get(site, id).subscribe(data => {
         this.item = data;
+        console.log(data.name,data.id)
         const item =  { searchField: data.name  }
         this.searchForm.patchValue( item )
       })

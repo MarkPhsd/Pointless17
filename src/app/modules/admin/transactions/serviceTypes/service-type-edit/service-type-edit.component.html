@@ -6,7 +6,7 @@
     <mat-card-title>
       <div class="buttons">
         <div>
-          Type Edit: {{ serviceType.name }}
+          <mat-icon>edit</mat-icon> <mat-icon>{{serviceType?.icon}}</mat-icon> {{ serviceType.name }}
         </div>
         <div>
           <app-edit-buttons-standard
@@ -17,10 +17,7 @@
           (outputCopy)            ="copyItem($event)"
           ></app-edit-buttons-standard>
         </div>
-
       </div>
-
-
     </mat-card-title>
 
     <mat-card-subtitle>
@@ -247,7 +244,7 @@
 
             <div>
               <mat-label>Image</mat-label>
-              {{image}} | {{inputForm?.value?.image}}
+              <!-- {{image}} | {{inputForm?.value?.image}} -->
               <app-widget-uploader
                   [(fileNames)]    ="image"
                   [isThumbNail]    ="false"
@@ -255,18 +252,17 @@
               </app-widget-uploader>
             </div>
 
-
           </div>
 
           <div *ngIf='serviceTypeFeaturesForm' [formGroup]='serviceTypeFeaturesForm'>
             <div style="margin:1em">
               <mat-form-field appearance="outline">
-                <mat-label >Icon </mat-label>
+                <mat-label >Sort Value </mat-label>
                 <input matInput
                       type             ="number"
                       formControlName  ="sortOrder"
                       class="form-control" >
-                <mat-hint>Sort value for Items.</mat-hint>
+
               </mat-form-field>
             </div>
             <div style="margin:1em">
@@ -276,7 +272,7 @@
                       type             ="text"
                       formControlName  ="icon"
                       class="form-control" >
-                <mat-hint>Set zero for sales, 1 for Purchase Orders</mat-hint>
+            
               </mat-form-field>
             </div>
         </div>
@@ -382,7 +378,7 @@
           </div>
 
           <!-- Address Section for Multiple Addresses -->
-          <mat-card-subtitle>Optional Address Information</mat-card-subtitle>
+          <mat-card-subtitle style="margin-top:1em;margin-bottom:1em">Dop Off Address Information</mat-card-subtitle>
           <div formArrayName="addressList">
             <div *ngFor="let address of addressList.controls; let i = index" [formGroupName]="i">
               <mat-form-field appearance="outline">
@@ -427,14 +423,11 @@
         </form>
       </mat-card-content>
     </mat-card>
-
-
   </mat-card>
 
-  <!-- weekDays: any[];
-  hoursAndDayID: any[];
-  seatEnabled: boolean;
-  icon: string; -->
+  <ng-container [ngTemplateOutlet]="scheduleDateValidator"></ng-container>
+  <ng-container [ngTemplateOutlet]="excludedDateValidator"></ng-container>
+  <ng-container [ngTemplateOutlet]="scheduleValidator"></ng-container>
 
 </div>
 
@@ -446,4 +439,36 @@
       <input matInput [(ngModel)]="serviceColor">
     </mat-form-field>
   </div>
+</ng-template>
+
+<ng-template #scheduleValidator>
+  <app-schedule-selector
+    [initialSchedule]="itemFeatures?.weekDayTimeValidator"
+    (saveForm)="saveDateTimeValidator($event)"
+  ></app-schedule-selector>
+</ng-template>
+
+<ng-template #scheduleDateValidator>
+  <app-schedule-date-range-selector
+    [initialDateRanges]="itemFeatures?.dateRanges"
+    (saveForm)="saveDateRangeValidator($event)"
+  >
+    <div header>
+       Specfic Ranges Allowed
+    </div>
+   
+  </app-schedule-date-range-selector>
+</ng-template>
+
+
+<ng-template #excludedDateValidator>
+  <app-schedule-date-range-selector
+    [initialDateRanges]="itemFeatures?.excludedDates"
+    (saveForm)="saveExcludedDateRangeValidator($event)"
+  >
+    <div header>
+      Excluded Date Ranges
+    </div>
+     
+  </app-schedule-date-range-selector>
 </ng-template>

@@ -26,6 +26,7 @@ import { CoachMarksService,CoachMarksClass } from '../../widgets/coach-marks/coa
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { NavigationHistoryService } from 'src/app/_services/system/navigation-history.service';
+import { TtsService } from 'src/app/_services/system/tts-service.service';
 
 interface IIsOnline {
   result: string;
@@ -272,13 +273,20 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
               private clientService         : ClientTableService,
               private settingsService: SettingsService,
               private navHistoryService      : NavigationHistoryService,
+              private ttsService : TtsService,
               private fb                    : UntypedFormBuilder ) {
   }
 
   ngOnChanges() {
-
     this.userChecked = false;
     const user = this.getUserInfo();
+
+  }
+     // Use the selected voice for TTS
+  speak() {
+    if (this.posDevice?.voiceOnError) {
+      this.ttsService.addTextToQueue('Speach Enabled.');
+    }
   }
 
   ngAfterViewInit() {
@@ -287,14 +295,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   ngOnInit() {
 
     this.userChecked = false
-    // this.site =  this.siteService.getAssignedSite();
     this.site$ = this.siteService.getHeaderSite()
-
-    // .subscribe(data => {
-    //   console.log('site',data)
-    //    this.site = data
-    // })
-
     this.getDeviceInfo();
     this.getUITransactionsSettings();
     this.initUIService();
@@ -341,6 +342,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
             this.uiSettings.updatePOSDevice(posDevice)
             this.terminalSetting = data;
             this.posDevice = posDevice;
+            this.speak()
             this.zoom(posDevice)
             return of(posDevice)
           } catch (error) {

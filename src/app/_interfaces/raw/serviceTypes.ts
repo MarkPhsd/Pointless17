@@ -46,19 +46,21 @@ export interface IServiceType {
   resaleType  : boolean;
   headerOrder: boolean;
   json: string; //converts to serviceTypeFeatures
-  serviceTypeFeatues: ServiceTypeFeatues;
+  serviceTypeFeatues: ServiceTypeFeatures;
   allRequestPrep: number;
-
 }
 
-export interface ServiceTypeFeatues {
+export interface ServiceTypeFeatures {
   weekDays: any[];
   hoursAndDayID: any[];
   seatEnabled: boolean;
   icon: string;
   sortOrder: number;
   nameStringPairs: NameStringListPair[]; // New property
-  addressList: ServiceAddress[]
+  addressList: ServiceAddress[];
+  weekDayTimeValidator: ScheduleValidator;
+  dateRanges: ScheduleDateValidator;
+  excludedDates: ScheduleDateValidator;
 }
 
 export interface ServiceAddress {
@@ -117,4 +119,24 @@ export interface IServiceTypePOSPut {
   promptForOrderName  : number;
   filterType          : number;
   json                : string
+}
+
+export interface DayTimeRangeValidator {
+  day: string;            // e.g., 'Monday'
+  timeRanges: { startTime: string, endTime: string }[];  // Multiple ranges per day
+  disabled?: boolean;
+}
+
+export interface ScheduleValidator {
+  week: DayTimeRangeValidator[];    // Array to store schedules for each day
+}
+
+export interface DateRangeValidator {
+  startDate: string; // Start date of the range
+  endDate: string;   // End date of the range
+
+}
+
+export interface ScheduleDateValidator {
+  allowedDates: DateRangeValidator[];
 }

@@ -62,6 +62,7 @@
                 class      ="grid-container" >
               <div>
                 <metrc-inventory-properties
+                      [menuItem]      ="menuItem"
                       [inputForm]     ="packageForm"
                       [package]       ="package"
                       (outputMenuItem)="getCatalogItem($event)"

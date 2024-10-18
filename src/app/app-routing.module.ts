@@ -149,6 +149,8 @@ import { PosOrderItemsComponent } from './modules/posorders/pos-order/pos-order-
 import { QrPaymentComponent } from './modules/orders/qr-payment/qr-payment.component';
 import { OnlinePaymentCompletedComponent } from './modules/payment-processing/online-payment-completed/online-payment-completed.component';
 import { StoresManagerComponent } from './modules/admin/stores-manager/stores-manager.component';
+import { ScheduleSelectorComponent } from './shared/widgets/schedule-selector/schedule-selector.component';
+import { ScheduleDateRangeSelectorComponent } from './shared/widgets/schedule-date-range-selector/schedule-date-range-selector.component';
 
 const routes: Routes = [
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
@@ -156,6 +158,12 @@ const routes: Routes = [
       
     {path: '', component: DefaultComponent,
       children: [
+
+
+        //
+        { path: 'schedule-validator',  component: ScheduleSelectorComponent, data: { title: 'validator', animation: 'isLeft'} },
+        { path: 'date-validator',  component: ScheduleDateRangeSelectorComponent, data: { title: 'validator', animation: 'isLeft'} },
+        
         { path: 'qr-payment',  component: QrPaymentComponent, data: { title: 'Order', animation: 'isLeft'} },
         { path: 'payment-completed',  component: OnlinePaymentCompletedComponent, data: { title: 'Success', animation: 'isLeft'} },
         

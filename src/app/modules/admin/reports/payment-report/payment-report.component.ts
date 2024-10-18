@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { Observable, Subject, of, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { IPaymentSalesSearchModel, IPaymentSalesSummary, PaymentSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
-
+import { IReportingSearchModel,  ITaxReport, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 @Component({
   selector: 'payment-report',
   templateUrl: './payment-report.component.html',
@@ -23,6 +23,9 @@ export class PaymentReportComponent implements OnInit, OnChanges {
   @Output() renderComplete = new EventEmitter<any>()
   @Input()  surCharge: boolean;
   refreshList = []
+
+  salesReport: any;
+
   @Input() autoPrint: boolean;
   refunds$           : Observable<IPaymentSalesSummary>;
   sales$             : Observable<IPaymentSalesSummary>;
@@ -35,6 +38,7 @@ export class PaymentReportComponent implements OnInit, OnChanges {
 
   constructor(
     private httpClient: HttpClient,
+    private reportingItemsSalesService: ReportingItemsSalesService,
     private salesPaymentService: SalesPaymentsService) { }
 
   ngOnInit() {
@@ -68,6 +72,9 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     this.voids$ = null;
     this.refunds$ = null;
     this.sales$ = null;
+
+    console.log(this.type,  'refreshReports')
+
     // console.log('refresh type', this.type)
     // console.log('sales')
     if (this.type === 'service') {
@@ -75,12 +82,13 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     }
 
     if (this.type == 'buysell') {
-
       this.refreshSales();
       return;
     }
 
     if (this.type == 'sales') {
+      console.log(this.type,  'model')
+      this.getSalesReport(0)
       this.refreshSales();
       this.refreshRefunds();
       this.refreshVoids();
@@ -119,9 +127,6 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.zrunID    = this.zrunID;
     searchModel.reportRunID = this.reportRunID;
 
-
-      // console.log(this.type, searchModel, 'model')
-
     this.sales$  = this.salesPaymentService.getPaymentSales(this.site, searchModel).pipe(switchMap(data => {
       this.checkList(1)
       // console.log('type', this.type)
@@ -137,6 +142,17 @@ export class PaymentReportComponent implements OnInit, OnChanges {
       }
       return of(data)
     }))
+  }
+
+  getSalesReport(employeeID: number) {
+        
+    let item = {startDate: this.dateFrom, endDate: this.dateTo, zrunID: this.zrunID,
+          } as IReportingSearchModel;
+
+    if (employeeID != 0) {   item.employeeID = employeeID   }
+
+    this.salesReport = item      
+
   }
 
   refreshRefunds() {

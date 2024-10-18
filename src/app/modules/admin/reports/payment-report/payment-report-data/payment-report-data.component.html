@@ -162,6 +162,7 @@
             {{sales?.total ?? 0 | currency }}
           </div>
 
+
           <div *ngIf="surCharge">Avg</div>
           <div *ngIf="surCharge && sales.count != 0">
             {{sales?.surChargeAmount | currency }}

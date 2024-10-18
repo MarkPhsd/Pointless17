@@ -1,24 +1,33 @@
 
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(order$ | async) as order"></div>
+<div *ngIf="(submitMetrcOrder$ | async) as order"></div>
 <div class="header-row">
   <div>
-    <button class="button" mat-raised-button (click)="onExportToCsv()">
-      CSV Export
-      <mat-icon>download</mat-icon>
-    </button>
-
-  
-    <span class="margin5">
-      <ng-container [ngTemplateOutlet]="menuButtonContainer"></ng-container>
-    </span>
+    <div class="header-row">
+      <div>
+        <button class="button" mat-raised-button (click)="onExportToCsv()">
+          METRC Upload
+          <mat-icon>upload</mat-icon>
+        </button>
+      </div>
+      <div>
+        <button class="button" mat-raised-button (click)="onExportToCsv()">
+          CSV Download
+          <mat-icon>download</mat-icon>
+        </button>
+      </div>
+      <span class="margin5">
+        <ng-container [ngTemplateOutlet]="menuButtonContainer"></ng-container>
+      </span>
+    </div>
   </div>
 
  <div *ngIf="processing">
     <mat-spinner [diameter]="50"></mat-spinner>
  </div>
 
- <div>
+ <div style="max-width:750px">
    <div class="text-row header-row">
      <div>Current Page: {{currentPage}}</div>
      <div>Records: {{totalRecordCount}} (Max 10000)</div>
@@ -42,13 +51,14 @@
      <div *ngIf="searchModel.currentPage">
         Current: {{searchModel.currentPage}}
      </div>
- 
-     <div *ngIf="exceptionMessage"><mat-icon>warning</mat-icon>{{exceptionMessage}}</div>
-  </div>
 
-  <div *ngIf="selectedResponse">
-    <button mat-button (click)="clearSelectedData()"><mat-icon>delete</mat-icon></button>
-    <mat-icon>info</mat-icon> {{ selectedResponse | json}}
+     <div *ngIf="exceptionMessage"><mat-icon>warning</mat-icon>{{exceptionMessage}}</div>
+
+     <div *ngIf="selectedResponse">
+      <button mat-button (click)="clearSelectedData()"><mat-icon color="warn">close</mat-icon></button>
+      <mat-icon>info</mat-icon> {{ selectedResponse | json}}
+    </div>
+  
   </div>
  </div>
 
@@ -87,21 +97,23 @@
         <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
       </div>
 
-      <ag-grid-angular  *ngIf="!searchModel.currentDay"
+      <!-- searchModel.currentDay {{searchModel.currentDay}} <br> -->
+       <ag-grid-angular  *ngIf="!searchModel.currentDay"
             #agGrid
             [style]              ="gridDimensions"
             id                   ="myGrid"
             [class]              ="agtheme"
             [columnDefs]         ="columnDefs"
             [defaultColDef]      ="defaultColDef"
+            [rowData]            ="rowData"
             [gridOptions]        ="gridOptionsInfinite"
             [rowSelection]       ="rowSelection"
             [frameworkComponents]="frameworkComponents"
             (selectionChanged)   ="onSelectionChanged($event)"
-            (gridReady)          ="onGridReady($event)">
+            (gridReady)          ="onGridReady($event)"> 
       </ag-grid-angular>
-
-      <ag-grid-angular *ngIf="searchModel.currentDay"
+       <ag-grid-angular 
+            *ngIf="searchModel.currentDay"
             #agGrid2
             [style]              ="gridDimensions"
             id                   ="myGrid"

@@ -30,8 +30,8 @@ import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 @Component({
   selector: 'app-pos-payment',

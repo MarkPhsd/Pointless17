@@ -175,9 +175,15 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
 
   setFormInventoryData(data) {
     this.item      = data
-    this.images    = data?.images;
-    this.itemTags  = data.metaTags;
-    this.color     = data?.color;
+    try {
+      if (data) { 
+        this.images    = data?.images;
+        this.itemTags  = data.metaTags;
+        this.color     = data?.color;
+      }
+    } catch (error) {
+      
+    }
     this.inputForm = this.fbInventory.initForm(this.inputForm)
     this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
     this.subscribeToFormChanges()
@@ -290,10 +296,14 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
         this.item = data;
         let posItem = {} as PosOrderItem;
         if (!this.item?.cost) {   this.item.cost = 0  }
-        posItem.inventoryAssignmentID = data.id;
-        posItem.wholeSale = this.item?.cost;
-        posItem.wholeSaleCost = this.item?.cost;
-        return this.posOrderItemService.changeItemCost(site, posItem )
+
+        if (+item.poDetailID != 0) {
+          posItem.id = item.poDetailID
+          posItem.inventoryAssignmentID = data.id;
+          posItem.wholeSale = this.item?.cost;
+          posItem.wholeSaleCost = this.item?.cost;
+          return this.posOrderItemService.changeItemCost(site, posItem )
+        }
       }
       return of(data)
     })).pipe(switchMap(data => {
@@ -306,7 +316,9 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     const item$ = this.updateWithoutNotification()
     item$.subscribe(data => {
       if (data) {
-        this.onCancel('true')
+        setTimeout(() => {
+          this.onCancel('true')
+        }, 200);
       }
     })
   }
@@ -343,6 +355,7 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   }
 
   onCancel(event) {
+    
     this.dialogRef.close(event);
   }
 

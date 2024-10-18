@@ -63,6 +63,9 @@ export class AddItemByTypeComponent implements OnInit {
   }
 
   sortByName(list) {
+    if (!list) { return }
+    if (list.length == 0 ) { return }
+
     list.sort((a, b) => {
       if (a.name < b.name) {
         return -1;

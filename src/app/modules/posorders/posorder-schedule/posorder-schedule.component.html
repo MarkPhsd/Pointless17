@@ -1,3 +1,4 @@
+<div *ngIf="(action$ |async) as item"></div>
 <mat-card class="plan-order mat-card-class" *ngIf="order">
   <mat-card-title>
       Plan Order
@@ -65,6 +66,26 @@
                 [order]="order"
                 (OutPutSaveShippingTime)="saveShippingTime($event)">
             </app-posorder-schedule-form>
+          
+            <ng-container [ngTemplateOutlet]="scheduleDateValidator"></ng-container>
+
+            <ng-container [ngTemplateOutlet]="scheduleValidator"></ng-container>
+
+            
+            <ng-template #scheduleValidator>
+              <app-schedule-selector
+                [presenationMode]="true"
+                [initialSchedule]="itemTypeFeatures?.weekDayTimeValidator"
+              ></app-schedule-selector>
+            </ng-template>
+            
+            <ng-template #scheduleDateValidator>
+              <app-schedule-date-range-selector
+                [presenationMode]="true"
+                [initialDateRanges]="itemTypeFeatures?.dateRanges"
+              ></app-schedule-date-range-selector>
+            </ng-template>
+          
           </div>
         </mat-tab>
 
@@ -77,7 +98,7 @@
               [order]="order"
               [inputForm]="inputFormNotes">
             </pos-order-notes>
-            <!-- {{inputFormNotes.value | json}} -->
+
             <ng-container [ngTemplateOutlet]="packageInfo"></ng-container>
           </div>
 
@@ -170,7 +191,10 @@
         <mat-card-title>{{ pair?.name }}</mat-card-title>
         <mat-card-content>
           <div *ngFor="let value of pair?.values; let valueIndex = index">
-            <button class="button-name-pair" color ="accent" mat-flat-button (click)="selectValue(nameIndex, valueIndex)">
+            <button class="button-name-pair" 
+            color ="accent" 
+                    mat-flat-button 
+                    (click)="selectValue(nameIndex, valueIndex)">
               {{ value }}
             </button>
           </div>
