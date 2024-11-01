@@ -3,7 +3,7 @@
   </div>
     <mat-card>
 
-      <mat-card-actions *ngIf="isFormValid">
+      <mat-card-actions *ngIf="inputForm &&  isFormValid">
         <button mat-raised-button
                 style="height:75px;width:125px"
                 color='primary'
@@ -19,8 +19,7 @@
       </mat-card-actions>
 
       <mat-card-subtitle>
-        Delivery Address
-
+      Delivery Address
       <div *ngIf="inputForm">
         <div *ngIf="inputForm.controls?.address.errors?.required && inputForm.controls?.address.touched" class="error">
           <mat-icon color="warn">warning</mat-icon> Address required.
@@ -72,8 +71,10 @@
               [fieldName]="'zip'">
               Zip
             </app-value-fields>
-
+            <button mat-raised-button color="accent" (click)="resetForm()">Clear</button>
           </div>
+
+    
 
           <div *ngIf="!platFormService.isApp()">
             <div >
@@ -112,5 +113,5 @@
             </mat-card>
           </button>
           </div>
-      </div>
+        </div>
     </ng-template>

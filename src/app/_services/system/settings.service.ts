@@ -20,6 +20,7 @@ interface IIsOnline {
 }
 export interface ITerminalSettings {
   id: number;
+  condensedMenuButtons: boolean;
   prepCheckDevice : boolean;
   medicalRecSales : number;
   receiptPrinter  : string;

@@ -27,7 +27,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   scheduleForm              : FormGroup;
   order                     : IPOSOrder;
   itemTypeFeatures : ServiceTypeFeatures;
-
+  saveTime$: Observable<any>;
   _order                    : Subscription;
   errorMessage    : string;
   SWIPE_ACTION    = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
@@ -74,10 +74,10 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
         this.instructions         = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.instructions);
         this.shippingInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.shippingInstructions);
         this.scheduleInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.scheduleInstructions);
-      
+
         this.itemTypeFeatures = features;
       }
-      
+
     })
   }
   constructor(
@@ -117,41 +117,6 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     }
   }
 
-  // selectValue(nameIndex: number, valueIndex: number): void {
-  //   this.selectedNamePairValueIndex = valueIndex; // Track selected value index
-  //   const selectedPair = this.nameStringPairs[nameIndex];
-  //   const selectedValue = selectedPair.values[valueIndex];
-
-  //   // You can patch this value in form or use it for other logic
-  //   console.log(`Selected ${selectedValue} from ${selectedPair.name}`);
-
-  //   this.inputFormNotes =  this.fb.group({
-  //     productOrderMemo  :[addTextToCurrentValue, Validators.maxLength(500)],
-  //   })
-
-  // }
-
-    // Method to select and patch productOrderMemo
-    // selectValue(nameIndex: number, valueIndex: number): void {
-    //   const selectedPair = this.nameStringPairs[nameIndex];
-    //   const selectedValue = selectedPair.values[valueIndex];
-
-    //   const newInfo = `${selectedPair.name} ${selectedValue}  `
-    //   // Get the current memo value from the form
-    //   let currentMemo = this.inputForm.get('productOrderMemo')?.value || '';
-
-    //   if (!currentMemo.includes(newInfo)) {
-    //     // Append the value if it's not already there
-    //     currentMemo = currentMemo ? `${currentMemo}, ${newInfo}` : newInfo;
-
-    //     // Patch the form with the updated memo
-    //     this.inputFormNotes.patchValue({
-    //       productOrderMemo: currentMemo
-    //     });
-    //     console.log(currentMemo, newInfo, this.inputFormNotes.value )
-    //     return;
-    //   }
-    // }
 
     // Method to select and patch productOrderMemo
     selectValue(nameIndex: number, valueIndex: number): void {
@@ -210,7 +175,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
       this.inputForm = this.fb.group({
         address  :[client?.address, Validators.required],
         city     :[client?.city, Validators.required],
-        address2 :[, Validators.required],
+        address2 :[],
         state    :[client?.state, Validators.required],
         zip      :[client?.zip, Validators.required],
       })
@@ -219,7 +184,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
 
     this.inputForm = this.fb.group({
       address  :[this.order?.shipAddress, Validators.required],
-      address2 :[this.order?.shipAddress2],
+      address2 :[this.order?.shipSuite],
       city     :[this.order?.shipCity, Validators.required],
       state    :[this.order?.shipState, Validators.required],
       zip      :[this.order?.shipPostal, Validators.required],
@@ -356,7 +321,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     if (!serviceType) { return }
     this.serviceType = serviceType;
     if (serviceType) {
-      
+
       if (serviceType.deliveryService) {
         this.updateSelectedIndex(1)
         return // of(data)
@@ -397,6 +362,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     const site = this.siteService.getAssignedSite();
     this.action$ = this.orderService.putOrder(site, order).pipe(
       switchMap (data => {
+        // console.log('data.', data?.preferredScheduleDate)
           this.orderMethodsService.updateOrderSubscription(data)
           this.processingUpdate = false;
           this.updateSelectedIndex(2)
@@ -405,38 +371,45 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
   }
 
   saveShippingTime(event) {
+
+    console.log('event', this.order?.preferredScheduleDate)
+
+    if (!this.order?.preferredScheduleDate) { return }
     const site = this.siteService.getAssignedSite();
     this.processingUpdate = true;
-    const shipDate = new Date(event) // this.dateHelperService.format(event, this.dateTimeFormat);
+    const shipDate = new Date(this.order?.preferredScheduleDate) // this.dateHelperService.format(event, this.dateTimeFormat);
 
     const itemFeatures = JSON.parse(this.order?.service?.json) as ServiceTypeFeatures;
-    let isValid: boolean 
+    let isValid: boolean
     isValid = false
 
-    if (!itemFeatures) { 
-      isValid = true 
-    } else { 
+    if (!itemFeatures) {
+      isValid = true
+    } else {
       isValid = this.dateHelper.validateDateTime( shipDate,
-                          itemFeatures?.dateRanges.allowedDates, 
-                          itemFeatures?.weekDayTimeValidator.week, 
+                          itemFeatures?.dateRanges.allowedDates,
+                          itemFeatures?.weekDayTimeValidator.week,
                           itemFeatures?.excludedDates.allowedDates )
-    } 
+    }
 
-    if (isValid == false) { 
+    if (isValid == false) {
       this.siteService.notify('This date selection falls outside of any valid time frame. ', 'Close', 1000, 'red')
       return;
     }
 
-
-    this.action$ = this.orderService.putOrder(site, this.order).pipe(
+    this.orderService.putOrder(site, this.order).pipe(
         switchMap(data => {
+          // console.log('data.', data?.preferredScheduleDate)
           this.processingUpdate = false;
           this.orderMethodsService.updateOrderSubscription(data)
           this.updateSelectedIndex(3)
           return of(data)
       })
-    )    
-  
+    ).subscribe(data => {
+
+      console.log('saved')
+    })
+
   }
 
   // Action triggered when user swipes
@@ -465,7 +438,9 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     }
 
     if (this.serviceType && this.serviceType?.promptScheduleTime && !this.order.preferredScheduleDate) {
-      this.messages.push('Schedule Date Required');
+      if (!this.scheduleForm.controls['preferredScheduleDate'].value) {
+        this.messages.push('Schedule Date Required');
+      }
     }
 
     if (this.serviceType && this.serviceType?.deliveryService) {
@@ -484,7 +459,9 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     let finalIndex  = 1;
 
     if (this.serviceType?.deliveryService && !this.order.preferredScheduleDate) {
-       finalIndex = 2
+       if (!this.scheduleForm.controls['preferredScheduleDate'].value) {
+        finalIndex = 2
+      }
     }
 
     if (this.serviceType?.deliveryService && this.order.preferredScheduleDate) {

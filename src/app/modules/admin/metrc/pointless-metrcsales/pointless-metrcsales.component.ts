@@ -1,10 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-
 import {  IPOSOrder, ISite } from 'src/app/_interfaces';
 import { OrdersService, ReportingService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-
 import { Capacitor, Plugins } from '@capacitor/core';
 import { METRCSalesReportPaged, PointlessMetrcSales, PointlessMETRCSalesService, PointlessMetrcSearchModel } from 'src/app/_services/metrc/pointless-metrcsales.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
@@ -12,13 +10,9 @@ import { IItemBasic } from 'src/app/_services/menu/menu.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
-
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-
-import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { UnparseConfig } from 'ngx-papaparse';
@@ -153,10 +147,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
             this.searchModel        = searchModel;
             return;
           }
-          
-         
           this.refreshSearch_sub()
-
        }
       )
     } catch (error) {
@@ -188,7 +179,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     this.site = this.siteService.getAssignedSite()
     this.initClasses();
     this.gridOptionsInfinite = this.agGridFormatingService.initGridOptions(1000000, this.columnDefs, false);
-
+    this.gridOptions = this.agGridFormatingService.initGridOptionsClientSide(1000000, this.columnDefs, true);
     this.updateResize()
   }
 
@@ -264,7 +255,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
           const button = document.createElement('button');
           button.innerHTML = 'Submit';
           button.className = 'mat-raised-button btn btn-primary btn-sm';
-      
+
           // Check if metrcResponse exists and disable the button if true
           if (params?.data?.metrcResponse) {
             button.disabled = true;
@@ -273,7 +264,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
             // Add event listener only if the button is enabled
             button.addEventListener('click', () => this.submitTransaction(params));
           }
-      
+
           return button;
         },
         minWidth: 125,
@@ -491,7 +482,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
   getRowData(params, startRow: number, endRow: number):  Observable<METRCSalesReportPaged>  {
     const site                = this.siteService.getAssignedSite()
-
     console.log('getRowData')
     if (this.searchModel && this.searchModel.currentDay) {
       if (this.currentDayRan) {
@@ -507,12 +497,10 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     if (!this.searchModel) { this.searchModel = {}  as PointlessMetrcSearchModel};
     this.searchModel.pageSize   = 100000
     this.searchModel.pageNumber = 1;
-
-    this.searchModel.refunds = false
+    this.searchModel.refunds = false;
     if (this.refunds) {
       this.searchModel.refunds = true
     }
-
     return this.pointlessMetrcSalesReport.getSalesReport(site, this.searchModel)
   }
 
@@ -537,10 +525,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     }
 
     this.onFirstDataRendered(this.params)
-
-    // if (params == undefined) {
-    //   console.log('params undefined')
-    //   return }
 
     if (!params?.startRow ||  !params?.endRow) {
       params = {}
@@ -567,7 +551,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       })
       return;
     }
-  
+
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
       const items$    = this.getRowData(params, params.startRow, params.endRow)
@@ -609,7 +593,7 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
     if (!datasource)   { return }
     if (!this.gridApi) { return }
- 
+
     this.gridApi.setDatasource(datasource);
 
     this.autoSizeAll(true);
@@ -651,13 +635,12 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
 
     try {
       this.selectedResponse=null;
-      console.log('event', event)
+      // console.log('event', event)
       const item = selectedRows[0]
       this.selected = item
       if (item && item.metrcResponse) {
         this.selectedResponse = JSON.parse(item?.metrcResponse)
       }
-
     } catch (error) {
       console.log(error)
     }
@@ -687,11 +670,11 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
   submitTransaction(params?) {
 
     let e
-    if (params) { 
+    if (params) {
       e = params
     }
 
-    if (!e) { 
+    if (!e) {
       this.siteService.notify("Nothing Selected", 'close', 2000)
       return
     }
@@ -709,20 +692,17 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
       this.siteService.notify("This sale has appeared to already have been submitted", 'close', 2000)
       return;
     }
-    
-    console.log(e.data)
 
+    // console.log(e.data)
     const orderID =  e.data.orderID;
     this.submitMetrcOrder$ = this.metrcService.submitTransaction( {id: orderID} ).pipe(switchMap(data => {
       this.selectedResponse = JSON.stringify(data)
-
       // this.refreshSearch()
-
       return of(data)
     }))
   }
 
-  uploadTransactions(params?) {
+  uploadTransactions() {
     const site = this.siteService.getAssignedSite()
     this.submitMetrcOrder$ = this.metrcService.uploadTransactions().pipe(switchMap(data => {
       if (data) {
@@ -798,35 +778,35 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
     }
   }
 
-    autoSizeAll(skipHeader) {
-      if (! this.gridOptions ) { return }
-      if (!this.gridOptions || !this.gridOptions.columnApi) {return}
-      try {
-        var allColumnIds = [];
-        this.gridOptions.columnApi.getAllColumns().forEach(function (column) {
-          allColumnIds.push(column.colId);
-        });
-        this.gridOptions.columnApi.autoSizeColumns(allColumnIds, skipHeader);
-      } catch (error) {
-        console.log(error)
-      }
+  autoSizeAll(skipHeader) {
+    if (! this.gridOptions ) { return }
+    if (!this.gridOptions || !this.gridOptions.columnApi) {return}
+    try {
+      var allColumnIds = [];
+      this.gridOptions.columnApi.getAllColumns().forEach(function (column) {
+        allColumnIds.push(column.colId);
+      });
+      this.gridOptions.columnApi.autoSizeColumns(allColumnIds, skipHeader);
+    } catch (error) {
+      console.log(error)
     }
+  }
 
-    getLabel(rowData)
-    {
+  getLabel(rowData)
+  {
 
-      console.log('get label rowData', rowData)
+    console.log('get label rowData', rowData)
+    return rowData
+
+    if(rowData) {
       return rowData
-
-      if(rowData) {
-        return rowData
-        if (!rowData.orderID) {return 'Unknown'}
-        const value = rowData.orderID.toString().substr(-5);
-        return value
-      } else {
-          return 'Unknown'
-      }
+      if (!rowData.orderID) {return 'Unknown'}
+      const value = rowData.orderID.toString().substr(-5);
+      return value
+    } else {
+        return 'Unknown'
     }
+  }
 
     onExportToCsv() {
       if (this.searchModel.currentDay) {
@@ -845,7 +825,6 @@ export class PointlessMETRCSalesComponent implements OnInit , OnDestroy{
         options.quotes = false;
         options.header = false;
         options.skipEmptyLines = true;
-
 
         this.gridApi.exportDataAsCsv({ columnKeys: fields, allColumns: false,
                                         fileName: 'metrc' + this.dateFrom, skipColumnHeaders: true, suppressQuotes: true});

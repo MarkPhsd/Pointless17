@@ -5,7 +5,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
-import { UntypedFormGroup,UntypedFormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'posorder-shipping-address',
@@ -30,7 +30,6 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
-      // if (!this.serviceInit && !this.serviceType) {
         this.initServiceTypeInfo();
         this.serviceInit = true
       // }
@@ -79,9 +78,7 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
       return
     }
     this.serviceType$ = this.serviceTypeService.getTypeCached(site, this.order?.serviceTypeID).pipe(switchMap(data => {
-      console.log('initServiceTypeInfo', data)
       const features = JSON.parse(data?.json) as ServiceTypeFeatures;
-      console.log('features', features)
       if (features?.addressList) { 
         this.addressList = features.addressList
       }

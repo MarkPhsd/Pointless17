@@ -8,6 +8,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { FbServiceTypeService } from 'src/app/_form-builder/fb-service-type.service';
 import { catchError, of, switchMap, Observable } from 'rxjs';
+// import { ItemBasic } from '../../../report-designer/interfaces/reports';
 
 @Component({
   selector: 'app-service-type-edit',
@@ -27,6 +28,7 @@ export class ServiceTypeEditComponent implements OnInit {
   serviceTypeFeaturesForm : FormGroup;
   itemFeatures: ServiceTypeFeatures;
   image: string;
+  groupList             : string[];
 
   constructor(
     private serviceTypeService      : ServiceTypeService,
@@ -82,20 +84,20 @@ export class ServiceTypeEditComponent implements OnInit {
 
             this.itemFeatures = JSON.parse(this.serviceType?.json) as ServiceTypeFeatures;
 
-            if (!this.itemFeatures) { 
+            if (!this.itemFeatures) {
               this.itemFeatures = {}  as ServiceTypeFeatures;
             }
             if (!this.itemFeatures.weekDayTimeValidator) { this.itemFeatures.weekDayTimeValidator = {} as ScheduleValidator}
-            if (!this.itemFeatures.dateRanges) { 
+            if (!this.itemFeatures.dateRanges) {
               this.itemFeatures.dateRanges = {} as ScheduleDateValidator
               this.itemFeatures.dateRanges = { allowedDates: [] };
             }
             //excludedDates
-            if (!this.itemFeatures.excludedDates) { 
+            if (!this.itemFeatures.excludedDates) {
               this.itemFeatures.excludedDates = {} as ScheduleDateValidator
               this.itemFeatures.excludedDates = { allowedDates: [] };
             }
-            
+
             this.inputForm.patchValue(this.serviceType)
             this.patchFormValues()
             return of(data)
@@ -126,8 +128,11 @@ export class ServiceTypeEditComponent implements OnInit {
         weekDays: itemFeatures.weekDays,
         hoursAndDayID: itemFeatures.hoursAndDayID,
         seatEnabled: itemFeatures.seatEnabled,
-        icon: itemFeatures.icon
+        icon: itemFeatures.icon,
+        metaTags: itemFeatures?.metaTags
       });
+
+      this.groupList = itemFeatures?.metaTags;
 
       // Patch nameStringPairs
       const nameStringPairsArray = this.serviceTypeFeaturesForm.get('nameStringPairs') as FormArray;
@@ -160,6 +165,13 @@ export class ServiceTypeEditComponent implements OnInit {
       this.inputForm  = this.fbServiceTypeService.initForm(this.inputForm)
     }
 
+    setGroupingList(event) {
+      if (event) {
+        console.log('event', event, event.value)
+        this.groupList = event //.value;
+      }
+    }
+
     updateItem(event: any)  {
 
       if (!this.inputForm.valid) { return }
@@ -173,6 +185,12 @@ export class ServiceTypeEditComponent implements OnInit {
       featuresValue.weekDayTimeValidator = this.itemFeatures?.weekDayTimeValidator;
       featuresValue.dateRanges = this.itemFeatures?.dateRanges;
       featuresValue.excludedDates =this.itemFeatures.excludedDates;
+
+      if (this.groupList) {
+        featuresValue.metaTags = this.groupList
+      }
+
+      console.log('featuresvalue', featuresValue)
       const json = JSON.stringify(featuresValue);
       serviceType.json = json;
 
@@ -242,33 +260,33 @@ export class ServiceTypeEditComponent implements OnInit {
       })
     }
 
-    saveDateTimeValidator(event) { 
-      if (event) { 
+    saveDateTimeValidator(event) {
+      if (event) {
         console.log('event', event, event?.value)
         if (!this.itemFeatures) { this.itemFeatures = {} as ServiceTypeFeatures}
-        if (this.itemFeatures) { 
+        if (this.itemFeatures) {
           this.itemFeatures.weekDayTimeValidator = event;
           this.updateItem(null)
         }
       }
     }
 
-    saveDateRangeValidator(event) { 
-      if (event) { 
+    saveDateRangeValidator(event) {
+      if (event) {
         console.log('event', event, event?.value)
         if (!this.itemFeatures) { this.itemFeatures = {} as ServiceTypeFeatures}
-        if (this.itemFeatures) { 
+        if (this.itemFeatures) {
           this.itemFeatures.dateRanges = event;
           this.updateItem(null)
         }
       }
     }
 
-    saveExcludedDateRangeValidator(event) { 
-      if (event) { 
+    saveExcludedDateRangeValidator(event) {
+      if (event) {
         console.log('event', event, event?.value)
         if (!this.itemFeatures) { this.itemFeatures = {} as ServiceTypeFeatures}
-        if (this.itemFeatures) { 
+        if (this.itemFeatures) {
           this.itemFeatures.excludedDates = event;
           this.updateItem(null)
         }
@@ -287,7 +305,8 @@ export class ServiceTypeEditComponent implements OnInit {
         seatEnabled: [false],
         icon: [''],
         nameStringPairs: this.fb.array([]),
-        addressList: this.fb.array([])  // Treat addressList as FormArray for multiple addresses
+        addressList: this.fb.array([]),  // Treat addressList as FormArray for multiple addresses
+        metaTags: [],
       });
     }
     initAddress(): FormGroup {

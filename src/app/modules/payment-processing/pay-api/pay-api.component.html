@@ -6,11 +6,12 @@
   <div *ngIf="payApiEnabled && order?.balanceRemaining !=0">
 
 
-    <div *ngIf="isAdmin">
+    <div *ngIf="isAdmin && debugMode">
       MID {{publicKey}} <br>
       URL {{scriptUrl}} <br>
       Mode: {{certMode}}
     </div>
+
     <div *ngIf="(payMID$ | async) as key">
       <div *ngIf="!key"> No MID Present  </div>
     </div>
@@ -54,7 +55,7 @@
               <!-- {{publicKey}} -->
             </div>
           </div>
-      
+
           <div class="grid">
             <!-- style="font-size:large;margin-left:20px" -->
               <div class="grid-item" >
@@ -63,7 +64,7 @@
               <div class="grid-item-right">
                 {{order?.total | currency}}
               </div>
-  
+
               <div class="grid-item" >
                 Gratuity
               </div>
@@ -80,7 +81,7 @@
                 {{ surchargeValue | currency}}
               </div>
             </div>
-            
+
             <div>
               <mat-divider></mat-divider>
             </div>
@@ -90,11 +91,11 @@
                 Total
               </div>
 
-              <div class="grid-item-right" > 
+              <div class="grid-item-right" >
                 {{ totalValue | currency}}
               </div>
             </div>
-         
+
           <div *ngIf="expInvalid">
             <mat-icon color="warm">alert</mat-icon>Invalid EXP
           </div>

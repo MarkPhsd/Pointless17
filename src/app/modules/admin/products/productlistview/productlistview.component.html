@@ -149,6 +149,13 @@
       </button>
     </div>
 
+    <div *ngIf="storeSelectorEnabled" class="margin-left-5 ">
+      <button mat-button
+              (click)="editSelectedItemsStoreValues()">
+        <mat-icon>store</mat-icon>Edit Stores
+      </button>
+    </div>
+
     <div  class="margin-5 ">
       <button mat-button (click)="advanced = !advanced">
         <mat-icon>settings</mat-icon>

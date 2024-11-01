@@ -1,6 +1,6 @@
  <div *ngIf="(order$ | async) as order"></div>
 
- <mat-card>
+ <mat-card style="width:65vw;min-width:400px">
    <mat-card-title>
       <button class="payment-buttons" mat-button (click)="newOrder()">
         <mat-icon>receipt</mat-icon><span>New Default Order</span>
@@ -47,7 +47,7 @@
             (outPutID)="orderByType($event)">
 
             <div *ngIf="orderMethodsService.toggleChangeOrderType">
-              Change Order Type
+               Select Type
             </div>
             <div *ngIf="!orderMethodsService.toggleChangeOrderType">
                Start new Order
@@ -60,7 +60,9 @@
         <div *ngIf="items.length>0">
           <h4>Selected Items</h4>
           <div *ngFor="let item of items; let i = index">
-            <button  style="margin-left: 5px"  mat-icon-button (click)="removeSelectedItem(i)">
+            <button  style="margin-left: 5px;max-width:200px"  
+                     mat-icon-button 
+                     (click)="removeSelectedItem(i)">
               {{item?.productName}} <mat-icon color="warn">delete</mat-icon>
             </button>
           </div>

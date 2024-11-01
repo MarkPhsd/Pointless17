@@ -6,12 +6,15 @@ ion-item-sliding {
 }
 
 
-ion-item {
+.ion-slide {
   width: 110%;
   left: -15px;
-  // height: 125px;
 }
 
+.item-reorder { 
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
 .nopadd  {
   padding: 0;
   margin: -3px;
@@ -22,7 +25,6 @@ ion-item {
   padding: 0;
   margin: -3px;
   width: 99%;
-  // overflow: auto;
 }
 
 

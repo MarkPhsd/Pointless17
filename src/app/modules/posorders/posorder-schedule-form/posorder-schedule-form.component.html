@@ -1,28 +1,29 @@
 <div class="grid-container">
-  <div *ngIf="inputForm" [formGroup]="inputForm">
+ <div *ngIf="appointmentForm" [formGroup]="appointmentForm">
+  <mat-form-field appearance="outline">
+    <input
+      matInput
+      [matDatepickerFilter]="dateFilter"
+      required
+      [matDatepicker]="picker"
+      placeholder="Schedule Date"
+      formControlName="preferredDate" />  <!-- Fixed the whitespace issue -->
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
 
-    <mat-form-field class="form-field"   appearance ='outline'>
-      <input matInput
-             class="form-field"
-             [ngxMatDatetimePicker]="picker"
-             placeholder="Choose a date"
-             formControlName="preferredScheduleDate"   >
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #picker
-         [showSpinners]="true"
-         [showSeconds]="false"
-         [stepHour]="true"
-         [stepMinute]="true"
-         [stepSecond]="false"
-         [touchUi]="true"
-         [color]="'primary'"
-         [enableMeridian]="true"
-         [disableMinute]="true"
-         [hideTime]="false">
-      </ngx-mat-datetime-picker>
-   </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-select placeholder="Select a time" formControlName="preferredTime">
+      <mat-option *ngFor="let time of timeSlots" [value]="time">{{ time }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
 
+  <div *ngIf="inputForm"  [formGroup]="inputForm">
+    Scheduled Time: {{inputForm.controls['preferredScheduleDate'].value}}
   </div>
+
+  <button mat-raised-button color="accent" class="margin-5  payment-buttons" (click)="resetAppointment()">Clear Date</button>
 
   <div *ngIf="!platFormService.isApp()">
     <div *ngIf="serviceType && serviceType.scheduleInstructions"
@@ -33,13 +34,14 @@
       </mat-hint>
     </div>
   </div>
+
 </div>
 
 <div>
-  <button style="height:75px;width:125px"
+  <button class="margin-5 payment-buttons"
           mat-raised-button
           color="primary"
-         (click)="saveShippingTime()">
+          (click)="onSubmit()">
   <mat-icon aria-label="save">save</mat-icon> Next
   </button>
 </div>

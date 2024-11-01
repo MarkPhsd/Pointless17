@@ -18,7 +18,7 @@ import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { UIHomePageSettings } from 'src/app/_services/system/settings/uisettings.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 @Component({
   selector: 'app-strain-product-edit',
@@ -28,12 +28,12 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 export class StrainProductEditComponent implements OnInit {
 
   // <div *ngIf="fbProductsService.isGrouping(itemType)">
-  @ViewChild('cannabisTemplate')     cannabisTemplate : TemplateRef<any>;
+  @ViewChild('cannabisTemplate')      cannabisTemplate : TemplateRef<any>;
   @ViewChild('priceCategoryTemplate') priceCategoryTemplate : TemplateRef<any>;
   @ViewChild('tareValueTemplate')     tareValueTemplate : TemplateRef<any>;
   @ViewChild('retailProductTemplate') retailProductTemplate : TemplateRef<any>;
   @ViewChild('gluetenFreeTemplate')   gluetenFreeTemplate : TemplateRef<any>;
-  @ViewChild('liquorTemplate') liquorTemplate : TemplateRef<any>;
+  @ViewChild('liquorTemplate')        liquorTemplate : TemplateRef<any>;
   @ViewChild('priceCategorySelectorTemplate') priceCategorySelectorTemplate : TemplateRef<any>;
   @ViewChild('groceryPromptTemplate') groceryPromptTemplate : TemplateRef<any>;
 
@@ -105,8 +105,9 @@ export class StrainProductEditComponent implements OnInit {
   }
 
   get storeSelectorEnabled() {
-    // if (this.uiHomePage.)
-    return true;
+    if (this.uiHome?.binaryStoreValue) {
+      return true;
+    }
   }
 
   get tareValueTemplateView() {
@@ -122,8 +123,7 @@ export class StrainProductEditComponent implements OnInit {
   unitSearchForm       : UntypedFormGroup;
   reOrderUnitSearchForm: UntypedFormGroup;
   pbSearchForm         : UntypedFormGroup;
-
-  jsonForm: FormGroup;
+  jsonForm             : FormGroup;
   get f() { return this.productForm;}
   action$             :  Observable<any>;
   performingAction    : boolean;
@@ -150,12 +150,23 @@ export class StrainProductEditComponent implements OnInit {
   dialogData: any;
   createThumbNail: boolean;
 
+  homePage$: Observable<UIHomePageSettings>;
+  // uiHome: UIHomePageSettings;
+
+  initHomePageSettings() {
+    this.homePage$ =  this.uiSettings.UIHomePageSettings.pipe(switchMap( data => {
+      this.uiHome  = data as UIHomePageSettings;
+      return of(data)
+    }));
+  }
+
   constructor(private menuService: MenuService,
               public  route: ActivatedRoute,
               public  fb: UntypedFormBuilder,
               private itemTypeService  : ItemTypeService,
               private priceCategoryService: PriceCategoriesService,
               private siteService: SitesService,
+              private uiSettings: UISettingsService,
               public  fbProductsService: FbProductsService,
               private inventoryEditButon: InventoryEditButtonService,
               private itemTypeMethodsService: ItemTypeMethodsService,
@@ -218,11 +229,40 @@ export class StrainProductEditComponent implements OnInit {
 
   ngOnInit() {
     // console.log('ngOninit data', this.dialogData)
+
     this.setInit(this.dialogData)
     if (!this.dialogData) {
       this.initializeDataAndForm()
     }
+
+    this.logInvalidControls(this.productForm)
+    this.logInvalidControls(this.unitSearchForm)
+    this.logInvalidControls(this.reOrderUnitSearchForm)
+    this.logInvalidControls(this.pbSearchForm)
+    this.logInvalidControls(this.jsonForm)
+
+
+   // productForm          : UntypedFormGroup;
+    // unitSearchForm       : UntypedFormGroup;
+    // reOrderUnitSearchForm: UntypedFormGroup;
+    // pbSearchForm         : UntypedFormGroup;
+    // jsonForm             : FormGroup;
   };
+
+  logInvalidControls(form: FormGroup) {
+    try {
+      Object.keys(form.controls).forEach(key => {
+        const control = form.get(key);
+        if (!control) {
+          console.error(`Control with name '${key}' is missing or null.`);
+        } else {
+          // console.log(`${key}:`, control);
+        }
+      });
+    } catch (error) {
+
+    }
+  }
 
   updateSave(event) {
     this.action$ = this.updateItem(event);
@@ -521,7 +561,7 @@ export class StrainProductEditComponent implements OnInit {
           this.setInit({product: this.product, itemType: data})
           return this.menuService.getMenuItemByID(site, this.product.id)
         }
-      )).pipe(switchMap(data => { 
+      )).pipe(switchMap(data => {
         this.menuService.updateMenuItem(data)
         return of(this.product)
       }))

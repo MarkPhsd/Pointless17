@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { GridApi } from 'ag-grid-community';
-import { Observable, of, switchMap } from 'rxjs';
+import { from, mergeMap, Observable, of, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { store, StoresService } from 'src/app/_services/system/stores.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
@@ -27,6 +27,8 @@ function myComparator(value1, value2) {
 })
 export class StoresManagerComponent {
 
+  list: any[];
+  CONCURRENCY_LIMIT = 10; // Number of concurrent requests
   menuItem: IMenuItem;
   gridApi:            GridApi;
   // gridColumnApi:      GridAlignColumnsDirective;
@@ -70,15 +72,25 @@ export class StoresManagerComponent {
                 @Inject(MAT_DIALOG_DATA) public data: any,
     ) {
 
-      if (data) { 
-        if (data?.activeOnly) { 
+
+      console.log(data)
+      if (data) {
+        if (data.list) {
+          this.list = data.list;
+          this.activeStores = false;
+          this.menuItem = null
+          console.log('selected items', this.list)
+          return;
+        }
+      }
+      if (data) {
+        if (data?.activeOnly) {
           this.activeStores = true
           this.menuItem = data?.menuItem
           this.diaglog = true
           this.gridStyle             ='width: 100%; height: 500px;'
         }
       }
-
   }
 
   ngOnInit()  {
@@ -86,32 +98,24 @@ export class StoresManagerComponent {
     this.initGridResults();
   }
 
-  // refreshData() { 
-  //   if (this.activeStores) { 
-  //       if (this.menuItem) { 
-  //       let binaryValue =  this.menuItem?.storeBinaryValue
-  //       this.stores$ = this.storeService.getActiveStores().pipe(switchMap(data  => { 
-  //         const list = this.populateAssignedStores(binaryValue, data)
-  //         return of(list)
-  //       }))
-  //       return;
-  //     }
-  //   }
-  //   this.stores$ = this.storeService.getStores()
-  // }
-  refreshData() { 
-    if (this.activeStores) { 
-      if (this.menuItem) { 
-        let binaryValue = BigInt(this.menuItem.storeBinaryValue);  // Convert to bigint
-        
+  refreshData() {
+
+    console.log('this.activestores,', this.activeStores, this.menuItem)
+    if (this.activeStores || this.list) {
+      if (this.menuItem || this.list) {
+        let binaryValue : any  // Convert to bigint
+        if (this.menuItem && this.menuItem?.storeBinaryValue) {
+          binaryValue = BigInt(this.menuItem.storeBinaryValue);
+        }
+
         this.stores$ = this.storeService.getActiveStores().pipe(
-          switchMap(data => { 
+          switchMap(data => {
             const list = this.populateAssignedStores(binaryValue, data);
-            console.log(list)
+            console.log('active stores', list, binaryValue)
             return of(list);
           })
         );
-        
+
         return;
       }
     }
@@ -119,31 +123,30 @@ export class StoresManagerComponent {
   }
 
   populateAssignedStores(binaryValue: bigint, list: store[]): store[] {
-    try {
-      // Iterate over each store in the list and assign based on the binaryValue
-      list.forEach((store: store) => {
-        // Ensure store.binaryValue is not null or undefined
-        if (store.binaryValue == null) {
-          console.error(`store.binaryValue is null or undefined for store ${store.name}`);
-          store.assign = false;
-          return;
-        }
-  
-        // Convert store.binaryValue to bigint
-        const storeBinaryValue = BigInt(store.binaryValue);
-  
-        // Check if the store's binary value is part of the passed-in binaryValue
-        store.assign = (binaryValue & storeBinaryValue) !== BigInt(0);  // Use BigInt(0) for comparison
-      });
-  
-      console.log('list assigned', list, binaryValue.toString());
-      return list;
-  
-    } catch (error) {
-      console.log(error);
-    }
-    return [];
+    list.forEach((store: store, index: number) => {
+
+      if (!binaryValue) {
+
+      } else {
+        // Assign binaryValue based on store index or ID
+        store.binaryValue = BigInt(1) << BigInt(index); // Using index
+        // OR
+        // store.binaryValue = BigInt(1) << BigInt(store.id - 1); // Using store.id
+        // Ensure store.assign is correctly set based on the incoming binaryValue
+        const storeBinaryValue = store.binaryValue;
+        store.assign = (binaryValue & storeBinaryValue) !== BigInt(0);
+
+        console.log(`Assigned binaryValue for ${store.name}: ${store.binaryValue.toString()}`);
+      }
+
+      // For grid display compatibility
+      // store.displayBinaryValue = storeBinaryValue.toString();
+    });
+
+    // console.log('list assigned', list, binaryValue.toString());
+    return list;
   }
+
 
   initGridResults() {
     this.initAGGridFeatures()
@@ -155,12 +158,12 @@ export class StoresManagerComponent {
     };
   }
 
-  assign() { 
-    if (this.menuItem) { 
-      if (this.menuItem.itemType.name === 'category') { 
+  assign() {
+    if (this.menuItem) {
+      if (this.menuItem.itemType.name === 'category') {
 
       }
-      if (this.menuItem.itemType.name === 'department') { 
+      if (this.menuItem.itemType.name === 'department') {
 
       }
     }
@@ -179,10 +182,10 @@ export class StoresManagerComponent {
       {headerName: 'Name', field: 'name',  editable: !this.activeStores,
         singleClickEdit: true,  sortable: true, maxWidth: 150, minWidth: 150},
 
-     
+
     ]
 
-    let active =         
+    let active =
     {
       headerName: "Active",
         width:    100,
@@ -201,7 +204,7 @@ export class StoresManagerComponent {
             return input;
         }
     }
-    if (!this.activeStores) { 
+    if (!this.activeStores) {
       this.columnDefs.push(active);
     }
 
@@ -228,7 +231,7 @@ export class StoresManagerComponent {
         }
     }
 
-    if(this.activeStores) { 
+    if(this.activeStores || this.list) {
       this.columnDefs.push(item);
     }
 
@@ -247,7 +250,7 @@ export class StoresManagerComponent {
     }
   }
 
-  close() { 
+  close() {
     if (!this.dialogRef) { return}
     this.dialogRef.close(this.product)
   }
@@ -255,7 +258,6 @@ export class StoresManagerComponent {
   cellValueChanged(event) {
     const colName = event?.column?.colId.toString() as string;
     const item = event.data as store
-
     this.action$ = this.updateValues(event.data?.id , event.value, colName).pipe(switchMap(data => {
       if (data) {
         if (data.errorMessage) {
@@ -266,13 +268,13 @@ export class StoresManagerComponent {
     }))
   }
 
-  
+
   onCellClicked(event) {
     const colName = event?.column?.colId.toString().trim() as string;
 
-    // console.log('event',colName, event.data, event.value)
+    console.log('event', colName, event.data, event.value)
 
-    if (colName === 'assign') { 
+    if (colName === 'assign') {
       this.generateBinaryValue();
       return;
     }
@@ -282,7 +284,6 @@ export class StoresManagerComponent {
       item.active = !event.value
       this.action$ = this.updateValues(event.data.id, !event.value, 'active');
       event.value = !event.value;
-      // this.refreshGrid()
     }
   }
 
@@ -297,70 +298,46 @@ export class StoresManagerComponent {
     this.displayedGridData = rowData;  // Store row data for real-time JSON view
   }
 
-  // generateBinaryValue() {
-  //   let binaryValue = 0;
-    
-  //   if (!this.gridApi) {
-  //     console.log('no grid api');
-  //     return;
-  //   }
-    
-  //   // Iterate over each row in the grid data
-  //   this.gridApi.forEachNode((node) => {
-  //     const store = node.data as store;
-  //     console.log(store?.name, store.assign);
-      
-  //     // Check if the "Assign" checkbox is checked
-  //     if (store.assign) {
-  //       // Calculate the binary value for the selected store
-  //       const storeIndex = store.id - 1; // Assuming store.id starts from 1
-  //       binaryValue |= (1 << storeIndex); // Use bitwise OR to add the store's value
-  //     }
-  //   });
-  
-  //   // Update the component's binaryValue
-  //   this.binaryValue = binaryValue;
-  //   // this.menu
-
-  //   const site = this.siteService.getAssignedSite()
-  //   this.action$ = this.menuService.getProduct(site, this.menuItem.id).pipe(switchMap(data => {
-  //     if (data) { 
-  //       data.storeBinaryValue = this.binaryValue
-  //       this.product = data;
-  //       return this.menuService.setBinaryValue(site, this.menuItem.id, data)
-  //     }
-  //     return of(null)
-  //   }))
-  
-  // }
-
-
-  
   generateBinaryValue() {
     let binaryValue = BigInt(0);
-  
+
     if (!this.gridApi) {
       console.log('no grid api');
-      return;
+      return binaryValue;
     }
-  
+
     // Iterate over each row in the grid data
     this.gridApi.forEachNode((node) => {
       const store = node.data as store;
-  
+      console.log(`Store: ${store.name}, assign: ${store.assign}, binaryValue: ${store.binaryValue}`);
+
       // Check if the "Assign" checkbox is checked
       if (store.assign) {
-        // Ensure store.binaryValue is also a bigint
+        if (store.binaryValue == null) {
+          console.error(`store.binaryValue is null or undefined for store ${store.name}`);
+          return;
+        }
+
+        // Ensure storeBinaryValue is a BigInt
         const storeBinaryValue = BigInt(store.binaryValue);
-        binaryValue |= storeBinaryValue;  // Use the store's binary value
+
+        // Accumulate binaryValue using BigInt values
+        binaryValue |= storeBinaryValue;
+
+        console.log('binaryValue assign ', storeBinaryValue.toString(), binaryValue.toString());
       }
     });
-  
+
     const site = this.siteService.getAssignedSite();
-  
+
+    if (this.list) {
+      this.assignItemList(binaryValue)
+      this.binaryValue = binaryValue;
+      return binaryValue;  // Return the final calculated
+    }
     this.action$ = this.menuService.getProduct(site, this.menuItem.id).pipe(
       switchMap(data => {
-        if (data) { 
+        if (data) {
           data.storeBinaryValue = binaryValue.toString(); // Convert bigint to string
           this.product = data;
           return this.menuService.setBinaryValue(site, this.menuItem.id, data);
@@ -368,29 +345,41 @@ export class StoresManagerComponent {
         return of(null);
       })
     );
-  
+
     this.binaryValue = binaryValue;
     return binaryValue;  // Return the final calculated binaryValue
   }
 
+  assignItemList(binaryValue) {
+    const site = this.siteService.getAssignedSite();
+
+    this.action$ = this.menuService.setStoreBinaryList(site, binaryValue, this.list).pipe(
+        switchMap(data => {
+          if (data) {
+            this.siteService.notify('Store values updated.', 'Close', 3000, 'green')
+          }
+          return of(null); // Handle cases where data is null
+        })
+    )
+
+  }
+
+
   updateValues(id, value : any, fieldName: string): Observable<store> {
-    if (!id) { return of(null)}
-  
+    if (!id) { return of(null) }
     let store = { } as store;
     store.id = id
-    if (fieldName === 'name') { 
-      
+
+    if (fieldName === 'name') {
       if (!value) {
         this.siteService.notify('Value can not be empty', 'close', 3000)
         return of(null)
-      } 
-
+      }
       store.name = value
     }
-    if (fieldName === 'active')  { 
+    if (fieldName === 'active')  {
       store.active = value
     }
-
     return this.storeService.putStore(store);
   }
 

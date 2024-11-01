@@ -24,3 +24,28 @@ button {
 .toggle-min {
   width: 87px;
 }
+
+
+.date-picker-input {
+  background-color: transparent;
+  border: 1px;
+  border: 1px solid #9e9e9e;
+  border-radius: 4px;
+  outline: none;
+  height: 2.5rem;
+  width: 100%;
+  font-size: 1em;
+  margin: 1px;
+  padding-left: 2px;
+  box-shadow: none;
+  box-sizing: content-box;
+  width: 185px;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+
+.calendar-button {
+  position: relative;
+  // left: -35px;
+
+
+}

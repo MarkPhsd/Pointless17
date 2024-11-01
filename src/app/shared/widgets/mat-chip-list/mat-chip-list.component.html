@@ -1,0 +1,30 @@
+<div *ngIf="items$ | async as items">{{items | json}}</div>
+
+<div [formGroup]="inputForm" *ngIf="inputForm">
+  <mat-list>
+    <mat-list-item *ngFor="let item of (items$ | async); let i = index">
+      <input
+        matInput
+        formControlName="listItems"  
+        (ngModelChange)="updateItemName(i, $event)" x
+        placeholder="Enter item name"
+      />
+      <button mat-icon-button (click)="deleteItem(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-list-item>
+  
+    <!-- Add New Item -->
+    <mat-list-item>
+      <input
+        matInput
+        formControlName="listItems"  
+        (keydown.enter)="addItem()"
+        placeholder="Add new item"
+      />
+      <button mat-icon-button (click)="addItem()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+</div>

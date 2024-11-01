@@ -12,6 +12,7 @@
         <ng-container [ngTemplateOutlet]="filterViewPhone"></ng-container>
         <div>
           <div *ngIf="scheduleDateStart && scheduleDateEnd">
+
             <ng-container [ngTemplateOutlet]="scheduledItems"></ng-container>
           </div>
           <ng-container [ngTemplateOutlet]="orderSelectedList"></ng-container>
@@ -73,6 +74,20 @@
       <mat-icon>accounts</mat-icon><span>House Account</span>
   </button>
 </ng-template>
+
+<ng-template #scheduledItemsOption>
+  <button *ngIf="scheduleDateStart && scheduleDateEnd"
+          mat-raised-button (click)="toggleScheduledItemsView()">
+    <div *ngIf="hideScheduledItems">
+      Show Prep List
+    </div>
+    <div *ngIf="!hideScheduledItems">
+      Hide Prep List
+    </div>
+  </button>
+</ng-template>
+
+
 
 <ng-template #freshOrders>
   <button class="button"
@@ -270,7 +285,7 @@
 </ng-template>
 
 <ng-template #scheduledItems>
-  <div>
+  <div *ngIf="!hideScheduledItems">
     <item-sales-card
           [site]="site"
           [viewType]="'activeReportView'"
@@ -406,6 +421,7 @@
       <ng-container [ngTemplateOutlet]="prepView"></ng-container>
     </span>
 
+    <ng-container [ngTemplateOutlet]="scheduledItemsOption"></ng-container>
     <span #coachingMergeView>
       <ng-container [ngTemplateOutlet]="mergeViewEnabled"></ng-container>
     </span>

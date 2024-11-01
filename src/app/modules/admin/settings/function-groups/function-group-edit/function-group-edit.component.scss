@@ -1,16 +1,36 @@
-.pop{
-
-  padding: 20px 10px;
+.pop {
+  padding: 15px 10px;
   border-bottom: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
   flex-direction: row;
   align-items: center;
-  // justify-content: space-between;
+  justify-content: space-between; /* Adjusted to space out the content */
   box-sizing: border-box;
-  cursor: move;
-  background: white;
+  cursor: pointer; /* Pointer instead of move to reflect clickable interaction */
+  background: #f9f9f9;
   font-size: 14px;
+  border-radius: 8px; /* Optional rounding for better visuals */
+  transition: background-color 250ms ease-in-out, box-shadow 200ms ease-in-out;
+}
+
+
+.drag-indicator::before {
+  content: '⠿'; 
+  font-size: 18px;
+  color: #999;
+}
+
+
+/* Hover effect to give visual feedback */
+.pop:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus or active state when the button is clicked */
+.pop:active {
+  background-color: #d6d6d6;
 }
 
 .cdk-drop-list-dragging .cdk-drag {
@@ -33,10 +53,6 @@
   opacity: 0;
 }
 
-.cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
 .example-box:last-child {
   border: none;
 }
@@ -52,7 +68,7 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns: 150px 500px ;
+  grid-template-columns: 150px 500px;
   width: 800px;
   gap: 10px;
   margin: 10px;

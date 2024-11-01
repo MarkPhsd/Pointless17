@@ -23,7 +23,13 @@
     <div class="centered-flex" >
       <div>
         <h3>{{uiHomePageSetting?.displayCompanyName}}</h3>
-        <app-logo [logoSize]="'large'" ></app-logo>
+        <!-- logoHomePage {{uiHomePageSetting?.logoHomePage}} <br>
+        tinyLogo  {{uiHomePageSetting?.tinyLogo}} <br> -->
+
+        <app-logo
+            [logoImage]="uiHomePageSetting?.logoHomePage"
+            [logoSize]="'large'" >
+        </app-logo>
       </div>
     </div>
 

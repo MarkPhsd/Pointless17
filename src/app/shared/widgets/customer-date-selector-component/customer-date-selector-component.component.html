@@ -1,0 +1,8 @@
+<mat-form-field appearance="outline">
+  <mat-label>Select Appointment Date & Time</mat-label>
+  <input matInput [ngxMatDatetimePicker]="picker" formControlName="appointmentDate">
+  <ngx-mat-datetime-picker #picker 
+                           type="datetime" 
+                           ></ngx-mat-datetime-picker>
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+</mat-form-field>

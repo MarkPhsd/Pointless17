@@ -198,6 +198,7 @@ export interface NewItem            {
   price?: ProductPrice; // the real assingment
   productPrice?: ProductPrice; // temporary assignment - used in customer menu.
   wholesale: number;
+  groupName: string;
 }
 
 
@@ -249,6 +250,7 @@ export interface ItemWithAction {
 })
 
 export class POSOrderItemService {
+
 
 
   get platForm()              {  return Capacitor.getPlatform(); }
@@ -313,6 +315,19 @@ export class POSOrderItemService {
       }
     }
     return newItem;
+  }
+
+  setSortedItems(site: ISite, itemsList: PosOrderItem[]) : Observable<string>{
+
+    const controller = "/POSOrderItems/"
+
+    const endPoint  = "setSortedItems"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, itemsList );
   }
 
   postInventoryAction(site: ISite, arg1: { posItem: PosOrderItem; action: string; }) {

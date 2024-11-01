@@ -25,7 +25,7 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   searchForm: UntypedFormGroup;
 
-  @Output()  outputClearExceptions : EventEmitter<any> = new EventEmitter();
+  @Output() outputClearExceptions : EventEmitter<any> = new EventEmitter();
   @Output() outputCurrentDay :   EventEmitter<any> = new EventEmitter();
   @Output() outputRefreshSearch :   EventEmitter<any> = new EventEmitter();
   get platForm()         {  return Capacitor.getPlatform(); }
@@ -33,6 +33,7 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
   printingEnabled    : boolean;
   electronEnabled    : boolean;
   capacitorEnabled   : boolean;
+
   printerName        : string;
   printQuantity      : number;
 
@@ -195,7 +196,7 @@ export class MetrcSalesFilterComponent implements OnInit, OnDestroy {
         }
       }
     }
-    if (!this.searchModel) { 
+    if (!this.searchModel) {
       this.searchModel = {} as PointlessMetrcSearchModel
     }
     this.initDateForm()

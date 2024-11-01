@@ -1,21 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { BehaviorSubject, Observable, } from 'rxjs';
+import { BehaviorSubject, map, Observable, } from 'rxjs';
 import { ISetting}   from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 import { AppInitService } from './app-init.service';
 import { SiteLogin } from './site-logins.service';
 
-export interface store { 
+export interface store {
   id: number; // As Integer
   name : string;
   siteReferenceKey : number; // As Nullable(Of Integer)
-  binaryValue : bigint; //As Integer
+  binaryValue: bigint //| string | number;
   storeNumber : string;
   active : boolean; // As Nullable(Of Boolean)
   errorMessage: string;
   assign: boolean;
+  displayBinaryValue?: string;
 }
 
 @Injectable({
@@ -45,7 +46,18 @@ export class StoresService {
 
       const url = `${site.url}${controller}${endPoint}${parameters}`
 
-      return this.http.get<store[]>(url);
+      return this.http.get<store[]>(url).pipe(
+        map(data => {
+          data.forEach((store: store, index: number) => {
+            if (store.binaryValue != null) {
+              store.binaryValue = BigInt(store.binaryValue);
+            } else {
+              // Assign binaryValue if it's missing
+              store.binaryValue = BigInt(1) << BigInt(index);
+            }
+          });
+          return data;
+        }))
 
     }
 
@@ -60,7 +72,18 @@ export class StoresService {
 
       const url = `${site.url}${controller}${endPoint}${parameters}`
 
-      return this.http.get<store[]>(url);
+      return this.http.get<store[]>(url).pipe(
+        map(data => {
+          data.forEach((store: store, index: number) => {
+            if (store.binaryValue != null) {
+              store.binaryValue = BigInt(store.binaryValue);
+            } else {
+              // Assign binaryValue if it's missing
+              store.binaryValue = BigInt(1) << BigInt(index);
+            }
+          });
+          return data;
+        }))
 
     }
 

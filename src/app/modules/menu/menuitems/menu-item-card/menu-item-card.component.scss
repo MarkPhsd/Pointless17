@@ -59,10 +59,19 @@
   position: relative;
   height: 100%;
   overflow: hidden;
-  height: 125px;
+}
 
+.item-container-std {
+  height: 125px;
   @include for-phone-only {
     height: 125px;
+  }
+}
+
+.item-container-condensed {
+  height: 65px;
+  @include for-phone-only {
+    height: 55px;
   }
 }
 
@@ -137,7 +146,7 @@
   white-space: pre-wrap;
   text-wrap: balance;
 
-  
+
   line-height: 1em;
   max-height: 2em;
 
@@ -216,7 +225,7 @@
   font-size   : 1.5em;
   height: auto;
   overflow: hidden;
-  
+
   white-space: pre-wrap;
   text-wrap: pretty;
   // white-space:normal;
@@ -250,7 +259,7 @@
   text-overflow: ellipsis;
   text-transform: capitalize;
 
-    
+
   white-space: pre-wrap;
   text-wrap: pretty;
 
@@ -303,7 +312,7 @@
   font-size   : .9em;
   text-align  : center;
   width       : 100%;
-   
+
   white-space: pre-wrap;
   text-wrap: pretty;
 
@@ -316,7 +325,7 @@
     font-weight : 400;
     font-size   : .9em;
     text-align  : center;
-   
+
     white-space: pre-wrap;
     text-wrap: pretty;
     overflow    : hidden;
@@ -329,7 +338,7 @@
     font-size   : .9em;
     text-align  : center;
     width       : 100%;
-   
+
     white-space: pre-wrap;
     text-wrap: pretty;
     overflow    : hidden;
@@ -478,6 +487,40 @@
     top: 5px;
     height: 65px;
   }
+}
+
+.item-name-center-menu {
+  margin-bottom: 3px;
+  margin-top: 1px;
+  text-align: center;
+  justify-content: center;
+  z-index: 102;
+  font-weight:   500;
+
+  text-wrap: balance;
+  position: relative;
+  white-space: normal;
+
+  @supports (-webkit-touch-callout: none) {
+    font-size: .8em;
+  }
+
+  @include for-phone-only {
+    margin-top: -3px;
+    top: 5px;
+    height: 65px;
+  }
+}
+
+.item-name-center-menu-std {
+  font-size: 1rem;
+  height: 95px;
+}
+
+.item-name-center-menu-condensed {
+  font-size: .9rem;
+  line-height: 1.2rem;
+  height: 50px;
 }
 
 .uom {

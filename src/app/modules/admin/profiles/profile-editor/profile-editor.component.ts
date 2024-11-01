@@ -4,7 +4,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IClientTable, IUserProfile } from 'src/app/_interfaces';
-import { AWSBucketService, ContactsService } from 'src/app/_services';
+import { ContactsService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 

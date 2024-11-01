@@ -64,7 +64,7 @@ export class PosEditSettingsComponent implements OnInit {
 
   constructor(
     private fb                  : UntypedFormBuilder,
-    public sitesService        : SitesService,
+    public sitesService         : SitesService,
     private settingsService     : SettingsService,
     public  deviceService       : DeviceDetectorService,
     private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
@@ -73,13 +73,13 @@ export class PosEditSettingsComponent implements OnInit {
     private printingService     : PrintingService,
     private uiSettingService    : UISettingsService,
     private fileSystemService   : FileSystemService,
-    private serviceTypeService: ServiceTypeService,
+    private serviceTypeService  : ServiceTypeService,
     public  labelingService     : LabelingService,
     private menuService         : MenuService,
     private cardPointBoltService: CardPointBoltService,
-    public route        : ActivatedRoute,
-    private dCapService           : DcapService,
-    private dialogRef   : MatDialogRef<PosEditSettingsComponent>,
+    public route                : ActivatedRoute,
+    private dCapService         : DcapService,
+    private dialogRef           : MatDialogRef<PosEditSettingsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number ) {
 
       this.initUiSettings()
@@ -261,6 +261,7 @@ export class PosEditSettingsComponent implements OnInit {
       voiceOnAddItem: [],
       voiceOnMessage: [],
       voiceOnError: [],
+      condensedMenuButtons: [],
     })
 
     this.dsiEMVSettings = this.fb.group({

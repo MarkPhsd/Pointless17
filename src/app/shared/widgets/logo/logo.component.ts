@@ -19,7 +19,7 @@ export class LogoComponent implements OnInit, OnDestroy {
   @Input() border:string
   company  = '';
   bucket$: Observable<any>;
-  logoImage: string;
+  @Input() logoImage: string;
   borderStyle: string;
   constructor(
    private uiSettingService      : UISettingsService,
@@ -68,14 +68,6 @@ export class LogoComponent implements OnInit, OnDestroy {
         return of(data)
       })
     )
-
-  //   this.bucket$    = this.awsBucketService.awsBucketURLOBS().pipe(switchMap(data => {
-  //     this.bucketName = data
-  //     return of(data)
-  // }));
-
-
-
     if (this.bucket) {
       this.refreshUIHomePageSettings()
     }
@@ -92,19 +84,20 @@ export class LogoComponent implements OnInit, OnDestroy {
   initLogoImage() {
     if (!this.logoSize ) { this.logoSize  = 'large'}
     if (this.bucket) {
-        if (this.logoSize === 'large') {
-          this.logo = this.uiHomePageSetting?.logoHomePage
-        }
-        if (this.logoSize === 'small') {
-          this.logo = this.uiHomePageSetting?.tinyLogo
-        }
-        if (this.logoImage) {
-          const logo = `${this.bucket}${this.logoImage}`
-          this.logo = logo
-          return;
-        }
-        const logo = `${this.bucket}${this.logo}`
+
+      if (this.logoSize === 'large') {
+        this.logo = this.uiHomePageSetting?.logoHomePage
+      }
+      if (this.logoSize === 'small') {
+        this.logo = this.uiHomePageSetting?.tinyLogo
+      }
+      if (this.logoImage) {
+        const logo = `${this.bucket}${this.logoImage}`
         this.logo = logo
+        return;
+      }
+      const logo = `${this.bucket}${this.logo}`
+      this.logo = logo
     }
   }
 

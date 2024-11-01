@@ -98,7 +98,11 @@ export class AuthenticationService {
     }
 
     setUserAuth(userAuth: string) {
-      localStorage.setItem('userAuth', userAuth)
+      try {
+        localStorage.setItem('userAuth', userAuth)
+      } catch (error) {
+        // this.siteService.notify("Unable to use local storage. You may browse the store, but your browser is not blocking required features for this app to function", "Close", 10000)
+      }
     }
 
     updateUserAuthstemp(userAuths : IUserAuth_Properties ) {
@@ -398,20 +402,20 @@ export class AuthenticationService {
       const url = `${api}/users/RequestUserSetupToken`
 
       const messsage = this.getTracker(userName)
-     
+
       return this.http.post<any>(url, { userName: userName, message: messsage });
     };
 
     requestPasswordResetToken(userName: string): Observable<any> {
       const api = this.siteService.getAssignedSite().url;
       const url = `${api}/users/RequestPasswordResetToken`;
-      
+
       const messsage = this.getTracker(userName)
-     
+
       return this.http.post<any>(url, { userName: userName, message: messsage });
     }
-    
-    getTracker(userName: string, ignoreAppCheck?: boolean) { 
+
+    getTracker(userName: string, ignoreAppCheck?: boolean) {
       return this.siteService.getApplicationInfo(userName);
     }
 

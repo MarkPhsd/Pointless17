@@ -35,17 +35,40 @@ export class AddItemByTypeComponent implements OnInit {
 
 //sort
 // putItemTypesList
+ngOnInit() {
+  const site = this.siteService.getAssignedSite();
+  const itemTypes$ = this.itemTypeService.getItemTypes(site);
 
-  ngOnInit() {
-    const site         =  this.siteService.getAssignedSite();
-    const itemTypes$   =  this.itemTypeService.getItemTypes(site);
+  itemTypes$.subscribe(data => {
+    console.log('data', data);
 
-    itemTypes$.subscribe(data => {
-      this.itemTypeProducts    = data.filter(items  => items?.useType === 'product' || items?.useType.toLowerCase() === 'modifier')
-      this.itemTypeCategories  = data.filter(items  => items?.useType === 'category')
-      this.itemTypeAdjustments = data.filter(items  => items?.useType === 'adjustment')
-    })
-    this.sortAlpha(1)
+    // Filtering products or modifiers
+    this.itemTypeProducts = data.filter(item => 
+      item.useType && (this.getItem(item) === 'product' || this.getItem(item) === 'modifier')
+    );
+
+    // Filtering groupings
+    this.itemTypeCategories = data.filter(item => 
+      item.useType && this.getItem(item) === 'category'
+    );
+
+    // Filtering adjustments
+    this.itemTypeAdjustments = data.filter(item => 
+      item.useType && this.getItem(item) === 'adjustment'
+    );
+  });
+
+  this.sortAlpha(1);
+}
+
+
+  getItem(items) { 
+    try { 
+      return items?.useType.toLowerCase() 
+    } catch (error) {
+        
+    }
+    return ''
   }
 
   sortAlpha(index) {

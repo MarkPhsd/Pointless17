@@ -5,22 +5,8 @@ import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
 // import { DaterangepickerDirective } from 'ngx-daterangepicker-material/daterangepicker.directive';
 import { AuthenticationService } from 'src/app/_services';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
-// import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 
-// {
-//   format: 'MM/DD/YYYY', // could be 'YYYY-MM-DDTHH:mm:ss.SSSSZ'
-//   displayFormat: 'MM/DD/YYYY', // default is format value
-//   direction: 'ltr', // could be rtl
-//   weekLabel: 'W',
-//   separator: ' To ', // default is ' - '
-//   cancelLabel: 'Cancel', // detault is 'Cancel'
-//   applyLabel: 'Okay', // detault is 'Apply'
-//   clearLabel: 'Clear', // detault is 'Clear'
-//   customRangeLabel: 'Custom range',
-//   daysOfWeek: dayjs.weekdaysMin(),
-//   monthNames: dayjs.monthsShort(),
-//   firstDay: 1 // first day is monday
-// }
 
 @Component({
   selector: 'mat-date-range',
@@ -37,7 +23,7 @@ export class MatDateRangeComponent implements OnInit, AfterViewInit{
   @Input() buttonViewEnabled: boolean = false;
   @Input() inputForm: UntypedFormGroup;
   @Output() outputDateRange  = new EventEmitter();
-
+  @Input() enableBigPIcker: boolean
   @Input() hideRefresh: boolean;
   @Input() autoRefresh: boolean;
   selected: {startDate: any, endDate: any};
@@ -66,7 +52,18 @@ export class MatDateRangeComponent implements OnInit, AfterViewInit{
   }
 
   openDatepicker() {
-    // this.pickerDirective.open();
+    this.pickerDirective.open();
+  }
+  selectedRange(event) {
+    console.log(event)
+  }
+
+  datesUpdated (event) {
+    console.log(event)
+  }
+
+  rangeClicked (event) {
+    console.log(event)
   }
 
   ngAfterViewInit() {
@@ -125,16 +122,6 @@ export class MatDateRangeComponent implements OnInit, AfterViewInit{
     this.emitDatePickerData();
   }
 
-  selectedRange(event) {
-    console.log(event)
-  }
 
-  datesUpdated (event) {
-    console.log(event)
-  }
-
-  rangeClicked (event) {
-    console.log(event)
-  }
 }
 

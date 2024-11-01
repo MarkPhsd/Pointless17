@@ -85,8 +85,8 @@
       </div>
 
       <!-- height is fixed -->
-      <div class="buttons-container">
-        <div *ngIf="mainPanel">
+      <div *ngIf="mainPanel" class="buttons-container">
+        <div >
           <span #coachingchangeType></span>
           <span #coachingexitButton></span>
           <span #coachingSuspend></span>
@@ -139,7 +139,7 @@
           <div *ngIf="menuToggleEnabled">
             <ng-container [ngTemplateOutlet]="displaySubMenu"></ng-container>
           </div>
-          
+
           <div class="button-layout-container">
             <div *ngIf="mainPanel && uiTransactionSettings && !menuToggleEnabled"
                   class="green-buttons">
@@ -154,7 +154,7 @@
 
             <div *ngIf="mainPanel && uiTransactionSettings && !menuToggleEnabled"
                   class="credit-buttons ">
-        
+
                 <ng-container [ngTemplateOutlet]="receiveOrderView"></ng-container>
                 <ng-container [ngTemplateOutlet]="stripePayButtonView"></ng-container>
                 <ng-container [ngTemplateOutlet]="disEMVCreditOnlyCardButton"></ng-container>
@@ -170,12 +170,12 @@
                 <ng-container [ngTemplateOutlet]="wicEBTButtonView"></ng-container>
                 <ng-container [ngTemplateOutlet]="triPOSPaymentButtonView"></ng-container>
                 <ng-container [ngTemplateOutlet]="payButton"></ng-container>
-        
+
                 <ng-container [ngTemplateOutlet]="roundOrderView"></ng-container>
                 <ng-container [ngTemplateOutlet]="closeOrderButton"></ng-container>
             </div>
           </div>
-          
+
         </div>
 
         <div *ngIf="!mainPanel && uiTransactionSettings"
@@ -214,18 +214,18 @@
 </div>
 
 <ng-template #displaySubMenu>
-  <price-schedule-menu-list 
+  <price-schedule-menu-list
     [retailView]="true"
     (outPutMenu)="setDefaultFirstMenu($event)">
   </price-schedule-menu-list>
 
-  <price-schedule-menu-items 
+  <price-schedule-menu-items
       [menuCategoryID]="menuCategoryID">
   </price-schedule-menu-items>
 </ng-template>
 
 <ng-template #receiveOrderView>
-  
+
   <div *ngIf="!isNotPurchaseOrder ">
     <button mat-raised-button class="payment-buttons" color="accent" (click)="receiveOrder()">
       <mat-icon>download</mat-icon>
@@ -246,7 +246,7 @@
       <br>Drop 0 QTY
     </button>
   </div>
- 
+
   <div *ngIf=" !isNotPurchaseOrder ">
     <button mat-raised-button class="payment-buttons" color="accent" (click)="showLabelPrint = !showLabelPrint">
       <mat-icon>label</mat-icon>
@@ -377,7 +377,7 @@
 </ng-template>
 
 <ng-template #disEMVCardButton>
-  
+
   <div style="margin-top:5px" *ngIf="isApp && order?.balanceRemaining != 0 && isNotPurchaseOrder
               && !uiTransactions?.dCapAllowCreditOnlyOption">
     <dsi-emvcard-pay-btn
@@ -693,7 +693,7 @@
       </mat-date-range>
     </div>
 
-    <purchase-item-cost-history 
+    <purchase-item-cost-history
       [dateTo]   ="dateTo"
       [dateFrom] ="dateFrom"
       [inputForm]="salesDateForm"

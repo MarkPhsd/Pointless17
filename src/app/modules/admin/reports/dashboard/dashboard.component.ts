@@ -18,6 +18,8 @@ import { ReportingItemsSalesService } from 'src/app/_services/reporting/reportin
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
 import { TransferDataService } from 'src/app/_services/transactions/transfer-data.service';
+import dayjs from 'dayjs/esm';
+import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,6 +28,17 @@ import { TransferDataService } from 'src/app/_services/transactions/transfer-dat
 })
 
 export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
+  @ViewChild(DaterangepickerDirective, { static: false }) pickerDirective: DaterangepickerDirective;
+
+  ranges: any = {
+    'Today': [dayjs(), dayjs()],
+    'Yesterday': [dayjs().subtract(1, 'days'), dayjs().subtract(1, 'days')],
+    'Last 7 Days': [dayjs().subtract(6, 'days'), dayjs()],
+    'Last 30 Days': [dayjs().subtract(29, 'days'), dayjs()],
+    'This Month': [dayjs().startOf('month'), dayjs().endOf('month')],
+    'Last Month': [dayjs().subtract(1, 'month').startOf('month'), dayjs().subtract(1, 'month').endOf('month')]
+  }
+
   averageHourlySales$: Observable<any[]>;
   topSalesByQuantity$: Observable<any[]>;
   topSalesByTotalPrice$ : Observable<any[]>;
@@ -40,7 +53,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   loadDynamicData:  boolean = false;
 
-  
+
   reportList = [
     {name: 'Re Order List', id: '1', icon: ''},
     {name: 'Department Values', id: '2', icon: ''},
@@ -169,7 +182,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
   _uiHomePage: Subscription;
   autoPrint: boolean = false;
   batchData: any;
-
+  selected
   constructor(
               private authentication              : AuthenticationService,
               private reportingService            : ReportingService,
@@ -218,17 +231,19 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     this.subscribeUIHomePage();
   };
 
+  openDatepicker() {
+      this.pickerDirective.open();
+  }
+  subscribeUIHomePage() {
+    try {
+      this._uiHomePage = this.uISettingsService.homePageSetting$.subscribe(data => {
+        if (data) {
+          this.uiHomePage = data;
+        }
+      })
+    } catch (error) {
 
-    subscribeUIHomePage() {
-      try {
-        this._uiHomePage = this.uISettingsService.homePageSetting$.subscribe(data => {
-          if (data) {
-            this.uiHomePage = data;
-          }
-        })
-      } catch (error) {
-
-      }
+    }
 
   }
   setOrder(id: number, history) {
@@ -305,7 +320,7 @@ export class DashboardComponent implements OnChanges,OnInit, OnDestroy  {
     if (this.dateTo) {
       end = this.dateTo
     }
-   
+
     const site = this.siteService.getAssignedSite()
     this.zrunID = null;
 

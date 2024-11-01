@@ -320,6 +320,15 @@ export class MenuService {
     return  this.httpClient.put<any[]>(url, listofItems)
   }
 
+  setStoreBinaryList(site: ISite, binary: any, listofItems: any[] ) {
+    const controller =  "/Products/"
+    const endPoint = "setStoreBinaryList"
+    const parameters = `?binaryValue=${binary}`
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+    const uri =  this.sitesService.getCacheURI(url)
+    return  this.httpClient.put<any[]>(url, listofItems)
+  }
+
   saveProductField(site: ISite, id: number, itemValue: string, fieldName: string): Observable<IProduct> {
 
     const controller ="/products/"

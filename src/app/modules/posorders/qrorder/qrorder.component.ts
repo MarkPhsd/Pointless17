@@ -35,7 +35,8 @@ export class QROrderComponent implements OnInit {
               public orderMethodsService: OrderMethodsService,
               private userSwitchingService: UserSwitchingService,
               private orderService: OrdersService){
-    this.id = this.route.snapshot.paramMap.get('id');
+    this.id = this.route.snapshot.paramMap.get('orderCode');
+
    }
 
   ngOnInit(): void
@@ -55,10 +56,13 @@ export class QROrderComponent implements OnInit {
     const client$ = this.initTempUser();
     this.order$ = client$.pipe(
       switchMap(data => {
+        console.log('client', data)
         return this.orderService.newOrderFromQR(site, this.id)
       })
     ).pipe(
       switchMap(data => {
+        console.log('order', data)
+        this.orderMethodsService.updateOrder(data)
         //navigate to the menu screen
         //hide the sidebar
         //show the search bar

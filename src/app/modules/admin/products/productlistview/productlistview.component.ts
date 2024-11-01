@@ -26,6 +26,7 @@ import { EditSelectedItemsComponent } from '../productedit/edit-selected-items/e
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { StoresManagerComponent } from '../../stores-manager/stores-manager.component';
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
     return 0;
@@ -37,6 +38,10 @@ function myComparator(value1, value2) {
     return 1;
   }
   return value1 - value2;
+}
+
+export interface mutliList {
+  list: any[]
 }
 
 function sortData(data, sortModel) {
@@ -175,11 +180,19 @@ urlPath$: Observable<string>;
 _promptSubGroup : Subscription;
 promptSubGroup  : PromptSubGroups;
 webWorkRequired: boolean;
+// homePage$: Observable<UIHomePageSettings>;
 
 initSubscriptions() {
   this._promptSubGroup = this.promptSubGroupService.promptSubGroup$.subscribe(data => {
      this.promptSubGroup = data;
   })
+}
+
+
+get storeSelectorEnabled() {
+  if (this.uiHome.binaryStoreValue) {
+    return true;
+  }
 }
 
 constructor(  private _snackBar              : MatSnackBar,
@@ -347,8 +360,8 @@ constructor(  private _snackBar              : MatSnackBar,
     }
   }
 
-  setVendorID(event) { 
-    if (event && event.id) { 
+  setVendorID(event) {
+    if (event && event.id) {
       this.productSupplierCatID = event.id;
       this.refreshSearch(1);
     }
@@ -1015,7 +1028,7 @@ constructor(  private _snackBar              : MatSnackBar,
     const site               = this.siteService.getAssignedSite()
     if (page != 0) { this.currentPage         = page}
     const model = this.initSearchModel();
-  
+
     this.onGridReady(this.params)
   }
 
@@ -1067,7 +1080,7 @@ constructor(  private _snackBar              : MatSnackBar,
       items$.subscribe(data =>
         {
             const resp         =  data.paging
-            if (data && !data.paging) { 
+            if (data && !data.paging) {
               this.siteService.notify(data.toString(), 'Close', 10000)
             }
             if (!resp)         {return}
@@ -1272,6 +1285,35 @@ constructor(  private _snackBar              : MatSnackBar,
         height:       '550px',
         minHeight:    '550px',
         data   : this.selected
+      },
+    )
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.refreshGrid()
+      }
+    });
+  }
+
+
+  editSelectedItemsStoreValues() {
+    if (!this.selected) {
+      this._snackBar.open('No items selected. Use Shift + Click or Ctrl + Cick to choose multiple items.', 'oops!', {duration: 2000})
+      return
+    }
+    console.log(this.selected)
+    let dialogRef: any;
+    const site = this.siteService.getAssignedSite();
+
+    let data = {} as mutliList
+
+    data.list = this.selected
+
+    dialogRef = this.dialog.open(StoresManagerComponent,
+      { width:        '500px',
+        minWidth:     '500px',
+        height:       '550px',
+        minHeight:    '550px',
+        data   :       data
       },
     )
     dialogRef.afterClosed().subscribe(result => {

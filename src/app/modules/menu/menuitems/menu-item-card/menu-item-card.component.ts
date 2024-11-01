@@ -64,6 +64,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
   @Input() disableImages: boolean;
   @Input() androidApp: boolean;
   @Input() isApp     = false;
+  @Input() condensedMenuButtons : boolean;
 
   ///for use with prompts
   @Input() styleMatCard = ''
@@ -138,14 +139,18 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
     if (this.displayType === 'header-category') {
       return  'item-name-center-category'
     }
-    if (!this.menuItem) { 
+    if (!this.menuItem) {
       return  'item-name-center-category'
     }
     if (this.menuItem.urlImageMain  || this.menuItem.thumbnail  ) {
       return 'item-name-center-image'
     }
-    // return 'item-name-center-image'
-    return  'item-name-center-menu'
+
+    if (this.condensedMenuButtons) {
+        return  'item-name-center-menu item-name-center-menu-condensed'
+    }
+
+    return  'item-name-center-menu item-name-center-menu-std'
   }
 
   get imageButtonClass() {
@@ -189,6 +194,10 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
       return 'item-container-mobile-app android'
     }
 
+    if (this.condensedMenuButtons) {
+        return 'item-container item-container-condensed container-app-noimage'
+    }
+
     if (this.disableImages) {
       return 'item-container container-app-noimage'
     }
@@ -197,7 +206,7 @@ export class MenuItemCardComponent implements OnInit, OnChanges,  OnDestroy {
       return 'item-container item-container-app'
     }
 
-    return 'item-container container-mobile'
+    return 'item-container item-container-std container-mobile'
   }
 
   get buttonViewBol() {

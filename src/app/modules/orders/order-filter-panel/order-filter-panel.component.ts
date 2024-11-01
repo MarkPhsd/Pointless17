@@ -646,7 +646,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
     let item =  JSON.parse(JSON.stringify(search));
 
-    console.log('refresh search', item)
+   // console.log('refresh search', item)
     if (this.toggleOpenClosedAll == "1") {  this.initCompletionDateForm()  }
     item.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
     item.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
@@ -664,7 +664,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     this.orderMethodsService.orderSearchEmployeeID = this.employeeID
     item.employeeID = this.employeeID;
     this.refreshAllOrMyOrders(item);
-    console.log('refresh search', item)
+    // console.log('refresh search', item)
     this.updateOrderSearch( JSON.parse(JSON.stringify(item)));
     return of('')
   }
@@ -912,8 +912,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   refreshScheduledDateSearch() {
       if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
 
-      this.scheduleDateTo = this.scheduleDateForm.get("start").value
-      this.scheduleDateFrom  = this.scheduleDateForm.get("end").value
+      this.scheduleDateFrom = this.scheduleDateForm.get("start").value
+      this.scheduleDateTo = this.scheduleDateForm.get("end").value
 
       if (!this.scheduleDateForm || !this.scheduleDateFrom  || !this.scheduleDateTo) {
         this.searchModel.scheduleDate_From = '';

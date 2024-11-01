@@ -65,7 +65,10 @@ export class DateValidators {
 })
 export class OrderMethodsService implements OnDestroy {
 
+  isToggleisDisabled: boolean = false; // Initialize with default value
 
+  private _togglePOSItemSort = new BehaviorSubject<boolean>(this.isToggleisDisabled);
+  public togglePOSItemSort$ = this._togglePOSItemSort.asObservable();
 
   emailSubjects = [
     {name: 'Please Complete', subject: 'Please review this order for prep. I would like it completed. I agree to pay when it the order is completed.', id: 1},
@@ -104,6 +107,8 @@ export class OrderMethodsService implements OnDestroy {
   private _posIssueItem   = new BehaviorSubject<PosOrderItem>(null);
   public  posIssueItem$   = this._posIssueItem.asObservable();
   public splitEntryValue  = 0;
+
+  public groupName: string = ''
 
   private observablesArraySubject = new BehaviorSubject<Observable<any>[]>([]);
   public observablesArray$ = this.observablesArraySubject.asObservable();
@@ -163,6 +168,11 @@ export class OrderMethodsService implements OnDestroy {
 
   isApp                       = false;
   private orderClaimed                : boolean;
+
+  toggleSortingState(newState: boolean) {
+    this.isToggleisDisabled = newState;
+    this._togglePOSItemSort.next(this.isToggleisDisabled);
+  }
 
   getCurrentOrder() {
     if (!this.currentOrder) {
@@ -284,10 +294,16 @@ export class OrderMethodsService implements OnDestroy {
 
   preSwitchOrder(order: IPOSOrder) {
     if (!this.currentOrder?.id || this.currentOrder?.id == 0) {
+      this.groupName = ''
       this.splitEntryValue = 1;
+      this.toggleSortingState(false);
+
     }
     if (this.currentOrder?.id != order?.id) {
+      this.groupName = ''
       this.splitEntryValue = 1;
+      this.toggleSortingState(false);
+
     }
   }
 
@@ -305,6 +321,7 @@ export class OrderMethodsService implements OnDestroy {
       this.updateOrderSubscriptionOnly(order);
       if (order?.service?.filterType == 0  ) {
       }
+
       this.setStateOrder(order);
       this._scanner.next(true)
     } catch (error) {
@@ -403,7 +420,11 @@ export class OrderMethodsService implements OnDestroy {
     }
     order = this.getCost(order);
     const orderJson = JSON.stringify(order);
-    localStorage.setItem('orderSubscription', orderJson);
+    try{
+      localStorage.setItem('orderSubscription', orderJson);
+    }catch(error) {
+      console.log('save state')
+    }
   }
 
   getStateOrder(){
@@ -1068,7 +1089,7 @@ export class OrderMethodsService implements OnDestroy {
     const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging,
                       portionValue: portionValue, deviceName: deviceName, passAlongItem: passAlongItem,
                       clientID: order.clientID , priceColumn : order.priceColumn, assignedPOSItems: assignedPOSItems,
-                      unitTypeID: unitTypeID, productPrice: productPrice, wholesale: cost } as NewItem;
+                      unitTypeID: unitTypeID, productPrice: productPrice, wholesale: cost, groupName: this.groupName } as NewItem;
     // console.log(barcode)
     // console.log('new item', newItem)
     return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
@@ -1100,7 +1121,7 @@ export class OrderMethodsService implements OnDestroy {
   addItemToOrderFromBarcode(barcode: string, input, assignedItem, inputQuantity?, unitTypeID?, cost?) {
     const site = this.siteService.getAssignedSite();
     console.log('barCode', barcode)
-    
+
     const item$ = this.menuService.getMenuItemByBarcode(site, barcode, this.order?.clientID);
     let quantity = 1;
     if (inputQuantity) {  quantity = inputQuantity }
@@ -1108,9 +1129,9 @@ export class OrderMethodsService implements OnDestroy {
 
     return   item$.pipe(switchMap( data => {
 
-    
+
       if ( !data ) {
-          //for inventory items that don't have an item attached yet. 
+          //for inventory items that don't have an item attached yet.
           return this.processItemPOSObservable( this.order, barcode, null, quantity, input, 0, 0,
                                                 assignedItem, this.assignPOSItems,
                                                 unitTypeID, null,
@@ -1321,7 +1342,7 @@ export class OrderMethodsService implements OnDestroy {
                             cost?: number) : Observable<ItemPostResults> {
 
 
-    console.log('processItem', order, barcode, item, quantity,)
+    // console.log('processItem', order, barcode, item, quantity,)
 
     let tempItem = {} as ItemPostResults
     const user$ = this.getUserOrCreateUser()
@@ -1358,6 +1379,7 @@ export class OrderMethodsService implements OnDestroy {
         if (item) {
           const deviceName  = localStorage.getItem('devicename')
           const splitGroupID = this.splitEntryValue;
+          const groupName = this.groupName;
           let newItem     = { orderID: order.id,
                               quantity: quantity,
                               menuItem: item,
@@ -1374,7 +1396,8 @@ export class OrderMethodsService implements OnDestroy {
                               assignedPOSItems: passAlongItems,
                               productPrice: productPrice,
                               wholesale: cost,
-                              unitTypeID: unitTypeID }
+                              unitTypeID: unitTypeID,
+                              groupName: groupName }
 
           if (order.id == 0 || !order.id) {
             const orderPayload = this.getPayLoadDefaults(null)
@@ -1814,6 +1837,9 @@ export class OrderMethodsService implements OnDestroy {
       if (data) {
         if (data?.defaultMenuCategoryID) {
           categoryID = data?.defaultMenuCategoryID;
+          // this.router.navigate(["/menuitems-infinite/", {categoryID:categoryID}]);
+          // return this.menuService.getMenuItemByID(site, categoryID)
+          return of(null)
         }
       }
       return this.uiSettingService.transactionUISettings$
@@ -1822,10 +1848,11 @@ export class OrderMethodsService implements OnDestroy {
       //   this.router.navigate(["/menuitems-infinite/", {categoryID:categoryID}]);
       //   return this.menuService.getMenuItemByID(site, categoryID)
       // }
-      // if (data && data.defaultNewOrderCategoryID) {
-      //   this.router.navigate(["/menuitems-infinite/", {categoryID: data?.defaultNewOrderCategoryID}]);
-      //   return this.menuService.getMenuItemByID(site, data.defaultNewOrderCategoryID)
-      // }
+
+      if (data && data.defaultNewOrderCategoryID) {
+        // this.router.navigate(["/menuitems-infinite/", {categoryID: data?.defaultNewOrderCategoryID}]);
+        // return this.menuService.getMenuItemByID(site, data.defaultNewOrderCategoryID)
+      }
       return of(null)
     }))
   }
@@ -2109,6 +2136,8 @@ export class OrderMethodsService implements OnDestroy {
     localStorage.removeItem('orderSubscription')
     this.updateOrderSubscription(null);
     this.splitEntryValue = 0;
+    this.groupName = ''
+    this.toggleSortingState(false);
     this.navAfterClearOrder()
   }
 

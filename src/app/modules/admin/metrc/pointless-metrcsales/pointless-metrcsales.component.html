@@ -2,11 +2,12 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(order$ | async) as order"></div>
 <div *ngIf="(submitMetrcOrder$ | async) as order"></div>
+
 <div class="header-row">
   <div>
     <div class="header-row">
       <div>
-        <button class="button" mat-raised-button (click)="onExportToCsv()">
+        <button class="button" mat-raised-button (click)="uploadTransactions()">
           METRC Upload
           <mat-icon>upload</mat-icon>
         </button>
@@ -58,7 +59,7 @@
       <button mat-button (click)="clearSelectedData()"><mat-icon color="warn">close</mat-icon></button>
       <mat-icon>info</mat-icon> {{ selectedResponse | json}}
     </div>
-  
+
   </div>
  </div>
 
@@ -110,9 +111,10 @@
             [rowSelection]       ="rowSelection"
             [frameworkComponents]="frameworkComponents"
             (selectionChanged)   ="onSelectionChanged($event)"
-            (gridReady)          ="onGridReady($event)"> 
+            (gridReady)          ="onGridReady($event)">
       </ag-grid-angular>
-       <ag-grid-angular 
+      <!-- [gridOptions]        ="gridOptions" -->
+       <ag-grid-angular
             *ngIf="searchModel.currentDay"
             #agGrid2
             [style]              ="gridDimensions"

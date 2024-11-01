@@ -123,8 +123,15 @@ get rowClasses() {
       if (value) {
         return true
       }
-
     },
+
+    // "row-metrc-submit-button": (params) => {
+    //   const value = params.api.getValue("metrcResponse", params.node);
+    //   if (value === '') { return true }
+    //   const respsonseExists = this.getErrors(value)
+    //   if (respsonseExists) { return true}
+    //   return false;
+    // },
 
     "row-metrc-posted": (params) => {
       const value = params.api.getValue("metrcResponse", params.node);
@@ -145,13 +152,7 @@ get rowClasses() {
       return false;
     },
 
-    "row-metrc-submit-button": (params) => {
-      const value = params.api.getValue("metrcResponse", params.node);
-      if (value === '') { return true }
-      const respsonseExists = this.getErrors(value)
-      if (respsonseExists) { return true}
-      return false;
-    },
+
   }
 }
 
@@ -185,9 +186,9 @@ initGridOptions(pageSize: number, columnDefs: any, enableSorting?: boolean) {
     cacheBlockSize: pageSize,
     maxBlocksInCache: 50,
     rowModelType: 'infinite',
+    rowSelection: 'multiple',
     infiniteInitialRowCount: 0,
     columnDefs: columnDefs,
-    rowSelection: 'multiple',
     rowClassRules: this.rowClasses,
     enableFilter: true,
     enableSorting: sorting,

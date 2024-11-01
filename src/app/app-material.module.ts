@@ -48,7 +48,7 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
 
 @NgModule({
   imports        : [
-    // NgxMatDatetimePickerModule,
+    NgxMatDatetimePickerModule,
     // NgxMatNativeDateModule,
 
     NgOptimizedImage,

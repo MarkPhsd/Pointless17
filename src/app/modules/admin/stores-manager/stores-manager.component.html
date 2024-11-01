@@ -3,21 +3,22 @@
   <mat-card-title>Stores List</mat-card-title>
   <mat-card-subtitle>
     <div *ngIf="diaglog" >  {{menuItem?.name}} {{menuItem?.itemType?.name}}</div>
+     <!-- {{ binaryValue }} -->
   </mat-card-subtitle>
   <mat-card-content>
 
     <div class="flex-group-row">
-      
-      <div>
+
+      <!-- <div>
         <button class="buttons"  mat-raised-button (click)="refreshData()"><mat-icon>refresh</mat-icon>Refresh</button>
-      </div>
+      </div> -->
 
       <button *ngIf="diaglog" class="buttons" mat-button color="warn" (click)="close()"><mat-icon>close</mat-icon>Close</button>
-    
-      <button *ngIf="diaglog" class="buttons" mat-button color="primary" (click)="assign()"> <mat-icon>publish</mat-icon> Assign Stores </button>
+
+      <!-- <button *ngIf="diaglog" class="buttons" mat-button color="primary" (click)="assign()"> <mat-icon>publish</mat-icon> Assign Stores </button> -->
     </div>
-  
-    
+
+
     <div *ngIf="stores$">
       <ag-grid-angular
             #agGrid

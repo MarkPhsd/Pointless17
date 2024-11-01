@@ -166,7 +166,7 @@ export class SitesService {
 
   getDemoMode() :  Observable<string> {
     const site = this.getAssignedSite()
-   
+
     const controller = '/system/'
 
     const endPoint = `getDemoMode`
@@ -509,9 +509,9 @@ export class SitesService {
     this.speak(speak)
   }
 
-  speak(speak) { 
+  speak(speak) {
     this.zone.run(() => {
-      //   if (speak) { 
+      //   if (speak) {
       //     this.ttsService.addTextToQueue(speak)
       //   }
       // Ensure TTS is triggered even if called within a complex chain
@@ -519,7 +519,7 @@ export class SitesService {
         console.log('Speaking:', speak);
         setTimeout(() => {
           let text = ''
-          if (!this.initialzedVoice) { 
+          if (!this.initialzedVoice) {
              text = 'p ....'
              this.initialzedVoice= true;
           }
@@ -527,7 +527,7 @@ export class SitesService {
         }, 10); // Adjust the delay as needed
       }
     });
-    
+
   }
 
   notifyObs(message: string, title: string, time: number, color?: string, vPOS?: string) : Observable<any> {
@@ -537,6 +537,21 @@ export class SitesService {
 
   addTextToQueue(message: string, voice: string) {
     this.ttsService.addTextToQueue(message, voice)
+  }
+
+  convertToArray(value: string | string[]): string[] {
+    if (Array.isArray(value)) {
+      // Check if the first element is a comma-separated string
+      if (value.length === 1 && value[0].includes(',')) {
+        return value[0].split(',').map(tag => tag.trim());
+      }
+      return value;
+    } else if (typeof value === 'string') {
+      // Handle single string input (edge case)
+      return value.split(',').map(tag => tag.trim());
+    }
+    // Fallback: return an empty array if the input is invalid
+    return [];
   }
 
 }

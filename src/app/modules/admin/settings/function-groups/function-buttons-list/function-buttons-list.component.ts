@@ -10,6 +10,8 @@ import { IMenuButtonGroups, IMenuButtonProperties, mb_MenuButton } from 'src/app
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { NewOrderTypeComponent } from 'src/app/modules/posorders/components/new-order-type/new-order-type.component';
 
 @Component({
   selector: 'function-buttons-list',
@@ -26,8 +28,8 @@ export class FunctionButtonsListComponent implements OnInit {
   @Input() isUser: boolean;
   @Input() isStaff: boolean;
   @Input() adminEmail: string;
-
   @Input() list: IMenuButtonGroups;
+  bottomSheet$: Observable<any>;
   _order        :   Subscription;
   action$: Observable<any>;
   //  private mbMenuGroupService: MBMenuButtonsService
@@ -41,6 +43,7 @@ export class FunctionButtonsListComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private fbProductButtonService: ProductEditButtonService,
     private messageService: RequestMessageMethodsService,
+    private _bottomSheet           : MatBottomSheet,
    ) {
 
   }
@@ -60,6 +63,10 @@ export class FunctionButtonsListComponent implements OnInit {
     const functionName = props?.method
     if (!functionName) { return }
     switch (functionName) {
+
+      case 'changeOrderType':
+        this.changeOrderType();
+        break;
       case 'editOrder':
         this.editOrder();
         break;
@@ -118,7 +125,9 @@ export class FunctionButtonsListComponent implements OnInit {
       case 'postToShipDay':
         this.postToShipDay()
         break;
-
+      case 'togglePOSORderItemSort':
+        this.togglePOSORderItemSort();
+        break;
       default:
         console.log('Function not found');
         break;
@@ -149,6 +158,15 @@ export class FunctionButtonsListComponent implements OnInit {
     const diag = this.fbProductButtonService.openOrderEditor(this.order)
   }
 
+  changeOrderType() {
+    if (!this.order) { return }
+    this.orderMethodsService.toggleChangeOrderType = true;
+    const bottomSheet = this._bottomSheet.open(NewOrderTypeComponent)
+    this.bottomSheet$ = bottomSheet.afterDismissed()
+    this.bottomSheet$.subscribe(data => {
+      this.orderMethodsService.toggleChangeOrderType = false;
+    })
+  }
 
   price(value) {
     if (this.order ) {
@@ -237,6 +255,11 @@ export class FunctionButtonsListComponent implements OnInit {
   textOrder() {
     console.log('Placeholder for Text Order');
     // Add the actual implementation here
+  }
+
+  togglePOSORderItemSort() {
+    const newState = !this.orderMethodsService.isToggleisDisabled;
+    this.orderMethodsService.toggleSortingState(newState);
   }
 
   postToShipDay() {

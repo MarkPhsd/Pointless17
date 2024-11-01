@@ -21,6 +21,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
       <mat-date-range
         [hideRefresh] ="true"
         [buttonViewEnabled] ="true"
+
         [inputForm] ="completionDateForm">
       </mat-date-range>
     </div>
@@ -185,7 +186,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
       <button mat-flat-button  style="width:150px;height:50px"color="warn"
               (click)="showView(5)">Item Voids</button>
 
-      <button *ngIf="zrunID" style="width:150px;height:50px" 
+      <button *ngIf="zrunID" style="width:150px;height:50px"
               mat-raised-button (click)="deleteDuplicates()" color="warn">Delete Duplicates ({{zrunID}})</button>
 
     </div>
@@ -235,7 +236,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
             <ng-container *ngTemplateOutlet="viewMetrcNetSales, context: {$implicit: site}">
             </ng-container>
           </div>
-         
+
           <sales-tax-report
                   [site]="site"
                   [dateFrom]  ="dateFrom"
@@ -400,7 +401,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
           <ng-container *ngTemplateOutlet="uomSalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="brandSalesView,context: {$implicit: site}"></ng-container>
           <ng-container *ngTemplateOutlet="vendorSalesView,context: {$implicit: site}"></ng-container>
-          
+
 
         </ng-container>
 
@@ -534,7 +535,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
                   [zrunID]  ="zrunID"
                   >
                 <div class="header">
-                  <mat-icon>menu</mat-icon> Item Count SAles   
+                  <mat-icon>menu</mat-icon> Item Count SAles
                   <mat-divider></mat-divider>
                 </div>
             </item-sales-card>
@@ -641,7 +642,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
         </ng-template>
 
         <ng-template #brandSales let-site>
-          
+
           <div>
             <item-sales-card
                   [notifier]="count"
@@ -662,7 +663,7 @@ assets/htmlTemplates/salesreportStyles.html' -->
         </ng-template>
 
         <ng-template #vendorSales let-site>
-          
+
           <div>
             <item-sales-card
                   [notifier]="count"

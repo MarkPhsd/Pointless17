@@ -3,9 +3,12 @@
 <div  *ngIf="order && mainPanel && uiTransactionSetting"
       class="buttons-container">
 
+
   <ng-container [ngTemplateOutlet]="receiptView"></ng-container>
 
   <ng-container [ngTemplateOutlet]="payOptionView"></ng-container>
+
+  <ng-container [ngTemplateOutlet]="isGroupNameMenu"></ng-container>
 
   <ng-container [ngTemplateOutlet]="listItemsView"> </ng-container>
 
@@ -62,6 +65,7 @@
     <ng-container [ngTemplateOutlet]="isbalanceSheetMenuView"></ng-container>
   </div>
 
+
   <div>
     <ng-container [ngTemplateOutlet]="quickMenusToggle"></ng-container>
   </div>
@@ -73,7 +77,7 @@
 </div>
 
 <ng-template #quickMenusToggle>
-  <button 
+  <button
           mat-raised-button
           class="button"
           color="primary"
@@ -425,7 +429,6 @@
 
   <button aria-label="user menu"
           mat-raised-button
-
           [matMenuTriggerFor]="menu"
           #menuTrigger="matMenuTrigger"
           (click)="menuTrigger.openMenu()" >
@@ -466,3 +469,35 @@
   <message-menu-sender [order]="order" [isStaff]="isStaff"></message-menu-sender>
 
 </ng-template>
+
+<ng-template #groupNameMenu>
+    <!-- Second Menu Trigger -->
+    <!-- serviceTypeOrder  {{serviceTypeOrder | json}} -->
+     <div        *ngIf="serviceTypeOrder">
+
+       <button aria-label="settings menu"
+        mat-raised-button
+        [matMenuTriggerFor]="settingsMenu"
+        #settingsMenuTrigger="matMenuTrigger"
+        (click)="settingsMenuTrigger.openMenu()">
+        <mat-icon>groups</mat-icon>
+        Group <br> {{orderMethodsService?.groupName}}
+      </button>
+
+      <!-- Second Menu -->
+      <mat-menu class="mat-menu-panel"
+              [overlapTrigger]="false"
+                #settingsMenu="matMenu">
+        <span (mouseleave)="settingsMenuTrigger.closeMenu()">
+
+          <div *ngFor="let item of serviceTypeOrder">
+            <button mat-raised-button (click)="setGroupName(item)">
+              {{item}}
+            </button>
+          </div>
+
+        </span>
+      </mat-menu>
+  </div>
+</ng-template>
+

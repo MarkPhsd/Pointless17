@@ -3,7 +3,7 @@ import { formatDate as ngFormatDate } from "@angular/common";
 import { Inject } from "@angular/core";
 import { Injectable } from "@angular/core";
 import { LOCALE_ID } from "@angular/core";
-import { DateRangeValidator, DayTimeRangeValidator } from "src/app/_interfaces";
+import { DateRangeValidator, DayTimeRangeValidator, ScheduleDateValidator, ScheduleValidator } from "src/app/_interfaces";
 // import * as moment from 'moment';
 // ----------------------------------------------------------------------------------- //
 // ----------------------------------------------------------------------------------- //
@@ -66,13 +66,200 @@ var FROM_NOW_YEAR = ( MS_DAY * 547 );
 export class DateHelperService {
 
 	private localID: string;
+  timeSlots: string[] = []; // Store generated time slots
+  private disallowedDates: { startDate: string; endDate: string }[] = [];
+  private disallowedWeekdays: Set<number> = new Set(); // Store disallowed weekdays as numbers
 
+  private disallowedDateObjects: { startDate: Date; endDate: Date }[] = [];
 	// I initialize the date-helper with the given localization token.
 	constructor( @Inject( LOCALE_ID ) localID: string ) {
     // console.log('localID', localID)
 		this.localID = localID;
 
 	}
+
+  // Updated method to set disallowed dates and weekdays
+// Updated method to set disallowed dates and weekdays
+  setDisallowedDates(
+    dateValidator: ScheduleDateValidator,
+    weekDayTimeValidator: ScheduleValidator
+  ) {
+    // Safely store the allowedDates, handling null or undefined values
+    this.disallowedDates = dateValidator?.allowedDates || [];
+
+    // Safely extract disabled weekdays, handling null or undefined week property
+    this.disallowedWeekdays = new Set(
+      (weekDayTimeValidator?.week || [])
+        .filter((day) => day?.disabled) // Only process disabled days
+        .map((day) => this.getDayNumber(day.day))
+    );
+  }
+
+  // setDisallowedDates(
+  //   dateValidator: ScheduleDateValidator,
+  //   weekDayTimeValidator: ScheduleValidator
+  // ) {
+  //   // Store the allowedDates from ScheduleDateValidator as disallowed dates
+  //   this.disallowedDates = dateValidator.allowedDates;
+
+  //   // Extract disabled weekdays from ScheduleValidator
+  //   this.disallowedWeekdays = new Set(
+  //     weekDayTimeValidator.week
+  //       .filter((day) => day.disabled) // Only process disabled days
+  //       .map((day) => this.getDayNumber(day.day))
+  //   );
+
+
+  // };
+
+
+  // Convert day name to JavaScript's numeric day (0 = Sunday, 6 = Saturday)
+  private getDayNumber(day: string): number {
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return daysOfWeek.indexOf(day);
+  }
+
+  // Helper to convert string date to Date object with timezone adjustment
+  private toDate(dateString: string): Date {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      throw new Error(`Invalid date string: ${dateString}`);
+    }
+    return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+  }
+
+  // Generate the filter function for ngx-mat-datetime-picker
+  generateDisallowedDateFilter(minDate?: Date): (dateTime: Date | null) => boolean {
+
+    if (!minDate) {minDate = new Date()}
+    return (dateTime: Date | null): boolean => {
+      if (!dateTime) return false;
+
+      // Enforce minDate constraint
+      if (dateTime < minDate) return false;
+
+      // Block disallowed weekdays
+      if (this.disallowedWeekdays.has(dateTime.getDay())) return false;
+
+      // Block specific disallowed date ranges
+      return !this.disallowedDates.some((range) => {
+        const startDate = this.toDate(range.startDate);
+        const endDate = this.toDate(range.endDate);
+        return dateTime >= startDate && dateTime <= endDate;
+      });
+    };
+  }
+
+   // Generate time slots based on provided time ranges or default to 6 AM - 9 PM
+   generateTimeSlots(timeRanges?: { startTime: string; endTime: string }[]): void {
+    if (!timeRanges || timeRanges.length === 0) {
+      // Default: Generate from 6 AM to 9 PM in 15-minute intervals
+      this.generateDefaultTimeSlots();
+    } else {
+      // Generate time slots based on provided ranges
+      timeRanges.forEach((range) => {
+        this.generateTimeSlotsForRange(range.startTime, range.endTime);
+      });
+    }
+  }
+
+  // Generate 15-minute intervals between 6 AM and 9 PM
+  private generateDefaultTimeSlots() {
+    this.generateTimeSlotsForRange('06:00', '21:00');
+  }
+
+  private generateTimeSlotsForRange(startTime: string, endTime: string) {
+    const [startHours, startMinutes] = startTime.split(':').map(Number);
+    const [endHours, endMinutes] = endTime.split(':').map(Number);
+
+    const start = new Date();
+    start.setHours(startHours, startMinutes, 0, 0);
+
+    const end = new Date();
+    end.setHours(endHours, endMinutes, 0, 0);
+
+    this.timeSlots = []; // Store generated time slots
+
+    while (start <= end) {
+      const hours = start.getHours();
+      const minutes = start.getMinutes().toString().padStart(2, '0');
+
+      // Convert hours from 24-hour format to 12-hour format
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const formattedHours = hours % 12 || 12; // Convert '0' to '12' for midnight
+
+      // Create the time slot string in 'HH:mm AM/PM' format
+      const timeSlot = `${formattedHours}:${minutes} ${ampm}`;
+      this.timeSlots.push(timeSlot);
+
+      // Increment by 15 minutes
+      start.setMinutes(start.getMinutes() + 15);
+    }
+
+    return this.timeSlots;
+  }
+
+
+  // Generate 15-minute intervals for a specific time range
+  private generateTimeSlotsForRange24Hr(startTime: string, endTime: string) {
+    const [startHours, startMinutes] = startTime.split(':').map(Number);
+    const [endHours, endMinutes] = endTime.split(':').map(Number);
+
+    const start = new Date();
+    start.setHours(startHours, startMinutes, 0, 0);
+
+    const end = new Date();
+    end.setHours(endHours, endMinutes, 0, 0);
+    this.timeSlots = []; // Store generated time slots
+
+    while (start <= end) {
+      const hours = start.getHours().toString().padStart(2, '0');
+      const minutes = start.getMinutes().toString().padStart(2, '0');
+      this.timeSlots.push(`${hours}:${minutes}`);
+      start.setMinutes(start.getMinutes() + 15); // Increment by 15 minutes
+    }
+    return this.timeSlots
+  }
+
+    // // Convert string to Date with timezone adjustment
+    // private toDate(dateString: string): Date {
+    //   const date = new Date(dateString);
+    //   if (isNaN(date.getTime())) {
+    //     throw new Error(`Invalid date string: ${dateString}`);
+    //   }
+    //   return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+    // }
+    // // Generate the filter function, now also accepting a minDate
+    // generateDisallowedDateFilter(minDate?: Date): (dateTime: Date | null) => boolean {
+    //   if (!minDate) { minDate = new Date()}
+
+    //   return (dateTime: Date | null): boolean => {
+    //     if (!dateTime) return false;
+
+    //     // Enforce minDate constraint
+    //     if (dateTime < minDate) return false;
+
+    //     // Check if the date falls within any disallowed range
+    //     return !this.disallowedDates.some((range) => {
+    //       const startDate = this.toDate(range.startDate);
+    //       const endDate = this.toDate(range.endDate);
+    //       return dateTime >= startDate && dateTime <= endDate;
+    //     });
+    //   };
+    // }
+
+
+
+  isDateTimeDisallowed(dateTime: Date): boolean {
+    return this.disallowedDateObjects.some((range) => {
+      return dateTime >= range.startDate && dateTime <= range.endDate;
+    });
+  }
+
+  // Retrieve disallowed dates
+  getDisallowedDates(): DateRangeValidator[] {
+    return this.disallowedDates;
+  }
 
 
   getDates(startDate: Date, endDate: Date): Date[] {
@@ -354,6 +541,24 @@ export class DateHelperService {
     return date && Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date);
   }
 
+    // Helper to format time in 'HH:mm' format
+     formatTime(date: Date): string {
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    }
+
+    // Helper function to format time in "HH:mm AM/PM" format
+    formatTimeOnly(date: Date): string {
+      const hours = date.getHours();
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+
+      // Adjust hours to 12-hour format
+      const formattedHours = hours % 12 || 12;
+
+      return `${formattedHours}:${minutes} ${ampm}`;
+    }
       /**
      * Helper function to format time from 24-hour (HH:MM) to 12-hour with AM/PM
      * @param timeString - The time in 24-hour format (e.g., "14:05")
@@ -426,7 +631,7 @@ export class DateHelperService {
     // Check if there are valid Time Ranges defined for the specific day
     if (timeRanges && timeRanges.length > 0) {
       const dayTimeRange = timeRanges.find(range => range.day === this.getDayString(selectedDay));
-      
+
       // If the day is disabled, it should fail validation
       if (dayTimeRange?.disabled) {
         console.log(`Day ${this.getDayString(selectedDay)} is disabled.`);
@@ -497,6 +702,84 @@ export class DateHelperService {
    */
   private padZero(num: number): string {
     return num < 10 ? `0${num}` : `${num}`;
+  }
+
+   formatToISO(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const milliseconds = date.getMilliseconds().toString().padStart(3, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}`;
+  }
+
+
+  formatDateTime(date: Date | null | undefined): string {
+    if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+      console.warn('Invalid date object provided:', date);
+      return 'Invalid Date';
+    }
+
+    const months = (date.getMonth() + 1).toString().padStart(2, '0');
+    const days = date.getDate().toString().padStart(2, '0');
+    const years = date.getFullYear();
+
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    // Convert hours to 12-hour format
+    hours = hours % 12;
+    hours = hours ? hours : 12; // '0' should be '12'
+
+    const formattedTime = `${hours}:${minutes} ${ampm}`;
+    return `${months}/${days}/${years} ${formattedTime}`;
+  }
+
+  parseFormattedDateTime(dateString: string | null | undefined): Date | null {
+    if (!dateString || typeof dateString !== 'string') {
+      console.warn('Invalid date string:', dateString);
+      return null;
+    }
+
+    // Check if the input is in ISO 8601 format
+    const isoDate = new Date(dateString);
+    if (!isNaN(isoDate.getTime())) {
+      return isoDate;
+    }
+
+    // Handle custom MM/DD/YYYY HH:mm AM/PM format
+    const parts = dateString.split(' '); // Split into date, time, and AM/PM parts
+    if (parts.length < 3) {
+      console.warn('Date string format is incorrect:', dateString);
+      return null;
+    }
+
+    const [datePart, timePart, ampm] = parts;
+    const dateSegments = datePart.split('/').map(Number);
+    if (dateSegments.length !== 3) {
+      console.warn('Invalid date format:', datePart);
+      return null;
+    }
+    const [month, day, year] = dateSegments;
+
+    const timeSegments = timePart.split(':').map(Number);
+    if (timeSegments.length !== 2) {
+      console.warn('Invalid time format:', timePart);
+      return null;
+    }
+    let [hours, minutes] = timeSegments;
+
+    // Convert to 24-hour format if needed
+    if (ampm === 'PM' && hours < 12) hours += 12;
+    if (ampm === 'AM' && hours === 12) hours = 0;
+
+    const date = new Date(year, month - 1, day, hours, minutes);
+    return isNaN(date.getTime()) ? null : date; // Return null if the date is invalid
   }
 
 

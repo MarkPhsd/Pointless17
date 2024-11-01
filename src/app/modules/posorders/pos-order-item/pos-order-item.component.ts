@@ -89,7 +89,7 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
   @Input() enableItemReOrder  : boolean = false;
   @Input() isStaff: boolean;
   @Input() orderServiceType: string;
-  
+
   textNameLength : number = 30;
 
   @Input() cardWidth: string;
@@ -150,6 +150,15 @@ export class PosOrderItemComponent implements OnInit,OnChanges, AfterViewInit,On
      if (window.innerWidth < 768) {
        this.smallDevice = true
      }
+  }
+
+  get printLocationEnabled() {
+    if ( (
+      (this.orderItem.idRef == 0 || this.orderItem?.id == this.orderItem.idRef) &&
+      this.orderItem?.printLocation && this.orderItem?.printLocation!= 0)) {
+        return true
+      }
+      return false
   }
 
   get _unitprice() {

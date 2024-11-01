@@ -200,6 +200,17 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
     return undefined;
   }
 
+
+  get isCondensedMenuButtons() {
+    if (this.uiHomePage?.condensedMenuButtons) {
+      return true
+    }
+    if (this.posDevice?.condensedMenuButtons) {
+      return true;
+    }
+    return false
+  }
+
   get categoryFilterView(){
     if (this.uiHomePage && this.uiHomePage.suppressMenuItems && this.uiHomePage.storeNavigation) {
       if (this.categories && this.categories.length) {

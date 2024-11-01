@@ -71,8 +71,6 @@ export class MatToggleSelectorComponent implements OnChanges {
               list = list.result
             }
        
-
-            console.log('data', data)
             this.subscribed = true
             this.list = []
             if (list) {

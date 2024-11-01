@@ -1,6 +1,5 @@
 <div *ngIf="(action$ | async) as items"></div>
 <div *ngIf="serviceType && inputForm">
-  <!-- {{serviceType | json}} -->
 
   <mat-card class="mat-card">
     <mat-card-title>
@@ -272,7 +271,7 @@
                       type             ="text"
                       formControlName  ="icon"
                       class="form-control" >
-            
+
               </mat-form-field>
             </div>
         </div>
@@ -339,6 +338,19 @@
         Features
       </mat-card-subtitle>
       <mat-card-content>
+
+        <div class="meta-tags"
+              *ngIf="itemFeatures && serviceTypeFeaturesForm">
+
+            <app-meta-tag-chips
+              [itemTags]="itemFeatures?.metaTags"
+              [placeholder]="'Order Grouping'"
+              [fieldDescription]="'Order Grouping'"
+              (outPutItemTags) ="setGroupingList($event)"
+              [serviceTypeFeatures] ="itemFeatures"
+              [inputForm]      ="serviceTypeFeaturesForm">
+            </app-meta-tag-chips>
+        </div>
         <form [formGroup]="serviceTypeFeaturesForm">
           <!-- Other form fields -->
 
@@ -456,7 +468,7 @@
     <div header>
        Specfic Ranges Allowed
     </div>
-   
+
   </app-schedule-date-range-selector>
 </ng-template>
 
@@ -469,6 +481,6 @@
     <div header>
       Excluded Date Ranges
     </div>
-     
+
   </app-schedule-date-range-selector>
 </ng-template>

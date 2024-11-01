@@ -1,13 +1,19 @@
 // import { Route } from '@angular/router';
 import { Observable, Subscription, of, switchMap, } from 'rxjs';
 import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter,
-         OnDestroy, TemplateRef, Renderer2 } from '@angular/core';
+         OnDestroy, TemplateRef, Renderer2,
+         ViewChildren,
+         QueryList,
+         AfterViewInit,
+         SimpleChanges,
+         OnChanges,
+         } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { ISite } from 'src/app/_interfaces';
+import { IServiceType, ISite, ServiceTypeFeatures } from 'src/app/_interfaces';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
@@ -18,14 +24,30 @@ import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
 import { IMenuButtonGroups, MBMenuButtonsService } from 'src/app/_services/system/mb-menu-buttons.service';
+import { ItemReorderEventDetail } from '@ionic/angular';
+import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { filter } from 'lodash';
 
 @Component({
   selector: 'pos-order-items',
   templateUrl: './pos-order-items.component.html',
   styleUrls: ['./pos-order-items.component.scss'],
 })
-export class PosOrderItemsComponent implements OnInit, OnDestroy {
+export class PosOrderItemsComponent implements OnInit, OnDestroy, AfterViewInit,OnChanges {
+  serviceTypeOrder : string[]
+  private _filteredItems: any[] | null = null;  // Store filtered result
+  private _lastItems: any[] = [];               // Cache of last input items
 
+  groupedItems: { [key: string]: PosOrderItem[] } = {};
+  // currentItems: PosOrderItem[] = [];
+  // @ViewChildren('reorderItem', { read: ElementRef })
+
+  @ViewChildren('reorderGroup', { read: ElementRef }) reorderGroupList: QueryList<ElementRef>;
+
+  items: QueryList<ElementRef>;
+
+  toggleROrder: boolean;
   action$: Observable<any>;
   @ViewChild('posOrderItemsPrepView') posOrderItemsPrepView: TemplateRef<any>;
   @ViewChild('posOrderItemsView') posOrderItemsView: TemplateRef<any>;
@@ -89,10 +111,13 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   private styleTag: HTMLStyleElement;
   // private customStyleEl: HTMLStyleElement | null = null;
   @ViewChild('scrollDiv') scrollDiv: ElementRef;
-
+  isToggleisDisabled: boolean;
   scanMode : number;
   isAdmin: boolean;
 
+  serviceType  : IServiceType;
+  serviceType$ : Observable<IServiceType>;
+  sort$: Observable<string>;
   scrollStyle = this.platformService.scrollStyleWide;
   user$ = this.authService.user$.pipe(switchMap(data => {
     if (this.phoneDevice) {
@@ -102,15 +127,21 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     this.setScrollBarColor(data?.userPreferences?.headerColor)
     return of(data)
   }))
-  uiHomePage: import("c:/Users/18587/repos/Pointless151/src/app/_services/system/settings/uisettings.service").UIHomePageSettings;
 
+  toggleSubscriber$ = this.orderMethodService.togglePOSItemSort$.subscribe(data => {
+
+    // console.log('toggle', datacon)
+    this.toggleReorder(data)
+
+  })
+
+  uiHomePage: UIHomePageSettings;
 
   get isNoPaymentPage() {
     if (this.currentRoute === 'pos-payment') {
       return false
     }
     return true
-
   }
 
   setScanMode(number) {
@@ -118,24 +149,22 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   get currentItems() {
+    if (this.scanMode == 1) {
+      return this.posOrderItems.filter(data => {
+        if (!data.prepByDate) {
+          return data
+        }
+      })
+    }
 
-      if (this.scanMode == 1) {
-        return this.posOrderItems.filter(data => {
-          if (!data.prepByDate) {
-            return data
-          }
-        })
-      }
-
-      if (this.scanMode == 2) {
-        return this.posOrderItems.filter(data => {
-          if (!data.deliveryByDate) {
-            return data
-          }
-        })
-      }
-
-      return this.posOrderItems
+    if (this.scanMode == 2) {
+      return this.posOrderItems.filter(data => {
+        if (!data.deliveryByDate) {
+          return data
+        }
+      })
+    }
+    return this.posOrderItems
   }
 
   routSubscriber() {
@@ -159,6 +188,130 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     })
   }
 
+  handleReorder(event: any) {
+    event.detail.complete();
+    this.updateItemsList();
+    return;
+  }
+
+  findItemByIndex(index: number): PosOrderItem | undefined {
+    let cumulativeIndex = 0;
+
+    for (const group in this.groupedItems) {
+      const items = this.groupedItems[group];
+      if (index < cumulativeIndex + items.length) {
+        return items[index - cumulativeIndex];
+      }
+      cumulativeIndex += items.length;
+    }
+    return undefined;
+  }
+
+  getGroupNameByIndex(index: number): string | undefined {
+    let cumulativeIndex = 0;
+    for (const groupName in this.groupedItems) {
+      const items = this.groupedItems[groupName];
+      cumulativeIndex += items.length;
+
+      if (index < cumulativeIndex) {
+        return groupName;
+      }
+    }
+    return undefined;
+  }
+
+  logGroupedItems() {
+    const itemsList: PosOrderItem[] = [];
+
+    let i = 1; // Product sort order counter
+    let  productSortOrder =1
+    // Loop through the grouped items and log them
+    Object.entries(this.groupedItems).forEach(([groupName, items]) => {
+      items.forEach(item => {
+        // console.log(`Group: ${groupName}, Product: ${item.productName}, ID: ${item.id}`);
+        let posItem = {} as PosOrderItem
+        posItem.id = item.id
+        posItem.productName = item.productName
+        posItem.groupName = groupName,
+        productSortOrder = i++,
+
+        itemsList.push(posItem);
+      });
+    });
+    const site = this.siteService.getAssignedSite();
+    this.sort$ = this.posOrderItemService.setSortedItems(site, itemsList);
+  }
+
+
+  updateItemsList() {
+    const reorderGroupElementRef = this.reorderGroupList.first;
+    if (!reorderGroupElementRef) {
+      console.error('reorderGroupElementRef is undefined');
+      return;
+    }
+    const reorderGroupElement = reorderGroupElementRef.nativeElement as HTMLElement;
+
+    // Proceed with your traversal and updating logic
+    this.traverseReorderGroup(reorderGroupElement);
+  }
+
+  traverseReorderGroup(reorderGroupElement: HTMLElement) {
+    const itemsArray: PosOrderItem[] = [];
+    let sortOrder = 1;
+    let currentGroupName = '';
+
+    const childNodes = Array.from(reorderGroupElement.children);
+
+    childNodes.forEach((node: HTMLElement) => {
+      if (node.tagName === 'ION-ITEM-DIVIDER') {
+        // This is a group header
+        currentGroupName = node.innerText.trim();
+        // console.log(`Current Group: ${currentGroupName}`);
+      } else if (node.tagName === 'ION-ITEM') {
+        const itemId = node.getAttribute('data-id');
+        const posItem = this.findItemById(itemId);
+        if (posItem) {
+          posItem.groupName = currentGroupName;
+          posItem.productSortOrder = sortOrder++;
+          itemsArray.push(posItem);
+          // console.log(`Item ID: ${itemId}, New Group: ${currentGroupName}`);
+        }
+      }
+    });
+
+    // console.log('Updated Items:', itemsArray);
+    this.saveUpdatedItems(itemsArray);
+  }
+
+
+  findItemById(id: string): PosOrderItem | undefined {
+    return this.currentItems.find(item => item.id.toString() === id);
+  }
+
+  saveUpdatedItems(items: PosOrderItem[]) {
+    const site = this.siteService.getAssignedSite();
+    this.sort$ = this.posOrderItemService.setSortedItems(site, items);
+  }
+
+  getAllServiceTypes(): string[] {
+    if (this.groupedItems) {
+      if (this.serviceTypeOrder) {
+        const dynamicTypes = Object.keys(this.groupedItems).filter(
+          type => !this.serviceTypeOrder.includes(type)
+        );
+        if (this.serviceTypeOrder) {
+          return [...this.serviceTypeOrder, ...dynamicTypes];
+        }
+      }
+    }
+    return []
+  }
+
+
+  toggleReorder(option) {
+    this.initializeGroups()
+    this.isToggleisDisabled = option// !this.isToggleisDisabled;
+  }
 
   get posItemsView() {
     if (this.prepScreen) {
@@ -177,8 +330,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   initSubscriptions() {
-
-
     try {
       this._posDevice = this.uiSettingsService.posDevice$.subscribe(data => {
         this.posDevice = data;
@@ -186,7 +337,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     } catch (error) {
 
     }
-
 
     try {
       this._bottomSheetOpen = this.orderMethodService.bottomSheetOpen$.subscribe(data => {
@@ -207,6 +357,9 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       if (!this.displayHistoryInfo) {
         this._order = this.orderMethodService.currentOrder$.subscribe( order => {
           this.order = order
+          if (this.order?.serviceType != order?.serviceType) {
+            this.setServiceTypeGroups()
+          }
 
           if (this.order && this.order.posOrderItems)  {
             this.posOrderItems = this.order.posOrderItems
@@ -222,7 +375,9 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
         if (!this.disableActions) {
           this._order = this.orderMethodService.currentOrder$.subscribe( order => {
             this.order = order
-            // console.log('order update', this.order?.posOrderItems)
+            if (!this.serviceType &&  this.order) {
+              this.getServiceType()
+            }
             if (this.order && this.order.posOrderItems)  {
               this.posOrderItems = this.order.posOrderItems
               this.sortPOSItems(this.currentItems);
@@ -237,6 +392,34 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       this.scrollToBottom();
     }, 200);
 
+  }
+
+  setServiceTypeGroups() {
+    if (!this.order) {return [] }
+    if (!this.order.service) {return [] }
+
+    // const site = this.siteService.getAssignedSite()
+    // this.serviceType$ = this.seviceTypeService.getTypeCached(site, this.order.serviceTypeID).pipe(switchMap(data => {
+      const serviceType = this.order.service;
+      // console.log('service', serviceType.json)
+      if (!serviceType.json) { return [] }
+      const props = JSON.parse(serviceType.json) as ServiceTypeFeatures;
+
+      // console.log('props', props, props.metaTags)
+      if (!props) {  return []}
+
+      if (!props.metaTags) {  return []}
+
+      this.serviceTypeOrder = this.siteService.convertToArray(props.metaTags);
+      // return of(data)
+    // }))
+  }
+
+  getServiceType() {
+    const site = this.siteService.getAssignedSite()
+    if (!this.order) {return}
+    this.serviceType = this.order.service;
+    this.setServiceTypeGroups()
   }
 
   sendOrder() {
@@ -256,30 +439,88 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   }
 
   sortPOSItems(orderItems: PosOrderItem[]) {
-
     this.posOrderItems = this.sortItems(orderItems)
-
     setTimeout(() => {
       this.scrollToBottom();
     }, 200);
   }
 
-  sortItems(items:  PosOrderItem[]) {
-    // let list = items.sort((a, b) => (a.idRef > b.idRef) ? 1 : 1);
-    // list = items.sort((a, b) => (a.productSortOrder > b.productSortOrder) ? 1 : -1);
-    // list.forEach(data => {
-    //   // console.log(data.productName, data.productSortOrder)
-    // })
+  sortItems(items: PosOrderItem[]) {
+    let  serviceTypeOrder = this.serviceTypeOrder;
+
     this.conditionalIndex = 1;
-    if (!this.conditionalIndex) { this.conditionalIndex = 1}
+    if (!this.conditionalIndex) { this.conditionalIndex = 1; }
+
+    if (!serviceTypeOrder) { serviceTypeOrder = []}
+
+      // Helper function to get the order index for a service type
+      const getServiceTypeOrder = (serviceType: string): number => {
+        const index = serviceTypeOrder.indexOf(serviceType);
+        return index === -1 ? -Infinity : index; // -Infinity for unknown types to place them at the top
+      };
+
+
+    // Sort based on serviceType and productSortOrder, while retaining original groupings by id and idRef
+    items.sort((a, b) => {
+      // Ensure items stay grouped together
+
+      if (!this.isToggleisDisabled) {
+        return a.productSortOrder - b.productSortOrder;
+      }
+
+      if (a.id === a.idRef && b.id === b.idRef) {
+        const serviceOrderA = getServiceTypeOrder(a.serviceType);
+        const serviceOrderB = getServiceTypeOrder(b.serviceType);
+
+        // Sort by serviceType using predefined order
+        if (serviceOrderA !== serviceOrderB) {
+          return serviceOrderA - serviceOrderB;
+        }
+
+        // If serviceType is the same, sort by productSortOrder
+        return a.productSortOrder - b.productSortOrder;
+      }
+
+
+      // If not in the same group, maintain original group order
+      return 0;
+    });
+
+    // console.log('items', items)
+
+    // Apply original grouping logic and assign conditionalIndex
     items.forEach((item, index) => {
-      if (item.id == item.idRef) {
+      if (item.id === item.idRef) {
         item.conditionalIndex = this.conditionalIndex++;
       } else {
-          item.conditionalIndex = null; // or keep the previous value, depending on your needs
+        item.conditionalIndex = null;
       }
     });
+
     return items;
+  }
+  get itemCount(): number {
+    // Check if the items have changed to avoid re-filtering
+    if (this.currentItems !== this._lastItems) {
+      this._filteredItems = this.currentItems.filter(item => item.idRef === item.id);
+      this._lastItems = this.currentItems;
+    }
+    return this._filteredItems?.length || 0;
+  }
+
+  // Group items by serviceType and exclude items where idRef != id
+  getGroupedItems() {
+    const filteredItems = this.currentItems.filter(item => item.id === item.idRef);
+
+    const grouped = filteredItems.reduce((acc, item) => {
+      if (!acc[item.serviceType]) {
+        acc[item.serviceType] = [];
+      }
+      acc[item.serviceType].push(item);
+      return acc;
+    }, {} as { [key: string]: PosOrderItem[] });
+
+    return Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b));
   }
 
 
@@ -287,6 +528,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       if (this._bottomSheetOpen) { this._bottomSheetOpen.unsubscribe()}
       if (this._order) { this._order.unsubscribe()}
       if (this._uiConfig) { this._uiConfig.unsubscribe()}
+      this.serviceType = null;
   }
 
   constructor(  public platformService: PlatformService,
@@ -304,6 +546,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
                 private _bottomSheetService  : MatBottomSheet,
                 private messagingService: RequestMessageMethodsService,
                 private mbMenuGroupService: MBMenuButtonsService,
+                private posOrderItemService: POSOrderItemService,
+                private seviceTypeService: ServiceTypeService,
                 private router: Router
               )
   {
@@ -322,8 +566,22 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       this.nopadd = 'nopadd-display'
     }
 
+    if (this.order) {
+      this.setServiceTypeGroups()
+    }
+
     // if (this.pax)
   }
+
+
+  ngAfterViewInit() {
+    // Subscribe to changes in the QueryList
+    this.reorderGroupList.changes.subscribe(() => {
+      // Handle any updates if necessary
+    });
+  }
+
+
 
   checkIfMenuBoardExists(): boolean {
     const url = this.router.url;
@@ -336,6 +594,12 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   dismissItemsView(event) {
     this.dismiss();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.currentItems && this.isToggleisDisabled && this.serviceTypeOrder) {
+      this.initializeGroups();
+    }
   }
 
   ngOnInit() {
@@ -370,6 +634,80 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     this.initStyles();
 
   }
+
+  itemFilter(item: PosOrderItem): boolean {
+    if (item.idRef !== null && item.id !== item.idRef) {
+      // Exclude items where idRef is not null and id is not equal to idRef
+      return false;
+    }
+    return true;
+  }
+
+  initializeGroups() {
+    if (!this.currentItems) return;
+    // Filter items based on your filtering criteria
+    const filteredItems = this.currentItems.filter(item => this.itemFilter(item));
+    // console.log('posOrderItems', this.posOrderItems)
+    // console.log(this.currentItems, filteredItems)
+    // Collect all unique group names from the items
+    const groupNames = Array.from(new Set(filteredItems.map(item => item.groupName || 'Ungrouped')));
+
+    // Initialize the `groupedItems` based on the collected group names
+    this.groupedItems = groupNames.reduce((acc, groupName) => {
+      acc[groupName] = [];
+      return acc;
+    }, {} as { [key: string]: PosOrderItem[] });
+
+    // Group items by `groupName`
+    filteredItems.forEach(item => {
+      const groupName = item.groupName || 'Ungrouped';
+      item.groupName = groupName; // Ensure item has the correct groupName
+      this.groupedItems[groupName].push(item);
+    });
+
+    // Sort items within each group based on `productSortOrder`
+    Object.values(this.groupedItems).forEach(items => {
+      items.sort((a, b) => a.productSortOrder - b.productSortOrder);
+    });
+
+    // console.log('Initialized Groups:', this.groupedItems);
+  }
+
+
+  // initializeGroups() {
+  //   // Ensure `serviceTypeOrder` is correctly initialized as an array
+  //   const groupNames = Array.isArray(this.serviceTypeOrder) ? this.serviceTypeOrder : [];
+
+  //   // Initialize the `groupedItems` based on `groupNames`
+  //   this.groupedItems = groupNames.reduce((acc, type) => {
+  //     acc[type] = [];
+  //     return acc;
+  //   }, {} as { [key: string]: PosOrderItem[] });
+
+  //   if (!this.currentItems) return;
+
+  //   // Filter items based on your filtering criteria
+  //   const filteredItems = this.currentItems.filter(item => this.itemFilter(item));
+
+  //   // Group items by `groupName`
+  //   filteredItems.forEach(item => {
+  //     const groupName = item.groupName || 'Ungrouped';
+  //     item.groupName = groupName; // Ensure item has the correct groupName
+
+  //     if (!this.groupedItems[groupName]) {
+  //       this.groupedItems[groupName] = [];
+  //     }
+
+  //     this.groupedItems[groupName].push(item);
+  //   });
+
+  //   // Sort items within each group based on `productSortOrder`
+  //   Object.values(this.groupedItems).forEach(items => {
+  //     items.sort((a, b) => a.productSortOrder - b.productSortOrder);
+  //   });
+
+  //   console.log('Initialized Groups:', this.groupedItems);
+  // }
 
   initStyles() {
     if (this.prepScreen)  {  this.orderItemsPanel = 'item-list-prep';  }
@@ -558,7 +896,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       return
     }
 
-    console.log('get item height', this.phoneDevice)
+    // console.log('get item height', this.phoneDevice)
     const divTop = this.myScrollContainer.nativeElement.getBoundingClientRect().top;
     const viewportBottom = window.innerHeight;
     const remainingHeight = viewportBottom - divTop;

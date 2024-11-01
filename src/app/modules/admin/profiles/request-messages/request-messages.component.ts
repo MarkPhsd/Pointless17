@@ -33,7 +33,7 @@ export class RequestMessagesComponent implements OnInit {
   @Input() orderID: number;
   @Input() posDevice: ITerminalSettings
   @Input() uiTransaction  : TransactionUISettings;
-  
+
   actions: string;
 
   searchModel: IRequestMessageSearchModel;
@@ -91,7 +91,7 @@ export class RequestMessagesComponent implements OnInit {
       observable.subscribe({
         complete: () => {
           // Observable completed its work
-          console.log('process Que')
+          // console.log('process Que')
         },
         error: (err) => {
           console.error('Observable encountered an error: ', err);
@@ -184,7 +184,7 @@ export class RequestMessagesComponent implements OnInit {
 
     return messages$.pipe(
       concatMap(data => {
-        console.log('messages: ', data?.length, data)
+        // console.log('messages: ', data?.length, data)
         if (data) {
           if (data?.length>0) {
             this.processMessages(data)
@@ -249,16 +249,16 @@ export class RequestMessagesComponent implements OnInit {
   getIsPrintServer() {
     let isDevice = false;
     this._printServer = false;
-    if (!this.platFormService.isAppElectron) { 
+    if (!this.platFormService.isAppElectron) {
       console.log('Not running in Electron, skipping print server check.');
-      return isDevice; 
+      return isDevice;
     }
-  
+
     if (!this.uiTransaction?.printServerDevice) {
       console.log('No print server device configured.');
       return isDevice;
     }
-  
+
     const deviceName = localStorage.getItem('devicename')
     if (this.uiTransaction.printServerDevice != deviceName) {
       console.log(`${deviceName} is the current device. ${this.uiTransaction?.printServerDevice} is the print server.`);
@@ -271,7 +271,7 @@ export class RequestMessagesComponent implements OnInit {
       console.log('Print server mathes this device name:', this.posDevice?.name);
       this.printServerDevice = this.posDevice;
     }
-  
+
     if (this.printServerDevice && this.printServerDevice.printServerEnable) {
       if (!this.initRefresh) {
         console.log('Setting print server with device:', this.printServerDevice);
@@ -280,10 +280,10 @@ export class RequestMessagesComponent implements OnInit {
         this._printServer = true;
       }
       isDevice = true;
-    }  
- 
+    }
+
     return isDevice;
-  
+
   }
 
   setPrintServer(data: ITerminalSettings) {
@@ -300,12 +300,12 @@ export class RequestMessagesComponent implements OnInit {
   //depending on the type of job it is. we need to create an observable for each print job.
 
   collectPrintOrders(printMessages: IRequestMessage[]) {
-    console.log('collectPrintOrders', this.printServerDevice?.printServerEnable);
+    // console.log('collectPrintOrders', this.printServerDevice?.printServerEnable);
     if (!this.printServerDevice?.printServerEnable) { return; }
     const site = this.siteService.getAssignedSite();
-  
+
     const printObservables: Observable<any>[] = [];
-  
+
     printMessages.forEach((data, index) => {
       if (data.method === 'printPrep') {
         const order$ = this.orderService.getOrder(site, data.orderID.toString(), false).pipe(
@@ -316,13 +316,13 @@ export class RequestMessagesComponent implements OnInit {
         );
         printObservables.push(order$);
       }
-  
+
       if (data.method === 'printReceipt') {
         if (!this.isStaff && !this.posDevice) { return; }
         const order$ = this.orderService.getOrder(site, data.orderID.toString(), false).pipe(
           concatMap(order => {
             this.printingService.printOrder = order;
-            console.log('remote print receipt Order:', this.refreshTime, order.orderID, 
+            console.log('remote print receipt Order:', this.refreshTime, order.orderID,
               order?.total, order?.posPayments[0]?.amountPaid);
             this.orderMethodsService.selectedPayment = null;
             this.printingService.previewReceipt(true, order, this.printServerDevice?.receiptPrinter);
@@ -333,7 +333,7 @@ export class RequestMessagesComponent implements OnInit {
         printObservables.push(order$);
       }
     });
-  
+
     // Wait for all print jobs to complete
     if (printObservables.length > 0) {
       forkJoin(printObservables).subscribe({
@@ -347,44 +347,10 @@ export class RequestMessagesComponent implements OnInit {
         }
       });
     }
-  
+
     printMessages = [];
   }
-  
-  // collectPrintOrders(printMessages: IRequestMessage[]) {
-  //   console.log('collectPrintOrders', this.printServerDevice?.printServerEnable)
-  //   if (!this.printServerDevice?.printServerEnable) { return }
-  //   const site = this.siteService.getAssignedSite()
 
-  //   const cancelUpdate = true
-  //   printMessages.forEach((data, index) => {
-  //     console.log(data?.method, data?.orderID)
-  //     if (data.method === 'printPrep') {
-  //       const order$ = this.orderService.getOrder(site, data.orderID.toString(),false).pipe(concatMap(order => {
-  //           return this.paymentsMethodsProcessService.sendToPrep(order, true, this.uiTransaction, cancelUpdate  )
-  //         })).pipe(concatMap(order =>  {
-  //           return this._archiveMessage(data, true)
-  //         }))
-  //       this.addObservable(order$)
-  //     }
-
-  //     if (data.method === 'printReceipt') {
-  //       if (!this.isStaff && !this.posDevice) { return }
-  //       const order$ = this.orderService.getOrder(site, data.orderID.toString(), false).pipe(concatMap(data => {
-  //          this.printingService.printOrder = data;
-  //          console.log('remote print receipt Orderr:', this.refreshTime, data.orderID, 
-  //                        data?.total, data?.posPayments[0]?.amountPaid)
-  //          this.orderMethodsService.selectedPayment = null;
-  //          this.printingService.previewReceipt(true, data , this.printServerDevice?.receiptPrinter);
-  //          return of(data)
-  //       })).pipe(concatMap(order =>  {
-  //         return this._archiveMessage(data, true)
-  //       }))
-  //       this.addObservable(order$)
-  //     }
-  //   });
-  //   printMessages = []
-  // }
 
   get isStaff() {
     if (!this.user || !this.user?.roles) { return false}
@@ -405,9 +371,9 @@ export class RequestMessagesComponent implements OnInit {
   }
 
   initUserSubscriber() {
-   
+
     let user : IUser;;
-    this.user$ =  this.authenticationService.user$.pipe(switchMap(data => { 
+    this.user$ =  this.authenticationService.user$.pipe(switchMap(data => {
       user = data;
       this.user  = data;
       return of(data)
@@ -420,12 +386,12 @@ export class RequestMessagesComponent implements OnInit {
     //     user = data;
     //     const deviceName = localStorage.getItem('devicename');
     //     return this.getDeviceInfo(deviceName)
-    // })).pipe(switchMap(data => { 
+    // })).pipe(switchMap(data => {
     //   return of(user)
     // }))
   }
 
-  getDeviceInfo(devicename) { 
+  getDeviceInfo(devicename) {
     const site = this.siteService.getAssignedSite();
     return this.settingService.getPOSDeviceBYName(site, devicename).pipe(switchMap(data => {
         if (!data) { return of(null)}
@@ -456,31 +422,31 @@ export class RequestMessagesComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any
      )
   {
-    console.log('data', data)
+    // console.log('data', data)
     if (data && data.action) {
-      if (data.action === 'orderMessages') { 
-        console.log('data', data)
+      if (data.action === 'orderMessages') {
+        // console.log('data', data)
         this.orderID = data.order.id;
         this.enableActions = false
         this.actions = data?.action
         return;
       }
     }
-    if (data && data.id) { 
+    if (data && data.id) {
       this.orderID = data.order.id;
       this.enableActions = false
       return;
     }
-    
+
     this.enableActions = true
   }
 
   ngOnInit(): void {
     let user = this.userAuthService?.user
-    console.log('on init ', this.actions)
-    if (this.actions === 'orderMessages') { 
+    // console.log('on init ', this.actions)
+    if (this.actions === 'orderMessages') {
       const orders$ = this._getOrderMessages()
-      this.messages$ = orders$.pipe(switchMap(data => { 
+      this.messages$ = orders$.pipe(switchMap(data => {
         this.refreshMessages()
         return of(data)
       }))
@@ -498,7 +464,7 @@ export class RequestMessagesComponent implements OnInit {
     this.messages$ = this._getOrderMessages()
   }
 
-  
+
   _getOrderMessages() {
     const site = this.siteService.getAssignedSite()
     const search = {} as IRequestMessageSearchModel;
@@ -532,14 +498,14 @@ export class RequestMessagesComponent implements OnInit {
         this.initServicesByDevice()
         return of(data)
       }))
-    } else { 
+    } else {
       // console.log('pos Device Init Services 2', this.posDevice)
       this.initServicesByDevice()
     }
 
   }
 
-  initServicesByDevice() { 
+  initServicesByDevice() {
     console.log('initServices')
     this.initUserSubscriber();
     this.getIsPrintServer()

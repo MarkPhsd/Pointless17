@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FilterComponent } from './widgets/filter/filter.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -267,6 +267,8 @@ import { TtsComponent } from './widgets/tts/tts.component';
 import { ScheduleSelectorComponent } from './widgets/schedule-selector/schedule-selector.component';
 import { ScheduleDateRangeSelectorComponent } from './widgets/schedule-date-range-selector/schedule-date-range-selector.component';
 import { PaymentTypesSelectionComponent } from '../modules/posorders/payment-types-selection/payment-types-selection.component';
+import { CustomerDateSelectorComponent } from './widgets/customer-date-selector-component/customer-date-selector-component.component';
+import { MatChipListComponent } from './widgets/mat-chip-list/mat-chip-list.component';
 
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
@@ -331,6 +333,8 @@ import { PaymentTypesSelectionComponent } from '../modules/posorders/payment-typ
     ClockInOutComponent,
     ClockViewComponent,
     ClockInPanelComponent,
+
+    CustomerDateSelectorComponent,
     UserPreferencesComponent,
     DepartmentSelectComponent,
     DeviceInfoComponent,
@@ -374,7 +378,7 @@ import { PaymentTypesSelectionComponent } from '../modules/posorders/payment-typ
     ListProductSearchInputComponent,
     OrderItemScannerComponent,
     ListPrintersElectronComponent,
-
+    MatChipListComponent,
     MatDateRangeComponent,
     MatSelectComponent,
     MatSpinnerOverlayComponent,
@@ -604,6 +608,7 @@ import { PaymentTypesSelectionComponent } from '../modules/posorders/payment-typ
     CashDrawerSettingsComponent,
     CallUsSelectorComponent,
     CardComponent,
+    CustomerDateSelectorComponent,
     DSIEMVAndroidPayBtnComponent,
     DsiEMVCardPayBtnComponent,
     TimeChartReportComponent,
@@ -677,6 +682,7 @@ import { PaymentTypesSelectionComponent } from '../modules/posorders/payment-typ
     LogoComponent,
     Label1by8Component,
     MatDateRangeComponent,
+    MatChipListComponent,
     ScheduleSelectorComponent,
     ScheduleDateRangeSelectorComponent,
     // NgcCookieConsentModule.forRoot(cookieConfig),
@@ -812,8 +818,8 @@ import { PaymentTypesSelectionComponent } from '../modules/posorders/payment-typ
     // {provude: Gallery},
     NgxImageCompressService,
     KeyboardComponent,
-  ]
-
+  ],
+  schemas: [NO_ERRORS_SCHEMA], 
 })
 
 export class SharedModule { }

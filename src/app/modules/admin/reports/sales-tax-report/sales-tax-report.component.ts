@@ -96,15 +96,15 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   getSalesReport(employeeID: number) {
           
     let item = {startDate: this.dateFrom, endDate: this.dateTo, zrunID: this.zrunID,
-      pendingTransactions: this.pendingTransactions,
-      scheduleDateEnd: this.scheduleDateEnd,
-      scheduleDateStart: this.scheduleDateStart } as IReportingSearchModel;
+                pendingTransactions: this.pendingTransactions,
+                scheduleDateEnd: this.scheduleDateEnd,
+              scheduleDateStart: this.scheduleDateStart } as IReportingSearchModel;
 
-      if (employeeID != 0) {
-         item.employeeID = employeeID  
-      }
+    if (employeeID != 0) {
+        item.employeeID = employeeID  
+    }
 
-      if (item.scheduleDateEnd && item.scheduleDateStart) {
+    if (item.scheduleDateEnd && item.scheduleDateStart) {
       this.sales$ =  this.reportingItemsSalesService.putSalesTaxReport(this.site, item ).pipe(switchMap(data => {
           this.sales = data;
           this.processing = false;
@@ -114,33 +114,33 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
         return of(data )
       })
       return
-      }
+    }
 
-      if (item.zrunID) {
+    if (item.zrunID) {
       this.sales$ = this.laborSummary$.pipe(switchMap(data => {
       this.laborSummary = data;
       return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
-         })).pipe(switchMap(data => {
+        })).pipe(switchMap(data => {
           this.sales = data;
           this.processing = false;
           this.outputComplete.emit('SalesTaxReport')
           return of(data)
       }))
       return
-      }
-
-      if (!item.zrunID) { 
-      return  this.laborSummary$.pipe(switchMap(data => {
-          this.laborSummary = data;
-          return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
-      })).pipe(switchMap(data => {
-          this.sales = data;
-          this.processing = false;
-          this.outputComplete.emit('SalesTaxReport')
-          return of(data)
-        }))
-      }
     }
+
+      // if (!item.zrunID) { 
+    this.sales$ =  this.laborSummary$.pipe(switchMap(data => {
+        this.laborSummary = data;
+        return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )
+    })).pipe(switchMap(data => {
+        this.sales = data;
+        this.processing = false;
+        this.outputComplete.emit('SalesTaxReport')
+        return of(data)
+      }))
+      // }
+  }
 
   dataGridView() {
     this.popOutService.openDynamicGrid(

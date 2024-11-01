@@ -13,7 +13,7 @@
     <ng-container [ngTemplateOutlet]="headers"></ng-container>
     <div  *ngFor="let sale of item | keyvalue">
       <div class="item-sales-grid-body" *ngFor="let sale of sale.value | derp">
-        <div class="product-name">{{sale?.productName | truncateText : 20   }}      </div>
+        <div class="product-name">{{sale?.productName    }}      </div>
         <div class="totalslabel">{{sale?.itemTotal | currency }}   </div>
         <div class="totalslabel">{{sale?.quantity | number: '1.0-0' }}             </div>
         <div class="totalslabel">{{sale?.productCount | number: '1.0-0' }}             </div>
@@ -29,8 +29,8 @@
   <ng-container [ngTemplateOutlet]="headers"></ng-container>
   <!-- {{sales | json}} -->
   <div  class="item-sales-grid-body"  *ngFor="let sale of (showAll ? sales : sales?.slice(0,10))" >
-  
-    
+
+
 
       <div class="product-name" *ngIf="groupBy === 'void' " >{{sale?.employee | truncateText : 20}}</div>
       <div class="product-name" >{{sale?.productName | truncateText : 20   }}      </div>

@@ -53,12 +53,14 @@ export class PayAPIComponent implements OnInit {
   uiTransactions$ : Observable<TransactionUISettings>;
   certMode: boolean;
   user: IUser;
+  debugMode = false
 
-  get isAdmin() { 
-    if (this.user?.roles === 'admin' || this.user?.roles === 'Admin') { 
+  get isAdmin() {
+    if (this.user?.roles === 'admin' || this.user?.roles === 'Admin') {
       return true
     }
   }
+
 
   constructor(
     private fb: FormBuilder,
@@ -66,7 +68,7 @@ export class PayAPIComponent implements OnInit {
     private siteService: SitesService,
     private orderMethodsService: OrderMethodsService,
     private uiSettingService: UISettingsService,
-    private dcapPayAPIService: DcapPayAPIService, 
+    private dcapPayAPIService: DcapPayAPIService,
     private userAuthorization: UserAuthorizationService,
     private router: Router,
   ) { }
@@ -74,16 +76,16 @@ export class PayAPIComponent implements OnInit {
   ngOnInit(): void {
 
     this.user = this.userAuthorization.currentUser()
-    if (!this.uiTransactions) { 
-      this.uiTransactions$ = this.uiSettingService.getUITransactionSetting().pipe(switchMap(data => { 
+    if (!this.uiTransactions) {
+      this.uiTransactions$ = this.uiSettingService.getUITransactionSetting().pipe(switchMap(data => {
         this.uiTransactions = data;
         return of(data)
       }))
     }
 
 
-    this.certMode$ = this.dcapPayAPIService.getCertMode().pipe(switchMap(data => { 
-        if (data) { 
+    this.certMode$ = this.dcapPayAPIService.getCertMode().pipe(switchMap(data => {
+        if (data) {
           if (data == 'cert' || data == 'test') {
             this.certMode = true
           }
@@ -92,7 +94,7 @@ export class PayAPIComponent implements OnInit {
       })
     );
 
-   
+
     this.errorMessage = '';
     this.payAPIKeyExists();
 
@@ -175,7 +177,7 @@ export class PayAPIComponent implements OnInit {
             // Here, you might want to do something with the token, like sending it to your server;
             if (response.Token) {
 
-             
+
                 let posPayment = {} as IPOSPayment;
                 posPayment.orderID    = this.order.id;
                 posPayment.amountPaid = this.order?.total;
@@ -205,14 +207,14 @@ export class PayAPIComponent implements OnInit {
       window.DatacapWebToken.requestToken(mid, "payment_form", tokenCallback);
   }
 
- get getTipValue() : number { 
-    if (this.paymentForm) { 
+ get getTipValue() : number {
+    if (this.paymentForm) {
         return +this.paymentForm.controls['tipAmount'].value
     }
     return 0;
   }
- 
-  get surchargeValue() { 
+
+  get surchargeValue() {
 
     return +(this.order?.total * +this.uiTransactions.dCapPayAPISurchargeValue).toFixed(2)
 
@@ -221,10 +223,10 @@ export class PayAPIComponent implements OnInit {
  get totalValue() {
   return +(this.order?.total + this.getTipValue +(this.order?.total * +this.uiTransactions.dCapPayAPISurchargeValue)).toFixed(2)
  }
- getTipAmount(posPayment) { 
-  if (!this.paymentForm) {  return posPayment} 
+ getTipAmount(posPayment) {
+  if (!this.paymentForm) {  return posPayment}
   let tipAmount = 0
-  if (this.paymentForm.controls['tipAmount'].value) { 
+  if (this.paymentForm.controls['tipAmount'].value) {
      tipAmount = +this.paymentForm.controls['tipAmount'].value
   }
   posPayment.tipAmount = tipAmount;

@@ -124,7 +124,7 @@
 
 
 <ng-template #subcategoryFilter>
- 
+
   <div  style="margin-top:15px" *ngIf="uiHomePage.storeNavigation && subCategoriesList && subCategoriesList.length>1 && !smallDevice">
     <mat-card style="padding:0px;margin-top:5px">
       <div class="flex-row">
@@ -144,6 +144,7 @@
 
 <ng-template #menuItemCard let-item let-type="type">
   <app-menu-item-card
+        [condensedMenuButtons]="isCondensedMenuButtons"
         [isApp]               ="isApp"
         [androidApp]          ="androidApp"
         [displayType]         ="type"

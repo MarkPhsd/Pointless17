@@ -44,7 +44,6 @@ export class ServiceTypeService {
     const uri = { url: url, cacheMins: 120}
 
     let appCache =  JSON.parse(localStorage.getItem('appCache')) as ISetting
-    // console.log('get cached services?', appCache)
     if (appCache) {
       if (appCache.value && appCache.boolean) {
         const url = { url: uri, cacheMins: appCache.value}
@@ -96,6 +95,8 @@ export class ServiceTypeService {
     return this.http.get<IServiceType[]>(url);
 
   }
+
+  
 
 
   getSaleTypesCached(site: ISite):  Observable<IServiceType[]> {

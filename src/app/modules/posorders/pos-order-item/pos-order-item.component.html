@@ -239,8 +239,8 @@
 </ng-template>
 
 <ng-template #labelButtonView>
- 
-  <div *ngIf="!userAuthService?.isUser && enableExitLabel && orderItem?.printLocation ">
+
+  <div *ngIf="!userAuthService?.isUser && enableExitLabel && printLocationEnabled ">
     <button mat-button  color="accent" (click)="printLabel(orderItem)">
       <mat-icon  class="mat-icon-label">print</mat-icon>   Label
     </button>
@@ -249,7 +249,7 @@
 
 <ng-template #exitlabelButtonView>
 
-  <div *ngIf="userAuthService?.isStaff && enableExitLabel && mainPanel  && orderItem?.printLocation != 0">
+  <div *ngIf="userAuthService?.isStaff && enableExitLabel && mainPanel  && printLocationEnabled">
     <!-- {{userAuthService?.isStaff }} | {{mainPanel}} {{orderItem?.printLocation}} -->
     <button mat-button  class="exit-label-button" color="accent" (click)="printLabel(orderItem)">
       <mat-icon>print</mat-icon>
@@ -268,8 +268,8 @@
 </ng-template>
 
 <ng-template #threeDotsLabel>
-  <!-- loc {{orderItem?.printLocation}} label {{enableExitLabeloh }} -->
-  <div *ngIf="platFormService.isAppElectron && userAuthService?.isStaff && enableExitLabel && (orderItem?.printLocation && orderItem?.printLocation!= 0)">
+  <!-- loc {{orderItem?.printLocation}} label {{enableExitLabel }} -->
+  <div *ngIf="platFormService.isAppElectron && userAuthService?.isStaff && enableExitLabel && printLocationEnabled">
     <button mat-button  class="exit-label-button" color="accent" (click)="printLabel(orderItem)">
       <mat-icon>print</mat-icon>
       <br>

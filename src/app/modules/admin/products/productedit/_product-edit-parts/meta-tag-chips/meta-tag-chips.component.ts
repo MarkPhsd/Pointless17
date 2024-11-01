@@ -21,6 +21,9 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
 
   get f()   { return this.inputForm;}
 
+  @Input() placeholder = 'meta tags';
+  @Input() fieldDescription ='Meta Tags';
+
   @ViewChild('input', {static: true}) input: ElementRef;
   @ViewChild('metaTag') metaTag: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete ;
@@ -30,8 +33,9 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
   @Input()  inputForm  :        UntypedFormGroup;
   @Input()  metaTagList:        string;
   @Input()  itemTags          : string[]
-  @Input()  product    :        IProduct;
-  @Input()  inventory  : IInventoryAssignment;
+  @Input()  product      :        IProduct;
+  @Input()  inventory    : IInventoryAssignment;
+  @Input()  serviceTypeFeatures: any;
 
   // @Output() outPutItemTags = new EventEmitter()
   @Output() outPutItemTags = new EventEmitter<any>();
@@ -77,10 +81,13 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
     this.site = this.sitesService.getAssignedSite()
   }
 
-  async ngOnInit() {
+  ngOnInit() {
 
     //the nput from the parent shouold work
     if (this.metaTags) {
+      if (! this.metaTags.value) { 
+        return;
+      }
       this.initMetaTags( this.metaTags.value)// this.metaTagsList
     }
     return
@@ -107,7 +114,10 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
       .subscribe();
     }
 
-    this.initMetaTags(this.metaTags.value)
+    if (this.metaTags && this.metaTags.value) { 
+      this.initMetaTags(this.metaTags.value)
+    }
+
     if (this.metaTagList) {
       this.initMetaTags(this.metaTagList)
     }
@@ -124,6 +134,11 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
     if (this.product) {
       tag.departmentID = this.product?.departmentID;
       tag.brandID      = this.product?.brandID;
+    }
+    if (this.serviceTypeFeatures) {
+      // tag.servipeID = this.product?.departmentID;
+      // tag.brandID      = this.product?.brandID;
+      return;
     }
 
     const tags$ = this.metaTagService.post(this.site, tag)

@@ -12,7 +12,7 @@ import { ProducteditComponent } from '../productedit.component';
   templateUrl: './edit-selected-items.component.html',
   styleUrls: ['./edit-selected-items.component.scss']
 })
-export class EditSelectedItemsComponent implements OnInit {
+export class  EditSelectedItemsComponent implements OnInit {
   action$   : Observable<any>;
   inputForm : UntypedFormGroup;
   get subCategoryID()    { return this.inputForm.get("subCategoryID") as UntypedFormControl;}

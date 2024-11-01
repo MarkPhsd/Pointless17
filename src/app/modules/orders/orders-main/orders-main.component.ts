@@ -51,6 +51,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   @ViewChild('coachingMergeView', {read: ElementRef}) coachingMergeView: ElementRef;
 
   viewHouseAccountListOn: boolean;
+  hideScheduledItems: boolean;
 
   @ViewChild('ordersSelectedView')    ordersSelectedView: TemplateRef<any>;
   mergeOrders: boolean;
@@ -154,6 +155,10 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     }
   }
 
+  toggleScheduledItemsView() {
+    this.hideScheduledItems = !this.hideScheduledItems
+  }
+
   get summaryEnabled() {
     if (this.platFormService.androidApp && this.smallDevice) {return null}
     if (!this.user) {return null}
@@ -163,8 +168,8 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
     return null;
   }
 
-  get isPaxDevice() { 
-    if (this.platFormService.androidApp && this.smallDevice) { 
+  get isPaxDevice() {
+    if (this.platFormService.androidApp && this.smallDevice) {
       return true;
     }
   }
@@ -261,7 +266,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
         data =  this.searchModel ;
       }
 
-      
+
       // return;
       if (data) {
         this.searchModel = data;
@@ -271,9 +276,9 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
 
         if (this.uiTransactions && !this.uiTransactions.toggleUserOrAllOrders) {
           this.searchModel.employeeID = 0;
-        } 
+        }
 
-        if (this.viewType == 3) { 
+        if (this.viewType == 3) {
           this.searchModel.employeeID = 0;
         }
 
@@ -282,7 +287,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
         //     this.searchModel.employeeID =  0
         //   } else {
         //     //if its the same as what is set, otherwise we just set it to what it was.
-        //     if (this.searchModel.employeeID == this.userAuthorization.user?.employeeID) { 
+        //     if (this.searchModel.employeeID == this.userAuthorization.user?.employeeID) {
         //       this.searchModel.employeeID =  this.userAuthorization.user?.employeeID
         //     }
         //   }
@@ -499,7 +504,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy, AfterViewInit,OnC
   }
 
   refreshSearch() {
-    if (this.viewPrep) { 
+    if (this.viewPrep) {
       this.searchModel.closedOpenAllOrders = 0
     }
     this.orderMethodsService.updateOrderSearchModel(this.searchModel)

@@ -1,6 +1,6 @@
-<div *ngIf=" inputForm">
+<div *ngIf="inputForm">
   <mat-form-field appearance="outline">
-    <mat-label>Meta Tags</mat-label>
+    <mat-label>{{fieldDescription}}</mat-label>
 
     <mat-chip-list    #chipList aria-label=" selection"  >
       <mat-chip
@@ -26,7 +26,6 @@
     </mat-chip-list>
 
     <mat-autocomplete
-
                       panelWidth="auto"
                       #auto="matAutocomplete"
                       [displayWith]="displayFn.bind(this)"
@@ -45,7 +44,7 @@
        [formGroup]="inputForm">
     <input  matInput
             type="text"
-            name="metaTags"
+            [name]="fieldDescription"
             formControlName="metaTags">
   </div>
 

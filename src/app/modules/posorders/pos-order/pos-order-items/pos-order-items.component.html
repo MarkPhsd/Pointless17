@@ -1,7 +1,12 @@
 <div *ngIf="(action$ | async) as action"></div>
 <div *ngIf="(printAction$ | async) as action"></div>
-    <!-- phondevice -->
 
+<div *ngIf="(sort$ | async) as sort"></div>
+<!-- <div>
+  serviceTypeOrder {{serviceTypeOrder | json}}
+</div> -->
+
+<!-- <button mat-raised-button (click)="initializeGroups()">Refresh</button> -->
 <ng-container [ngTemplateOutlet]="posItemsView"></ng-container>
 
 <ng-template #posOrderItemsPrepView>
@@ -14,9 +19,7 @@
 
 <ng-template #phoneDeviceView>
 
-  <!-- scanModePrep scanModeDelivery-->
   <div class="ps-flex-group" *ngIf="posDevice?.prepCheckDevice">
-
     <span class="item-span" *ngIf="scanMode && scanMode != 0">
       <order-item-scanner [scanMode]="scanMode"></order-item-scanner>
     </span>
@@ -25,8 +28,6 @@
       <button  style="margin-left:5px; height:55px" color="primary" mat-flat-button (click)="setScanMode(1)"><mat-icon>shopping_cart_checkout</mat-icon>Prep
       <span *ngIf="scanMode ==1"> ON </span></button>
     </span>
-
-
 
     <span class="item-span" >
       <button  style="margin-left:5px; height:55px" color="accent" mat-flat-button (click)="setScanMode(2)"><mat-icon>commuute</mat-icon>Driver
@@ -71,7 +72,7 @@
         </div>
 
         <div *ngIf="posDevice?.prepCheckDevice && currentItems">
-          Remaining {{currentItems.length}}
+          Remaining {{itemCount}}
         </div>
 
       </div>
@@ -83,8 +84,6 @@
           </button>
 
           <ng-container [ngTemplateOutlet]="menuFunctionButtons"></ng-container>
-
-
         </div>
       </span>
     </div>
@@ -120,78 +119,83 @@
 </ng-template>
 
 <ng-template #posItemsListView>
+    <!-- <button mat-raised-button (click)="toggleReorder()">Toggle</button> -->
+
+    <div *ngIf="(serviceType$ | async) as serviceType"> </div>
+
+    <div *ngIf="isToggleisDisabled && serviceTypeOrder">
+      <ion-list>
+        <ion-reorder-group
+          #reorderGroup
+          [disabled]="false"
+          (ionItemReorder)="handleReorder($event)"
+        >
+          <ng-container *ngFor="let groupName of getAllServiceTypes(); trackBy: trackByFN">
+            <ion-item-divider [attr.data-group]="groupName">
+              <h3>{{ groupName }}</h3>
+            </ion-item-divider>
+
+            <ng-container *ngIf="groupedItems[groupName]?.length > 0">
+              <ion-item
+                *ngFor="let item of groupedItems[groupName]; let i = index; trackBy: trackByFN"
+                [attr.data-group]="item.groupName"
+                [attr.data-id]="item.id"
+              >
+                <ng-container
+                  [ngTemplateOutlet]="posItem"
+                  [ngTemplateOutletContext]="{ $implicit: item, index: i }"
+                ></ng-container>
+                <ion-reorder slot="end"></ion-reorder>
+              </ion-item>
+            </ng-container>
+          </ng-container>
+        </ion-reorder-group>
+      </ion-list>
+
+    </div>
+
+
+
+    <div *ngIf="!isToggleisDisabled || !serviceTypeOrder">
     <ion-item-sliding
                       [class]="nopadd"
                       *ngFor="let item of currentItems;
                               let i = index;trackBy: trackByFN"
                       (ionSwipe)="swipeAction(i)"  >
+        <div *ngIf="uiConfig">
+          <ion-item class="ion-slide" *ngIf="item" >
+            <ng-container
+              [ngTemplateOutlet]="posItem"
+              [ngTemplateOutletContext]="{$implicit: item, index: i}">
+            </ng-container>
+          </ion-item>
+        </div>
 
-      <div *ngIf="uiConfig">
-        <ion-item *ngIf="item" >
-          <pos-order-item
-                      [class]      ="gridScroller"
-                      [index]      ="i"
-                      [orderServiceType]="order?.serviceType"
-                      [quantity]   ="item?.quantity"
-                      [unitPrice]  ="item?.unitPrice"
-                      [total]      ="item?.total"
-                      [wholeSale]  ="item?.wholeSale"
-                      [subTotal]   ="item?.subTotal"
-                      [id]         ="item?.id"
-                      [orderItem]  ="item"
-                      [printed]    ="item.printed"
-                      [onlineShortDescription]="item?.posOrderMenuItem?.onlineShortDescription"
-                      [placeHolderImage]="'placeholderproduct.png'"
-                      [mainImage]   ="item?.posOrderMenuItem?.urlImageMain"
-                      [productName] = "item?.productName"
-                      [cbd]         ="item?.posOrderMenuItem?.cbd"
-                      [thc]         ="item?.posOrderMenuItem?.thc"
-                      [menuItem]    ="item?.posOrderMenuItem"
-                      [productID]   ="item?.productID"
-                      [ui]          ="uiConfig"
-                      [mainPanel]   ="mainPanel"
-                      [userAuths]           ='userAuths'
-                      [wideBar]             ="wideBar"
-                      [smallDevice]         ="phoneDevice"
-                      [prepScreen]          ="prepScreen"
-                      [deliveryPrep]        = "scanMode == 1 || scanMode == 2"
-                      [enableExitLabel]     = "enableExitLabel"
-                      [disableActions]      = "disableActions"
-                      [isStaff]             ="isStaff"
-                      [displayHistoryInfo]  = "displayHistoryInfo"
-                      [enableItemReOrder]   = "enableItemReOrder"
-                      [purchaseOrderEnabled]= "purchaseOrderEnabled"
-                      [conditionalIndex]    = 'item?.conditionalIndex'
-                      (outputDelete)        = "removeItemFromList($event)"
-          ></pos-order-item>
-        </ion-item>
-      </div>
+        <ion-item-options *ngIf="prepScreen">
+          <ion-item-option color="warn">
+            <button mat-button color="primary" (click)="setAsPrepped(i)" >
+              <span *ngIf="!item.itemPrepped" ><mat-icon>done       </mat-icon>Set Prepped</span>
+              <span *ngIf="item.itemPrepped"  ><mat-icon>remove_done</mat-icon>Undo Prep</span>
+            </button>
+          </ion-item-option>
+        </ion-item-options>
 
-      <ion-item-options *ngIf="prepScreen">
-        <ion-item-option color="warn">
-          <button mat-button color="primary" (click)="setAsPrepped(i)" >
-            <span *ngIf="!item.itemPrepped" ><mat-icon>done       </mat-icon>Set Prepped</span>
-            <span *ngIf="item.itemPrepped"  ><mat-icon>remove_done</mat-icon>Undo Prep</span>
-          </button>
-        </ion-item-option>
-      </ion-item-options>
-
-      <ion-item-options >
-        <ion-item-option color="warn">
-          <button mat-button color="primary" (click)="removeItemFromList(i)" >
-            <span *ngIf="!item?.printed && !prepScreen">
-              <mat-icon>delete</mat-icon>
-              Delete
-            </span>
-            <span *ngIf="item?.printed && !prepScreen">
-              <mat-icon>remove_shopping_cart</mat-icon>
-              Void
-            </span>
-          </button>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-
+        <ion-item-options >
+          <ion-item-option color="warn">
+            <button mat-button color="primary" (click)="removeItemFromList(i)" >
+              <span *ngIf="!item?.printed && !prepScreen">
+                <mat-icon>delete</mat-icon>
+                Delete
+              </span>
+              <span *ngIf="item?.printed && !prepScreen">
+                <mat-icon>remove_shopping_cart</mat-icon>
+                Void
+              </span>
+            </button>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </div>
 </ng-template>
 
 <ng-template #communicationsView>
@@ -217,3 +221,41 @@
   </div>
 </ng-template>
 
+<ng-template #posItem let-item let-i>
+  <pos-order-item
+      [class]      ="gridScroller"
+      [index]      ="i"
+      [orderServiceType]="order?.serviceType"
+      [quantity]   ="item?.quantity"
+      [unitPrice]  ="item?.unitPrice"
+      [total]      ="item?.total"
+      [wholeSale]  ="item?.wholeSale"
+      [subTotal]   ="item?.subTotal"
+      [id]         ="item?.id"
+      [orderItem]  ="item"
+      [printed]    ="item.printed"
+      [onlineShortDescription]="item?.posOrderMenuItem?.onlineShortDescription"
+      [placeHolderImage]="'placeholderproduct.png'"
+      [mainImage]   ="item?.posOrderMenuItem?.urlImageMain"
+      [productName] = "item?.productName"
+      [cbd]         ="item?.posOrderMenuItem?.cbd"
+      [thc]         ="item?.posOrderMenuItem?.thc"
+      [menuItem]    ="item?.posOrderMenuItem"
+      [productID]   ="item?.productID"
+      [ui]          ="uiConfig"
+      [mainPanel]   ="mainPanel"
+      [userAuths]           ='userAuths'
+      [wideBar]             ="wideBar"
+      [smallDevice]         ="phoneDevice"
+      [prepScreen]          ="prepScreen"
+      [deliveryPrep]        = "scanMode == 1 || scanMode == 2"
+      [enableExitLabel]     = "enableExitLabel"
+      [disableActions]      = "disableActions"
+      [isStaff]             ="isStaff"
+      [displayHistoryInfo]  = "displayHistoryInfo"
+      [enableItemReOrder]   = "enableItemReOrder"
+      [purchaseOrderEnabled]= "purchaseOrderEnabled"
+      [conditionalIndex]    = 'item?.conditionalIndex'
+      (outputDelete)        = "removeItemFromList($event)"
+    ></pos-order-item>
+</ng-template>

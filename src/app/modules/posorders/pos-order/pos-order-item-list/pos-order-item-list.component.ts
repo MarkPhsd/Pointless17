@@ -312,7 +312,7 @@ export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
     if (this.purchaseOrderEnabled &&  !reconcilePass) {
 
-      nextColumn =  {headerName: 'InStock',     field: 'traceProductCount',
+      nextColumn =  {headerName: 'InStock',     field: 'currentProductCount',
         sortable: true,
         width   : 100,
         minWidth: 100,

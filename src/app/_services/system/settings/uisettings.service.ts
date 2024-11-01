@@ -324,6 +324,8 @@ export interface UIHomePageSettings {
   disableSearchFieldInMenu: boolean;
   catalogScheduleMenuEnabled: boolean;
   staffcatalogScheduleMenuEnabled: boolean;
+
+  condensedMenuButtons: boolean;
 }
 
 @Injectable({
@@ -742,6 +744,7 @@ export class UISettingsService {
       departmentsEnabled    : [''],
       tierMenuEnabled       : [''],
       itemsPerPage          : [''],
+      condensedMenuButtons  : [''],
       menuItemSize          : [''],
       staffBrandsEnabled    : [''],
       staffCategoriesEnabled: [''],

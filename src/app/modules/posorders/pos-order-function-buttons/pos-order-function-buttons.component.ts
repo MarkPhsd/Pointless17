@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, Input,EventEmitter, HostListener, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable,  Subscription, of, switchMap } from 'rxjs';
-import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
+import { IPOSOrder, IServiceType,  IUserProfile, ServiceTypeFeatures } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -14,6 +14,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { RequestMessageService } from 'src/app/_services/system/request-message.service';
 import { PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 @Component({
   selector: 'pos-order-function-buttons',
   templateUrl: './pos-order-function-buttons.component.html',
@@ -24,6 +25,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   get platForm() {  return Capacitor.getPlatform(); }
   @Input()    quicKMenusExist : boolean;
   menuToggle: boolean;
+  serviceTypeOrder : string[]
 
   posDevice$: Observable<ITerminalSettings>;
   posDevice : ITerminalSettings;
@@ -43,6 +45,8 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @ViewChild('listItemsView')  listItemsView: TemplateRef<any>;
   @ViewChild('adjustmentOptionsView')  adjustmentOptionsView: TemplateRef<any>;
   @ViewChild('balanceSheetMenuView')  balanceSheetMenuView: TemplateRef<any>;
+  @ViewChild('groupNameMenu') groupNameMenu: TemplateRef<any>;
+
   @ViewChild('communicationsView')  communicationsView: TemplateRef<any>;
   @ViewChild('reFireOrder')  reFireOrder: TemplateRef<any>;
   @ViewChild('cancelButton') cancelButton: TemplateRef<any>;
@@ -106,9 +110,13 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @Input() userAuths       :   IUserAuth_Properties;
   _userAuths      : Subscription;
   assignedItems   : Subscription;
+  _order: Subscription;
   refundItems     : boolean;
   action$ : Observable<any>;
   locations$ = this.locationsService.getLocationsCached();
+
+  serviceType  : IServiceType;
+  serviceType$ : Observable<IServiceType>;
 
   transactionUISettingsSubscriber() {
     this._transactionUI = this.uiSettingsService.transactionUISettings$.subscribe( data => {
@@ -116,6 +124,13 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
         this.uiTransactionSetting = data;
       }
     });
+
+    this._order = this.orderMethodsService.currentOrder$.subscribe( order => {
+      this.order = order
+      if (this.order?.serviceType != order?.serviceType) {
+        this.setServiceTypeGroups()
+      }
+    })
 
   }
 
@@ -136,10 +151,11 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     })
   }
   constructor(private platFormService: PlatformService,
-              public userAuthorizationService: UserAuthorizationService,
+              public  userAuthorizationService: UserAuthorizationService,
               private authenticationService: AuthenticationService,
-              public orderMethodsService: OrderMethodsService,
+              public  orderMethodsService: OrderMethodsService,
               private router: Router,
+              private siteService: SitesService,
               private locationsService: PrinterLocationsService,
               private requestMessageService: RequestMessageService,
               private paymentsMethodsProcessService: PaymentsMethodsProcessService,
@@ -153,7 +169,27 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     this.transactionUISettingsSubscriber();
     this.posDeviceSubscriber();
     this.userAuthSubscriber()
+
+    this.setServiceTypeGroups()
+
   }
+
+  setServiceTypeGroups() {
+    if (!this.order) {return [] }
+    if (!this.order.service) {return [] }
+
+    const serviceType = this.order.service;
+    if (!serviceType.json) { return [] }
+    const props = JSON.parse(serviceType.json) as ServiceTypeFeatures;
+
+    if (!props) {  return []}
+
+    if (!props.metaTags) {  return []}
+
+    this.serviceTypeOrder = this.siteService.convertToArray(props.metaTags);
+    return  props.metaTags
+  }
+
 
   get isPaymentsMade() {
     if (this.order && this.order.posPayments) {
@@ -164,6 +200,8 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     }
     return false
   }
+
+
 
   get creditCardPaymentsMade() {
     if (this.order && this.order.posPayments) {
@@ -182,7 +220,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     this.outPutListView.emit(this.listView)
   }
 
-  toggleQuickMenu() { 
+  toggleQuickMenu() {
     this.menuToggle = !this.menuToggle
     this.outPutToggleQuickMenu.emit(this.menuToggle)
   }
@@ -195,6 +233,9 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     }
     if (this.assignedItems) {
       this.assignedItems.unsubscribe()
+    }
+    if (this._order) {
+      this._order.unsubscribe()
     }
   }
 
@@ -352,6 +393,14 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
       return this.inventoryManifestView
     }
     return null
+  }
+
+  get isGroupNameMenu() {
+    return this.groupNameMenu
+    if (this.order?.service?.filterType != 0 ) { return null }
+    if (this.isStaff) {
+    }
+    return null;
   }
 
   get isemailOptionView() {
@@ -515,6 +564,10 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
       return this.roundToPrecision( this.order.balanceRemaining * (1 + +ui.dcapDualPriceValue) , 5)
     }
 
+  }
+
+  setGroupName(name) {
+    this.orderMethodsService.groupName = name;
   }
 
 }
