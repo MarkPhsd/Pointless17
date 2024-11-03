@@ -13,7 +13,7 @@
 <div *ngIf="prepView">
   <div class="mat-card-container"
         *ngIf="site && (prepSummary$ | async) as summary; else loading">
-    <button mat-raised-button color="accent" (click)="refreshSales()"><mat-icon>refresh</mat-icon></button>      
+    <button mat-raised-button color="accent" (click)="refreshSales()"><mat-icon>refresh</mat-icon></button>
     <ng-container
                   [ngTemplateOutlet]="activeReportViewCurrentPrep"
                   [ngTemplateOutletContext]="{$implicit: summary}">
@@ -215,7 +215,7 @@
 
         <div  class="grid-adjustment info-width"
               *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
-             
+
             <div class="sales-product-name product-name">{{ sale?.productName | truncateText : 20   }}  {{ sale?.unitType | truncateText : 5   }}     </div>
             <div class="sales-totals totals">            {{ sale?.orderID }}               </div>
             <div class="sales-totals">                   {{ sale?.originalPrice | currency }}   </div>

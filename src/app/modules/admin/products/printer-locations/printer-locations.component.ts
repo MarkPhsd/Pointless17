@@ -1,14 +1,12 @@
-import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject, TemplateRef, ComponentFactoryResolver} from '@angular/core';
+import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, TemplateRef} from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, switchMap} from 'rxjs';
 import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
-import { InventoryLocationsService , IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSort } from '@angular/material/sort';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { IPrinterLocation, PrinterLocationsService, IPrinterLocationRO } from 'src/app/_services/menu/printer-locations.service';
 import { IItemBasic } from 'src/app/_services';
 import { SettingsService } from 'src/app/_services/system/settings.service';
@@ -71,7 +69,7 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
     ))
   }
 
-  refresh() { 
+  refresh() {
     this.receiptList$ = this.refreshAll();
   }
 
@@ -100,8 +98,8 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
     return this.printerLocationsService.getLocations().pipe(
       switchMap(data => {
 
-          if (!data) { 
-            this.noData = true 
+          if (!data) {
+            this.noData = true
             return of(data)
           }
 
@@ -124,7 +122,7 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
           return of(data)
         }
       ));
-    
+
   }
 
   getTemplateName(item: IPrinterLocationRO) {
