@@ -62,7 +62,7 @@ import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
 import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
 import { UserIdleModule } from 'angular-user-idle';
-import { DragAndDropModule } from 'angular-draggable-droppable';
+// import { DragAndDropModule } from 'angular-draggable-droppable';
 import { ResizeDirective } from './_directives/resize.directive';
 
 import {NgcCookieConsentConfig} from 'ngx-cookieconsent';
@@ -258,7 +258,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     SharedModule,
     NGXMaterialModule,
     NgxElectronModule,
-    DragAndDropModule,
+    // DragAndDropModule,
     LayoutModule,
   ],
 
