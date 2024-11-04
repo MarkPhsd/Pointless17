@@ -527,6 +527,7 @@ enum actions {
   void = 1,
   priceAdjust = 2,
   note = 3,
+  adjust = 4,
   partialVoid = 22
 }
 

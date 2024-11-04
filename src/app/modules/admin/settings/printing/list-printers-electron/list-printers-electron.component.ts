@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+import { PlatformService } from 'src/app/_services/system/platform.service';
+// import { ElectronService } from 'ngx-electron';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 
 @Component({
@@ -15,11 +16,13 @@ export class ListPrintersElectronComponent implements OnInit {
 
   @Input()  printerName         : string
 
-  constructor(private electronService: ElectronService,
+  // private electronService: ElectronService,
+  constructor(
+              private platFormService: PlatformService,
               private printingService: PrintingService) { }
 
   ngOnInit(): void {
-    if (this.electronService.remote != null) {
+    if (this.platFormService.isAppElectron) {
       this.isElectronApp = true
     }
     if (this.isElectronApp) {

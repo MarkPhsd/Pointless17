@@ -7,7 +7,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -18,6 +18,7 @@ import { ManifestInventoryService } from 'src/app/_services/inventory/manifest-i
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-inventory-history-list',
@@ -69,7 +70,8 @@ export class InventoryHistoryListComponent implements OnInit, OnDestroy {
        private siteService       : SitesService,
        private settingService    : SettingsService,
        private fb                : UntypedFormBuilder,
-       private electronService   : ElectronService,
+       private platFormService   : PlatformService,
+      //  private electronService   : ElectronService,
        private renderingService  : RenderingService,
        private printingService   : PrintingService,
        private menuService       : MenuService,
@@ -112,7 +114,7 @@ export class InventoryHistoryListComponent implements OnInit, OnDestroy {
     }
 
     this.initForm()
-    this.electronEnabled =  this.electronService.isElectronApp
+    this.electronEnabled =  this.platFormService.isAppElectron
     this.printerName = this.getLastPrinterName();
     this.labelID = this.printingService.getLastLabelUsed();
   }

@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 
 @Component({
   selector: 'electron-zoom-control',
@@ -13,8 +15,10 @@ export class ElectronZoomControlComponent implements OnInit {
   itemValue
   @Output() valueEmit  = new  EventEmitter()
   constructor(
-     private electronService: ElectronService,
-     private settings: SettingsService) { }
+    //  private electronService: ElectronService,
+    private siteService: SitesService,
+    private platFormService: PlatformService,
+    private settings: SettingsService) { }
 
   ngOnInit(): void {
     this.itemValue = 1
@@ -30,14 +34,19 @@ export class ElectronZoomControlComponent implements OnInit {
     // await this.setZoom();
   }
 
-  async setZoom() {
-    const electron = this.electronService.remote.require('./index.js');
-    if (!electron) {
-      console.log('electron is undefined')
+  setZoom(): void {
+    if (!this.platFormService.isAppElectron) {
       return;
     }
-    console.log('this.itemvalue', this.itemValue)
-    await electron.electronZoomControl(this.itemValue)
+
+    console.log('this.itemValue', this.itemValue);
+
+    try {
+      (window as any).electron.setZoom(+this.itemValue);
+    } catch (error) {
+      console.error('Failed to set zoom level:', error);
+      this.siteService.notify(`Failed to set zoom level: ${error}`, 'Close', 3000, 'red');
+    }
   }
 
   async setValueByValue(value) {

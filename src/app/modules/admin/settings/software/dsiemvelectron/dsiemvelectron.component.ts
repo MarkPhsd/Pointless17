@@ -2,12 +2,13 @@ import { T } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { catchError, Observable, of, switchMap } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { RStream, DSIEMVTransactionsService, TranResponse, Transaction, TStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { DSIEMVSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
@@ -42,10 +43,12 @@ export class DSIEMVElectronComponent implements OnInit {
               private matSnack          : MatSnackBar,
               private settingsService   : SettingsService,
               private siteService       : SitesService,
-              private electronService   : ElectronService) { }
+              private platFormService   : PlatformService,
+              // private electronService   : ElectronService
+            ) { }
 
   ngOnInit(): void {
-    if (this.electronService.remote) {this.isElectron = true  }
+    if (this.platFormService.isAppElectron) {this.isElectron = true  }
     this.deviceName = this.settingsService.deviceName;
     this.amountForm = this.fb.group({
       amount: ['1.00']

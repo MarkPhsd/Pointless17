@@ -126,8 +126,8 @@ import { MyThingComponent } from './widgets/over-lay/my-thing/my-thing.component
 import { LogoComponent } from './widgets/logo/logo.component';
 import { FilterPipe } from '../_pipes/filter.pipe';
 import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile-med-info/profile-med-info.component';
-import { ImageSwiperComponent } from './widgets/image-swiper/image-swiper.component';
-import { SwiperModule } from 'swiper/angular';
+// import { ImageSwiperComponent } from './widgets/image-swiper/image-swiper.component';
+// import { SwiperModule } from 'swiper/angular';
 import { CompanyInfoHeaderComponent } from './widgets/company-info-header/company-info-header.component';
 import { GridsterModule } from 'angular-gridster2';
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -368,7 +368,7 @@ import { MatChipListComponent } from './widgets/mat-chip-list/mat-chip-list.comp
     ItemTypeSortComponent,
     ItemSalesCardComponent,
     SalesItemsComponent,
-    ImageSwiperComponent,
+    // ImageSwiperComponent,
     ImageContainerComponent,
     InstructionDirective,
     KeyPadComponent,
@@ -562,7 +562,7 @@ import { MatChipListComponent } from './widgets/mat-chip-list/mat-chip-list.comp
     GridsterModule,
     RouterModule,
     ReactiveFormsModule,
-    SwiperModule,
+    // SwiperModule,
     YouTubePlayerModule,
     NgxJsonViewerModule,
     NgxColorsModule,
@@ -669,7 +669,7 @@ import { MatChipListComponent } from './widgets/mat-chip-list/mat-chip-list.comp
     ItemTypeSortComponent,
     ItemSalesCardComponent,
     SalesItemsComponent,
-    ImageSwiperComponent,
+    // ImageSwiperComponent,
     KeyPadComponent,
     KeyboardComponent,
     KeyboardButtonComponent,
@@ -819,7 +819,7 @@ import { MatChipListComponent } from './widgets/mat-chip-list/mat-chip-list.comp
     NgxImageCompressService,
     KeyboardComponent,
   ],
-  schemas: [NO_ERRORS_SCHEMA], 
+  // schemas: [NO_ERRORS_SCHEMA],
 })
 
 export class SharedModule { }

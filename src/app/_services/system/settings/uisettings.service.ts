@@ -10,10 +10,10 @@ import { UserAuthorizationService } from '../user-authorization.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { PosEditSettingsComponent } from 'src/app/modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electronyzer';
 import { PlatformService } from '../platform.service';
 import { UserPreferencesComponent } from 'src/app/modules/admin/clients/user-preferences/user-preferences.component';
-import { IMenuButtonGroups } from '../mb-menu-buttons.service';
 import { TtsService } from '../tts-service.service';
 
 export interface ContactFieldOptions {
@@ -518,7 +518,7 @@ export class UISettingsService {
       private userAuthorizationService     : UserAuthorizationService,
       private dialog                : MatDialog,
       private platFormService   : PlatformService,
-      private electronService: ElectronService,
+      // private electronService: ElectronService,
       private ttsService: TtsService,
       private settingsService: SettingsService) {
     this.initSecureSettings()
@@ -634,7 +634,7 @@ export class UISettingsService {
 
   getDSSIEmvSettings() {
     if (!this.userAuthorizationService.user) { return }
-    if (!this.electronService.isElectronApp) { return }
+    if (!this.platFormService.isAppElectron) { return }
 
     if (!this.userAuthorizationService.user) {
       this._DSIEMVSettings.next(null)
@@ -1125,16 +1125,19 @@ export class UISettingsService {
     }
   }
 
-   electronZoom(value) {
-    // console.log('Zoom Occured')
-    if (this.platFormService.isAppElectron) {
-      const electron = this.electronService.remote.require('./index.js');
-      if (!electron) {
-        // console.log('electron is undefined')
-      }
-      console.log('value', value)
-      electron.electronZoomControl(value)
-    }
+  //  electronZoom(value) {
+  //   // console.log('Zoom Occured')
+  //   if (this.platFormService.isAppElectron) {
+  //     const electron = this.electronService.remote.require('./index.js');
+  //     if (!electron) {
+  //       // console.log('electron is undefined')
+  //     }
+  //     console.log('value', value)
+  //     electron.electronZoomControl(value)
+  //   }
+  // }
+  electronZoom(value: number): void {
+    (window as any).electron.setZoom(value);
   }
 
   notify(message: string, title: string) {

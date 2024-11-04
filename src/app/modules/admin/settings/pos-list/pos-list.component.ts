@@ -30,7 +30,7 @@ export class PosListComponent implements OnInit, OnDestroy {
   @Input() user: IUser;
   constructor( private AuthenticationService : AuthenticationService,
                private setingsServerice      : SettingsService,
-               
+
                private uiSettings: UISettingsService,
                public orderMethodsService: OrderMethodsService,
                private siteService           : SitesService,
@@ -70,7 +70,7 @@ export class PosListComponent implements OnInit, OnDestroy {
   }
 
   @HostListener("window", [])
-  editTerminal(event) { 
+  editTerminal(event) {
     if (window.innerWidth < 768) {
       this.editTerminalInNew(event)
       return
@@ -89,7 +89,7 @@ export class PosListComponent implements OnInit, OnDestroy {
     }
   }
 
-  editTerminalInNew(event) { 
+  editTerminalInNew(event) {
     const id = event;
     if (id) {
       this.setingsServerice.editPOSDeviceInNew(id)
@@ -105,7 +105,7 @@ export class PosListComponent implements OnInit, OnDestroy {
       this.notifyEvent(`${this.posName} has not been assigned. Please assign names less than 5 characters.`, "Failure")
     }
 
-    
+
   }
 
   getDeviceInfo() {
@@ -131,7 +131,7 @@ export class PosListComponent implements OnInit, OnDestroy {
 
   zoom(posDevice: ITerminalSettings)  {
     if (posDevice && posDevice?.electronZoom && posDevice?.electronZoom != '0') {
-      this.uiSettings.electronZoom(posDevice.electronZoom)
+      this.uiSettings.electronZoom(+posDevice.electronZoom)
     }
   }
   clearPOS() {

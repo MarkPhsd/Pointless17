@@ -10,14 +10,14 @@ export class FileSystemService {
       (private electronService: ElectronService) {}
 
   async makeDirectory(path: string): Promise<any> {
-      const fs = this.electronService.remote.require('./datacap/transactions.js');
-      const response = await fs.makeDirectory(path)
+      // const fs = this.electronService.remote.require('./datacap/transactions.js');
+      // const response = await fs.makeDirectory(path)
   }
 
   async makeFile(path: string, name : string): Promise<any> {
 
-    const pathName = `${path}\\${name}`
-    const fs = this.electronService.remote.require('./datacap/transactions.js');
-    const response = await fs.makeFile(pathName)
+    // const pathName = `${path}\\${name}`
+    // const fs = this.electronService.remote.require('./datacap/transactions.js');
+    // const response = await fs.makeFile(pathName)
 }
 }

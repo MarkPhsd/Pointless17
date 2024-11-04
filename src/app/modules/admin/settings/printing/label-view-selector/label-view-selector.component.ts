@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { IProduct, ISetting } from 'src/app/_interfaces';
 import { Observable, of, switchMap } from 'rxjs';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -43,7 +43,8 @@ export class LabelViewSelectorComponent implements OnInit {
     }
   }
 
-  constructor( private electronService  : ElectronService,
+  // private electronService  : ElectronService,
+  constructor(
               private snack             : MatSnackBar,
               private settingService    : SettingsService,
               private siteService       : SitesService,

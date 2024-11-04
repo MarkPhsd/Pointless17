@@ -356,7 +356,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   zoom(posDevice: ITerminalSettings)  {
     if (posDevice && posDevice?.electronZoom && posDevice?.electronZoom != '0') {
-      this.uiSettings.electronZoom(posDevice.electronZoom)
+      this.uiSettings.electronZoom(+posDevice.electronZoom)
     }
   }
 

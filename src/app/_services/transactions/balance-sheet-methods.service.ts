@@ -11,7 +11,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { PlatformService } from '../system/platform.service';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +45,7 @@ export class BalanceSheetMethodsService {
     private router                         : Router,
     private location                       : Location,
     public  platformService                : PlatformService,
-    private electronService                : ElectronService,
+    // private electronService                : ElectronService,
     private siteService                     : SitesService,
     private balanceSheetService             : BalanceSheetService,
     private authenticationService: AuthenticationService,
@@ -90,7 +90,7 @@ export class BalanceSheetMethodsService {
   }
 
   promptBalanceSheet(user: IUser): Observable<{user: IUser, sheet: IBalanceSheet, err: any}> {
-    
+
     if (this.platformService.isAppElectron || this.platformService.androidApp) {
       const site     = this.sitesService.getAssignedSite()
       const deviceName = this.getDeviceName();
@@ -128,7 +128,7 @@ export class BalanceSheetMethodsService {
     const site = this.sitesService.getAssignedSite()
     const user = this.authenticationService._user.value;
 
- 
+
     if (!user) {  return  of(null)}
     return   this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
       switchMap(sheet => {
@@ -373,17 +373,36 @@ export class BalanceSheetMethodsService {
     return item$;
   }
 
-  async  openDrawerOne() {
-    // console.log('open cash drawer one')
-    const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-    const response        = await emvTransactions.openCashDrawerOne();
+  async openDrawerOne(): Promise<void> {
+    try {
+      const response = await (window as any).electron.openDrawerOne();
+      console.log('Drawer One Response:', response);
+    } catch (error) {
+      console.error('Failed to open Drawer One:', error);
+      this.siteService.notify(`Failed to open Drawer One: ${error}`, 'Close', 3000, 'red');
+    }
   }
 
-  async  openDrawerTwo() {
-    // console.log('open cash drawer one')
-    const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-    const response        = await emvTransactions.openCashDraweTwo();
+  async openDrawerTwo(): Promise<void> {
+    try {
+      const response = await (window as any).electron.openDrawerTwo();
+      console.log('Drawer Two Response:', response);
+    } catch (error) {
+      console.error('Failed to open Drawer Two:', error);
+      this.siteService.notify(`Failed to open Drawer Two: ${error}`, 'Close', 3000, 'red');
+    }
   }
+  // async  openDrawerOne() {
+  //   // console.log('open cash drawer one')
+  //   const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+  //   const response        = await emvTransactions.openCashDrawerOne();
+  // }
+
+  // async  openDrawerTwo() {
+  //   // console.log('open cash drawer one')
+  //   const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+  //   const response        = await emvTransactions.openCashDraweTwo();
+  // }
 
   async openDrawerNoSale(sheet:IBalanceSheet) {
     await this.openDrawerOne()

@@ -225,6 +225,7 @@ enum actions {
   note = 3,
   SaleAuth = 4,
   refund = 10,
+  refundTypeTwo = 11,
 }
 
 export interface ItemWithAction {

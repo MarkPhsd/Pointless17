@@ -3,7 +3,7 @@ import * as _ from "lodash";
 import { ICompany, IServiceType, ISetting,  } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatLegacySnackBar as MatSnackBar, } from '@angular/material/legacy-snack-bar';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { IPOSOrder, IPOSPayment, PosPayment } from 'src/app/_interfaces/transactions/posorder';
 import { BtPrintingService } from './bt-printing.service';
 import  EscPosEncoder  from 'esc-pos-encoder-ionic';

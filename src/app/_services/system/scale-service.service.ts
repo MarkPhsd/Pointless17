@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { PlatformService } from './platform.service';
 import { IPCService } from 'src/app/_services/system/ipc.service';
 import { Capacitor } from '@capacitor/core';
 // import { ipcRenderer } from 'electron';
 import { NgZone } from '@angular/core';
+import { SitesService } from '../reporting/sites.service';
 
 
 export interface ScaleInfo {
@@ -53,10 +54,11 @@ export class ScaleService  {
     this._scaleInfo.next(scaleInfo);
   }
 
+  // private electronService: ElectronService,
   constructor(
-    private electronService: ElectronService,
     private platformService: PlatformService,
     public IPCService :     IPCService,
+    private siteService: SitesService,
     private _ngZone: NgZone
     ) {
     if (!this.IPCService.isElectronApp) { return }
@@ -78,16 +80,23 @@ export class ScaleService  {
 
   }
 
-
-  outSizeAngular(scaleSetup) {
+  outSizeAngular(scaleSetup: any): void {
     this._ngZone.runOutsideAngular(() => {
-      this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
-      {
-          this.updateScaleValues(args, scaleSetup.decimalPlaces)
-        }
-      );
-    })
+      (window as any).electron.onScaleInfo((event: any, args: any) => {
+        this.updateScaleValues(args, scaleSetup.decimalPlaces);
+      });
+    });
   }
+
+  // outSizeAngular(scaleSetup) {
+  //   this._ngZone.runOutsideAngular(() => {
+  //     this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
+  //     {
+  //         this.updateScaleValues(args, scaleSetup.decimalPlaces)
+  //       }
+  //     );
+  //   })
+  // }
 
   //move to feature service.
   //  readScaleEventIPC(): ScaleInfo {
@@ -174,19 +183,37 @@ export class ScaleService  {
     }
   }
 
-  startScaleApp() {
-    if ( !this.platformService.isAppElectron) { return }
-    const childProcess = this.electronService.remote.require('child_process');
-    const pathToExec = 'C:\\pointless\\restarter.exe scaleservice.exe'; // Update this to your executable path
-    this.execProcess = childProcess.exec(pathToExec, function (err, data) {
-      if(err) {
-        console.error(err);
-        return;
-      }
-    });
+  // startScaleApp() {
+  //   if ( !this.platformService.isAppElectron) { return }
+  //   const childProcess = this.electronService.remote.require('child_process');
+  //   const pathToExec = 'C:\\pointless\\restarter.exe scaleservice.exe'; // Update this to your executable path
+  //   this.execProcess = childProcess.exec(pathToExec, function (err, data) {
+  //     if(err) {
+  //       console.error(err);
+  //       return;
+  //     }
+  //   });
 
-    if (this.execProcess) {
-      this.processID = this.execProcess.pid;
+  //   if (this.execProcess) {
+  //     this.processID = this.execProcess.pid;
+  //   }
+  // }
+
+  async startScaleApp(): Promise<void> {
+    if (!this.platformService.isAppElectron) {
+      return;
+    }
+
+    const pathToExec = 'C:\\pointless\\restarter.exe scaleservice.exe'; // Update this as needed
+    try {
+      const response = await (window as any).electron.startScaleApp(pathToExec);
+      if (response && response.pid) {
+        this.processID = response.pid;
+        console.log('Scale app started with PID:', this.processID);
+      }
+    } catch (error) {
+      console.error('Failed to start scale app:', error);
+      this.siteService.notify(`Failed to start scale app: ${error}`, 'Close', 3000, 'red');
     }
   }
 
@@ -197,67 +224,114 @@ export class ScaleService  {
     this.killProcessById(this.processID)
   }
 
-  public killProcessById(processId: number) {
-    if (!this.electronService.isElectronApp) { return}
-      const childProcess = this.electronService.remote.require('child_process');
-      let command = `taskkill /PID ${processId} /F`;
-      childProcess.exec(command, (err, stdout, stderr) => {
-        if (err) {
-          console.error('Error:', err);
-          return;
-        }
-        if (stderr) {
-          return;
-        }
-      });
-    }
+  // public killProcessById(processId: number) {
+  //   if (!this.platformService.isAppElectron) { return}
+  //     const childProcess = this.electronService.remote.require('child_process');
+  //     let command = `taskkill /PID ${processId} /F`;
+  //     childProcess.exec(command, (err, stdout, stderr) => {
+  //       if (err) {
+  //         console.error('Error:', err);
+  //         return;
+  //       }
+  //       if (stderr) {
+  //         return;
+  //       }
+  //     });
+  //   }
 
-
-  startProcess(name: string) {
-    try {
-      if ( !this.platformService.isAppElectron) { return }
-    } catch (error) {
+  public async killProcessById(processId: number): Promise<void> {
+    if (!this.platformService.isAppElectron) {
       return;
     }
-    if (!this.platformService.isAppElectron) { return }
-    const childProcess = this.electronService.remote.require('child_process');
-    const pathToExec = `C:\\pointless\\${name}`; // Update this to your executable path
-    this.execProcess = childProcess.exec(pathToExec, function (err, data) {
-      if(err) {
-        console.error(err);
-        return;
+
+    try {
+      const success = await (window as any).electron.killProcess(processId);
+      if (success) {
+        console.log(`Process ${processId} killed successfully`);
       }
-      console.log(data.toString());
-    });
+    } catch (error) {
+      console.error(`Failed to kill process ${processId}:`, error);
+      this.siteService.notify(`Failed to kill process ${processId}: ${error}`, 'Close', 3000, 'red');
+    }
   }
 
-  public killProcessByName(processName: string) {
+
+  // startProcess(name: string) {
+  //   try {
+  //     if ( !this.platformService.isAppElectron) { return }
+  //   } catch (error) {
+  //     return;
+  //   }
+  //   if (!this.platformService.isAppElectron) { return }
+  //   const childProcess = this.electronService.remote.require('child_process');
+  //   const pathToExec = `C:\\pointless\\${name}`; // Update this to your executable path
+  //   this.execProcess = childProcess.exec(pathToExec, function (err, data) {
+  //     if(err) {
+  //       console.error(err);
+  //       return;
+  //     }
+  //     console.log(data.toString());
+  //   });
+  // }
+  async startProcess(name: string): Promise<void> {
+    if (!this.platformService.isAppElectron) {   return;   }
+    const pathToExec = `C:\\pointless\\${name}`; // Customize this path as needed
     try {
-      if (!this.platformService.isAppElectron) { return }
+      const response = await (window as any).electron.startApp(pathToExec);
+      if (response && response.pid) {
+        this.execProcess = response.pid;
+        console.log(`${name} started with PID:`, this.execProcess);
+      }
     } catch (error) {
+      console.error(`Failed to start ${name}:`, error);
+      this.siteService.notify(`Failed to start ${name}: ${error}`, 'Close', 3000, 'red');
+    }
+  }
+
+
+  // public killProcessByName(processName: string) {
+  //   try {
+  //     if (!this.platformService.isAppElectron) { return }
+  //   } catch (error) {
+  //     return;
+  //   }
+  //   const childProcess = this.electronService.remote.require('child_process');
+  //   // Command that gets the IDs of all processes with the given name
+  //   let command = `taskkill /F /IM ${processName} /T`;
+
+  //   try {
+  //     childProcess.exec(command, (err, stdout, stderr) => {
+  //       if (err) {
+  //         console.error(err);
+  //         return;
+  //       }
+  //       if (stderr) {
+  //         console.error(stderr);
+  //         return;
+  //       }
+  //       console.log(stdout);
+  //     });
+  //   } catch (error) {
+
+  //   }
+  // }
+
+  public async killProcessByName(processName: string): Promise<void> {
+    if (!this.platformService.isAppElectron) {
       return;
     }
-    const childProcess = this.electronService.remote.require('child_process');
-    // Command that gets the IDs of all processes with the given name
-    let command = `taskkill /F /IM ${processName} /T`;
 
     try {
-      childProcess.exec(command, (err, stdout, stderr) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        if (stderr) {
-          console.error(stderr);
-          return;
-        }
-        console.log(stdout);
-      });
+      const success = await (window as any).electron.killProcessByName(processName);
+      if (success) {
+        console.log(`Process ${processName} killed successfully`);
+      }
     } catch (error) {
-
+      console.error(`Failed to kill process ${processName}:`, error);
+      this.siteService.notify(`Failed to kill process ${processName}: ${error}`, 'Close', 3000, 'red');
     }
-
   }
+
 }
 
       // this.electronService.ipcRenderer.on('scaleType', (event, args) => {

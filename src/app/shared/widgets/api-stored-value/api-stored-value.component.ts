@@ -2,7 +2,7 @@ import { Component, OnInit,NgZone  } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Router } from '@angular/router';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
@@ -30,7 +30,7 @@ export class ApiStoredValueComponent implements OnInit {
       private fb                   : UntypedFormBuilder,
       private authenticationService: AuthenticationService,
       private appInitService       : AppInitService,
-      public  electronService      : ElectronService,
+      // public  electronService      : ElectronService,
       private platformService      : PlatformService,
       private siteService          : SitesService,
       private ngZone               : NgZone,
@@ -48,7 +48,7 @@ export class ApiStoredValueComponent implements OnInit {
 
     this.initRender();
     this.getVersion();
-    this.isElectronApp = this.electronService.isElectronApp;
+    this.isElectronApp = this.platFormService.isAppElectron;
     this.isApp = this.platformService.isApp();
   }
 
@@ -65,24 +65,27 @@ export class ApiStoredValueComponent implements OnInit {
   }
 
   //for electrononly
-  initRender() {
-    if (!this.electronService.isElectronApp) { return }
-    this.electronService.ipcRenderer.on('getVersion', (event, arg) => {
+  initRender(): void {
+    if (!this.platformService.isAppElectron) {
+      return;
+    }
+
+    (window as any).electron.onGetVersion((arg: any) => {
       this.ngZone.run(() => {
-          this.version = arg
-          this.electronVersion = arg
+        this.version = arg;
+        this.electronVersion = arg;
       });
-    })
+    });
   }
 
   ngOnInit(): void {
     let currentAPIUrl = localStorage.getItem('storedApiUrl');
 
-    if (currentAPIUrl) { 
+    if (currentAPIUrl) {
       currentAPIUrl = currentAPIUrl.replace( 'https://', '')
       currentAPIUrl = currentAPIUrl.replace( '/api', '')
     }
-    
+
     this.inputForm = this.fb.group({
       apiUrl: [currentAPIUrl],
     });
@@ -113,7 +116,7 @@ export class ApiStoredValueComponent implements OnInit {
   }
 
   checkForUpdate() {
-    if (!this.electronService.isElectronApp) { return }
+    if (!this.platFormService.isAppElectron) { return }
     this.IPCService._ipc.send('getVersion', 'ping');
 
     this.IPCService._ipc.addListener('getVersion', (event, pong) => {
@@ -127,14 +130,26 @@ export class ApiStoredValueComponent implements OnInit {
     this.matSnack.open('Is Electron ' +  this.IPCService.isElectronApp, 'status')
   }
 
-  getVersion() {
-    if (!this.electronService.isElectronApp) { return }
-    this.electronService.ipcRenderer.send('getVersion', 'ping');
+  getVersion(): void {
+    if (!this.platformService.isAppElectron) {
+      return;
+    }
+
+    // Send the version request
+    (window as any).electron.getVersion();
+
+    // Listen for the version response
+    (window as any).electron.onVersionResponse((version: string) => {
+      this.ngZone.run(() => {
+        this.version = version;
+        this.electronVersion = version;
+      });
+    });
   }
 
   getPong(): any {
     try{
-      if (!this.electronService.isElectronApp) { return }
+      if (!this.platFormService.isAppElectron) { return }
         this.IPCService._ipc.addListener('asynchronous-message', (event, pong) => {
       });
       return null

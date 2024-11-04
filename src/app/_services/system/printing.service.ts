@@ -4,7 +4,7 @@ import { ITerminalSettings, SettingsService } from 'src/app/_services/system/set
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IClientTable, IPurchaseOrderItem, ISetting, ISite, IUser } from 'src/app/_interfaces';
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import  html2canvas from 'html2canvas';
 import  domtoimage from 'dom-to-image';
@@ -112,7 +112,8 @@ export class PrintingService {
     this.__printView = value;
   }
 
-  constructor(  private electronService   : ElectronService,
+  // private electronService   : ElectronService,
+  constructor(
                 private dialog            : MatDialog,
                 private orderService      : OrdersService,
                 private clientService     : ClientTableService,
@@ -490,15 +491,23 @@ export class PrintingService {
     });
   }
 
-  listPrinters(): any {
+  // listPrinters(): any {
+  //   try {
+  //     let printWindow = new this.electronService.remote.BrowserWindow({ show:false })
+  //     printWindow.loadURL('http://localhost')
+  //     const printers = printWindow.webContents.getPrinters()
+  //     printWindow.close();
+  //     return printers;
+  //   } catch (error) {
+  //     return ['Error Getting Printers']
+  //   }
+  // }
+
+  listPrinters(): Promise<any> {
     try {
-      let printWindow = new this.electronService.remote.BrowserWindow({ show:false })
-      printWindow.loadURL('http://localhost')
-      const printers = printWindow.webContents.getPrinters()
-      printWindow.close();
-      return printers;
+      return (window as any).electron.listPrinters();
     } catch (error) {
-      return ['Error Getting Printers']
+      return Promise.resolve(['Error Getting Printers']);
     }
   }
 
@@ -566,35 +575,44 @@ export class PrintingService {
     }
   }
 
-  printElectronForLabels(contents: string, printerName: string, options: printOptions) : any {
-    if (!contents) { return }
-    let printWindow = new this.electronService.remote.BrowserWindow({show: false, width: 350, height: 600 })
-    if (options.silent) { printWindow.hide(); }
-    // console.log('printElectronForLabels contents', contents)
-    return  printWindow.loadURL(contents)
-      .then( e => {
-        if (options.silent) { printWindow.hide(); }
-        if (!options) {  options = this.getdefaultOptions(printerName)  }
-        printWindow.webContents.print(
-          options,
-          (success, failureReason) => {
-            try {
-              printWindow.close();
-              printWindow = null;
-            } catch (error) {
-              console.log('error close window', error)
-            }
-          }
-        )
+  // printElectronForLabels(contents: string, printerName: string, options: printOptions) : any {
+  //   if (!contents) { return }
+  //   let printWindow = new this.electronService.remote.BrowserWindow({show: false, width: 350, height: 600 })
+  //   if (options.silent) { printWindow.hide(); }
+  //   // console.log('printElectronForLabels contents', contents)
+  //   return  printWindow.loadURL(contents)
+  //     .then( e => {
+  //       if (options.silent) { printWindow.hide(); }
+  //       if (!options) {  options = this.getdefaultOptions(printerName)  }
+  //       printWindow.webContents.print(
+  //         options,
+  //         (success, failureReason) => {
+  //           try {
+  //             printWindow.close();
+  //             printWindow = null;
+  //           } catch (error) {
+  //             console.log('error close window', error)
+  //           }
+  //         }
+  //       )
 
-        }).catch( err => {
-          this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
-          printWindow.close();
-          printWindow = null;
-          return null;
-      }
-    )
+  //       }).catch( err => {
+  //         this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
+  //         printWindow.close();
+  //         printWindow = null;
+  //         return null;
+  //     }
+  //   )
 
+  // }
+
+  printElectronForLabels(contents: string, printerName: string, options: any): void {
+    if (!contents) return;
+
+    (window as any).electron.printLabels(contents, printerName, options)
+      .catch((err: any) => {
+        this.siteService.notify(`Error occurred: ${err}. options: ${options}`, 'Close', 5000, 'red');
+      });
   }
 
   async printLabelElectron(printString: string, printerName: string) {
@@ -625,34 +643,64 @@ export class PrintingService {
     }
   }
 
-  printElectron(contents: string, printerName: string, options: printOptions) : boolean {
-    if (!this.platFormService.isAppElectron) { return }
-    let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
-    if (options.silent) { printWindow.hide(); }
-       printWindow.loadURL(contents)
-      .then( e => {
-        if (options.silent) { printWindow.hide(); }
-        if (!options) {  options = this.getdefaultOptions(printerName)  }
+  // printElectron(contents: string, printerName: string, options: printOptions) : boolean {
+  //   if (!this.platFormService.isAppElectron) { return }
+  //   let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+  //   if (options.silent) { printWindow.hide(); }
+  //      printWindow.loadURL(contents)
+  //     .then( e => {
+  //       if (options.silent) { printWindow.hide(); }
+  //       if (!options) {  options = this.getdefaultOptions(printerName)  }
 
-        printWindow.webContents.print(
-          options,
-          (success, failureReason) => {
-            console.log('Print Window : printing ', success, failureReason);
-            printWindow.close();
-            printWindow = null;
-            return true
-          }
-        )
+  //       printWindow.webContents.print(
+  //         options,
+  //         (success, failureReason) => {
+  //           console.log('Print Window : printing ', success, failureReason);
+  //           printWindow.close();
+  //           printWindow = null;
+  //           return true
+  //         }
+  //       )
 
-        }).catch( err => {
-          console.log('Print window Load URL error:', err, options)
-          this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
-          printWindow.close();
-          printWindow = null;
-          return false
-      }
-    )
-    return false;
+  //       }).catch( err => {
+  //         console.log('Print window Load URL error:', err, options)
+  //         this.siteService.notify(`Error occured: ${err}. options: ${options}`,  'Close', 5000, 'red' )
+  //         printWindow.close();
+  //         printWindow = null;
+  //         return false
+  //     }
+  //   )
+  //   return false;
+  // }
+
+  printElectron(contents: string, printerName: string, options: any): Promise<boolean> {
+    if (!this.platFormService.isAppElectron || !contents) {
+      return Promise.resolve(false);
+    }
+
+    // Use the method exposed by preload.js to trigger the print action
+    return (window as any).electron.printContents(contents, printerName, options)
+      .then((success: boolean) => {
+        if (!success) {
+          this.siteService.notify(
+            `Printing failed for printer: ${printerName}`,
+            'Close',
+            5000,
+            'red'
+          );
+        }
+        return success;
+      })
+      .catch((err: any) => {
+        console.error('Error during print operation:', err);
+        this.siteService.notify(
+          `Error occurred: ${err}. options: ${options}`,
+          'Close',
+          5000,
+          'red'
+        );
+        return false;
+      });
   }
 
   removeAllStyles() {
@@ -686,39 +734,67 @@ export class PrintingService {
     });
   }
 
-   async printElectronAsync(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
-    if (!this.platFormService.isAppElectron) { return }
-    let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
-    if (options.silent) { printWindow.hide(); }
-    let result = true;
-    await printWindow.loadURL(contents)
-      .then( e => {
-        if (options.silent) { printWindow.hide(); }
-        if (!options) {  options = this.getdefaultOptions(printerName)  }
-        printWindow.webContents.print(
-          options,
-          (success, failureReason) => {
-            // console.log('Print Window : printing ', success, failureReason);
-            printWindow.close();
-            printWindow = null;
-            result = false
-          }
-        )
-        }).catch( err => {
-          console.log('Print window Load URL error:',printerName , err, options)
-          this.siteService.notify(`Error occured: Check your printer. options: printer: ${printerName} - Error: ${JSON.stringify(options)}`,  'Close', 25000, 'red' )
-          printWindow.close();
-          printWindow = null;
-          result = false
+  //  async printElectronAsync(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
+  //   if (!this.platFormService.isAppElectron) { return }
+  //   let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+  //   if (options.silent) { printWindow.hide(); }
+  //   let result = true;
+  //   await printWindow.loadURL(contents)
+  //     .then( e => {
+  //       if (options.silent) { printWindow.hide(); }
+  //       if (!options) {  options = this.getdefaultOptions(printerName)  }
+  //       printWindow.webContents.print(
+  //         options,
+  //         (success, failureReason) => {
+  //           // console.log('Print Window : printing ', success, failureReason);
+  //           printWindow.close();
+  //           printWindow = null;
+  //           result = false
+  //         }
+  //       )
+  //       }).catch( err => {
+  //         console.log('Print window Load URL error:',printerName , err, options)
+  //         this.siteService.notify(`Error occured: Check your printer. options: printer: ${printerName} - Error: ${JSON.stringify(options)}`,  'Close', 25000, 'red' )
+  //         printWindow.close();
+  //         printWindow = null;
+  //         result = false
+  //     }
+  //   )
+  //   return result;
+  // }
+  async printElectronAsync(contents: string, printerName: string, options: any): Promise<boolean> {
+    if (!this.platFormService.isAppElectron || !contents) {
+      return false;
+    }
+
+    try {
+      // Use the exposed `printContents` function
+      const success = await (window as any).electron.printContents(contents, printerName, options);
+      if (!success) {
+        this.siteService.notify(
+          `Printing failed for printer: ${printerName}`,
+          'Close',
+          25000,
+          'red'
+        );
       }
-    )
-    return result;
+      return success;
+    } catch (err) {
+      console.error('Error during print operation:', printerName, err);
+      this.siteService.notify(
+        `Error occurred: Check your printer. Printer: ${printerName} - Error: ${JSON.stringify(options)}`,
+        'Close',
+        25000,
+        'red'
+      );
+      return false;
+    }
   }
 
-  async printElectronIPCAsync(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
-    if (!this.platFormService.isAppElectron) { return }
-    this.electronService.ipcRenderer.send('print', { contents, printerName, options });
-  }
+  // async printElectronIPCAsync(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
+  //   if (!this.platFormService.isAppElectron) { return }
+  //   this.electronService.ipcRenderer.send('print', { contents, printerName, options });
+  // }
 
 
   printDocuments(printOrderList: IPrintOrders[]): Observable<any> {
@@ -1180,15 +1256,27 @@ export class PrintingService {
     console.log('')
   }
 
-  async saveContentsToFile(filePath: string, contents: string) {
+  // async saveContentsToFile(filePath: string, contents: string) {
+  //   try {
+  //     const fileWriting = this.electronService.remote.require('./datacap/transactions.js');
+  //     let response      : any;
+  //     response           =  await fileWriting.writeToFile(filePath, contents)
+  //   } catch (error) {
+  //     this.siteService.notify(`File could not be written. ${error}`, 'Close', 3000, 'red')
+  //   }
+  // }
+
+  async saveContentsToFile(filePath: string, contents: string): Promise<void> {
     try {
-      const fileWriting = this.electronService.remote.require('./datacap/transactions.js');
-      let response      : any;
-      response           =  await fileWriting.writeToFile(filePath, contents)
+      const response = await (window as any).electron.saveToFile(filePath, contents);
+      if (!response.success) {
+        throw new Error(response.error || 'Unknown error');
+      }
     } catch (error) {
-      this.siteService.notify(`File could not be written. ${error}`, 'Close', 3000, 'red')
+      this.siteService.notify(`File could not be written. ${error}`, 'Close', 3000, 'red');
     }
   }
+
 
   saveCreditCardSale(data: string, code: string) {
     const uuid = UUID.UUID().slice(0,5);

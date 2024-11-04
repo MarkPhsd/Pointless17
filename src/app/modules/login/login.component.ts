@@ -13,7 +13,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { PollingService } from 'src/app/_services/system/polling.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
@@ -147,7 +147,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private uiSettingService       : UISettingsService,
         private awsBucketService       : AWSBucketService,
         private orderMethodsService    : OrderMethodsService,
-        private electronService        : ElectronService,
+        // private electronService        : ElectronService,
+        private platFormService        : PlatformService,
         private settingService         : SettingsService,
         private paymentMethodsservice  : PaymentsMethodsProcessService,
         private pollingService: PollingService,
@@ -216,13 +217,33 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   zoom(posDevice: ITerminalSettings)  {
     if (posDevice && posDevice?.electronZoom && posDevice?.electronZoom != '0') {
-      this.uiSettingService.electronZoom(posDevice.electronZoom)
+      this.uiSettingService.electronZoom(+posDevice.electronZoom)
     }
   }
 
-  async  openDrawerOne() {
-    const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-    const response        = await emvTransactions.openCashDrawerOne()
+  // async  openDrawerOne() {
+  //   // const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+  //   // const response        = await emvTransactions.openCashDrawerOne()
+  // }
+
+  async openDrawerOne(): Promise<void> {
+    try {
+      const response = await (window as any).electron.openDrawerOne();
+      console.log('Drawer One Response:', response);
+    } catch (error) {
+      console.error('Failed to open Drawer One:', error);
+      this.siteService.notify(`Failed to open Drawer One: ${error}`, 'Close', 3000, 'red');
+    }
+  }
+
+  async openDrawerTwo(): Promise<void> {
+    try {
+      const response = await (window as any).electron.openDrawerTwo();
+      console.log('Drawer Two Response:', response);
+    } catch (error) {
+      console.error('Failed to open Drawer Two:', error);
+      this.siteService.notify(`Failed to open Drawer Two: ${error}`, 'Close', 3000, 'red');
+    }
   }
 
   refreshUIHomePageSettings() {

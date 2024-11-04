@@ -14,7 +14,7 @@ export class EncryptionService {
   }
 
   decrypt(text, key) {
-    // /this.plainText.trim(), this.encPassword.trim()
+    // this.plainText.trim(), this.encPassword.trim()
     const decryptedPass = CryptoJS.AES.encrypt(text.trim(), key)
     return decryptedPass;
   }

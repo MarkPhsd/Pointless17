@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { Capacitor} from '@capacitor/core';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { AppInitService } from '../_services/system/app-init.service';
+import { PlatformService } from '../_services/system/platform.service';
 
 @Injectable({ providedIn: 'root' })
 
@@ -16,7 +17,7 @@ export class AgeVerificationGuardService {
 
   constructor(
     private router: Router,
-    private electronService: ElectronService,
+    private platFormservice: PlatformService,
     private appInitService  : AppInitService,
 ) { }
 
@@ -52,7 +53,7 @@ export class AgeVerificationGuardService {
       this.webMode = true
     }
 
-    if (this.electronService.isElectronApp) {
+    if (this.platFormservice.isAppElectron) {
       this.webMode = false
       this.platForm = 'electron'
       return

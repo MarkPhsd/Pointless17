@@ -4,11 +4,11 @@ import { Component, ElementRef,AfterViewInit,
         Input} from '@angular/core';
 import { ClientSearchModel, ClientSearchResults, IUserProfile }  from 'src/app/_interfaces';
 import { AWSBucketService, ContactsService, MenuService} from 'src/app/_services';
-import { trigger, transition, animate, style, query, stagger } from '@angular/animations';
+// import { trigger, transition, animate, style, query, stagger } from '@angular/animations';
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Capacitor, Plugins } from '@capacitor/core';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';

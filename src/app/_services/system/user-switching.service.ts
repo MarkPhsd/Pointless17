@@ -12,7 +12,7 @@ import { AppInitService } from './app-init.service';
 import { PlatformService } from './platform.service';
 import { EncryptionService } from '../encryption/encryption.service';
 import { BalanceSheetMethodsService } from '../transactions/balance-sheet-methods.service';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { ToolBarUIService } from './tool-bar-ui.service';
 import { UISettingsService } from './settings/uisettings.service';
 import { ClientTypeService, IUserAuth_Properties } from '../people/client-type.service';
@@ -90,7 +90,7 @@ export class UserSwitchingService implements  OnDestroy {
     private encryptionService: EncryptionService,
     private toolbarUIService : ToolBarUIService,
     private uiSettingService: UISettingsService,
-    private electronService  : ElectronService,
+    // private electronService  : ElectronService,
     private clientTypeService: ClientTypeService,
     private clientTableService: ClientTableService,
     private userIdle: UserIdleService,
@@ -122,7 +122,7 @@ export class UserSwitchingService implements  OnDestroy {
     const appUser = {} as ElectronDimensions;
     const user = JSON.stringify(appUser)
     localStorage.setItem('appUser', user)
-    this.isElectron =  this.electronService.isElectronApp
+    this.isElectron =  this.platformService.isAppElectron
   }
 
   async switchUser(): Promise<boolean> {

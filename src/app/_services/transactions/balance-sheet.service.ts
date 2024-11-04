@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of, switchMap, } from 'rxjs';
 
 import { ISite } from 'src/app/_interfaces';
 import { UntypedFormBuilder, FormGroup } from '@angular/forms';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { SitesService } from '../reporting/sites.service';
 import { PlatformService } from '../system/platform.service';
 import { ItemBasic } from 'src/app/modules/admin/report-designer/interfaces/reports';
@@ -364,24 +364,24 @@ export class BalanceSheetService {
 
     let userTrue : boolean;
     userTrue = false
-    if (user) { 
+    if (user) {
       userTrue = true
     }
 
     console.log('getCurrentUserBalanceSheet service', userTrue, deviceName)
-    if (!userTrue) { 
+    if (!userTrue) {
       let item = {} as IBalanceSheet;
       item.id = 0;
       return of(item)
     }
 
-    if (!deviceName) { 
+    if (!deviceName) {
       let item = {} as IBalanceSheet
       item.id = 0;
       return of(item)
     }
 
- 
+
     user.authdata = ''
     this.authenticationService.updateUser(user)
 

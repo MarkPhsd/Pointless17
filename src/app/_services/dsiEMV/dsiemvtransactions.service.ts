@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { XMLParser, XMLBuilder, XMLValidator} from 'fast-xml-parser';
 import { DSIEMVSettings, UISettingsService } from '../system/settings/uisettings.service';
 import { Subscription } from 'rxjs';
@@ -222,8 +222,9 @@ export class DSIEMVTransactionsService implements OnDestroy {
     })
   }
 
+  // private electronService: ElectronService,
   constructor
-      ( private electronService: ElectronService,
+  (
         private matSnack        : MatSnackBar,
         private uiSettingService : UISettingsService,
       ) {
@@ -237,74 +238,74 @@ export class DSIEMVTransactionsService implements OnDestroy {
   }
 
   async mercuryPinPadReset(transaction: Transaction): Promise<RStream> {
-    if (!transaction) { return }
-    const tstream       = {} as TStream;
-    tstream.Transaction = transaction
-    const builder       = new XMLBuilder(null)
-    const xml           = builder.build(tstream);
-    console.log(xml)
-    let response        : any;
-    try {
-      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-      response = await emvTransactions.PINPadReset(xml)
-    } catch (error) {
-      console.log('error', error)
-    }
-    if (response === 'reset failed') {
-      this.dsiResponse = 'Pin Pad Reset Failed'
-      return;
-    }
-    if (response) {
-      const parser  = new XMLParser(null);
-      this.dsiResponse =  parser.parse(response)
-      return this.dsiResponse;
-    }
+    // if (!transaction) { return }
+    // const tstream       = {} as TStream;
+    // tstream.Transaction = transaction
+    // const builder       = new XMLBuilder(null)
+    // const xml           = builder.build(tstream);
+    // console.log(xml)
+    // let response        : any;
+    // try {
+    //   const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+    //   response = await emvTransactions.PINPadReset(xml)
+    // } catch (error) {
+    //   console.log('error', error)
+    // }
+    // if (response === 'reset failed') {
+    //   this.dsiResponse = 'Pin Pad Reset Failed'
+    //   return;
+    // }
+    // if (response) {
+    //   const parser  = new XMLParser(null);
+    //   this.dsiResponse =  parser.parse(response)
+    //   return this.dsiResponse;
+    // }
     const dsiResponse = {} as RStream;
     return dsiResponse;
   }
 
   async pinPadReset(transaction: Transaction): Promise<RStream> {
-    if (!transaction) { return }
-    const tstream       = {} as TStream;
-    tstream.Transaction = transaction
-    const topLevel      = {} as topLevel;
-    topLevel.TStream    = tstream;
-    const builder       = new XMLBuilder(this.options)
-    const xml           = builder.build(topLevel);
-    let response        : any;
-    try {
-      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-      response = await emvTransactions.PINPadReset(xml)
-    } catch (error) {
-      console.log('error', error)
-      return  error
-    }
-    if (response === 'reset failed') {
-      this.dsiResponse = 'Pin Pad Reset Failed'
-      return  this.dsiResponse
-    }
-    if (response) {
-      const parser  = new XMLParser(null);
-      this.dsiResponse =  parser.parse(response)
-      console.log('pinPadReset response', this.dsiResponse)
-      return this.dsiResponse;
-    }
+    // if (!transaction) { return }
+    // const tstream       = {} as TStream;
+    // tstream.Transaction = transaction
+    // const topLevel      = {} as topLevel;
+    // topLevel.TStream    = tstream;
+    // const builder       = new XMLBuilder(this.options)
+    // const xml           = builder.build(topLevel);
+    // let response        : any;
+    // try {
+    //   const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+    //   response = await emvTransactions.PINPadReset(xml)
+    // } catch (error) {
+    //   console.log('error', error)
+    //   return  error
+    // }
+    // if (response === 'reset failed') {
+    //   this.dsiResponse = 'Pin Pad Reset Failed'
+    //   return  this.dsiResponse
+    // }
+    // if (response) {
+    //   const parser  = new XMLParser(null);
+    //   this.dsiResponse =  parser.parse(response)
+    //   console.log('pinPadReset response', this.dsiResponse)
+    //   return this.dsiResponse;
+    // }
     const dsiResponse = {} as RStream;
     return dsiResponse;
   }
 
   async mercuryPinPadTest(): Promise<any> {
-    let transaction = {} as Transaction;
-    transaction  = this.getPadSettings(transaction)
-    if (transaction) {
-      const tstream = {} as TStream;
-      tstream.Transaction = transaction
-      const builder = new XMLBuilder(this.options)
-      const xml = builder.build(tstream);
-      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-      const response = await emvTransactions.MercuryPinPadTest(xml)
-      return response
-    }
+    // let transaction = {} as Transaction;
+    // transaction  = this.getPadSettings(transaction)
+    // if (transaction) {
+    //   const tstream = {} as TStream;
+    //   tstream.Transaction = transaction
+    //   const builder = new XMLBuilder(this.options)
+    //   const xml = builder.build(tstream);
+    //   const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+    //   const response = await emvTransactions.MercuryPinPadTest(xml)
+    //   return response
+    // }
   }
 
   async emvBatch(transaction: Transaction, batchSummary: BatchSummary): Promise<any> {
@@ -335,9 +336,9 @@ export class DSIEMVTransactionsService implements OnDestroy {
     let response        : any;
     console.log('emvBatch xml', xml)
     try {
-      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-      response              = await emvTransactions.EMVTransaction(xml)
-      console.log('EMV Batch Response', response)
+      // const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+      // response              = await emvTransactions.EMVTransaction(xml)
+      // console.log('EMV Batch Response', response)
     } catch (error) {
       console.log('error', error)
       return  error
@@ -371,8 +372,8 @@ export class DSIEMVTransactionsService implements OnDestroy {
     let response        : any;
 
     try {
-      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-      response              = await emvTransactions.EMVTransaction(xml)
+      // const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+      // response              = await emvTransactions.EMVTransaction(xml)
     } catch (error) {
       console.log('error', error)
       return  error
@@ -452,8 +453,8 @@ export class DSIEMVTransactionsService implements OnDestroy {
     }
 
     try {
-      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-      response              = await emvTransactions.EMVTransaction(xml)
+      // const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+      // response              = await emvTransactions.EMVTransaction(xml)
       // console.log('EMVTransaction response (dsiEMVTransaction.service)', response);
 
     } catch (error) {
@@ -477,14 +478,14 @@ export class DSIEMVTransactionsService implements OnDestroy {
   }
 
   async testADODBConnection() {
-    const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-    const response = await emvTransactions.testADODBConnection()
+    // const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+    let response : any ;///await emvTransactions.testADODBConnection()
     console.log('response', response)
     return response
   }
 
   async textActiveX(pathName: string) {
-    const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+    let  emvTransactions : any // this.electronService.remote.require('./datacap/transactions.js');
     const response = await emvTransactions.textActiveX(pathName)
     console.log('response', response)
     return response
@@ -492,14 +493,14 @@ export class DSIEMVTransactionsService implements OnDestroy {
 
   runOpenWord() {
     const xml = this.getResetXML()
-    const PadReset = this.electronService.remote.require('./datacap/transactions.js');
+    let  PadReset  : any //= this.electronService.remote.require('./datacap/transactions.js');
     const response = PadReset.openWord();
     return response
   }
 
   runEMVPadReset() {
     const xml = this.getResetXML()
-    const winax = this.electronService.remote.require('./datacap/transactions.js');
+    let winax : any //= this.electronService.remote.require('./datacap/transactions.js');
     const response = winax.EMVPadReset(xml);
     console.log('xml - response', xml, response)
     return response
@@ -507,7 +508,7 @@ export class DSIEMVTransactionsService implements OnDestroy {
 
   runCreateFile() {
     const xml = this.getResetXML()
-    const winax = this.electronService.remote.require('./datacap/transactions.js');
+    let winax : any // = this.electronService.remote.require('./datacap/transactions.js');
     const response = winax.createFile();
     return response
   }

@@ -4,7 +4,7 @@ import { ActivatedRoute, } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProduct, ISetting, ISite } from 'src/app/_interfaces';
 import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -52,7 +52,7 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
        private menuService       : MenuService,
        private siteService       : SitesService,
        private fb                : UntypedFormBuilder,
-       private electronService   : ElectronService,
+      //  private electronService   : ElectronService,
        private renderingService  : RenderingService,
        private printingService   : PrintingService,
        private inventoryEditButon: InventoryEditButtonService,
@@ -157,7 +157,7 @@ export class ProductInfoPanelComponent implements OnInit, OnChanges {
             this.saveProduct();
       });
 
-  
+
     }
   }
 
