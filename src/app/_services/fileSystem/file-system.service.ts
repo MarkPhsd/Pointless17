@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +7,9 @@ import { ElectronService } from 'ngx-electron';
 export class FileSystemService {
 
   constructor
-      (private electronService: ElectronService) {}
+      (
+        // private electronService: ElectronService
+      ) {}
 
   async makeDirectory(path: string): Promise<any> {
       // const fs = this.electronService.remote.require('./datacap/transactions.js');

@@ -1,23 +1,23 @@
 
-<div *ngIf="isElectronApp">
+<div *ngIf="isElectronApp && printerList.length>0">
   <mat-form-field appearance="outline">
     <mat-label><ng-content></ng-content></mat-label>
     <mat-select
-                type="text"
-                [(ngModel)]="printerName"
-                (selectionChange)="emitPrinter()"
-              >
-      <div *ngIf="printerList; else loading">
-        <mat-option *ngFor="let item of printerList" [value]="''">
-          Clear
-        </mat-option>
-        <mat-option *ngFor="let item of printerList" [value]="item.name">
-          {{ item.name }}
-        </mat-option>
-      </div>
+        type="text"
+        [(ngModel)]="printerName"
+        (selectionChange)="emitPrinter()" >
+
+      <mat-option value="">
+        Clear
+      </mat-option>
+      <mat-option *ngFor="let item of printerList" [value]="item?.name">
+        {{ item.displayName || item.name }}
+      </mat-option>
+
     </mat-select>
   </mat-form-field>
 </div>
 <ng-template #loading>
   <mat-spinner [diameter]="50"></mat-spinner>
 </ng-template>
+

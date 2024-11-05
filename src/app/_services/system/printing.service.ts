@@ -4,7 +4,6 @@ import { ITerminalSettings, SettingsService } from 'src/app/_services/system/set
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IClientTable, IPurchaseOrderItem, ISetting, ISite, IUser } from 'src/app/_interfaces';
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
-// import { ElectronService } from 'ngx-electron';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import  html2canvas from 'html2canvas';
 import  domtoimage from 'dom-to-image';
@@ -121,14 +120,12 @@ export class PrintingService {
                 private inventoryService   : InventoryAssignmentService,
                 private router            : Router,
                 private userAuthService   : UserAuthorizationService,
-                // private orderMethodsService: OrderMethodsService,
                 private orderItemService  : POSOrderItemService,
                 private platFormService   : PlatformService,
                 private menuItemService   : MenuService,
                 private http              : HttpClient,
                 private posOrderItemService : POSOrderItemService,
                 private metrcPackageService: MetrcPackagesService,
-                private printingAndroidService   : PrintingAndroidService,
                 private renderingService  : RenderingService,
                 private settingService    : SettingsService,
                 private siteService       : SitesService,
@@ -244,7 +241,6 @@ export class PrintingService {
     return result;
   }
 
-
   printLabelByQuantity(contents: any, printerName: string, quantity: number) {
 
     let timer  =  +localStorage.getItem('testVariable' )
@@ -261,7 +257,6 @@ export class PrintingService {
                                             printCount: quantity,
                                             contents: contents,
                                             joinLabels: true})
-
     }
     return result;
 
@@ -272,14 +267,10 @@ export class PrintingService {
     let contents        = labelProcess?.contents;
     let  printCount     = labelProcess?.printCount;
     let  joinLabels     = labelProcess?.joinLabels;
-
-    // this.obs$.push( this.printItemLabel(item, null, order, joinLabels) )
     let result = this.postLabelToListAlt(true, contents)
     printCount += 1
-
     return result
   }
-
 
   async initDefaultLayouts() {
     const site = this.siteService.getAssignedSite();
@@ -326,31 +317,23 @@ export class PrintingService {
   }
 
   refreshInventoryLabelOBS(zplText: string, data: any): Observable<any> {
-
     const site        =  this.siteService.getAssignedSite();
     if (!zplText) {return}
-
     let zpl = {} as  zplLabel;
     zpl.height = '2' // this.zplSetting.option2;
     zpl.width  = '3' // this.zplSetting.option3;
-
     if (!zpl) { return }
 
     //interpolate the zpl text
     zplText =  this.renderingService.interpolateText(data, zplText)
     zpl.text   = zplText
-    // console.log('zpl', zpl.text)
     if (zpl) {
       let result = zpl as unknown as any;
       if (result?.text?.typeError) {
-        console.log('possible error message', result?.text?.typeError)
         this.siteService.notify(`Label Format error ${result?.text?.typeError}`, 'Close', 5000, 'red' )
       }
-      // console.log('zpl', zpl, );
-      console.log('zpl error', result?.text?.typeError)
       return  this.labelaryService.postZPL(site, zpl).pipe(
           switchMap(data => {
-            // console.log('image data', data)
             return  of(`data:image/jpeg;base64,${data}`)
         })
       )
@@ -619,7 +602,6 @@ export class PrintingService {
     const uuid = UUID.UUID().slice(0,5);
 
     if (!printString || printString == undefined || printString == 'undefined') { return };
-    console.log('printLabelElectron', printerName)
     const file = `file:///c://pointless//labels//print${uuid}.txt`
     let fileName = `c:\\pointless\\labels\\print${uuid}.txt`;
     try {
@@ -628,7 +610,6 @@ export class PrintingService {
       this.siteService.notify(`File could not be written.
                                 Please make sure you have a writable folder ${fileName}`, 'Close', 3000, 'red')
     }
-
     const options = {
       silent: true,
       printBackground: false,
@@ -636,7 +617,6 @@ export class PrintingService {
     } as printOptions
 
     try {
-
       this.printElectronForLabels( file, printerName, options )
     } catch (error) {
       return false
@@ -1256,19 +1236,12 @@ export class PrintingService {
     console.log('')
   }
 
-  // async saveContentsToFile(filePath: string, contents: string) {
-  //   try {
-  //     const fileWriting = this.electronService.remote.require('./datacap/transactions.js');
-  //     let response      : any;
-  //     response           =  await fileWriting.writeToFile(filePath, contents)
-  //   } catch (error) {
-  //     this.siteService.notify(`File could not be written. ${error}`, 'Close', 3000, 'red')
-  //   }
-  // }
-
   async saveContentsToFile(filePath: string, contents: string): Promise<void> {
     try {
+      console.log(filePath, contents)
       const response = await (window as any).electron.saveToFile(filePath, contents);
+
+      console.log('save file response', response)
       if (!response.success) {
         throw new Error(response.error || 'Unknown error');
       }
@@ -1276,7 +1249,6 @@ export class PrintingService {
       this.siteService.notify(`File could not be written. ${error}`, 'Close', 3000, 'red');
     }
   }
-
 
   saveCreditCardSale(data: string, code: string) {
     const uuid = UUID.UUID().slice(0,5);

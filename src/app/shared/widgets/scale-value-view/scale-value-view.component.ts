@@ -18,6 +18,7 @@ export class ScaleValueViewComponent implements OnInit {
 
   scaleSubscriber() {
     this._scaleInfo = this.scaleService.scaleInfo$.subscribe( data => {
+      // console.log('scale info data', data)
       this.weight  =''
       this.mode = ''
       this.changeDetectorRef.detectChanges();
@@ -39,13 +40,9 @@ export class ScaleValueViewComponent implements OnInit {
   ngOnInit(): void {
     this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
     if (this.scaleSetup && this.scaleSetup.enabled) {
-      this.initScale();
+      this.restartScale();
     }
     this.scaleSubscriber();
-  }
-
-  initScale() {
-    this.scaleService.initScaleService();
   }
 
   get displayWeight()  {
@@ -58,7 +55,6 @@ export class ScaleValueViewComponent implements OnInit {
   restartScale() {
     this.scaleService.initScaleService()
   }
-
 
   getIsScaleNaN(scale){
     if (scale) {

@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
-import { IPCService } from 'src/app/_services/system/ipc.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
@@ -34,7 +33,6 @@ export class ApiStoredValueComponent implements OnInit {
       private platformService      : PlatformService,
       private siteService          : SitesService,
       private ngZone               : NgZone,
-      private IPCService           : IPCService,
       private matSnack             : MatSnackBar,
     ) {
 
@@ -66,16 +64,21 @@ export class ApiStoredValueComponent implements OnInit {
 
   //for electrononly
   initRender(): void {
-    if (!this.platformService.isAppElectron) {
-      return;
-    }
+    try {
+      if (!this.platformService.isAppElectron) {
+        return;
+      }
 
-    (window as any).electron.onGetVersion((arg: any) => {
-      this.ngZone.run(() => {
-        this.version = arg;
-        this.electronVersion = arg;
+      (window as any).electron.onGetVersion((arg: any) => {
+        this.ngZone.run(() => {
+          this.version = arg;
+          this.electronVersion = arg;
+        });
       });
-    });
+
+    } catch (error) {
+      console.log('init render error')
+    }
   }
 
   ngOnInit(): void {
@@ -112,46 +115,44 @@ export class ApiStoredValueComponent implements OnInit {
   }
 
   checkNode() {
-    this.matSnack.open('checkNode ' + this.IPCService.isElectronApp, 'status')
+    this.matSnack.open('checkNode ' + this.platFormService.isAppElectron, 'status')
   }
 
   checkForUpdate() {
     if (!this.platFormService.isAppElectron) { return }
-    this.IPCService._ipc.send('getVersion', 'ping');
-
-    this.IPCService._ipc.addListener('getVersion', (event, pong) => {
-      this.electronVersion = event;
-      this.version = event;
-    });
   }
 
 
   checkIfIsElectron() {
-    this.matSnack.open('Is Electron ' +  this.IPCService.isElectronApp, 'status')
+    this.matSnack.open('Is Electron ' +   this.platFormService.isAppElectron, 'status')
   }
 
   getVersion(): void {
-    if (!this.platformService.isAppElectron) {
-      return;
-    }
+    try {
+      if (!this.platformService.isAppElectron) {
+        return;
+      }
 
-    // Send the version request
-    (window as any).electron.getVersion();
+      // Send the version request
+      (window as any).electron.getVersion();
 
-    // Listen for the version response
-    (window as any).electron.onVersionResponse((version: string) => {
-      this.ngZone.run(() => {
-        this.version = version;
-        this.electronVersion = version;
+      // Listen for the version response
+      (window as any).electron.onVersionResponse((version: string) => {
+        this.ngZone.run(() => {
+          this.version = version;
+          this.electronVersion = version;
+        });
       });
-    });
+    } catch (error) {
+      console.log('get version api stored value', error)
+    }
   }
 
   getPong(): any {
     try{
-      if (!this.platFormService.isAppElectron) { return }
-        this.IPCService._ipc.addListener('asynchronous-message', (event, pong) => {
-      });
+      // if (!this.platFormService.isAppElectron) { return }
+      //   this.IPCService._ipc.addListener('asynchronous-message', (event, pong) => {
+      // });
       return null
     } catch (error) {
       this.version  = error

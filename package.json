@@ -1,6 +1,6 @@
 {
   "name": "pointlespos",
-  "version": "3.40.6",
+  "version": "3.40.8",
   "browser": {
     "crypto": false,
     "stream": false,

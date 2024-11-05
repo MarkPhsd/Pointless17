@@ -16,10 +16,9 @@ import { PrintingAndroidService } from 'src/app/_services/system/printing-androi
 import { EditCSSStylesComponent } from '../edit-cssstyles/edit-cssstyles.component';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IItemBasic, OrdersService } from 'src/app/_services';
-import { IPCService } from 'src/app/_services/system/ipc.service';
 import { Router } from '@angular/router';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-
+import { Capacitor} from '@capacitor/core';
 // https://github.com/Ans0n-Ti0/esc-pos-encoder-ionic-demo
 // https://github.com/tojocky/node-printer
 //https://stackblitz.com/edit/angular-ivy-13kwjp?file=src%2Fapp%2Fprint-component%2Fprint.component.ts
@@ -128,6 +127,7 @@ export class InstalledPrintersComponent implements OnInit {
   terminalSetting$: Observable<ISetting>;
   deviceName = localStorage.getItem('devicename')
 
+  platFormMap = Capacitor.getPlatform();
   constructor(
               private printingService       : PrintingService,
               private printingAndroidService: PrintingAndroidService,
@@ -137,34 +137,35 @@ export class InstalledPrintersComponent implements OnInit {
               private dialog                : MatDialog,
               private fakeData              : FakeDataService,
               private renderingService      : RenderingService,
-              private platFormService       : PlatformService,
-              private icpService            : IPCService,
+              public  platFormService       : PlatformService,
               public  orderService          : OrdersService,
               public orderMethodsService: OrderMethodsService,
               private router: Router,
-
   ) {
   }
 
   async ngOnInit() {
     this.printOptions = {} as printOptions;
     this.platForm = this.platFormService.platForm;
-    this.isElectronApp = this.icpService.isElectronApp;
+    await this.listPrinters();
+
+    this.isElectronApp = this.platFormService.isAppElectron;
     this.electronLabelPrinter$ = this.getElectronLabelPrinter();
+
     this.getElectronPrinterAssignent().subscribe(data => {
       this.electronPrinter = data;
     })
 
     this.refreshSelections()
-    this.listPrinters();
 
     if (this.platFormService.androidApp) {
       await this.getAndroidPrinterAssignment()
     }
   }
 
-  listPrinters(): any {
-    this.electronPrinterList = this.printingService.listPrinters();
+  async listPrinters(): Promise<any> {
+    this.electronPrinterList =  await this.printingService.listPrinters();
+    // console.log('printer list', this.electronPrinterList)
   }
 
   saveTerminalSetting()  {
@@ -172,11 +173,11 @@ export class InstalledPrintersComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     this.settingService.getSettingByName(site,this.deviceName).pipe(
       switchMap(data => {
-      this.terminalSetting = data;
-      this.terminal = JSON.parse(data.text)  as ITerminalSettings;
-      this.terminal.btPrinter = this.btPrinter;
-      data.text = JSON.stringify(this.terminal);
-      return this.settingService.putSetting(site,data.id,data)
+        this.terminalSetting = data;
+        this.terminal = JSON.parse(data.text)  as ITerminalSettings;
+        this.terminal.btPrinter = this.btPrinter;
+        data.text = JSON.stringify(this.terminal);
+        return this.settingService.putSetting(site,data.id,data)
     })).subscribe
   }
 
@@ -347,6 +348,8 @@ export class InstalledPrintersComponent implements OnInit {
   }
 
   get  isWebPrintingTemplate() {
+    if (this.isElectronApp) { return }
+
     if (this.platForm === 'web' && (!this.isElectronApp)) {
       return this.webPrintingTemplate
     }
@@ -658,9 +661,9 @@ export class InstalledPrintersComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
 
     let obs$ = this.settingService.getSetting(site, id)
-    if (!id && type ==2) { 
+    if (!id && type ==2) {
       const setting = {} as ISetting;
-      setting.name = 'Label' 
+      setting.name = 'Label'
       setting.description = 'labels'
       obs$ = this.settingService.postSetting(site, setting)
     }

@@ -1,6 +1,6 @@
 {
-  "name": "pointlesspos",
-  "version": "3.30.1",
+  "name": "pointlessposbeta",
+  "version": "3.30.2    ",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless POS",
@@ -13,7 +13,7 @@
     "deploy 32 Platform": "build --win --ia32 --p always",
     "deploy Multi Platform": "build --win --x64 --ia32 --p always",
     "deploy 64": "build --win --x64 --p always",
-    "rebuild2": "npm rebuild winax --runtime=electron --target=11.0.0 --dist-url=https://electronjs.org/headers --build-from-source",
+    "rebuild2": "npm rebuild winax --runtime=electron --target=14.0.0 --dist-url=https://electronjs.org/headers --build-from-source",
     "rebuild": "electron-rebuild -f -w winax --msvs_version=2019"
   },
   "dependencies": {
@@ -26,7 +26,7 @@
     "winreg": "^1.2.4"
   },
   "devDependencies": {
-    "electron": "^11.0.0",
+    "electron": "^14.0.0",
     "electron-builder": "^20.28.4",
     "electron-reloader": "^1.2.1"
   },

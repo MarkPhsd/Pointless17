@@ -20,7 +20,7 @@
               <div  [class]="gridReceiptClass"
                     [innerHTML]="getInterpolatedHTML(itemText, item)" >  </div>
             </div>
-            <div [class]="isLastIndented(i)" style="margin-left:15px" *ngIf="(item.idRef && item.id != item.idRef && item.idRef != 0)">
+            <div [class]="isLastIndented(i)" style="margin-left:15px" *ngIf="(item?.idRef && item?.id != item.idRef && item.idRef != 0)">
               <div  [class]="gridReceiptClass"
                     [innerHTML]="getInterpolatedHTML(itemText, item)" >  </div>
             </div>
@@ -107,11 +107,11 @@
 </div>
 
 <ng-template #paymentsView let-payment>
-  <div *ngIf="payment.paymentMethod.isCreditCard">
+  <div *ngIf="payment?.paymentMethod?.isCreditCard">
     <div [innerHTML]="getInterpolatedHTML(paymentsCreditText, payment)" >  </div>
   </div>
 
-  <div *ngIf=" !payment.paymentMethod.isCreditCard ">
+  <div *ngIf=" !payment?.paymentMethod?.isCreditCard ">
     <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
   </div>
 </ng-template>

@@ -1,10 +1,16 @@
 <div *ngIf="(receiptStyles$ | async) as styles"></div>
 <div *ngIf="(receiptLayoutSetting$ | async) as setting"></div>
 <div *ngIf="(receipt$  | async) as item"></div>
+
 <div class="header">
     <h2>Print Settings </h2>
-    <p>
-      Current Platform: {{platForm}}
+    <p >
+      <span *ngIf="isElectronApp" >
+        Current Platform: Electron
+      </span>
+      <span *ngIf="!isElectronApp && platForm !== 'android'" >
+        Current Platform: {{platForm}}
+      </span>
     </p>
     <p>These setting change based on the device type you are using. </p>
     <p><mat-icon>web</mat-icon>    Web:     Printing options for the web are limited to dialog windows, there is no automated printing.</p>
@@ -105,13 +111,16 @@
 
 <ng-template #electronPrintingTemplate>
   <h4>Windows Installed Printers</h4>
-  <div *ngIf="electronPrinter as item; else loadingWindowsPrinters">
-    <app-list-printers-electron
-        [printerName]      ="item.text"
-        [printerList]      ="electronPrinterList"
-        (outputPrinterName)="setElectronPrinterName($event)" >
-        Receipt Printer
-    </app-list-printers-electron>
+  <div *ngIf="electronPrinterList">
+    <div *ngIf="electronPrinter as item; else loadingWindowsPrinters">
+      {{electronPrinterList.length}} Printers
+      <app-list-printers-electron
+          [printerName]      ="item.text"
+          [printerList]      ="electronPrinterList"
+          (outputPrinterName)="setElectronPrinterName($event)" >
+          Receipt Printer
+      </app-list-printers-electron>
+    </div>
   </div>
 
   <div class="defaultElectronPrinter">

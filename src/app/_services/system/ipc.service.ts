@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ScaleInfo } from './scale-service.service';
 import { IpcRenderer } from 'electron';
+import { PlatformService } from './platform.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class IPCService {
     return !!(window && window.process && window.process.type);
   }
 
-  constructor() {
+  constructor(private platformService: PlatformService) {
   }
 
    listPrinters() {

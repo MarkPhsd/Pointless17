@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Capacitor, Plugins } from '@capacitor/core';
-import { IPCService } from './ipc.service';
+import { Capacitor} from '@capacitor/core';
 
 export interface platFormInfo {
   platForm            : string;
@@ -15,23 +14,22 @@ export interface platFormInfo {
 
 export class PlatformService {
 
-
-  get scrollStyleWide() { 
-    if (this.isApp) { 
+  get scrollStyleWide() {
+    if (this.isApp) {
       if (this.isAppElectron)  {
         return 'scrollstyle_1'
       }
     }
     return ''
   }
-  
+
   platFormInfo    = {}  as platFormInfo;
   private _apiUrl       : any;
 
   get isAppElectron() {
-    if (!this.ipcService) { return false }
-    const info = this.ipcService.isElectronApp
-    return  info
+    // console.log(window?.process?.versions?.electron)
+    return !!(window['electron'] && window['electron'].isElectron)
+    // return !!(window && window.process && window.process.versions && window.process.versions.electron);
   }
 
   get androidApp()    {
@@ -62,7 +60,7 @@ export class PlatformService {
   }
 
   constructor(
-      private ipcService          : IPCService,
+
      ) {
     this.initAPIUrl();
     if (!this._apiUrl) {this._apiUrl =''};
@@ -84,8 +82,9 @@ export class PlatformService {
         this.platFormInfo.androidApp = true
         this.platFormInfo.platForm = 'android'
       }
-      if (this.ipcService.isElectronApp) {
-        this.platFormInfo.isAppElectron = true
+      if (this.isAppElectron) {
+        this.platFormInfo.isApp = true;
+        this.platFormInfo.isAppElectron = true;
         this.platFormInfo.platForm = 'electron'
       }
       return this.platFormInfo

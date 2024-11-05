@@ -14,7 +14,7 @@ import { ITerminalSettings, SettingsService } from 'src/app/_services/system/set
 import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
-import { ActivatedRoute, Route } from '@angular/router';
+import { ActivatedRoute, } from '@angular/router';
 import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 import { MenuService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';

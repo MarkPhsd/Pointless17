@@ -12,7 +12,7 @@ export class ListPrintersElectronComponent implements OnInit {
 
   @Output() outputPrinterName   :      EventEmitter<any> = new EventEmitter();
   @Input()  printerList         : any;
-  isElectronApp    : boolean;
+  @Input()  isElectronApp    : boolean;
 
   @Input()  printerName         : string
 
@@ -21,16 +21,17 @@ export class ListPrintersElectronComponent implements OnInit {
               private platFormService: PlatformService,
               private printingService: PrintingService) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     if (this.platFormService.isAppElectron) {
       this.isElectronApp = true
     }
-    if (this.isElectronApp) {
-      this.listPrinters();
+    if (this.isElectronApp && !this.printerList) {
+      this.printerList = await this.listPrinters();
     }
   }
 
   listPrinters(): any {
+
     this.printerList = this.printingService.listPrinters();
   }
 
