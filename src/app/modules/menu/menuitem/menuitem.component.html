@@ -63,24 +63,35 @@
           <mat-divider style="margin:15px;padding:10"></mat-divider>
 
           <mat-tab-group mat-align-tabs="start"
-                        class="mat-tab-group"
+                         style="min-height: 300px;"
+                         class="mat-tab-group"
                          md-stretch-tabs >
 
-            <mat-tab label="Description">
-              <ng-container [ngTemplateOutlet]="inventoryList"></ng-container>
-              <ng-container [ngTemplateOutlet]="descriptionView"></ng-container>
+            <mat-tab label="Description"   style="min-height: 300px;">
+              <div class="custom-tab-content">
+                <ng-container [ngTemplateOutlet]="inventoryList"></ng-container>
+                <ng-container [ngTemplateOutlet]="descriptionView"></ng-container>
+              </div>
             </mat-tab>
-            <mat-tab label="Special">
-              <ng-container [ngTemplateOutlet]="specialDescriptionView"></ng-container>
+
+            <mat-tab label="Special"   style="min-height: 300px;">
+              <div class="custom-tab-content">
+                <ng-container [ngTemplateOutlet]="specialDescriptionView"></ng-container>
+              </div>
             </mat-tab>
+
             <mat-tab *ngIf="fbProductsService.isCannabis(menuItem.itemType) ||
                             fbProductsService.isFood(menuItem.itemType) ||
                             fbProductsService.isAlcohol(menuItem.itemType) ||
                             fbProductsService.isGrocery(menuItem.itemType) ||
                             fbProductsService.isTobacco(menuItem.itemType)
-                            " label="Ingredients">
-              <ng-container [ngTemplateOutlet]="chemicalSpinnerView"></ng-container>
+                            " label="Ingredients"
+                            style="min-height: 300px;">
+              <div class="custom-tab-content">
+                <ng-container [ngTemplateOutlet]="chemicalSpinnerView"></ng-container>
+              </div>
             </mat-tab>
+
           </mat-tab-group>
 
       </mat-card-content>

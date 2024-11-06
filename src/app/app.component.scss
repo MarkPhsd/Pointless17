@@ -1,3 +1,4 @@
+
 .boundary {
   width: 100vw;
   height: 100wh;
@@ -41,59 +42,3 @@
   width: 24px;
   height: 24px;
 }
-// :host {
-//     display: block;
-//     flex-direction: column;
-//     height: 100%;
-//     width: auto;
-//     overflow: auto;
-//     -webkit-overflow-scrolling: touch;
-// }
-
-// container {
-//   overflow: auto;
-// }
-
-// .container-app {
-//   overflow: auto;
-// }
-
-// .keyboard {
-//   z-index: 1000;
-//   height: calc(25vh + 75px);
-//   width: 75vw;
-//   padding: 25px;
-//   box-sizing: border-box;
-//   border: solid 1px #ccc;
-//   color: rgba(0, 0, 0, 0.87);
-//   display: flex;
-//   justify-content: start;
-//   border-radius: 4px;
-//   transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
-//   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-// }
-
-// .keyboard.free-dragging {
-//   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-//     0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
-// }
-
-// .dragging-handle {
-//   position: absolute;
-//   top: 10px;
-//   right: 10px;
-//   color: #ccc;
-//   cursor: move;
-//   width: 44px;
-//   height: 44px;
-// }
-
-
-// body.android-platform mat-card {
-//   @extend .mat-elevation-z0; // Assuming .mat-elevation-z0 is a defined class
-// }
-
-// body.android-platform mat-chip {
-//   @extend .mat-elevation-z0; // Assuming .mat-elevation-z0 is a defined class
-// }
-

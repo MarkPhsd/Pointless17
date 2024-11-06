@@ -26,13 +26,32 @@ mat-card {
   overflow-x: hidden;
 }
 
+mat-tab-body {
+  min-height: 300px !important;
+}
+
+mat-tab-body .mat-tab-body-content {
+  min-height: 300px; /* Set your desired minimum height */
+}
+
+mat-tab-body .mat-tab-body-active {
+  min-height: 300px; /* Set your desired minimum height */
+}
+
+.custom-tab-content {
+  min-height: 300px;
+}
+
 mat-label {
   font-size: 1em;
 }
 
 mat-tab-group {
-  min-height: 100px;
+  // min-height: 100px;
+  min-height: 300px !important;
 }
+
+
 
 .instructions {
   float: left;

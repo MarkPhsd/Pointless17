@@ -1,6 +1,6 @@
 <!-- (swipeleft)="onSwipeLeft()" -->
 <div *ngIf="(ipAddress$ | async) as action"></div>
-<div class="boundary" #myContainer >
+<div class="mat-app-background boundary">
   <ion-app>
     <ng-container [ngTemplateOutlet]="isKeyBoardVisible"></ng-container>
     <ng-container [ngTemplateOutlet]="splash"></ng-container>
@@ -9,14 +9,14 @@
 </div>
 
 <ng-template #keyboardView>
-<div  #keyboardRef
-     class="example-box"
-     cdkDrag
-     [cdkDragFreeDragPosition]="keyboardPosition"
-     (cdkDragEnded)="onDragEnd($event)"
-     >
-  <app-keyboard-view></app-keyboard-view>
-</div>
+  <div  #keyboardRef
+      class="example-box"
+      cdkDrag
+      [cdkDragFreeDragPosition]="keyboardPosition"
+      (cdkDragEnded)="onDragEnd($event)"
+      >
+    <app-keyboard-view></app-keyboard-view>
+  </div>
 </ng-template>
 
 <ng-template #loading>....loading.</ng-template>

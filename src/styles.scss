@@ -9,14 +9,6 @@
 @import '../node_modules/@angular/cdk/overlay-prebuilt.css';
 
 
-// mat-button mat-raised-button {
-//   @media print {
-//     display: none;
-//   }
-// }
-
-
-
 mat-icon {
   @media print {
     visibility: hidden;
@@ -93,6 +85,7 @@ button {
   mat-form-field-appearance-outline mat-form-field-wrapper .mat-form-field-appearance-outline .mat-form-field-wrapper{
     padding: 0px  !important;
   }
+
 
   .mat-form-field-wrapper {
     padding-bottom: .45em  !important;
@@ -1546,7 +1539,7 @@ mat-dialog-container {
   margin: 5px;
 }
 
-///ionic 
+///ionic
 ion-item-sliding {
   --border-radius: 10px;
   --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

@@ -4,6 +4,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { environment } from 'src/environments/environment';
 import { ICompany } from 'src/app/_interfaces';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
+import { AuthenticationService } from 'src/app/_services';
 
 @Component({
   selector: 'app-tier-prices',
@@ -18,11 +19,22 @@ export class TierPricesComponent implements OnInit {
   company = {} as ICompany;
   logo: string;
 
+  isStaff: boolean;
+
   constructor(
+    private authenticationService: AuthenticationService,
     private appInitService        : AppInitService,)
   { }
 
   ngOnInit() {
+
+    const user$ = this.authenticationService.user$.subscribe(data => {
+      if (data) {
+        if (data?.employeeID  != 0 ) {
+          this.isStaff = true;
+        }
+      }
+    })
 
     this.appInitService.init();
     if (this.company === undefined) {

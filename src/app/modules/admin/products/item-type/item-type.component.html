@@ -1,7 +1,8 @@
 <!-- <div *ngIf="_itemTypes$ | async"></div> -->
 <div *ngIf="(action$ | async) as  action"></div>
 <mat-card>
-  <mat-accordion class="example-headers-align" multi="false" >
+  <!--  class="example-headers-align"  -->
+  <mat-accordion multi="false" >
 
     <mat-expansion-panel [expanded]="accordionStep === 0" (opened)="setStep(0)" hideToggle>
       <mat-expansion-panel-header>
@@ -59,7 +60,7 @@
                       (click)="filterMetrcCategories()">
                   <mat-icon>view</mat-icon>Metrc Types</button>
                 </div>
-                
+
 
               </div>
             </div>

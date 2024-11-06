@@ -1,3 +1,4 @@
+// import { OverlayContainer } from "@angular/cdk/overlay";
 import { Injectable, Renderer2 } from "@angular/core";
 import {  Observable } from 'rxjs';
 import { ITheme }  from 'src/app/_interfaces';
@@ -11,6 +12,7 @@ export class ThemesService {
 
   theme: Observable<ITheme[]>;
 
+  // private overlayContainer:OverlayContainer
   constructor(  private _renderer : Renderer2) {}
 
   getThemeOptions()
@@ -36,15 +38,26 @@ export class ThemesService {
       this._renderer.removeClass(document.body, 'dark-theme');
       this._renderer.removeClass(document.body, 'light-theme');
       this._renderer.addClass(document.body, 'light-theme');
+      // this.toggleDarkMode(true)
     }
     if (!darkMode) {
       const theme = localStorage.getItem('angularTheme')
       this._renderer.removeClass(document.body, 'dark-theme');
       this._renderer.removeClass(document.body, 'light-theme');
       this._renderer.addClass(document.body, 'dark-theme');
+      // this.toggleDarkMode(false)
     }
 
   }
 
+  // toggleDarkMode(isDarkMode: boolean) {
+  //   if (isDarkMode) {
+  //     // document.body.classList.add('dark-theme');
+  //     this.overlayContainer.getContainerElement().classList.add('dark-theme');
+  //   } else {
+  //     // document.body.classList.remove('dark-theme');
+  //     this.overlayContainer.getContainerElement().classList.remove('dark-theme');
+  //   }
+  // }
 
 }

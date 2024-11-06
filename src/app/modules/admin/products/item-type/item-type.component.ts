@@ -1,11 +1,8 @@
-import { Component,   OnInit,} from '@angular/core';
+import { Component,   OnInit, ViewEncapsulation,} from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { Observable, Subject, of, switchMap  } from 'rxjs';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import { Observable,  of, switchMap  } from 'rxjs';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import {  GridApi } from '@ag-grid-community/all-modules';
-// import {AgGridAngular} from 'ag-grid-angular';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
@@ -20,7 +17,8 @@ import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items
 @Component({
   selector: 'app-item-type',
   templateUrl: './item-type.component.html',
-  styleUrls: ['./item-type.component.scss']
+  styleUrls: ['./item-type.component.scss'],
+  encapsulation: ViewEncapsulation.None // Disable encapsulation
 })
 export class ItemTypeComponent implements OnInit {
 
@@ -172,8 +170,8 @@ export class ItemTypeComponent implements OnInit {
 
   checkIfMetrcCategoriesExist() {
     const site = this.siteService.getAssignedSite()
-    this.metrcCategoriesService.getCategories( ).subscribe(data => { 
-      if (data) { 
+    this.metrcCategoriesService.getCategories( ).subscribe(data => {
+      if (data) {
         this.metrcCatsExist = true;
       }
     })
@@ -237,7 +235,7 @@ export class ItemTypeComponent implements OnInit {
         autoHeight: true,
         cellRendererFramework: AgGridImageFormatterComponent
       },
-     
+
       {headerName: 'Metrc', field: 'metrcCategoryID', sortable: true, minWidth: 50},
     ]
     this.rowSelection = 'multiple';
@@ -258,17 +256,17 @@ export class ItemTypeComponent implements OnInit {
 
   filterMetrcCategories() {
     const site = this.siteService.getAssignedSite()
-    this.itemTypes$  = this.itemTypeService.getTypeList(site).pipe(switchMap(data => { 
-      if (data) { 
-        let list = data.filter(item => { 
-          return item.metrcCategoryID>0 
+    this.itemTypes$  = this.itemTypeService.getTypeList(site).pipe(switchMap(data => {
+      if (data) {
+        let list = data.filter(item => {
+          return item.metrcCategoryID>0
         })
         return of(list)
       }
       return of(data)
     }))
   }
-  
+
 
   getLabel(rowData)
   {

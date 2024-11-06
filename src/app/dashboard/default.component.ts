@@ -208,13 +208,13 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   get getMatDrawerContainerClass() {
 
-    if (this.platFormService.isApp() ) { return  'mat-drawer-container'}
-    if (this.userAuthorizationService?.isStaff) { return  'mat-drawer-container'}
+    if (this.platFormService.isApp() ) { return  'mat-drawer-container mat-app-background'}
+    if (this.userAuthorizationService?.isStaff) { return  'mat-drawer-container mat-app-background'}
 
     if (this.smallDevice) {
-      return  'mat-drawer-container'
+      return  'mat-drawer-container mat-app-background'
     }
-    return  'mat-drawer-container-user'
+    return  'mat-drawer-container-user mat-app-background'
 
   }
 
@@ -337,12 +337,12 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     const devicename = localStorage.getItem('devicename');
 
     if (!devicename) { return ;}
- 
+
     this.posDevice$ = this.getDeviceInfo(devicename)
 
   }
 
-  getDeviceInfo(devicename) { 
+  getDeviceInfo(devicename) {
       const site = this.siteService.getAssignedSite();
     return this.settingService.getPOSDeviceBYName(site, devicename).pipe(switchMap(data => {
       if (!data) { return of(null)}
@@ -361,7 +361,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       this._uiSettings = this.uiSettingsService.homePageSetting$.pipe (switchMap(data => {
         if (data) {
           this.uiSettings = data;
-       
+
           if (this.phoneDevice)  {
             this.matorderBar = 'mat-orderBar-wide'
             return
@@ -370,12 +370,12 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         const devicename = localStorage.getItem('devicename');
-        if (devicename){ 
+        if (devicename){
           return this.getDeviceInfo(devicename)
         }
         return of(null)
       })).subscribe(data => {
-         
+
         if (data && data?.ignoreTimer) {
           this.initIdle();
         }
@@ -589,7 +589,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     } catch (error) {
     }
 
-   
+
 
     try {
       this.userSubscriber();
@@ -669,7 +669,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscribeAddress();
     this.subscribSendOrder()
 
-    if (!this.platFormService.isApp) { 
+    if (!this.platFormService.isApp) {
       this.ipAddress$ = this.siteService.getIpAddress()
     }
   }

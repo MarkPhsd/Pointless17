@@ -1,4 +1,14 @@
+@use '@angular/material' as mat;
+
 @import "/src/mixins.scss";
+@include mat.legacy-core();
+@include mat.all-legacy-component-typographies();
+
+
+body  {
+  background-color: mat.get-color-from-palette(mat.$grey-palette, 900) !important;
+  color: mat.get-color-from-palette(mat.$grey-palette, 50) !important;
+}
 
 :host {
   display: block;
