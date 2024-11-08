@@ -108,36 +108,36 @@
         </div>
         <div class="grid-view-sections">
           <div class="grid-views">
-
-            <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Home Page Customer View</h4>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle   formControlName="suppressMenuItems" >
-                <mat-label>Suppress Items in Categories (For Food Service)</mat-label>
-              </mat-slide-toggle>
+            <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Multi Store Options</h4>
+            <div *ngIf="(stores$ | async) as list">
+              <form-select-list [formFieldName]   = "'binaryStoreValue'"
+                                [searchForm]      = "inputForm"
+                                [listTypeValue]   = "'storeValueBinary'"
+                                [list]            = "list"    >
+              <div fieldSearchDescription>StoreID Name</div>
+              </form-select-list>
             </div>
-            <div class="toggle-fields">
-              <mat-slide-toggle   formControlName="gloabalSecondLanguage" >
-                <mat-label>Global Second Language Features</mat-label>
-              </mat-slide-toggle>
-            </div>
-          </div>
+        </div>
+
         </div>
 
           <div class="grid-view-sections">
             <div class="grid-views">
 
-              <div *ngIf="(stores$ | async) as list">
-                <form-select-list [formFieldName]   = "'binaryStoreValue'"
-                                  [searchForm]      = "inputForm"
-                                  [listTypeValue]   = "'storeValueBinary'"
-                                  [list]            = "list"    >
-                <div fieldSearchDescription>StoreID Name</div>
-                </form-select-list>
+              <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Home Page Customer View</h4>
+
+
+              <div class="toggle-fields">
+                <mat-slide-toggle   formControlName="suppressMenuItems" >
+                  <mat-label>Suppress Items in Categories (For Food Service)</mat-label>
+                </mat-slide-toggle>
+              </div>
+              <div class="toggle-fields">
+                <mat-slide-toggle   formControlName="gloabalSecondLanguage" >
+                  <mat-label>Global Second Language Features</mat-label>
+                </mat-slide-toggle>
               </div>
 
-
-              <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Home Page Customer View</h4>
               <div class="toggle-fields">
                 <mat-slide-toggle formControlName="hideSearchBar">
                   <mat-label>Disable Search Bar In Header</mat-label>
@@ -433,75 +433,92 @@
             </div>
           </div>
 
-        <div>
-          <h4>Order Settings</h4>
-          <mat-divider></mat-divider>
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="wideOrderBar"
-                      >
-              <mat-label class="margin-left-5">Wide Order Bar</mat-label>
-            </mat-slide-toggle>
-          </div>
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="displaySendButton"
-                      >
-              <mat-label>Send Order Button</mat-label>
-              <mat-hint class="margin-left-5">Show button beneath print button</mat-hint>
-            </mat-slide-toggle>
+          <div class="grid-view-sections">
+          <div>
+            <h4>Catalog Management Settings</h4>
+
+            <h5>Optional Columns</h5>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="catalogColumnsEnableUOM"
+                        >
+                <mat-label class="margin-left-5">Enable UOM</mat-label>
+              </mat-slide-toggle>
+            </div>
+
           </div>
 
           <div>
-            <mat-slide-toggle
-                      formControlName="lockTerminalToBalanceSheet"  >
-              <mat-label>Balance Sheet Lock</mat-label>
-              <mat-hint class="margin-left-5">Lock terminal to user who started balance sheet.</mat-hint>
-            </mat-slide-toggle>
+            <h4>Order Settings</h4>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="wideOrderBar"
+                        >
+                <mat-label class="margin-left-5">Wide Order Bar</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="displaySendButton"
+                        >
+                <mat-label>Send Order Button</mat-label>
+                <mat-hint class="margin-left-5">Show button beneath print button</mat-hint>
+              </mat-slide-toggle>
+            </div>
+
+            <div>
+              <mat-slide-toggle
+                        formControlName="lockTerminalToBalanceSheet"  >
+                <mat-label>Balance Sheet Lock</mat-label>
+                <mat-hint class="margin-left-5">Lock terminal to user who started balance sheet.</mat-hint>
+              </mat-slide-toggle>
+            </div>
+
+            <div>
+              <mat-slide-toggle
+                        formControlName="employeeOnClockList"  >
+                <mat-label>Employees On Clock</mat-label>
+                <mat-hint class="margin-left-5">Shows employees on Clock on Login.</mat-hint>
+              </mat-slide-toggle>
+            </div>
+
+            <div>
+              <mat-slide-toggle
+                        formControlName="autoClockEmployeeOnLogin"  >
+                <mat-label>Auto Clock In</mat-label>
+                <mat-hint  class="margin-left-5">Auto Clock In employee On Login</mat-hint>
+              </mat-slide-toggle>
+            </div>
+
+            <div>
+              <mat-slide-toggle
+                        formControlName="pinPadDefaultOnApp"  >
+                <mat-label>PIN Pad Default</mat-label>
+                <mat-hint class="margin-left-5">Login Shows PIN Pad Entry Default.</mat-hint>
+              </mat-slide-toggle>
+            </div>
+
+            <div>
+              <mat-slide-toggle
+                        formControlName="timeOut"  >
+                <mat-label>Time Out (3 Minutes)</mat-label>
+                <mat-hint class="margin-left-5">App Only - Will log out after 3 minutes no use.</mat-hint>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-fields" style="width:200px">
+              <app-value-fields
+                  [fieldType]     ="'number'"
+                  [inputForm]     ="inputForm"
+                  [fieldName]     ="'timeOutValue'">
+                  Time out in Seconds
+              </app-value-fields>
+            </div>
           </div>
 
-          <div>
-            <mat-slide-toggle
-                      formControlName="employeeOnClockList"  >
-              <mat-label>Employees On Clock</mat-label>
-              <mat-hint class="margin-left-5">Shows employees on Clock on Login.</mat-hint>
-            </mat-slide-toggle>
-          </div>
-
-          <div>
-            <mat-slide-toggle
-                      formControlName="autoClockEmployeeOnLogin"  >
-              <mat-label>Auto Clock In</mat-label>
-              <mat-hint  class="margin-left-5">Auto Clock In employee On Login</mat-hint>
-            </mat-slide-toggle>
-          </div>
-
-          <div>
-            <mat-slide-toggle
-                      formControlName="pinPadDefaultOnApp"  >
-              <mat-label>PIN Pad Default</mat-label>
-              <mat-hint class="margin-left-5">Login Shows PIN Pad Entry Default.</mat-hint>
-            </mat-slide-toggle>
-          </div>
-
-          <div>
-            <mat-slide-toggle
-                      formControlName="timeOut"  >
-              <mat-label>Time Out (3 Minutes)</mat-label>
-              <mat-hint class="margin-left-5">App Only - Will log out after 3 minutes no use.</mat-hint>
-            </mat-slide-toggle>
-          </div>
-
-          <div class="toggle-fields" style="width:200px">
-            <app-value-fields
-                [fieldType]     ="'number'"
-                [inputForm]     ="inputForm"
-                [fieldName]     ="'timeOutValue'">
-                Time out in Seconds
-            </app-value-fields>
-          </div>
         </div>
-
       </div>
 
       <div *ngIf="uiHomePage">
@@ -509,7 +526,8 @@
         <h4>Images</h4>
         <mat-divider></mat-divider>
 
-        <div class="grid-settings-views">
+        <div class="flex-start-row ">
+
           <div class="grid-item">
             <mat-card >
               <app-widget-uploader

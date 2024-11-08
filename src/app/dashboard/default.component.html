@@ -21,7 +21,7 @@
   <mat-drawer
           *ngIf    ="!menuManager"
           position ="start"
-          class="mat-app-background"
+          class    ="mat-app-background"
           [mode]   ="sidebarMode"
           [opened] ="leftSideBarToggle">
 
@@ -70,8 +70,6 @@
 
 <app-footer></app-footer>
 
-
-
 <ng-container [ngTemplateOutlet]="appSiteFooterOn"></ng-container>
 
 <ng-template #appSiteFooter>
@@ -86,8 +84,10 @@
 </div>
 
 <ng-template #appMenuSearchBar>
-  <div [class]  ="barType">
-    <app-menu-search-bar> </app-menu-search-bar>
+  <div  class="mat-app-background">
+    <div [class]  ="barType">
+      <app-menu-search-bar> </app-menu-search-bar>
+    </div>
   </div>
 </ng-template>
 
@@ -96,23 +96,26 @@
 </ng-template>
 
 <ng-template #menuBarView>
+  <div  class="mat-app-background">
+    <div  [hidden]="toolbarTiny">
+      <app-menu-minimal>
+      </app-menu-minimal>
+    </div>
 
-  <div  [hidden]="toolbarTiny">
-    <app-menu-minimal>
-    </app-menu-minimal>
-  </div>
-
-  <div  [hidden]="!toolbarTiny"
-        class="menu-tiny" >
-    <app-menu-tiny>
-    </app-menu-tiny>
+    <div  [hidden]="!toolbarTiny"
+          class="menu-tiny" >
+      <app-menu-tiny>
+      </app-menu-tiny>
+    </div>
   </div>
 </ng-template>
 
 <ng-template  #appOrderBar>
-  <div  [class] = "matorderBar">
-    <app-order-bar>
-    </app-order-bar>
+  <div  class="mat-app-background">
+    <div  [class] = "matorderBar"  >
+      <app-order-bar>
+      </app-order-bar>
+    </div>
   </div>
 </ng-template>
 

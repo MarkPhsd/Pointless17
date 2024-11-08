@@ -1,5 +1,5 @@
-import { Component,  Input,  OnInit, OnDestroy, EventEmitter, Output} from '@angular/core';
-import { AWSBucketService, MenuService,  } from 'src/app/_services';
+import { Component,  Input,  OnInit, OnDestroy, EventEmitter, Output, TemplateRef, ViewChild} from '@angular/core';
+import { AuthenticationService, AWSBucketService, MenuService,  } from 'src/app/_services';
 import { IMenuItem,   }  from 'src/app/_interfaces/menu/menu-products';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, Subject, Subscription, of } from 'rxjs';
@@ -22,6 +22,8 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { MatricesService } from 'src/app/_services/menu/matrices.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 // https://www.npmjs.com/package/ngx-gallery
 // Possible additional info options
@@ -36,6 +38,10 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     @Input() fileName: string;
     @Output() outputExitForm = new EventEmitter<any>();
+    @ViewChild('editItemView')            editItemView :  TemplateRef<any> | undefined;
+    @Input() disableEdit: boolean;
+    isApp = this.platFormservice.isApp;
+
     recentAssociations$ : Observable<IMenuItem[]>;
     associations$ : Observable<IMenuItem[]>;
 
@@ -91,6 +97,29 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       }
     }
 
+
+    smallDevice    : boolean;
+    get enableEditItemBol() {
+      if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
+      if (this.authenticationService.isAdmin || this.authenticationService.isAuthorized) {
+        if (this.menuItem && this.menuItem.id > 0) {
+          return true
+        }
+      }
+      return false;
+    }
+
+    get enableEditItem() {
+      if (this.disableEdit || (this.isApp && this.smallDevice)) { return }
+      if (this.authenticationService.isAdmin || this.authenticationService.isAuthorized ) {
+        if (this.menuItem && this.menuItem.id > 0) {
+          return this.editItemView
+        }
+      }
+      return null;
+    }
+
+
     constructor(
           private uISettingsService : UISettingsService,
           private menuService       : MenuService,
@@ -112,6 +141,9 @@ export class MenuitemComponent implements OnInit, OnDestroy {
           private inventoryAssignmentService: InventoryAssignmentService,
           private awsBucket         : AWSBucketService,
           private matricesService   : MatricesService,
+          public  authenticationService: AuthenticationService,
+          private platFormservice: PlatformService,
+          private productEditButtonService: ProductEditButtonService,
 
          )
     {
@@ -219,6 +251,12 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       } catch (error) {
       }
     }
+
+
+  editItem() {
+    if (!this.menuItem) { return }
+    this.action$ = this.productEditButtonService.openProductDialogObs(this.menuItem?.id);
+  }
 
     getNotes() {
       let notes = ''

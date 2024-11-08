@@ -31,7 +31,12 @@
       <div *ngFor="let tier of tvPriceMenuTiers$ | async">
         <div class="grid" >
           <div class="grid-title tiername">
-            {{tier.name}}
+            <div *ngIf="isAuthorized">
+              <button mat-button color="accent" (click)="editTier(tier.id)"> {{tier.name}} </button>
+            </div>
+            <div *ngIf="!isAuthorized">
+              {{tier.name}}
+            </div>
           </div>
           <div *ngFor="let item of tier.tvMenuPriceTierItems">
             <div class="prices">

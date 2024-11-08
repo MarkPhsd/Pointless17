@@ -9,12 +9,17 @@
     <mat-card>
       <mat-card-title>
         <div>
-          <button *ngIf="showCloseButton"
+          <button style="position:relative;left:75px" *ngIf="showCloseButton"
                   mat-raised-button
                   (click)="exit()">
               <mat-icon>close</mat-icon>
           </button>
         </div>
+
+        <ng-container *ngIf="enableEditItemBol">
+          <ng-container [ngTemplateOutlet]="enableEditItem"></ng-container>
+        </ng-container>
+
       </mat-card-title>
 
       <mat-card-content >
@@ -412,3 +417,13 @@
   </div>
 </ng-template>
 
+<ng-template #editItemView>
+  <div class="edit-float-button">
+    <button
+        mat-mini-fab
+        color="accent"
+        (click)="editItem()" >
+      <mat-icon  color="primary">info</mat-icon>
+    </button>
+  </div>
+</ng-template>

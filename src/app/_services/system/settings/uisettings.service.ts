@@ -240,6 +240,11 @@ export interface CmdResponse{
 }
 
 export interface UIHomePageSettings {
+
+  //move to it's own interface one day
+  catalogColumnsEnableUOM: boolean;
+
+
   binaryStoreValue: any;
   mobileEnabled: boolean;
   pinPadDefaultOnApp: boolean;
@@ -810,6 +815,7 @@ export class UISettingsService {
       staffcatalogScheduleMenuEnabled: [],
       catalogScheduleMenuEnabled: [],
       binaryStoreValue: [],
+      catalogColumnsEnableUOM: [],
      })
     return fb
   }

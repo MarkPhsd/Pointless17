@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter} from '@angular/core';
 import { ITVMenuPriceTiers, TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable} from 'rxjs';
+import { AuthenticationService } from 'src/app/_services';
 
 @Component({
   selector: 'tiers-with-prices',
@@ -12,16 +13,25 @@ import { Observable} from 'rxjs';
 export class TiersWithPricesComponent implements OnInit {
 
   @Output() outPutSetPriceTier = new EventEmitter();
-
+  isAuthorized: boolean
   tvPriceMenuTiers$: Observable<ITVMenuPriceTiers[]>;
   tvPriceMenuTiers: ITVMenuPriceTiers[];
 
   constructor(
+    private authenticationService: AuthenticationService,
     private tvMenuPriceTierService: TvMenuPriceTierService,
     private siteService:            SitesService)
   { }
 
   ngOnInit(): void {
+    const user$ = this.authenticationService.user$.subscribe(data =>  {
+      if (data) {
+        if (data?.roles.toLowerCase() == 'admin' || data?.roles.toLowerCase() == 'manager'){
+          this.isAuthorized = true
+        }
+      }
+    })
+
     this.initMenuPrices();
   }
 
@@ -34,6 +44,10 @@ export class TiersWithPricesComponent implements OnInit {
         return data.webEnabled
       })
     })
+  }
+
+  editTier(id:number) {
+
   }
 
   setPriceTier(name: string) {

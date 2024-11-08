@@ -724,6 +724,19 @@ constructor(  private _snackBar              : MatSnackBar,
      }
      this.columnDefs.push(itemName)
 
+    //  catalogColumnsEnableUOM
+
+     const uom = {headerName: 'UOM',     field: 'unitDescription',
+            // sortable: true,
+          width   : 100,
+          minWidth: 100,
+          maxWidth: 125,
+          editable: false,
+          flex    : 1,
+      }
+      // if (this.uiHome?.catalogColumnsEnableUOM) {
+        this.columnDefs.push(uom)
+      // }
 
      if (this.uiHome.gloabalSecondLanguage) {
        const language = {headerName: 'Language',     field: 'prodsecondLanguage',

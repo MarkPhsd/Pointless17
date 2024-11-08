@@ -14,6 +14,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 export class TierItemsComponent implements OnInit {
   @Input() isStaff: boolean;
   @Input() priceTier: string;
+  @Input() disableActions: boolean;
   headers: any;
   flowers$: Observable<IFlowerMenu[]>;
   filteredFlowers: Observable<IFlowerMenu[]>;
@@ -50,10 +51,10 @@ export class TierItemsComponent implements OnInit {
     this.applySorting();
   }
 
-  applySorting(data: IFlowerMenu[] = this.flowers$.getValue()) {
+  applySorting(data?: IFlowerMenu[]) {
     this.filteredFlowers = this.flowers$.pipe(
       map((flowers) =>
-        flowers.sort((a, b) => {
+        (data || flowers).sort((a, b) => {
           const aValue = a[this.sortField];
           const bValue = b[this.sortField];
           const comparison = aValue > bValue ? 1 : aValue < bValue ? -1 : 0;

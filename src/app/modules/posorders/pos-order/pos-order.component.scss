@@ -132,7 +132,7 @@
     grid-column: auto !important; /* Ensure that items follow the normal flow */
   }
 
- 
+
 
   .payment-buttons-container {
     // --gap: 5px;
@@ -159,17 +159,17 @@
       overflow-y: auto;
       overflow-x: hidden;
     }
-  
+
     // @media (max-height: 625px)  {
     //   max-height: 150px;
     //   overflow: auto;
     // }
   }
-  
+
   .payment-buttons-container > * {
     grid-column: auto; /* Ensure normal flow, no manual grid placement */
   }
-  
+
   @include for-phone-only {
     .payment-buttons-container {
       --gap: 5px;
@@ -287,7 +287,9 @@
   display: grid;
   grid-template-columns: auto;
   gap: 5px;
-  overflow: auto;
+  // overflow: auto;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .order-layout {

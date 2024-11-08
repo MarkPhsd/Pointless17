@@ -9,15 +9,15 @@
     <div *ngIf="headers">
       <div class="headers" *ngFor="let header of headers">
         <div class="grid-item menu-items">
-          <div class="headers">
+          <div *ngIf="!disableActions" class="headers" style="color: #078a07">
             {{header}}
-            <button mat-icon-button (click)="setSort('thc')">
+            <button color="accent" class="sort-buttons" mat-icon-button (click)="setSort('thc')">
               THC <mat-icon>{{ sortField === 'thc' ? (sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward') : '' }}</mat-icon>
             </button>
-            <button mat-icon-button (click)="setSort('cbd')">
+            <button color="accent" class="sort-buttons" mat-icon-button (click)="setSort('cbd')">
               CBD <mat-icon>{{ sortField === 'cbd' ? (sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward') : '' }}</mat-icon>
             </button>
-            <button mat-icon-button (click)="setSort('name')">
+            <button color="accent" class="sort-buttons" mat-icon-button (click)="setSort('name')">
               Name <mat-icon>{{ sortField === 'name' ? (sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward') : '' }}</mat-icon>
             </button>
           </div>
@@ -30,11 +30,11 @@
             <span *ngIf="flower.priceTier === header && flower.flower.length > 0">
               <div class="grid-item">
                 <button class="button-dimensions" mat-button (click)="navMenuItem(flower)">
-                  <mat-icon>open_with</mat-icon>
+                  <mat-icon style="color: #77DD77">open_with</mat-icon>
                   <span class="button-text">
                     {{flower?.flower | truncateText: 18}}
                     <div>THC: {{flower?.thc}}% CBD: {{flower?.cbd}}%</div>
-                    <div *ngIf="isStaff">Cat: {{flower?.priceCategory}}</div>
+                    <mat-label   style="color: #3b828f;font-size:.9em" *ngIf="isStaff">{{flower?.priceCategory}}</mat-label>
                   </span>
                 </button>
               </div>
