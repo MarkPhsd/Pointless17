@@ -202,6 +202,13 @@ export class MenuItemsInfiniteComponent implements OnInit, OnDestroy {
 
 
   get isCondensedMenuButtons() {
+
+    if (this.posDevice) {
+      if (this.posDevice.condensedMenuButtons) {
+        return true;
+      }
+    }
+
     if (this.uiHomePage?.condensedMenuButtons) {
       return true
     }

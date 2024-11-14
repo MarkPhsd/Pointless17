@@ -777,6 +777,8 @@ export class OrdersService {
 
   }
 
+  //this method has an override in the API
+  //check the one without history as a parameter
   putOrder(site: ISite, order: IPOSOrder):  Observable<IPOSOrder>  {
 
     const controller = "/POSOrders/"

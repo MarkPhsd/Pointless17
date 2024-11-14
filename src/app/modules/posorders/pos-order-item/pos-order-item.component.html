@@ -328,8 +328,9 @@
 
       {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName) }} @
 
-
+      <span *ngIf="!ui.displayItemPOSTTotal && (mainPanel || !smallDevice)">
       {{ _unitprice | currency }}
+      </span>
 
       <span *ngIf="orderItem.baseUnitType"> / {{ orderItem?.baseUnitType }} </span> = {{ subTotal | currency}}
 
@@ -338,15 +339,18 @@
         {{packages}}  {{(orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName)}}
       </div>
 
-      <span *ngIf="ui.displayItemPOSTTotal">
+      <span *ngIf="ui.displayItemPOSTTotal && mainPanel">
         | Tax: {{ orderItem?.taxTotal | currency }}  | Total: {{orderItem?.total | currency}}
+      </span>
+
+      <span *ngIf="ui.displayItemPOSTTotal && (!mainPanel || smallDevice)">
+        Total: {{orderItem?.total | currency}}
       </span>
 
       <div *ngIf="ui && ui?.dcapMultiPrice && ui?.dcapDualPriceValue != 0 && !orderItem.completionDate ">
         <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue > 0 &&  !orderItem.completionDate" > Credit  Price </span>
         <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue < 0 && !orderItem.completionDate" >  Discount Price </span>
         @ {{ cashDiscount | currency }}
-        <!-- | ({{ui.dcapDualPriceValue}}%) -->
       </div>
 
     </div>

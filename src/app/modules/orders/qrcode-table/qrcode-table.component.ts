@@ -263,4 +263,10 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
     return user;
   }
 
+  applySignature() {
+    if (this.order.completionDate) {
+      this.router.navigate(['signature'])
+    }
+  }
+
 }

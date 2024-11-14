@@ -424,6 +424,11 @@ export class ChangeDueComponent implements OnInit  {
     }
   }
 
+  closeByOutPut(event) {
+    this._closeOnly();
+    this.orderMethodsService._scanner.next(true)
+  }
+
   _closeOnly() {
     try {
       this.orderMethodsService._scanner.next(true)

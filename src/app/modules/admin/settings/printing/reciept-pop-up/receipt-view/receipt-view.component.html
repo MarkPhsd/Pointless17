@@ -1,3 +1,5 @@
+
+
 <div *ngIf="action$ | async"></div>
 
 <div *ngIf="(email$ | async) as email">
@@ -8,8 +10,14 @@
 <div *ngIf="printView">
   <div *ngIf="(printAction$ | async) as printAction"></div>
 
+
   <div *ngIf="(refreshView$ | async) as layout">
+
+
+
+
     <ng-container [ngTemplateOutlet]="helpButton"></ng-container>
+
     <div #coachingReceiptView class="buttons-grid">
 
       <div *ngIf="platFormService.isApp()">
@@ -25,12 +33,14 @@
     </div>
 
     <div class="buttons-grid">
-      <span #coachingLink></span>
-      <span #coachingPDF></span>
+
       <div>
         <button *ngIf="order" mat-button (click)="email()">
           <mat-icon>email</mat-icon>Email
         </button>
+      </div>
+
+      <div>
         <button mat-button
                 [disabled]="!order || !order?.orderCode"
                 *ngIf="!isElectronApp"
@@ -39,12 +49,28 @@
         </button>
       </div>
 
-      <button  mat-button (click)="convertToPDF()">  <mat-icon>pdf</mat-icon> PDF </button>
+
+      <div>
+        <button  mat-button (click)="convertToPDF()">  <mat-icon>pdf</mat-icon> PDF </button>
+      </div>
+
+      <div>
+        <button mat-button (click)="qrCodeDisplayToggle()">
+          <mat-icon>qr_code</mat-icon>QR Link
+        </button>
+      </div>
+
+      <div>
+        <span #coachingLink></span>
+        <span #coachingPDF></span>
+      </div>
 
     </div>
 
     <div>
+      <ng-container [ngTemplateOutlet]="qrCodeDisplayView"></ng-container>
     </div>
+
 
     <div class="mat-card-white">
       <ng-container>
@@ -134,4 +160,16 @@
           (initPopOver)="initPopOver()"
           [enabled]="user && user?.userPreferences &&  user?.userPreferences?.enableCoachMarks"></coach-marks-button>
   </div> -->
+</ng-template>
+
+
+
+<ng-template #qrCodeToggle>
+  <div *ngIf="(qrCode$ | async) as qrCode">
+    <mat-card>
+      <qrcode [qrdata]="qrCode"
+              [width]="256"
+              [errorCorrectionLevel]="'M'"></qrcode>
+    </mat-card>
+  </div>
 </ng-template>

@@ -89,3 +89,10 @@ img {
 .fields-width {
   width: 150px;
 }
+
+
+.grid-flow {
+  display: grid;
+  grid-template-columns: auto ;
+  gap: 10px;
+}

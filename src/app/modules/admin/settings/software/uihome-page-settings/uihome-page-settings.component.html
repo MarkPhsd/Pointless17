@@ -46,6 +46,7 @@
             [inputForm]="inputForm">
         </app-email-settings>
 
+
         <div  *ngIf="inputForm && showEmailSettings"
               [formGroup]="inputForm">
           <h4>Email </h4>
@@ -90,6 +91,17 @@
               [inputForm]     ="inputForm"
               [fieldName]     ="'threeParty'">
            Chat - Sub Group
+          </app-value-fields>
+        </div>
+
+        <div><h4>IP Info</h4></div>
+
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'ipInfoToken'">
+              IP Info Token
           </app-value-fields>
         </div>
 
@@ -158,7 +170,7 @@
 
               <div class="toggle-fields">
                 <mat-slide-toggle  formControlName="catalogScheduleMenuEnabled"  >
-                  <mat-label>Catalog Schules - Menu List </mat-label>
+                  <mat-label>Catalog Schedules - Menu List </mat-label>
                 </mat-slide-toggle>
               </div>
 
@@ -278,7 +290,7 @@
                 <mat-slide-toggle
                           formControlName="staffcatalogScheduleMenuEnabled"
                         >
-                  <mat-label>Catalog Schules - Menu List </mat-label>
+                  <mat-label>Catalog Schedules - Menu List </mat-label>
                 </mat-slide-toggle>
               </div>
 

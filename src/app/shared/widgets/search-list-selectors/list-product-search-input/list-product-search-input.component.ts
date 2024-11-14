@@ -1,6 +1,7 @@
 import { Component,Output,OnInit,
          ViewChild ,ElementRef,
           EventEmitter,OnDestroy, AfterViewInit,
+          Input,
           } from '@angular/core';
 import { MenuService, OrdersService } from 'src/app/_services';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
@@ -12,8 +13,8 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { finalize, take } from 'rxjs/operators';
+import { Observable,  } from 'rxjs';
+
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 // https://github.com/rednez/angular-user-idle
 const { Keyboard } = Plugins;
@@ -35,6 +36,8 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
+  @Output() outPutExit  = new EventEmitter();
+  @Input() newOrder: boolean;
   action$: Observable<unknown>;
 
   searchPhrase:  Subject<unknown> = new Subject();
@@ -50,8 +53,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
   transactionUISettings : TransactionUISettings;
   requireEnter          : boolean;
-
-
 
 
   initSubscriptions() {
@@ -195,9 +196,9 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
         const serviceType$ = this.serviceTypeService.getType(site, this.posDevice.defaultOrderTypeID)
         return serviceType$.pipe(switchMap(data => {
             return of(data)
-        })).pipe(switchMap(data => {
-            const order$ = this.getNewOrder(site, data)
-            return order$
+          })).pipe(switchMap(data => {
+              const order$ = this.getNewOrder(site, data)
+              return order$
         }))
       }
     }
@@ -205,14 +206,28 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
   getNewOrder(site, serviceType) {
-    if (this.order) { return of(this.order)}
+    if (this.order && !this.order?.completionDate) { return of(this.order)}
     return this.orderMethodsService.newOrderWithPayloadMethod(site, serviceType).pipe(
       switchMap(data => {
+        console.log('getNew Order', serviceType, data?.completionDate, data?.id)
         return of(data)
     }))
   }
 
   scan(barcode: string){
+    // console.log('new order', this.newOrder, this.order?.completionDate)
+    if (this.newOrder || this.order?.completionDate) {
+      this.action$ = this.addNewOrder().pipe(switchMap(data => {
+          // console.log('new order', data)
+          this.outPutExit.emit('true')
+          this.order = data //this.orderMethodService.currentOrder;
+          this.orderMethodService.addObservable(this.addItemToOrder(barcode))
+          this.newOrder = false;
+
+          return of(data)
+      }))
+      return;
+    }
     this.orderMethodService.addObservable(this.addItemToOrder(barcode))
   }
 
@@ -223,7 +238,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     return order$.pipe(switchMap(data => {
       return  newItem$
     }))
-
   }
 
   hideKeyboardTimeOut() {

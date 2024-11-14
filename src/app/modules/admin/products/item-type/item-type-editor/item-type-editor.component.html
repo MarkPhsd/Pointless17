@@ -245,6 +245,15 @@
                 </mat-form-field>
               </div>
 
+              <div class="filterItem" *ngIf="jsonForm" [formGroup]="jsonForm">
+                <div class="toggle-footer">
+                  <mat-slide-toggle name= "vatStyleTax"
+                                    formControlName="vatStyleTax">
+                    <mat-label>VAT Style Tax</mat-label>
+                  </mat-slide-toggle>
+                </div>
+              </div>
+
               <div class="filterItem"
                 *ngIf="metrcCategories$ &&  typeName === 'cannabis'"  >
                 <mat-form-field appearance="outline">

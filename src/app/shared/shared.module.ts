@@ -814,6 +814,7 @@ import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
     MatSelectorComponent,
     EditBarComponent,
     SignatureComponent,
+    QRCodeModule,
   ],
 
   providers: [

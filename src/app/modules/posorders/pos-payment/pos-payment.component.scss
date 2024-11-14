@@ -365,3 +365,22 @@ mat-card {
     order: 2; /* Ensure green buttons are underneath */
   }
 }
+
+.location-info-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  padding: 16px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.grid-item.property {
+  font-weight: bold;
+  color: #555;
+}
+
+.grid-item.value {
+  color: #333;
+}

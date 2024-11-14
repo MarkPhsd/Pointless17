@@ -129,6 +129,7 @@ export interface ItemType_Properties {
   metrcGroup: number;
   itemNamePrefix: string;
   itemNameSuffix: string;
+  vatStyleTax: boolean;
 }
 
 export interface ItemTypeCategory {
@@ -330,7 +331,7 @@ export class ItemTypeService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`;
 
-    return  this.http.get<IItemType>(url).pipe(switchMap(data => { 
+    return  this.http.get<IItemType>(url).pipe(switchMap(data => {
       return this.createDepartmentsFromList(site)
     }))
   }

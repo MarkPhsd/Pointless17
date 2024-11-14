@@ -27,14 +27,16 @@
             # {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
           </span>
           <span *ngIf="order.history">
-            # ( {{ order?.id | truncateRight: 5}}) | {{order?.purchaseOrderNumber ?? order?.orderID_Temp | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
+            # ( {{ order?.id | truncateRight: 5}}) |
+                {{order?.purchaseOrderNumber ?? order?.orderID_Temp | truncateRight: 5}}
+                {{order?.serviceType | truncateText: 14}}
           </span>
 
-          <span #coachingRefresh *ngIf="isApp || isUserStaff">
+          <span #coachingRefresh >
             <button mat-button (click)='refreshOrder()'><mat-icon>refresh</mat-icon></button>
-            <span *ngIf="order.priceColumn && order.priceColumn >0 "><mat-icon>column</mat-icon> Level {{order.priceColumn}}</span>
+            <span *ngIf="order.priceColumn && order.priceColumn >0  "><mat-icon>column</mat-icon> Level {{order?.priceColumn}}</span>
           </span>
-          <div *ngIf="order.tableName">{{order.tableName}}</div>
+          <div *ngIf="order.tableName">{{order?.tableName}}</div>
         </h4>
       </div>
       <div>

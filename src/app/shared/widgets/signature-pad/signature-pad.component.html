@@ -1,10 +1,35 @@
-<mat-card>
+<div *ngIf="action$ | async"></div>
+
+<mat-card *ngIf="uiHomePage && order">
   <mat-card-title>
     <div #ngContent></div>
   </mat-card-title>
   <mat-card-content>
-    <signature-pad #signaturePad></signature-pad>
-    <button mat-button-raised (click)="saveSignature()">Save Signature</button>
-    <button mat-button-raised (click)="clearSignature()">Clear</button>
+
+    <div *ngIf="!order?.orderFeatures?.signatureLocked">
+      <signature-pad [options]="signaturePadOptions"  #signaturePad></signature-pad>
+
+      <div style="margin: 5px;">
+        <button color="warn" class="payment-buttons"  mat-flat-button (click)="clearSignature()">Clear</button>
+      </div>
+
+      <div style="margin: 5px;">
+        <button color="primary" class="payment-buttons" mat-flat-button (click)="saveSignature()">
+            <mat-icon>save</mat-icon>
+            Save
+        </button>
+      </div>
+
+    </div>
+
+    <div *ngIf="order?.orderFeatures?.signatureLocked">
+      <img *ngIf="order?.orderFeatures?.signature" [src]="order?.orderFeatures?.signature" alt="Signature Image" />
+      <mat-icon>lock</mat-icon>
+      <button color="primary" class="payment-buttons" mat-flat-button (click)="goBack()">
+        <mat-icon>exit</mat-icon>
+        Exit
+      </button>
+    </div>
+
   </mat-card-content>
 </mat-card>

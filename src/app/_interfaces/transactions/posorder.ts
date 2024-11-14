@@ -61,6 +61,7 @@ export interface IPOSOrderSearchModel {
 }
 
 export interface IPOSOrder {
+  json: string;
   errorMessage: string;
   id:                    number;
   orderTime:             string;
@@ -163,8 +164,23 @@ export interface IPOSOrder {
 export interface JSONOrder {
    billOnHold : number ;
    featuresSelected: ItemBasic[]
+   signature: string;
+   signatureLocked: boolean;
+   ipInfo: LocationInfo;
+   ipInfoJSON: string;
 }
 
+export interface LocationInfo {
+  city: string;
+  country: string;
+  hostname: string;
+  ip: string;
+  loc?: string;
+  org?: string;
+  postal?: string;
+  region?: string;
+  timezone?: string;
+}
 
  export interface ClientsPOSOrders {
   id:                        number;

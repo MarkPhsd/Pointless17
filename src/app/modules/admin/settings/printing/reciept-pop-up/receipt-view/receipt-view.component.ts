@@ -13,6 +13,8 @@ import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { EmployeeClockMethodsService } from 'src/app/_services/employeeClock/employee-clock-methods.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { HttpClient } from '@angular/common/http';
+import { IAppConfig } from 'src/app/_services/system/app-init.service';
 @Component({
   selector: 'app-receipt-view',
   templateUrl: './receipt-view.component.html',
@@ -39,9 +41,12 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   @Input()  options          : printOptions;
   @Input()  order            : IPOSOrder;
   @Input()  payments         : any[];
-
   _printView: Subscription;
   // printView               = 1;
+  qrCode$ : Observable<any>;
+  qrDisplayOn: boolean;
+  orderqrCode: string;
+  @ViewChild('qrCodeToggle') qrCodeToggle: TemplateRef<any>;
 
   receiptLayoutSetting      : ISetting;
   receiptStyles             : ISetting;
@@ -66,7 +71,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   items             : any[];
   orders            : any;
- 
+
   orderTypes        : any;
   platForm          = '';
   action$           : Observable<any>;
@@ -160,6 +165,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     })
   }
 
+
   constructor(
     public  orderService           : OrdersService,
     private uiSettingService       : UISettingsService,
@@ -172,6 +178,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     private orderMethodService    : OrderMethodsService,
     private coachMarksService     : CoachMarksService,
     private authenticationService : AuthenticationService,
+    private httpClient: HttpClient,
     private router                : Router,
     private paymentsMethodsProcessService: PaymentsMethodsProcessService,
     )
@@ -181,7 +188,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
     if (this.order) {
       this.printingService.printOrder = this.order;
-      
+
       console.log(this.order.id)
     }
 
@@ -216,16 +223,21 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
             this.siteService.notify('Error  stylesreceipt view' + e, 'Alert', 2000)
             return of(null)
           })).pipe(
-      switchMap(data => { return deviceInfo$}
+      switchMap(data => { return deviceInfo$ }
           ),catchError(e => {
-            this.siteService.notify('Error deviceInfo receipt view' + e, 'Alert', 2000)
+            this.siteService.notify('Test Error deviceInfo receipt view' + e, 'Alert', 2000)
             return of(null)
           })).pipe(
       switchMap(data => {
+        console.log('final',data)
+        if (!data) {  return of({})}
         return of(data)
+
         }),catchError(e => {
-            this.siteService.notify('Error receipt view' + e, 'Alert', 2000)
-            return of(null)
+            //it's okay if this item is null
+            this.siteService.notify('Error receipt view: ' + e, 'Alert', 2000)
+            // console.log('error',data)
+            return of({})
       }))
   }
 
@@ -310,8 +322,17 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   getDeviceInfo(): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
     const device = localStorage.getItem('devicename');
+    if (!device) { return of(null)}
+
     return  this.settingService.getSettingByNameCached(site, device).pipe(switchMap(data => {
+
+      if (!data.text) {
+        let item = {} as  ITerminalSettings
+        return of(null)
+      }
+
       const item  = JSON.parse(data.text) as ITerminalSettings
+
       if (item) {
         if (this.platFormService.isAppElectron) {
           if (item?.receiptPrinter) {
@@ -319,6 +340,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
           }
         }
       }
+
       return of(data)
     }))
   }
@@ -445,7 +467,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     const  ui  = this.uiSettingService._transactionUISettings.value as TransactionUISettings;
     if (this.platFormService.isAppElectron) {
       await this.printElectron();
-      if (!ui?.disablePrintPrepOnPrint) { 
+      if (!ui?.disablePrintPrepOnPrint) {
         this.sendOrder()
       }
       if (this.order?.completionDate) {
@@ -461,7 +483,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
     if (this.platFormService.webMode)    {
       this.convertToPDF()
-      if (!ui.disablePrintPrepOnPrint) { 
+      if (!ui.disablePrintPrepOnPrint) {
         this.sendOrder()
       }
       if (this.order?.completionDate) {
@@ -619,6 +641,23 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     this.coachMarksService.add(new CoachMarksClass(this.coachingReceiptView.nativeElement, "Receipt View: The Receipt View gives you an option to print."));
     this.coachMarksService.add(new CoachMarksClass(this.coachingPDF.nativeElement, "PDF: Save as PDF"));
     this.coachMarksService.add(new CoachMarksClass(this.coachingLink.nativeElement, "Link: If you are in a browser, a link button will appear. This will allow customers to pay for the order using Stripe or PayPal."));
+  }
+
+
+  qrCodeDisplayToggle() {
+    this.qrDisplayOn = !this.qrDisplayOn;
+    const orderCode = this.order.orderCode;
+    const config$ =  this.httpClient.get('assets/app-config.json').pipe(switchMap(data => {
+      const config = data as unknown as IAppConfig;
+      const path = `${config.appUrl}qr-receipt;orderCode=${orderCode}`
+      return of(path)
+    }))
+    this.qrCode$ = config$;
+  }
+
+  get qrCodeDisplayView()   {
+    if (this.qrDisplayOn) { return this.qrCodeToggle}
+    return null;
   }
 
 }

@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
   keyboardDimensions = 'height:300px;width:700px'
   devMode = false;
   ipAddress$: Observable<any>;
-  
+
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
   get platFormName() {  return Capacitor.getPlatform(); }
   initSubscription() {
@@ -65,8 +65,6 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
     }
   }
 
-  
-
   // private idle: Idle,
   constructor(
       private platForm             : Platform,
@@ -78,10 +76,9 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
       private viewContainerRef     : ViewContainerRef,
       private platformService      : PlatformService,
       private siteService          : SitesService,
-      private renderer: Renderer2,
+      private renderer             : Renderer2,
   ) {
 
-    this.ipAddress$ = this.siteService.getIpAddress()
 
     this.setTitle();
     this.initSubscription();
@@ -89,6 +86,9 @@ export class AppComponent implements OnInit, OnDestroy , AfterViewInit, AfterCon
     this.backButtonEvent();
     this.devMode = isDevMode();
     this.initKeyboardSubscriber();
+
+
+
   }
 
   // initializeApp() {

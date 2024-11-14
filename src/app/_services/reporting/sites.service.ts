@@ -84,13 +84,15 @@ export class SitesService {
     return this.ttsService.getVoices()
   }
 
-  getIpAddress(): Observable<any> {
-    // const ipApiUrl = 'https://geolocation-db.com/json/'
-    const ipApiUrl = "https://ipinfo.io/json?token=cb36c1b021a341"
+  getIpAddress(token: string): Observable<any> {
 
+    console.log('token', token, this.ipAddressCurrent)
     if (this.ipAddressCurrent) {
       return of(this.ipAddressCurrent)
     }
+    if (!token) { return of(null) }
+    // const ipApiUrl = 'https://geolocation-db.com/json/'
+    const ipApiUrl = `https://ipinfo.io/json?token=${token}`
 
     return this.http.get(ipApiUrl).pipe(switchMap(data => {
       const value = data as any;

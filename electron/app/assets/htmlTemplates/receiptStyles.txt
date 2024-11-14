@@ -3,7 +3,30 @@
     margin: 0mm 0mm 15mm 0mm;
 }
 
+.dots {
+	flex-grow: 1;
+	margin: 0 5px;
+	background-image: radial-gradient(currentColor 1px, transparent 1px);
+	background-size: 5px 5px;
+	background-repeat: repeat-x;
+	height: 1px; /* Adjust this to control the vertical alignment of dots */
+}
+.receipt-grid-75-100-75-100 {
+  display: grid;
+  grid-template-columns: 75px 100px 75px 100px;
+}
+
+
 @media print {
+
+    .dots {
+      flex-grow: 1;
+      margin: 0 5px;
+      background-image: radial-gradient(currentColor 1px, transparent 1px);
+      background-size: 5px 5px;
+      background-repeat: repeat-x;
+      height: 1px; /* Adjust this to control the vertical alignment of dots */
+    }
 
     .receipt-header-center {
         align-items: center;
@@ -16,99 +39,104 @@
         position: relative;
         text-align: left;
     }
-	
+
     .receipt-text-align-right {
         align-items: right;
         position: relative;
         text-align: right;
     }
-	
+
 	.receipt-text-align-center {
         align-items: center;
         position: relative;
         text-align: center;
     }
-	
-	.receipt-font-weight-600 { 
+
+	.receipt-font-weight-600 {
 	    font-weight: 600;
 	}
-	.receipt-font-weight-500 { 
+	.receipt-font-weight-500 {
 	    font-weight: 500;
 	}
-	
-	.receipt-font-20 { 
+
+	.receipt-font-20 {
 	    font-size: 20pt;
     }
-	.receipt-font-18 { 
+	.receipt-font-18 {
 	    font-size: 18pt;
     }
-	.receipt-font-15 { 
+	.receipt-font-15 {
 	    font-size: 15pt;
     }
-	.receipt-font-14 { 
+	.receipt-font-14 {
 	    font-size: 14pt;
-    }	
-	.receipt-font-13 { 
+    }
+	.receipt-font-13 {
 	    font-size: 13pt;
     }
-	.receipt-font-12 { 
+	.receipt-font-12 {
 	    font-size: 12pt;
     }
 
-    .receipt-grid-receipt-80 {
-        display: grid;
-        grid-template-columns: 50px auto 80px;
-    }
-
-    .receipt-grid-receipt-20px-auto-auto {
-        display: grid;
-        grid-template-columns: 20px auto auto;
-    }
-
-    .receipt-grid-120-auto-auto {
-        display: grid;
-        grid-template-columns: 120px auto auto;
+	.receipt-grid-50-150-100-100 {
+    display: grid;
+    grid-template-columns: 50px 150px 100px 100px;
 	}
-	
+
+  .receipt-grid-receipt-80 {
+    display: grid;
+    grid-template-columns: 50px auto 80px;
+  }
+
+  .receipt-grid-receipt-20px-auto-auto {
+    display: grid;
+    grid-template-columns: 20px auto auto;
+  }
+
+  .receipt-grid-120-auto-auto {
+      display: grid;
+      grid-template-columns: 120px auto auto;
+}
+
 	.receipt-grid-75-100-75-100 {
         display: grid;
         grid-template-columns: 75px 100px 75px 100px;
 	}
-	
+
 	.receipt-grid-auto-100 {
         display: grid;
         grid-template-columns: auto 100px;
 	}
-	
+
 	.receipt-grid-100-auto {
         display: grid;
         grid-template-columns: 100px auto ;
 	}
-	
-	
+
+
 	.receipt-grid-gap-20 {
 	    gap: 20px;
 	}
 	.receipt-grid-gap-10 {
 	    gap: 10px;
 	}
-	
+
 	.receipt-items-span-columns-2 {
 		grid-column-end: span 2;
 	}
-	
+
 	.receipt-items-span-columns-3 {
 		grid-column-end: span 3;
 	}
-	
+
 	.receipt-items-span-columns-start-2 {
 		grid-column-start: span 2;
 	}
-	
+
 	.receipt-items-span-columns-start-3 {
 		grid-column-start: span 3;
 	}
-	
+
 	.margin-top-25px {
 		margin-top:25px;
 	}

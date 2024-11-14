@@ -262,6 +262,7 @@ export class PosEditSettingsComponent implements OnInit {
       voiceOnMessage: [],
       voiceOnError: [],
       condensedMenuButtons: [],
+      disableVATTax: [],
     })
 
     this.dsiEMVSettings = this.fb.group({

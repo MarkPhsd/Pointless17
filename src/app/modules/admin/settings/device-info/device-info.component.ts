@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector'
 import { Observable } from 'rxjs';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { UIHomePageSettings } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-device-info',
@@ -12,15 +13,15 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 })
 export class DeviceInfoComponent implements OnInit {
 
+  @Input() uiHomePage!: UIHomePageSettings
   deviceInfo      : any;
   isMobile        : boolean;
   isTablet        : boolean;
   isDesktopDevice : boolean;
   deviceName      : string;
-
   debugOnThisDevice: boolean;
   ipAddress$: Observable<any>;
-  
+
   constructor(
     public platformService: PlatformService,
     public authService: AuthenticationService,
@@ -50,7 +51,7 @@ export class DeviceInfoComponent implements OnInit {
     if (localStorage.getItem('debugOnThisDevice') === 'true') {
       localStorage.setItem('debugOnThisDevice', 'false')// === 'false'
       this.debugOnThisDevice =  false;
-   
+
       return
     }
     localStorage.setItem('debugOnThisDevice', 'true') // === 'true'
@@ -60,7 +61,7 @@ export class DeviceInfoComponent implements OnInit {
 
   getDeviceInfo() {
     // this.deviceInfo = this.deviceService.getDeviceInfo();
-    this.ipAddress$ = this.siteService.getIpAddress()
+    this.ipAddress$ = this.siteService.getIpAddress(this.uiHomePage?.ipInfoToken)
     this.deviceInfo =  this.authService.getTracker(this.authService.userValue?.username, true)
     this.isMobile = this.deviceService.isMobile();
     this.isTablet = this.deviceService.isTablet();

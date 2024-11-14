@@ -32,14 +32,14 @@
 
     <div class="mat-item">
 
-      <span class="item-span" 
-            *ngIf="refreshCreditCardButton && !order?.completionDate" 
+      <span class="item-span"
+            *ngIf="refreshCreditCardButton && !order?.completionDate"
             style="margin-bottom:3px">
         <ng-container [ngTemplateOutlet]="disEMVCreditOnlyCardButton"></ng-container>
       </span>
 
       <button mat-raised-button
-        *ngIf="!refreshCreditCardButton"
+        *ngIf="!refreshCreditCardButton "
         fxFill
         color="primary"
         (click)="toggleOpenOrderBar()">
@@ -124,7 +124,7 @@
 </ng-template>
 
 <ng-template #disEMVCreditOnlyCardButton>
-  
+
   <dsi-emvcard-pay-btn
       *ngIf="(androidApp || isStaff) && deviceName"
       [autoPay]="true"
@@ -139,7 +139,7 @@
       [creditOnly]="true">
     <div footerstyle>
       <mat-icon color="warn">credit_card</mat-icon>
-      Credit 
+      Credit
     </div>
   </dsi-emvcard-pay-btn>
 </ng-template>

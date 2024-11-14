@@ -343,7 +343,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
             this.terminalSetting = data;
             this.posDevice = posDevice;
             this.speak()
-            this.zoom(posDevice)
+
             return of(posDevice)
           } catch (error) {
             this.siteService.notify(`Error setting device info, for device: ${devicename}` + JSON.stringify(error), 'Close', 10000, 'yellow')
@@ -354,11 +354,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
     ))
   }
 
-  zoom(posDevice: ITerminalSettings)  {
-    if (posDevice && posDevice?.electronZoom && posDevice?.electronZoom != '0') {
-      this.uiSettings.electronZoom(+posDevice.electronZoom)
-    }
-  }
+
 
   get isClockInOutOn() {
     if (this.isUserStaff)  {

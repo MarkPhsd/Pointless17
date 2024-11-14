@@ -244,7 +244,7 @@ export interface UIHomePageSettings {
   //move to it's own interface one day
   catalogColumnsEnableUOM: boolean;
 
-
+  ipInfoToken: string;
   binaryStoreValue: any;
   mobileEnabled: boolean;
   pinPadDefaultOnApp: boolean;
@@ -816,6 +816,7 @@ export class UISettingsService {
       catalogScheduleMenuEnabled: [],
       binaryStoreValue: [],
       catalogColumnsEnableUOM: [],
+      ipInfoToken:[],
      })
     return fb
   }

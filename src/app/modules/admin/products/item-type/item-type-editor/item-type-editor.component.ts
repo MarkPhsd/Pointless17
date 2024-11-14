@@ -194,6 +194,7 @@ export class ItemTypeEditorComponent implements OnInit, OnDestroy  {
       metrcGroup: [],
       itemNameSuffix: [],
       itemNamePrefix: [],
+      vatStyleTax: [],
     })
 
     if (itemType.json) {

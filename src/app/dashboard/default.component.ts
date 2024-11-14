@@ -349,41 +349,66 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       const device = JSON.parse(data.text) as ITerminalSettings;
       this.settingService.updateTerminalSetting(device)
       this.initPrintServer(device)
+
+      this.zoom(device)
+
       if (device.enableScale) {  }
       this.posDevice = device;
       return of(device)
     }))
   }
 
-  homePageSubscriber(){
+  zoom(posDevice: ITerminalSettings)  {
+    if (posDevice && posDevice?.electronZoom && posDevice?.electronZoom != '0') {
+      console.log('zoom 1, then zoom', posDevice?.electronZoom)
+      this.setZoom(+posDevice.electronZoom)
+    }
+  }
+
+
+  setZoom(zoomValue): void {
+    if (!this.platFormService.isAppElectron) return;
     try {
-      this.matorderBar = 'mat-orderBar-wide'
-      this._uiSettings = this.uiSettingsService.homePageSetting$.pipe (switchMap(data => {
-        if (data) {
-          this.uiSettings = data;
 
-          if (this.phoneDevice)  {
-            this.matorderBar = 'mat-orderBar-wide'
-            return
+        (window as any).electron.setZoom(zoomValue);
+
+    } catch (error) {
+      console.error('Failed to set zoom level:', error);
+      this.siteService.notify(`Failed to set zoom level: ${error}`, 'Close', 3000, 'red');
+    }
+  }
+
+  homePageSubscriber() {
+    try {
+      this.matorderBar = 'mat-orderBar-wide';
+      this._uiSettings = this.uiSettingsService.homePageSetting$.pipe(
+        switchMap(data => {
+          if (data) {
+            this.uiSettings = data;
+            if (this.phoneDevice) {
+              this.matorderBar = 'mat-orderBar-wide';
+              return of(null); // Return an observable here
+            }
+            this.matorderBar = 'mat-orderBar-wide';
           }
-          this.matorderBar = 'mat-orderBar-wide'
-        }
 
-        const devicename = localStorage.getItem('devicename');
-        if (devicename){
-          return this.getDeviceInfo(devicename)
-        }
-        return of(null)
-      })).subscribe(data => {
-
+          const devicename = localStorage.getItem('devicename');
+          if (devicename) {
+            return this.getDeviceInfo(devicename);
+          }
+          return of(null); // Return of(null) if no other observable is returned
+        })
+      ).subscribe(data => {
+        if (!data) { return; }
         if (data && data?.ignoreTimer) {
           this.initIdle();
         }
-      })
+      });
     } catch (error) {
-
+      console.log('home page subscriber error', error);
     }
   }
+
 
   // if (!data) {
   //   this.stopWatching()
@@ -669,9 +694,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscribeAddress();
     this.subscribSendOrder()
 
-    if (!this.platFormService.isApp) {
-      this.ipAddress$ = this.siteService.getIpAddress()
-    }
+
   }
 
   getHelp() {
@@ -708,6 +731,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
             this.uiSettingsService.updateHomePageSetting(ui);
             this.initUI();
             this.uiSettings = ui;
+
+            if (!this.platFormService.isApp) {
+              this.ipAddress$ = this.siteService.getIpAddress(ui?.ipInfoToken)
+            }
             return of(ui)
           }
           return of(null)
@@ -715,10 +742,15 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initUI() {
-    const bar = this.getBoolean(localStorage.getItem('barSize'))
-    this.toolbarUIService.updateBarSize(bar)
-    this.refreshToolBarType();
-    this.initSubscriptions();
+    try {
+      const bar = this.getBoolean(localStorage.getItem('barSize'))
+      this.toolbarUIService.updateBarSize(bar)
+      this.refreshToolBarType();
+      this.initSubscriptions();
+
+    } catch (error) {
+      console.log('inputUI error', error)
+    }
   }
 
   getBoolean(value){
@@ -737,6 +769,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
  }
 
   ngAfterViewInit() {
+    this.setZoom(1)
+
     this.cd.detectChanges();
     setTimeout(()=>{
       this.rightSideBarToggle = true;
@@ -744,6 +778,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     setTimeout(()=>{
       this.rightSideBarToggle = false;
     },50);
+
+    setTimeout(() => {
+      this.zoom(this.posDevice)
+    }, 2000);
   };
 
   orderBarToggler(event){

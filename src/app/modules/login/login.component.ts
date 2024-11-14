@@ -379,6 +379,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.initForm();
     this.clearUserSettings();
     localStorage.removeItem('devicename')
+    localStorage.removeItem('awsbucket')
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
     this.statusMessage = ''
   }

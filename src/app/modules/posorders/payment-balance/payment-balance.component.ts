@@ -60,6 +60,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   paymentsFiltered: any[] = [];
 
   updatePaymentsFiltered() {
+    if (!this.order?.posPayments) { return }
     if (this.order?.completionDate) {
       this.paymentsFiltered = this.order.posPayments.filter(item => item?.tranCode !== 'EMVPreAuth');
     } else {

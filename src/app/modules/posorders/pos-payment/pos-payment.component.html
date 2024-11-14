@@ -17,8 +17,8 @@
       <ng-container [ngTemplateOutlet]="dCApPreAuthButton"         [ngTemplateOutletContext]="{$implicit: footerItem}"></ng-container>
       <ng-container [ngTemplateOutlet]="dCApPreAuthManualButton" [ngTemplateOutletContext]="{$implicit: footerItem}"></ng-container>
     </div>
-  </div>
-</div> -->
+  </div>-->
+</div>
 
 <div *ngIf="(paymentMethods$ | async) as methods">
   <div [class]="orderLayout" *ngIf="order  && uiTransactions">
@@ -69,7 +69,8 @@
         <button class="button-width-175 button-height-75"
                 color="accent"
                 mat-raised-button
-                (click)="exitOrder()"><mat-icon>exit_to_app</mat-icon>Leave Order</button>
+                (click)="exitOrder()"><mat-icon>exit_to_app</mat-icon>Leave Order
+        </button>
       </div>
 
       <!-- <div class="button-margin-10">
@@ -90,6 +91,8 @@
               <mat-icon>edit</mat-icon>
               Enter Tip
         </button>
+
+
       </div>
 
       <mat-card class="margin-bottom-10" *ngIf="isStaff">
@@ -125,7 +128,7 @@
 
           <div class="grid-menu-category-flow">
 
-            <div *ngIf="!paymentsEqualTotal && !splitByItem && !uiTransactions?.dcapDualPriceValue
+            <div *ngIf="!order.completionDate && !paymentsEqualTotal && !splitByItem && !uiTransactions?.dcapDualPriceValue
                         && platFormService.isApp()
                         && isCreditProcessingEnabled">
               <button class="splitbutton"
@@ -136,7 +139,7 @@
               </button>
             </div>
 
-            <div  *ngIf="!paymentsEqualTotal && (uiTransactions && uiTransactions?.splitEntry) && isStaff">
+            <div  *ngIf="!order.completionDate &&  !paymentsEqualTotal && (uiTransactions && uiTransactions?.splitEntry) && isStaff">
               <button class="splitbutton"
                       mat-raised-button
                       color="primary"
@@ -820,6 +823,15 @@
   <mat-card class="card-dimensions">
     <mat-card-content>
       <app-receipt-view [hideExit]="true" [order]="order"></app-receipt-view>
+
+      <div *ngIf="order?.orderFeatures?.signatureLocked">
+        <img *ngIf="order?.orderFeatures?.signature" [src]="order?.orderFeatures?.signature" alt="Signature Image" />
+        <div>
+         <<ng-container [ngTemplateOutlet]="locationInfo"></ng-container>
+        </div>
+        <mat-icon>lock</mat-icon>
+      </div>
+
     </mat-card-content>
   </mat-card>
 </ng-template>
@@ -876,3 +888,35 @@ class              = "card-height"
 [buttonDimensions] = "'button-dimensions-tall'"
 (outPutItem)       = "getPaymentMethod($event)">
 </app-mat-toggle-selector> -->
+
+
+<ng-template #locationInfo>
+  <div class="location-info-grid" *ngIf="order?.orderFeatures?.ipInfo as locationInfo">
+    <div class="grid-item property">City</div>
+    <div class="grid-item value">{{ locationInfo?.city }}</div>
+
+    <div class="grid-item property">Country</div>
+    <div class="grid-item value">{{ locationInfo?.country }}</div>
+
+    <div class="grid-item property">Hostname</div>
+    <div class="grid-item value">{{ locationInfo?.hostname }}</div>
+
+    <div class="grid-item property">IP</div>
+    <div class="grid-item value">{{ locationInfo?.ip }}</div>
+
+    <div class="grid-item property">Location</div>
+    <div class="grid-item value">{{ locationInfo?.loc || 'N/A' }}</div>
+
+    <div class="grid-item property">Organization</div>
+    <div class="grid-item value">{{ locationInfo?.org || 'N/A' }}</div>
+
+    <div class="grid-item property">Postal Code</div>
+    <div class="grid-item value">{{ locationInfo?.postal || 'N/A' }}</div>
+
+    <div class="grid-item property">Region</div>
+    <div class="grid-item value">{{ locationInfo?.region || 'N/A' }}</div>
+
+    <div class="grid-item property">Timezone</div>
+    <div class="grid-item value">{{ locationInfo?.timezone || 'N/A' }}</div>
+  </div>
+</ng-template>

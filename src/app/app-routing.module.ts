@@ -151,22 +151,24 @@ import { OnlinePaymentCompletedComponent } from './modules/payment-processing/on
 import { StoresManagerComponent } from './modules/admin/stores-manager/stores-manager.component';
 import { ScheduleSelectorComponent } from './shared/widgets/schedule-selector/schedule-selector.component';
 import { ScheduleDateRangeSelectorComponent } from './shared/widgets/schedule-date-range-selector/schedule-date-range-selector.component';
+import { SignatureComponent } from './shared/widgets/signature-pad/signature-pad.component';
 
 const routes: Routes = [
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
     { path: 'qr-receipt',  component: QRCodeTableComponent, data: { title: 'Order', animation: 'isLeft'} },
-      
+
     {path: '', component: DefaultComponent,
       children: [
 
+        { path: 'signature',  component: SignatureComponent, data: { title: 'signature', animation: 'isLeft'} },
 
         //
-        { path: 'schedule-validator',  component: ScheduleSelectorComponent, data: { title: 'validator', animation: 'isLeft'} },
+        { path: 'schedule-validator',  component: ScheduleSelectorComponent, data: { title: 'schedule validator', animation: 'isLeft'} },
         { path: 'date-validator',  component: ScheduleDateRangeSelectorComponent, data: { title: 'validator', animation: 'isLeft'} },
-        
+
         { path: 'qr-payment',  component: QrPaymentComponent, data: { title: 'Order', animation: 'isLeft'} },
         { path: 'payment-completed',  component: OnlinePaymentCompletedComponent, data: { title: 'Success', animation: 'isLeft'} },
-        
+
         { path: 'pay-api', component: PayAPIComponent, data: { title: 'Order', animation: 'isLeft'} },
         { path: 'pay-api-iframe', component: PayAPIFrameComponent, data: { title: 'Order', animation: 'isLeft'} },
 
@@ -221,7 +223,7 @@ const routes: Routes = [
         //StoresManagerComponent
         { path: 'store-list', component: StoresManagerComponent, canActivate: [AuthGuard], data: {title: 'Store List', animation: 'isLeft'}},
 
-      
+
         { path: 'store-credit', component: StoreCreditListComponent, canActivate: [AuthGuard], data: {  title: 'Store Credit Search',  animation:  'isLeft'} },
         { path: 'pos-orders',   component: OrdersMainComponent, canActivate: [AuthGuard], data: {  title: 'Orders',  animation:  'isLeft'} },
         { path: 'currentorder', component: PosOrderComponent, canActivate: [AuthGuard], data: { title: 'Current Order', animation: 'isLeft'} },

@@ -149,6 +149,18 @@
           </mat-slide-toggle>
         </div>
 
+        <div class="toggle-fields">
+          <mat-slide-toggle  formControlName="condensedMenuButtons"  >
+            <mat-label>Condensed Menu Buttons </mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle  formControlName="disableVATTax"  >
+            <mat-label>Disable VAT Tax </mat-label>
+          </mat-slide-toggle>
+        </div>
+
         <div *ngIf="(serviceType$ | async) as list ">
           <mat-form-field style="width: 200px" class="fields"
               appearance="outline">
@@ -164,6 +176,7 @@
               </mat-select>
             </mat-form-field>
         </div>
+
         <div *ngIf="(categories$ | async) as list ">
           <mat-form-field style="width: 200px" class="fields"
               appearance="outline">
@@ -200,12 +213,7 @@
               <mat-label>Disable Menu Images</mat-label>
             </mat-slide-toggle>
           </div>
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="condensedMenuButtons">
-              <mat-label>Condensded Menu Buttons</mat-label>
-            </mat-slide-toggle>
-          </div>
+
         </mat-card-content>
       </mat-card>
       <mat-divider></mat-divider>

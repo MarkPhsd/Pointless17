@@ -78,6 +78,11 @@
                   <br>Call Staff
                 </button>
               </div>
+
+              <div *ngIf="order.completionDate && !order?.orderFeatures?.signatureLocked">
+                <ng-container [ngTemplateOutlet]="signature"></ng-container>
+              </div>
+
               <div *ngIf="order.balanceRemaining != 0">
                 <button mat-raised-button color="primary" (click)="requestCheck()">
                   <mat-icon>payment</mat-icon>
@@ -131,4 +136,6 @@
   </div>
 </ng-template>
 
-
+<ng-template #signature>
+  <button  mat-raised-button (click)="applySignature()">  Sign <br> to Accept </button>
+</ng-template>

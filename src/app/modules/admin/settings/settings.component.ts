@@ -8,6 +8,7 @@ import { SystemManagerService } from 'src/app/_services/system/system-manager.se
 import { Subscription } from 'rxjs';
 import { PointlessCCDSIEMVAndroidService } from '../../payment-processing/services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-settings',
@@ -36,16 +37,21 @@ export class SettingsComponent implements OnInit, OnDestroy {
       return this.platFormService.getPlatForm().platForm;
     }
 
-      blueToothDeviceList: any;
+    blueToothDeviceList: any;
     showPaymentMethods = false;
     user          :  IUser;
     role          :  string;
     accordionStep = -1;
     _accordionStep: Subscription;
-
+    _homePage     : Subscription;
+    uiHomePage    : UIHomePageSettings;
     initSubscriptions() {
       this._accordionStep  = this.systemManagerService.accordionMenu$.subscribe( step => {
         this.accordionStep = step;
+      })
+
+      this._homePage = this.uisettingService.homePageSetting$.subscribe(data => {
+        this.uiHomePage = data
       })
     }
 
@@ -82,6 +88,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     constructor(
+        private uisettingService: UISettingsService,
         private AuthenticationService: AuthenticationService,
         private dialog               : MatDialog,
         private systemManagerService : SystemManagerService,

@@ -55,7 +55,7 @@ export interface ITerminalSettings {
   quickScanningDevice: boolean;
   defaultOrderTypeID: number;
   defaultMenuCategoryID: number;
-
+  disableVATTax: boolean;
   voiceOnAddItem: boolean;
   voiceOnMessage: boolean;
   voiceOnError  : boolean;

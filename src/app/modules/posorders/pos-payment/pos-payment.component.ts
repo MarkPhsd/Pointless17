@@ -141,7 +141,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       const item = localStorage.getItem('devicename')
       //if not device assigned, skip this.
       if (!item) {
-        return;
+        return of(null)
       }
 
       return this.uISettingsService.getPOSDevice(item).pipe(switchMap(data => {
@@ -181,8 +181,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
     const dsiEmvSettings = data?.dsiEMVSettings;
     this.paymentsMethodsService.setDSIEmvSettings(dsiEmvSettings)
-    // this.enablePreAuth   = dsiEmvSettings?.partialAuth;
-    // console.log('preauth', this.enablePreAuth, dsiEmvSettings, data)
   }
 
   setPaxInfo(data) {
@@ -359,6 +357,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
        return of(data)
     }))
   }
+
 
   get payAPIEnabled() {
     if (this.uiTransactions.dcapPayAPIEnabled && !this.isApp) {
