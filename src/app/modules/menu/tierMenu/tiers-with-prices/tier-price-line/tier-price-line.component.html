@@ -16,10 +16,10 @@
 
               {{item.flatQuantity}} G
               <span *ngIf="item.rateOrPrice">
-                @ {{ (item.retail * item.flatQuantity).toFixed(2) | currency }}
+                &#64; {{ (item.retail * item.flatQuantity).toFixed(2) | currency }}
               </span>
               <span *ngIf="!item.rateOrPrice">
-                @ {{ item.retail | currency }}
+                &#64; {{ item.retail | currency }}
               </span>
           </button>
         </div>

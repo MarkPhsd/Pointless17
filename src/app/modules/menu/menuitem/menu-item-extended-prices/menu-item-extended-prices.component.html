@@ -9,15 +9,15 @@
     <div *ngIf="menuItem?.itemType?.webStoreSimpleView" id="price" color="warn"> 
       {{ menuItem?.retail | currency }}
       <span *ngIf="menuItem.baseUnitType">
-        @ {{menuItem.baseUnitType}}
+        &#64; {{menuItem.baseUnitType}}
       </span>
     </div>
 
-    <div *ngIf="!price && !menuItem?.itemType?.webStoreSimpleView" id="price" color="warn">     {{ menuItem?.retail | currency }} @ {{menuItem.baseUnitType}} X {{quantity}}
+    <div *ngIf="!price && !menuItem?.itemType?.webStoreSimpleView" id="price" color="warn">     {{ menuItem?.retail | currency }} &#64; {{menuItem.baseUnitType}} X {{quantity}}
       = {{ menuItem?.retail * quantity | currency }}
     </div>
 
-    <div *ngIf="price && !menuItem?.itemType?.webStoreSimpleView" id="price" color="warn">     {{ price.retail *  (price.partMultiplyer  ?  price.partMultiplyer : 1) | currency }} @ {{menuItem.baseUnitType}} X {{quantity}}
+    <div *ngIf="price && !menuItem?.itemType?.webStoreSimpleView" id="price" color="warn">     {{ price.retail *  (price.partMultiplyer  ?  price.partMultiplyer : 1) | currency }} &#64; {{menuItem.baseUnitType}} X {{quantity}}
       = {{ price.retail * quantity * (price.partMultiplyer  ?  price.partMultiplyer : 1) | currency }}
     </div>
   </div>

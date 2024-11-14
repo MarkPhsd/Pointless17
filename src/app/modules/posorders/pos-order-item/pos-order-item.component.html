@@ -326,7 +326,7 @@
 
       {{ quantity }}
 
-      {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName) }} @
+      {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? 'Each' : orderItem?.unitName) }} &#64;
 
       <span *ngIf="!ui.displayItemPOSTTotal && (mainPanel || !smallDevice)">
       {{ _unitprice | currency }}
@@ -350,7 +350,7 @@
       <div *ngIf="ui && ui?.dcapMultiPrice && ui?.dcapDualPriceValue != 0 && !orderItem.completionDate ">
         <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue > 0 &&  !orderItem.completionDate" > Credit  Price </span>
         <span  *ngIf="ui && ui.dcapMultiPrice &&  ui.dcapDualPriceValue < 0 && !orderItem.completionDate" >  Discount Price </span>
-        @ {{ cashDiscount | currency }}
+        &#64; {{ cashDiscount | currency }}
       </div>
 
     </div>
@@ -361,7 +361,7 @@
 
       {{ orderItem?.baseUnitType == '' ? ''  : (orderItem?.unitName == 'False' ? '' : orderItem?.unitName) }}
 
-      @ {{ unitPrice | currency }}
+      &#64; {{ unitPrice | currency }}
 
       <span *ngIf="orderItem.baseUnitType">/ {{ orderItem?.baseUnitType }} </span>
        = {{ subTotal | currency}}
@@ -381,7 +381,7 @@
 <ng-template #purchaseOrderView>
   <div >
     <span *ngIf="purchaseOrderEnabled">
-      Cost : {{ quantity }}  @  {{ wholeSale | currency }} = {{ wholeSale*quantity | currency}}
+      Cost : {{ quantity }}  &#64;  {{ wholeSale | currency }} = {{ wholeSale*quantity | currency}}
     </span>
     <span *ngIf="deliveryPrep">
       ID#/({{ orderItem?.id }})
