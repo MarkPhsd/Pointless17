@@ -72,8 +72,25 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   get DSIEmvSettings(): DSIEMVSettings {
     const item = localStorage.getItem('DSIEMVSettings');
     if (!item) { return }
-    const EMVSettings = JSON.parse(item)
-    return EMVSettings
+
+    // console.log('item', item)
+    try {
+      const EMVSettings = JSON.parse(item)
+      return EMVSettings
+
+    } catch (error) {
+
+    }
+    return null;
+  }
+
+  setDSIEmvSettings(dsiEMVSettings: DSIEMVSettings) {
+    if (!dsiEMVSettings) {
+      // console.log('no dsi settings')
+      return dsiEMVSettings;
+    }
+    const settings = JSON.stringify(dsiEMVSettings)
+    const item = localStorage.setItem('DSIEMVSettings', settings);
   }
 
   newOrderWithPayloadMethod(site, serviceType){
@@ -471,7 +488,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           if (data.errorMessage) {
             this.sitesService.notify(data?.errorMessage, 'close', 10000)
           }
-          if (data?.order) { 
+          if (data?.order) {
             this.orderMethodsService.updateOrder(data?.order)
           }
           this.sitesService.notify('Voided - this order has been re-opened if closed.', 'Result', 10000, 'green' )
@@ -998,7 +1015,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           let response: IPaymentResponse;
 
           const payment$ =   this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod).pipe(switchMap(data => {
-            if (data.order) { 
+            if (data.order) {
               this.orderMethodsService.updateOrder(data.order)
             }
             return of(data)

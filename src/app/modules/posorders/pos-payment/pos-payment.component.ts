@@ -32,6 +32,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { dsiemvandroid } from 'dsiemvandroidplugin';
 
 @Component({
   selector: 'app-pos-payment',
@@ -39,6 +40,9 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
   styleUrls: ['./pos-payment.component.scss']
 })
 export class PosPaymentComponent implements OnInit, OnDestroy {
+
+  posItemButton = {footerButton: false}
+  footerItem = {footerButton: true}
 
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('receiptView') receiptView: TemplateRef<any>;
@@ -128,24 +132,36 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   posDevice: ITerminalSettings;
   PaxA920 : boolean;
   payApiEnabled: boolean;
-  enablePreAuth = this.paymentsMethodsService?.DSIEmvSettings?.partialAuth;
+  enablePreAuth : boolean;
+
   posDevice$      = this.uISettingsService.posDevice$.pipe(switchMap(data => {
+
     if (!data)  {
+      //get device name
       const item = localStorage.getItem('devicename')
+      //if not device assigned, skip this.
+      if (!item) {
+        return;
+      }
+
       return this.uISettingsService.getPOSDevice(item).pipe(switchMap(data => {
+        console.log('posDevice Settings', data)
         if (data) {
           this.setPaxInfo(data)
-          this.posDevice = data;
+          this.setDSIEMV(item)
+          this.posDevice       = data;
           this.uISettingsService.updatePOSDevice(data)
         }
         return of(data)
       }))
     } else {
+      this.setDSIEMV(data)
       this.setPaxInfo(data)
     }
 
     return of(data)
   }))
+
   get isProcessingPayment() {
     if (this.processing) {
       return this.processingPayment;
@@ -153,9 +169,25 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  setDSIEMV(data) {
+    if (!data) {
+      console.log('no device settings')
+      return;
+    }
+
+    if (!data?.dsiEMVSettings) {
+      console.log('no dsi settings')
+      return;
+    }
+    const dsiEmvSettings = data?.dsiEMVSettings;
+    this.paymentsMethodsService.setDSIEmvSettings(dsiEmvSettings)
+    // this.enablePreAuth   = dsiEmvSettings?.partialAuth;
+    // console.log('preauth', this.enablePreAuth, dsiEmvSettings, data)
+  }
+
   setPaxInfo(data) {
     if (data.dsiEMVSettings) {
-      if (data?.dsiEMVSettings?.deviceValue == 'EMV_A920PRO_DATACAP_E2E') {
+      if (data?.dsiEMVSettings?.deviceValue) {
         this.PaxA920 = true
       }
     }
@@ -283,7 +315,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.paymentForm = this.fb.group({
       tipAmount: []
     })
-    
+
     this.initTransactionUISettings();
     this.initAuthorization()
     const site = this.sitesService.getAssignedSite();
@@ -293,7 +325,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
     this.getPaymentMethods(site)
     this.userSubscriber();
- 
+
     try {
       this.dsiEMVEnabled = this.paymentsMethodsService.DSIEmvSettings?.enabled;
     } catch (error) {
@@ -452,6 +484,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   initTransactionUISettings() {
     this.uISettingsService.transactionUISettings$.subscribe( data => {
         this.uiTransactions = data
+        this.enablePreAuth = data?.allowPreAuth;
       }
     )
   }
@@ -467,7 +500,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   emailOrder(event) {
-    if (!this.order) { 
+    if (!this.order) {
       this.orderMethodsService.notifyEvent('Order not idenfitied', 'Success')
     }
     this.orderMethodsService.emailOrder(this.order).subscribe(data => {

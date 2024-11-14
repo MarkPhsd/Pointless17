@@ -14,10 +14,10 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
   styleUrls: ['./dsi-emvcard-pay-btn.component.scss']
 })
 export class DsiEMVCardPayBtnComponent implements OnInit, OnChanges {
-  
-  @ViewChild('regularStyle') regularStyle: TemplateRef<any>;
-  @ViewChild('footerStyle') footerStyle: TemplateRef<any>;
 
+  @ViewChild('regularStyle') regularStyle: TemplateRef<any>;
+  @ViewChild('footerStyle')  footerStyle: TemplateRef<any>;
+  @Input()  footerText: string;
   @Input() footerButton: boolean;
   @Input() dCap : boolean;
   @Input() order: IPOSOrder;
@@ -46,14 +46,26 @@ export class DsiEMVCardPayBtnComponent implements OnInit, OnChanges {
     public  platFormService : PlatformService,) { }
 
   ngOnInit(): void {
-    if (this.debitOnly) { 
-      this.themeClass = 'button-debit payment-buttons';
+    if (this.debitOnly) {
+      if (this.footerText) {
+        this.themeClass = 'button-debit';
+      } else {
+        this.themeClass = 'button-debit payment-buttons';
+      }
     }
-    if (this.creditOnly) { 
-      this.themeClass = 'button-credit payment-buttons';
+    if (this.creditOnly) {
+      if (this.footerText) {
+        this.themeClass = 'button-credit';
+      } else {
+        this.themeClass = 'button-credit payment-buttons';
+      }
     }
-    if (this.manual) { 
-      this.themeClass = 'button-manual payment-buttons';
+    if (this.manual) {
+      if (this.footerText) {
+        this.themeClass = 'button-manual';
+      } else {
+        this.themeClass = 'button-manual payment-buttons';
+      }
     }
     const i = 0
   }
@@ -104,10 +116,10 @@ export class DsiEMVCardPayBtnComponent implements OnInit, OnChanges {
     let amount = this.creditBalanceRemaining
     if (order) {
       if (this.paymentAmount && this.paymentAmount !=0) {
-        amount= this.roundToPrecision(  this.paymentAmount, 2) 
+        amount= this.roundToPrecision(  this.paymentAmount, 2)
       }
       if (amount > this.creditBalanceRemaining) {
-        amount  = this.roundToPrecision( this.creditBalanceRemaining, 2) 
+        amount  = this.roundToPrecision( this.creditBalanceRemaining, 2)
       }
     }
     return  this.roundToPrecision(amount,2)
@@ -117,7 +129,7 @@ export class DsiEMVCardPayBtnComponent implements OnInit, OnChanges {
     const response  = await this.dsiProcess.pinPadReset( );
     this.sitesService.notify('PIN Pad Reset', 'Success', 1000)
   }
-  
+
   roundToPrecision(value: number, precision: number): number {
     const factor = Math.pow(10, precision);
     const valueResult = Math.round(value * factor) / factor;
@@ -130,5 +142,5 @@ export class DsiEMVCardPayBtnComponent implements OnInit, OnChanges {
     }
     return this.regularStyle;
   }
-  
+
 }

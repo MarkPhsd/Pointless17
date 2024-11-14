@@ -1,10 +1,10 @@
-<div *ngIf=" (action$ | async) as action"></div>
-<div *ngIf=" (cancelAction$ | async) as action"></div>
+<div *ngIf=" ( action$ | async) as action"></div>
+<div *ngIf=" ( cancelAction$ | async) as action"></div>
 <div *ngIf="(  setting$ | async) as action"></div>
-<div *ngIf="( actionSetting$ | async) as action"></div>
-<div *ngIf="(saving$ | async) as item"></div>
-<div *ngIf="(void$ | async) as void"></div>
-<div *ngIf="(requestVoid$ | async) as voidRequest"></div>
+<div *ngIf="(  actionSetting$ | async) as action"></div>
+<div *ngIf="(  saving$ | async) as item"></div>
+<div *ngIf="(  void$ | async) as void"></div>
+<div *ngIf="(  requestVoid$ | async) as voidRequest"></div>
 
 <div *ngIf="!terminalSettings">
   Warning No Terminal Settings.
@@ -38,7 +38,10 @@
 
     <mat-card *ngIf="dsiEmv">
       <mat-card-title>
-        # {{posPayment.id}} | V2 {{dsiEmv.v2}} | Display In back {{ dsiEmv.sendToBack }}
+        # {{posPayment.id}} | V2 {{dsiEmv.v2}} |
+        <span *ngIf="dsiEmv.sendToBack">
+          Display
+        </span>
         <h3>
         Total  {{posPayment?.amountPaid | currency}}
         </h3>

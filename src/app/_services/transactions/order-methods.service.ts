@@ -1038,8 +1038,9 @@ export class OrderMethodsService implements OnDestroy {
         return  this.sendGridService.sendOrder(order.id, order.history, order.clients_POSOrders.email, clientName  )
       }
     }
-    this.notifyEvent('No email in contact', 'Alert')
-    return null
+    this.emailOrderByEntry(order);
+    // this.notifyEvent('No email in contact', 'Alert')
+    return of(null)
   }
 
   sendSSMSOrderISReady(order: IPOSOrder) {

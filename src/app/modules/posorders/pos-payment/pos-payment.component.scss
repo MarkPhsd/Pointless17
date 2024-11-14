@@ -91,10 +91,12 @@ mat-card {
 
   @include for-phone-only  {
     display: grid;
-    grid-template-columns: auto;
+    grid-template-columns: auto auto;
     gap: 5px;
   }
 }
+
+
 .grid-list {
   display: grid;
   grid-template-columns: 1fr minmax(285px, 285px);

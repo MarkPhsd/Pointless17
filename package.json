@@ -1,6 +1,6 @@
 {
   "name": "pointlespos",
-  "version": "3.41.6",
+  "version": "3.41.7",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -13,9 +13,9 @@
   },
   "scripts": {
     "ng": "ng",
-    "start with SSL": "ng serve --configuration dev --public-host --host=192.168.0.2 --port=4600 --ssl true --ssl-key ./localhost-key.pem --ssl-cert ./localhost.pem ",
-    "start with IP": "ng serve --configuration dev --public-host --host=192.168.0.2 --port=4500 ",
-    "startLocal": "npx  ng serve --configuration dev --host=localhost --port=4500",
+    "start with SSL": "node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng serve --configuration dev --public-host --host=192.168.0.249 --port=4600 --ssl true --ssl-key ./localhost-key.pem --ssl-cert ./localhost.pem",
+    "start with IP": "node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng serve --configuration dev --public-host --host=192.168.0.249 --port=4500",
+    "startLocal": "npx ng serve --configuration dev --host=localhost --port=4500",
     "startLocalNode": "ng serve --configuration dev --host=localhost --port=4500",
     "BuildPointless production": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build  --configuration production",
     "androidpointless": " npm run deploy --domain=androidpointlesspos",
@@ -45,6 +45,7 @@
     "@ag-grid-community/all-modules": "^25.3.0",
     "@ag-grid-community/core": "^25.3.0",
     "@ag-grid-community/styles": "^29.3.5",
+    "@almothafar/angular-signature-pad": "^6.0.0",
     "@angular-devkit/architect": "^0.1602.16",
     "@angular-material-components/datetime-picker": "^16.0.1",
     "@angular-material-components/moment-adapter": "^16.0.1",
@@ -108,6 +109,7 @@
     "and": "^0.0.3",
     "angular-gridster2": "^13.1.1",
     "angular-resize-event": "^3.1.1",
+    "angular-signature-pad": "^0.0.14",
     "angular-typesafe-reactive-forms-helper": "^2.0.2",
     "angular-user-idle": "3.0",
     "angular2-uuid": "^1.1.1",

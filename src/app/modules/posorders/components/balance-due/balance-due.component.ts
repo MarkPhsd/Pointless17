@@ -168,7 +168,7 @@ export class ChangeDueComponent implements OnInit  {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
 
-    
+
     this.printingCheck();
     this.initAuthorization();
     this.initTransactionUISettings();
@@ -176,15 +176,15 @@ export class ChangeDueComponent implements OnInit  {
     this.isPax;
     await this.bringtoFront()
     this.startRepeatingFunction()
-  
+
     if (this.order) {
       const site = this.siteService.getAssignedSite()
-      this.serviceType$ = this.serviceTypeService.getTypeCached(site, this.order.serviceTypeID).pipe(switchMap(data => { 
+      this.serviceType$ = this.serviceTypeService.getTypeCached(site, this.order.serviceTypeID).pipe(switchMap(data => {
         return of(data)
       }))
     }
-    
-  
+
+
   }
 
   initTerminalSettings() {
@@ -282,7 +282,7 @@ export class ChangeDueComponent implements OnInit  {
     }
   }
 
- 
+
 
   startRepeatingFunction() {
     interval(1000) // emit every second
@@ -562,16 +562,18 @@ export class ChangeDueComponent implements OnInit  {
     const device = localStorage.getItem('devicename')
     const site = this.siteService.getAssignedSite()
     this.payment.tipAmount = amount;
-    const process$ = this.dCapService.preAuthCaptureByRecordNo(device, this.payment)
+    const process$ = this.dCapService.preAuthCaptureByRecordNoV2(device, this.payment)
+
     return process$.pipe(switchMap(data => {
-      if (data && data.TextResponse && data.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) {
-        if (data?.cmdStatus?.toLowerCase === 'error'.toLowerCase) {
-          this.siteService.notify(data?.cmdResponse + ' ' + data?.textResponse, 'close',50000, 'red' )
+      if (data && data.response.TextResponse  && data.response.TextResponse.toLowerCase() != 'Approved'.toLowerCase()) {
+        if (data?.response?.CmdStatus?.toLowerCase === 'error'.toLowerCase) {
+          this.siteService.notify(data?.response?.CmdStatus + ' ' + data?.response?.TextResponse, 'close',50000, 'red' )
           return of(null)
         }
       }
       return this.getOrderUpdate(this.payment?.orderID.toString(), site)
     }))
+
   }
 
   applytoPOS(payment:IPOSPayment, amount, site) {

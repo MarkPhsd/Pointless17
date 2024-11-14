@@ -911,7 +911,7 @@ export class MenuService {
         uri.url = url;
         // productSearchModel.pageSize = 25;
         return this.httpCache.post<any>(uri, productSearchModel).pipe(switchMap(data => {
-          // console.log('cache data menu item search')
+          console.log('cache data menu item search')
           return of(data)
         }))
       }

@@ -1,0 +1,10 @@
+<mat-card>
+  <mat-card-title>
+    <div #ngContent></div>
+  </mat-card-title>
+  <mat-card-content>
+    <signature-pad #signaturePad></signature-pad>
+    <button mat-button-raised (click)="saveSignature()">Save Signature</button>
+    <button mat-button-raised (click)="clearSignature()">Clear</button>
+  </mat-card-content>
+</mat-card>

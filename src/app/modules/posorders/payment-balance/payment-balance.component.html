@@ -77,7 +77,7 @@
 
   <mat-card-content *ngIf="order.posPayments" class="mat-card-content">
     <h5 *ngIf="getNumberOfPayments()>0"># of Payments:  {{ getNumberOfPayments() }}</h5>
-    <div  *ngFor="let item of order.posPayments">
+    <div  *ngFor="let item of paymentsFiltered">
 
       <div class="payment-grid"
             *ngIf=" getPaymentViewA(item) ||
@@ -138,8 +138,8 @@
 
     <div *ngIf="(order.creditBalanceRemaining != 0 && totalAuthPayments > 0 )">
       <button class="payment-buttons-sm" mat-raised-button color='primary'
-              (click)="captureDCap(item, totalAuthPayments)">
-          <mat-label>Complete  <br> {{ totalAuthPayments | currency }}</mat-label>
+              (click)="captureDCap(item, order.creditBalanceRemaining)">
+          <mat-label>Complete  <br> {{ order.creditBalanceRemaining | currency }}</mat-label>
       </button>
 
       <button *ngIf="item?.tranCode === 'EMVPreAuth'"
@@ -177,7 +177,7 @@
       <button   color="accent"
                 class="payment-buttons-sm"
                 style="width:125px"
-                 *ngIf="!disableOptions &&  !PaxA920  && item.amountPaid > 0"
+                 *ngIf="!disableOptions &&  !PaxA920  && item.amountPaid > 0 && item.completionDate"
                 mat-raised-button (click)="editPayment(item)">
         <mat-icon>edit</mat-icon><br>
           Edit Tip</button>

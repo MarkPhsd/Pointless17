@@ -1,8 +1,9 @@
+<div class="centered centered-flex ">
 
-<div class="centered centered-flex">
+<div class="action-center " style="max-width: 390px;">
     <mat-card>
         <mat-card-title>
-            <div  >
+            <div style="max-width: 375px">
                 {{message}}
             </div>
             <div *ngIf="(email$ | async) as email">
@@ -17,15 +18,11 @@
                         <mat-label >Enter Email</mat-label>
                         <input matInput
                                 type             ="email"
-                                formControlName  ="email"
-                            >
+                                formControlName  ="email">
                     </mat-form-field>
                 </div>
-
-
             </div>
-
-            <div   >
+            <div >
                 <button mat-raised-button color="primary" (click)="emailOrder()"><mat-icon>email</mat-icon>Send Email</button>
                 <button mat-raised-button color="warn" (click)="close()"><mat-icon>exit_to_app</mat-icon>Exit</button>
             </div>
@@ -33,3 +30,4 @@
     </mat-card>
   </div>
 
+</div>

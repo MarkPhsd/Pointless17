@@ -1,28 +1,63 @@
-<span *ngIf="devicename && 
+<span *ngIf="devicename &&
              (uiTransactions?.dsiEMVNeteEpayEnabled || uiTransactions?.dCapEnabled)
              && order && order?.balanceRemaining != 0">
-    <ng-container [ngTemplateOutlet]="footerStyle"></ng-container>
-
-    <button 
-          mat-raised-button
-          *ngIf="!footerButton"
-          [ngClass]="themeClass"
-          (click)="processPayment(manual)">
-      <ng-content></ng-content>
-    </button>
-
+    <ng-container [ngTemplateOutlet]="buttonView"></ng-container>
 </span>
 
 <ng-template #regularStyle>
-
+  <button
+      mat-raised-button
+      class="payment-button"
+      [ngClass]="themeClass"
+      (click)="processPayment(manual)">
+    <ng-content></ng-content>
+  </button>
 </ng-template>
 
 <ng-template #footerStyle>
-  <button mat-raised-button
-       fxFill
-       *ngIf="footerButton"
-       color="primary"
-       (click)="processPayment(false)">
-    <ng-content select="[footerstyle]"></ng-content>
-  </button>
+  <div *ngIf="!footerText">
+    <button mat-raised-button
+        fxFill
+        color="primary"
+        (click)="processPayment(false)">
+      <mat-icon>credit_card</mat-icon>Credit
+    </button>
+  </div>
+  <div *ngIf="footerText">
+    <button mat-raised-button
+        fxFill
+        [ngClass]="themeClass"
+        (click)="processPayment(false)">
+      {{footerText}}
+    </button>
+  </div>
 </ng-template>
+
+<!-- @ViewChild('regularStyle') regularStyle: TemplateRef<any>;
+  @ViewChild('footerStyle')  footerStyle: TemplateRef<any>; -->
+
+
+<!--
+<span *ngIf="devicename &&
+             (uiTransactions?.dsiEMVNeteEpayEnabled || uiTransactions?.dCapEnabled)
+             && order && order?.balanceRemaining != 0">
+
+    <button mat-raised-button
+        fxFill
+        *ngIf="footerButton"
+        color="primary"
+        (click)="processPayment(false)">
+      button text
+      <ng-content select="[footerstyle]"></ng-content>
+    </button>
+
+    <button
+        mat-raised-button
+        *ngIf="!footerButton"
+        class="payment-button"
+        [ngClass]="themeClass"
+        (click)="processPayment(manual)">
+      <ng-content></ng-content>
+    </button>
+</span>
+ -->

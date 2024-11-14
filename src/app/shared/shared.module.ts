@@ -254,6 +254,7 @@ import { SiteCardComponent } from './widgets/site-card/site-card.component';
 import { OnlinePaymentCompletedComponent } from '../modules/payment-processing/online-payment-completed/online-payment-completed.component';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 
+
 import {
   DataUrl,
   DOC_ORIENTATION,
@@ -269,6 +270,8 @@ import { ScheduleDateRangeSelectorComponent } from './widgets/schedule-date-rang
 import { PaymentTypesSelectionComponent } from '../modules/posorders/payment-types-selection/payment-types-selection.component';
 import { CustomerDateSelectorComponent } from './widgets/customer-date-selector-component/customer-date-selector-component.component';
 import { MatChipListComponent } from './widgets/mat-chip-list/mat-chip-list.component';
+import { SignatureComponent } from './widgets/signature-pad/signature-pad.component';
+import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
 
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
@@ -540,7 +543,7 @@ import { MatChipListComponent } from './widgets/mat-chip-list/mat-chip-list.comp
     ClockViewComponent,
     CloseFloatingButtonComponent,
     SiteFooterComponent,
-
+    SignatureComponent,
   ],
 
   imports: [
@@ -568,7 +571,7 @@ import { MatChipListComponent } from './widgets/mat-chip-list/mat-chip-list.comp
     NgxColorsModule,
     NgxImageCaptureModule,
     NgxDaterangepickerMd.forRoot(),
-
+    AngularSignaturePadModule,
   ],
 
   exports: [
@@ -809,7 +812,8 @@ import { MatChipListComponent } from './widgets/mat-chip-list/mat-chip-list.comp
     ReportGroupSelectorComponent,
     ReportTypesComponent,
     MatSelectorComponent,
-    EditBarComponent
+    EditBarComponent,
+    SignatureComponent,
   ],
 
   providers: [
@@ -818,6 +822,7 @@ import { MatChipListComponent } from './widgets/mat-chip-list/mat-chip-list.comp
     // {provude: Gallery},
     NgxImageCompressService,
     KeyboardComponent,
+
   ],
   // schemas: [NO_ERRORS_SCHEMA],
 })

@@ -416,11 +416,11 @@ export class DcapService {
     return this.http.post<any>(url, posPayment)
   }
 
-  preAuth(deviceName: string, posPayment: IPOSPayment, manual: boolean): Observable<any> {
+  preAuth(deviceName: string, posPayment: IPOSPayment, manual: boolean): Observable<DCAPPaymentResponse> {
 
     const controller = '/dCap/'
 
-    const endPoint = "preAuth"
+    const endPoint = "preAuthV2"
 
     const parameters = `?deviceName=${deviceName}&manual=${manual}`
 
@@ -429,11 +429,11 @@ export class DcapService {
     return this.http.post<any>(url, posPayment)
   }
 
-  preAuthCaptureByRecordNo(deviceName: string, posPayment: IPOSPayment): Observable<any> {
+  preAuthCaptureByRecordNoV2(deviceName: string, posPayment: IPOSPayment): Observable<DCAPPaymentResponse> {
 
     const controller = '/dCap/'
 
-    const endPoint = "preAuthCaptureByRecordNo"
+    const endPoint = "preAuthCaptureByRecordNoV2"
 
     const parameters = `?deviceName=${deviceName}`
 
@@ -443,11 +443,11 @@ export class DcapService {
   }
 
   //To increase the authorized amount of a previous PreAuth transaction
-  incrementalAuthByRecordNo(deviceName: string, posPayment: IPOSPayment): Observable<any> {
+  incrementalAuthByRecordNoV2(deviceName: string, posPayment: IPOSPayment): Observable<DCAPPaymentResponse> {
 
     const controller = '/dCap/'
 
-    const endPoint = "incrementalAuthByRecordNo"
+    const endPoint = "incrementalAuthByRecordNoV2"
 
     const parameters = `?deviceName=${deviceName}`
 
@@ -469,6 +469,22 @@ export class DcapService {
 
     return this.http.post<any>(url, posPayment)
   }
+
+  //To add a gratuity to a previously processed EMVPreAuth transaction and capture the transaction to the current batch.
+  preAuthCaptureV2(deviceName: string, posPayment: IPOSPayment): Observable<any> {
+
+    const controller = '/dCap/'
+
+    const endPoint = "preAuthCapture"
+
+    const parameters = `?deviceName=${deviceName}`
+
+    const url = `${this.site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, posPayment)
+  }
+
+
 
   zeroAuth(deviceName: string, posPayment: IPOSPayment): Observable<any> {
 

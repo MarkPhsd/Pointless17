@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit, Optional,OnDestroy, Input } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
-import { Observable, Subject, catchError, concatMap, of, switchMap, takeUntil, timer } from 'rxjs';
+import { Observable, Subject, catchError, concatMap, of, switchMap, takeUntil, timeout, timer } from 'rxjs';
 import { IPOSPayment, IPOSOrder, ISetting } from 'src/app/_interfaces';
-import { AuthenticationService } from 'src/app/_services';
+import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -101,6 +101,7 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
     public  paymentService        : POSPaymentService,
     private siteService           : SitesService,
     public  orderMethodsService   : OrderMethodsService,
+    public orderService           : OrdersService,
     private settingsService       : SettingsService,
     private uiSettingService      : UISettingsService,
     private fb                    : UntypedFormBuilder,
@@ -170,6 +171,7 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           this.payAmount();
           return;
         }
+
         if (data?.value<0) {
           this.refundAmount();
           return;
@@ -198,17 +200,27 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
       }
 
       ngOnDestroy() {
-
         this.terminalSettings.dsiEMVSettings.sendToBack = false;
         this.setting.text = JSON.stringify(this.terminalSettings)
 
-         this._putSetting(this.setting).subscribe(data => {
-          // console.log('put setting occured')
+         this._putSetting(this.setting).pipe(switchMap(setting => {
+           return  this.updateOrder()
+         })).subscribe(data => {
           this.orderMethodsService._scanner.next(true)
           this.stopTimer();
           this.bringtoFront();
           return this.saveTerminalSetting(false)
         })
+
+      }
+
+      updateOrder() {
+        const site = this.siteService.getAssignedSite()
+        return this.orderService.getOrder(site, this.order.id.toString(), false).pipe(
+          switchMap(data => {
+          this.orderMethodsService.updateOrder(data)
+          return of(data)
+        }))
       }
 
       sendToBack() {
@@ -263,13 +275,13 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           if (!data?.text) { return of(null)}
           this.terminalSettings = JSON.parse(data.text) as ITerminalSettings;
           this.dsiEmv = this.terminalSettings?.dsiEMVSettings;
-          this.isPax;
+
           if (!data) {
             return this.getPOSDeviceSettings(site, device)
           }
           return of(data)
         })).pipe(switchMap(data => {
-          
+
           this.terminalSettings.dsiEMVSettings.checkPartialAuthCompleted = 0;
           this.terminalSettings.dsiEMVSettings.checkPartialAuth = 0;
 
@@ -328,24 +340,6 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           }
       }
 
-      preAuth() {
-        if (!this.validateTransactionData()) { return }
-        if (this.terminalSettings) {
-          const device = this.terminalSettings?.name;
-          const site = this.siteService.getAssignedSite()
-          this.initMessaging()
-          this.processing = true;
-          const sale$ = this.dCapService.preAuth(this.terminalSettings?.name , this.posPayment, this.manual);
-          this.processing$ = sale$.pipe(concatMap(data => {
-            this.result = data;
-            return this.processResults(data)
-          })),catchError(data => {
-            this.processing = false;
-            this.siteService.notify(JSON.stringify(data), 'Close', 10000, 'red')
-            return of(data)
-          })
-        }
-      }
 
       initTimer() {
         // this.timer = setInterval(async () => {
@@ -358,7 +352,177 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
         // })
       }
 
-      payAmountV2() {
+
+
+    payAmountV2() {
+      console.log('ispax', this.isPax, this.paxApp)
+      if (!this.validateTransactionData()) { return; }
+      if (this.terminalSettings) {
+        const device = this.terminalSettings?.name;
+        const site = this.siteService.getAssignedSite();
+        this.initMessaging();
+        this.processing = true;
+
+        this.initTimer();
+        let sale$ = this.getPaymentManualChipv2().pipe(
+          concatMap(data => {
+            this.posPayment = data?.payment;
+            this.result = data?.response;
+            console.log(data?.success, data?.response)
+
+            if (this.isPax || this.paxApp) {
+              this.bringtoFront();
+            }
+
+            if (!data?.success) {
+              this.response = data?.response;
+            }
+
+            return this.processResultsV2(data);
+          }),
+          timeout(25000), // Timeout after 25 seconds
+          catchError(error => {
+            if (error.name === 'TimeoutError') {
+              if (this.isPax || this.paxApp) {
+                this.bringtoFront();
+                this._cancelTransaction(); // Call cancel transaction if timeout occurs
+              }
+            }
+            return of(error); // Continue with the error handling flow
+          })
+        );
+
+        this.processing$ = sale$;
+      }
+    }
+
+      // payAmountV2() {
+      //   if (!this.validateTransactionData()) { return }
+      //   if (this.terminalSettings) {
+      //     const device = this.terminalSettings?.name;
+      //     const site = this.siteService.getAssignedSite()
+      //     this.initMessaging()
+      //     this.processing = true;
+
+      //     this.initTimer();
+      //     let sale$ = this.getPaymentManualChipv2().pipe(concatMap(data => {
+      //       this.posPayment = data?.payment;
+      //       this.result = data?.response;
+
+      //       // console.log('payAmountV2' , data)
+
+      //       if (!data?.success) {
+      //         this.response = data?.response;
+      //       }
+
+
+      //       return this.processResultsV2(data)
+      //     }),catchError(data => {
+
+      //       this.bringtoFront();
+      //       return of(data)
+      //     }))
+
+      //     this.processing$ = sale$
+      //   }
+      // }
+
+      payAmount() {
+
+
+        if (!this.validateTransactionData()) { return }
+
+        if (this.terminalSettings) {
+          console.log('Pay amount test', this.creditOnly, this.debitOnly)
+
+          const device = this.terminalSettings.name;
+          const site = this.siteService.getAssignedSite()
+          this.initMessaging()
+          this.processing = true;
+          let sale$
+            if (this.debitOnly) {
+              this.processing$ =  this.dCapService.payAmountV2Debit(this.terminalSettings?.name , this.posPayment).pipe(concatMap(data => {
+                this.result = data;
+
+                console.log('data.response', data.response)
+                console.log('ispax', this.isPax,this.paxApp)
+
+                if (this.isPax || this.paxApp) {
+                  this.bringtoFront();
+                }
+
+                return this.processResultsV2(data)
+              })),
+              timeout(25000), // Timeout after 25 seconds
+              catchError(error => {
+                console.log('error', error)
+                if (error.name === 'TimeoutError') {
+                  if (this.isPax || this.paxApp) {
+                    this.bringtoFront();
+                    this._cancelTransaction(); // Call cancel transaction if timeout occurs
+                  }
+                }
+                return of(error); // Continue with the error handling flow
+              })
+              return;
+            }
+
+            if (this.creditOnly) {
+              this.processing$ =  this.dCapService.payAmountV2Credit(this.terminalSettings?.name , this.posPayment).pipe(concatMap(data => {
+                this.result = data;
+                console.log('data.response', data.response)
+                console.log('ispax', this.isPax,this.paxApp)
+
+                if (this.isPax || this.paxApp) {
+                  this.bringtoFront();
+                }
+
+                return this.processResultsV2(data)
+              })),
+              timeout(25000), // Timeout after 25 seconds
+              catchError(error => {
+                console.log('error', error)
+                if (error.name === 'TimeoutError') {
+                  if (this.isPax || this.paxApp) {
+                    this.bringtoFront();
+                    this._cancelTransaction(); // Call cancel transaction if timeout occurs
+                  }
+                }
+                return of(error); // Continue with the error handling flow
+              })
+              return;
+            }
+
+            this.processing$ = this.getPaymentManualChipv2().pipe(concatMap(data => {
+              this.result = data;
+              console.log('data.response', data.response)
+              console.log('ispax', this.isPax,this.paxApp)
+
+              if (this.isPax || this.paxApp) {
+                this.bringtoFront();
+              }
+
+              return this.processResultsV2(data)
+            })),
+            timeout(25000), // Timeout after 25 seconds
+            catchError(error => {
+              console.log('error', error)
+              if (error.name === 'TimeoutError') {
+                if (this.isPax || this.paxApp) {
+                  this.bringtoFront();
+                  this._cancelTransaction(); // Call cancel transaction if timeout occurs
+                }
+              }
+              return of(error); // Continue with the error handling flow
+            })
+
+          }
+
+      }
+
+
+
+      preAuth() {
         if (!this.validateTransactionData()) { return }
         if (this.terminalSettings) {
           const device = this.terminalSettings?.name;
@@ -366,55 +530,17 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           this.initMessaging()
           this.processing = true;
 
-          this.initTimer();
-          let sale$ = this.getPaymentManualChipv2().pipe(concatMap(data => {
-            this.posPayment = data?.payment;
-            this.result = data?.response;
-
-            // console.log('payAmountV2' , data) 
-
-            if (!data?.success) {
-              this.response = data?.response;
-            }
+          const sale$ = this.dCapService.preAuth(this.terminalSettings?.name , this.posPayment, this.manual);
+          this.processing$ = sale$.pipe(concatMap(data => {
+            this.result = data;
 
             return this.processResultsV2(data)
-          }))
-          this.processing$ = sale$
-        }
-      }
-
-      payAmount() {
-        if (!this.validateTransactionData()) { return }
-        if (this.terminalSettings) {
-          const device = this.terminalSettings.name;
-          const site = this.siteService.getAssignedSite()
-          this.initMessaging()
-          this.processing = true;
-
-            if (this.debitOnly) {
-              this.processing$ =  this.dCapService.payAmountV2Debit(this.terminalSettings?.name , this.posPayment).pipe(concatMap(data => {
-                this.result = data;
-                // console.log('payamount manual', data)
-                return this.processResultsV2(data)
-              }))
-              return;
-            }
-
-            if (this.creditOnly) {
-              this.processing$ =  this.dCapService.payAmountV2Credit(this.terminalSettings?.name , this.posPayment).pipe(concatMap(data => {
-                this.result = data;
-                // console.log('payamount credit', data)
-                return this.processResultsV2(data)
-              }))
-              return;
-            }
-
-            this.processing$ = this.getPaymentManualChipv2().pipe(concatMap(data => {
-              this.result = data;
-              // console.log('payamount manual', data)
-              return this.processResultsV2(data)
-            }))
-
+            // return this.processResults(data.order)
+          })),catchError(data => {
+            this.processing = false;
+            this.siteService.notify(JSON.stringify(data), 'Close', 10000, 'red')
+            return of(data)
+          })
         }
       }
 
@@ -439,7 +565,6 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
       getPaymentManualChipv2() {
         if (this.creditOnly) {
           return this.dCapService.payAmountV2Credit(this.terminalSettings?.name , this.posPayment);
-          return;
         }
         let sale$ = this.dCapService.payAmountV2(this.terminalSettings?.name , this.posPayment);
         if (this.manual) {
@@ -458,7 +583,6 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
 
       processResultsV2(paymentResponse: DCAPPaymentResponse): Observable<any> {
 
-
         if (!paymentResponse) {
           this.loggerService.publishObject('Credit processResults No Response', paymentResponse)
           this.processing = false;
@@ -467,11 +591,11 @@ export class DCAPTransactionComponent implements OnInit, OnDestroy {
           return of(null);
         }
 
-            // console.log('paymentResponse', paymentResponse)
+        // console.log('paymentResponse', paymentResponse)
 
         let voidReqestParital$ : Observable<any>;
         voidReqestParital$ = of({})
-        
+
         // console.log('paymentResponse?.errorMessage', paymentResponse?.errorMessage)
         if (paymentResponse?.errorMessage === 'Partial Approval') {
            voidReqestParital$ = this.partialApprovalAlert(paymentResponse?.payment)

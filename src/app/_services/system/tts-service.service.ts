@@ -1,5 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { PlatformService } from './platform.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,13 +12,20 @@ export class TtsService {
   private isSpeaking: boolean = false;
   private defaultVoiceName: string = 'Microsoft Zira'; // Default voice
 
-  constructor(private zone: NgZone) {
+  constructor(private zone: NgZone,
+              private PlatformService: PlatformService,
+  ) {
+    //only use with electron
+    if (!this.PlatformService.isAppElectron) { return   }
+
     this.initVoices();
     this.processQueue();
   }
 
   // Initialize voices and listen for changes
   private initVoices() {
+
+
     speechSynthesis.onvoiceschanged = () => {
       this.voices = speechSynthesis.getVoices();
       this.voicesLoaded.next(true); // Notify that voices are loaded
@@ -40,7 +48,7 @@ export class TtsService {
     // Add new text and its voice name (or default) to the queue
 
     // this.defaultVoiceName = 'Microsoft Mark - English (United States)';
-    if (!voiceName) { 
+    if (!voiceName) {
       voiceName = 'Microsoft Mark - English (United States)';
     }
 
@@ -64,30 +72,30 @@ export class TtsService {
 
   private startSpeaking(text: string, voiceName?: string) {
     this.isSpeaking = true;
-  
+
     const utterance = new SpeechSynthesisUtterance(text);
     const selectedVoice = this.voices.find(voice => voice.name === (voiceName || this.defaultVoiceName));
-  
+
     if (selectedVoice) {
       utterance.voice = selectedVoice;
     }
-  
+
     utterance.onend = () => {
       console.log('Utterance ended, resetting isSpeaking');
       this.isSpeaking = false; // Reset flag to allow next message to be spoken
       this.processNextInQueue(); // Trigger the next item in the queue
     };
-  
+
     utterance.onerror = (event) => {
       console.error('Speech synthesis error:', event.error);
       this.isSpeaking = false; // Ensure the flag is reset in case of an error
       this.processNextInQueue();
     };
-  
+
     console.log('Speaking:', text);
     speechSynthesis.speak(utterance);
   }
-  
+
   private processNextInQueue() {
     const updatedQueue = this.textQueue$.value.slice(1); // Remove the first item from the queue
     this.textQueue$.next(updatedQueue); // Update the queue
@@ -98,20 +106,20 @@ export class TtsService {
 
   // private startSpeaking(text: string, voiceName?: string) {
   //   this.isSpeaking = true;
-  
+
   //   const utterance = new SpeechSynthesisUtterance(text);
-    
-   
+
+
   //   // Assign the selected voice or fall back to the default voice
   //   const selectedVoiceName = voiceName || this.defaultVoiceName;
   //   const selectedVoice = this.voices.find(voice => voice.name === selectedVoiceName);
-  
+
   //   if (selectedVoice) {
   //     utterance.voice = selectedVoice;
   //   } else {
   //     console.warn(`Voice "${selectedVoiceName}" not found, using system default voice.`);
   //   }
-  
+
   //   utterance.onend = () => {
   //     this.zone.run(() => {
   //       this.isSpeaking = false;
@@ -119,12 +127,12 @@ export class TtsService {
   //       this.textQueue$.next(updatedQueue); // Update the queue
   //     });
   //   };
-  
+
   //   console.log('Selected voice:', selectedVoice ? selectedVoice.name : 'Default system voice');
   //   speechSynthesis.speak(utterance);
   // }
 
- 
+
   // Expose the list of voices
   getVoices() {
     return this.voices;

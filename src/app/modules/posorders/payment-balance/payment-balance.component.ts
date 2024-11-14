@@ -36,7 +36,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   @Input() mainPanel = true;
   @Input() uiTransactions: TransactionUISettings;
   @Input() disableOptions: boolean;
-  
+
   void$: Observable<any>;
   action$: Observable<any>;
   printing$: Observable<any>;
@@ -57,12 +57,22 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   @Input()  deviceInfo: IDeviceInfo;
   _posDevice: Subscription;
   @Input() PaxA920 : boolean;
+  paymentsFiltered: any[] = [];
+
+  updatePaymentsFiltered() {
+    if (this.order?.completionDate) {
+      this.paymentsFiltered = this.order.posPayments.filter(item => item?.tranCode !== 'EMVPreAuth');
+    } else {
+      this.paymentsFiltered = this.order?.posPayments || [];
+    }
+  }
 
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
       this.order = data
       this.getAuthTotalPayments();
       this.lastIncrementalAuth();
+      this.updatePaymentsFiltered();
     })
 
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
@@ -162,15 +172,15 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
 
   isCashVoidAllowed(item: IPOSPayment, auth: IUserAuth_Properties) {
-    if (this.authData?.enableCashVoid) { 
-      if (item?.paymentMethod?.isCash) { 
+    if (this.authData?.enableCashVoid) {
+      if (item?.paymentMethod?.isCash) {
         return true
       }
     }
   }
   getNumberOfPayments() {
     let count = 0
-    const list = this.order?.posPayments //?.length // || 0
+    const list = this.paymentsFiltered //?.length // || 0
     list.forEach(data => {
       if (data.amountPaid != 0) {
         count += 1;
@@ -427,8 +437,10 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
     item.amountPaid  = amount;
     item.amountReceived = amount;
-    this.action$ = this.dcapService.preAuthCaptureByRecordNo(device, item).pipe(switchMap(data => {
-      return this.paymentMethodsProessService.processDCAPPreauthResponse(data, item, this.order, device)
+    this.action$ = this.dcapService.preAuthCaptureByRecordNoV2(device, item).pipe(switchMap(data => {
+      // return this.paymentMethodsProessService.processDCAPPreauthResponse(data, item, this.order, device)
+      this.orderMethodsService.updateOrder(data.order)
+      return of(data.order)
     }))
   }
 
@@ -436,8 +448,10 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     const device = localStorage.getItem('devicename')
     item.amountPaid  = amount;
     item.amountReceived = amount;
-    this.action$ = this.dcapService.incrementalAuthByRecordNo(device, item).pipe(switchMap(data => {
-      return this.paymentMethodsProessService.processDCAPPreauthResponse(data, item, this.order, device)
+    this.action$ = this.dcapService.incrementalAuthByRecordNoV2(device, item).pipe(switchMap(data => {
+      this.orderMethodsService.updateOrder(data.order)
+      // return this.paymentMethodsProessService.processDCAPPreauthResponse(data.response, item, this.order, device)
+      return of(data.order)
     }))
   }
 
@@ -455,7 +469,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       if (this.PaxA920) {
         return;
       }
-    
+
 
       const site = this.siteService.getAssignedSite();
       if (payment.paymentMethodID == 0) {
