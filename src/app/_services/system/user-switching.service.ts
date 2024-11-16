@@ -230,10 +230,10 @@ export class UserSwitchingService implements  OnDestroy {
     const timeOut = 3000;
     const deviceName = localStorage.getItem('devicename');
     let modUser : IUser;
-    // Authentication stream
+
     let auth$ = this.authenticate(userLogin).pipe(
       concatMap(user => {
-        // console.log('submit 2 fail?', this.didItemFail(user) )
+        // console.log('submit 1 fail?', this.didItemFail(user) )
         if (this.didItemFail(user)) {
           this.authenticationService.authenticationInProgress = false;
           user.errorMessage = 'Auth Failed'
@@ -289,7 +289,6 @@ export class UserSwitchingService implements  OnDestroy {
 
         if  ( this.platformService.isApp() ) {
           if (deviceName) {
-
             return this.promptBalanceSheet(user)
           }
         }

@@ -95,14 +95,22 @@
   </div>
 
   <div *ngIf="hideshowMessages">
+
+
     <mat-card *ngIf="!messages || messages.length == 0">
       <mat-label color='accent'>There are no messages</mat-label>
     </mat-card>
 
+    <div *ngIf="messages?.id === 0">
+      <mat-label color='accent'>There are no messages</mat-label>
+    </div>
+
     <mat-card *ngIf="messages && messages.length > 0">
+
       <mat-card-content>
         <div *ngFor = "let item of messages"
               class = "message-list">
+
 
           <app-request-message
             [enableActions]="enableActions"

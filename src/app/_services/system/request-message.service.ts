@@ -303,10 +303,10 @@ export class RequestMessageService {
 
     let userTrue : boolean;
     userTrue = false
-    if (this.authenticationService._user.value) { 
+    if (this.authenticationService._user.value) {
       userTrue = true
     }
-    console.log('getOpenRequestMessage', userTrue)
+    // console.log('getOpenRequestMessage', userTrue)
     const controller = "/RequestMessages/"
 
     const endPoint = "GetOpenRequestMessagesByOrder"
@@ -315,9 +315,9 @@ export class RequestMessageService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.post<IRequestMessage[]>(url,searchModel).pipe(switchMap(data => { 
-      if (data && data.length == 0) { 
-        if (!data[0]?.id) { 
+    return  this.http.post<IRequestMessage[]>(url,searchModel).pipe(switchMap(data => {
+      if (data && data.length == 0) {
+        if (!data[0]?.id) {
           return of(null)
         }
       }
@@ -330,14 +330,14 @@ export class RequestMessageService {
     //this shouold perform the operation on the backend via the api.
     let mmessage = [] as IRequestMessage[]
     if (!this.authenticationService._user.value) { return of(mmessage)}
-    
+
     let userTrue : boolean;
     userTrue = false
-    if (this.authenticationService._user.value) { 
+    if (this.authenticationService._user.value) {
       userTrue = true
     }
 
-    console.log('getOpenRequestMessages', userTrue )
+    // console.log('getOpenRequestMessages', userTrue )
 
     const controller = "/RequestMessages/"
 
@@ -347,9 +347,9 @@ export class RequestMessageService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.post<IRequestMessage[]>(url,searchModel).pipe(switchMap(data => { 
-      if (data && data.length == 0) { 
-        if (!data[0]?.id) { 
+    return  this.http.post<IRequestMessage[]>(url,searchModel).pipe(switchMap(data => {
+      if (data && data.length == 0) {
+        if (!data[0]?.id) {
           return of(null)
         }
       }

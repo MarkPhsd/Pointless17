@@ -1,44 +1,80 @@
 <div *ngIf="(action$ | async) as action"></div>
-<mat-card *ngIf="(uiHome$ | async) as uiHome">
+<div *ngIf="(uiHome$ | async) as uiHome">
 
-    <mat-card-title><mat-icon>user</mat-icon>Welcome new user</mat-card-title>
-    <mat-card-subtitle>Let's get you setup so we may notify you about your order when it's complete.
-      Please enter a user name, and email <span *ngIf="mobileEnabled"> or mobile number </span> to make a password</mat-card-subtitle>
 
-    <mat-card-content>
-
-      <!-- {{user | json}} -->
-
-      <div *ngIf="inputForm && user">
-
-        <app-value-fields
-          [inputForm]="inputForm"
-          [fieldName]="'userName'">
-          User Name
-        </app-value-fields>
-
-        <div *ngIf="uiHome.twilioEnabled || uiHome?.mobileEnabled">
-          <app-value-fields
-                          [inputForm]="inputForm"
-                          [fieldName]="'phone'">
-              Phone
-            </app-value-fields>
+<mat-card>
+  <div class="header-logos">
+    <div >
+      <div class="grid-about">
+        <div>
+          <img class="pointless-logo"
+              onerror   = "this.src='assets/images/logo.png'"
+              src       = 'assets/images/logo.png' >
         </div>
-        <div >
-          <app-value-fields
-                [inputForm]="inputForm"
-                [fieldName]="'email'">
-            Email
-          </app-value-fields>
-        </div>
-
-        <button mat-raised-button color="primary" (click)="requestUser()">
-          <mat-icon>password</mat-icon>Password Request
-        </button>
-
+        <div><a href="https://pointlesspos.com">PointlessPOS</a></div>
       </div>
+    </div>
 
-    </mat-card-content>
+    <mat-divider></mat-divider>
 
+    <app-logo
+        [uiHomePageSetting] ="uiHome"
+        [logoSize]          ="'medium'"
+        [border]=''
+        [logo]              ="uiHome?.logoHomePage"
+    ></app-logo>
+  </div>
+
+    <mat-divider></mat-divider>
+  <div style="margin-top:15px">
+    <button mat-raised-button color="primary" (click)="toggleNewUser()">
+      <mat-icon>person</mat-icon>
+      <span *ngIf="newUser">  Existing User</span>
+      <span *ngIf="!newUser"> New User</span>
+    </button>
+  </div>
+
+    <mat-card *ngIf="newUser">
+      <mat-card-title><mat-icon>user</mat-icon>Welcome new user</mat-card-title>
+      <mat-card-subtitle>Use an email <span *ngIf="mobileEnabled"> or mobile number </span> then request a password token.</mat-card-subtitle>
+        <mat-card-content>
+
+          <div *ngIf="inputForm && user">
+
+          <div *ngIf="uiHome.twilioEnabled || uiHome?.mobileEnabled">
+            <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'phone'">
+            Phone
+              </app-value-fields>
+          </div>
+
+          <div *ngIf="!uiHome.twilioEnabled && !uiHome?.mobileEnabled" >
+            <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'email'">
+              Email
+            </app-value-fields>
+          </div>
+
+          <button mat-raised-button color="primary" (click)="requestUser()">
+            <mat-icon>email</mat-icon>Send Password Token
+          </button>
+
+        </div>
+
+      </mat-card-content>
+
+    </mat-card>
+
+    <mat-card *ngIf="!newUser">
+      <app-login-info
+        [uiHomePageSetting]="uiHome"
+        [smallDevice]="true"
+        (outPutCompleted)="onLoginCompleted($event)"
+        [disableGuestOption]="true"
+      ></app-login-info>
+    </mat-card>
   </mat-card>
 
+</div>

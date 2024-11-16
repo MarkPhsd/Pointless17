@@ -16,6 +16,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable,  } from 'rxjs';
 
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { setTimeout } from 'timers/promises';
 // https://github.com/rednez/angular-user-idle
 const { Keyboard } = Plugins;
 
@@ -25,6 +26,8 @@ const { Keyboard } = Plugins;
   styleUrls: ['./list-product-search-input.component.scss']
 })
 export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
+  private onUpdateSubject = new Subject<void>();
+  private lastScannedBarcode: string | null = null;
 
   scans = [] as unknown[];
   obs$ : Observable<unknown>[];
@@ -32,6 +35,8 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   _scanners = new ReplaySubject <unknown>()
   posDevice       : ITerminalSettings
   _posDevice      : Subscription;
+  admitOne: boolean;
+  isUpdating: any;
 
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -112,6 +117,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     if (this.searchForm)  {
       this.getUISettings()
     }
+    this.scanUpdate()
   }
 
   getUISettings() {
@@ -142,7 +148,11 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
-    if (this._order) { this._order.unsubscribe()}
+    this.onDestroy.next();
+    this.onDestroy.complete();
+
+    if (this._order) { this._order.unsubscribe(); }
+    if (this._posDevice) { this._posDevice.unsubscribe(); }
   }
 
   initSearchSubscription() {
@@ -168,10 +178,25 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     })
   }
 
+
+  scanUpdate() {
+    this.onUpdateSubject.pipe(
+      debounceTime(10) // Adjust the time based on your requirements
+    ).subscribe(() => {
+      console.log('piping hot')
+      this.performUpdate();
+    });
+  }
+
   onUpdate() {
+    this.onUpdateSubject.next();
+  }
+
+  private performUpdate() {
     if (this.requireEnter) {
-      const barcode  =  this.input.nativeElement.value;
-      if (!this.scans) { this.scans = [] };
+      const barcode = this.input.nativeElement.value;
+      console.log('performUpdate', barcode)
+      if (!this.scans) { this.scans = []; }
       this.scan(barcode);
     }
   }
@@ -189,7 +214,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     return of(this.order)
   }
 
-  addNewOrder() {
+  addNewOrder(forceNewOrder?: boolean) {
     const site = this.siteService.getAssignedSite();
     if (this.posDevice) {
       if (this.posDevice.defaultOrderTypeID  && this.posDevice.defaultOrderTypeID != 0) {
@@ -197,52 +222,80 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
         return serviceType$.pipe(switchMap(data => {
             return of(data)
           })).pipe(switchMap(data => {
-              const order$ = this.getNewOrder(site, data)
+              const order$ = this.getNewOrder(site, data, forceNewOrder)
               return order$
         }))
       }
     }
-    return this.getNewOrder(site, null)
+    return this.getNewOrder(site, null, forceNewOrder)
   }
 
-  getNewOrder(site, serviceType) {
-    if (this.order && !this.order?.completionDate) { return of(this.order)}
+  getNewOrder(site, serviceType, forceNewOrder?: boolean) {
+
+    if (!forceNewOrder) {
+      return of(this.order)
+    }
+
+    if (!forceNewOrder) {
+      if (this.order && !this.order?.completionDate) { return of(this.order)}
+    }
+
     return this.orderMethodsService.newOrderWithPayloadMethod(site, serviceType).pipe(
       switchMap(data => {
-        console.log('getNew Order', serviceType, data?.completionDate, data?.id)
+        console.log('getNew Order',  data, data?.id)
         return of(data)
     }))
   }
 
   scan(barcode: string){
-    // console.log('new order', this.newOrder, this.order?.completionDate)
-    if (this.newOrder || this.order?.completionDate) {
-      this.action$ = this.addNewOrder().pipe(switchMap(data => {
-          // console.log('new order', data)
-          this.outPutExit.emit('true')
-          this.order = data //this.orderMethodService.currentOrder;
-          this.orderMethodService.addObservable(this.addItemToOrder(barcode))
-          this.newOrder = false;
 
-          return of(data)
-      }))
+    if (this.newOrder || this.order?.completionDate) {
+      if (this.admitOne) {
+        this.closeOnTimeOut()
+        return;
+      }
+
+      if (!this.admitOne) {
+        this.admitOne = true; // Ensure admitOne is set before resetting newOrder
+        this.newOrder = false;
+        this.orderMethodService.addObservable(this.addItemToOrder(barcode, true), 'scanned item');
+      }
       return;
     }
-    this.orderMethodService.addObservable(this.addItemToOrder(barcode))
+
+    if (this.admitOne) { return true }
+
+    this.orderMethodService.addObservable(this.addItemToOrder(barcode),  'scanned item no new order')
   }
 
-  addItemToOrder(barcode: string): Observable<unknown> {
+  closeOnTimeOut() {
+
+    window.setTimeout(() => {
+      console.log('time out occured')
+      this.outPutExit.emit('true');
+    }, 500);
+
+  }
+
+  addItemToOrder(barcode: string, forceNewOrder?: boolean): Observable<unknown> {
     this.initForm()
-    const order$ = this.addNewOrder()
+    const order$ = this.addNewOrder(forceNewOrder)
+
     const newItem$ =  this.orderMethodService.addItemToOrderFromBarcode(barcode, this.input, this.assignedItem)
     return order$.pipe(switchMap(data => {
       return  newItem$
+    })).pipe(switchMap(data => {
+      console.log('add item from barcode')
+      if (forceNewOrder) {
+        this.closeOnTimeOut()
+      }
+      return of(data)
     }))
   }
 
   hideKeyboardTimeOut() {
     if (this.platForm  != 'android') {
-      setTimeout(()=> {
+      window.setTimeout(()=> {
           this.input.nativeElement.focus();
       }, 200 )
     }

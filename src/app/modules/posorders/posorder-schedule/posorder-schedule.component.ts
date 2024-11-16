@@ -68,8 +68,8 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
       return of(item)
     })).subscribe(data => {
       this.serviceType = data;
-      if (data) {
-        const features = JSON.parse(data.json) as ServiceTypeFeatures;
+      if (data && data.json) {
+        const features = JSON.parse(data?.json) as ServiceTypeFeatures;
         this.nameStringPairs      = features?.nameStringPairs; // Initialize nameStringPairs from features
         this.instructions         = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.instructions);
         this.shippingInstructions = this.sanitizer.bypassSecurityTrustHtml(this.serviceType?.shippingInstructions);

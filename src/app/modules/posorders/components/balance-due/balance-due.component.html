@@ -74,7 +74,8 @@
       <div *ngIf="!androidApp">
         <div  *ngIf=" !uiTransactions?.disableTipGratutity && isUser ||
                     ((payment && payment?.account)
-                    || (paymentMethod && paymentMethod?.isCreditCard && !uiTransactions?.disableTipGratutity))">
+                      || (paymentMethod && paymentMethod?.isCreditCard &&
+                      !uiTransactions?.disableTipGratutity))">
           <tip-entry-amount
             [payment]            = "payment"
             [paymentMethod]      = "paymentMethod"
@@ -164,9 +165,12 @@
       </button>
     </span>
 
+    <!--      -->
     <div *ngIf="!isUser && !isPax" class="action-center">
       <mat-label>Scan to Start New Order</mat-label>
-      <list-product-search-input [newOrder]="true">
+      <list-product-search-input
+            [newOrder]="true"
+          (outPutExit)="_closeOnly()">
       </list-product-search-input>
     </div>
 

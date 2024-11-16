@@ -1009,7 +1009,7 @@ export class PrintingService {
           try {
             let field = 'productName';
             if (data[field]) {
-              this.siteService.notify('Item type Error.', 'Close', 10000)
+              // this.siteService.notify('Item type Error.', 'Close', 10000)
               return of(null)
             }
           } catch (error) {

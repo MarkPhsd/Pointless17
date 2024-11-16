@@ -67,10 +67,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   action$: Observable<any>;
   loginAction$: Observable<any>;
+  loginAction: any;
 
   _loginStatus    : Subscription;
   loginStatusvalue: number;
-  loginAction: any;
   rememberMe: boolean;
   uiHome$: Observable<UIHomePageSettings>;
 

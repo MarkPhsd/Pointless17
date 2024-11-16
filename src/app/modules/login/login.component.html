@@ -43,7 +43,7 @@
                           [uiHomePageSetting] ="uiHomePageSetting"
                           [logoSize]          ="'medium'"
                           [border]=''
-                          [logo]              ="uiHomePageSetting.logoHomePage"
+                          [logo]              ="uiHomePageSetting?.logoHomePage"
                     ></app-logo>
                   </div>
 
@@ -65,7 +65,6 @@
           </mat-card-title>
 
           <mat-card-content>
-            <!-- returnUrl {{returnUrl}} -->
             <div  class="center"
                   *ngIf="loginForm"
                   [formGroup]="loginForm"

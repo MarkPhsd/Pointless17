@@ -272,6 +272,7 @@ import { CustomerDateSelectorComponent } from './widgets/customer-date-selector-
 import { MatChipListComponent } from './widgets/mat-chip-list/mat-chip-list.component';
 import { SignatureComponent } from './widgets/signature-pad/signature-pad.component';
 import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
+import { LoginInfoComponent } from './widgets/login-info/login-info.component';
 
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
@@ -370,6 +371,7 @@ import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
     IonicGeoLocationComponent,
     ItemTypeSortComponent,
     ItemSalesCardComponent,
+
     SalesItemsComponent,
     // ImageSwiperComponent,
     ImageContainerComponent,
@@ -544,6 +546,7 @@ import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
     CloseFloatingButtonComponent,
     SiteFooterComponent,
     SignatureComponent,
+    LoginInfoComponent
   ],
 
   imports: [
@@ -572,9 +575,11 @@ import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
     NgxImageCaptureModule,
     NgxDaterangepickerMd.forRoot(),
     AngularSignaturePadModule,
+
   ],
 
   exports: [
+    LoginInfoComponent,
     NgxJsonViewerModule,
     AgGridModule,
     DragDropModule,

@@ -89,6 +89,7 @@ export class OrderMethodsService implements OnDestroy {
   private _itemProcessSection     = new BehaviorSubject<number>(null);
   public itemProcessSection$      = this._itemProcessSection.asObservable();
 
+  outPutOnNext:boolean;
   processItem : ProcessItem
 
   public _quantityValue = new BehaviorSubject<number>(1);
@@ -188,8 +189,9 @@ export class OrderMethodsService implements OnDestroy {
     this.observablesArraySubject.next([]);
   }
 
-  addObservable(newObservable: Observable<any>): void {
+  addObservable(newObservable: Observable<any>, description?: string): void {
     const currentObservables = this.observablesArraySubject.getValue();
+    // console.log('adding observable', description)
     newObservable = newObservable.pipe(
       take(1),
       finalize(() => this.removeObservable(newObservable))
@@ -1075,7 +1077,9 @@ export class OrderMethodsService implements OnDestroy {
                    portionValue: string, packaging: string, assignedPOSItems: PosOrderItem[]
                    ,unitTypeID?, productPrice?: ProductPrice,cost?: number): Observable<ItemPostResults> {
 
-    if (!barcode) { return null;}
+    if (!barcode) {
+      this.siteService.notify('Barcode expected but, no barcode sent', 'close', 3000, 'red')
+      return null;}
     if (!order) {const order = {} as IPOSOrder}
 
     let passAlongItem = {} as any;
@@ -1092,8 +1096,11 @@ export class OrderMethodsService implements OnDestroy {
                       clientID: order.clientID , priceColumn : order.priceColumn, assignedPOSItems: assignedPOSItems,
                       unitTypeID: unitTypeID, productPrice: productPrice, wholesale: cost, groupName: this.groupName } as NewItem;
     // console.log(barcode)
-    // console.log('new item', newItem)
-    return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
+    // console.log('scanItemForOrder', )
+    return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem).pipe(switchMap(data =>{
+      // console.log('scan result', data)
+      return of(data)
+    }))
   }
 
   async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
@@ -1121,16 +1128,13 @@ export class OrderMethodsService implements OnDestroy {
 
   addItemToOrderFromBarcode(barcode: string, input, assignedItem, inputQuantity?, unitTypeID?, cost?) {
     const site = this.siteService.getAssignedSite();
-    console.log('barCode', barcode)
+    // console.log('barCode', barcode, this.order?.id, this.order.orderDate)
 
     const item$ = this.menuService.getMenuItemByBarcode(site, barcode, this.order?.clientID);
     let quantity = 1;
     if (inputQuantity) {  quantity = inputQuantity }
 
-
     return   item$.pipe(switchMap( data => {
-
-
       if ( !data ) {
           //for inventory items that don't have an item attached yet.
           return this.processItemPOSObservable( this.order, barcode, null, quantity, input, 0, 0,
@@ -1304,6 +1308,7 @@ export class OrderMethodsService implements OnDestroy {
               unitTypeID, productPrice,
               cost).pipe(switchMap(
         data => {
+        // console.log('scanBarcodedItem', data)
         this.processItemPostResultsPipe(data)
         return of(data);
       }
@@ -1343,15 +1348,18 @@ export class OrderMethodsService implements OnDestroy {
                             cost?: number) : Observable<ItemPostResults> {
 
 
-    // console.log('processItem', order, barcode, item, quantity,)
+    // console.log('processItemPOSObservable', order, barcode, item, quantity,)
 
     let tempItem = {} as ItemPostResults
     const user$ = this.getUserOrCreateUser()
     // return  user$.pipe(switchMap(data => { return of(tempItem)}))
     this.initItemProcess();
 
+    if (!this.validateItem(item, barcode)) {
+      console.log('not valid')
+      return of(null)
+    }
 
-    if (!this.validateItem(item, barcode)) {  return of(null) }
     if (this.assignedPOSItem && !passAlongItem) { passAlongItem  = this.assignedPOSItem[0]; };
     order = this.validateOrder();
     this.overrideClear = false;
@@ -1363,6 +1371,7 @@ export class OrderMethodsService implements OnDestroy {
     if (order) {
       const site       = this.siteService.getAssignedSite();
       if (barcode)  {
+        // console.log('scan barcoded item.')
         return this.scanBarcodedItem(site, order, barcode,quantity, input?.packageing,
                                       input?.portionValue, passAlongItems, unitTypeID,productPrice,cost)
       }
@@ -1376,6 +1385,9 @@ export class OrderMethodsService implements OnDestroy {
           portionValue     = input?.portionValue;
           itemNote         = input?.itemNote;
         }
+
+        // console.log('input', input);
+        // console.log('item', item);
 
         if (item) {
           const deviceName  = localStorage.getItem('devicename')
@@ -1413,6 +1425,7 @@ export class OrderMethodsService implements OnDestroy {
                 return this.posOrderItemService.postItem(site, newItem)
               })).pipe(
                 concatMap(data => {
+                  // console.log('posteditem',data?.posItem?.productName, order?.id)
                   this.processItemPostResultsPipe(data)
                   return of(data);
               })
@@ -1424,8 +1437,10 @@ export class OrderMethodsService implements OnDestroy {
             }))
           }
 
+
           let postItem$ =  this.posOrderItemService.postItem(site, newItem).pipe(concatMap(
             data => {
+              // console.log('posteditem',data?.posItem?.productName, order?.id)
               this.processItemPostResultsPipe(data)
               return of(data);
             }
@@ -1443,7 +1458,7 @@ export class OrderMethodsService implements OnDestroy {
         console.log('error', error)
       }
     }
-
+    console.log('no order')
     this.notifyEvent('Nothing added.', 'Alert ')
     return of(null)
   }

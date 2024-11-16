@@ -431,6 +431,7 @@ export class ChangeDueComponent implements OnInit  {
 
   _closeOnly() {
     try {
+      console.log('exit received')
       this.orderMethodsService._scanner.next(true)
       this.dialogRef.close()
     } catch (error) {

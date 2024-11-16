@@ -6,7 +6,6 @@ import { IUser } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 
 @Component({
@@ -22,7 +21,7 @@ export class NewUserGuestComponent implements OnInit {
   user: IUser;
   uiHome$: Observable<any>;
   action$: Observable<any>;
-
+  newUser = true;
   constructor(
               private settingService: SettingsService,
               private fb: FormBuilder,
@@ -31,17 +30,25 @@ export class NewUserGuestComponent implements OnInit {
               private router: Router,
               @Optional() private dialogRef  : MatDialogRef<NewUserGuestComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-
             )
     {
-
       this.dialogOpen = true
     }
 
+  toggleNewUser(){
+    this.newUser = !this.newUser;
+    this.initForm()
+    if (this.newUser) {
+    }
+  }
 
   ngOnInit() {
     this.user = this.userAuthService._user.value;
     this.uiHome$ =  this.settingService.getUIHomePageSettings()
+    this.initForm()
+  }
+
+  initForm() {
     this.inputForm = this.fb.group({
       userName: ['', Validators.required],
       email: [],
@@ -49,7 +56,6 @@ export class NewUserGuestComponent implements OnInit {
     })
 
   }
-
   requestUser() {
 
     const user = this.inputForm.value;
@@ -63,17 +69,23 @@ export class NewUserGuestComponent implements OnInit {
     iUser.email = user?.email;
     iUser.phone = user?.phone;
     iUser.id = this.user.id;
+
+    if (iUser.email) {
+      iUser.username = iUser.email;
+    } else {
+      iUser.username = iUser.phone;
+    }
     const updateUser$ = this.userAuthService.requestNewUser(iUser);
 
     this.action$ = updateUser$.pipe(switchMap(data => {
       if (data) {
 
-        console.log(data)
+        // console.log(data)
 
         if (data?.userExists) {
           //then send us to the password reset
           this.closeDialog()
-          this.router.navigate(['/changepassword', {userName: user.userName}]);
+          this.router.navigate(['/changepassword', {userName: iUser.username}]);
           // this.userAuthService.requestPasswordResetToken(data?.userName)
         }
         if (!data?.userExists) {
@@ -94,6 +106,11 @@ export class NewUserGuestComponent implements OnInit {
         return of('error')
       }
     }
+  }
+
+  onLoginCompleted(event) {
+    // console.log('completed')
+    this.closeDialog()
   }
 
 }

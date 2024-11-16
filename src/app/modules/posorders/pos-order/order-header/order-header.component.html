@@ -23,7 +23,7 @@
           <span  *ngIf="!isOrderClaimed && order.id" > <mat-icon color="warn">lock</mat-icon>
           </span>
 
-          <span *ngIf="!order.history">
+        <span *ngIf="!order.history">
             # {{order?.id | truncateRight: 5}} {{order?.serviceType | truncateText: 14}}
           </span>
           <span *ngIf="order.history">

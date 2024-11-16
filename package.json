@@ -1,6 +1,6 @@
 {
   "name": "pointlespos",
-  "version": "3.42.1",
+  "version": "3.42.4",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -13,8 +13,8 @@
   },
   "scripts": {
     "ng": "ng",
-    "start with SSL": "node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng serve --configuration dev --public-host --host=192.168.0.249 --port=4600 --ssl true --ssl-key ./localhost-key.pem --ssl-cert ./localhost.pem",
-    "start with IP": "node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng serve --configuration dev --public-host --host=192.168.0.249 --port=4500",
+    "start with SSL": "node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng serve --configuration dev --public-host --host=192.168.0.17 --port=4600 --ssl true --ssl-key ./localhost-key.pem --ssl-cert ./localhost.pem",
+    "start with IP": "node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng serve --configuration dev --public-host --host=192.168.0.17 --port=4500",
     "startLocal": "npx ng serve --configuration dev --host=localhost --port=4500",
     "startLocalNode": "ng serve --configuration dev --host=localhost --port=4500",
     "BuildPointless production": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build  --configuration production",
@@ -205,7 +205,7 @@
     "zone.js": "^0.14.10"
   },
   "devDependencies": {
-    "@angular-builders/custom-webpack": "^16.0.1",
+    "@angular-builders/custom-webpack": "^17.0.2",
     "@angular-devkit/build-angular": "^17.3.11",
     "@angular-devkit/core": "^17.3.11",
     "@angular-devkit/schematics": "^17.3.11",

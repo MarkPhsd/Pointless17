@@ -376,6 +376,7 @@ export class POSOrderItemService {
 
     if (!newItem ) {
       // console.log('no item for add item to order with barcode')
+      this.siteService.notify('New item (addItemToOrderWithBarcode) expected but no item sent', 'close', 3000, 'red')
       return
     }
 
@@ -394,8 +395,11 @@ export class POSOrderItemService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    // console.log('url', url, newItem)
-    return this.http.post<ItemPostResults>(url, newItem );
+    console.log('url', url, )
+    return this.http.post<ItemPostResults>(url, newItem ).pipe(switchMap(data => {
+      console.log('addItemToOrderWithBarcode return', data)
+      return of(data)
+    }));
 
   }
 

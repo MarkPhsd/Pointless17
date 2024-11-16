@@ -81,11 +81,13 @@ $white: #efefef;
 
 img:hover {
   transform: scale(1.02);
+  object-fit: cover;
 }
 
 img:active:hover {
   // box-shadow: 1px 1px 2px rgb(158, 82, 82), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
   transform: scale(1.07);
+  object-fit: cover;
 }
 
 .circle-dome {
@@ -113,6 +115,7 @@ img {
   border-radius: 50%;
   margin-top: 3px;
   z-index: 99;
+  object-fit: cover;
   @include for-phone-only  {
     min-width: 12vh;
     min-height: 12vh;
