@@ -26,6 +26,7 @@
             "tsConfig"  : "tsconfig.app.json",
             "polyfills" : "src/polyfills.ts",
             "preserveSymlinks": true,
+            "statsJson": true,
             "customWebpackConfig": {
               "path": "./webpack.config.ts",
               "replaceDuplicatePlugins": true
