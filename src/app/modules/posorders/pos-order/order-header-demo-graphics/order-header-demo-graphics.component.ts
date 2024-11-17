@@ -1,9 +1,9 @@
 import { Component, OnInit, EventEmitter, Input, Output, OnChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, Subscription, debounce, of, switchMap } from 'rxjs';
+import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
-import { ContactsService, OrdersService, ThemesService } from 'src/app/_services';
+import { ContactsService, OrdersService,  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -15,10 +15,6 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   styleUrls: ['./order-header-demo-graphics.component.scss']
 })
 export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDestroy  {
-
-  orderNameForm: UntypedFormGroup;
-  saveAction$: Observable<any>;
-
   @Input()  canRemoveClient : boolean = false;
   @Input()  order           : IPOSOrder;
   @Input()  mainPanel        : boolean = false;
@@ -26,7 +22,8 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges,OnDest
   @Output() outPutOpenClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutRemoveClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutAssignCustomer:   EventEmitter<any> = new EventEmitter<any>();
-
+  orderNameForm: UntypedFormGroup;
+  saveAction$: Observable<any>;
   isAuthorized: boolean;
   isStaff : boolean;
   isUser: boolean;

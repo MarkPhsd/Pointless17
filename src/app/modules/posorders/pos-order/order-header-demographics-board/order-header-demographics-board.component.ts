@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IPOSOrder, ISite } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { catchError, delay, Observable, of, repeatWhen, switchMap, throwError } from 'rxjs';
+import { of, switchMap} from 'rxjs';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
@@ -12,18 +11,19 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class OrderHeaderDemographicsBoardComponent implements OnInit {
 
+  @Input() disableActions: boolean;
+  @Input() refreshTime: 10;
+
   site    : ISite;
   posName : string;
   order$ = this.orderMethodsService.currentOrder$.pipe(switchMap(data => {
     return of(data)
   }));
 
-  @Input() disableActions: boolean;
-  @Input() refreshTime: 10;
   constructor(
     private siteService:  SitesService,
     private orderMethodsService: OrderMethodsService,
-    private orderService: OrdersService,) { }
+    ) { }
 
   ngOnInit(): void {
     this.posName = localStorage.getItem('devicename')

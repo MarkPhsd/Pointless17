@@ -7,7 +7,7 @@
   </div>
  <mat-divider></mat-divider>
 
- <mat-content>
+ <mat-card-content>
   <div [style.height]="chartHeight" class="menu-list"
        *ngIf="(results$ | async) as list; else loading">
     <div *ngFor="let item of list.results">
@@ -18,7 +18,7 @@
       </category-items-board-item>
     </div>
   </div>
- </mat-content>
+ </mat-card-content>
 
 </mat-card>
 

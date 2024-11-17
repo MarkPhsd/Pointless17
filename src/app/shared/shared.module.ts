@@ -23,7 +23,7 @@ import { SalesTaxReportComponent } from 'src/app/modules/admin/reports/sales-tax
 import { PagerBlobComponent } from './widgets/pager-blob/pager-blob.component';
 import { SiteSelectorComponent } from './widgets/site-selector/site-selector.component';
 import { HammerCardComponent } from './widgets/hammer-card/hammer-card.component';
-import { TiersCardComponent } from '../modules/tv-menu/tv-price-specials/tiers-card/tiers-card.component';
+// import { TiersCardComponent } from '../modules/tv-menu/tv-price-specials/tiers-card/tiers-card.component';
 import { FacilitySearchSelectorComponent } from 'src/app/shared/widgets/facility-search-selector/facility-search-selector.component';
 // import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
 import { ListPrintersElectronComponent } from '../modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
@@ -70,12 +70,12 @@ import { BtBlueToothScannerComponent } from './widgets/bt-blue-tooth-scanner/bt-
 import { AutofocusDirective } from '../_directives/auto-focus-input.directive';
 import { HammerModule } from '@angular/platform-browser';
 // import { ClientSearchSelectorComponent } from './widgets/client-search-selector/client-search-selector.component';
-import { LimitValuesProgressBarsComponent } from '../modules/posorders/limit-values-progress-bars/limit-values-progress-bars.component';
-import { ProgressBarComponent } from './widgets/progress-bar/progress-bar.component';
+// import { LimitValuesProgressBarsComponent } from '../modules/posorders/limit-values-progress-bars/limit-values-progress-bars.component';
+// import { ProgressBarComponent } from './widgets/progress-bar/progress-bar.component';
 // import { ScaleReaderComponent } from './widgets/scale-reader/scale-reader.component';
 import { ProfileBillingAddressComponent } from '../modules/admin/profiles/parts/profile-billing-address/profile-billing-address.component';
 import { ProfileShippingAddressComponent } from '../modules/admin/profiles/parts/profile-shipping-address/profile-shipping-address.component';
-import { OrderHeaderDemoGraphicsComponent } from '../modules/posorders/pos-order/order-header-demo-graphics/order-header-demo-graphics.component';
+// import { OrderHeaderDemoGraphicsComponent } from '../modules/posorders/pos-order/order-header-demo-graphics/order-header-demo-graphics.component';
 import { MenuPriceSelectionComponent } from '../modules/menu/menu-price-selection/menu-price-selection.component';
 import { PrinterLocationSelectionComponent } from '../modules/admin/products/productedit/_product-edit-parts/printer-location-selection/printer-location-selection.component';
 import { ExitLabelSelectionComponent } from '../modules/admin/products/productedit/_product-edit-parts/exit-label-selection/exit-label-selection.component';
@@ -383,7 +383,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     InstructionDirective,
     KeyPadComponent,
     Label1by8Component,
-    LimitValuesProgressBarsComponent,
+    // LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
     ListProductSearchInputComponent,
     OrderItemScannerComponent,
@@ -412,7 +412,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     NewOrderTypeComponent,
     NgControlAttributeDirective,
     NumericDirective,
-    OrderHeaderDemoGraphicsComponent,
+    // OrderHeaderDemoGraphicsComponent,
     // OrderTotalComponent,
     OrderHeaderComponent,
     QROrderComponent,
@@ -447,7 +447,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ProfileShippingAddressComponent,
     ProfileBillingAddressComponent,
     ProfileMedInfoComponent,
-    ProgressBarComponent,
+    // ProgressBarComponent,
     PriceCategorySearchComponent,
     PartUsageGraphComponent,
     //ProductFilterComponent
@@ -479,7 +479,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SummarycardComponent,
     TagChipsProductsComponent,
     TaxFieldsComponent,
-    TiersCardComponent,
+    // TiersCardComponent,
     QuantiySelectorComponent,
     // ToggleThemeComponent,
 
@@ -494,7 +494,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     MatSpinnerOverlayComponent,
     QRCodeTableComponent,
     ValueSpinnerComponent,
-    ProgressBarComponent,
+    // ProgressBarComponent,
     SearchDebounceInputComponent,
     // UploaderComponent,
     OverLayComponent,
@@ -694,7 +694,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     KeyboardViewComponent,
     LastImageDisplayComponent,
 
-    LimitValuesProgressBarsComponent,
+    // LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
     ListPrintersElectronComponent,
     // LogoComponent,
@@ -727,7 +727,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
     NgControlAttributeDirective,
-    OrderHeaderDemoGraphicsComponent,
+    // OrderHeaderDemoGraphicsComponent,
     // OrderTotalComponent,
     OrderHeaderComponent,
     QROrderComponent,
@@ -769,7 +769,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ProductSearchSelector2Component,
     ProfileBillingAddressComponent,
     ProfileShippingAddressComponent,
-    ProgressBarComponent,
+  
     RewardsAvailibleComponent,
     RetailProductEditComponent,
     RequestMessageComponent,
@@ -799,7 +799,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SummarycardComponent,
     TagChipsProductsComponent,
     TaxFieldsComponent,
-    TiersCardComponent,
+    // TiersCardComponent,
     TipEntryComponent,
     ThreeCXFabComponent,
     // ToggleThemeComponent,

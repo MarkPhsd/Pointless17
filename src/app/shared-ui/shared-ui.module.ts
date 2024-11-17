@@ -24,6 +24,18 @@ import { LogoComponent } from '../shared/widgets/logo/logo.component';
 import { ProductSearchSelectorComponent } from '../shared/widgets/product-search-selector/product-search-selector.component';
 import { ToggleThemeComponent } from '../shared/widgets/toggle-theme/toggle-theme.component';
 import { ReactiveFormsModule } from '@angular/forms';
+// import { GridcomponentPropertiesDesignComponent } from '../modules/admin/grid-menu-layout/grid-component-properties/gridcomponent-properties-design/gridcomponent-properties-design.component';
+import { LimitValuesCardComponent } from '../modules/posorders/limit-values-card/limit-values-card.component';
+import { OrderHeaderDemographicsBoardComponent } from '../modules/posorders/pos-order/order-header-demographics-board/order-header-demographics-board.component';
+import { OrderTotalBoardComponent } from '../modules/posorders/pos-order/order-total-board/order-total-board.component';
+import { CategoryItemsBoardItemComponent } from '../modules/tv-menu/category-items-board/category-items-board-item/category-items-board-item.component';
+import { CategoryItemsBoardComponent } from '../modules/tv-menu/category-items-board/category-items-board.component';
+import { TvPriceSpecialsComponent } from '../modules/tv-menu/tv-price-specials/tv-price-specials.component';
+import { TvPriceTierMenuItemsComponent } from '../modules/tv-menu/tv-price-tier-menu-items/tv-price-tier-menu-items.component';
+import { LimitValuesProgressBarsComponent } from '../modules/posorders/limit-values-progress-bars/limit-values-progress-bars.component';
+import { ProgressBarComponent } from '../shared/widgets/progress-bar/progress-bar.component';
+import { TiersCardComponent } from '../modules/tv-menu/tv-price-specials/tiers-card/tiers-card.component';
+import { OrderHeaderDemoGraphicsComponent } from '../modules/posorders/pos-order/order-header-demo-graphics/order-header-demo-graphics.component';
 
 
 @NgModule({
@@ -45,6 +57,19 @@ import { ReactiveFormsModule } from '@angular/forms';
     ClientSearchSelectorComponent,
 
 
+    TvPriceTierMenuItemsComponent,
+    TvPriceSpecialsComponent,
+    TiersCardComponent,
+    OrderTotalBoardComponent,
+    OrderHeaderDemoGraphicsComponent,
+    
+    LimitValuesCardComponent,
+    ProgressBarComponent,
+    LimitValuesProgressBarsComponent,
+    
+    OrderHeaderDemographicsBoardComponent,
+    CategoryItemsBoardComponent,
+    CategoryItemsBoardItemComponent,
   ],
   imports: [
     CommonModule,
@@ -69,6 +94,21 @@ import { ReactiveFormsModule } from '@angular/forms';
     OrderTotalComponent,
     ClientSearchSelectorComponent,
 
+
+    TvPriceTierMenuItemsComponent,
+    TvPriceSpecialsComponent,
+    TiersCardComponent,
+    OrderTotalBoardComponent,
+    OrderHeaderDemoGraphicsComponent,
+    
+    LimitValuesCardComponent,
+    ProgressBarComponent,
+    LimitValuesProgressBarsComponent,
+    
+    OrderHeaderDemographicsBoardComponent,
+    CategoryItemsBoardComponent,
+    CategoryItemsBoardItemComponent,
+   
   ],
   providers: [
     InventoryEditButtonService,

@@ -21,14 +21,14 @@
       </div>
 
       <div >
-        <div *ngIf="user?.roles != 'user' && (!disableActions || canRemoveClient)" >
+        <div *ngIf="user?.roles !== 'user' && (!disableActions || canRemoveClient)" >
           <button mat-button
                   (click)="clearClient()">
               <mat-icon>clear</mat-icon>Clear
           </button>
         </div>
 
-        <div *ngIf="!disableActions && order.clientID !=0">
+        <div *ngIf="!disableActions && order.clientID !==0">
           <button mat-button
                   (click)="openClient()">
               <mat-icon>open_in_new</mat-icon> View
@@ -41,7 +41,7 @@
 </mat-card>
 
 <mat-card *ngIf="!disableActions && !order.clients_POSOrders">
-  <div  *ngIf="(order?.service?.filterType != 1 && order?.service?.filterType != 2)">
+  <div  *ngIf="(order?.service?.filterType !== 1 && order?.service?.filterType !== 2)">
     <div class="grid-demo" *ngIf="transactionSettings?.showCustomerOption || mainPanel">
       <div>
         <app-client-search-selector

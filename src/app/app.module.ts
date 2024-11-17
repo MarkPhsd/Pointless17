@@ -201,8 +201,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     CurrencyFormatterDirective,
     LoginComponent,
 
-    TvPriceTierMenuItemsComponent,
-    TvPriceSpecialsComponent,
+ 
     RegisterAccountExistingUserWithTokenComponent,
     RegisterAccountMainComponent,
     ResetpasswordComponent,
@@ -213,14 +212,12 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     GridComponentPropertiesComponent,
     GridDesignerInfoComponent,
     DisplayToggleAndroidComponent,
-
     DashboardMenuComponent,
-    OrderTotalBoardComponent,
-    LimitValuesCardComponent,
-    OrderHeaderDemographicsBoardComponent,
-    CategoryItemsBoardComponent,
-    CategoryItemsBoardItemComponent,
     GridcomponentPropertiesDesignComponent,
+
+
+
+
     SplashLoadingComponent,
     ResizeDirective,
 
