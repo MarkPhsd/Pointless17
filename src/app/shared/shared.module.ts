@@ -72,7 +72,7 @@ import { HammerModule } from '@angular/platform-browser';
 import { ClientSearchSelectorComponent } from './widgets/client-search-selector/client-search-selector.component';
 import { LimitValuesProgressBarsComponent } from '../modules/posorders/limit-values-progress-bars/limit-values-progress-bars.component';
 import { ProgressBarComponent } from './widgets/progress-bar/progress-bar.component';
-import { ScaleReaderComponent } from './widgets/scale-reader/scale-reader.component';
+// import { ScaleReaderComponent } from './widgets/scale-reader/scale-reader.component';
 import { ProfileBillingAddressComponent } from '../modules/admin/profiles/parts/profile-billing-address/profile-billing-address.component';
 import { ProfileShippingAddressComponent } from '../modules/admin/profiles/parts/profile-shipping-address/profile-shipping-address.component';
 import { OrderHeaderDemoGraphicsComponent } from '../modules/posorders/pos-order/order-header-demo-graphics/order-header-demo-graphics.component';
@@ -465,7 +465,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SplitEntrySelectorComponent,
     SaveChangesButtonComponent,
     SalesTaxReportComponent,
-    ScaleReaderComponent,
+    // ScaleReaderComponent,
     ScaleSettingsComponent,
     SidebarComponent,
     SiteSelectorComponent,
@@ -786,7 +786,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SplitEntrySelectorComponent,
     SalesTaxReportComponent,
     ScaleSettingsComponent,
-    ScaleReaderComponent,
+    // ScaleReaderComponent,
     SearchDebounceInputComponent,
     SetTokenComponent,
     SidebarComponent,

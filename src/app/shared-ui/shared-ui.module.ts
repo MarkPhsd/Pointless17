@@ -8,18 +8,27 @@ import { ProductEditButtonService } from '../_services/menu/product-edit-button.
 // Services
 import { InventoryEditButtonService } from '../_services/inventory/inventory-edit-button.service';
 import { MBMenuButtonsService } from '../_services/system/mb-menu-buttons.service';
+import { BarcodeScannerComponent } from '../shared/widgets/barcode-scanner/barcode-scanner.component';
+import { IonicModule } from '@ionic/angular';
+import { AppMaterialModule } from '../app-material.module';
+import { ScaleReaderComponent } from '../shared/widgets/scale-reader/scale-reader.component';
 
 
 @NgModule({
   declarations: [
-    ButtonRendererComponent
+    BarcodeScannerComponent,
+    ButtonRendererComponent,
+    ScaleReaderComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    IonicModule,
+    AppMaterialModule,
   ],
   exports: [
-
-    ButtonRendererComponent
+    BarcodeScannerComponent,
+    ButtonRendererComponent,
+    ScaleReaderComponent
   ],
   providers: [
     InventoryEditButtonService,

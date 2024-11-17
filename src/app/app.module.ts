@@ -195,7 +195,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     AgGridToggleComponent,
     AppComponent,
     AppGateComponent,
-    BarcodeScannerComponent,
+    // BarcodeScannerComponent,
     ChangepasswordComponent,
     CategoriesAlternateComponent,
     CurrencyFormatterDirective,
