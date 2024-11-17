@@ -3,6 +3,7 @@ import { ITVMenuPriceTiers, TvMenuPriceTierService } from 'src/app/_services/men
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable} from 'rxjs';
 import { AuthenticationService } from 'src/app/_services';
+import { PriceTierMethodsService } from 'src/app/_services/menu/price-tier-methods.service';
 
 @Component({
   selector: 'tiers-with-prices',
@@ -20,6 +21,7 @@ export class TiersWithPricesComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private tvMenuPriceTierService: TvMenuPriceTierService,
+    private priceTierMethods: PriceTierMethodsService,
     private siteService:            SitesService)
   { }
 
@@ -47,7 +49,7 @@ export class TiersWithPricesComponent implements OnInit {
   }
 
   editTier(id:number) {
-
+    this.priceTierMethods.openPriceTier(id)
   }
 
   setPriceTier(name: string) {

@@ -555,7 +555,6 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SharedUiModule,
     SharedUtilsModule,
     SharedPipesModule,
-
     
     AgGridModule,
     AppRoutingModule,

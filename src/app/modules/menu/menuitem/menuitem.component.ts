@@ -97,6 +97,11 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       }
     }
 
+    get modalScroll() {
+      if (this.showCloseButton) { 
+        return 'overflow-y: auto;max-height: 75vh;'
+      }
+    }
 
     smallDevice    : boolean;
     get enableEditItemBol() {
