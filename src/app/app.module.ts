@@ -42,7 +42,7 @@ import { AgGridImageFormatterComponent } from './_components/_aggrid/ag-grid-ima
 import { AgGridToggleComponent } from './_components/_aggrid/ag-grid-toggle/ag-grid-toggle.component';
 import { NGXMaterialModule } from './ngx-material.module';
 import { AppInitService } from './_services/system/app-init.service';
-import { NgxElectronModule } from 'ngx-electron';
+
 import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
 import { GridManagerEditComponent } from './modules/admin/grid-menu-layout/grid-manager-edit/grid-manager-edit.component';
@@ -65,6 +65,7 @@ import {NgcCookieConsentConfig} from 'ngx-cookieconsent';
 import {NgcCookieConsentModule} from 'ngx-cookieconsent';
 import { AppConfigService } from './_services/system/app-config.service';
 import { DisplayToggleAndroidComponent } from './modules/admin/grid-menu-layout/dashboard-menu/display-toggle-android/display-toggle-android.component';
+import { SharedPipesModule } from './shared-pipes/shared-pipes.module';
 
 // const cookieConfig:NgcCookieConsentConfig = {
 //   cookie: {
@@ -189,8 +190,6 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
 
 @NgModule({
   declarations: [
-
-
     AgGridTestComponent,
     AgGridImageFormatterComponent,
     AgGridToggleComponent,
@@ -229,7 +228,7 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
 
   imports: [
     IonicModule.forRoot(),
-
+    SharedPipesModule,
     // G-6BNWKZ7VY8
     // NgxGoogleAnalyticsModule.forRoot('traking-code'),
     // NgxGoogleAnalyticsModule.forRoot(await getTrackingCode()) ,
@@ -251,12 +250,12 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     EditorModule,
     SharedModule,
     NGXMaterialModule,
-    // NgxElectronModule,
-    // DragAndDropModule,
+
     LayoutModule,
   ],
 
   exports: [
+    SharedPipesModule,
     AppMaterialModule,
     NgcCookieConsentModule,
     SharedModule,

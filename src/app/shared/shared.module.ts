@@ -83,7 +83,7 @@ import { MatSelectComponent } from './widgets/mat-select/mat-select.component';
 import { PrinterLocationsComponent } from '../modules/admin/products/printer-locations/printer-locations.component';
 import { KeyPadComponent } from './widgets/key-pad/key-pad.component';
 import { ToggleThemeComponent } from './widgets/toggle-theme/toggle-theme.component';
-import { TruncateTextPipe } from '../_pipes/truncate-text.pipe';
+
 import { PosOrderFunctionButtonsComponent } from '../modules/posorders/pos-order-function-buttons/pos-order-function-buttons.component';
 import { PosOrderTransactionDataComponent } from '../modules/posorders/pos-order-transaction-data/pos-order-transaction-data.component';
 import { PaymentBalanceComponent } from '../modules/posorders/payment-balance/payment-balance.component';
@@ -273,6 +273,9 @@ import { MatChipListComponent } from './widgets/mat-chip-list/mat-chip-list.comp
 import { SignatureComponent } from './widgets/signature-pad/signature-pad.component';
 import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
 import { LoginInfoComponent } from './widgets/login-info/login-info.component';
+import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
+import { SharedUiModule } from '../shared-ui/shared-ui.module';
+import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
 
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
@@ -288,12 +291,14 @@ import { LoginInfoComponent } from './widgets/login-info/login-info.component';
 // }
 @NgModule({
   declarations: [
-    DsiEMVCardPayBtnComponent,
     SafeHtmlPipe,
     ArrayFilterPipe,
     ArraySortPipe,
-    BackgroundUrlPipe,
     DerpPipe,
+    BackgroundUrlPipe,
+    TruncateRightPipe,
+
+    DsiEMVCardPayBtnComponent,
     BrandTypeSelectComponent,
     AccordionComponent,
     AdjustmentReasonsComponent,
@@ -411,9 +416,6 @@ import { LoginInfoComponent } from './widgets/login-info/login-info.component';
     OrderTotalComponent,
     OrderHeaderComponent,
     QROrderComponent,
-    // QrPaymentComponent,
-    // PayAPIComponent,
-    // PayAPIFrameComponent,
     ScheduleSelectorComponent,
     ScheduleDateRangeSelectorComponent,
     OnlinePaymentCompletedComponent,
@@ -454,8 +456,6 @@ import { LoginInfoComponent } from './widgets/login-info/login-info.component';
     OptionsSelectFilterComponent,
     CategoryMenuSelectorComponent,
     MenuCardCategoriesComponent,
-    // ReceiptLayoutComponent,
-    //*** */
     AuditPaymentComponent,
     PriceScheduleMenuListComponent,
     RewardsAvailibleComponent,
@@ -482,8 +482,8 @@ import { LoginInfoComponent } from './widgets/login-info/login-info.component';
     TiersCardComponent,
     QuantiySelectorComponent,
     ToggleThemeComponent,
-    TruncateTextPipe,
-    TruncateRightPipe,
+
+
     UnitTypeFieldsComponent,
     WebEnabledComponent,
     ValueFieldsComponent,
@@ -551,12 +551,19 @@ import { LoginInfoComponent } from './widgets/login-info/login-info.component';
 
   imports: [
     IonicModule.forRoot(),
+    CommonModule,
+    SharedUiModule,
+    SharedUtilsModule,
+    SharedPipesModule,
+
+    
     AgGridModule,
     AppRoutingModule,
     DashBoardRoutingModule,
     DragDropModule,
     AppMaterialModule,
-    CommonModule,
+
+
     BrowserAnimationsModule,
     HighchartsChartModule,
     FormsModule,
@@ -579,6 +586,11 @@ import { LoginInfoComponent } from './widgets/login-info/login-info.component';
   ],
 
   exports: [
+
+    SharedUiModule,
+    SharedUtilsModule,
+    SharedPipesModule,
+
     LoginInfoComponent,
     NgxJsonViewerModule,
     AgGridModule,
@@ -793,7 +805,7 @@ import { LoginInfoComponent } from './widgets/login-info/login-info.component';
     TipEntryComponent,
     ThreeCXFabComponent,
     ToggleThemeComponent,
-    TruncateTextPipe,
+
     TruncateRightPipe,
     UIHomePageSettingsComponent,
     UnitTypeFieldsComponent,
@@ -820,6 +832,7 @@ import { LoginInfoComponent } from './widgets/login-info/login-info.component';
     EditBarComponent,
     SignatureComponent,
     QRCodeModule,
+    
   ],
 
   providers: [
