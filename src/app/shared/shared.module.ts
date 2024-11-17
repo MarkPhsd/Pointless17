@@ -25,7 +25,7 @@ import { SiteSelectorComponent } from './widgets/site-selector/site-selector.com
 import { HammerCardComponent } from './widgets/hammer-card/hammer-card.component';
 import { TiersCardComponent } from '../modules/tv-menu/tv-price-specials/tiers-card/tiers-card.component';
 import { FacilitySearchSelectorComponent } from 'src/app/shared/widgets/facility-search-selector/facility-search-selector.component';
-import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
+// import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
 import { ListPrintersElectronComponent } from '../modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
 import { DSIEMVAndroidPayBtnComponent } from '../modules/posorders/pos-payment/dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
 import { ListProductSearchInputComponent } from './widgets/search-list-selectors/list-product-search-input/list-product-search-input.component';
@@ -52,11 +52,11 @@ import { BtPOSPrinterComponent } from '../modules/admin/settings/printing/bt-pos
 import { PriceCategorySelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/price-category-select/price-category-select.component';
 import { MenuTinyComponent } from './widgets/menus/menu-tiny/menu-tiny.component';
 import { ProductTypeSelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/product-type-select/product-type-select.component';
-import { EditButtonsStandardComponent } from './widgets/edit-buttons-standard/edit-buttons-standard.component';
+// import { EditButtonsStandardComponent } from './widgets/edit-buttons-standard/edit-buttons-standard.component';
 import { ClientTypesLookupComponent } from '../modules/admin/profiles/parts/client-types-lookup/client-types-lookup.component';
 import { StatusLookupComponent } from '../modules/admin/profiles/parts/status-lookup/status-lookup.component';
 import { UnitTypeFieldsComponent } from '../modules/admin/products/productedit/_product-edit-parts/unit-type-fields/unit-type-fields.component';
-import { ValueFieldsComponent } from '../modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+// import { ValueFieldsComponent } from '../modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
 import { CartButtonComponent } from './widgets/cart-button/cart-button.component';
 import { PriceCategorySearchComponent } from '../modules/admin/products/productedit/_product-edit-parts/price-category-search/price-category-search.component';
 import { MenuSearchBarComponent } from './components/menu-search-bar/menu-search-bar.component';
@@ -69,7 +69,7 @@ import { ButtonRendererComponent } from '../_components/btn-renderer.component';
 import { BtBlueToothScannerComponent } from './widgets/bt-blue-tooth-scanner/bt-blue-tooth-scanner.component';
 import { AutofocusDirective } from '../_directives/auto-focus-input.directive';
 import { HammerModule } from '@angular/platform-browser';
-import { ClientSearchSelectorComponent } from './widgets/client-search-selector/client-search-selector.component';
+// import { ClientSearchSelectorComponent } from './widgets/client-search-selector/client-search-selector.component';
 import { LimitValuesProgressBarsComponent } from '../modules/posorders/limit-values-progress-bars/limit-values-progress-bars.component';
 import { ProgressBarComponent } from './widgets/progress-bar/progress-bar.component';
 // import { ScaleReaderComponent } from './widgets/scale-reader/scale-reader.component';
@@ -82,7 +82,7 @@ import { ExitLabelSelectionComponent } from '../modules/admin/products/producted
 import { MatSelectComponent } from './widgets/mat-select/mat-select.component';
 import { PrinterLocationsComponent } from '../modules/admin/products/printer-locations/printer-locations.component';
 import { KeyPadComponent } from './widgets/key-pad/key-pad.component';
-import { ToggleThemeComponent } from './widgets/toggle-theme/toggle-theme.component';
+// import { ToggleThemeComponent } from './widgets/toggle-theme/toggle-theme.component';
 
 import { PosOrderFunctionButtonsComponent } from '../modules/posorders/pos-order-function-buttons/pos-order-function-buttons.component';
 import { PosOrderTransactionDataComponent } from '../modules/posorders/pos-order-transaction-data/pos-order-transaction-data.component';
@@ -109,21 +109,21 @@ import { UserAuthorizedDirective } from '../_directives/user-authorized.directiv
 import { APISettingComponent } from '../modules/login/apisetting/apisetting.component';
 import { ApiStoredValueComponent } from './widgets/api-stored-value/api-stored-value.component';
 import { ScaleSettingsComponent } from '../modules/admin/settings/software/scale-settings/scale-settings.component';
-import { ApiStatusDisplayComponent } from './widgets/api-status-display/api-status-display.component';
+// import { ApiStatusDisplayComponent } from './widgets/api-status-display/api-status-display.component';
 import { MatSelectNGModelComponent } from './widgets/mat-select-ngmodel/mat-select-ngmodel.component';
 import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.component';
 import { OrderHeaderComponent } from '../modules/posorders/pos-order/order-header/order-header.component';
-import { OrderTotalComponent } from '../modules/posorders/pos-order/order-total/order-total.component';
+// import { OrderTotalComponent } from '../modules/posorders/pos-order/order-total/order-total.component';
 import { PriceTierScheduleComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-schedule/price-tier-schedule.component';
 import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-selector.component';
 import { BackgroundCoverComponent } from './widgets/background-cover/background-cover.component';
-import { UploaderComponent } from './widgets/AmazonServices';
+// import { UploaderComponent } from './widgets/AmazonServices';
 import { PaymentReportCardComponent } from '../modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
 import { DSIEMVElectronComponent } from '../modules/admin/settings/software/dsiemvelectron/dsiemvelectron.component';
 import { DepartmentMenuComponent } from '../modules/menu/department-menu/department-menu.component';
 import { OverLayComponent } from './widgets/over-lay/over-lay.component';
 import { MyThingComponent } from './widgets/over-lay/my-thing/my-thing.component';
-import { LogoComponent } from './widgets/logo/logo.component';
+// import { LogoComponent } from './widgets/logo/logo.component';
 import { FilterPipe } from '../_pipes/filter.pipe';
 import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile-med-info/profile-med-info.component';
 // import { ImageSwiperComponent } from './widgets/image-swiper/image-swiper.component';
@@ -131,12 +131,12 @@ import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile
 import { CompanyInfoHeaderComponent } from './widgets/company-info-header/company-info-header.component';
 import { GridsterModule } from 'angular-gridster2';
 import { ColorPickerModule } from 'ngx-color-picker';
-import { MatMenuBasicComponent } from './widgets/mat-menu-basic/mat-menu-basic.component';
+// import { MatMenuBasicComponent } from './widgets/mat-menu-basic/mat-menu-basic.component';
 import { IFrameComponent } from './widgets/i-frame/i-frame.component';
 import { YoutubePlayerComponent } from './widgets/youtube-player/youtube-player.component';
 import { SafeHtmlPipe } from '../_pipes/safe-html.pipe';
 import {YouTubePlayerModule} from '@angular/youtube-player'
-import { StrainIndicatorComponent } from '../modules/tv-menu/strain-indicator/strain-indicator.component';
+// import { StrainIndicatorComponent } from '../modules/tv-menu/strain-indicator/strain-indicator.component';
 import { CardDashboardComponent } from '../modules/admin/reports/card-dashboard/card-dashboard.component';
 import { DashBoardRoutingModule } from '../dash-board-routing.module';
 import { DsiEMVPaymentComponent } from '../modules/admin/dsi-emvpayment/dsi-emvpayment.component';
@@ -307,7 +307,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     AppWizardProgressButtonComponent,
     APISettingComponent,
     ApiStoredValueComponent,
-    ApiStatusDisplayComponent,
+    // ApiStatusDisplayComponent,
     AutofocusDirective,
     BalanceSheetReportComponent,
     BlogPostListComponent,
@@ -329,7 +329,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ProductChartReportComponent,
     CardDashboardComponent,
     CompanyInfoHeaderComponent,
-    ClientSearchSelectorComponent,
+    // ClientSearchSelectorComponent,
     CannabisItemEditComponent,
     CategorySelectComponent,
     CategoryScrollComponent,
@@ -338,7 +338,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ChemicalValuesComponent,
     ChemicalSpinnersComponent,
     ClientTypesLookupComponent,
-    ClientSearchSelectorComponent,
+    // ClientSearchSelectorComponent,
     ClockInOutComponent,
     ClockViewComponent,
     ClockInPanelComponent,
@@ -360,7 +360,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     EmployeeClockEditComponent,
     EmployeeClockFilterComponent,
     ExitLabelSelectionComponent,
-    EditButtonsStandardComponent,
+    // EditButtonsStandardComponent,
     FacilitySearchSelectorComponent,
     FastUserSwitchComponent,
     FilterComponent,
@@ -393,7 +393,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     MatSelectComponent,
     MatSpinnerOverlayComponent,
     MatToggleSelectorComponent,
-    MatMenuBasicComponent,
+    // MatMenuBasicComponent,
     MatSelectNGModelComponent,
     MetaTagChipsComponent,
     ItemassociationsComponent,
@@ -413,7 +413,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     NgControlAttributeDirective,
     NumericDirective,
     OrderHeaderDemoGraphicsComponent,
-    OrderTotalComponent,
+    // OrderTotalComponent,
     OrderHeaderComponent,
     QROrderComponent,
     ScheduleSelectorComponent,
@@ -441,7 +441,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     PrinterLocationSelectionComponent,
     PrinterLocationsComponent,
     ProgressUploaderComponent,
-    ProductSearchSelectorComponent,
+    // ProductSearchSelectorComponent,
     ProductSearchSelector2Component,
     ProductTypeSelectComponent,
     ProfileShippingAddressComponent,
@@ -473,7 +473,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SpeciesListComponent,
     StatusLookupComponent,
     StoreCreditInfoComponent,
-    StrainIndicatorComponent,
+    // StrainIndicatorComponent,
     StoreCreditSearchComponent,
     SetTokenComponent,
     SummarycardComponent,
@@ -481,12 +481,12 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     TaxFieldsComponent,
     TiersCardComponent,
     QuantiySelectorComponent,
-    ToggleThemeComponent,
+    // ToggleThemeComponent,
 
 
     UnitTypeFieldsComponent,
     WebEnabledComponent,
-    ValueFieldsComponent,
+    // ValueFieldsComponent,
     CartButtonComponent,
     UIHomePageSettingsComponent,
 
@@ -496,11 +496,11 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ValueSpinnerComponent,
     ProgressBarComponent,
     SearchDebounceInputComponent,
-    UploaderComponent,
+    // UploaderComponent,
     OverLayComponent,
     MyThingComponent,
     TipEntryComponent,
-    LogoComponent,
+    // LogoComponent,
     IFrameComponent,
     YoutubePlayerComponent,
     SafeHtmlPipe,
@@ -562,7 +562,6 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     DragDropModule,
     AppMaterialModule,
 
-
     BrowserAnimationsModule,
     HighchartsChartModule,
     FormsModule,
@@ -610,7 +609,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     AutofocusDirective,
     APISettingComponent,
     ApiStoredValueComponent,
-    ApiStatusDisplayComponent,
+    // ApiStatusDisplayComponent,
     AppWizardProgressButtonComponent,
     BalanceSheetReportComponent,
     BlogPostListComponent,
@@ -636,7 +635,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ColorPickerModule,
     CoachMarksButtonComponent,
     CategorySelectComponent,
-    ClientSearchSelectorComponent,
+    // ClientSearchSelectorComponent,
     CloseFloatingButtonComponent,
     ExitLabelSelectionComponent,
     CannabisItemEditComponent,
@@ -663,7 +662,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     DsiEMVPaymentComponent,
     DepartmentMenuComponent,
     DynamicAgGridComponent,
-    EditButtonsStandardComponent,
+    // EditButtonsStandardComponent,
     EmployeeClockListComponent,
     EmployeeClockEditComponent,
     EmployeesOnClockListComponent,
@@ -698,7 +697,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
     ListPrintersElectronComponent,
-    LogoComponent,
+    // LogoComponent,
     Label1by8Component,
     MatDateRangeComponent,
     MatChipListComponent,
@@ -706,7 +705,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ScheduleDateRangeSelectorComponent,
     // NgcCookieConsentModule.forRoot(cookieConfig),
     NgxDaterangepickerMd,
-    MatMenuBasicComponent,
+    // MatMenuBasicComponent,
     MatToggleSelectorComponent,
     MatSelectComponent,
     MatSelectNGModelComponent,
@@ -729,7 +728,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     NewOrderTypeComponent,
     NgControlAttributeDirective,
     OrderHeaderDemoGraphicsComponent,
-    OrderTotalComponent,
+    // OrderTotalComponent,
     OrderHeaderComponent,
     QROrderComponent,
     QRCodeTableComponent,
@@ -766,7 +765,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     PosOrderTransactionDataComponent,
     PosPaymentEditComponent,
     ProductTypeSelectComponent,
-    ProductSearchSelectorComponent,
+    // ProductSearchSelectorComponent,
     ProductSearchSelector2Component,
     ProfileBillingAddressComponent,
     ProfileShippingAddressComponent,
@@ -792,7 +791,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SidebarComponent,
     SpeciesListComponent,
     StatusLookupComponent,
-    StrainIndicatorComponent,
+    // StrainIndicatorComponent,
     StoreCreditInfoComponent,
     StoreCreditSearchComponent,
     SortSelectorComponent,
@@ -803,13 +802,13 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     TiersCardComponent,
     TipEntryComponent,
     ThreeCXFabComponent,
-    ToggleThemeComponent,
+    // ToggleThemeComponent,
 
     TruncateRightPipe,
     UIHomePageSettingsComponent,
     UnitTypeFieldsComponent,
-    UploaderComponent,
-    ValueFieldsComponent,
+    // UploaderComponent,
+    // ValueFieldsComponent,
     WebEnabledComponent,
     SimpleTinyComponent,
     NumericDirective,

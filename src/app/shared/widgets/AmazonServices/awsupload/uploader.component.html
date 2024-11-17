@@ -29,7 +29,7 @@
 <div>
     <div *ngIf="fileNames">
       <div *ngFor="let item of (fileNames?.toString().split(',')); let i = index">
-        <div *ngIf="item != ''"  class="container">
+        <div *ngIf="item !== ''"  class="container">
           <div>
             {{item}}
           </div>
