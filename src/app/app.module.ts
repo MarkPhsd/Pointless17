@@ -19,8 +19,6 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { BasicAuthInterceptor } from './_http-interceptors/basic-auth.interceptor';
 import { ErrorInterceptor } from './_http-interceptors/error.interceptor';
 import { AppGateComponent } from './modules/app-gate/app-gate/app-gate.component';
-import { TvPriceSpecialsComponent } from './modules/tv-menu/tv-price-specials/tv-price-specials.component';
-import { TvPriceTierMenuItemsComponent } from './modules/tv-menu/tv-price-tier-menu-items/tv-price-tier-menu-items.component';
 import { RegisterAccountMainComponent } from './modules/login/registration/register-account-main/register-account-main.component';
 import { RegisterAccountExistingUserWithTokenComponent } from './modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component';
 import { AgGridModule } from 'ag-grid-angular'
@@ -30,7 +28,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router, RouteReuseStrategy, RouterModule } from '@angular/router';
 import '@capacitor-community/camera-preview';
 import '@capacitor-community/barcode-scanner';
-import { BarcodeScannerComponent } from './shared/widgets/barcode-scanner/barcode-scanner.component';
 import { HttpClientCacheService } from './_http-interceptors/http-client-cache.service';
 import { CacheClientService } from './_http-interceptors/cache-client.service';
 import { RenderingService } from './_services/system/rendering.service';
@@ -50,11 +47,6 @@ import { DynamicModule } from 'ng-dynamic-component';
 import { GridComponentPropertiesComponent } from './modules/admin/grid-menu-layout/grid-component-properties/grid-component-properties.component';
 import { GridDesignerInfoComponent } from './modules/admin/grid-menu-layout/grid-designer-info/grid-designer-info.component';
 import { DashboardMenuComponent } from './modules/admin/grid-menu-layout/dashboard-menu/dashboard-menu.component';
-import { CategoryItemsBoardComponent } from './modules/tv-menu/category-items-board/category-items-board.component';
-import { CategoryItemsBoardItemComponent } from './modules/tv-menu/category-items-board/category-items-board-item/category-items-board-item.component';
-import { OrderTotalBoardComponent } from './modules/posorders/pos-order/order-total-board/order-total-board.component';
-import { OrderHeaderDemographicsBoardComponent } from './modules/posorders/pos-order/order-header-demographics-board/order-header-demographics-board.component';
-import { LimitValuesCardComponent } from './modules/posorders/limit-values-card/limit-values-card.component';
 import { GridcomponentPropertiesDesignComponent } from './modules/admin/grid-menu-layout/grid-component-properties/gridcomponent-properties-design/gridcomponent-properties-design.component';
 import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
@@ -66,6 +58,7 @@ import {NgcCookieConsentModule} from 'ngx-cookieconsent';
 import { AppConfigService } from './_services/system/app-config.service';
 import { DisplayToggleAndroidComponent } from './modules/admin/grid-menu-layout/dashboard-menu/display-toggle-android/display-toggle-android.component';
 import { SharedPipesModule } from './shared-pipes/shared-pipes.module';
+import { CoreModule } from './core.module';
 
 // const cookieConfig:NgcCookieConsentConfig = {
 //   cookie: {
@@ -173,20 +166,7 @@ enableProdMode();
 //   .then(success => console.log(`Bootstrap success`))
 //   .catch(err => console.error(err));
 
-export function getIsDebugDevice(): boolean {
-  if (localStorage.getItem('debugOnThisDevice') === 'true') {
-    return true
-  }
-  return false
-}
 
-export  function init_app(appLoadService: AppInitService) {
-  return () =>  appLoadService.init();
-}
-
-export  async function   getTrackingCode(appLoadService: AppInitService) : Promise<string>{
-  return  await appLoadService.getGoogleTrackingID();
-}
 
 @NgModule({
   declarations: [
@@ -215,15 +195,14 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     DashboardMenuComponent,
     GridcomponentPropertiesDesignComponent,
 
-
-
-
     SplashLoadingComponent,
     ResizeDirective,
 
   ],
 
   imports: [
+    CommonModule,
+    CoreModule,
     IonicModule.forRoot(),
     SharedPipesModule,
     // G-6BNWKZ7VY8
@@ -242,7 +221,6 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
     ReactiveFormsModule,
     FormsModule,
     BrowserModule,
-    CommonModule,
     DynamicModule,
     EditorModule,
     SharedModule,
@@ -264,33 +242,9 @@ export  async function   getTrackingCode(appLoadService: AppInitService) : Promi
   ],
 
   providers: [
-    // { provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig },
-    { provide: HTTP_INTERCEPTORS,  useClass: BasicAuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS,  useClass: ErrorInterceptor, multi: true },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    AppInitService,
     CurrencyPipe,
-    CacheClientService,
-    HttpClientCacheService,
-    Printer,
-    BluetoothSerial,
-    RenderingService,
-    PagerService,
-    StatusBar,
     ErrorInterceptor,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: init_app,
-      // deps: [AppInitService, Sentry.TraceService],
-      deps: [AppInitService],
-      multi: true
-    },
-    // {
-    //   provide: APP_INITIALIZER,
-    //   useFactory: initializeApp,
-    //   deps: [AppConfigService],
-    //   multi: true
-    // },
     Title
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
