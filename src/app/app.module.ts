@@ -16,7 +16,6 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { ChangepasswordComponent } from './modules/login/changepassword/changepassword.component';
 import { ResetpasswordComponent } from './modules/login/resetpassword/resetpassword.component';
 import { EditorModule } from '@tinymce/tinymce-angular';
-import { BasicAuthInterceptor } from './_http-interceptors/basic-auth.interceptor';
 import { ErrorInterceptor } from './_http-interceptors/error.interceptor';
 import { AppGateComponent } from './modules/app-gate/app-gate/app-gate.component';
 import { RegisterAccountMainComponent } from './modules/login/registration/register-account-main/register-account-main.component';
@@ -24,22 +23,24 @@ import { RegisterAccountExistingUserWithTokenComponent } from './modules/login/r
 import { AgGridModule } from 'ag-grid-angular'
 import { CategoriesAlternateComponent } from './modules/menu/categories/categories-alternate/categories-alternate.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Router, RouteReuseStrategy, RouterModule } from '@angular/router';
 import '@capacitor-community/camera-preview';
 import '@capacitor-community/barcode-scanner';
-import { HttpClientCacheService } from './_http-interceptors/http-client-cache.service';
-import { CacheClientService } from './_http-interceptors/cache-client.service';
-import { RenderingService } from './_services/system/rendering.service';
-import { PagerService } from './_services/system/agpager.service';
-import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
-import { AgGridTestComponent } from './shared/widgets/ag-grid-test/ag-grid-test.component';
+
 import { CurrencyFormatterDirective } from './_directives/currency-reactive.directive';
 import { AgGridImageFormatterComponent } from './_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { AgGridToggleComponent } from './_components/_aggrid/ag-grid-toggle/ag-grid-toggle.component';
 import { NGXMaterialModule } from './ngx-material.module';
-import { AppInitService } from './_services/system/app-init.service';
 
+import * as Sentry from "@sentry/angular";
+import { BrowserTracing } from "@sentry/tracing";
+import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
+import { UserIdleModule } from 'angular-user-idle';
+import { ResizeDirective } from './_directives/resize.directive';
+import { NgcCookieConsentConfig} from 'ngx-cookieconsent';
+import { NgcCookieConsentModule} from 'ngx-cookieconsent';
+import { AppConfigService } from './_services/system/app-config.service';
+
+import { DisplayToggleAndroidComponent } from './modules/admin/grid-menu-layout/dashboard-menu/display-toggle-android/display-toggle-android.component';
 import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
 import { GridManagerEditComponent } from './modules/admin/grid-menu-layout/grid-manager-edit/grid-manager-edit.component';
@@ -48,17 +49,12 @@ import { GridComponentPropertiesComponent } from './modules/admin/grid-menu-layo
 import { GridDesignerInfoComponent } from './modules/admin/grid-menu-layout/grid-designer-info/grid-designer-info.component';
 import { DashboardMenuComponent } from './modules/admin/grid-menu-layout/dashboard-menu/dashboard-menu.component';
 import { GridcomponentPropertiesDesignComponent } from './modules/admin/grid-menu-layout/grid-component-properties/gridcomponent-properties-design/gridcomponent-properties-design.component';
-import * as Sentry from "@sentry/angular";
-import { BrowserTracing } from "@sentry/tracing";
-import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
-import { UserIdleModule } from 'angular-user-idle';
-import { ResizeDirective } from './_directives/resize.directive';
-import {NgcCookieConsentConfig} from 'ngx-cookieconsent';
-import {NgcCookieConsentModule} from 'ngx-cookieconsent';
-import { AppConfigService } from './_services/system/app-config.service';
-import { DisplayToggleAndroidComponent } from './modules/admin/grid-menu-layout/dashboard-menu/display-toggle-android/display-toggle-android.component';
+import { AgGridTestComponent } from './shared/widgets/ag-grid-test/ag-grid-test.component';
+
+
 import { SharedPipesModule } from './shared-pipes/shared-pipes.module';
 import { CoreModule } from './core.module';
+import { RouteReuseStrategy } from '@angular/router';
 
 // const cookieConfig:NgcCookieConsentConfig = {
 //   cookie: {
@@ -222,23 +218,14 @@ enableProdMode();
     FormsModule,
     BrowserModule,
     DynamicModule,
-    EditorModule,
+   
     SharedModule,
     NGXMaterialModule,
-
-    LayoutModule,
+  
   ],
 
   exports: [
-    SharedPipesModule,
-    AppMaterialModule,
-    NgcCookieConsentModule,
-    SharedModule,
-    EditorModule,
-    FormsModule,
-    IonicModule,
-    AgGridImageFormatterComponent,
-    AgGridToggleComponent,
+  
   ],
 
   providers: [
