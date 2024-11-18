@@ -36,6 +36,21 @@ import { LimitValuesProgressBarsComponent } from '../modules/posorders/limit-val
 import { ProgressBarComponent } from '../shared/widgets/progress-bar/progress-bar.component';
 import { TiersCardComponent } from '../modules/tv-menu/tv-price-specials/tiers-card/tiers-card.component';
 import { OrderHeaderDemoGraphicsComponent } from '../modules/posorders/pos-order/order-header-demo-graphics/order-header-demo-graphics.component';
+import { BalanceSheetViewComponent } from './printing/balance-sheet-view/balance-sheet-view.component';
+import { LabelViewSelectorComponent } from './printing/label-view-selector/label-view-selector.component';
+import { ReceiptLayoutComponent } from './printing/receipt-layout/receipt-layout.component';
+import { PrintTemplatePopUpComponent } from './printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
+import { PrintTemplateComponent } from './printing/reciept-pop-up/print-template/print-template.component';
+import { ReceiptViewComponent } from './printing/reciept-pop-up/receipt-view/receipt-view.component';
+import { CreditCardPaymentsPrintListComponent } from '../modules/transactions/balanceSheets/credit-card-payments-print-list/credit-card-payments-print-list.component';
+import { ItemSalesCardComponent } from '../modules/admin/reports/item-sales-card/item-sales-card.component';
+import { PaymentReportComponent } from '../modules/admin/reports/payment-report/payment-report.component';
+import { PaymentReportDataComponent } from '../modules/admin/reports/payment-report/payment-report-data/payment-report-data.component';
+import { PaymentReportCardComponent } from '../modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
+import { BalanceSheetHeaderViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-header-view/balance-sheet-header-view.component';
+import { BalanceSheetCalculationsViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-calculations-view/balance-sheet-calculations-view.component';
+import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
+import { SalesItemsComponent } from '../modules/admin/reports/item-sales-card/sales-items/sales-items.component';
 
 
 @NgModule({
@@ -70,12 +85,37 @@ import { OrderHeaderDemoGraphicsComponent } from '../modules/posorders/pos-order
     OrderHeaderDemographicsBoardComponent,
     CategoryItemsBoardComponent,
     CategoryItemsBoardItemComponent,
+
+
+    //receipts
+    ReceiptLayoutComponent,
+    ReceiptViewComponent,
+    PrintTemplatePopUpComponent,
+    PrintTemplateComponent,
+    LabelViewSelectorComponent,
+
+    
+    CreditCardPaymentsPrintListComponent,
+
+    //moved from shared
+    ItemSalesCardComponent,
+    PaymentReportComponent,
+    PaymentReportDataComponent,
+    ReceiptViewComponent,
+    PaymentReportCardComponent,
+
+    SalesItemsComponent,
+
+    BalanceSheetViewComponent,
+    BalanceSheetHeaderViewComponent,
+    BalanceSheetCalculationsViewComponent,
   ],
   imports: [
     CommonModule,
     IonicModule,
     AppMaterialModule,
     ReactiveFormsModule,
+    SharedPipesModule
   ],
   exports: [
     BarcodeScannerComponent,
@@ -108,12 +148,36 @@ import { OrderHeaderDemoGraphicsComponent } from '../modules/posorders/pos-order
     OrderHeaderDemographicsBoardComponent,
     CategoryItemsBoardComponent,
     CategoryItemsBoardItemComponent,
-   
+
+
+    //receipts
+    ReceiptLayoutComponent,
+    ReceiptViewComponent,
+    PrintTemplatePopUpComponent,
+    PrintTemplateComponent,
+    LabelViewSelectorComponent,
+  
+
+    CreditCardPaymentsPrintListComponent,
+
+    //moved from shared
+    ItemSalesCardComponent,
+    PaymentReportComponent,
+    PaymentReportDataComponent,
+    ReceiptViewComponent,
+    PaymentReportCardComponent,
+
+    SalesItemsComponent,
+
+    BalanceSheetViewComponent,
+    BalanceSheetHeaderViewComponent,
+    BalanceSheetCalculationsViewComponent,
   ],
   providers: [
     InventoryEditButtonService,
     ProductEditButtonService,
-    MBMenuButtonsService
+    MBMenuButtonsService,
+  
   ]
 })
 export class SharedUiModule { }

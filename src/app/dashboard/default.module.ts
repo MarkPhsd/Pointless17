@@ -79,7 +79,7 @@ import { DatabaseSchemaComponent } from '../modules/admin/settings/database/data
 import { CSVImportComponent } from '../modules/admin/settings/database/csv-import/csv-import.component';
 // import { ProductFilterComponent } from './widgets/product-filter/product-filter.component';
 // import { CategorySelectListFilterComponent } from './widgets/category-select-list-filter/category-select-list-filter.component';
-import { ReceiptLayoutComponent } from '../modules/admin/settings/printing/receipt-layout/receipt-layout.component';
+// import { ReceiptLayoutComponent } from '../shared-ui/printing/receipt-layout/receipt-layout.component';
 
 import { InstalledPrintersComponent } from '../modules/admin/settings/printing/installed-printers/installed-printers.component';
 import { MenuItemsInfiniteComponent } from '../modules/menu/menuitems/menu-items-infinite/menu-items-infinite.component';
@@ -88,7 +88,7 @@ import { HTMLEditPrintingComponent } from '../modules/admin/settings/printing/ht
 import { CacheSettingsComponent } from '../modules/admin/settings/database/cache-settings/cache-settings.component';
 import { InventoryHistoryListComponent } from '../modules/admin/inventory/inventory-history-list/inventory-history-list.component';
 import { InventoryHistoryItemComponent } from '../modules/admin/inventory/inventory-history-item/inventory-history-item.component';
-import { LabelViewSelectorComponent } from '../modules/admin/settings/printing/label-view-selector/label-view-selector.component';
+// import { LabelViewSelectorComponent } from '../shared-ui/printing/label-view-selector/label-view-selector.component';
 import { InventoryComponent } from '../modules/admin/settings/inventory/inventory.component';
 import { StrainPackagesComponent } from '../modules/admin/metrc/packages/strains-add/strain-packages/strain-packages.component';
 import { MetrcIndividualPackageComponent } from '../modules/admin/metrc/packages/metrc-individual-package/metrc-individual-package.component';
@@ -153,7 +153,7 @@ import { EmployeeListComponent } from '../modules/admin/employees/employee-list/
 import { EmployeeFilterPanelComponent } from '../modules/admin/employees/employee-filter-panel/employee-filter-panel.component';
 import { EmployeeEditComponent } from '../modules/admin/employees/employee-edit/employee-edit.component';
 import { EmployeeDetailsPanelComponent } from '../modules/admin/employees/employee-details-panel/employee-details-panel.component';
-import { RecieptPopUpComponent } from '../modules/admin/settings/printing/reciept-pop-up/reciept-pop-up.component';
+import { RecieptPopUpComponent } from '../shared-ui/printing/reciept-pop-up.component';
 import { EditCSSStylesComponent } from '../modules/admin/settings/printing/edit-cssstyles/edit-cssstyles.component';
 import { PosOperationsComponent } from '../modules/transactions/operations/pos-operations/pos-operations.component';
 import { PosOrderItemEditComponent } from '../modules/posorders/pos-order-item/pos-order-item-edit/pos-order-item-edit.component';
@@ -163,8 +163,8 @@ import { PaymentMethodSettingsComponent } from '../modules/admin/transactions/pa
 import { UITransactionsComponent } from '../modules/admin/settings/software/UISettings/uitransactions/uitransactions.component';
 import { DefaultReceiptSelectorComponent } from '../modules/admin/settings/printing/default-receipt-selector/default-receipt-selector.component';
 import { RequiresSerialComponent } from '../modules/posorders/requires-serial/requires-serial.component';
-import { BalanceSheetCalculationsViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-calculations-view/balance-sheet-calculations-view.component';
-import { BalanceSheetHeaderViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-header-view/balance-sheet-header-view.component';
+// import { BalanceSheetCalculationsViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-calculations-view/balance-sheet-calculations-view.component';
+// import { BalanceSheetHeaderViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-header-view/balance-sheet-header-view.component';
 import { BalanceSheetQuickViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-quick-view/balance-sheet-quick-view.component';
 import { PriceOptionsComponent } from '../modules/posorders/price-options/price-options.component';
 import { ProfileDemographicsComponent } from '../modules/admin/profiles/parts/demographics/demographics.component';
@@ -219,7 +219,7 @@ import { TypeBoardItemsComponent } from '../modules/tv-menu/type-board-items/typ
 import { MenuBoardComponent } from '../modules/tv-menu/menu-board/menu-board.component';
 import { StripeSettingsComponent } from '../modules/admin/settings/stripe-settings/stripe-settings.component';
 import { NgxStripeModule } from 'ngx-stripe';
-import { StripeCheckOutComponent } from '../modules/admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
+import { StripeCheckOutComponent } from '../modules/payment-processing/stripe-check-out/stripe-check-out.component';
 import { DSIEMVTransactionComponent } from '../modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
 
 import { PosOrderBoardComponent } from '../modules/posorders/pos-order/pos-order-board/pos-order-board.component';
@@ -231,14 +231,14 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
 // import { ExportDataComponent } from '../modules/admin/settings/database/export-data/export-data.component';
 import { PosEditSettingsComponent } from '../modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
 
-import { ReceiptViewComponent } from '../modules/admin/settings/printing/reciept-pop-up/receipt-view/receipt-view.component';
+// import { ReceiptViewComponent } from '../shared-ui/printing/reciept-pop-up/receipt-view/receipt-view.component';
 
 import { StoreCreditPopUpComponent } from '../modules/posorders/pos-payment/store-credit-pop-up/store-credit-pop-up.component';
 import { StoreCreditIssueComponent } from '../modules/posorders/pos-order/store-credit-issue/store-credit-issue.component';
-import { BalanceSheetViewComponent } from '../modules/admin/settings/printing/balance-sheet-view/balance-sheet-view.component';
+// import { BalanceSheetViewComponent } from '../shared-ui/printing/balance-sheet-view/balance-sheet-view.component';
 import { CloseDayValidationComponent } from '../modules/transactions/operations/pos-operations/close-day-validation/close-day-validation.component';
 import { PasswordValidationComponent } from '../modules/admin/profiles/password-validation/password-validation.component';
-import { CreditCardPaymentsPrintListComponent } from '../modules/transactions/balanceSheets/credit-card-payments-print-list/credit-card-payments-print-list.component';
+// import { CreditCardPaymentsPrintListComponent } from '../modules/transactions/balanceSheets/credit-card-payments-print-list/credit-card-payments-print-list.component';
 import { AngularResizeEventModule } from 'angular-resize-event';
 import { ProductListByBarcodeComponent } from '../modules/menu/product-list-by-barcode/product-list-by-barcode.component';
 import { AppWizardStatusComponent } from '../modules/admin/settings/software/app-wizard-status/app-wizard-status.component';
@@ -315,8 +315,8 @@ import { BlogListEditComponent } from '../modules/admin/blogEditor/blog-list-edi
 import { BlogPostEditComponent } from '../modules/admin/blogEditor/blog-post-edit/blog-post-edit.component';
 import { BlogPostSortComponent } from '../modules/admin/blogEditor/blog-post-sort/blog-post-sort.component';
 import { PosOrderItemListComponent } from '../modules/posorders/pos-order/pos-order-item-list/pos-order-item-list.component';
-import { PrintTemplateComponent } from '../modules/admin/settings/printing/reciept-pop-up/print-template/print-template.component';
-import { PrintTemplatePopUpComponent } from '../modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
+// import { PrintTemplateComponent } from '../shared-ui/printing/reciept-pop-up/print-template/print-template.component';
+// import { PrintTemplatePopUpComponent } from '../shared-ui/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
 // import { DxReportDesignerModule, DxReportViewerModule } from 'devexpress-reporting-angular';
 import { DevxReportDesignerComponent } from '../modules/admin/devx-reporting/devx-report-designer/devx-report-designer.component';
 import { ReportViewerComponent } from '../modules/admin/devx-reporting/report-viewer/report-viewer.component';
@@ -403,6 +403,9 @@ import {NgcCookieConsentModule} from 'ngx-cookieconsent';
 import { NewUserGuestComponent } from '../modules/profile/new-user-guest/new-user-guest.component';
 import { PosOrderItemEditorComponent } from '../modules/posorders/pos-order/pos-order-items/pos-order-item-edit/pos-order-item-editor.component';
 import { StoresManagerComponent } from '../modules/admin/stores-manager/stores-manager.component';
+import { SharedUiModule } from '../shared-ui/shared-ui.module';
+import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
+import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
 // import { PosOrderItemEditorComponent } from '../modules/posorders/pos-order/pos-order-items/pos-order-item-edit/pos-order-item-edit.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
@@ -448,10 +451,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     BalanceSheetsComponent,
     BalanceSheetFilterComponent,
     BalanceSheetEditComponent,
-    BalanceSheetCalculationsViewComponent,
-    BalanceSheetHeaderViewComponent,
+    // BalanceSheetCalculationsViewComponent,
+    // BalanceSheetHeaderViewComponent,
     BalanceSheetQuickViewComponent,
-    BalanceSheetViewComponent,
+    // BalanceSheetViewComponent,
 
     BrandslistComponent,
 
@@ -463,8 +466,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ClientInfoComponent,
     ClientTypeSelectionComponent,
     CloseDayValidationComponent,
-    CreditCardPaymentsPrintListComponent,
-
+    // CreditCardPaymentsPrintListComponent,
 
     CookieConsentComponent,
     //adminModule
@@ -560,8 +562,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     StoreCreditEditorComponent,
     StoreCreditListComponent,
 
-    PrintTemplatePopUpComponent,
-    PrintTemplateComponent,
+    // PrintTemplatePopUpComponent,
+    // PrintTemplateComponent,
     ///end admin
 
     CatalogScheduleInfoComponent,
@@ -608,7 +610,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     FunctionGroupEditComponent,
     FunctionGroupButtonEditComponent,
     HTMLEditPrintingComponent,
-    ReceiptLayoutComponent,
+    // ReceiptLayoutComponent,
     JobTypesEditComponent,
     JobTypesListComponent,
 
@@ -634,7 +636,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ItemSortComponent,
     ItemCategoriesEditComponent,
     ImageCaptureComponent,
-    LabelViewSelectorComponent,
+    // LabelViewSelectorComponent,
 
     MenuGroupItemEditComponent,
 
@@ -768,7 +770,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PSMenuGroupListComponent,
     PSMenuGroupEditComponent,
 
-    ReceiptLayoutComponent,
+    // ReceiptLayoutComponent,
     RecieptPopUpComponent,
     ReportsComponent,
     RequiresSerialComponent,
@@ -802,7 +804,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     StoreCreditPopUpComponent,
     SoftwareComponent,
 
-    ReceiptViewComponent,
+    // ReceiptViewComponent,
     MenuItemCardDashboardComponent,
     StripeSettingsComponent,
     StripeCheckOutComponent,
@@ -861,7 +863,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       NgPipesModule,
       ReactiveFormsModule,
       RouterModule,
+
       SharedModule,
+
+
       NgxStripeModule.forRoot(),
       NgxCsvParserModule,
       NgxPayPalModule,

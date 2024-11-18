@@ -11,7 +11,7 @@ import { toPng, toJpeg } from 'html-to-image';
 import { jsPDF } from "jspdf";
 import { RenderingService } from './rendering.service';
 import { LabelaryService, zplLabel } from '../labelary/labelary.service';
-import { RecieptPopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/reciept-pop-up.component';
+import { RecieptPopUpComponent } from 'src/app/shared-ui/printing/reciept-pop-up.component';
 import { BehaviorSubject,  Observable, switchMap, of, catchError, forkJoin,  concatMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { PlatformService } from './platform.service';
@@ -21,7 +21,7 @@ import { POSOrderItemService } from '../transactions/posorder-item-service.servi
 import { HttpClient } from '@angular/common/http';
 import { UISettingsService } from './settings/uisettings.service';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
-import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
+import { PrintTemplatePopUpComponent } from 'src/app/shared-ui/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
 import { IMenuItem, ItemType } from 'src/app/_interfaces/menu/menu-products';
 import { ClientTableService } from '../people/client-table.service';
 import { UUID } from 'angular2-uuid';

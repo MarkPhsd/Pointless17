@@ -2,7 +2,7 @@ import { E } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { catchError, concatMap, Observable, of, switchMap } from 'rxjs';
-import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
+import { PrintTemplatePopUpComponent } from 'src/app/shared-ui/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
 import { IPOSOrder, ISetting, ISite, PosOrderItem } from 'src/app/_interfaces';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { IPrinterLocation, PrinterLocationsService } from '../menu/printer-locations.service';

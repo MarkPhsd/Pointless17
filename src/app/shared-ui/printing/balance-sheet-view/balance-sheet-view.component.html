@@ -63,10 +63,10 @@
                 <div>
                   {{ sheet?.netSales ?? 0 | currency }}
                 </div>
-                <div *ngIf="serviceFee.gratuity != 0">
+                <div *ngIf="serviceFee.gratuity !== 0">
                   Other Charges:
                 </div>
-                <div  *ngIf="serviceFee.gratuity != 0">
+                <div  *ngIf="serviceFee.gratuity !== 0">
                   {{ serviceFee?.gratuity ?? 0 | currency }}
                 </div>
                 <!-- <div *ngIf="serviceFee.gratuity != 0">

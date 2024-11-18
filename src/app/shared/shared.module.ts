@@ -118,7 +118,7 @@ import { PriceTierScheduleComponent } from '../modules/admin/products/price-tier
 import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-selector.component';
 import { BackgroundCoverComponent } from './widgets/background-cover/background-cover.component';
 // import { UploaderComponent } from './widgets/AmazonServices';
-import { PaymentReportCardComponent } from '../modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
+// import { PaymentReportCardComponent } from '../modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
 import { DSIEMVElectronComponent } from '../modules/admin/settings/software/dsiemvelectron/dsiemvelectron.component';
 import { DepartmentMenuComponent } from '../modules/menu/department-menu/department-menu.component';
 import { OverLayComponent } from './widgets/over-lay/over-lay.component';
@@ -168,7 +168,7 @@ import { BlogPostListComponent } from './widgets/blog-post-list/blog-post-list.c
 import { BlogPostComponent } from './widgets/blog-post/blog-post.component';
 import { TagChipsProductsComponent } from '../modules/admin/products/productedit/_product-edit-parts/tag-chips-products/tag-chips-products.component';
 import { CashDrawerSettingsComponent } from '../modules/admin/settings/software/cash-drawer-settings/cash-drawer-settings.component';
-import { PaymentReportDataComponent } from '../modules/admin/reports/payment-report/payment-report-data/payment-report-data.component';
+// import { PaymentReportDataComponent } from '../modules/admin/reports/payment-report/payment-report-data/payment-report-data.component';
 import { ClockInOutComponent } from './widgets/clock-in-out/clock-in-out.component';
 import { TruncateRightPipe } from '../_pipes/truncate-right.pipe';
 import { PosCheckOutButtonsComponent } from '../modules/posorders/pos-order/pos-check-out-buttons/pos-check-out-buttons.component';
@@ -224,8 +224,8 @@ import { ZoomComponent } from './widgets/zoom/zoom.component';
 import { PartUsageGraphComponent } from '../modules/admin/products/part-builder/part-usage-graph/part-usage-graph.component';
 import { CoachMarksComponent } from './widgets/coach-marks/coach-marks.component';
 import { CoachMarksButtonComponent } from './widgets/coach-marks-button/coach-marks-button.component';
-import { SalesItemsComponent } from '../modules/admin/reports/item-sales-card/sales-items/sales-items.component';
-import { DerpPipe } from '../_pipes/derp.pipe';
+// import { SalesItemsComponent } from '../modules/admin/reports/item-sales-card/sales-items/sales-items.component';
+
 import { POSOrderScheduleCardComponent } from '../modules/posorders/posorder-schedule/posorder-schedule-card/posorder-schedule-card.component';
 import { AuditPaymentComponent } from '../modules/admin/reports/item-sales-card/audit-payment/audit-payment.component';
 import { QRCodeModule } from 'angularx-qrcode'
@@ -294,7 +294,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SafeHtmlPipe,
     ArrayFilterPipe,
     ArraySortPipe,
-    DerpPipe,
+   
     BackgroundUrlPipe,
     TruncateRightPipe,
 
@@ -375,9 +375,9 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     InventoryAdjustmentNoteComponent,
     IonicGeoLocationComponent,
     ItemTypeSortComponent,
-    ItemSalesCardComponent,
+    // ItemSalesCardComponent,
 
-    SalesItemsComponent,
+    // SalesItemsComponent,
     // ImageSwiperComponent,
     ImageContainerComponent,
     InstructionDirective,
@@ -423,9 +423,9 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     PagerBlobComponent,
     PageNotFoundComponent,
     PaymentBalanceComponent,
-    PaymentReportComponent,
-    PaymentReportCardComponent,
-    PaymentReportDataComponent,
+    // PaymentReportComponent,
+    // PaymentReportCardComponent,
+    // PaymentReportDataComponent,
     PaymentTypesSelectionComponent,
     PieComponent,
     POSOrderScheduleCardComponent,
@@ -597,7 +597,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ArrayFilterPipe,
     ArraySortPipe,
     BackgroundUrlPipe,
-    DerpPipe,
+
     BrandTypeSelectComponent,
     ListProductSearchInputComponent,
     OrderItemScannerComponent,
@@ -685,8 +685,8 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ImageContainerComponent,
     InstructionDirective,
     ItemTypeSortComponent,
-    ItemSalesCardComponent,
-    SalesItemsComponent,
+    // ItemSalesCardComponent,
+    // SalesItemsComponent,
     // ImageSwiperComponent,
     KeyPadComponent,
     KeyboardComponent,
@@ -736,7 +736,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     PagingInfoComponent,
     PageNotFoundComponent,
     PaymentBalanceComponent,
-    PaymentReportDataComponent,
+    // PaymentReportDataComponent,
     PieComponent,
     PriceCategorySearchComponent,
     PriceCategorySelectComponent,

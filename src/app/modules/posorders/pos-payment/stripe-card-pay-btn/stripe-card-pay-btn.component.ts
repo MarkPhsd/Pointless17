@@ -1,6 +1,6 @@
 import { Component, Input, OnInit,Output,EventEmitter } from '@angular/core';
 import { Observable,switchMap,of   } from 'rxjs';
-import { StripeCheckOutComponent } from 'src/app/modules/admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
+import { StripeCheckOutComponent } from 'src/app/modules/payment-processing/stripe-check-out/stripe-check-out.component';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
