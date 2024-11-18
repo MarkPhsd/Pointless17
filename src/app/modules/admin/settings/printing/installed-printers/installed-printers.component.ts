@@ -11,7 +11,8 @@ import { HTMLEditPrintingComponent } from '../htmledit-printing/htmledit-printin
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
-import   domtoimage from 'dom-to-image';
+// import   domtoimage from 'dom-to-image';
+import { toPng, toJpeg } from 'html-to-image';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { EditCSSStylesComponent } from '../edit-cssstyles/edit-cssstyles.component';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -495,69 +496,98 @@ export class InstalledPrintersComponent implements OnInit {
   }
 
   async printAndroidImage() {
-    //this method uses an existing file within the assests folder.
-    // let img = new Image();
-    // img.src = '/assets/receipt.png';
-    // let img = new Image();
-    // img.src = '/assets/receipt.jpg';
-    // const img = this.putImageOnScreen();
-    // if (!img) {
-    //   this.snack.open('no image created', 'fail')
-    //   return
-    // }
+    try {
+        const options = { backgroundColor: 'white', width: 400, height: 800 };
+        const node = this.receiptImage.nativeElement;
+
+        // Generate the PNG image from the element
+        const dataUrl = await toPng(node, options);
+        
+        const img = new Image();
+        img.src = dataUrl;
+
+        // Use the printing service to send the image to the Android printer
+        this.printingAndroidService.printAndroidImage(img, this.btPrinter);
+
+    } catch (error) {
+        console.error('Error generating or printing the image:', error);
+        this.siteService.notify('Failed to create image for printing', 'Error', 5000);
+    }
+}
+
+  // async printAndroidImage() {
+  //   //this method uses an existing file within the assests folder.
+  //   // let img = new Image();
+  //   // img.src = '/assets/receipt.png';
+  //   // let img = new Image();
+  //   // img.src = '/assets/receipt.jpg';
+  //   // const img = this.putImageOnScreen();
+  //   // if (!img) {
+  //   //   this.snack.open('no image created', 'fail')
+  //   //   return
+  //   // }
 
 
-    // let img = new Image();
-    // // img.src = 'https://cafecartel.com/temp/logo.png';
-    // img.src = '/assests/icons/icon-72x72.png'
-    const options = { background: 'white', height: 800, width: 400 };
-    domtoimage.toPng( this.receiptImage.nativeElement , options).then(
-      data => {
-        var img = new Image();
-        img.src = data;
-        this.printingAndroidService.printAndroidImage( img , this.btPrinter)
-      })
+  //   // let img = new Image();
+  //   // // img.src = 'https://cafecartel.com/temp/logo.png';
+  //   // img.src = '/assests/icons/icon-72x72.png'
+  //   const options = { background: 'white', height: 800, width: 400 };
+  //   domtoimage.toPng( this.receiptImage.nativeElement , options).then(
+  //     data => {
+  //       var img = new Image();
+  //       img.src = data;
+  //       this.printingAndroidService.printAndroidImage( img , this.btPrinter)
+  //     })
 
-    return
+  //   return
 
-    // img.src = '/assests/icons/icon-72x72.png'
-    // this.printingService.printAndroidImage( img, this.btPrinter)
-    // return
-    //we need to generate the iamge from the printSection
-    // const options = { background: 'white', height: 1000, width: 600 };
+  //   // img.src = '/assests/icons/icon-72x72.png'
+  //   // this.printingService.printAndroidImage( img, this.btPrinter)
+  //   // return
+  //   //we need to generate the iamge from the printSection
+  //   // const options = { background: 'white', height: 1000, width: 600 };
 
-    domtoimage.toPng(document.getElementById('printImage') , options).then(
-      data => {
-        var img = new Image();
-        img.src = data;
-        // const newImage = document.body.appendChild(img);
-        // this.receiptImage.nativeElement = img
-        this.receiptImage64 =   `${img.src}`
+  //   domtoimage.toPng(document.getElementById('printImage') , options).then(
+  //     data => {
+  //       var img = new Image();
+  //       img.src = data;
+  //       // const newImage = document.body.appendChild(img);
+  //       // this.receiptImage.nativeElement = img
+  //       this.receiptImage64 =   `${img.src}`
 
-        // let img = new Image();
-        // img.src =  this.receiptImage64
-        this.printingAndroidService.printAndroidImage( img  , this.btPrinter)
-      }
-    )
-  }
+  //       // let img = new Image();
+  //       // img.src =  this.receiptImage64
+  //       this.printingAndroidService.printAndroidImage( img  , this.btPrinter)
+  //     }
+  //   )
+  // }
 
-  putImageOnScreen(): HTMLImageElement {
-    let node = document.getElementById('printsection') ;
-    const options = { background: 'white',  height: 1000, width: 600 };
-    domtoimage.toPng(node, options).then(
-      data =>
-      {
-        if (!data) {return}
-        let img = new Image();
-        img.src = data;
-        this.receiptImage64 =  `${img.src}`
-        // this.snack.open(img.src, 'image')
-        return img
-      }, err => {
-        // this.snack.open(err, 'Failed')
-      }
-    )
-    return null;
+  putImageOnScreen(): Promise<HTMLImageElement | null> {
+    const node = document.getElementById('printsection');
+    const options = { backgroundColor: 'white', width: 600, height: 1000 };
+
+    if (!node) {
+        console.error('Element with ID "printsection" not found.');
+        return Promise.resolve(null);
+    }
+
+    return toPng(node, options)
+        .then((dataUrl) => {
+            if (!dataUrl) {
+                return null;
+            }
+
+            const img = new Image();
+            img.src = dataUrl;
+            this.receiptImage64 = `${img.src}`;
+            return img;
+        })
+        .catch((err) => {
+            console.error('Failed to generate image:', err);
+            // Optionally notify the user here
+            // this.snack.open(err.toString(), 'Failed');
+            return null;
+        });
   }
 
   async printElectron() {

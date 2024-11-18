@@ -184,14 +184,14 @@
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "browserTarget": "CCSApp:build"
+            "buildTarget": "CCSApp:build"
           },
           "configurations": {
             "dev": {
-              "browserTarget": "CCSApp:build:dev"
+              "buildTarget": "CCSApp:build:dev"
             },
             "production": {
-              "browserTarget": "CCSApp:build:production"
+              "buildTarget": "CCSApp:build:production"
             },
              "ci": {
               "progress": false
@@ -256,11 +256,11 @@
         "ionic-cordova-build": {
           "builder": "@ionic/angular-toolkit:cordova-build",
           "options": {
-            "browserTarget": "CCSApp:build"
+            "buildTarget": "CCSApp:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "CCSApp:build:production"
+              "buildTarget": "CCSApp:build:production"
             }
           }
         },

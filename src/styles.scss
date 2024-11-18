@@ -721,7 +721,7 @@ mat-dialog-container {
   flex-direction: column;
   row-gap: 10px;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: start;
 }
 
@@ -730,7 +730,7 @@ mat-dialog-container {
   flex-direction: row;
   row-gap: 10px;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: start;
 }
 
@@ -976,7 +976,7 @@ mat-dialog-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .flex-grid-column-nogap {
@@ -1068,7 +1068,7 @@ mat-dialog-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
   margin: 5px;
   gap: 10px;
 }
@@ -1076,7 +1076,7 @@ mat-dialog-container {
 .ps-flex-group-start-no-margin {
   display: flex;
   flex-direction: row;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .ps-flex-group-content-start {
@@ -1092,7 +1092,7 @@ mat-dialog-container {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: start;
+  justify-content: flex-start;
   margin: 5px;
   gap: 10px;
 }
@@ -1101,7 +1101,7 @@ mat-dialog-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
   margin: 5px;
   gap: 10px;
 }

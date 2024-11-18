@@ -6,7 +6,8 @@ import { IClientTable, IPurchaseOrderItem, ISetting, ISite, IUser } from 'src/ap
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import  html2canvas from 'html2canvas';
-import  domtoimage from 'dom-to-image';
+// import  domtoimage from 'dom-to-image';
+import { toPng, toJpeg } from 'html-to-image';
 import { jsPDF } from "jspdf";
 import { RenderingService } from './rendering.service';
 import { LabelaryService, zplLabel } from '../labelary/labelary.service';
@@ -19,7 +20,6 @@ import { MenuService, OrdersService } from 'src/app/_services';
 import { POSOrderItemService } from '../transactions/posorder-item-service.service';
 import { HttpClient } from '@angular/common/http';
 import { UISettingsService } from './settings/uisettings.service';
-import { PrintingAndroidService} from  './printing-android.service';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
 import { IMenuItem, ItemType } from 'src/app/_interfaces/menu/menu-products';
@@ -463,16 +463,28 @@ export class PrintingService {
   }
 
   getDomToImage(node: any) {
-      domtoimage.toPng(node)
-    .then(function (dataUrl) {
-        var img = new Image();
-        img.src = dataUrl;
-        document.body.appendChild(img);
-    })
-    .catch(function (error) {
-        console.error('oops, something went wrong!', error);
-    });
+    toPng(node)
+        .then((dataUrl) => {
+            const img = new Image();
+            img.src = dataUrl;
+            document.body.appendChild(img);
+        })
+        .catch((error) => {
+            console.error('Oops, something went wrong!', error);
+        });
   }
+
+  // getDomToImage(node: any) {
+  //     domtoimage.toPng(node)
+  //   .then(function (dataUrl) {
+  //       var img = new Image();
+  //       img.src = dataUrl;
+  //       document.body.appendChild(img);
+  //   })
+  //   .catch(function (error) {
+  //       console.error('oops, something went wrong!', error);
+  //   });
+  // }
 
   // listPrinters(): any {
   //   try {
@@ -494,36 +506,68 @@ export class PrintingService {
     }
   }
 
+  public convertToPDF(node: any, fileName?: string) {
+    let pdfName = 'invoice.pdf';
+    if (fileName) {
+        pdfName = `${fileName}.pdf`;
+    }
+
+    try {
+        const options = { backgroundColor: 'white', width: 595, height: 845 };
+        toPng(node, options).then(dataUrl => {
+            // Initialize jsPDF
+            const doc = new jsPDF('p', 'mm', 'a4');
+            // Add the image to the PDF
+            doc.addImage(dataUrl, 'PNG', 0, 0, 250, 250); // Adjust the dimensions as needed
+            // Save the PDF
+            doc.save(pdfName);
+        }).catch(error => {
+            this.siteService.notify(error.toString(), 'PNG Error', 3000);
+        });
+    } catch (error) {
+        this.siteService.notify(error.toString(), 'PNG Error', 3000);
+    }
+}
+
    // const node = document.getElementById('printsection');
-  public convertToPDF(node: any, fileName? : string)  {
-    let pdfName = 'invoice.pdf'
-    if (fileName) {  pdfName = `${fileName}.pdf`  }
+  // public convertToPDF(node: any, fileName? : string)  {
+  //   let pdfName = 'invoice.pdf'
+  //   if (fileName) {  pdfName = `${fileName}.pdf`  }
 
 
+  //   try {
+  //     const options = { background: 'white', height: 845, width: 595 };
+  //     domtoimage.toPng(node, options).then(data => {
+  //       //Initialize JSPDF
+  //       const doc = new jsPDF('p', 'mm', 'a4');
+  //       doc.addImage(data, 'PNG', 0, 0, 250, 250);//change values to your preference
+  //       doc.save(fileName);
+  //     }, error => {
+  //       this.siteService.notify(error.toString(), 'PNG Error error', 3000)
+  //     })
+  //   } catch (error) {
+  //     this.siteService.notify(error.toString(),  'PNG Error error', 3000)
+  //   }
+  // }
+
+  public convertToPNG(node: any) {
     try {
-      const options = { background: 'white', height: 845, width: 595 };
-      domtoimage.toPng(node, options).then(data => {
-        //Initialize JSPDF
-        const doc = new jsPDF('p', 'mm', 'a4');
-        doc.addImage(data, 'PNG', 0, 0, 250, 250);//change values to your preference
-        doc.save(fileName);
-      }, error => {
-        this.siteService.notify(error.toString(), 'PNG Error error', 3000)
-      })
+        const options = { backgroundColor: 'white', width: 300, height: 845 };
+        return toPng(node, options);
     } catch (error) {
-      this.siteService.notify(error.toString(),  'PNG Error error', 3000)
+        this.siteService.notify(error.toString(), 'PNG Error', 3000);
     }
-  }
+}
 
-  convertToPNG(node: any)
-  {
-    try {
-      const options = { background: 'white', height: 845, width: 300 };
-      return  domtoimage.toPng(node, options)
-    } catch (error) {
-      this.siteService.notify(error.toString(),  'PNG Error error', 3000)
-    }
-  }
+  // convertToPNG(node: any)
+  // {
+  //   try {
+  //     const options = { background: 'white', height: 845, width: 300 };
+  //     return  domtoimage.toPng(node, options)
+  //   } catch (error) {
+  //     this.siteService.notify(error.toString(),  'PNG Error error', 3000)
+  //   }
+  // }
 
   getLastPrinterName(printerType): string {
     return  localStorage.getItem(printerType)

@@ -81,7 +81,7 @@ app-inventory-history-item {
 }
 .grid-items {
   display: grid;
-  // justify-content: start;
+  // justify-content: flex-start;
   // flex-direction: row;
   // flex-wrap: wrap;
   grid-template-columns: repeat( auto-fill, minmax(150px, 1fr) );

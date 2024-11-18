@@ -108,7 +108,7 @@ img {
 }
 
 .grid-image-item {
-  justify-content: start;
+  justify-content: flex-start;
   @include for-phone-only {
 
   }
@@ -210,7 +210,7 @@ h1 {
   /* Ensuring the column has at least 50px width */
   min-width: 25px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: start;
   font-size: clamp(1.8rem, 2vw, 2rem);
   font-weight: 500;
@@ -226,7 +226,7 @@ h1 {
   grid-template-columns:  repeat(auto-fit, minmax(125px, 1fr));
   // justify-content: space-between;
   grid-auto-flow: dense; // This helps in filling up the gaps
-  justify-content: start; // Aligns grid items to the start of the grid area
+  justify-content: flex-start; // Aligns grid items to the start of the grid area
 
   font-weight: 500;
   line-height: 1.2em;

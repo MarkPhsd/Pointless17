@@ -110,14 +110,14 @@ h3, .h3 {
 .ps-flex-group-start-no-margin {
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   min-width: 300px;
 }
 
 .ps-flex-group-start-no-margin-side {
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   // max-width: 280px;
   overflow: hidden;
   min-width: 300px;
