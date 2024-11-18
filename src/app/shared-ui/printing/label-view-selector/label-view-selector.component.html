@@ -1,10 +1,11 @@
 <div *ngIf="(label$ | async) as action"></div>
 
+<!--   -->
 <mat-form-field appearance="outline">
   <mat-label><ng-content></ng-content></mat-label>
     <mat-select
               type="text"
-              [(ngModel)]="labelID"
+             [(ngModel)]="labelID"
               (selectionChange)="refreshLabelSettings(labelID)">
 
     <div *ngIf="(labelList$ | async) as list">

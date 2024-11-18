@@ -238,7 +238,7 @@ import { GalleryModule } from 'ng-gallery';
 import { ImageLightHouseComponent } from './widgets/image-light-house/image-light-house.component';
 import { ClockInPanelComponent } from '../modules/admin/clients/clock-in-panel/clock-in-panel.component';
 import { UserPreferencesComponent } from '../modules/admin/clients/user-preferences/user-preferences.component';
-import { ClockViewComponent } from './widgets/clock-in-out/clock-view/clock-view.component';
+// import { ClockViewComponent } from './widgets/clock-in-out/clock-view/clock-view.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { NgxColorsModule } from 'ngx-colors';
 import { CloseFloatingButtonComponent } from './widgets/close-floating-button/close-floating-button.component';
@@ -340,7 +340,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ClientTypesLookupComponent,
     // ClientSearchSelectorComponent,
     ClockInOutComponent,
-    ClockViewComponent,
+    // ClockViewComponent,
     ClockInPanelComponent,
 
     CustomerDateSelectorComponent,
@@ -542,7 +542,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SearchFieldsComponent,
     ImageGalleryComponent,
     ImageLightHouseComponent,
-    ClockViewComponent,
+    // ClockViewComponent,
     CloseFloatingButtonComponent,
     SiteFooterComponent,
     SignatureComponent,
@@ -609,7 +609,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     AutofocusDirective,
     APISettingComponent,
     ApiStoredValueComponent,
-    // ApiStatusDisplayComponent,
+ 
     AppWizardProgressButtonComponent,
     BalanceSheetReportComponent,
     BlogPostListComponent,
@@ -635,7 +635,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ColorPickerModule,
     CoachMarksButtonComponent,
     CategorySelectComponent,
-    // ClientSearchSelectorComponent,
+ 
     CloseFloatingButtonComponent,
     ExitLabelSelectionComponent,
     CannabisItemEditComponent,
@@ -645,10 +645,8 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ChipsDisplayComponent,
     ClientTypesLookupComponent,
 
-    // PayAPIComponent,
-    // PayAPIFrameComponent,
     OnlinePaymentCompletedComponent,
-    ClockViewComponent,
+  
     CompanyInfoHeaderComponent,
     EmailSettingsComponent,
     ElectronZoomControlComponent,

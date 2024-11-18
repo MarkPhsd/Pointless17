@@ -23,7 +23,7 @@ import { EditButtonsStandardComponent } from '../shared/widgets/edit-buttons-sta
 import { LogoComponent } from '../shared/widgets/logo/logo.component';
 import { ProductSearchSelectorComponent } from '../shared/widgets/product-search-selector/product-search-selector.component';
 import { ToggleThemeComponent } from '../shared/widgets/toggle-theme/toggle-theme.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import { GridcomponentPropertiesDesignComponent } from '../modules/admin/grid-menu-layout/grid-component-properties/gridcomponent-properties-design/gridcomponent-properties-design.component';
 import { LimitValuesCardComponent } from '../modules/posorders/limit-values-card/limit-values-card.component';
 import { OrderHeaderDemographicsBoardComponent } from '../modules/posorders/pos-order/order-header-demographics-board/order-header-demographics-board.component';
@@ -51,6 +51,8 @@ import { BalanceSheetHeaderViewComponent } from '../modules/transactions/balance
 import { BalanceSheetCalculationsViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-calculations-view/balance-sheet-calculations-view.component';
 import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
 import { SalesItemsComponent } from '../modules/admin/reports/item-sales-card/sales-items/sales-items.component';
+import { ClockViewComponent } from '../shared/widgets/clock-in-out/clock-view/clock-view.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 
 @NgModule({
@@ -93,7 +95,7 @@ import { SalesItemsComponent } from '../modules/admin/reports/item-sales-card/sa
     PrintTemplatePopUpComponent,
     PrintTemplateComponent,
     LabelViewSelectorComponent,
-
+    ClockViewComponent,
     
     CreditCardPaymentsPrintListComponent,
 
@@ -115,7 +117,9 @@ import { SalesItemsComponent } from '../modules/admin/reports/item-sales-card/sa
     IonicModule,
     AppMaterialModule,
     ReactiveFormsModule,
-    SharedPipesModule
+    FormsModule ,
+    SharedPipesModule,
+    QRCodeModule,
   ],
   exports: [
     BarcodeScannerComponent,
@@ -156,7 +160,7 @@ import { SalesItemsComponent } from '../modules/admin/reports/item-sales-card/sa
     PrintTemplatePopUpComponent,
     PrintTemplateComponent,
     LabelViewSelectorComponent,
-  
+    ClockViewComponent,
 
     CreditCardPaymentsPrintListComponent,
 
