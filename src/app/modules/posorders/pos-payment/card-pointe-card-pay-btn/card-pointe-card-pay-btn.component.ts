@@ -4,7 +4,6 @@ import { IPaymentMethod } from 'ngx-paypal';
 import { Observable } from 'rxjs';
 import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder } from 'src/app/_interfaces';
-import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -36,7 +35,6 @@ export class CardPointeCardPayBtnComponent implements OnInit {
     private uISettingsService: UISettingsService,
     private sitesService    : SitesService,
     private dialog          : MatDialog,
-    private dsiProcess      : DSIProcessService,
     private paymentsMethodsService: PaymentsMethodsProcessService,
     private orderMethodsService: OrderMethodsService,
     private paymentMethodService: PaymentMethodsService,

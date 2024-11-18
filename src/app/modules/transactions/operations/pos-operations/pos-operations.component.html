@@ -46,14 +46,7 @@
         <span *ngIf="(uiTransactions?.dCapEnabled && dsiEmv)">
           <button mat-raised-button (click)="forcedcapBatchClose()"> <mat-icon>credit_card</mat-icon>Force Batch Close</button>
         </span>
-    
-        <span *ngIf="(uiTransactions && uiTransactions.dsiEMVNeteEpayEnabled) && dsiEMVSettings && isElectronApp">
-          <button mat-raised-button (click)="emvDatacapBatchCards()"> <mat-icon>credit_card</mat-icon>Batch Close</button>
-        </span>
-    
-        <span *ngIf="(uiTransactions && uiTransactions.dsiEMVNeteEpayEnabled) && dsiEMVSettings && isElectronApp">
-          <button mat-raised-button (click)="emvDataCapBatchInquire()"> <mat-icon>credit_card</mat-icon>Batch Inquire</button>
-        </span>
+  
     
         <app-list-printers-electron
             [printerName]      ="printerName"

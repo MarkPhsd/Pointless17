@@ -3,7 +3,7 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
 import { IPOSOrder, IPOSPayment, OperationWithAction } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
-import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
+
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
@@ -51,7 +51,6 @@ export class DSIEMVTransactionComponent implements OnInit {
   uiSettings: TransactionUISettings;
   constructor(
     private paymentsMethodsProcess: PaymentsMethodsProcessService,
-    private dsiProcess            : DSIProcessService,
     private orderService          : OrdersService,
     private orderMethodService    : OrderMethodsService,
     private pOSPaymentService     : POSPaymentService,
@@ -146,21 +145,11 @@ export class DSIEMVTransactionComponent implements OnInit {
   }
 
   async dsiResetDevice() {
-    this.processing = true;
-    const response  = await this.dsiProcess.pinPadReset( );
-    this.message = 'Device Reset'
-    this.processing = false;
+
   }
 
   async testProcess() {
-    const amount = this.amount
-    const payment = this.payment
-    if (!this.order) { return }
-    this.processingResults = true;
-    this.processing = true;
-    this.response = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
-    this.processing = true;
-    this.processingResults = false;
+
   }
 
   testSaveTransaction() {
@@ -202,73 +191,31 @@ export class DSIEMVTransactionComponent implements OnInit {
   }
 
   async processSaleCard() {
-    const amount = this.amount
-    const payment = this.payment
-    if (!this.order) { return }
-    this.processingResults = true;
-    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, this.uiSettings.dsiTipPrompt );
-    this.processingResults = false;
-    this.processResults(response)
+
   };
 
   async processVoidCard() {
-    const amount = this.amount
-    const payment = this.voidPayment
-    if (!this.order) { return }
-    this.processingResults = true;
-    const response  = await this.dsiProcess.emvVoid(payment);
-    this.processingResults = false;
-    this.processVoidResults(response)
+
   };
 
   async processRefundCard() {
-    const amount  = this.amount
-    const payment = this.payment
-    if (!this.order) { return }
-    this.processingResults = true;
-    const response  = await this.dsiProcess.emvReturn(amount, payment.id,  this.manualPrompt );
-    this.processingResults = false;
-    this.processResults(response)
+
   };
 
   async procesPreAuthCard() {
-    const amount = this.amount
-    const payment = this.payment
-    if (!this.order) { return }
-    this.processingResults = true;
-    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
-    this.processingResults = false;
-    this.processResults(response)
+
   };
 
   async procesForceAuthCard() {
-    const amount = this.amount
-    const payment = this.payment
-    if (!this.order) { return }
-    this.processingResults = true;
-    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
-    this.processingResults = false;
-    this.processResults(response)
+
   };
 
   async procesWIC() {
-    const amount = this.amount
-    const payment = this.payment
-    if (!this.order) { return }
-    this.processingResults = true;
-    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
-    this.processingResults = false;
-    this.processResults(response)
+
   };
 
   async procesEBT() {
-    const amount = this.amount
-    const payment = this.payment
-    if (!this.order) { return }
-    this.processingResults = true;
-    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
-    this.processingResults = false;
-    this.processResults(response)
+
   };
 
   processVoidResults(response: RStream) {

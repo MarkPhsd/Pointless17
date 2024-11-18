@@ -10,7 +10,7 @@ import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
+
 import { BatchClose, Transaction } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { ICanCloseOrder } from 'src/app/_interfaces/transactions/transferData';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
@@ -115,7 +115,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     private orderService       : OrdersService,
     private platFormService    : PlatformService,
     private printingService    : PrintingService,
-    private dsiProcess         : DSIProcessService,
+  
     private sendGridService    : SendGridService,
     private matSnack           : MatSnackBar,
     private uISettingsService  : UISettingsService,
@@ -349,26 +349,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     this.localSite = this.siteService.getAssignedSite();
   }
 
-  async emvDatacapBatchCards(): Promise<boolean> {
-    try {
-
-      if (this.uiTransactions && this.uiTransactions.dsiEMVNeteEpayEnabled) {
-        this.batchSummary  = null;
-        const response =  await this.dsiProcess.emvBatch()
-        this.batchClose = response
-        return true
-      }
-    } catch (error) {
-    }
-    return false
-  }
-
-  async  emvDataCapBatchInquire() {
-    if (this.uiTransactions && this.uiTransactions.dsiEMVNeteEpayEnabled) {
-      const response    = await this.dsiProcess.emvBatchInquire();
-      this.batchSummary = response;
-    }
-  }
+ 
 
   viewdcapBatchSummary() {
     this.batchSummary$ = this.dcapBatchSummary
@@ -430,12 +411,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
 
     try {
       if (this.isElectronApp) {
-        if (this.uiTransactions && this.uiTransactions.dsiEMVNeteEpayEnabled) {
-          const batchResult =  await this.emvDatacapBatchCards();
-          if (!batchResult) {
-            const answer = window.confirm('Batch error, did you want to continue closing? You can batch separately.')
-          }
-        }
+    
       }
     } catch (error) {
       const answer = window.confirm(`Batch error ${error}, did you want to continue closing? You can batch separately.`)

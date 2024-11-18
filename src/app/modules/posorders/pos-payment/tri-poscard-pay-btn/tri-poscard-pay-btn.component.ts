@@ -3,13 +3,10 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IPaymentMethod } from 'ngx-paypal';
 import { Observable } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
-import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
+
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
-import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+
 import { TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 
 @Component({

@@ -2,7 +2,6 @@ import { Component, Input, OnChanges, OnInit, TemplateRef, ViewChild } from '@an
 import { IPaymentMethod } from 'ngx-paypal';
 import { Observable } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
-import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
@@ -41,7 +40,6 @@ export class DsiEMVCardPayBtnComponent implements OnInit, OnChanges {
 
   constructor(
     private sitesService    : SitesService,
-    private dsiProcess      : DSIProcessService,
     private paymentsMethodsService: PaymentsMethodsProcessService,
     public  platFormService : PlatformService,) { }
 
@@ -126,8 +124,7 @@ export class DsiEMVCardPayBtnComponent implements OnInit, OnChanges {
   }
 
   async dsiResetDevice() {
-    const response  = await this.dsiProcess.pinPadReset( );
-    this.sitesService.notify('PIN Pad Reset', 'Success', 1000)
+
   }
 
   roundToPrecision(value: number, precision: number): number {
