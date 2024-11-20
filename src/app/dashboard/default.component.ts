@@ -366,8 +366,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async setZoom(zoomValue) {
-    await  (window as any).electron.setZoom(1);
     if (!this.platFormService.isAppElectron) return;
+    await  (window as any).electron.setZoom(1);
     try {
       await (window as any).electron.setZoom(zoomValue);
     } catch (error) {

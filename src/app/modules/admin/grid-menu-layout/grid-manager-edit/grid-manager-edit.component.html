@@ -7,7 +7,7 @@
       <mat-tab label="Settings">
 
         <mat-card> 
-          <mat-title>
+          <mat-card-title>
             <div class="grid-title">
               <div>
                 Edit Dashboard
@@ -25,7 +25,7 @@
                 ></app-edit-buttons-standard> 
               </div>
             </div>
-           </mat-title> 
+           </mat-card-title> 
 
            <mat-card-content *ngIf="dashboardModel"> 
              [formGroup]="inputForm" 
@@ -192,7 +192,7 @@
         <mat-card *ngIf="dashboardModel" class="widgets-selection">
           <mat-card-title>
             Permissions
-            <mat-lable>Leave unchecked for anyone to see. (permissions still apply to data access)</mat-lable>
+            <mat-label>Leave unchecked for anyone to see. (permissions still apply to data access)</mat-label>
           </mat-card-title>
           <mat-card-content>
             <dashboard-client-type-selection
