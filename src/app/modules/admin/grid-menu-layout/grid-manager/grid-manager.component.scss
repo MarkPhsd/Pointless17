@@ -182,15 +182,16 @@ mat-accordion {
 
 .menu-grid-menu {
   // display: grid;
-  // gap: 15px;
+  gap: 15px;
+  display:flex;
   // grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
-  // // width: 245px;
-  // min-width: 250px;
-  // display: flex;
-  // flex-direction: column;
-  // column-gap: 10px;
-  // flex-wrap: nowrap;
-  // justify-content:flex-start
+  // width: 245px;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  column-gap: 10px;
+  flex-wrap: nowrap;
+  justify-content:flex-start
   
 }
 

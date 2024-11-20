@@ -1,41 +1,43 @@
 <div *ngIf="(action$ | async) as action"></div>
 
-<div *ngIf="!hideMenu">
+<div>
    <mat-toolbar [color]="matToolbarColor">
       <mat-toolbar-row>
-         <div class="menu-grid-menu">
+
             <div class="icon-position">
                <app-logo [logoSize]="'small'"></app-logo>
             </div>
 
-            <div>
+            <div *ngIf="!hideMenu">
                <button aria-label="home" mat-button (click)="goHome()">
                   <mat-icon>home</mat-icon>
                </button>
             </div>
 
-            <div class="display" *ngIf="allowDesign">
+            <div class="display" *ngIf="allowDesign && !hideMenu">
                <button (click)="toggleMenu()" aria-label="menu" mat-button>
                   <mat-icon>menu</mat-icon>
                </button>
             </div>
 
-            <div class="display" *ngIf="allowDesign">
+            <div class="display" *ngIf="allowDesign && !hideMenu">
                <button (click)="hide()" aria-label="menu" mat-button>
                   <mat-icon>menu_open</mat-icon>
                </button>
             </div>
 
-            <app-dashboard-menu></app-dashboard-menu> 
+            <div>
+              <app-dashboard-menu></app-dashboard-menu> 
+            </div>
 
-            <span class="display">
+            <div class="display">
                <app-toggle-theme></app-toggle-theme>
-            </span>
+            </div>
             
-            <span class="display">
+            <div class="display">
                <api-status-display></api-status-display>
-            </span>
-         </div>
+            </div>
+    
       </mat-toolbar-row>
    </mat-toolbar> 
 </div>
