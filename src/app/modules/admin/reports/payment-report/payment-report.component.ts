@@ -73,7 +73,7 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     this.refunds$ = null;
     this.sales$ = null;
 
-    console.log(this.type,  'refreshReports')
+    // console.log(this.type,  'refreshReports')
 
     // console.log('refresh type', this.type)
     // console.log('sales')

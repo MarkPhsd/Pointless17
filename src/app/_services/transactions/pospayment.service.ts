@@ -14,6 +14,7 @@ import { IPaymentMethod } from './payment-methods.service';
 })
 export class POSPaymentService {
 
+
   private _searchModel          = new BehaviorSubject<IPaymentSearchModel>(null);
   public searchModel$           = this._searchModel.asObservable();
 
@@ -46,6 +47,19 @@ export class POSPaymentService {
             )
   {
 
+  }
+
+  getTransactionData(site: ISite,id: any, history: boolean): Observable<any> {
+
+    const controller = "/POSPayments/";
+
+    const endPoint = "getTransactionData";
+
+    const parameters = `?id=${id}&history=${history}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>( url )
   }
 
   getCreditTipTotals(site: ISite, id: number): Observable<number> {

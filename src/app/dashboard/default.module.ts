@@ -865,7 +865,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       RouterModule,
 
       SharedModule,
-
+      SharedUtilsModule,
 
       NgxStripeModule.forRoot(),
       NgxCsvParserModule,

@@ -25,7 +25,6 @@
 
   <div *ngIf="(terminalSettings$  | async) as terminalSettings; else loading">
 
-
     <div *ngIf="(!dsiEmv || (!dsiEmv?.TranDeviceID || dsiEmv?.TranDeviceID === '')) || !posPayment">
       <div *ngIf="!posPayment">
         <mat-icon>alert</mat-icon> No Payment Found

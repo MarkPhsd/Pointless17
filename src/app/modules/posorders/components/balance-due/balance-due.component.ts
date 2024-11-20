@@ -4,8 +4,8 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { interval, Observable, of,Subject,Subscription, timer } from 'rxjs';
 import {  catchError, concatMap, switchMap, take, takeUntil } from 'rxjs/operators';
-import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
-import { IPOSOrder, IPOSPayment, IServiceType } from 'src/app/_interfaces';
+import { CardPointMethodsService, PointlessCCDSIEMVAndroidService } from 'src/app/modules/payment-processing/services';
+import { IPOSOrder, IPOSPayment, IServiceType, PosPayment } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { IBalanceDuePayload } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -23,8 +23,14 @@ import { DcapPayAPIService } from 'src/app/modules/payment-processing/services/d
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { Router } from '@angular/router';
-import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
+import { NavigationService } from 'src/app/_services/system/navigation.service';
+import { DSIEMVTransactionsService, PrintData, RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { dsiemvandroid } from 'dsiemvandroidplugin';
+import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
+
+
+
 @Component({
   selector: 'app-balance-due',
   templateUrl: './balance-due.component.html',
@@ -68,7 +74,10 @@ export class ChangeDueComponent implements OnInit  {
 
   remainingTime: number = 0;
   private stopTimer$ = new Subject<void>(); // For stopping the timer when component is destroyed
-
+  processing: boolean;
+  private timer: any;
+  instructions: string;
+  cancelResponse: boolean;
   // Start the timer based on the passed duration
   startTimer(duration: number): void {
     this.remainingTime = duration;
@@ -96,6 +105,7 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   get isPax() {
+    if (this.paxApp) { return true }
     const data = this.terminalSettings;
     if (data?.dsiEMVSettings) {
       if (data?.dsiEMVSettings?.deviceValue) {
@@ -114,6 +124,10 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   constructor(
+              private paxAndroidService: PointlessCCDSIEMVAndroidService,
+              private dcapMethodsService: DcapMethodsService,
+              private dsiMVTransactionsService: DSIEMVTransactionsService,
+               private navigationService     : NavigationService,
               private authenticationService : AuthenticationService,
               private userSwitchingService  : UserSwitchingService,
               private platFormService: PlatformService,
@@ -658,4 +672,112 @@ export class ChangeDueComponent implements OnInit  {
     this.snackBar.open(message, title, {duration: duration, verticalPosition: 'top'})
   }
 
+  navPOSOrders() {
+    // this.smallDeviceLimiter();
+    this.orderMethodsService.refreshAllOrders()
+    this.navigationService.navPOSOrders()
+  }
+
+  async testPrintData() {
+    const payment = this.payment as IPOSPayment;
+    try {
+      console.log('testPrint Data coming', payment.transactionData)
+      // const tran =  JSON.parse(payment.transactionData);
+      
+      // const printData = extractLineProperties(tran)
+      const printData = this.dsiMVTransactionsService.getTestData()
+  
+      console.log( printData)
+      
+      try {
+        if (printData) { 
+          await this.printToPax(printData)
+        }
+      } catch (error) {
+        
+      }
+      
+    } catch (error) {
+      
+    }
+    
+  }
+
+  async creditTicketPrint() {
+    const payment = this.payment as IPOSPayment;
+    
+    try {
+        const tran =  JSON.parse(payment.transactionData);
+        const printData = this.dcapMethodsService.extractLineProperties(tran)
+        // const printData = this.dsiMVTransactionsService.getTestData()
+        console.log(tran, printData)
+        try {
+          if (printData) { 
+            await this.printToPax(printData)
+          }
+        } catch (error) {
+          console.log('error', error)  
+        }
+    } catch (error) {
+      console.log('error', error)     
+    }
+  }
+
+  async printToPax(printData) {
+    let item         = this.paxAndroidService.initTransactionForPrint(this.dsiEmv, printData)
+    const printInfo    = this.paxAndroidService.mergePrintDataToTransaction(printData, item)
+    const printResult  =  dsiemvandroid.print(printInfo)
+    this.checkResponse_Transaction('PRINT')
+  }
+
+  checkResponse_Transaction(tranType) {
+    this.processing = true;
+    // console.log('checkResponse_Transaction', tranType)
+    this.timer = setInterval(async () => {
+      //PARAMDOWNLOAD
+      if (tranType === 'RESET') {
+        // Use an arrow function to maintain the 'this' context
+        await this.intervalCheckReset(this.timer, tranType);
+      }
+      if (tranType === 'PRINT' || tranType == 'print') {
+        // Use an arrow function to maintain the 'this' context
+        await this.intervalCheckPrint(this.timer);
+      }
+    }, 500);
+  }
+  
+  async intervalCheckPrint(timer: any) {
+    let responseSuccess = '';
+    console.log('intervalCheckPrint')
+    const options = {}
+    const paymentResponse = await dsiemvandroid.getResponse(options);
+    if (paymentResponse && (paymentResponse.value !== '' )) {
+      this.instructions = ''
+      clearInterval(timer);  // Clear the interval here when the condition is met'
+      await dsiemvandroid.bringToFront(options)
+      await dsiemvandroid.clearResponse(options)
+      await dsiemvandroid.bringToFront(options)
+    }
+  }
+
+  async intervalCheckReset(timer: any, tranType?: string) {
+    let responseSuccess = '';
+    const options = {}
+    const paymentResponse = await dsiemvandroid.getResponse(options);
+    if (paymentResponse && (paymentResponse.value !== '' || this.cancelResponse)) {
+      this.instructions = ''
+      this.cancelResponse = false;
+      this.processing = false;
+      responseSuccess = 'complete';
+      const response = this.dcapMethodsService.convertToObject(paymentResponse.value)
+      if (response) {
+        clearInterval(timer);  // Clear the interval here when the condition is met'
+        await dsiemvandroid.bringToFront(options)
+        await dsiemvandroid.clearResponse(options)
+        await dsiemvandroid.bringToFront(options)
+      }
+    }
+  }
+  
+  
 }

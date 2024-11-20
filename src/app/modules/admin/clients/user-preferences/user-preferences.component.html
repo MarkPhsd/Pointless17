@@ -1,4 +1,5 @@
 <div *ngIf="(action$ | async) as action"></div>
+
 <mat-card *ngIf="inputForm" [formGroup]="inputForm">
   <mat-card-title>
     Preferences
@@ -57,20 +58,9 @@
         <ng-container [ngTemplateOutlet]="buttonColorPicker"></ng-container>
       </div>
 
-
     </div>
 
     <mat-card>
-
-      <!-- <div>
-        <app-value-fields
-            [inputForm]="inputForm"
-            [fieldType]="'password'"
-            [fieldName]="'metrcKey'" >
-          METRC
-        </app-value-fields>
-      </div> -->
-
 
       <div>
         <app-value-fields
@@ -93,16 +83,15 @@
 
   <mat-card-actions>
     <button style="float:right;margin-top:15px" mat-raised-button color="warn" (click)="close()">
-      <mat-icon *ngIf="!saveDisabled">save</mat-icon> <mat-icon *ngIf="saveDisabled">exit_to_app</mat-icon>Save <div *ngIf="!saveDisabled">Close</div>
+      <mat-icon *ngIf="!saveDisabled">save</mat-icon> <mat-icon *ngIf="saveDisabled">
+        exit_to_app</mat-icon>Save <div *ngIf="!saveDisabled">Close</div>
     </button>
   </mat-card-actions>
 </mat-card>
 
 <ng-template #buttonColorPicker>
-
     <mat-label>Theme Color</mat-label>
     <ngx-colors ngx-colors-trigger [(ngModel)]="headerColor"></ngx-colors>
-
 </ng-template>
 <!-- Preferences
 <div >{{user?.userPreferences | json}}</div>

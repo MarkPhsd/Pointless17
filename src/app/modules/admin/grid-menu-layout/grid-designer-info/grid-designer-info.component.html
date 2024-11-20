@@ -5,26 +5,26 @@
               layoutService.dashboardModel"
             class="grid"
             >
-    <mat-card>
-    <h4><mat-icon>settings</mat-icon> Settings </h4>
-    <mat-divider></mat-divider>
+     <mat-card>
+      <h4><mat-icon>settings</mat-icon> Settings </h4>
+      <mat-divider></mat-divider>
 
-    <div>
-    <mat-checkbox [(ngModel)]="layoutService.options.swap"
-            (ngModelChange)="changedOptions()">
-      Swap
-    </mat-checkbox>
-    <mat-checkbox [(ngModel)]="layoutService.options.swapWhileDragging"
-            (ngModelChange)="changedOptions()">
-      Swap Items While Dragging
-    </mat-checkbox>
-    <mat-checkbox [(ngModel)]="layoutService.options.pushItems"
-            (ngModelChange)="changedOptions()">
-      Push Items
-    </mat-checkbox>
+      <div>
+      <mat-checkbox [(ngModel)]="layoutService.options.swap"
+              (ngModelChange)="changedOptions()">
+        Swap
+      </mat-checkbox>
+      <mat-checkbox [(ngModel)]="layoutService.options.swapWhileDragging"
+              (ngModelChange)="changedOptions()">
+        Swap Items While Dragging
+      </mat-checkbox>
+      <mat-checkbox [(ngModel)]="layoutService.options.pushItems"
+              (ngModelChange)="changedOptions()">
+        Push Items
+      </mat-checkbox>
 
-    </div>
-    </mat-card>
+      </div>
+    </mat-card> 
 
     </div>
 </div>

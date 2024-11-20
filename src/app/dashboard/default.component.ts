@@ -361,18 +361,15 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   zoom(posDevice: ITerminalSettings)  {
     if (posDevice && posDevice?.electronZoom && posDevice?.electronZoom != '0') {
-      console.log('zoom 1, then zoom', posDevice?.electronZoom)
-      this.setZoom(+posDevice.electronZoom)
+       this.setZoom(+posDevice.electronZoom)
     }
   }
 
-
-  setZoom(zoomValue): void {
+  async setZoom(zoomValue) {
+    await  (window as any).electron.setZoom(1);
     if (!this.platFormService.isAppElectron) return;
     try {
-
-        (window as any).electron.setZoom(zoomValue);
-
+      await (window as any).electron.setZoom(zoomValue);
     } catch (error) {
       console.error('Failed to set zoom level:', error);
       this.siteService.notify(`Failed to set zoom level: ${error}`, 'Close', 3000, 'red');

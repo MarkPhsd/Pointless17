@@ -1007,7 +1007,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   }
 
   mergePrintDataToTransaction(
-    printData: PrintData,
+    printData: any,
     transaction: Transaction
   ): Transaction {
     const mergedTransaction = {

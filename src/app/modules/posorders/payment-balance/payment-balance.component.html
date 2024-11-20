@@ -92,7 +92,9 @@
         <ng-container *ngTemplateOutlet="dCapCaptureView,  context: {$implicit: item}"></ng-container>
 
         <ng-container *ngTemplateOutlet="cardInfoView,  context: {$implicit: item}"></ng-container>
-         <ng-container *ngTemplateOutlet="printButtonView,  context:  {$implicit: item}"></ng-container>
+        <ng-container *ngTemplateOutlet="printButtonView,  context:  {$implicit: item}"></ng-container>
+        <ng-container *ngTemplateOutlet="printPaxReceipt,  context:  {$implicit: item}"></ng-container>
+       
         <ng-container *ngTemplateOutlet="voidActionView,  context:  {$implicit: item}"></ng-container>
 
         <div *ngIf="item.voidReason && item.voidReason != 0" >
@@ -363,5 +365,22 @@
         Reverse <br> Last Auth
       </mat-label>
     </button>
+  </div>
+</ng-template>
+
+<ng-template #printPaxReceipt let-item>
+  <div *ngIf="isPax">
+
+    <ng-container *ngIf="triggerPrintData(item.id); false"></ng-container>
+
+    <!-- Trigger data retrieval -->
+    <div *ngIf="printData$ | async as itemData">
+      <button class="payment-button-balance"
+              color="accent"
+              mat-raised-button
+              (click)="printPax(itemData)">
+        <mat-icon>print</mat-icon> (Credit)
+      </button>
+    </div>
   </div>
 </ng-template>

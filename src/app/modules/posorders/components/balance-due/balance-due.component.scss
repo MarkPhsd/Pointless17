@@ -39,7 +39,7 @@
   }
 }
 .new-order-button { 
-  
+
   @include for-phone-only  {
     display       : none;
   }
@@ -124,6 +124,18 @@ mat-icon {
 }
 
 .big-button {
-  height: 100%;
+ 
   width: calc(100vw - 66vw - 25px);
+  height: 100%;
+}
+
+
+.order-options { 
+  height: 105px;
+  width: 125px;
+  margin:10px;
+  @include for-phone-only  {
+    width: 55px;
+    width: 110px;
+   }
 }

@@ -1,12 +1,11 @@
 <div *ngIf="(action$  | async) as action"></div>
 
- <!-- <button mat-button (click)="setOptions()">Set Options</button> -->
 
  <div    [style.height]="pixelHeight"
          [style.max-height]="pixelHeight"
          *ngIf="layoutService.dashboardModel">
 
-  <gridster [style.background]="backgroundColor"
+   <gridster [style.background]="backgroundColor"
             [style.opacity]="opacity/100"
             [style.background-blend-mode]="backgroundblendmode"
             [style.background-image]="'url('+ image +')'"
@@ -20,7 +19,7 @@
             class="gridster-container"
             (drop)="onDrop($event)" >
 
-    <gridster-item  [style.opacity]="getOpacity(item?.object?.opacity/100)"
+     <gridster-item  [style.opacity]="getOpacity(item?.object?.opacity/100)"
                     [style.border-radius]="getBorderRadius(item?.object?.borderRadius)"
                     [style.border]="getBorder(item?.object?.border)"
                     [item]="item"
@@ -28,12 +27,12 @@
         <div>
           <div  class="menu-bar" *ngIf="authService.isAuthorized &&
                                       layoutService.designerMode">
-          <mat-menu-basic
-              [enableDelete]="true"
-              [enableSettings]="true"
-              (outputDelete)="removeItem(item)"
-              (outputSettings)="openItemSettings(item)">
-            </mat-menu-basic>
+             <mat-menu-basic
+                [enableDelete]="true"
+                [enableSettings]="true"
+                (outputDelete)="removeItem(item)"
+                (outputSettings)="openItemSettings(item)">
+              </mat-menu-basic>
           </div>
 
           <div [class]="gridsteritemclass">
@@ -51,9 +50,10 @@
             </ng-container>
           </div>
         </div>
-    </gridster-item>
+    </gridster-item> 
   </gridster>
 
 </div>
 
+ 
 <!-- {{options | json}} -->

@@ -1,9 +1,9 @@
-<!-- <div *ngIf="inputForm">
+ <div *ngIf="inputForm">
   {{inputForm.value | json}}
-</div> -->
+</div> 
 <div *ngIf="action$ | async"></div>
-<mat-card>
-    <mat-card-title>
+ <mat-card> 
+     <mat-card-title>
       <div class="grid">
         <div>
           Edit Card
@@ -17,9 +17,9 @@
           ></app-edit-buttons-standard>
         </div>
       </div>
-    </mat-card-title>
+    </mat-card-title> 
 
-    <mat-card-subtitle>
+     <mat-card-subtitle>
       <div [style.font-color]="'red'"
           *ngIf="message && message.length>0">
         <mat-icon>warning</mat-icon>
@@ -28,11 +28,10 @@
           {{item}}
         </div>
       </div>
-    </mat-card-subtitle>
+    </mat-card-subtitle> 
 
-    <mat-card-content>  
+     <mat-card-content>  
 
-      <!-- {{inputForm.value | json}} -->
       <div *ngIf="inputForm && dashBoardContent; else loading;"
            [formGroup]="inputForm"
            class="info-container" >
@@ -147,18 +146,18 @@
         </div>
       </div>
     </mat-card-content>
-  </mat-card>
+  </mat-card> 
 
-  <mat-card>
+   <mat-card>
     <div  *ngIf="cardValueTypesTemp && cardType === 'menu'"
         class="flex-grid-row-5px margin-10">
       <ng-container [ngTemplateOutlet]="imageView"></ng-container>
       <ng-container [ngTemplateOutlet]="textView"></ng-container>
       <ng-container [ngTemplateOutlet]="ccsView"></ng-container>
     </div>
-  </mat-card>
+  </mat-card> 
 
-  <mat-card>
+   <mat-card>
     <mat-card-title><h4>Design Properties</h4></mat-card-title>
     <mat-card-content>
       <div class="ps-flex-group">
@@ -202,14 +201,14 @@
         </div>
       </div>
     </mat-card-content>
-  </mat-card>
+  </mat-card> 
 
   <ng-template #loading>
-    <mat-spinner [diameter]="50"></mat-spinner>
+     <mat-spinner [diameter]="50"></mat-spinner> 
   </ng-template>
 
   <ng-template #rangeTypeView>
-    <div  *ngIf="inputForm" [formGroup]="inputForm">
+     <div  *ngIf="inputForm" [formGroup]="inputForm">
       <mat-button-toggle-group name="type"
                 aria-label="item Type"
                 formControlName="rangeType">
@@ -220,11 +219,11 @@
             {{item}}
         </mat-button-toggle>
       </mat-button-toggle-group>
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #cardTypeValueView>
-    <div  [formGroup]="inputForm">
+     <div  [formGroup]="inputForm">
       <mat-form-field
             appearance="outline">
           <mat-label> Value Type </mat-label>
@@ -240,32 +239,32 @@
             </mat-option>
         </mat-select>
       </mat-form-field>
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #iFrameURLView>
-    <app-value-fields
+     <app-value-fields
         style="width:300px";
         [inputForm]="inputForm"
         [fieldName]="'url'"
         [fieldsClass]="'field-small'">
         URL
-    </app-value-fields>
+    </app-value-fields> 
   </ng-template>
 
   <ng-template #imageView>
     <div>
       <h4>Image</h4>
-      <app-widget-uploader
+       <app-widget-uploader
         [(fileNames)]="image"
         (imageUrl)   ="setImage($event)">
-      </app-widget-uploader>
+      </app-widget-uploader> 
     </div>
  </ng-template>
 
   <ng-template #youTubeViewURLView>
       <div>
-        <app-value-fields
+         <app-value-fields
             style="width:300px";
             [inputForm]="inputForm"
             [fieldName]="'url'"
@@ -274,12 +273,12 @@
         </app-value-fields>
         <mat-label>
           If your video is found at https://www.youtube.com/watch?v=PRQCAL_1234, then your video id is PRQCAL_RMVo.
-        </mat-label>
+        </mat-label> 
       </div>
   </ng-template>
 
   <ng-template #textView>
-      <mat-card [formGroup]="inputForm" style="min-width:350px;max-width:550px">
+       <mat-card [formGroup]="inputForm" style="min-width:350px;max-width:550px">
         <div class="document-content">
           <mat-divider></mat-divider>
           <mat-label>Description </mat-label><br>
@@ -289,11 +288,11 @@
                           formControlName="text" >
           </simple-tinymce>
         </div>
-      </mat-card>
+      </mat-card> 
   </ng-template>
 
   <ng-template #ccsView>
-    <div [formGroup]="inputForm">
+     <div [formGroup]="inputForm">
       <div>
         <button mat-button (click)="getDefaultCCS()">Set Default CSS</button>
       </div>
@@ -308,55 +307,55 @@
         </mat-form-field>
       </div>
 
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #productSearchSelectorView>
-    <span *ngIf="productName">Selected Product: {{productName}}</span>
+     <span *ngIf="productName">Selected Product: {{productName}}</span>
     <app-product-search-selector
         class         = "fields"
         [itemType]    = 1
         [productName] = "productName"
         [searchForm]  = "inputForm"
         (itemSelect)  = "getItem($event)">
-    </app-product-search-selector>
+    </app-product-search-selector> 
   </ng-template>
 
   <ng-template #autoRepeatView>
-    <div class="toggle-fields" [formGroup]="inputForm">
+     <div class="toggle-fields" [formGroup]="inputForm">
       <mat-slide-toggle
             formControlName="autoRepeat" >
         <mat-label>Repeat</mat-label>
       </mat-slide-toggle>
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #autoPlayView>
-    <div class="toggle-fields" [formGroup]="inputForm" >
+     <div class="toggle-fields" [formGroup]="inputForm" >
       <mat-slide-toggle   formControlName="autoPlay" >
         <mat-label>Auto Play</mat-label>
       </mat-slide-toggle>
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #disableActionView>
-    <div class="toggle-fields" [formGroup]="inputForm" >
+     <div class="toggle-fields" [formGroup]="inputForm" >
       <mat-slide-toggle   formControlName="disableActions" >
         <mat-label>Disable Actions</mat-label>
       </mat-slide-toggle>
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #cannabisView>
-    <div class="toggle-fields" [formGroup]="inputForm">
+     <div class="toggle-fields" [formGroup]="inputForm">
       <mat-slide-toggle    formControlName="MMJMenu" >
         <mat-label>Cannabis Style Menu</mat-label>
       </mat-slide-toggle>
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #selectedTypeView>
-    <div *ngIf="itemValue">
+     <div *ngIf="itemValue">
       Selected : {{itemValue?.name}}
     </div>
 
@@ -370,12 +369,12 @@
                         >
         <div fieldSearchDescription>Select</div>
         </form-select-list>
-    </div>
+    </div> 
   </ng-template>
 
 
   <ng-template #catalogSchedules>
-    <div *ngIf="itemValue">
+     <div *ngIf="itemValue">
       Selected : {{itemValue?.name}}
     </div>
 
@@ -389,11 +388,11 @@
                         >
         <div fieldSearchDescription>Select</div>
         </form-select-list>
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #unitsBackView>
-    <div class="grid-values grid-items">
+     <div class="grid-values grid-items">
       <div>
         Units Back {{inputForm.controls['rangeValue']?.value}}
       </div>
@@ -414,12 +413,12 @@
                     aria-label="units"
         ></mat-slider>
       </div>
-    </div>
+    </div> 
 
   </ng-template>
 
   <ng-template #refreshTimeView>
-    <div class="grid-values grid-items">
+     <div class="grid-values grid-items">
       <div>
         Refresh(seconds) {{refreshTime}}
       </div>
@@ -436,11 +435,11 @@
                     aria-label="units"
         ></mat-slider>
       </div>
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #opacityView>
-    <div class="grid-values grid-items ">
+     <div class="grid-values grid-items ">
       <div>
         Opacity {{opacity}}
       </div>
@@ -457,11 +456,11 @@
                     aria-label="units"
         ></mat-slider>
       </div>
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #borderView>
-    <div class="grid-values grid-items">
+     <div class="grid-values grid-items">
       <div>
         Border {{border}}
       </div>
@@ -478,11 +477,11 @@
                     aria-label="units"
         ></mat-slider>
       </div>
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #boarderRadiusView>
-    <div class="grid-values grid-items">
+     <div class="grid-values grid-items">
       <div>
         Border-Radius {{borderRadius}}
       </div>
@@ -499,11 +498,11 @@
                     aria-label="units"
         ></mat-slider>
       </div>
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #layerView>
-    <div class="grid-values grid-items">
+     <div class="grid-values grid-items">
       <div>
         Layer {{layerIndex}}
       </div>
@@ -520,11 +519,11 @@
                     aria-label="units"
         ></mat-slider>
       </div>
-    </div>
+    </div> 
   </ng-template>
 
   <ng-template #cardTypeView>
-    <div [formGroup]="inputForm" *ngIf="inputForm">
+     <div [formGroup]="inputForm" *ngIf="inputForm">
       <div><h4>Card Type</h4></div>
       <mat-button-toggle-group
                 class="mat-button-toggle-group"
@@ -539,5 +538,5 @@
           <mat-icon>{{item.icon}} </mat-icon> {{item.name}}
         </mat-button-toggle>
       </mat-button-toggle-group>
-    </div>
-  </ng-template>
+    </div> 
+  </ng-template> 

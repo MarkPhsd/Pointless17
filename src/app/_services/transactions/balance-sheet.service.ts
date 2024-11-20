@@ -368,7 +368,7 @@ export class BalanceSheetService {
       userTrue = true
     }
 
-    console.log('getCurrentUserBalanceSheet service', userTrue, deviceName)
+    // console.log('getCurrentUserBalanceSheet service', userTrue, deviceName)
     if (!userTrue) {
       let item = {} as IBalanceSheet;
       item.id = 0;

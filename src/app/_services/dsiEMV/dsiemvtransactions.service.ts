@@ -5,6 +5,40 @@ import { DSIEMVSettings, UISettingsService } from '../system/settings/uisettings
 import { Subscription } from 'rxjs';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 
+export class PrintData {
+  Line1!: string;
+  Line2!: string;
+  Line3!: string;
+  Line4!: string;
+  Line5!: string;
+  Line6!: string;
+  Line7!: string;
+  Line8!: string;
+  Line9!: string;
+  Line10!: string;
+  Line11!: string;
+  Line12!: string;
+  Line13!: string;
+  Line14!: string;
+  Line15!: string;
+  Line16!: string;
+  Line17!: string;
+  Line18!: string;
+  Line19!: string;
+  Line20!: string;
+  Line21!: string;
+  Line22!: string;
+  Line23!: string;
+  Line24!: string;
+  Line25!: string;
+  Line26!: string;
+  Line27!: string;
+  Line28!: string;
+  Line29!: string;
+  Line30!: string;
+  Line31!: string;
+}
+
 export interface topLevel {
   TStream: TStream;
 }
@@ -90,8 +124,9 @@ export interface TranInfo {
 export interface RStream {
   CmdResponse:  CmdResponse;
   TranResponse: TranResponse;
-  PrintData:    PrintData;
+  PrintData:    any;
   BatchSummary: BatchSummary
+  TransactionData: string;
 }
 
 export interface BatchSummary {
@@ -183,10 +218,10 @@ export interface CmdResponse {
   UserTrace:      string;
 }
 
-export interface PrintData {
-  Line1: string;
-  LineN: string;
-}
+// export interface PrintData {
+//   Line1: string;
+//   LineN: string;
+// }
 
 @Injectable({
   providedIn: 'root'
@@ -549,6 +584,41 @@ export class DSIEMVTransactionsService implements OnDestroy {
     response.TranCode = 'EMVSale';
     response.CardType = 'VISA'
     return response
+  }
+
+  
+  // Static method to provide test data
+   getTestData(): any {
+    return {
+      Line1: ".CLERK ID: James1                        ",
+      Line2: ". ",
+      Line3: ".               DEBIT CARD               ",
+      Line4: ".                  SALE                  ",
+      Line5: ". ",
+      Line6: ".DEBIT                   ************5556",
+      Line7: ".ENTRY LEGEND/METHOD: CHIP READ CONTACT  ",
+      Line8: ".DATE: 10/14/2024  TIME: 19:26:05        ",
+      Line9: ". ",
+      Line10: ".INVOICE: 379366                         ",
+      Line11: ".REFERENCE: 428dsasdad63                 ",
+      Line12: ".AUTH CODE: 162663                       ",
+      Line13: ". ",
+      Line14: ".AMOUNT                         USD$ 6.68",
+      Line15: ".                               =========",
+      Line16: ".TOTAL                          USD$ 6.68",
+      Line17: ". ",
+      Line18: ".          APPROVED - THANK YOU          ",
+      Line19: ". ",
+      Line20: ". ",
+      Line21: ".APPLICATION LABEL: US DEBIT             ",
+      Line22: ".AID: A0000000980840                     ",
+      Line23: ".ATC: 0285                               ",
+      Line24: ".AC: 04F1adsfasEC2C3F1                   ",
+      Line25: ".TVR: 8000048000                         ",
+      Line26: ".IAD: 06011203A00000                     ",
+      Line27: ".TSI: 6800                               ",
+      Line28: ".CVM: NONE                               "
+    };
   }
 
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input , OnDestroy, ChangeDetectorRef} from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Router } from '@angular/router';
-import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSPayment, ISite, PosPayment } from 'src/app/_interfaces';
 import { AuthenticationService, IDeviceInfo, OrdersService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -16,12 +16,15 @@ import { PaymentMethodsService } from 'src/app/_services/transactions/payment-me
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
-import { CardPointMethodsService } from '../../payment-processing/services';
+import { CardPointMethodsService, PointlessCCDSIEMVAndroidService } from '../../payment-processing/services';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { DcapService } from '../../payment-processing/services/dcap.service';
-import { DcapMethodsService } from '../../payment-processing/services/dcap-methods.service';
 import { Capacitor } from '@capacitor/core';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
+import { DSIEMVTransactionsService, PrintData, RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { dsiemvandroid } from 'dsiemvandroidplugin';
+import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
+import { NavigationService } from 'src/app/_services/system/navigation.service';
 
 @Component({
   selector: 'app-payment-balance',
@@ -29,6 +32,10 @@ import { UserSwitchingService } from 'src/app/_services/system/user-switching.se
   styleUrls: ['./payment-balance.component.scss']
 })
 export class PaymentBalanceComponent implements OnInit, OnDestroy {
+  paxApp: boolean;
+  timer: any;
+  processing: boolean;
+  cancelResponse: boolean;
   get platForm() {  return Capacitor.getPlatform(); }
   @Input() hideButtonOptions: boolean;
   @Input() qrOrder :boolean;
@@ -52,6 +59,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   totalAuthPayments : number;
   incrementalAuth: PosPayment;
   authData: IUserAuth_Properties;
+
+
   authData$: Observable<IUserAuth_Properties>;
   @Input()  posDevice       :  ITerminalSettings;
   @Input()  deviceInfo: IDeviceInfo;
@@ -59,6 +68,16 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   @Input() PaxA920 : boolean;
   paymentsFiltered: any[] = [];
 
+  private selectedId$ = new BehaviorSubject<number | null>(null);
+  public printData$: Observable<any> = this.selectedId$.pipe(
+    switchMap(id => {
+      if (!this.order || !id || id === 0) {
+        return of(null); // Return an empty observable
+      }
+      const site = this.siteService.getAssignedSite();
+      return this.posPaymentService.getTransactionData(site, id, this.order?.history);
+    })
+  );
   updatePaymentsFiltered() {
     if (!this.order?.posPayments) { return }
     if (this.order?.completionDate) {
@@ -67,6 +86,11 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       this.paymentsFiltered = this.order?.posPayments || [];
     }
   }
+
+  triggerPrintData(id: number): void {
+    this.selectedId$.next(id);
+  }
+  
 
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
@@ -110,7 +134,20 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     return false
   }
 
-  constructor(private orderService: OrdersService,
+  get isPax() {
+    if (this.paxApp) { return true }
+    const data = this.posDevice;
+    if (data?.dsiEMVSettings) {
+      if (data?.dsiEMVSettings?.deviceValue) {
+        this.paxApp = true
+        return true;
+      }
+    }
+  }
+
+  constructor(
+              private paxAndroidService: PointlessCCDSIEMVAndroidService,
+              private orderService: OrdersService,
               private orderMethodsService: OrderMethodsService,
               private siteService: SitesService,
               private paymentService: POSPaymentService,
@@ -118,6 +155,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private uiSettingsService: UISettingsService,
               private userSwitchingService:UserSwitchingService,
               private paymentMethodsProessService: PaymentsMethodsProcessService,
+              private posPaymentService: POSPaymentService,
               public authenticationService: AuthenticationService,
               public  userAuthorization: UserAuthorizationService,
               private productEditButtonService: ProductEditButtonService,
@@ -131,7 +169,9 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private toolbarUIService  : ToolBarUIService,
               private dcapService: DcapService,
               private dcapMethodsService: DcapMethodsService,
-              private router: Router) {
+              private router: Router,
+              private navigationService     : NavigationService,
+            ) {
    }
 
    ngOnInit() {
@@ -151,10 +191,6 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     if (this.userAuthorization.user.roles === 'user') {
       this.isUser = true;
     }
-
-    // this.userAuthorization.
-    // this_.user$.value.clientTypeID
-    // this.authData$ = this.userSwitchingService.user.()
 
     this.authData$ = of(this.authenticationService._userAuths.value).pipe(switchMap(data => {
       this.authData = data;
@@ -571,4 +607,81 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.matSnackBar.open(message, title, {duration: duration, verticalPosition: 'top'})
   }
 
+  async printPax(data) { 
+    const site = this.siteService.getAssignedSite()
+    if (!data) { return }
+     await this.creditTicketPrint(data) 
+  }
+  
+  async creditTicketPrint(data: string) {
+    try {
+        const tran = JSON.parse(data); // Parse the JSON string into an object
+        const printData = this.dcapMethodsService.extractLineProperties(tran.RStream); // Pass only the RStream object
+        try {
+          if (printData) { 
+            await   this.printToPax(printData)
+          }
+        } catch (error) {
+          console.log('error', error)  
+        }
+    } catch (error) {
+      console.log('error', error)     
+    }
+  }
+
+  async printToPax(printData) {
+    let item         = this.paxAndroidService.initTransactionForPrint(this.posDevice.dsiEMVSettings, printData)
+    const printInfo    = this.paxAndroidService.mergePrintDataToTransaction(printData, item)
+    const printResult  =  dsiemvandroid.print(printInfo)
+    this.checkResponse_Transaction('PRINT')
+  }
+
+  checkResponse_Transaction(tranType) {
+    this.processing = true;
+    // console.log('checkResponse_Transaction', tranType)
+    this.timer = setInterval(async () => {
+      //PARAMDOWNLOAD
+      if (tranType === 'RESET') {
+        // Use an arrow function to maintain the 'this' context
+        await this.intervalCheckReset(this.timer, tranType);
+      }
+      if (tranType === 'PRINT' || tranType == 'print') {
+        // Use an arrow function to maintain the 'this' context
+        await this.intervalCheckPrint(this.timer);
+      }
+    }, 500);
+  }
+  
+  async intervalCheckPrint(timer: any) {
+    let responseSuccess = '';
+    const options = {}
+    const paymentResponse = await dsiemvandroid.getResponse(options);
+    console.log('printResponse', paymentResponse)
+    if (paymentResponse && (paymentResponse.value !== '' )) {
+      clearInterval(timer);  // Clear the interval here when the condition is met'
+      await dsiemvandroid.clearResponse(options)
+      console.log('clear response')
+      await dsiemvandroid.bringToFront(options)
+      console.log('bring to front')
+      this.navigationService.navPOSOrders()
+    }
+  }
+
+  async intervalCheckReset(timer: any, tranType?: string) {
+
+    let responseSuccess = '';
+    const options = {}
+    const paymentResponse = await dsiemvandroid.getResponse(options);
+    if (paymentResponse && (paymentResponse.value !== '' || this.cancelResponse)) {
+      this.processing = false;
+      responseSuccess = 'complete';
+      const response = this.dcapMethodsService.convertToObject(paymentResponse.value)
+      if (response) {
+        clearInterval(timer);  // Clear the interval here when the condition is met'
+        await dsiemvandroid.bringToFront(options)
+        await dsiemvandroid.clearResponse(options)
+      }
+    }
+  }
+  
 }

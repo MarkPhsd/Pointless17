@@ -166,22 +166,19 @@ enableProdMode();
 
 @NgModule({
   declarations: [
-    AgGridTestComponent,
-    AgGridImageFormatterComponent,
-    AgGridToggleComponent,
+  
     AppComponent,
     AppGateComponent,
     // BarcodeScannerComponent,
     ChangepasswordComponent,
     CategoriesAlternateComponent,
-    CurrencyFormatterDirective,
-    LoginComponent,
 
- 
+    LoginComponent,
     RegisterAccountExistingUserWithTokenComponent,
     RegisterAccountMainComponent,
     ResetpasswordComponent,
 
+    CurrencyFormatterDirective,
     GridManagerComponent,
     GridMenuLayoutComponent,
     GridManagerEditComponent,
@@ -221,7 +218,6 @@ enableProdMode();
    
     SharedModule,
     NGXMaterialModule,
-  
   ],
 
   exports: [

@@ -53,10 +53,18 @@ import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
 import { SalesItemsComponent } from '../modules/admin/reports/item-sales-card/sales-items/sales-items.component';
 import { ClockViewComponent } from '../shared/widgets/clock-in-out/clock-view/clock-view.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import { AgGridImageFormatterComponent } from '../_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
+import { AgGridToggleComponent } from '../_components/_aggrid/ag-grid-toggle/ag-grid-toggle.component';
+import { AgGridTestComponent } from '../shared/widgets/ag-grid-test/ag-grid-test.component';
 
 
 @NgModule({
   declarations: [
+
+    AgGridTestComponent,
+    AgGridImageFormatterComponent,
+    AgGridToggleComponent,
+    
     BarcodeScannerComponent,
     ButtonRendererComponent,
     ScaleReaderComponent,

@@ -38,7 +38,7 @@ import {MatLegacyChipsModule as MatChipsModule} from '@angular/material/legacy-c
 
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import {DragDropModule } from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 // import {ScrollingModule } from '@angular/cdk/scrolling';
 // import { OverlayModule } from '@angular/cdk/overlay';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -50,9 +50,9 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
   imports        : [
     NgxMatDatetimePickerModule,
     // NgxMatNativeDateModule,
-
     NgOptimizedImage,
-    OverlayModule ],
+    OverlayModule 
+  ],
   exports: [
     DragDropModule,
     ScrollingModule,

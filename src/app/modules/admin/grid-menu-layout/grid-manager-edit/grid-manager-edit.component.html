@@ -1,56 +1,57 @@
  <div *ngIf="(action$ | async) as action"></div>
- <mat-tab-group  mat-align-tabs="start"
+  <mat-tab-group  mat-align-tabs="start"
                   md-stretch-tabs
                   [(selectedIndex)]="selectedIndex"
                   (selectedIndexChange)="selectChange()">
 
       <mat-tab label="Settings">
 
-        <mat-card>
+        <mat-card> 
           <mat-title>
             <div class="grid-title">
               <div>
                 Edit Dashboard
               </div>
 
-              <mat-icon *ngIf="flag">save</mat-icon>
+               <mat-icon *ngIf="flag">save</mat-icon> 
 
               <div class="buttons">
-                <app-edit-buttons-standard
+                 <app-edit-buttons-standard
                   (outputeupdateItem)     ="update($event)"
                   (outputupdateItemExit)  ="updateExit($event)"
                   (outputupdatedeleteItem)="delete($event)"
                   (outputupdateonCancel)  ="onCancel($event)"
                   enableDelete            ="true"
-                ></app-edit-buttons-standard>
+                ></app-edit-buttons-standard> 
               </div>
             </div>
-          </mat-title>
+           </mat-title> 
 
-          <mat-card-content *ngIf="dashboardModel">
-            <div class="grid" [formGroup]="inputForm"
+           <mat-card-content *ngIf="dashboardModel"> 
+             [formGroup]="inputForm" 
+            <div class="grid" 
                   *ngIf="inputForm; else loading;" >
 
                 <div>
-                  <app-value-fields
+                   <app-value-fields
                     style="width:300px"
                     [inputForm]="inputForm"
                     [fieldName]="'name'"
                     [fieldsClass]="'fields-small'">
                       Name
-                  </app-value-fields>
+                  </app-value-fields> 
                 </div>
 
                 <div>
-                  <mat-slide-toggle
+                   <mat-slide-toggle
                       name="active"
                       formControlName="active">
                     <mat-label class="mat-label">Enabled</mat-label>
-                  </mat-slide-toggle>
+                  </mat-slide-toggle> 
                 </div>
 
                 <div class="span-col-all">
-                  <mat-button-toggle-group name="type"
+                   <mat-button-toggle-group name="type"
                             aria-label="item Type"
                             formControlName="type">
                     <mat-button-toggle class="discount-type-button"
@@ -59,35 +60,36 @@
                             *ngFor="let item of types" >
                       {{item}}
                     </mat-button-toggle>
-                  </mat-button-toggle-group>
+                  </mat-button-toggle-group> 
                 </div>
 
             </div>
 
-            <mat-divider></mat-divider>
+             <mat-divider></mat-divider> 
 
             <h4>Features </h4>
             <div class="grid"
                 *ngIf="inputProperties" >
 
               <div>
-                <app-value-fields
+                 <app-value-fields
                   style="width:300px"
                   [inputForm]="inputProperties"
                   [fieldName]="'icon'"
                   [fieldsClass]="'fields-small'">
                   Icon - (Use mdi icons)
-                </app-value-fields>
+                </app-value-fields> 
               </div>
 
               <div class="span-col-2">
-                <input type="color" [(colorPicker)]="backgroundColor"
-                        [style.background]="backgroundColor"/>
+                 <input type="color" 
+                        [(colorPicker)]="backgroundColor"
+                        [style.background]="backgroundColor"/> 
               </div>
 
               <div class="span-col-all">
                 Opacity {{opacity}}
-                <mat-slider
+                 <mat-slider
                             thumbLabel
                             [displayWith]="formatLabel"
                             tickInterval="1000"
@@ -96,14 +98,14 @@
                             max="100"
                             [(ngModel)]="opacity"
                             aria-label="units"
-                ></mat-slider>
+                ></mat-slider> 
               </div>
 
               <div></div>
 
               <div class="span-col-2"
                   *ngIf="backgroundBlendModes">
-                <mat-form-field  appearance="outline">
+                 <mat-form-field  appearance="outline">
                     <mat-label> Background Blend Mode </mat-label>
                     <mat-select
                         [(ngModel)]       = "backgroundblendmode"
@@ -114,79 +116,79 @@
                           {{item}}
                       </mat-option>
                     </mat-select>
-                </mat-form-field>
+                </mat-form-field> 
               </div>
 
               <div></div>
 
-              <div>Input Expected Pixel Height and Width to ensure layout dimensions fit the type of screen that will use this dashboard (for TV's and Customer displays.).
-                <app-info-instructions></app-info-instructions>
+              <div>Input Expected Pixel Height and Width to ensure layout 
+                    dimensions fit the type of screen that will use this dashboard (for TV's and Customer displays.).
+                 <app-info-instructions></app-info-instructions> 
               </div>
               <div></div>
 
               <div class="span-col-2">
-                <app-value-fields
+                 <app-value-fields
                     style="width:300px"
                     [inputForm]="inputProperties"
                     [fieldName]="'pixelWidth'"
                     [fieldsClass]="'fields-small'">
                     Width
-                </app-value-fields>
+                </app-value-fields> 
               </div>
 
               <div class="span-col-2">
-                <app-value-fields
+                 <app-value-fields
                   style="width:300px"
                   [inputForm]="inputProperties"
                   [fieldName]="'pixelHeight'"
                   [fieldsClass]="'fields-small'">
                   Height
-                </app-value-fields>
+                </app-value-fields> 
               </div>
 
               <div>Grid Column and Rows (Determines Size of Grid Blocks)
-                <app-info-instructions></app-info-instructions>
+                 <app-info-instructions></app-info-instructions> 
               </div>
               <div></div>
               <div class="span-col-2">
-                <app-value-fields
+                 <app-value-fields
                     style="width:300px"
                     [inputForm]="inputProperties"
                     [fieldName]="'gridColumns'"
                     [fieldsClass]="'fields-small'">
                     Columns
-                </app-value-fields>
+                </app-value-fields> 
               </div>
 
               <div class="span-col-2">
-                <app-value-fields
+                 <app-value-fields
                   style="width:300px"
                   [inputForm]="inputProperties"
                   [fieldName]="'gridRows'"
                   [fieldsClass]="'fields-small'">
                   Rows
-                </app-value-fields>
+                </app-value-fields> 
               </div>
 
               <div></div>
               <div class="grid-items span-col-all">
-                <mat-card class="image-container">
+                 <mat-card class="image-container">
                   <app-widget-uploader
                       [(fileNames)]="image"
                       (messageOut) ="receivedImage($event)" >
                     Background Image
                   </app-widget-uploader>
-                </mat-card>
+                </mat-card> 
               </div>
 
             </div>
-          </mat-card-content>
+
+           </mat-card-content>
         </mat-card>
+      </mat-tab> 
 
-      </mat-tab>
-
-      <mat-tab label="Permissions">
-
+       <mat-tab label="Permissions">
         <mat-card *ngIf="dashboardModel" class="widgets-selection">
           <mat-card-title>
             Permissions
@@ -197,17 +199,17 @@
                 [dashboardModel]        ="dashboardModel"
                 (outputClientTypesJSON) ="setRolesJSON($event)"
                 (outputClientTypes)     ="setRoles($event)">
-            </dashboard-client-type-selection>
+            </dashboard-client-type-selection> 
           </mat-card-content>
         </mat-card>
 
       </mat-tab>
 
-  </mat-tab-group>
+   </mat-tab-group> 
 
 
 <ng-template #loading>
-  <mat-spinner [diameter]="50"></mat-spinner>
+   <mat-spinner [diameter]="50"></mat-spinner> 
 </ng-template>
 
 

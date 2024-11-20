@@ -20,6 +20,37 @@ export class DcapMethodsService {
   xmlString = `<?xml version="1.0"?>`
 
 
+  extractLineProperties(rStream: any): Record<string, string> {
+    const lineData: Record<string, string> = {};
+  
+    // Ensure rStream is a valid object
+    if (typeof rStream !== 'object' || rStream === null) {
+      console.error('Invalid RStream object:', rStream);
+      return lineData;
+    }
+  
+    // Iterate over all properties of the object
+    Object.entries(rStream).forEach(([key, value]) => {
+      if (key.startsWith('Line') && typeof value === 'string') {
+        lineData[key] = value.trim(); // Add only Line properties
+      }
+    });
+  
+    return lineData;
+  }
+  
+  // extractLineProperties(rStream: { [key: string]: any }): { [key: string]: string } {
+  //   if (!rStream) { return {}}
+  //   const lineData: { [key: string]: string } = {};
+  //   // Loop through all properties
+  //   Object.keys(rStream).forEach((key) => {
+  //     if (key.startsWith("Line")) {
+  //       lineData[key] = String(rStream[key]); // Convert to string in case it's not
+  //     }
+  //   });
+  //   return lineData;
+  // }
+
   constructor(
     private siteService: SitesService,
     private pOSPaymentService: POSPaymentService,

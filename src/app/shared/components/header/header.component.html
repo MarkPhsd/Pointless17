@@ -183,7 +183,7 @@
 <ng-template #siteSelectorView>
   <button aria-label="location_on"
           mat-button
-          *ngIf="!smallDevice"
+          *ngIf="!phoneDevice"
           (click)="siteSelector()">
     <mat-icon>location_on</mat-icon>
   </button>
@@ -255,10 +255,10 @@
     </button>
   </div>
 
-  <div *ngIf="user && user.roles && user.roles != 'user'">
+  <div *ngIf="user && user.roles && user.roles !== 'user'">
     <ng-container [ngTemplateOutlet]="menuButtonContainer">  </ng-container>
   </div>
-  <div *ngIf="user && user.roles && user.roles == 'user'">
+  <div *ngIf="user && user.roles && user.roles === 'user'">
     <ng-container [ngTemplateOutlet]="menuBarView"></ng-container>
   </div>
 
@@ -298,9 +298,9 @@
           [matMenuTriggerFor]="menu"
           #menuTrigger="matMenuTrigger"
           (click)="menuTrigger.openMenu()" >
-    <mat-icon *ngIf="mailCount == 0 || !mailCount">person</mat-icon>
+    <mat-icon *ngIf="mailCount === 0 || !mailCount">person</mat-icon>
     <mat-icon
-        *ngIf="mailCount && mailCount != 0"
+        *ngIf="mailCount && mailCount !== 0"
         matBadge="{{ mailCount }}"
         matBadgeColor="accent"
         matBadgePosition="before">
@@ -383,7 +383,7 @@
         </div>
 
         <div  class="mat-item"
-            *ngIf="user && user.roles === 'user'  && user?.username != 'user'">
+            *ngIf="user && user.roles === 'user'  && user?.username !== 'user'">
             <button
                     mat-raised-button
                     color="primary"

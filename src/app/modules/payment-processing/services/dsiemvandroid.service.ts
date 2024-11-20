@@ -9,6 +9,7 @@ import { ISetting } from 'src/app/_interfaces';
 import { Observable, of, switchMap } from 'rxjs';
 import { NgxXml2jsonService } from 'ngx-xml2json';
 import { DSIEMVSettings } from 'src/app/_services/system/settings/uisettings.service';
+import { PrintData } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 // import { parseStringPromise } from 'xml2js';
 export interface SecureDevice {
   description: string;
@@ -305,6 +306,36 @@ export class PointlessCCDSIEMVAndroidService {
     } catch (error) {
       return error;
     }
+  }
+
+  initTransactionForPrint(dsiEMVSettings: DSIEMVSettings, printData): any {
+    const device          = dsiEMVSettings
+    const item           = {} as any;
+    const value          = this.transaction;// as Transaction;
+    item.secureDevice    = device?.deviceValue;
+    item.amount          = value?.amount;
+    item.merchantID      = device?.MerchantID;
+    item.MerchantID      = device?.MerchantID;
+    item.pinPadIpAddress = device?.HostOrIP;
+    item.pinPadIpPort    = device?.PinPadIpPort;
+    item.userTrace       = device?.OperatorID;
+    item.prodCertMode    = this.certProdMode(device?.MerchantID);
+    item.pOSPackageID    = device?.POSPackageID
+    item.tranCode        = "PrintReceipt";
+    item.UseForms        = null// "false" /// this.useSuppressForms(device?.supressedForms)
+    this.transaction     = item;
+    return item;
+  }
+  
+  mergePrintDataToTransaction(
+    printData  : PrintData,
+    transaction: Transaction
+  ): Transaction {
+    const mergedTransaction = {
+      ...transaction,
+      ...printData
+    };
+    return mergedTransaction;
   }
 
 }

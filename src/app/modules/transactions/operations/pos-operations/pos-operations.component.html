@@ -47,11 +47,10 @@
           <button mat-raised-button (click)="forcedcapBatchClose()"> <mat-icon>credit_card</mat-icon>Force Batch Close</button>
         </span>
   
-    
         <app-list-printers-electron
             [printerName]      ="printerName"
             (outputPrinterName)="setPrinter($event)" >
-          Receipt Printer
+          Printer
         </app-list-printers-electron>
     
         <span *ngIf="runningClose">

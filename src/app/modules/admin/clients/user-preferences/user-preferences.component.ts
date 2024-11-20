@@ -66,7 +66,6 @@ export class UserPreferencesComponent implements OnInit {
 
     this.inputForm.patchValue(this.user?.userPreferences)
     this.headerColor  = this.user?.userPreferences?.headerColor;
-  
 
     this.inputForm.valueChanges.subscribe(data => {
       const formValue = data;

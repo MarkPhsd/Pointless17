@@ -31,7 +31,7 @@
   <ng-container [ngTemplateOutlet]="newOrderButton"></ng-container>
 
   <div class="center-panel">
-    <div *ngIf="payment && step == 1">
+    <div *ngIf="payment && step === 1">
       <div class="action-center">
 
         <div class="tip-grid">
@@ -67,7 +67,7 @@
       </div>
     </div>
 
-    <mat-card *ngIf="step == 2">
+    <mat-card *ngIf="step === 2">
 
       <ng-container [ngTemplateOutlet]="headerInfo"></ng-container>
 
@@ -82,13 +82,11 @@
             (specifiedTipAmount) = "specifiedTip($event)"
             (outPutTip)          = "customTipAmount($event)"
           ></tip-entry-amount>
-
           <div style="width:100%" *ngIf="proccessing">
             <mat-spinner [diameter]="50"></mat-spinner><br>
             ...processing
           </div>
           <ng-container [ngTemplateOutlet]="action"></ng-container>
-
         </div>
       </div>
 
@@ -112,69 +110,81 @@
 </div>
 
 <ng-template #actionCenterView let-stepValue>
-  <div class="action-center ">
-    <button mat-button
+   <div class="action-center ">
+      <button mat-button
+              class="tip-button"
+              (click)="printReceipt()">
+              <mat-icon *ngIf="!isApp">email</mat-icon>
+              <span *ngIf="isApp">Send</span>
+              <mat-icon *ngIf="isApp">print</mat-icon>
+              <span *ngIf="isApp">Print</span>
+      </button>
+
+      <button mat-button
             class="tip-button"
-            (click)="printReceipt()">
-            <mat-icon *ngIf="!isApp">email</mat-icon>
-            <span *ngIf="isApp">Send</span>
-            <mat-icon *ngIf="isApp">print</mat-icon>
-            <span *ngIf="isApp">Print</span>
-    </button>
-
-    <button mat-button
-           class="tip-button"
-           *ngIf="!androidApp"
-           (click)="viewReceipt()">
-          <mat-icon>receipt</mat-icon>
-          View Receipt
-    </button>
-
-    <button mat-button
-            class="tip-button"
-            *ngIf="!isUser && !androidApp"
-            (click)="changeStep()">
-      <mat-icon>arrow_forward_ios</mat-icon>Next
-    </button>
-
-    <div *ngIf="isPax">
-      <button color="warn"
-              mat-raised-button
-              aria-label="logout"
-              class="nav-item nav-link"
-              (click)="logout()">
-              Exit
-        <mat-icon>exit_to_app</mat-icon>
+            *ngIf="!androidApp"
+            (click)="viewReceipt()">
+        <mat-icon>receipt</mat-icon>
+        View Receipt
+      </button>
+      
+      <button mat-button
+              class="tip-button"
+              *ngIf="!isUser && !androidApp"
+              (click)="changeStep()">
+        <mat-icon>arrow_forward_ios</mat-icon>Next
       </button>
     </div>
 
-    <button mat-button
-            *ngIf="!isPax"
-            class="tip-button"
-            (click)="close()"><mat-icon>close</mat-icon>
-            Exit</button>
+    <div class="action-center ">
+      <div *ngIf="isPax">
+        <button color="warn"
+                mat-raised-button
+                aria-label="logout"
+                class="tip-button"
+                (click)="logout()">
+                Exit
+          <mat-icon>exit_to_app</mat-icon>
+        </button>
+      </div>
 
-    <span *ngIf="(serviceType$ | async) as item">
-      <button
-            *ngIf="!isPax && !item?.retailType"
-            color="warn"
-            mat-raised-button
-            (click)="logout()">
-          Log Out
-        <mat-icon>exit_to_app</mat-icon>
-      </button>
-    </span>
+      <div>
+        <ng-container [ngTemplateOutlet]="paxPrint"></ng-container>
+      </div>
+      <div>
+        <ng-container [ngTemplateOutlet]="openOrders"></ng-container>
+      </div>
 
-    <!--      -->
-    <div *ngIf="!isUser && !isPax" class="action-center">
-      <mat-label>Scan to Start New Order</mat-label>
-      <list-product-search-input
-            [newOrder]="true"
-          (outPutExit)="_closeOnly()">
-      </list-product-search-input>
     </div>
+    
+    <div class="action-center ">
+  
+        <div  *ngIf="!isUser">
+          <button  class="tip-button" mat-raised-button (click)="addNewOrder()">
+            New Order
+          </button>
+        </div>
 
-  </div>
+        <div *ngIf="(serviceType$ | async) as item">
+          <button
+                *ngIf="!isPax && !item?.retailType"
+                color="warn"
+                mat-raised-button
+                class="tip-button"
+                (click)="logout()">
+              Log Out
+            <mat-icon>exit_to_app</mat-icon>
+          </button>
+        </div>
+
+        <div *ngIf="!isUser && !isPax" class="action-center">
+          <mat-label>Scan to Start New Order</mat-label>
+          <list-product-search-input
+                [newOrder]="true"
+              (outPutExit)="_closeOnly()">
+          </list-product-search-input>
+        </div>
+    </div>
 
 </ng-template>
 
@@ -185,3 +195,35 @@
   </div>
 </ng-template>
 
+<ng-template #openOrders>
+  <!--  -->
+  <button *ngIf="isPax"  class="tip-button" mat-raised-button (click)="navPOSOrders()">
+    <mat-icon>point_of_sale</mat-icon>Orders
+  </button>
+</ng-template>
+
+<ng-template #paxPrint>
+  <!-- <button class="big-button"
+      mat-raised-button 
+      (click)="testPrintData()">
+      <mat-icon>print</mat-icon> 
+      Test Print
+  </button> -->
+
+  <button *ngIf="isPax" class="big-button"
+      mat-raised-button 
+      
+      (click)="creditTicketPrint()">
+      <mat-icon>print</mat-icon> 
+       Credit Print
+    </button>
+
+</ng-template>
+
+
+    <!-- <button mat-button
+            *ngIf="isPax"
+            class="tip-button"
+            (click)="close()"><mat-icon>close</mat-icon>
+        Exit
+    </button> -->

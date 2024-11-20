@@ -93,7 +93,8 @@
         </div>
         <div class="grid-buttons" >
           <div *ngIf="saleComplete && !enterTip">
-            <button mat-raised-button color="accent" *ngIf="responseData?.PrintData" (click)="print()"><mat-icon>print</mat-icon>Print (here)</button>
+            <button mat-raised-button color="accent" 
+            *ngIf="responseData?.PrintData" (click)="print()"><mat-icon>print</mat-icon>Print (here)</button>
           </div>
 
           <div>

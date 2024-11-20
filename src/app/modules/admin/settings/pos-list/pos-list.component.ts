@@ -100,13 +100,13 @@ export class PosListComponent implements OnInit, OnDestroy {
   setPOSName(event) {
     if (this.orderMethodsService.setPOSName(event?.name)) {
       this.posName = event?.name;
+      this.getDeviceInfo()
       this.notifyEvent(`${this.posName} has been assigned.`, "success")
     } else {
       this.notifyEvent(`${this.posName} has not been assigned. Please assign names less than 5 characters.`, "Failure")
     }
-
-
   }
+
 
   getDeviceInfo() {
     const devicename = localStorage.getItem('devicename')
@@ -130,6 +130,8 @@ export class PosListComponent implements OnInit, OnDestroy {
   }
 
   zoom(posDevice: ITerminalSettings)  {
+    this.uiSettings.electronZoom(1)
+
     if (posDevice && posDevice?.electronZoom && posDevice?.electronZoom != '0') {
       this.uiSettings.electronZoom(+posDevice.electronZoom)
     }

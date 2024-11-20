@@ -11,9 +11,6 @@ import { AuthenticationService, AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISite } from 'src/app/_interfaces';
 import { ActivatedRoute } from '@angular/router';
-import { NavigationService } from 'src/app/_services/system/navigation.service';
-
-
 
 @Component({
   selector: 'grid-menu-layout',

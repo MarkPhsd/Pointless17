@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { promise } from 'protractor';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-// import { ElectronService } from 'ngx-electron';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 
 @Component({
@@ -22,25 +20,23 @@ export class ListPrintersElectronComponent implements OnInit {
               private platFormService: PlatformService,
               private printingService: PrintingService) { }
 
-   ngOnInit() {
+   async ngOnInit() {
     if (this.platFormService.isAppElectron) {
       this.isElectronApp = true
     }
     if (this.isElectronApp && !this.printerList) {
-      this.printerList =  this.listPrinters();
+      const list = await this.listPrinters();
+      console.log('list', list)
+      this.printerList =  list
     }
   }
-
-  // async listPrinters(): Promise<any> {
-  //   this.printerList = await this.printingService.listPrinters();
-  // }
 
   emitPrinter() {
     this.outputPrinterName.emit(this.printerName)
   }
 
 
-  listPrinters(): Promise<any> {
+  async listPrinters(): Promise<any> {
     try {
       return (window as any).electron.listPrinters();
     } catch (error) {
