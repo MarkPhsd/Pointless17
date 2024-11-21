@@ -73,7 +73,6 @@
 
                 <div *ngIf="(cardType === 'chart' ||cardType === 'report') && dateRangeReport" class="toggle-fields">
                   <mat-slide-toggle
-                            [(dateRangeReport)]="dateRangeReport"
                             formControlName="dateRangeReport" >
                     <mat-label>Use Specific Dates - For history report dashboards.</mat-label>
                   </mat-slide-toggle>
