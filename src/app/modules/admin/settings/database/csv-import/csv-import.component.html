@@ -35,7 +35,6 @@
         </div>
     </div>
 
-
     <div class="fields">
       <mat-slide-toggle
                 [(ngModel)]="headerValues" >
@@ -66,7 +65,7 @@
       <div class="import-file">
 
         <button *ngIf="!resultsMessage &&
-                       (schemaValue !=0 && schemaValue != undefined) &&
+                       (schemaValue !==0 && schemaValue !== undefined) &&
                        itemCount>0"
               mat-raised-button
               color="primary"
