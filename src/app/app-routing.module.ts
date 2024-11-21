@@ -152,7 +152,7 @@ import { StoresManagerComponent } from './modules/admin/stores-manager/stores-ma
 import { ScheduleSelectorComponent } from './shared/widgets/schedule-selector/schedule-selector.component';
 import { ScheduleDateRangeSelectorComponent } from './shared/widgets/schedule-date-range-selector/schedule-date-range-selector.component';
 import { SignatureComponent } from './shared/widgets/signature-pad/signature-pad.component';
-import { TestGridComponent } from './modules/grid/test-grid/test-grid.component';
+// import { TestGridComponent } from './modules/grid/test-grid/test-grid.component';
 
 const routes: Routes = [
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
@@ -163,7 +163,7 @@ const routes: Routes = [
     {path: '', component: DefaultComponent,
       children: [
 
-        { path: 'test-grid',  component: TestGridComponent, data: { title: 'Order', animation: 'isLeft'} },
+        // { path: 'test-grid',  component: TestGridComponent, data: { title: 'Order', animation: 'isLeft'} },
 
 
         { path: 'signature',  component: SignatureComponent, data: { title: 'signature', animation: 'isLeft'} },

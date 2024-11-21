@@ -6,7 +6,7 @@ import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-car
 
 @NgModule({
   declarations: [
-    CurrencyFormatterDirective,
+
 
     // GridManagerComponent,
     // GridMenuLayoutComponent,
