@@ -21,10 +21,10 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { DcapService } from '../../payment-processing/services/dcap.service';
 import { Capacitor } from '@capacitor/core';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
-import { DSIEMVTransactionsService, PrintData, RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
+import { LogMessageInfo, SystemService } from 'src/app/_services/system/system.service';
 
 @Component({
   selector: 'app-payment-balance',
@@ -78,6 +78,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       return this.posPaymentService.getTransactionData(site, id, this.order?.history);
     })
   );
+
   updatePaymentsFiltered() {
     if (!this.order?.posPayments) { return }
     if (this.order?.completionDate) {
@@ -168,6 +169,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private settingsService: SettingsService,
               private toolbarUIService  : ToolBarUIService,
               private dcapService: DcapService,
+              private systemService: SystemService,
               private dcapMethodsService: DcapMethodsService,
               private router: Router,
               private navigationService     : NavigationService,
@@ -615,12 +617,24 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   
   async creditTicketPrint(data: string) {
     try {
+
         const tran = JSON.parse(data); // Parse the JSON string into an object
+        if (!tran) { 
+          this.siteService.notify('No tran data' , 'close', 100000);
+          return;
+        }
+        if (!tran.RStream) { 
+          this.siteService.notify('No rstream data', 'close', 100000);
+          return
+        }
+
         const printData = this.dcapMethodsService.extractLineProperties(tran.RStream); // Pass only the RStream object
         try {
-          if (printData) { 
-            await   this.printToPax(printData)
-          }
+          if (!printData) {   
+            this.siteService.notify('No Print Data Created', 'close', 100000);
+            return
+           }
+          await   this.printToPax(printData)
         } catch (error) {
           console.log('error', error)  
         }
@@ -632,6 +646,10 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   async printToPax(printData) {
     let item         = this.paxAndroidService.initTransactionForPrint(this.posDevice.dsiEMVSettings, printData)
     const printInfo    = this.paxAndroidService.mergePrintDataToTransaction(printData, item)
+    let log = {} as LogMessageInfo
+    log.type = "DCAP Printing"
+    log.messageString = JSON.stringify(printInfo)
+    this.systemService.secureLogger(log).subscribe(data => {})
     const printResult  =  dsiemvandroid.print(printInfo)
     this.checkResponse_Transaction('PRINT')
   }

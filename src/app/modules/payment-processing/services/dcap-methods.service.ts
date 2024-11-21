@@ -26,6 +26,7 @@ export class DcapMethodsService {
     // Ensure rStream is a valid object
     if (typeof rStream !== 'object' || rStream === null) {
       console.error('Invalid RStream object:', rStream);
+      this.siteService.notify('Invalid RStream Object', 'lose', 10000)
       return lineData;
     }
   

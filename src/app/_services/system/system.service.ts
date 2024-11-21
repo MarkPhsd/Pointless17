@@ -5,6 +5,22 @@ import { ICompany, ISite } from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 import { AuthenticationService } from '..';
 
+export class LogMessageInfo {
+  functionName: string;
+  webAPIVersion: string;
+  controllerName: string;
+  message: string;
+  messageString: any;
+  deviceName: string;
+  siteName: string;
+  userName: string;
+  level: string;
+  type: string;
+  subType: string;
+  companyName: string;
+  messageObject: any;
+}
+
 export interface SchemaUpdateResults {
   name:               string;
   result:             string;

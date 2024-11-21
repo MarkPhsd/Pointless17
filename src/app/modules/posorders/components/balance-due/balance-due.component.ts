@@ -28,6 +28,7 @@ import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { DSIEMVTransactionsService, PrintData, RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
+import { LogMessageInfo, SystemService } from 'src/app/_services/system/system.service';
 
 
 
@@ -40,7 +41,7 @@ export class ChangeDueComponent implements OnInit  {
 
   uiTransactions: TransactionUISettings
   uiTransactions$ : Observable<TransactionUISettings>;
-
+  printData$ : Observable<any>;
   ui: TransactionUISettings
   dsiEmv : DSIEMVSettings
   terminalSettings:ITerminalSettings;
@@ -150,6 +151,7 @@ export class ChangeDueComponent implements OnInit  {
               private dCapService : DcapService,
               private router: Router,
               private settingsService: SettingsService,
+              private systemService: SystemService,
               private dialogRef: MatDialogRef<ChangeDueComponent>,
               @Inject(MAT_DIALOG_DATA) public data: IBalanceDuePayload
             )
@@ -162,6 +164,9 @@ export class ChangeDueComponent implements OnInit  {
     if (data) {
       this.order = data.order
       this.payment = data.payment
+      if (this.payment) { 
+        this.getPrintData(this.payment.id)
+      }
       this.paymentMethod = data.paymentMethod;
       this.changeDue = (this.payment?.amountReceived - this.payment?.amountPaid).toFixed(2)
       this.step = 1;
@@ -673,61 +678,54 @@ export class ChangeDueComponent implements OnInit  {
   }
 
   navPOSOrders() {
-    // this.smallDeviceLimiter();
     this.orderMethodsService.refreshAllOrders()
     this.navigationService.navPOSOrders()
+    setTimeout(() => {
+      this.dialogRef.close()
+    }, 100);
   }
 
-  async testPrintData() {
-    const payment = this.payment as IPOSPayment;
+  async creditTicketPrint(data: string) {
     try {
-      console.log('testPrint Data coming', payment.transactionData)
-      // const tran =  JSON.parse(payment.transactionData);
-      
-      // const printData = extractLineProperties(tran)
-      const printData = this.dsiMVTransactionsService.getTestData()
-  
-      console.log( printData)
-      
-      try {
-        if (printData) { 
-          await this.printToPax(printData)
+        const tran = JSON.parse(data); // Parse the JSON string into an object
+        if (!tran) { 
+          this.siteService.notify('No tran data' , 'close', 100000);
+          return;
         }
-      } catch (error) {
-        
-      }
-      
-    } catch (error) {
-      
-    }
-    
-  }
-
-  async creditTicketPrint() {
-    const payment = this.payment as IPOSPayment;
-    
-    try {
-        const tran =  JSON.parse(payment.transactionData);
-        const printData = this.dcapMethodsService.extractLineProperties(tran)
-        // const printData = this.dsiMVTransactionsService.getTestData()
-        console.log(tran, printData)
+        if (!tran.RStream) { 
+          this.siteService.notify('No rstream data', 'close', 100000);
+          return
+        }
+        const printData = this.dcapMethodsService.extractLineProperties(tran?.RStream); // Pass only the RStream object
         try {
-          if (printData) { 
-            await this.printToPax(printData)
+          if (!printData) {  
+            this.siteService.notify('No printData', 'close', 100000)
+            return;
           }
+          await   this.printToPax(printData)
         } catch (error) {
+          this.siteService.notify('Printing error' + JSON.stringify(error), 'close', 100000)
           console.log('error', error)  
         }
     } catch (error) {
+      this.siteService.notify('Printing error 2' + JSON.stringify(error), 'close', 100000)
       console.log('error', error)     
     }
   }
 
   async printToPax(printData) {
-    let item         = this.paxAndroidService.initTransactionForPrint(this.dsiEmv, printData)
-    const printInfo    = this.paxAndroidService.mergePrintDataToTransaction(printData, item)
-    const printResult  =  dsiemvandroid.print(printInfo)
-    this.checkResponse_Transaction('PRINT')
+    try {
+      let item         = this.paxAndroidService.initTransactionForPrint(this.posDevice.dsiEMVSettings, printData)
+      const printInfo    = this.paxAndroidService.mergePrintDataToTransaction(printData, item)
+      const printResult  =  dsiemvandroid.print(printInfo)
+      let log = {} as LogMessageInfo
+      log.messageString = JSON.stringify(printInfo)
+      this.systemService.secureLogger(log).subscribe(data => {})
+      this.checkResponse_Transaction('PRINT')
+    } catch (error) {
+      this.siteService.notify('printToPax error' + JSON.stringify(error), 'close', 100000)
+    }
+
   }
 
   checkResponse_Transaction(tranType) {
@@ -748,15 +746,16 @@ export class ChangeDueComponent implements OnInit  {
   
   async intervalCheckPrint(timer: any) {
     let responseSuccess = '';
-    console.log('intervalCheckPrint')
     const options = {}
     const paymentResponse = await dsiemvandroid.getResponse(options);
+    console.log('printResponse', paymentResponse)
     if (paymentResponse && (paymentResponse.value !== '' )) {
-      this.instructions = ''
       clearInterval(timer);  // Clear the interval here when the condition is met'
-      await dsiemvandroid.bringToFront(options)
       await dsiemvandroid.clearResponse(options)
+      console.log('clear response')
       await dsiemvandroid.bringToFront(options)
+      console.log('bring to front')
+      this.navigationService.navPOSOrders()
     }
   }
 
@@ -765,8 +764,6 @@ export class ChangeDueComponent implements OnInit  {
     const options = {}
     const paymentResponse = await dsiemvandroid.getResponse(options);
     if (paymentResponse && (paymentResponse.value !== '' || this.cancelResponse)) {
-      this.instructions = ''
-      this.cancelResponse = false;
       this.processing = false;
       responseSuccess = 'complete';
       const response = this.dcapMethodsService.convertToObject(paymentResponse.value)
@@ -774,9 +771,14 @@ export class ChangeDueComponent implements OnInit  {
         clearInterval(timer);  // Clear the interval here when the condition is met'
         await dsiemvandroid.bringToFront(options)
         await dsiemvandroid.clearResponse(options)
-        await dsiemvandroid.bringToFront(options)
       }
     }
+  }
+
+  getPrintData(id: number) { 
+    if (id === 0) { return }
+    const site = this.siteService.getAssignedSite();
+    this.printData$ = this.paymentService.getTransactionData(site, id, this.order?.history);
   }
   
   

@@ -313,7 +313,7 @@ export class DSIEMVTransactionComponent implements OnInit {
 
   processDCAPVoidResults(response: RStream) {
     try {
-      console.log('processVoidResults RStream', response.CmdResponse)
+    
       const cmdResponse = response?.CmdResponse;
       const result =  this.dcapMethodsService.readResult(cmdResponse);
       if (!result.success) {

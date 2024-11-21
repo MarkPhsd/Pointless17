@@ -203,21 +203,17 @@
 </ng-template>
 
 <ng-template #paxPrint>
-  <!-- <button class="big-button"
-      mat-raised-button 
-      (click)="testPrintData()">
-      <mat-icon>print</mat-icon> 
-      Test Print
-  </button> -->
-
-  <button *ngIf="isPax" class="big-button"
-      mat-raised-button 
-      
-      (click)="creditTicketPrint()">
-      <mat-icon>print</mat-icon> 
-       Credit Print
-    </button>
-
+  <div *ngIf="isPax">
+    <div *ngIf="printData$ | async as itemData">
+      <button   
+          class="tip-button"
+          mat-raised-button 
+          (click)="creditTicketPrint(itemData)">
+          <mat-icon>print</mat-icon> 
+          Credit 
+        </button>
+      </div>
+  </div>
 </ng-template>
 
 
