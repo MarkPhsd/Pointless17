@@ -34,7 +34,7 @@ import { RouteReuseService } from "src/app/_services/system/route-reuse.service"
 import { ClientTypeEditComponent } from "./clients/client-types/client-type-edit/client-type-edit.component";
 import { ClientTypeListComponent } from "./clients/client-types/client-type-list/client-type-list.component";
 import { CompanyEditComponent } from "./company-edit/company-edit.component";
-import { SetTokenComponent } from './settings/set-token/set-token.component';
+import { SetTokenComponent } from '../../shared-ui/set-token/set-token.component';
 // import { EbaySettingsComponent } from './settings/software/ebay-settings/ebay-settings.component';
 // import { ItemassociationsComponent } from './products/productedit/_product-edit-parts/itemassociations/itemassociations.component';
 // import { SalesItemsComponent } from './reports/item-sales-card/sales-items/sales-items.component';

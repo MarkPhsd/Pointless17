@@ -11,7 +11,7 @@ import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IStripePaymentIntent, StripePaymentService } from 'src/app/_services/stripe/stripe-payment.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IPaymentResponse, IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';

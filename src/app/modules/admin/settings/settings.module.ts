@@ -29,6 +29,10 @@ import { DeviceInfoComponent } from './device-info/device-info.component';
 import { CardPointSettingsComponent } from '../../payment-processing/cardPointe/card-point-settings/card-point-settings.component';
 import { StripeSettingsComponent } from './stripe-settings/stripe-settings.component';
 import { NgxStripeModule } from 'ngx-stripe';
+import { EmailSettingsComponent } from './email-settings/email-settings.component';
+import { UIHomePageSettingsComponent } from './software/uihome-page-settings/uihome-page-settings.component';
+import { UITransactionsComponent } from './software/UISettings/uitransactions/uitransactions.component';
+import { SaveChangesButtonComponent } from 'src/app/shared-ui/save-changes-button/save-changes-button.component';
 
 @NgModule({
   declarations: [
@@ -42,9 +46,16 @@ import { NgxStripeModule } from 'ngx-stripe';
     CardPointSettingsComponent,
     StripeSettingsComponent,
 
+    //email settings
+    EmailSettingsComponent,
+
+    //settings
+    UIHomePageSettingsComponent,
+    UITransactionsComponent,
     //devieinfo
-    DeviceInfoComponent
-  ],
+    DeviceInfoComponent,
+
+    ],
   imports: [
     IonicModule.forRoot(),
     CommonModule,

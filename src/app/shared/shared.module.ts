@@ -109,33 +109,25 @@ import { OrderHeaderComponent } from '../modules/posorders/pos-order/order-heade
 import { PriceTierScheduleComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-schedule/price-tier-schedule.component';
 import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-selector.component';
 import { BackgroundCoverComponent } from './widgets/background-cover/background-cover.component';
-// import { UploaderComponent } from './widgets/AmazonServices';
-// import { PaymentReportCardComponent } from '../modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
 import { DSIEMVElectronComponent } from '../modules/admin/settings/software/dsiemvelectron/dsiemvelectron.component';
 import { DepartmentMenuComponent } from '../modules/menu/department-menu/department-menu.component';
 import { OverLayComponent } from './widgets/over-lay/over-lay.component';
 import { MyThingComponent } from './widgets/over-lay/my-thing/my-thing.component';
-// import { LogoComponent } from './widgets/logo/logo.component';
 import { FilterPipe } from '../_pipes/filter.pipe';
 import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile-med-info/profile-med-info.component';
-// import { ImageSwiperComponent } from './widgets/image-swiper/image-swiper.component';
-// import { SwiperModule } from 'swiper/angular';
 import { CompanyInfoHeaderComponent } from './widgets/company-info-header/company-info-header.component';
 import { GridsterModule } from 'angular-gridster2';
 import { ColorPickerModule } from 'ngx-color-picker';
-// import { MatMenuBasicComponent } from './widgets/mat-menu-basic/mat-menu-basic.component';
 import { IFrameComponent } from './widgets/i-frame/i-frame.component';
 import { YoutubePlayerComponent } from './widgets/youtube-player/youtube-player.component';
 import { SafeHtmlPipe } from '../_pipes/safe-html.pipe';
 import {YouTubePlayerModule} from '@angular/youtube-player'
-// import { StrainIndicatorComponent } from '../modules/tv-menu/strain-indicator/strain-indicator.component';
 import { CardDashboardComponent } from '../modules/admin/reports/card-dashboard/card-dashboard.component';
 import { DashBoardRoutingModule } from '../dash-board-routing.module';
 import { DsiEMVPaymentComponent } from '../modules/admin/dsi-emvpayment/dsi-emvpayment.component';
 import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatter/ag-icon-formatter.component';
 import { StoreCreditInfoComponent } from '../modules/posorders/pos-order/store-credit-info/store-credit-info.component';
 import { StoreCreditSearchComponent } from './widgets/search-list-selectors/store-credit-search/store-credit-search.component';
-import { EmailSettingsComponent } from '../modules/admin/settings/email-settings/email-settings.component';
 import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/uihome-page-settings/uihome-page-settings.component';
 import { ProductSearchSelector2Component } from '../modules/admin/products/productedit/_product-edit-parts/product-search-selector/product-search-selector.component';
 import { FastUserSwitchComponent } from '../modules/profile/fast-user-switch/fast-user-switch.component';
@@ -165,7 +157,6 @@ import { ClockInOutComponent } from './widgets/clock-in-out/clock-in-out.compone
 import { TruncateRightPipe } from '../_pipes/truncate-right.pipe';
 import { PosCheckOutButtonsComponent } from '../modules/posorders/pos-order/pos-check-out-buttons/pos-check-out-buttons.component';
 import { SplitEntrySelectorComponent } from '../modules/posorders/pos-order/split-entry-selector/split-entry-selector.component';
-import { SaveChangesButtonComponent } from './widgets/save-changes-button/save-changes-button.component';
 import { BrandTypeSelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/brand-type-select/brand-type-select.component';
 import { ValueFromListSelectorComponent } from './widgets/value-from-list-selector/value-from-list-selector.component';
 import { ScaleValueViewComponent } from './widgets/scale-value-view/scale-value-view.component';
@@ -343,7 +334,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     DCAPResponseMessageComponent,
     DynamicAgGridComponent,
     DSIEMVAndroidPayBtnComponent,
-    EmailSettingsComponent,
+  
     EmailEntryComponent,
     EmployeeClockListComponent,
     EmployeesOnClockListComponent,
@@ -452,7 +443,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SimpleTinyComponent,
     ScaleValueViewComponent,
     SplitEntrySelectorComponent,
-    SaveChangesButtonComponent,
+
     SalesTaxReportComponent,
     // ScaleReaderComponent,
     ScaleSettingsComponent,
@@ -462,20 +453,18 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SpeciesListComponent,
     StatusLookupComponent,
     StoreCreditInfoComponent,
-    // StrainIndicatorComponent,
+  
     StoreCreditSearchComponent,
    
     SummarycardComponent,
     TagChipsProductsComponent,
     TaxFieldsComponent,
-    // TiersCardComponent,
-    QuantiySelectorComponent,
-    // ToggleThemeComponent,
 
+    QuantiySelectorComponent,
 
     UnitTypeFieldsComponent,
     WebEnabledComponent,
-    // ValueFieldsComponent,
+
     CartButtonComponent,
     UIHomePageSettingsComponent,
 
@@ -483,13 +472,13 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     MatSpinnerOverlayComponent,
     QRCodeTableComponent,
     ValueSpinnerComponent,
-    // ProgressBarComponent,
+
     SearchDebounceInputComponent,
-    // UploaderComponent,
+  
     OverLayComponent,
     MyThingComponent,
     TipEntryComponent,
-    // LogoComponent,
+
     IFrameComponent,
     YoutubePlayerComponent,
     SafeHtmlPipe,
@@ -637,7 +626,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     OnlinePaymentCompletedComponent,
   
     CompanyInfoHeaderComponent,
-    EmailSettingsComponent,
+
     ElectronZoomControlComponent,
     DashboardComponent,
     DCAPResponseMessageComponent,
@@ -766,7 +755,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     UserPreferencesComponent,
     SiteCardComponent,
     SearchFieldsComponent,
-    SaveChangesButtonComponent,
+
     ScaleValueViewComponent,
     SplitEntrySelectorComponent,
     SalesTaxReportComponent,
@@ -785,16 +774,15 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SummarycardComponent,
     TagChipsProductsComponent,
     TaxFieldsComponent,
-    // TiersCardComponent,
+
     TipEntryComponent,
     ThreeCXFabComponent,
-    // ToggleThemeComponent,
+
 
     TruncateRightPipe,
     UIHomePageSettingsComponent,
     UnitTypeFieldsComponent,
-    // UploaderComponent,
-    // ValueFieldsComponent,
+
     WebEnabledComponent,
     SimpleTinyComponent,
     NumericDirective,

@@ -72,12 +72,11 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { NgxColorsModule } from 'ngx-colors';
 import { NgxImageCaptureModule } from 'ngx-image-compress';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
-import { AppRoutingModule } from '../app-routing.module';
-import { DashBoardRoutingModule } from '../dash-board-routing.module';
 import { FormSelectListComponent } from '../shared/widgets/formSelectList/form-select-list.component';
-import { SetTokenComponent } from '../modules/admin/settings/set-token/set-token.component';
+import { SetTokenComponent } from './set-token/set-token.component';
 import { StripeCheckOutComponent } from '../modules/payment-processing/stripe-check-out/stripe-check-out.component';
 import { NgxStripeModule } from 'ngx-stripe';
+import { SaveChangesButtonComponent } from './save-changes-button/save-changes-button.component';
 
 
 @NgModule({
@@ -145,9 +144,12 @@ import { NgxStripeModule } from 'ngx-stripe';
 
     SalesItemsComponent,
 
+    SaveChangesButtonComponent, //uihomagepage  transactionsettings
+
     BalanceSheetViewComponent,
     BalanceSheetHeaderViewComponent,
     BalanceSheetCalculationsViewComponent,
+
   ],
   imports: [
     CommonModule,
@@ -204,6 +206,7 @@ import { NgxStripeModule } from 'ngx-stripe';
     ClientSearchSelectorComponent,
 
     FormSelectListComponent,
+    SaveChangesButtonComponent,
 
     CSVImportComponent, //pos orders and settings
 
@@ -245,6 +248,7 @@ import { NgxStripeModule } from 'ngx-stripe';
     BalanceSheetViewComponent,
     BalanceSheetHeaderViewComponent,
     BalanceSheetCalculationsViewComponent,
+
   ],
   providers: [
     InventoryEditButtonService,

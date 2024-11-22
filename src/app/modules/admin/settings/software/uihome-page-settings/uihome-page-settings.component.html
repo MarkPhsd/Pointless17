@@ -27,24 +27,25 @@
   <div *ngIf="(uiHomePage$ | async) as uiHomePage; else loading">
     <mat-card-content *ngIf="inputForm && uiHomePage; else loading">
 
-      <save-changes-button
+      <!-- <save-changes-button
           [inputForm]="inputForm"
           (updateSetting)="updateSetting()">
-      </save-changes-button>
+      </save-changes-button> -->
 
       <mat-divider></mat-divider>
       <ng-container [ngTemplateOutlet]="twilio"></ng-container>
       <mat-divider></mat-divider>
+
       <div  *ngIf="inputForm">
         <button mat-raised-button color="primary"
                 (click)="showEmailSettings = !showEmailSettings">
           <mat-icon mat-icon>email</mat-icon>Email Settings
         </button>
 
-        <app-email-settings
+        <!-- <app-email-settings
             *ngIf="showEmailSettings"
             [inputForm]="inputForm">
-        </app-email-settings>
+        </app-email-settings> -->
 
 
         <div  *ngIf="inputForm && showEmailSettings"
@@ -135,10 +136,7 @@
 
           <div class="grid-view-sections">
             <div class="grid-views">
-
               <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Home Page Customer View</h4>
-
-
               <div class="toggle-fields">
                 <mat-slide-toggle   formControlName="suppressMenuItems" >
                   <mat-label>Suppress Items in Categories (For Food Service)</mat-label>
@@ -174,13 +172,11 @@
                 </mat-slide-toggle>
               </div>
 
-
               <div class="toggle-fields">
                 <mat-slide-toggle  formControlName="condensedMenuButtons"  >
                   <mat-label>Condensed Menu Buttons </mat-label>
                 </mat-slide-toggle>
               </div>
-
 
               <div class="toggle-fields">
                 <mat-slide-toggle  formControlName="scheduleSubMenu" >
@@ -343,7 +339,6 @@
                   <mat-label>Hide search features <br> (in app)</mat-label>
                 </mat-slide-toggle>
               </div>
-
             </div>
 
             <div class="grid-views">
@@ -388,7 +383,6 @@
 
             <div class="grid-views">
               <h4><mat-icon color="primary" style="margin-top:5px">manage_search</mat-icon>Product Filter Options</h4>
-
 
               <div class="toggle-fields">
                 <mat-slide-toggle formControlName="accordionMenu"  >
@@ -463,18 +457,15 @@
 
           <div>
             <h4>Order Settings</h4>
-
             <div class="toggle-fields">
               <mat-slide-toggle
-                        formControlName="wideOrderBar"
-                        >
+                        formControlName="wideOrderBar">
                 <mat-label class="margin-left-5">Wide Order Bar</mat-label>
               </mat-slide-toggle>
             </div>
             <div class="toggle-fields">
               <mat-slide-toggle
-                        formControlName="displaySendButton"
-                        >
+                        formControlName="displaySendButton" >
                 <mat-label>Send Order Button</mat-label>
                 <mat-hint class="margin-left-5">Show button beneath print button</mat-hint>
               </mat-slide-toggle>
@@ -587,7 +578,6 @@
           </app-value-fields>
         </div>
       </div>
-
 
     </mat-card-content>
   </div>

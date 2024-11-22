@@ -6,7 +6,6 @@ import { SystemService } from 'src/app/_services/system/system.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { EmployeeDetailsPanelComponent } from '../../employees/employee-details-panel/employee-details-panel.component';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 @Component({
   selector: 'app-email-settings',

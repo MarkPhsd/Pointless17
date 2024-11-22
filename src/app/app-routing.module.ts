@@ -131,7 +131,6 @@ import { ProductFilterComponent } from './shared/widgets/product-filter/product-
 import { PartBuilderMainComponent } from './modules/admin/products/part-builder/part-builder-main/part-builder-main.component';
 import { PartBuilderEditComponent } from './modules/admin/products/part-builder/part-builder-edit/part-builder-edit.component';
 import { PartBuilderUsageListComponent } from './modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';
-import { MessageEditorListComponent } from './modules/admin/message-editor-list/message-editor-list.component';
 import { BrandEditorMainComponent } from './modules/admin/resale_manager/brands/main/main.component';
 import { ResaleClassesMainComponent } from './modules/admin/resale_manager/classes/resale-classes-main/resale-classes-main.component';
 import { BuySellMainComponent } from './modules/buySell/buy-sell-main/buy-sell-main.component';
@@ -152,6 +151,7 @@ import { StoresManagerComponent } from './modules/admin/stores-manager/stores-ma
 import { ScheduleSelectorComponent } from './shared/widgets/schedule-selector/schedule-selector.component';
 import { ScheduleDateRangeSelectorComponent } from './shared/widgets/schedule-date-range-selector/schedule-date-range-selector.component';
 import { SignatureComponent } from './shared/widgets/signature-pad/signature-pad.component';
+import { MessageEditorListComponent } from './modules/admin/message-editor-list/message-editor-list.component';
 
 const routes: Routes = [
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
