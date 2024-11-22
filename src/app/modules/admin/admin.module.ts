@@ -91,58 +91,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
 @NgModule({
   declarations: [
-    // AdminbranditemComponent,
-    // AdminbrandslistComponent,
-    // ClientTypeListComponent,
-    // ClientTypeEditComponent,
-    // CompanyEditComponent,
-    // CSVImportComponent,
-    // DatabaseSchemaComponent,
 
-    // ManifestEditorHeaderComponent,
-    // ManifestsComponent,
-    // MainfestFilterComponent,
-    // MainfestEditorComponent,
-    // ManifestStatusComponent,
-    // ManifestTypeComponent,
-    // FacilitiesListComponent,
-    // FlatRateEditComponent,
-    // FlatRateListComponent,
-    // FlatTaxRateListComponent,
-
-    // PriceCategoriesEditComponent,
-    // PriceCategoryPriceFieldsComponent,
-    // PriceCategoryConversionsComponent,
-    // PriceCategoryTimeFiltersComponent,
-    // PriceCategoriesComponent,
-
-    // PriceTierEditComponent,
-    // PriceTiersComponent,
-    // UnitTypeListComponent,
-    // UnitTypeEditComponent,
-    // UnitTypePromptComponent,
-    // UnitTypeSelectComponent,
-    // ServiceTypeEditComponent,
-    // ServiceTypeListComponent,
-    // StrainsAddComponent,
-    // StrainPackagesComponent,
-    // StrainProductEditComponent,
-
-    // SiteEditComponent,
-    // SiteEditFormComponent,
-
-    // StoreCreditEditorComponent,
-    // StoreCreditListComponent,
-
-
-
-    // PartBuilderMainComponent
-
-    // SalesItemsComponent
-
-
-    // EbaySettingsComponent
-  
     SetTokenComponent
   ],
 

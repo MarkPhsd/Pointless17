@@ -867,7 +867,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
       SharedModule,
       SharedUtilsModule,
-
+      SharedUiModule,
+      
       NgxStripeModule.forRoot(),
       NgxCsvParserModule,
       NgxPayPalModule,

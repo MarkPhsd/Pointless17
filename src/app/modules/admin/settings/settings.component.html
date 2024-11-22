@@ -10,7 +10,7 @@
   <div *ngIf="role === 'admin' || role === 'manager'">
 
     <mat-accordion class="example-headers-align" multi="false">
-      <mat-expansion-panel [expanded]="accordionStep == 0"
+      <mat-expansion-panel [expanded]="accordionStep === 0"
                            (opened)="setStep(0)"
                            hideToggle>
         <mat-expansion-panel-header>
@@ -86,7 +86,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep == 2"
+    <mat-expansion-panel [expanded]="accordionStep === 2"
                          (opened)="setStep(2)"
                          hideToggle>
 
@@ -160,7 +160,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep == 4" (opened)="setStep(4)" hideToggle>
+    <mat-expansion-panel [expanded]="accordionStep === 4" (opened)="setStep(4)" hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title>
           Printer
@@ -183,7 +183,7 @@
       </mat-action-row>
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep ==5">
+    <mat-expansion-panel [expanded]="accordionStep === 5">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Ebay Settings
@@ -198,7 +198,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep == 5" (opened)="setStep(5)" hideToggle>
+    <mat-expansion-panel [expanded]="accordionStep === 5" (opened)="setStep(5)" hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title>
           Geo Location
@@ -225,7 +225,7 @@
       </ng-template>
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep == 6" (opened)="setStep(6)" hideToggle>
+    <mat-expansion-panel [expanded]="accordionStep === 6" (opened)="setStep(6)" hideToggle>
       <mat-expansion-panel-header>
           <mat-panel-title>
             Credit Card Processing
@@ -258,7 +258,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep == 7" (opened)="setStep(7)" hideToggle>
+    <mat-expansion-panel [expanded]="accordionStep === 7" (opened)="setStep(7)" hideToggle>
       <mat-expansion-panel-header>
           <mat-panel-title>
             Device Info
@@ -273,8 +273,8 @@
 
       <ng-template #accordionStep7>
 
-        <div  *ngIf="accordionStep == 7" >
-          <app-device-info [uiHomePage]="uiHomePage"></app-device-info>
+        <div  *ngIf="accordionStep === 7" >
+          <!-- <app-device-info [uiHomePage]="uiHomePage"></app-device-info> -->
         </div>
 
       </ng-template>

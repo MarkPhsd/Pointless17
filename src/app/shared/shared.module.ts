@@ -68,25 +68,18 @@ import { ButtonRendererComponent } from '../_components/btn-renderer.component';
 import { BtBlueToothScannerComponent } from './widgets/bt-blue-tooth-scanner/bt-blue-tooth-scanner.component';
 import { AutofocusDirective } from '../_directives/auto-focus-input.directive';
 import { HammerModule } from '@angular/platform-browser';
-// import { ClientSearchSelectorComponent } from './widgets/client-search-selector/client-search-selector.component';
-// import { LimitValuesProgressBarsComponent } from '../modules/posorders/limit-values-progress-bars/limit-values-progress-bars.component';
-// import { ProgressBarComponent } from './widgets/progress-bar/progress-bar.component';
-// import { ScaleReaderComponent } from './widgets/scale-reader/scale-reader.component';
 import { ProfileBillingAddressComponent } from '../modules/admin/profiles/parts/profile-billing-address/profile-billing-address.component';
 import { ProfileShippingAddressComponent } from '../modules/admin/profiles/parts/profile-shipping-address/profile-shipping-address.component';
-// import { OrderHeaderDemoGraphicsComponent } from '../modules/posorders/pos-order/order-header-demo-graphics/order-header-demo-graphics.component';
 import { MenuPriceSelectionComponent } from '../modules/menu/menu-price-selection/menu-price-selection.component';
 import { PrinterLocationSelectionComponent } from '../modules/admin/products/productedit/_product-edit-parts/printer-location-selection/printer-location-selection.component';
 import { ExitLabelSelectionComponent } from '../modules/admin/products/productedit/_product-edit-parts/exit-label-selection/exit-label-selection.component';
 import { MatSelectComponent } from './widgets/mat-select/mat-select.component';
 import { PrinterLocationsComponent } from '../modules/admin/products/printer-locations/printer-locations.component';
 import { KeyPadComponent } from './widgets/key-pad/key-pad.component';
-// import { ToggleThemeComponent } from './widgets/toggle-theme/toggle-theme.component';
 
 import { PosOrderFunctionButtonsComponent } from '../modules/posorders/pos-order-function-buttons/pos-order-function-buttons.component';
 import { PosOrderTransactionDataComponent } from '../modules/posorders/pos-order-transaction-data/pos-order-transaction-data.component';
 import { PaymentBalanceComponent } from '../modules/posorders/payment-balance/payment-balance.component';
-import { DeviceInfoComponent } from '../modules/admin/settings/device-info/device-info.component';
 import { CannabisItemEditComponent } from '../modules/admin/products/productedit/cannabis-item-edit/cannabis-item-edit.component';
 import { LiquorProductEditComponent } from '../modules/admin/products/productedit/liquor-product-edit/liquor-product-edit.component';
 import { RetailProductEditComponent } from '../modules/admin/products/productedit/retail-product-edit/retail-product-edit.component';
@@ -243,7 +236,6 @@ import { NgxColorsModule } from 'ngx-colors';
 import { CloseFloatingButtonComponent } from './widgets/close-floating-button/close-floating-button.component';
 import { MenuCardCategoriesComponent } from '../modules/menu/categories/menu-card-categories/menu-card-categories.component';
 import { SortSelectorsComponent } from './widgets/sort-selectors/sort-selectors.component';
-import { SetTokenComponent } from '../modules/admin/settings/set-token/set-token.component';
 import { DCAPResponseMessageComponent } from '../modules/dsiEMV/Dcap/dcaptransaction/dcapresponse-message/dcapresponse-message.component';
 import { EmployeesOnClockListComponent } from '../modules/admin/employeeClockAdmin/employees-on-clock-list/employees-on-clock-list.component';
 import { FunctionButtonsListComponent } from '../modules/admin/settings/function-groups/function-buttons-list/function-buttons-list.component';
@@ -252,7 +244,6 @@ import { SiteFooterComponent } from './components/site-footer/site-footer.compon
 import { SiteCardComponent } from './widgets/site-card/site-card.component';
 import { OnlinePaymentCompletedComponent } from '../modules/payment-processing/online-payment-completed/online-payment-completed.component';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
-
 
 import {
   DataUrl,
@@ -345,7 +336,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     CustomerDateSelectorComponent,
     UserPreferencesComponent,
     DepartmentSelectComponent,
-    DeviceInfoComponent,
+
     DSIEMVElectronComponent,
     DsiEMVPaymentComponent,
     DepartmentMenuComponent,
@@ -473,7 +464,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     StoreCreditInfoComponent,
     // StrainIndicatorComponent,
     StoreCreditSearchComponent,
-    SetTokenComponent,
+   
     SummarycardComponent,
     TagChipsProductsComponent,
     TaxFieldsComponent,
@@ -651,14 +642,14 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     DashboardComponent,
     DCAPResponseMessageComponent,
     DepartmentSelectComponent,
-    DeviceInfoComponent,
+    
     DisableControlDirective,
     DisplayMenuMenuComponent,
     DSIEMVElectronComponent,
     DsiEMVPaymentComponent,
     DepartmentMenuComponent,
     DynamicAgGridComponent,
-    // EditButtonsStandardComponent,
+   
     EmployeeClockListComponent,
     EmployeeClockEditComponent,
     EmployeesOnClockListComponent,
@@ -782,7 +773,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ScaleSettingsComponent,
     // ScaleReaderComponent,
     SearchDebounceInputComponent,
-    SetTokenComponent,
+  
     SidebarComponent,
     SpeciesListComponent,
     StatusLookupComponent,

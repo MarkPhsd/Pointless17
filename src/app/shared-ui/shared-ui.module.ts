@@ -75,6 +75,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { AppRoutingModule } from '../app-routing.module';
 import { DashBoardRoutingModule } from '../dash-board-routing.module';
 import { FormSelectListComponent } from '../shared/widgets/formSelectList/form-select-list.component';
+import { SetTokenComponent } from '../modules/admin/settings/set-token/set-token.component';
 
 
 @NgModule({
@@ -87,6 +88,8 @@ import { FormSelectListComponent } from '../shared/widgets/formSelectList/form-s
     BarcodeScannerComponent,
     ButtonRendererComponent,
     ScaleReaderComponent,
+
+    SetTokenComponent,
 
     MatMenuBasicComponent,
     LogoComponent,
@@ -174,10 +177,16 @@ import { FormSelectListComponent } from '../shared/widgets/formSelectList/form-s
   ],
 
   exports: [
+    AgGridTestComponent,
+    AgGridImageFormatterComponent,
+    AgGridToggleComponent,
+    
     BarcodeScannerComponent,
     ButtonRendererComponent,
     ScaleReaderComponent,
 
+    SetTokenComponent,
+    
     MatMenuBasicComponent,
     LogoComponent,
     ProductSearchSelectorComponent,

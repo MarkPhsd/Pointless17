@@ -28,39 +28,42 @@ import { SharedUtilsModule } from 'src/app/shared-utils/shared-utils.module';
 import { CacheSettingsComponent } from './database/cache-settings/cache-settings.component';
 import { DatabaseSchemaComponent } from './database/database-schema/database-schema.component';
 import { ExportDataComponent } from './database/export-data/export-data.component';
+import { DeviceInfoComponent } from './device-info/device-info.component';
 
 @NgModule({
   declarations: [
 
+    //data
     ExportDataComponent,
     DatabaseSchemaComponent,
-    CacheSettingsComponent
+    CacheSettingsComponent,
+    
+    //devieinfo
+    DeviceInfoComponent
   ],
   imports: [
     IonicModule.forRoot(),
     CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
     SharedUiModule,
     SharedUtilsModule,
     SharedPipesModule,
-    
-    AgGridModule,
-    AppRoutingModule,
-    DashBoardRoutingModule,
-    DragDropModule,
     AppMaterialModule,
 
+    AgGridModule,
+    DragDropModule,
+  
     BrowserAnimationsModule,
     HighchartsChartModule,
-    FormsModule,
+  
     HammerModule,
     QRCodeModule,
     GalleryModule,
     LightboxModule ,
     ColorPickerModule,
     GridsterModule,
-    RouterModule,
-    ReactiveFormsModule,
-    // SwiperModule,
+
     YouTubePlayerModule,
     NgxJsonViewerModule,
     NgxColorsModule,
