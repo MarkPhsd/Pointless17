@@ -217,9 +217,7 @@ import { StrainCardComponent } from '../modules/tv-menu/strainBoard/strain-card/
 import { TypeBoardComponent } from '../modules/tv-menu/type-board/type-board.component';
 import { TypeBoardItemsComponent } from '../modules/tv-menu/type-board-items/type-board-items.component';
 import { MenuBoardComponent } from '../modules/tv-menu/menu-board/menu-board.component';
-import { StripeSettingsComponent } from '../modules/admin/settings/stripe-settings/stripe-settings.component';
 import { NgxStripeModule } from 'ngx-stripe';
-import { StripeCheckOutComponent } from '../modules/payment-processing/stripe-check-out/stripe-check-out.component';
 import { DSIEMVTransactionComponent } from '../modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
 
 import { PosOrderBoardComponent } from '../modules/posorders/pos-order/pos-order-board/pos-order-board.component';
@@ -243,7 +241,6 @@ import { AngularResizeEventModule } from 'angular-resize-event';
 import { ProductListByBarcodeComponent } from '../modules/menu/product-list-by-barcode/product-list-by-barcode.component';
 import { AppWizardStatusComponent } from '../modules/admin/settings/software/app-wizard-status/app-wizard-status.component';
 import { FloorPlanComponent } from '../modules/floor-plan/floor-plan/floor-plan.component';
-import { CardPointSettingsComponent } from '../modules/payment-processing/cardPointe/card-point-settings/card-point-settings.component';
 import { CardpointeTransactionsComponent } from '../modules/payment-processing/cardPointe/cardpointe-transactions/cardpointe-transactions.component';
 import { CardPointIDTECHAndroidComponent } from '../modules/payment-processing/cardPointe/card-point-idtechandroid/card-point-idtechandroid.component';
 import { CpVIVO3300Component } from '../modules/payment-processing/cardPointe/cp-vivo3300/cp-vivo3300.component';
@@ -807,8 +804,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     // ReceiptViewComponent,
     MenuItemCardDashboardComponent,
-    StripeSettingsComponent,
-    StripeCheckOutComponent,
+
+    
     UITransactionsComponent,
     EbaySettingsComponent,
     EbayAuthRedirectComponent,
@@ -834,7 +831,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     WishlistComponent,
     ZoomFloorPlanComponent,
 
-    CardPointSettingsComponent,
+    
     CardPointIDTECHAndroidComponent,
     CardpointeTransactionsComponent,
     CpVIVO3300Component,
@@ -868,7 +865,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       SharedModule,
       SharedUtilsModule,
       SharedUiModule,
-      
+
       NgxStripeModule.forRoot(),
       NgxCsvParserModule,
       NgxPayPalModule,

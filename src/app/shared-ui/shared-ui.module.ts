@@ -76,6 +76,8 @@ import { AppRoutingModule } from '../app-routing.module';
 import { DashBoardRoutingModule } from '../dash-board-routing.module';
 import { FormSelectListComponent } from '../shared/widgets/formSelectList/form-select-list.component';
 import { SetTokenComponent } from '../modules/admin/settings/set-token/set-token.component';
+import { StripeCheckOutComponent } from '../modules/payment-processing/stripe-check-out/stripe-check-out.component';
+import { NgxStripeModule } from 'ngx-stripe';
 
 
 @NgModule({
@@ -132,7 +134,8 @@ import { SetTokenComponent } from '../modules/admin/settings/set-token/set-token
     ClockViewComponent,
     
     CreditCardPaymentsPrintListComponent,
-
+    StripeCheckOutComponent,
+    
     //moved from shared
     ItemSalesCardComponent,
     PaymentReportComponent,
@@ -171,6 +174,7 @@ import { SetTokenComponent } from '../modules/admin/settings/set-token/set-token
     YouTubePlayerModule,
     NgxJsonViewerModule,
     NgxColorsModule,
+    NgxStripeModule,
     NgxImageCaptureModule,
     AngularSignaturePadModule,
 
@@ -227,6 +231,7 @@ import { SetTokenComponent } from '../modules/admin/settings/set-token/set-token
     ClockViewComponent,
 
     CreditCardPaymentsPrintListComponent,
+    StripeCheckOutComponent,
 
     //moved from shared
     ItemSalesCardComponent,

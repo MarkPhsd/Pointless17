@@ -5,7 +5,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HammerModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule } from '@angular/router';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { IonicModule } from '@ionic/angular';
 import { AgGridModule } from 'ag-grid-angular';
@@ -20,8 +19,6 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { NgxImageCaptureModule } from 'ngx-image-compress';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { AppMaterialModule } from 'src/app/app-material.module';
-import { AppRoutingModule } from 'src/app/app-routing.module';
-import { DashBoardRoutingModule } from 'src/app/dash-board-routing.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { SharedUiModule } from 'src/app/shared-ui/shared-ui.module';
 import { SharedUtilsModule } from 'src/app/shared-utils/shared-utils.module';
@@ -29,6 +26,9 @@ import { CacheSettingsComponent } from './database/cache-settings/cache-settings
 import { DatabaseSchemaComponent } from './database/database-schema/database-schema.component';
 import { ExportDataComponent } from './database/export-data/export-data.component';
 import { DeviceInfoComponent } from './device-info/device-info.component';
+import { CardPointSettingsComponent } from '../../payment-processing/cardPointe/card-point-settings/card-point-settings.component';
+import { StripeSettingsComponent } from './stripe-settings/stripe-settings.component';
+import { NgxStripeModule } from 'ngx-stripe';
 
 @NgModule({
   declarations: [
@@ -38,6 +38,10 @@ import { DeviceInfoComponent } from './device-info/device-info.component';
     DatabaseSchemaComponent,
     CacheSettingsComponent,
     
+    //credit card processing 
+    CardPointSettingsComponent,
+    StripeSettingsComponent,
+
     //devieinfo
     DeviceInfoComponent
   ],
@@ -68,6 +72,7 @@ import { DeviceInfoComponent } from './device-info/device-info.component';
     NgxJsonViewerModule,
     NgxColorsModule,
     NgxImageCaptureModule,
+    NgxStripeModule,
     NgxDaterangepickerMd.forRoot(),
     AngularSignaturePadModule,
 

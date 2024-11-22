@@ -239,8 +239,6 @@
       <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
       <ng-template #accordionStep6>
-        <button mat-raised-button (click)="processorselect(1)">NetEpay Windows</button>
-        <button mat-raised-button (click)="processorselect(2)">NetEpay Android</button>
         <button mat-raised-button (click)="processorselect(3)">CardPointe with Bolt</button>
         <button mat-raised-button (click)="processorselect(4)">Stripe</button>
         <ng-container [ngTemplateOutlet]="processorSelection"></ng-container>
@@ -296,24 +294,15 @@
 
 <!-- Processor Selections -->
 <ng-template #processorItem1>
-  <div><app-dsiemvelectron>NetEpay Windows</app-dsiemvelectron> </div>
 </ng-template>
 
 <ng-template #processorItem2>
-  <div class="grid-android">
-    <div>
-      <pointlesscc-dsi-emvandroid
-                    [isAdmin]="true">
-      </pointlesscc-dsi-emvandroid>
-    </div>
-    <div><pointlesscc-dsiandroid-settings>NetEpay Android</pointlesscc-dsiandroid-settings></div>
-  </div>
 </ng-template>
 
 <ng-template #processorItem3>
-  <div><card-point-settings>Bolt Card Point</card-point-settings></div>
+  <!-- <div><card-point-settings>Bolt Card Point</card-point-settings></div> -->
 </ng-template>
 
 <ng-template #processorItem4>
-  <div><app-stripe-settings>Stripe API Settings</app-stripe-settings> </div>
+  <!-- <div><app-stripe-settings>Stripe API Settings</app-stripe-settings> </div> -->
 </ng-template>
