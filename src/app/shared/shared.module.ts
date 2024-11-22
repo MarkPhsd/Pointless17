@@ -17,7 +17,6 @@ import { SummarycardComponent } from '../modules/admin/reports/summarycard/summa
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { ProgressUploaderComponent } from './widgets/progress-uploader/progress-uploader.component';
-import { FormSelectListComponent } from './widgets/formSelectList/form-select-list.component';
 import { PageNotFoundComponent } from './widgets/page-not-found/page-not-found.component';
 import { SalesTaxReportComponent } from 'src/app/modules/admin/reports/sales-tax-report/sales-tax-report.component';
 import { PagerBlobComponent } from './widgets/pager-blob/pager-blob.component';
@@ -365,8 +364,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     FastUserSwitchComponent,
     FilterComponent,
     FilterPipe,
-    FormSelectListComponent,
-    // FoodProductEditComponent,
+
     FooterComponent,
     HeaderComponent,
     GenericIdSelectComponent,
@@ -669,9 +667,8 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     FacilitySearchSelectorComponent,
     FastUserSwitchComponent,
     FilterComponent,
-    FilterPipe,
     FooterComponent,
-    FormSelectListComponent,
+
     FreeDraggingDirective,
     FreeDraggingHandleDirective,
     GenericIdSelectComponent,

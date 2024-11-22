@@ -29,8 +29,8 @@
         <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
         <ng-template #accordionStep0>
-          <div *ngIf="accordionStep == 0">
-            <app-database-schema></app-database-schema>
+          <div *ngIf="accordionStep === 0">
+            <!-- <app-database-schema></app-database-schema> -->
           </div>
         </ng-template>
 
@@ -45,7 +45,7 @@
         </mat-action-row>
       </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep == 1"
+    <mat-expansion-panel [expanded]="accordionStep === 1"
                           (opened) ="setStep(1)"
                           hideToggle>
       <mat-expansion-panel-header>
@@ -62,7 +62,7 @@
 
       <ng-template #accordionStep1>
 
-        <div *ngIf="accordionStep ==1" class="grid-settings-2">
+        <div *ngIf="accordionStep ===1" class="grid-settings-2">
           <app-inventory-settings
                   [role]="role">
           </app-inventory-settings>

@@ -38,7 +38,6 @@ import { Capacitor} from '@capacitor/core';
 // https://www.codota.com/code/javascript/functions/child_process/exec
 // https://jscomplete.com/learn/node-beyond-basics/child-processes
 
-
 @Component({
   selector: 'app-installed-printers',
   templateUrl: './installed-printers.component.html',

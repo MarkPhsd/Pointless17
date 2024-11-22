@@ -56,6 +56,25 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { AgGridImageFormatterComponent } from '../_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { AgGridToggleComponent } from '../_components/_aggrid/ag-grid-toggle/ag-grid-toggle.component';
 import { AgGridTestComponent } from '../shared/widgets/ag-grid-test/ag-grid-test.component';
+import { CSVImportComponent } from '../modules/admin/settings/database/csv-import/csv-import.component';
+import { AngularSignaturePadModule } from '@almothafar/angular-signature-pad';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HammerModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
+import { YouTubePlayerModule } from '@angular/youtube-player';
+import { AgGridModule } from 'ag-grid-angular';
+import { GridsterModule } from 'angular-gridster2';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { GalleryModule } from 'ng-gallery';
+import { LightboxModule } from 'ng-gallery/lightbox';
+import { ColorPickerModule } from 'ngx-color-picker';
+import { NgxColorsModule } from 'ngx-colors';
+import { NgxImageCaptureModule } from 'ngx-image-compress';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { AppRoutingModule } from '../app-routing.module';
+import { DashBoardRoutingModule } from '../dash-board-routing.module';
+import { FormSelectListComponent } from '../shared/widgets/formSelectList/form-select-list.component';
 
 
 @NgModule({
@@ -81,6 +100,10 @@ import { AgGridTestComponent } from '../shared/widgets/ag-grid-test/ag-grid-test
     OrderTotalComponent,
     ClientSearchSelectorComponent,
 
+
+    FormSelectListComponent,
+
+    CSVImportComponent,
 
     TvPriceTierMenuItemsComponent,
     TvPriceSpecialsComponent,
@@ -125,10 +148,31 @@ import { AgGridTestComponent } from '../shared/widgets/ag-grid-test/ag-grid-test
     IonicModule,
     AppMaterialModule,
     ReactiveFormsModule,
-    FormsModule ,
+    FormsModule,
     SharedPipesModule,
     QRCodeModule,
+
+    AgGridModule,
+    DragDropModule,
+    BrowserAnimationsModule,
+    HighchartsChartModule,
+    FormsModule,
+    HammerModule,
+    QRCodeModule,
+    GalleryModule,
+    LightboxModule ,
+    ColorPickerModule,
+    GridsterModule,
+    RouterModule,
+    ReactiveFormsModule,
+    YouTubePlayerModule,
+    NgxJsonViewerModule,
+    NgxColorsModule,
+    NgxImageCaptureModule,
+    AngularSignaturePadModule,
+
   ],
+
   exports: [
     BarcodeScannerComponent,
     ButtonRendererComponent,
@@ -146,6 +190,9 @@ import { AgGridTestComponent } from '../shared/widgets/ag-grid-test/ag-grid-test
     OrderTotalComponent,
     ClientSearchSelectorComponent,
 
+    FormSelectListComponent,
+
+    CSVImportComponent, //pos orders and settings
 
     TvPriceTierMenuItemsComponent,
     TvPriceSpecialsComponent,

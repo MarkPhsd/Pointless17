@@ -75,8 +75,8 @@ import { TaxRateListComponent } from '../modules/admin/products/item-type/tax-ra
 import { TaxEditComponent } from '../modules/admin/products/taxes/tax-edit/tax-edit.component';
 import { TaxListComponent } from '../modules/admin/products/taxes/tax-list/tax-list.component';
 
-import { DatabaseSchemaComponent } from '../modules/admin/settings/database/database-schema/database-schema.component';
-import { CSVImportComponent } from '../modules/admin/settings/database/csv-import/csv-import.component';
+// import { DatabaseSchemaComponent } from '../modules/admin/settings/database/database-schema/database-schema.component';
+// import { CSVImportComponent } from '../modules/admin/settings/database/csv-import/csv-import.component';
 // import { ProductFilterComponent } from './widgets/product-filter/product-filter.component';
 // import { CategorySelectListFilterComponent } from './widgets/category-select-list-filter/category-select-list-filter.component';
 // import { ReceiptLayoutComponent } from '../shared-ui/printing/receipt-layout/receipt-layout.component';
@@ -85,7 +85,7 @@ import { InstalledPrintersComponent } from '../modules/admin/settings/printing/i
 import { MenuItemsInfiniteComponent } from '../modules/menu/menuitems/menu-items-infinite/menu-items-infinite.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { HTMLEditPrintingComponent } from '../modules/admin/settings/printing/htmledit-printing/htmledit-printing.component';
-import { CacheSettingsComponent } from '../modules/admin/settings/database/cache-settings/cache-settings.component';
+// import { CacheSettingsComponent } from '../modules/admin/settings/database/cache-settings/cache-settings.component';
 import { InventoryHistoryListComponent } from '../modules/admin/inventory/inventory-history-list/inventory-history-list.component';
 import { InventoryHistoryItemComponent } from '../modules/admin/inventory/inventory-history-item/inventory-history-item.component';
 // import { LabelViewSelectorComponent } from '../shared-ui/printing/label-view-selector/label-view-selector.component';
@@ -266,7 +266,7 @@ import { PromptSubGroupEditComponent } from '../modules/admin/menuPrompt/prompt-
 import { PromptSubGroupsComponent } from '../modules/admin/menuPrompt/prompt-sub-groups/prompt-sub-groups.component';
 import { ItemTypeCategoryAssignmentComponent } from '../modules/admin/products/item-type/item-type-category-assignment/item-type-category-assignment.component';
 import { ItemTypeDisplayAssignmentComponent } from '../modules/admin/products/item-type/item-type-display-assignment/item-type-display-assignment.component';
-import { ExportDataComponent } from '../modules/admin/settings/database/export-data/export-data.component';
+// import { ExportDataComponent } from '../modules/admin/settings/database/export-data/export-data.component';
 import { ClientTypeEditComponent } from '../modules/admin/clients/client-types/client-type-edit/client-type-edit.component';
 import { ClientTypeListComponent } from '../modules/admin/clients/client-types/client-type-list/client-type-list.component';
 import { CompanyEditComponent } from '../modules/admin/company-edit/company-edit.component';
@@ -458,7 +458,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     BrandslistComponent,
 
-    CacheSettingsComponent,
+    // CacheSettingsComponent,
     CategoriesComponent,
     CategorieslistviewComponent,
     CashPaymentButtonComponent,
@@ -491,9 +491,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     CompanyEditComponent,
 
     ClockBreaksTypesComponent,
-    CSVImportComponent,
+    // CSVImportComponent,
+    // DatabaseSchemaComponent,
+
     DailyReportComponent,
-    DatabaseSchemaComponent,
     DevxReportDesignerComponent,
     ReportViewerComponent,
     InventoryMenuItemComponent,
@@ -592,7 +593,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     EmployeeFilterPanelComponent,
     EmployeeListComponent,
     EmployeeMetrcKeyEntryComponent,
-    ExportDataComponent,
+    // ExportDataComponent,
     EmployeeSelectPopUpComponent,
     // FacilitiesListComponent,
     // FlatRateEditComponent,
