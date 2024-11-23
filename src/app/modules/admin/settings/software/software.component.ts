@@ -1,11 +1,22 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatLegacyButton, MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { ScaleSettingsComponent } from './scale-settings/scale-settings.component';
+import { UIHomePageSettingsComponent } from './uihome-page-settings/uihome-page-settings.component';
+import { UITransactionsComponent } from './UISettings/uitransactions/uitransactions.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-software-settings',
+  standalone: true,
+  imports: [CommonModule,MatExpansionModule,MatLegacyButtonModule,UIHomePageSettingsComponent,
+      UITransactionsComponent,ScaleSettingsComponent,MatIconModule,
+  ],
   templateUrl: './software.component.html',
   styleUrls: ['./software.component.scss']
 })
-export class SoftwareComponent  {
+export class SoftwareSettingsComponent  {
 
   @ViewChild('accordionStep0') accordionStep0: TemplateRef<any>;
   @ViewChild('accordionStep1') accordionStep1: TemplateRef<any>;

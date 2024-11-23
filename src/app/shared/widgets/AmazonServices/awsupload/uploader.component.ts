@@ -7,9 +7,25 @@ import { catchError, switchMap } from 'rxjs/operators';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable, of } from 'rxjs';
 import { NgxImageCompressService } from 'ngx-image-compress';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyProgressSpinner, MatLegacyProgressSpinnerModule, MatLegacySpinner } from '@angular/material/legacy-progress-spinner';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyLabel } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacySliderModule } from '@angular/material/legacy-slider';
 
 @Component({
   selector: 'app-widget-uploader',
+  standalone: true,
+  imports: [CommonModule,MatIconModule,AppMaterialModule,
+            MatLegacyButtonModule,MatLegacyProgressSpinnerModule,
+            MatLegacyInputModule,MatLegacySliderModule,MatLegacyCardModule,MatDividerModule,
+            FormsModule,AppMaterialModule],
   templateUrl: './uploader.component.html',
   styleUrls: ['./uploader.component.scss'],
   providers: [ TruncateTextPipe ]
@@ -22,7 +38,7 @@ export class UploaderComponent implements OnInit {
 
   @Input() width : number;
   @Input() height: number;
-  @Input() fileNames: string ; 
+  @Input() fileNames: string ;
   @Output() messageOut = new EventEmitter<string>();
   @Input() id:            string;
   @Input() createThumbNail: boolean;
@@ -68,7 +84,7 @@ export class UploaderComponent implements OnInit {
   }
 
   getImageURL(fileName: string): any {
-    if (fileName) { 
+    if (fileName) {
       const image =  this.awsBucket.getImageURLPath(this.bucketName, fileName)
       return image
      }
@@ -87,8 +103,8 @@ export class UploaderComponent implements OnInit {
           await this.compressAndUpload(file);
           if (this.isThumbNail) { return }
 
-          if (this.createThumbNail) { 
-            if (this.height == 0 || this.width == 0) { 
+          if (this.createThumbNail) {
+            if (this.height == 0 || this.width == 0) {
               this.isThumbNail = true;
               this.height = 200
               this.width  = 200
@@ -104,17 +120,17 @@ export class UploaderComponent implements OnInit {
     // This method compresses the file and appends 'thumbnail' to its name before upload
     async compressAndUpload(file: File) {
       const isImage = file.type.startsWith('image/') || file.type === 'image/webp';
-      
+
       if (isImage) {
 
-        
-        if (this.width == 0 || !this.width) { 
+
+        if (this.width == 0 || !this.width) {
           console.log('upload regular file ', file)
           this.confirmFileUpload(file);
           return;
         }
 
-   
+
         let image = await this.imageCompress.compressFile(
           URL.createObjectURL(file),
               1,
@@ -123,15 +139,15 @@ export class UploaderComponent implements OnInit {
               this.width,
               this.height,
         );
-  
+
         // Create a new file with the compressed image data and append 'thumbnail'
         let blob = this.dataURLToBlob(image);
 
         let fileName = this.appendThumbnailToName(file.name);
 
         let compressedFile = new File([blob], fileName, { type: file.type });
-  
-        if (!this.isThumbNail) { 
+
+        if (!this.isThumbNail) {
           this.confirmFileUpload(compressedFile);
           return;
         }
@@ -277,7 +293,7 @@ export class UploaderComponent implements OnInit {
           }
         );
 
-        if (!this.fileNames ) { 
+        if (!this.fileNames ) {
           return;
         }
 
@@ -343,7 +359,7 @@ export class UploaderComponent implements OnInit {
       }
       return fileName + '_thumbnail';
     }
-  
+
 }
 
 

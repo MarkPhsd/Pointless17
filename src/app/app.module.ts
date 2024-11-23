@@ -12,10 +12,8 @@ import { AppMaterialModule } from './app-material.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './modules/login/login.component';
 import { SharedModule } from './shared/shared.module';
-import { LayoutModule } from '@angular/cdk/layout';
 import { ChangepasswordComponent } from './modules/login/changepassword/changepassword.component';
 import { ResetpasswordComponent } from './modules/login/resetpassword/resetpassword.component';
-import { EditorModule } from '@tinymce/tinymce-angular';
 import { ErrorInterceptor } from './_http-interceptors/error.interceptor';
 import { AppGateComponent } from './modules/app-gate/app-gate/app-gate.component';
 import { RegisterAccountMainComponent } from './modules/login/registration/register-account-main/register-account-main.component';
@@ -27,8 +25,6 @@ import '@capacitor-community/camera-preview';
 import '@capacitor-community/barcode-scanner';
 
 import { CurrencyFormatterDirective } from './_directives/currency-reactive.directive';
-import { AgGridImageFormatterComponent } from './_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
-import { AgGridToggleComponent } from './_components/_aggrid/ag-grid-toggle/ag-grid-toggle.component';
 import { NGXMaterialModule } from './ngx-material.module';
 
 import * as Sentry from "@sentry/angular";
@@ -55,6 +51,9 @@ import { AgGridTestComponent } from './shared/widgets/ag-grid-test/ag-grid-test.
 import { SharedPipesModule } from './shared-pipes/shared-pipes.module';
 import { CoreModule } from './core.module';
 import { RouteReuseStrategy } from '@angular/router';
+import { AuthenticationService } from './_services/system/authentication.service';
+import { SitesService } from './_services/reporting/sites.service';
+import { SystemManagerService } from './_services/system/system-manager.service';
 
 // const cookieConfig:NgcCookieConsentConfig = {
 //   cookie: {
@@ -166,7 +165,7 @@ enableProdMode();
 
 @NgModule({
   declarations: [
-  
+
     AppComponent,
     AppGateComponent,
     // BarcodeScannerComponent,
@@ -193,17 +192,18 @@ enableProdMode();
 
   ],
 
-  imports: [
-    CommonModule,
-    CoreModule,
-    IonicModule.forRoot(),
-    SharedPipesModule,
-    // G-6BNWKZ7VY8
+
+     // G-6BNWKZ7VY8
     // NgxGoogleAnalyticsModule.forRoot('traking-code'),
     // NgxGoogleAnalyticsModule.forRoot(await getTrackingCode()) ,
     // NgxGoogleAnalyticsRouterModule,
-    UserIdleModule.forRoot({idle: 10, timeout: 100, ping: 120}),
+  imports: [
+    CommonModule,
     AppRoutingModule,
+    CoreModule,
+    IonicModule.forRoot(),
+    SharedPipesModule,
+    UserIdleModule.forRoot({idle: 10, timeout: 100, ping: 120}),
     AppMaterialModule,
     DefaultModule,
     AgGridModule,
@@ -215,20 +215,23 @@ enableProdMode();
     FormsModule,
     BrowserModule,
     DynamicModule,
-   
+
     SharedModule,
     NGXMaterialModule,
   ],
 
   exports: [
-  
+
   ],
 
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     CurrencyPipe,
     ErrorInterceptor,
-    Title
+    Title,
+    AuthenticationService,
+    SitesService,
+    SystemManagerService
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],

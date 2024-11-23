@@ -1,5 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { MatLegacySliderModule } from '@angular/material/legacy-slider';
 import { Router } from '@angular/router';
 import { switchMap, of, Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
@@ -8,9 +15,17 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EbayAPIService, ebayHeaders, ebayoAuthorization } from 'src/app/_services/resale/ebay-api.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @Component({
   selector: 'app-ebay-settings',
+  standalone: true,
+  imports: [CommonModule,NgxJsonViewerModule, FormsModule,ReactiveFormsModule,AppMaterialModule,ValueFieldsComponent,
+    ValueFieldsComponent,MatLegacyButtonModule,MatLegacyProgressSpinnerModule,
+    MatLegacyInputModule,MatLegacySliderModule,MatLegacyCardModule,MatDividerModule
+  ],
   templateUrl: './ebay-settings.component.html',
   styleUrls: ['./ebay-settings.component.scss']
 })
@@ -253,17 +268,17 @@ export class EbaySettingsComponent implements OnInit {
 
   listReturn() {
     const site = this.sitesService.getAssignedSite()
-    this.action$ = this.ebayService.listPolicies(site,'POSReturnPolicy').pipe(switchMap(data => 
+    this.action$ = this.ebayService.listPolicies(site,'POSReturnPolicy').pipe(switchMap(data =>
       {
         this.actionResult = data
         return of(data)
       }
     ))
   }
-  
+
   listFufillment() {
     const site = this.sitesService.getAssignedSite()
-    this.action$ = this.ebayService.listPolicies(site, 'POSFufillmentPolicy').pipe(switchMap(data => 
+    this.action$ = this.ebayService.listPolicies(site, 'POSFufillmentPolicy').pipe(switchMap(data =>
       {
         this.actionResult = data
         return of(data)
@@ -273,7 +288,7 @@ export class EbaySettingsComponent implements OnInit {
 
   listPayment() {
     const site = this.sitesService.getAssignedSite()
-    this.action$ = this.ebayService.listPolicies(site, 'POSPaymentPolicy').pipe(switchMap(data => 
+    this.action$ = this.ebayService.listPolicies(site, 'POSPaymentPolicy').pipe(switchMap(data =>
       {
         this.actionResult = data
         return of(data)
@@ -281,22 +296,22 @@ export class EbaySettingsComponent implements OnInit {
     ))
   }
 
-  getLocations() { 
+  getLocations() {
     const site = this.sitesService.getAssignedSite()
-    this.action$ = this.ebayService.getAsync(site, '/sell/inventory/v1/location/').pipe(switchMap(data => 
+    this.action$ = this.ebayService.getAsync(site, '/sell/inventory/v1/location/').pipe(switchMap(data =>
       {
         this.actionResult = data
         return this.ebayService.getPOSLocation(site) //, '/sell/inventory/v1/location/')
       }
-    )).pipe(switchMap(data => { 
+    )).pipe(switchMap(data => {
 
       return of(data)
     }))
   }
 
-  createLocation() { 
+  createLocation() {
     const site = this.sitesService.getAssignedSite()
-    this.action$ = this.ebayService.createInventoryLocation(site).pipe(switchMap(data => 
+    this.action$ = this.ebayService.createInventoryLocation(site).pipe(switchMap(data =>
       {
         this.actionResult = data
         return of(data)

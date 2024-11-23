@@ -22,10 +22,7 @@ import { SalesTaxReportComponent } from 'src/app/modules/admin/reports/sales-tax
 import { PagerBlobComponent } from './widgets/pager-blob/pager-blob.component';
 import { SiteSelectorComponent } from './widgets/site-selector/site-selector.component';
 import { HammerCardComponent } from './widgets/hammer-card/hammer-card.component';
-// import { TiersCardComponent } from '../modules/tv-menu/tv-price-specials/tiers-card/tiers-card.component';
 import { FacilitySearchSelectorComponent } from 'src/app/shared/widgets/facility-search-selector/facility-search-selector.component';
-// import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
-import { ListPrintersElectronComponent } from '../modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
 import { DSIEMVAndroidPayBtnComponent } from '../modules/posorders/pos-payment/dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
 import { ListProductSearchInputComponent } from './widgets/search-list-selectors/list-product-search-input/list-product-search-input.component';
 import { MoveInventoryLocationComponent } from 'src/app/modules/admin/inventory/move-inventory-location/move-inventory-location.component';
@@ -46,7 +43,6 @@ import { MenuMinimalComponent } from './widgets/menus/menu-minimal/menu-minimal.
 import { AccordionComponent } from './widgets/menus/accordion/accordion.component';
 import { MetaTagChipsComponent } from '../modules/admin/products/productedit/_product-edit-parts/meta-tag-chips/meta-tag-chips.component';
 import { MenuCompactComponent } from './widgets/menus/menu-compact/menu-compact.component';
-import { IonicGeoLocationComponent } from './widgets/ionic-geo-location/ionic-geo-location.component';
 import { BtPOSPrinterComponent } from '../modules/admin/settings/printing/bt-posprinter/bt-posprinter.component';
 import { PriceCategorySelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/price-category-select/price-category-select.component';
 import { MenuTinyComponent } from './widgets/menus/menu-tiny/menu-tiny.component';
@@ -95,17 +91,11 @@ import { IonicModule } from '@ionic/angular';
 import { IonicSwipeToDeleteComponent } from './widgets/ionic-swipe-to-delete/ionic-swipe-to-delete.component';
 import { DisableControlDirective } from '../_directives/disable-control-directive.directive';
 import { PaymentReportComponent } from '../modules/admin/reports/payment-report/payment-report.component';
-import { ItemSalesCardComponent } from '../modules/admin/reports/item-sales-card/item-sales-card.component';
 import { SearchDebounceInputComponent } from './widgets/search-debounce-input/search-debounce-input.component';
 import { UserAuthorizedDirective } from '../_directives/user-authorized.directive';
-import { APISettingComponent } from '../modules/login/apisetting/apisetting.component';
-import { ApiStoredValueComponent } from './widgets/api-stored-value/api-stored-value.component';
-import { ScaleSettingsComponent } from '../modules/admin/settings/software/scale-settings/scale-settings.component';
-// import { ApiStatusDisplayComponent } from './widgets/api-status-display/api-status-display.component';
 import { MatSelectNGModelComponent } from './widgets/mat-select-ngmodel/mat-select-ngmodel.component';
 import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.component';
 import { OrderHeaderComponent } from '../modules/posorders/pos-order/order-header/order-header.component';
-// import { OrderTotalComponent } from '../modules/posorders/pos-order/order-total/order-total.component';
 import { PriceTierScheduleComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-schedule/price-tier-schedule.component';
 import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-selector.component';
 import { BackgroundCoverComponent } from './widgets/background-cover/background-cover.component';
@@ -128,7 +118,6 @@ import { DsiEMVPaymentComponent } from '../modules/admin/dsi-emvpayment/dsi-emvp
 import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatter/ag-icon-formatter.component';
 import { StoreCreditInfoComponent } from '../modules/posorders/pos-order/store-credit-info/store-credit-info.component';
 import { StoreCreditSearchComponent } from './widgets/search-list-selectors/store-credit-search/store-credit-search.component';
-import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/uihome-page-settings/uihome-page-settings.component';
 import { ProductSearchSelector2Component } from '../modules/admin/products/productedit/_product-edit-parts/product-search-selector/product-search-selector.component';
 import { FastUserSwitchComponent } from '../modules/profile/fast-user-switch/fast-user-switch.component';
 import { AppWizardProgressButtonComponent } from './widgets/app-wizard-progress-button/app-wizard-progress-button.component';
@@ -260,7 +249,6 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
 
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
-// import { ReceiptLayoutComponent } from '../modules/admin/settings/printing/receipt-layout/receipt-layout.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -275,7 +263,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SafeHtmlPipe,
     ArrayFilterPipe,
     ArraySortPipe,
-   
+
     BackgroundUrlPipe,
     TruncateRightPipe,
 
@@ -286,9 +274,8 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     AdjustPaymentComponent,
     AreaComponent,
     AppWizardProgressButtonComponent,
-    APISettingComponent,
-    ApiStoredValueComponent,
-    // ApiStatusDisplayComponent,
+
+
     AutofocusDirective,
     BalanceSheetReportComponent,
     BlogPostListComponent,
@@ -334,7 +321,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     DCAPResponseMessageComponent,
     DynamicAgGridComponent,
     DSIEMVAndroidPayBtnComponent,
-  
+
     EmailEntryComponent,
     EmployeeClockListComponent,
     EmployeesOnClockListComponent,
@@ -353,7 +340,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     GenericNameSelectComponent,
     HammerCardComponent,
     InventoryAdjustmentNoteComponent,
-    IonicGeoLocationComponent,
+
     ItemTypeSortComponent,
     // ItemSalesCardComponent,
 
@@ -367,7 +354,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     LiquorProductEditComponent,
     ListProductSearchInputComponent,
     OrderItemScannerComponent,
-    ListPrintersElectronComponent,
+
     MatChipListComponent,
     MatDateRangeComponent,
     MatSelectComponent,
@@ -446,16 +433,16 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
 
     SalesTaxReportComponent,
     // ScaleReaderComponent,
-    ScaleSettingsComponent,
+
     SidebarComponent,
     SiteSelectorComponent,
     SiteCardComponent,
     SpeciesListComponent,
     StatusLookupComponent,
     StoreCreditInfoComponent,
-  
+
     StoreCreditSearchComponent,
-   
+
     SummarycardComponent,
     TagChipsProductsComponent,
     TaxFieldsComponent,
@@ -466,7 +453,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     WebEnabledComponent,
 
     CartButtonComponent,
-    UIHomePageSettingsComponent,
+
 
     UserAuthorizedDirective,
     MatSpinnerOverlayComponent,
@@ -474,7 +461,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ValueSpinnerComponent,
 
     SearchDebounceInputComponent,
-  
+
     OverLayComponent,
     MyThingComponent,
     TipEntryComponent,
@@ -533,7 +520,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SharedUiModule,
     SharedUtilsModule,
     SharedPipesModule,
-    
+
     AgGridModule,
     AppRoutingModule,
     DashBoardRoutingModule,
@@ -585,9 +572,8 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     AdjustPaymentComponent,
     AreaComponent,
     AutofocusDirective,
-    APISettingComponent,
-    ApiStoredValueComponent,
- 
+
+
     AppWizardProgressButtonComponent,
     BalanceSheetReportComponent,
     BlogPostListComponent,
@@ -613,7 +599,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ColorPickerModule,
     CoachMarksButtonComponent,
     CategorySelectComponent,
- 
+
     CloseFloatingButtonComponent,
     ExitLabelSelectionComponent,
     CannabisItemEditComponent,
@@ -624,21 +610,21 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ClientTypesLookupComponent,
 
     OnlinePaymentCompletedComponent,
-  
+
     CompanyInfoHeaderComponent,
 
     ElectronZoomControlComponent,
     DashboardComponent,
     DCAPResponseMessageComponent,
     DepartmentSelectComponent,
-    
+
     DisableControlDirective,
     DisplayMenuMenuComponent,
     DSIEMVElectronComponent,
     DsiEMVPaymentComponent,
     DepartmentMenuComponent,
     DynamicAgGridComponent,
-   
+
     EmployeeClockListComponent,
     EmployeeClockEditComponent,
     EmployeesOnClockListComponent,
@@ -655,7 +641,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     GenericNameSelectComponent,
     GridsterModule,
     HeaderComponent,
-    IonicGeoLocationComponent,
+
     IonicSwipeToDeleteComponent,
     ImageContainerComponent,
     InstructionDirective,
@@ -671,7 +657,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
 
     // LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
-    ListPrintersElectronComponent,
+
     // LogoComponent,
     Label1by8Component,
     MatDateRangeComponent,
@@ -744,12 +730,12 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ProductSearchSelector2Component,
     ProfileBillingAddressComponent,
     ProfileShippingAddressComponent,
-  
+
     RewardsAvailibleComponent,
     RetailProductEditComponent,
     RequestMessageComponent,
     RequestMessagesComponent,
-    // ReceiptLayoutComponent,
+
     QuantiySelectorComponent,
     UnitTypeSelectorComponent,
     UserPreferencesComponent,
@@ -759,10 +745,10 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ScaleValueViewComponent,
     SplitEntrySelectorComponent,
     SalesTaxReportComponent,
-    ScaleSettingsComponent,
+
     // ScaleReaderComponent,
     SearchDebounceInputComponent,
-  
+
     SidebarComponent,
     SpeciesListComponent,
     StatusLookupComponent,
@@ -780,7 +766,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
 
 
     TruncateRightPipe,
-    UIHomePageSettingsComponent,
+
     UnitTypeFieldsComponent,
 
     WebEnabledComponent,
@@ -804,7 +790,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     EditBarComponent,
     SignatureComponent,
     QRCodeModule,
-    
+
   ],
 
   providers: [

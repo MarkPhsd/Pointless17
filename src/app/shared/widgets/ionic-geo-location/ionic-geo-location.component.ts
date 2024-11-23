@@ -1,4 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
 // import { Plugins } from '@capacitor/core';
 // import { Geolocation} from '@capacitor/core';
 import { Geolocation } from '@capacitor/geolocation';
@@ -10,6 +13,8 @@ import { google } from "google-maps";
 
 @Component({
   selector: 'app-ionic-geo-location',
+  standalone: true,
+  imports: [CommonModule,MatDividerModule,MatLegacyButtonModule],
   templateUrl: './ionic-geo-location.component.html',
   styleUrls: ['./ionic-geo-location.component.scss']
 })

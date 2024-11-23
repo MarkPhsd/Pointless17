@@ -39,7 +39,7 @@
           [formGroup]="inputForm"
           class="grid-view-sections" >
 
-      <div class="grid-views">
+      <div class="grid-views"  [formGroup]="inputForm">
 
 
         <div class="grid-views">
@@ -338,9 +338,10 @@
 
 
             <div>
+              <!-- [matTooltip]="labelingService.transactionInfo[0].value" -->
               <mat-icon class="mat-label-info"
                     color="accent"
-                    [matTooltip]="labelingService.transactionInfo[0].value">info</mat-icon>
+                    >info</mat-icon>
               <app-value-fields
                   [inputForm]="inputForm"
                   [fieldName]="'weightGraceValue'">
@@ -357,9 +358,10 @@
             </div>
 
             <div>
+              <!--  [matTooltip]="labelingService.transactionInfo[6].value" -->
               <mat-icon class="mat-label-info"
                     color="accent"
-                    [matTooltip]="labelingService.transactionInfo[6].value">info</mat-icon>
+                   >info</mat-icon>
               <app-value-fields
                   [inputForm]="inputForm"
                   [fieldName]="'rewardPointValue'">
@@ -541,9 +543,10 @@
           <mat-card>
             <h4>Cardpointe </h4>
             <div class="toggle-fields">
+              <!-- [matTooltip]="labelingService.boltCardPoint[4].value" -->
               <mat-icon class="mat-label-info"
                           color="accent"
-                          [matTooltip]="labelingService.boltCardPoint[4].value">info</mat-icon>
+                          >info</mat-icon>
               <mat-slide-toggle
                         formControlName="cardPointBoltEnabled"
                         >
@@ -863,7 +866,7 @@
         </div>
       </div>
 
-      <div class="grid-views">
+      <div class="grid-views"  [formGroup]="inputForm">
 
         <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>
             Order Options</h4>
@@ -919,9 +922,10 @@
 
         <mat-label>Side Order Bar Option</mat-label>
         <div class="toggle-fields">
+          <!--  [matTooltip]="labelingService.transactionInfo[4].value" -->
           <mat-icon class="mat-label-info"
                     color="accent"
-                    [matTooltip]="labelingService.transactionInfo[4].value">info</mat-icon>
+                   >info</mat-icon>
           <mat-slide-toggle
                     formControlName="showNumberPad">
             <mat-label>Show number pad in-order</mat-label>
@@ -946,9 +950,10 @@
 
         <mat-label>Apply Table as Order Name</mat-label>
         <div class="toggle-fields">
+          <!--  [matTooltip]="labelingService.transactionInfo[2].value" -->
           <mat-icon class="mat-label-info"
                 color="accent"
-                [matTooltip]="labelingService.transactionInfo[2].value">info</mat-icon>
+               >info</mat-icon>
           <mat-slide-toggle
                     formControlName="applyTableNameToOrderName">
             <mat-label>Apply table name to order name</mat-label>
@@ -1067,7 +1072,7 @@
 
       </div>
 
-      <div class="grid-views">
+      <div class="grid-views"  [formGroup]="inputForm">
         <h3>Timed Events</h3>
         <div class="grid-views">
 
@@ -1090,7 +1095,7 @@
         </div>
       </div>
 
-      <div class="grid-views">
+      <div class="grid-views"  [formGroup]="inputForm">
         <div class="grid-views">
 
           <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Payment Options</h4>
@@ -1173,9 +1178,10 @@
           </div>
 
           <div class="toggle-fields">
+            <!--  [matTooltip]="labelingService.contactInfo[0].value" -->
             <mat-icon class="mat-label-info"
                       color="accent"
-                      [matTooltip]="labelingService.contactInfo[0].value">info</mat-icon>
+                     >info</mat-icon>
             <mat-slide-toggle
                       formControlName="idParseOnlyAgeConfirmation" >
               <mat-label>Only validate ID</mat-label>
@@ -1193,7 +1199,7 @@
         </div>
       </div>
 
-      <div class="grid-views">
+      <div class="grid-views"  [formGroup]="inputForm">
         <div class="grid-views">
           <h4><mat-icon color="primary" style="margin-top:5px">list</mat-icon>Audit</h4>
           <div class="toggle-fields" [formGroup]="inputForm">
@@ -1206,7 +1212,7 @@
         </div>
       </div>
 
-    <div>
+    <div  [formGroup]="inputForm">
       <mat-card *ngIf="voices">
         <h3>Voice Services</h3>
         <div >
@@ -1217,7 +1223,7 @@
                         type              = "text"
                         formControlName   = "voiceServiceName" >
 
-                <mat-option [value]=""> 
+                <mat-option [value]="">
                   Clear
                 </mat-option>
                 <mat-option

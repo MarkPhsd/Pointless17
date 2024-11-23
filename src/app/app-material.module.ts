@@ -51,7 +51,7 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
     NgxMatDatetimePickerModule,
     // NgxMatNativeDateModule,
     NgOptimizedImage,
-    OverlayModule 
+    OverlayModule
   ],
   exports: [
     DragDropModule,

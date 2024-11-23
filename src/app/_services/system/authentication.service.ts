@@ -140,8 +140,16 @@ export class AuthenticationService {
           user.userPreferences.firstTime_notifyShowAllOrders = false
         }
 
+
+      if (!this._user) {
+        return;
+      }
       // console.log('user pref', user, user?.userPreferences)
       this._user.next(user)
+
+      if (!this.siteService._user) {
+        return
+      }
       this.siteService._user.next(user)
     }
 
@@ -416,7 +424,11 @@ export class AuthenticationService {
     }
 
     getTracker(userName: string, ignoreAppCheck?: boolean) {
-      return this.siteService.getApplicationInfo(userName);
+      try {
+        return this.siteService.getApplicationInfo(userName);
+      } catch (error) {
+        console.log('error getapplication info', error)
+      }
     }
 
     assignUserNameAndPassword(user: IUser): Observable<IUserExists>  {

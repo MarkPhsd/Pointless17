@@ -20,7 +20,7 @@
         (click)="exportLogsToTxt()">
       Export Log
     </button>
-    
+
     <button mat-raised-button
         color="primary"
         (click)="cleanData()">
@@ -41,7 +41,7 @@
           <mat-icon>calendar</mat-icon>Close By Date
         </button>
 
-        <div [formGroup]="closeDateForm">
+        <!-- <div [formGroup]="closeDateForm">
           <mat-form-field style="width:135px;" class="flex-input" appearance="outline">
             <mat-label>Date</mat-label>
             <input matInput formControlName="date" matInput [matDatepicker]="picker">
@@ -49,7 +49,7 @@
             <mat-datepicker-toggle  matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-        </div>
+        </div> -->
       </mat-card>
     </div>
   </div>
@@ -81,21 +81,6 @@
       <br>
       {{databaseMessage}}
       {{schemaResults  | json }}
-    </div>
-  </div>
-
-    <mat-divider></mat-divider>
-
-  <app-cache-settings></app-cache-settings>
-
-  <mat-divider></mat-divider>
-  <h4><mat-icon>import_export</mat-icon>Import / Export</h4>
-  <div class="grid-views">
-    <div>
-      <app-csv-import></app-csv-import>
-    </div>
-    <div>
-      <app-export-data></app-export-data>
     </div>
   </div>
 

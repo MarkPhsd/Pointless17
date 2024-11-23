@@ -90,17 +90,23 @@
       </mat-slide-toggle>
     </div>
 
-    <button   style="margin:5px" class="margin-10" color="primary"  mat-raised-button (click)="saveEbaySettings()"><mat-icon>save</mat-icon>Save</button>
+    <button   style="margin:5px" class="margin-10" color="primary"
+    mat-raised-button (click)="saveEbaySettings()"><mat-icon>save</mat-icon>Save</button>
 
-    <button   style="margin:5px" class="margin-10" color="primary"  mat-raised-button (click)="getEbayTime()"><mat-icon>save</mat-icon>Test Ebay Time</button>
+    <button   style="margin:5px" class="margin-10" color="primary"
+    mat-raised-button (click)="getEbayTime()"><mat-icon>save</mat-icon>Test Ebay Time</button>
 
-    <button   style="margin:5px" class="margin-10" color="primary"  mat-raised-button (click)="clearAuthorization()"><mat-icon>delete</mat-icon>Clear Auth</button>
+    <button   style="margin:5px" class="margin-10" color="primary"
+    mat-raised-button (click)="clearAuthorization()"><mat-icon>delete</mat-icon>Clear Auth</button>
 
-    <button   style="margin:5px" class="margin-10" color="primary"  mat-raised-button (click)="nav('1')"><mat-icon>policy</mat-icon>Fufillment</button>
+    <button   style="margin:5px" class="margin-10" color="primary"
+    mat-raised-button (click)="nav('1')"><mat-icon>policy</mat-icon>Fufillment</button>
 
-    <button   style="margin:5px" class="margin-10" color="primary"  mat-raised-button (click)="nav('2')"><mat-icon>policy</mat-icon>Return Policy</button>
+    <button   style="margin:5px" class="margin-10" color="primary"
+    mat-raised-button (click)="nav('2')"><mat-icon>policy</mat-icon>Return Policy</button>
 
-    <button   style="margin:5px" class="margin-10" color="primary"  mat-raised-button (click)="createLocation()"><mat-icon>policy</mat-icon>Create Location</button>
+    <button   style="margin:5px" class="margin-10" color="primary"
+    mat-raised-button (click)="createLocation()"><mat-icon>policy</mat-icon>Create Location</button>
 
  </div>
 
@@ -122,26 +128,24 @@
         <div *ngIf="locations$ | async as action">
           <ng-container [ngTemplateOutlet]="itemJSON" [ngTemplateOutletContext]="{$implicit: action}"></ng-container>
         </div>
-        
+
         <div class="margin-5"><button mat-raised-button (click)="listPayment()"> Payment Policies</button></div>
 
         <div *ngIf="locations$ | async as action">
           <ng-container [ngTemplateOutlet]="itemJSON" [ngTemplateOutletContext]="{$implicit: action}"></ng-container>
         </div>
-        
+
         <div class="margin-5"><button mat-raised-button (click)="getLocations()"> Inventory Locations</button> </div>
         <div *ngIf="locations$ | async as action">
           <ng-container [ngTemplateOutlet]="itemJSON" [ngTemplateOutletContext]="{$implicit: action}"></ng-container>
         </div>
     </div>
 
-    
+
  </mat-card>
 
  <ng-template #itemJSON let-action>
-  <!-- <div *ngFor="let item of action">
-  </div> -->
-  <ngx-json-viewer json="action"></ngx-json-viewer>
+     <ngx-json-viewer json="action"></ngx-json-viewer>
  </ng-template>
 
 

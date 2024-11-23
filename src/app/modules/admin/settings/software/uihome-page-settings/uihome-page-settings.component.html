@@ -1,4 +1,5 @@
-<mat-card>
+
+ <mat-card>
   <mat-card-subtitle>
     <h3><ng-content></ng-content></h3>
     <mat-divider></mat-divider>
@@ -27,83 +28,82 @@
   <div *ngIf="(uiHomePage$ | async) as uiHomePage; else loading">
     <mat-card-content *ngIf="inputForm && uiHomePage; else loading">
 
-      <!-- <save-changes-button
+      <save-changes-button
           [inputForm]="inputForm"
           (updateSetting)="updateSetting()">
-      </save-changes-button> -->
+      </save-changes-button>
 
       <mat-divider></mat-divider>
       <ng-container [ngTemplateOutlet]="twilio"></ng-container>
       <mat-divider></mat-divider>
 
-      <div  *ngIf="inputForm">
-        <button mat-raised-button color="primary"
-                (click)="showEmailSettings = !showEmailSettings">
-          <mat-icon mat-icon>email</mat-icon>Email Settings
-        </button>
+        <div [formGroup]="inputForm" *ngIf="debugSection6">
+          <button mat-raised-button color="primary"
+                  (click)="showEmailSettings = !showEmailSettings">
+            <mat-icon mat-icon>email</mat-icon>Email Settings
+          </button>
 
-        <!-- <app-email-settings
-            *ngIf="showEmailSettings"
-            [inputForm]="inputForm">
-        </app-email-settings> -->
+          <app-email-settings
+              *ngIf="showEmailSettings"
+              [inputForm]="inputForm">
+          </app-email-settings>
 
-
-        <div  *ngIf="inputForm && showEmailSettings"
-              [formGroup]="inputForm">
-          <h4>Email </h4>
-          <div class="toggle-fields">
-            Requires SMTP Email account. Must be assignged in webconfig.
-            <mat-slide-toggle
-                      formControlName="smtpEmailEnabled"
-                      >
-              <mat-label>SMTP Email Enabled</mat-label>
-            </mat-slide-toggle>
+          <div  *ngIf="inputForm && showEmailSettings"
+                [formGroup]="inputForm">
+            <h4>Email </h4>
+            <div class="toggle-fields">
+              Requires SMTP Email account. Must be assignged in webconfig.
+              <mat-slide-toggle
+                        formControlName="smtpEmailEnabled"
+                        >
+                <mat-label>SMTP Email Enabled</mat-label>
+              </mat-slide-toggle>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div
-          *ngIf="inputForm"
-          [formGroup]="inputForm">
+        <div *ngIf="debugSection7" [formGroup]="inputForm">
 
-        <div class="grid-item">
-          <app-value-fields
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'displayCompanyName'">
-              Company Name Display
-          </app-value-fields>
-        </div>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldType]     ="'text'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'displayCompanyName'">
+                Company Name Display
+            </app-value-fields>
+          </div>
 
-        <div><h4> Chat</h4></div>
-        <div><mat-label> Allows you to incorporate a chat bubble for vistors and users.</mat-label></div>
-        <div><mat-label> Requires chat subscription.</mat-label></div>
-        <div class="grid-item">
-          <app-value-fields
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'threecxChatLink'">
-           Chat Server
-          </app-value-fields>
-        </div>
-        <div class="grid-item">
-          <app-value-fields
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'threeParty'">
-           Chat - Sub Group
-          </app-value-fields>
-        </div>
+          <div><h4> Chat</h4></div>
+          <div><mat-label> Allows you to incorporate a chat bubble for vistors and users.</mat-label></div>
+          <div><mat-label> Requires chat subscription.</mat-label></div>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldType]     ="'text'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'threecxChatLink'">
+            Chat Server
+            </app-value-fields>
+          </div>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldType]     ="'text'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'threeParty'">
+            Chat - Sub Group
+            </app-value-fields>
+          </div>
 
-        <div><h4>IP Info</h4></div>
+          <div><h4>IP Info</h4></div>
 
-        <div class="grid-item">
-          <app-value-fields
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'ipInfoToken'">
-              IP Info Token
-          </app-value-fields>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldType]     ="'text'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'ipInfoToken'">
+                IP Info Token
+            </app-value-fields>
+          </div>
+
         </div>
 
         <div><h4> Wordpress Content</h4></div>
@@ -111,7 +111,7 @@
         <div><mat-label> Must be filled out in the following format:</mat-label></div>
         <div><mat-label> https://yourdomain.com/wp-json/wp/v2/posts?slug=</mat-label></div>
 
-        <div class="grid-item">
+        <div class="grid-item"  [formGroup]="inputForm" *ngIf="debugSection5">
           <app-value-fields
               [fieldType]     ="'text'"
               [inputForm]     ="inputForm"
@@ -119,23 +119,21 @@
             CMS - Wordpress
           </app-value-fields>
         </div>
+
+        <div class="grid-views"  [formGroup]="inputForm" *ngIf="debugSection0">
+          <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Multi Store Options</h4>
+          <div *ngIf="(stores$ | async) as list">
+            <form-select-list [formFieldName]   = "'binaryStoreValue'"
+                              [searchForm]      = "inputForm"
+                              [listTypeValue]   = "'storeValueBinary'"
+                              [list]            = "list"    >
+            <div fieldSearchDescription>StoreID Name</div>
+            </form-select-list>
+          </div>
+        </div>
         <div class="grid-view-sections">
-          <div class="grid-views">
-            <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Multi Store Options</h4>
-            <div *ngIf="(stores$ | async) as list">
-              <form-select-list [formFieldName]   = "'binaryStoreValue'"
-                                [searchForm]      = "inputForm"
-                                [listTypeValue]   = "'storeValueBinary'"
-                                [list]            = "list"    >
-              <div fieldSearchDescription>StoreID Name</div>
-              </form-select-list>
-            </div>
-        </div>
-
-        </div>
-
-          <div class="grid-view-sections">
-            <div class="grid-views">
+          <div class="grid-view-sections" *ngIf="debugSection1">
+            <div class="grid-views" [formGroup]="inputForm"   *ngIf="debugSection20">
               <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Home Page Customer View</h4>
               <div class="toggle-fields">
                 <mat-slide-toggle   formControlName="suppressMenuItems" >
@@ -229,8 +227,9 @@
               </div>
 
               <div class="toggle-fields" style="margin-bottom:5px">
+                <!-- [matTooltip]="toolTips[0].value" -->
                 <mat-slide-toggle
-                          [matTooltip]="toolTips[0].value"
+
                           formControlName="storeNavigation"  >
                   <mat-label> Store Navigation</mat-label>
                 </mat-slide-toggle>
@@ -266,7 +265,7 @@
 
             </div>
 
-            <div class="grid-views">
+            <div class="grid-views" [formGroup]="inputForm"  *ngIf="debugSection21">
               <h4><mat-icon color="primary" style="margin-top:5px">home</mat-icon>Home Page Staff View</h4>
               <div class="toggle-fields">
                 <mat-slide-toggle
@@ -341,259 +340,235 @@
               </div>
             </div>
 
-            <div class="grid-views">
+            <div class="grid-views" [formGroup]="inputForm" *ngIf="debugSection22">
               <h4><mat-icon color="primary" style="margin-top:5px">search</mat-icon>Side Bar</h4>
               <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="sideToolbarDefaultBrand"
-                          >
+                <mat-slide-toggle formControlName="sideToolbarDefaultBrand"  >
                   <mat-label>Default Department</mat-label>
                 </mat-slide-toggle>
               </div>
-                  <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="sideToolbarEnableBrand"
-                          >
+              <div class="toggle-fields">
+                <mat-slide-toggle formControlName="sideToolbarEnableBrand"  >
                   <mat-label>Enable Brand</mat-label>
                 </mat-slide-toggle>
               </div>
               <div class="toggle-fields">
-                <mat-slide-toggle formControlName="sideToolbarEnableType" >
+                <mat-slide-toggle formControlName="sideToolbarEnableType"  >
                   <mat-label>Enable Type</mat-label>
                 </mat-slide-toggle>
               </div>
               <div class="toggle-fields">
-                <mat-slide-toggle  formControlName="sideToolbarEnableCategory"  >
+                <mat-slide-toggle formControlName="sideToolbarEnableCategory"  >
                   <mat-label>Enable Category</mat-label>
                 </mat-slide-toggle>
               </div>
-
               <div class="toggle-fields">
-                <mat-slide-toggle  formControlName="accordionMenuSideBar"  >
+                <mat-slide-toggle formControlName="accordionMenuSideBar"  >
                   <mat-label>Customer View Accordion Menu</mat-label>
                 </mat-slide-toggle>
               </div>
-
               <div class="toggle-fields">
-                <mat-slide-toggle  formControlName="staffAccordionMenuSideBar" >
+                <mat-slide-toggle formControlName="staffAccordionMenuSideBar"  >
                   <mat-label>Staff View Accordion Menu</mat-label>
                 </mat-slide-toggle>
               </div>
             </div>
 
-            <div class="grid-views">
+            <div class="grid-views"  *ngIf="debugSection23 && inputForm" [formGroup]="inputForm">
               <h4><mat-icon color="primary" style="margin-top:5px">manage_search</mat-icon>Product Filter Options</h4>
-
               <div class="toggle-fields">
                 <mat-slide-toggle formControlName="accordionMenu"  >
                   <mat-label>Accordion Menu Style</mat-label>
                 </mat-slide-toggle>
               </div>
-
               <div class="toggle-fields">
-                <mat-slide-toggle formControlName="subCategoryFilter" >
-                  <mat-label>Sub Category</mat-label>
+                <mat-slide-toggle formControlName="itemTypeFilter"  >
+                  <mat-label>Item Type Filter</mat-label>
                 </mat-slide-toggle>
               </div>
               <div class="toggle-fields">
-                <mat-slide-toggle  formControlName="categoryFilter"  >
-                  <mat-label>Category</mat-label>
+                <mat-slide-toggle formControlName="departmentFilter"  >
+                  <mat-label>Department Filter</mat-label>
                 </mat-slide-toggle>
               </div>
               <div class="toggle-fields">
-                <mat-slide-toggle  formControlName="departmentFilter"  >
-                  <mat-label>Department</mat-label>
+                <mat-slide-toggle formControlName="categoryFilter"  >
+                  <mat-label>Category Filter</mat-label>
                 </mat-slide-toggle>
               </div>
               <div class="toggle-fields">
-                <mat-slide-toggle  formControlName="itemTypeFilter"  >
-                  <mat-label>Item Type</mat-label>
+                <mat-slide-toggle formControlName="subCategoryFilter"  >
+                  <mat-label>Subcategory Filter</mat-label>
                 </mat-slide-toggle>
               </div>
               <div class="toggle-fields">
-                <mat-slide-toggle formControlName="brandFilter" >
-                  <mat-label>Brand</mat-label>
+                <mat-slide-toggle formControlName="brandFilter"  >
+                  <mat-label>Brand Filter</mat-label>
                 </mat-slide-toggle>
               </div>
               <div class="toggle-fields">
-                <mat-slide-toggle   >
-                  <mat-label>Gluten</mat-label>
-                </mat-slide-toggle>
-              </div>
-              <div class="toggle-fields">
-                <mat-slide-toggle  formControlName="speciesFilter" >
-                  <mat-label>Species</mat-label>
+                <mat-slide-toggle formControlName="colorFilter"  >
+                  <mat-label>Color Filter</mat-label>
                 </mat-slide-toggle>
               </div>
               <div class="toggle-fields">
                 <mat-slide-toggle formControlName="sizeFilter"  >
-                  <mat-label>Size</mat-label>
+                  <mat-label>Size Filter</mat-label>
+                </mat-slide-toggle>
+              </div>
+              <div class="toggle-fields">
+                <mat-slide-toggle formControlName="speciesFilter"  >
+                  <mat-label>Species Filter</mat-label>
+                </mat-slide-toggle>
+              </div>
+              <div class="toggle-fields">
+                <mat-slide-toggle formControlName="gluetenFilter"  >
+                  <mat-label>Gluten Filter</mat-label>
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-view-sections" [formGroup]="inputForm" *ngIf="inputForm && debugSection2">
+
+            <!-- <span *ngIf="debugSection25"> -->
+              <div >
+                <h4>Catalog Management Settings</h4>
+                <div class="toggle-fields" >
+                  <mat-slide-toggle formControlName="catalogColumnsEnableUOM"  >
+                    <mat-label>Enable UOM</mat-label>
+                  </mat-slide-toggle>
+                </div>
+              </div>
+
+              <div >
+
+              <h4>Order Settings</h4>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle formControlName="wideOrderBar"  >
+                  <mat-label>Wide Order Bar</mat-label>
                 </mat-slide-toggle>
               </div>
 
               <div class="toggle-fields">
-                <mat-slide-toggle formControlName="colorFilter"   >
-                  <mat-label>Color</mat-label>
+                <mat-slide-toggle formControlName="displaySendButton"  >
+                  <mat-label>Send Order Button</mat-label>
                 </mat-slide-toggle>
               </div>
-            </div>
-          </div>
 
-          <div class="grid-view-sections">
-          <div>
-            <h4>Catalog Management Settings</h4>
+              <div class="toggle-fields">
+                <mat-slide-toggle formControlName="lockTerminalToBalanceSheet"  >
+                  <mat-label>Balance Sheet Lock</mat-label>
+                </mat-slide-toggle>
+              </div>
 
-            <h5>Optional Columns</h5>
+              <div class="toggle-fields">
+                <mat-slide-toggle formControlName="employeeOnClockList"  >
+                  <mat-label>Employees On Clock</mat-label>
+                </mat-slide-toggle>
+              </div>
 
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="catalogColumnsEnableUOM"
-                        >
-                <mat-label class="margin-left-5">Enable UOM</mat-label>
-              </mat-slide-toggle>
-            </div>
+              <div class="toggle-fields">
+                <mat-slide-toggle formControlName="autoClockEmployeeOnLogin"  >
+                  <mat-label>Auto Clock On Login</mat-label>
+                </mat-slide-toggle>
+              </div>
 
-          </div>
+              <div class="toggle-fields">
+                <mat-slide-toggle formControlName="pinPadDefaultOnApp"  >
+                  <mat-label>PIN Pad Default</mat-label>
+                </mat-slide-toggle>
+              </div>
 
-          <div>
-            <h4>Order Settings</h4>
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="wideOrderBar">
-                <mat-label class="margin-left-5">Wide Order Bar</mat-label>
-              </mat-slide-toggle>
-            </div>
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="displaySendButton" >
-                <mat-label>Send Order Button</mat-label>
-                <mat-hint class="margin-left-5">Show button beneath print button</mat-hint>
-              </mat-slide-toggle>
-            </div>
+              <div class="toggle-fields">
+                <mat-slide-toggle formControlName="timeOut"  >
+                  <mat-label>Time Out (3 Minutes)</mat-label>
+                </mat-slide-toggle>
+              </div>
 
-            <div>
-              <mat-slide-toggle
-                        formControlName="lockTerminalToBalanceSheet"  >
-                <mat-label>Balance Sheet Lock</mat-label>
-                <mat-hint class="margin-left-5">Lock terminal to user who started balance sheet.</mat-hint>
-              </mat-slide-toggle>
-            </div>
+              <div class="toggle-fields" style="width:200px">
+                <app-value-fields
+                    [fieldType]     ="'number'"
+                    [inputForm]     ="inputForm"
+                    [fieldName]     ="'timeOutValue'">
+                    Time out in Seconds
+                </app-value-fields>
+              </div>
 
-            <div>
-              <mat-slide-toggle
-                        formControlName="employeeOnClockList"  >
-                <mat-label>Employees On Clock</mat-label>
-                <mat-hint class="margin-left-5">Shows employees on Clock on Login.</mat-hint>
-              </mat-slide-toggle>
-            </div>
-
-            <div>
-              <mat-slide-toggle
-                        formControlName="autoClockEmployeeOnLogin"  >
-                <mat-label>Auto Clock In</mat-label>
-                <mat-hint  class="margin-left-5">Auto Clock In employee On Login</mat-hint>
-              </mat-slide-toggle>
-            </div>
-
-            <div>
-              <mat-slide-toggle
-                        formControlName="pinPadDefaultOnApp"  >
-                <mat-label>PIN Pad Default</mat-label>
-                <mat-hint class="margin-left-5">Login Shows PIN Pad Entry Default.</mat-hint>
-              </mat-slide-toggle>
-            </div>
-
-            <div>
-              <mat-slide-toggle
-                        formControlName="timeOut"  >
-                <mat-label>Time Out (3 Minutes)</mat-label>
-                <mat-hint class="margin-left-5">App Only - Will log out after 3 minutes no use.</mat-hint>
-              </mat-slide-toggle>
-            </div>
-
-            <div class="toggle-fields" style="width:200px">
-              <app-value-fields
-                  [fieldType]     ="'number'"
-                  [inputForm]     ="inputForm"
-                  [fieldName]     ="'timeOutValue'">
-                  Time out in Seconds
-              </app-value-fields>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div *ngIf="uiHomePage">
-
-        <h4>Images</h4>
-        <mat-divider></mat-divider>
-
-        <div class="flex-start-row ">
-
-          <div class="grid-item">
-            <mat-card >
-              <app-widget-uploader
-                  [(fileNames)]="backgroundImage"
-                  (messageOut) ="received_Image($event)"
-                  >
-                  Upload Background Image
-              </app-widget-uploader>
-            </mat-card>
-          </div>
-
-          <div class="grid-item">
-            <mat-card >
-              <app-widget-uploader
-                  [(fileNames)]="logoHomePage"
-                  (messageOut) ="received_Logo($event)"
-                  >
-                  Upload Home Page Logo
-              </app-widget-uploader>
-            </mat-card>
-          </div>
-
-          <div class="grid-item">
-            <mat-card >
-              <app-widget-uploader
-                  [(fileNames)]="tinyLogo"
-                  (messageOut) ="received_TinyLogo($event)"
-                  >
-                  Tiny Logo
-              </app-widget-uploader>
-            </mat-card>
+             </div>
           </div>
         </div>
-      </div>
 
-      <div>
-        <h3>Menu Options</h3>
-        <mat-label>Min Stock Value to Show on Menu</mat-label>
-        <div style="width:200px">
-          <app-value-fields
-              [fieldType]     ="'number'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'minQuantityFilter'">
-              Min Quantity
-          </app-value-fields>
+        <div [formGroup]="inputForm"  *ngIf="uiHomePage && inputForm">
+
+          <h4>Images</h4>
+          <mat-divider></mat-divider>
+
+          <div class="flex-start-row ">
+
+            <div class="grid-item" *ngIf="debugSection10">
+              <mat-card >
+                <app-widget-uploader
+                    [(fileNames)]="backgroundImage"
+                    (messageOut) ="received_Image($event)"
+                    >
+                    Upload Background Image
+                </app-widget-uploader>
+              </mat-card>
+            </div>
+
+            <div class="grid-item" *ngIf="debugSection10">
+              <mat-card >
+                <app-widget-uploader
+                    [(fileNames)]="logoHomePage"
+                    (messageOut) ="received_Logo($event)"
+                    >
+                    Upload Home Page Logo
+                </app-widget-uploader>
+              </mat-card>
+            </div>
+
+            <div class="grid-item" *ngIf="debugSection10">
+              <mat-card >
+                <app-widget-uploader
+                    [(fileNames)]="tinyLogo"
+                    (messageOut) ="received_TinyLogo($event)"
+                    >
+                    Tiny Logo
+                </app-widget-uploader>
+              </mat-card>
+            </div>
+          </div>
         </div>
-      </div>
+
+        <div>
+          <h3>Menu Options</h3>
+          <mat-label>Min Stock Value to Show on Menu</mat-label>
+          <div style="width:200px">
+            <app-value-fields
+                [fieldType]     ="'number'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'minQuantityFilter'">
+                Min Quantity
+            </app-value-fields>
+          </div>
+        </div>
 
     </mat-card-content>
   </div>
 
-
 </mat-card>
 
 <ng-template #twilio>
-  <div  *ngIf="inputForm"
+  <div  *ngIf="inputForm && debugSection15"
         [formGroup]="inputForm">
     <h4>SSMS</h4>
     <mat-divider></mat-divider>
     <div class="toggle-fields">
         Requires Twilio SSMS Message account. Secret APIKey must be assigned in web configuration.
     <mat-slide-toggle
-              formControlName="twilioEnabled"   >
+              formControlName="twilioEnabled">
       <mat-label>Twilio Enabled</mat-label>
     </mat-slide-toggle>
     </div>

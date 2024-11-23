@@ -1,10 +1,20 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit,Input, Output  } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 @Component({
   selector: 'default-receipt-selector',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule
+  ],
   templateUrl: './default-receipt-selector.component.html',
   styleUrls: ['./default-receipt-selector.component.scss']
 })

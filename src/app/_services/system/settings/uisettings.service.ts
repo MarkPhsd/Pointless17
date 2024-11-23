@@ -794,16 +794,18 @@ export class UISettingsService {
       disableSearchFieldInMenu: [], //
       suppressItemsInStoreNavigation: [], //
       disableSearchFeaturesInItemsList: [], //
+
       accordionMenu: [],
-      colorFilter: [], //: boolean;
-      sizeFilter: [], //: boolean;
-      speciesFilter: [], //: boolean;
-      gluetenFilter: [], //: boolean;
-      brandFilter: [], //: boolean;
       itemTypeFilter: [], //: boolean;
       departmentFilter: [], //: boolean;
       categoryFilter: [], //: boolean;
       subCategoryFilter: [], //: boolean;
+      brandFilter: [], //: boolean;
+      colorFilter: [], //: boolean;
+      sizeFilter: [], //: boolean;
+      speciesFilter: [], //: boolean;
+      gluetenFilter: [], //: boolean;
+
       accordionMenuSideBar: [],
       staffAccordionMenuSideBar: [],
       minQuantityFilter: [],

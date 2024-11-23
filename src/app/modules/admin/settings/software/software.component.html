@@ -1,11 +1,10 @@
 <div class="features-grid">
   <mat-accordion class="example-headers-align" multi="false">
-    <mat-expansion-panel [expanded]="accordionStep == 0"
+    <mat-expansion-panel [expanded]="accordionStep === 0"
                          (opened)="setStep(0)"
                          hideToggle>
 
         <mat-expansion-panel-header>
-
           <mat-panel-title>
             Interfaces Settings
           </mat-panel-title>
@@ -24,7 +23,7 @@
 
       </mat-expansion-panel>
 
-      <mat-expansion-panel [expanded]="accordionStep == 1"
+      <mat-expansion-panel [expanded]="accordionStep === 1"
                            (opened)="setStep(1)"
                            hideToggle>
         <mat-expansion-panel-header>
@@ -47,10 +46,10 @@
 
       </mat-expansion-panel>
 
-      <mat-expansion-panel [expanded]="accordionStep == 2"
+      <mat-expansion-panel [expanded]="accordionStep === 2"
                           (opened)="setStep(2)"
                           hideToggle>
-          <mat-expansion-panel-header>
+        <mat-expansion-panel-header>
 
             <mat-panel-title>
               Scale Settings
@@ -60,19 +59,15 @@
               <mat-icon>scale</mat-icon>
             </mat-panel-description>
 
-          </mat-expansion-panel-header>
+        </mat-expansion-panel-header>
 
-          <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
+      <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
-          <ng-template #accordionStep2>
-              <div><app-scale-settings></app-scale-settings></div>
+      <ng-template #accordionStep2>
+          <div><app-scale-settings></app-scale-settings></div>
+      </ng-template>
 
-          </ng-template>
-
-       </mat-expansion-panel>
-
+    </mat-expansion-panel>
   </mat-accordion>
-
-
 </div>
 

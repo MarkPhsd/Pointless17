@@ -9,9 +9,53 @@ import { Subscription } from 'rxjs';
 import { PointlessCCDSIEMVAndroidService } from '../../payment-processing/services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { StripeSettingsComponent } from './stripe-settings/stripe-settings.component';
+import { UIHomePageSettingsComponent } from './software/uihome-page-settings/uihome-page-settings.component';
+import { UITransactionsComponent } from './software/UISettings/uitransactions/uitransactions.component';
+import { CardPointSettingsComponent } from '../../payment-processing/cardPointe/card-point-settings/card-point-settings.component';
+import { CacheSettingsComponent } from './database/cache-settings/cache-settings.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyLabel } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { MatLegacySliderModule } from '@angular/material/legacy-slider';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
+import { ValueFieldsComponent } from '../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { EmailSettingsComponent } from './email-settings/email-settings.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { InstalledPrintersComponent } from './printing/installed-printers/installed-printers.component';
+import { DatabaseSchemaComponent } from './database/database-schema/database-schema.component';
+import { EbaySettingsComponent } from './software/ebay-settings/ebay-settings.component';
+import { ApiStoredValueComponent } from 'src/app/shared/widgets/api-stored-value/api-stored-value.component';
+import { DeviceInfoComponent } from './device-info/device-info.component';
+import { CSVImportComponent } from './database/csv-import/csv-import.component';
+import { ExportDataComponent } from './database/export-data/export-data.component';
+import { InventoryComponent } from './inventory/inventory.component';
+import { SoftwareSettingsComponent } from './software/software.component';
+import { IonicGeoLocationComponent } from 'src/app/shared/widgets/ionic-geo-location/ionic-geo-location.component';
 
 @Component({
   selector: 'app-settings',
+  standalone: true,
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,
+    CardPointSettingsComponent,InstalledPrintersComponent,DatabaseSchemaComponent,
+    EbaySettingsComponent,ApiStoredValueComponent,DeviceInfoComponent,
+    StripeSettingsComponent,UIHomePageSettingsComponent,UITransactionsComponent,
+    UploaderComponent,EmailSettingsComponent,CacheSettingsComponent,
+    CSVImportComponent,ExportDataComponent,
+    InventoryComponent,
+    SoftwareSettingsComponent,
+    IonicGeoLocationComponent,
+    FormSelectListComponent,MatExpansionModule,
+    ValueFieldsComponent,MatLegacyProgressSpinnerModule,MatLegacyButtonModule,MatIconModule,
+    MatLegacyInputModule,MatLegacySliderModule,MatLegacyCardModule,MatDividerModule],
+
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
@@ -25,11 +69,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('accordionStep5') accordionStep5: TemplateRef<any>;
     @ViewChild('accordionStep6') accordionStep6: TemplateRef<any>;
     @ViewChild('accordionStep7') accordionStep7: TemplateRef<any>;
+    @ViewChild('accordionStep8') accordionStep8: TemplateRef<any>;
 
     @ViewChild('processorItem1') processorItem1: TemplateRef<any>;
     @ViewChild('processorItem2') processorItem2: TemplateRef<any>;
     @ViewChild('processorItem3') processorItem3: TemplateRef<any>;
     @ViewChild('processorItem4') processorItem4: TemplateRef<any>;
+
     processorSelection: TemplateRef<any>;
     showAndroid: boolean;
 
@@ -45,6 +91,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     _accordionStep: Subscription;
     _homePage     : Subscription;
     uiHomePage    : UIHomePageSettings;
+
     initSubscriptions() {
       this._accordionStep  = this.systemManagerService.accordionMenu$.subscribe( step => {
         this.accordionStep = step;
@@ -56,6 +103,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     get currentAccordionStep() {
+
       switch ( this.accordionStep) {
         case 0:
           return this.accordionStep0;
@@ -81,6 +129,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
         case 7:
           return this.accordionStep7;
           break;
+        case 8:
+          return this.accordionStep8;
+          break;
         default:
           return this.accordionStep0;
           break;
@@ -88,30 +139,31 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     constructor(
-        private uisettingService: UISettingsService,
+        private uisettingService     : UISettingsService,
         private AuthenticationService: AuthenticationService,
         private dialog               : MatDialog,
         private systemManagerService : SystemManagerService,
         private route                : ActivatedRoute,
-        private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
-        private platFormService     : PlatformService,
+        private dSIEMVAndroidService : PointlessCCDSIEMVAndroidService,
+        private platFormService      : PlatformService,
         private router               : Router)
     {
       this.accordionStep = -1;
       this.initSubscriptions();
     }
 
-    async ngOnInit() {
-
-      if (this.platForm === 'android') {
-        await this.listBTDevices()
-      }
+    ngOnInit() {
       this.getCurrentUser();
       const step = this.route.snapshot.paramMap.get('accordionStep');
       if (step) {
         this.accordionStep = +step;
         this.setStep(+step)
       }
+      this.listAsyncDevices()
+    }
+
+    listAsyncDevices() {
+      if (this.platForm === 'android') {   this.listBTDevices()   }
     }
 
     ngOnDestroy(): void {
@@ -126,9 +178,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
       this.router.navigate([url]);
     }
 
-    setStep(index: number) {
-      this.systemManagerService.updateAccordionStep(index)
-    }
 
     processorselect(index: number) {
 
@@ -147,6 +196,22 @@ export class SettingsComponent implements OnInit, OnDestroy {
           this.processorSelection  = this.processorItem4;
           break;
         }
+    }
+
+
+    setStep(index: number) {
+
+      console.log('setStep',this.accordionStep);
+
+      if( index == this.accordionStep ) {
+        this.accordionStep = -1
+        this.systemManagerService.updateAccordionStep(index)
+        console.log('accordionStep',this.accordionStep);
+        return;
+      }
+      console.log('accordionStep', index);
+      this.accordionStep = index;
+      this.systemManagerService.updateAccordionStep(index)
     }
 
     nextStep() {

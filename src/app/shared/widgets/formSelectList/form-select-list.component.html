@@ -20,13 +20,13 @@
           <span *ngIf="this.listTypeValue === 'storeValueBinary'">
             <mat-option  *ngFor="let item of list"
                         [value]="item.binaryValue">
-              {{ item.name }} 
+              {{ item.name }}
             </mat-option>
           </span>
-          <span *ngIf="this.listTypeValue != 'storeValueBinary'">
+          <span *ngIf="this.listTypeValue !== 'storeValueBinary'">
             <mat-option  *ngFor="let item of list"
                         [value]="item.binaryValue">
-              {{ item.name }}  
+              {{ item.name }}
             </mat-option>
           </span>
         </div>
@@ -65,33 +65,33 @@
   <div [formGroup]="searchForm"
        class="grid-container"
        *ngIf="searchForm">
-  
+
       <mat-form-field appearance="outline"
                       class="form-fields">
         <mat-label>
           <ng-content select="#fieldSearchDescription"></ng-content>
           <ng-content></ng-content>
         </mat-label>
-  
+
         <mat-select
                     type="'text'"
                     [formControlName]   = "formFieldName"
                     (selectionChange)   = "updateResults($event)" >
-  
+
           <mat-select-trigger *ngIf="inputField && inputField.value && showActiveInactive">
             <div class="item-results">
               <div>
                 {{inputField.value.name ? inputField.value.name : ''}}
               </div>
-  
+
               <div *ngIf="showActiveInactive" class="mat-icon">
                 <span *ngIf="inputField.value.active"><mat-icon color="primary">toggle_on</mat-icon></span>
                 <span *ngIf="!inputField.value.active"><mat-icon color="warn">toggle_off</mat-icon></span>
               </div>
             </div>
-  
+
           </mat-select-trigger>
-  
+
           <div *ngIf="itemList">
             <mat-option [value]="0">
               Clear
@@ -107,9 +107,8 @@
           </div>
         </mat-select>
       </mat-form-field>
-  
   </div>
-  
+
 </ng-template>
 
 

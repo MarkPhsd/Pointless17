@@ -1,9 +1,7 @@
 <div *ngIf="(action$ | async) as action"></div>
 
-<div class="features" *ngIf="role == 'admin'">
-
+<div class="features" *ngIf="role === 'admin'">
   <div class="grid-buttons">
-
     <div>
       <button mat-raised-button
               color  = "primary"
@@ -54,7 +52,9 @@
               class ="grid-image-button-group"
               (click)="serviceTypeList()">
         <div class="grid-image-button">
-          <div class="mat-grid-icon">  <mat-icon>add_shopping_cart</mat-icon> </div>
+          <div class="mat-grid-icon">  
+            <mat-icon>add_shopping_cart</mat-icon>
+          </div>
           <div>
             Transaction Types
           </div>
@@ -81,7 +81,7 @@
     <div>
       <button mat-raised-button
               color   = "primary"
-              class   ="grid-image-button-group "
+              class   ="grid-image-button-group"
               (click) ="blogListEdit()">
         <div class="grid-image-button">
           <div class="mat-grid-icon">
@@ -134,7 +134,9 @@
                 class ="grid-image-button-group "
                 (click)="initalizeTypes()">
           <div class="grid-image-button">
-            <div class="mat-grid-icon">  <mat-icon>warning</mat-icon> </div>
+            <div class="mat-grid-icon">  
+              <mat-icon>warning</mat-icon> 
+            </div>
             <div>
               Initialize
             </div>
@@ -151,10 +153,8 @@
             <mat-icon>clean</mat-icon>
             Clean Data
         </button>
-
       </div>
   </div>
-
 </div>
 
 <br>

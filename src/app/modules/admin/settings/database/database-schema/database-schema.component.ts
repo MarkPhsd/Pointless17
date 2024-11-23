@@ -6,12 +6,16 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { ISetting } from 'src/app/_interfaces';
 import { TransferDataService } from 'src/app/_services/transactions/transfer-data.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoggerService } from 'src/app/modules/payment-processing/services/logger.service';
 import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-database-schema',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule],
   templateUrl: './database-schema.component.html',
   styleUrls: ['./database-schema.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush,

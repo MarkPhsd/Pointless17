@@ -20,7 +20,6 @@
   <div [formGroup]="inputForm && !searchingEnabled"
        *ngIf="type === 'toggle'">
     <mat-slide-toggle
-        [name]="fieldName"
         [disabled] ='!enabled'
         class="mat-label"
         ngDefaultControl

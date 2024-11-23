@@ -20,8 +20,6 @@ import { ProfileEditorComponent } from './modules/admin/profiles/profile-editor/
 import { ProfileLookupComponent } from './modules/admin/profiles/profile-lookup/profile-lookup.component';
 import { PosOrderComponent } from './modules/posorders/pos-order/pos-order.component';
 import { SearchResultsComponent } from './modules/menu/search-results/search-results.component';
-import { AdminComponent } from './modules/admin/admin.component';
-import { SettingsComponent } from './modules/admin/settings/settings.component';
 import { ProductlistviewComponent } from './modules/admin/products/productlistview/productlistview.component';
 import { PageNotFoundComponent } from './shared/widgets/page-not-found/page-not-found.component';
 import { SiteEditComponent } from './modules/admin/settings/site-edit/site-edit.component';
@@ -58,7 +56,6 @@ import { TaxListComponent } from './modules/admin/products/taxes/tax-list/tax-li
 import { Label1by8Component } from './modules/admin/settings/printing/label1by8/label1by8.component';
 import { IonicGeoLocationComponent } from './shared/widgets/ionic-geo-location/ionic-geo-location.component';
 import { MenuItemsInfiniteComponent } from './modules/menu/menuitems/menu-items-infinite/menu-items-infinite.component';
-import { InstalledPrintersComponent } from './modules/admin/settings/printing/installed-printers/installed-printers.component';
 import { StrainsAddComponent } from './modules/admin/metrc/packages/strains-add/strains-add.component';
 import { PriceScheduleComponent } from './modules/admin/products/price-schedule/price-schedule.component';
 import { ItemTypeCategoryAssignmentComponent } from './modules/admin/products/item-type/item-type-category-assignment/item-type-category-assignment.component';
@@ -152,11 +149,13 @@ import { ScheduleSelectorComponent } from './shared/widgets/schedule-selector/sc
 import { ScheduleDateRangeSelectorComponent } from './shared/widgets/schedule-date-range-selector/schedule-date-range-selector.component';
 import { SignatureComponent } from './shared/widgets/signature-pad/signature-pad.component';
 import { MessageEditorListComponent } from './modules/admin/message-editor-list/message-editor-list.component';
+import { SettingsComponent } from './modules/admin/settings/settings.component';
+// import { SettingsComponent } from './modules/admin/settings/settings.component';
 
 const routes: Routes = [
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
     { path: 'qr-receipt',  component: QRCodeTableComponent, data: { title: 'Order', animation: 'isLeft'} },
-    
+
     {path: '', component: DefaultComponent,
       children: [
         { path: 'signature',  component: SignatureComponent, data: { title: 'signature', animation: 'isLeft'} },
@@ -215,8 +214,14 @@ const routes: Routes = [
         { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthGuard], data: {  title: 'Dash Board',  animation: 'isLeft'} },
         { path: 'reports',    component: ReportsComponent, canActivate: [AuthGuard], data: { title: 'Reports', animation: 'isLeft'} },
 
-        { path: 'admin',     component: AdminComponent, canActivate: [AuthGuard], data: {  title: 'Admin', animation:  'isLeft'} },
-        { path: 'settings',  component: SettingsComponent, canActivate: [AuthGuard], data: {  title: 'Settings',  animation:  'isLeft'} },
+        { path: 'app-settings',    component: SettingsComponent, canActivate: [AuthGuard], data: { title: 'Settings', animation: 'isLeft'} },
+
+        // {
+        //   path: 'app-settings', // Path to lazy load the module
+        //   loadChildren: () =>
+        //     import('./modules/admin/settings/settings.module').then((m) => m.SettingsModule),
+        // },
+
         { path: 'sites',     component: SitesComponent,  canActivate: [AuthGuard], data: {  title: 'Sites',  animation:  'isLeft'} },
         { path: 'site-edit', component: SiteEditComponent,  canActivate: [AuthGuard], data: { animation:  'isLeft'} },
         //StoresManagerComponent
@@ -359,8 +364,7 @@ const routes: Routes = [
 
         //settings
         { path: 'side-menu-layout', component: MenuManagerComponent , canActivate: [AuthGuard], data: {  title: 'Side Menu Edit', animation: 'isLeft'}},
-        { path: 'app-settings', component: SettingsComponent , canActivate: [AuthGuard], data: {  title: 'App Settings', animation: 'isLeft'}},
-        { path: 'item-type-category-assignment', component: ItemTypeCategoryAssignmentComponent , canActivate: [AuthGuard], data: { title: 'Item Type Category', animation: 'isLeft'}},
+         { path: 'item-type-category-assignment', component: ItemTypeCategoryAssignmentComponent , canActivate: [AuthGuard], data: { title: 'Item Type Category', animation: 'isLeft'}},
 
         //printing
         { path: 'label1by8', component: Label1by8Component, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
@@ -389,7 +393,6 @@ const routes: Routes = [
         { path: 'grid-menu-layout', component: GridMenuLayoutComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
       ]
     },
-    { path: 'printerslist'  ,  component: InstalledPrintersComponent, data: { title: 'Print Settings', animation: 'isLeft'} },
     { path: 'blog-post-list',  component: BlogPostListComponent, data: { title: 'BlogPosts', animation: 'isLeft'} },
     { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: {  title: 'Tiers',  animation: 'isLeft'}},
     { path: 'view-price-tiers', component: TierPricesComponent ,data: {  title: 'Price Tiers', animation: 'isLeft'}},
@@ -415,16 +418,7 @@ const routes: Routes = [
 
     { path: '**', component: PageNotFoundComponent},
 
-
-    // { path: 'menu-board', component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
-    // { path: 'client-type-list', component: ClientTypeListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
-    // { path: 'payments', component: DsiEMVPaymentComponent, data: { animation: 'isLeft'}},
-    // { path: 'agtest', component: AgGridTestComponent, data: { animation: 'isLeft'}},
-    // { path: 'printerSettings', component: InstalledPrintersComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
-    // { path: 'brandslist2', component: BrandslistComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
-    // { path: 'catscroll', component: CategoryScrollComponent, data: { animation: 'isLeft'}},
-    // { path: 'product-search-selector', component: ProductSearchSelectorComponent , canActivate: [AuthGuard], data: { title: 'Item Search',  animation: 'isLeft'}},
-  ];
+    ];
 
 @NgModule({
   imports:[

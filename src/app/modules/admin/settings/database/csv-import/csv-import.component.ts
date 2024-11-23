@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild,Input } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { combineLatest, Observable,  switchMap } from 'rxjs';
 import { FakeProductsService, POOrderImport } from 'src/app/_services/data/fake-products.service';
@@ -13,12 +13,28 @@ import { FlowVendor, ImportFlowVendorResults, IPOSOrder, IProduct } from 'src/ap
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { FlowInventory, ImportFlowInventoryResults } from 'src/app/_interfaces/import_interfaces/inventory-flow';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { CommonModule } from '@angular/common';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
+import {  MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacySlideToggleModule } from '@angular/material/legacy-slide-toggle';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyProgressBarModule } from '@angular/material/legacy-progress-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 export interface NamesCities {
   names: string[];
   cities: string[];
 }
 @Component({
   selector: 'app-csv-import',
+  standalone: true,
+  imports : [CommonModule,FormsModule, ReactiveFormsModule,MatLegacyInputModule,
+    MatLegacyCardModule,MatLegacyProgressBarModule,MatIconModule,
+    MatLegacyProgressSpinnerModule,
+    ValueFieldsComponent,FormSelectListComponent,MatLegacyButtonModule,
+  MatLegacySlideToggleModule],
   templateUrl: './csv-import.component.html',
   styleUrls: ['./csv-import.component.scss']
 })

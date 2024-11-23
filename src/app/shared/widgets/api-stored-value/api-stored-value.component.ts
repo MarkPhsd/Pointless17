@@ -1,8 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit,NgZone  } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Router } from '@angular/router';
-// import { ElectronService } from 'ngx-electron';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
@@ -10,6 +13,8 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'api-stored-value',
+  standalone: true,
+  imports: [CommonModule,MatLegacyCardModule,ReactiveFormsModule,FormsModule,MatLegacyFormFieldModule,MatLegacyButtonModule],
   templateUrl: './api-stored-value.component.html',
   styleUrls: ['./api-stored-value.component.scss']
 })

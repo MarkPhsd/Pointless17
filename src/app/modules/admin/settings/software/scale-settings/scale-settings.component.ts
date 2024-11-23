@@ -1,9 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacySlideToggleModule } from '@angular/material/legacy-slide-toggle';
 import { ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
 
 @Component({
   selector: 'app-scale-settings',
+  standalone: true,
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,
+        MatLegacyInputModule, MatLegacySlideToggleModule,
+      MatLegacyCardModule,MatLegacyFormFieldModule],
   templateUrl: './scale-settings.component.html',
   styleUrls: ['./scale-settings.component.scss']
 })

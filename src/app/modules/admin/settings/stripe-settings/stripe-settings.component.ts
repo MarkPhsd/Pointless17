@@ -1,12 +1,29 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyLabel } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacyProgressSpinner, MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { MatLegacySliderModule } from '@angular/material/legacy-slider';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { StripeAPISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
+import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-stripe-settings',
+  standalone:true,
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,
+    FormSelectListComponent,MatIconModule,
+    ValueFieldsComponent,MatLegacyProgressSpinnerModule,MatLegacyButtonModule,
+    MatLegacyInputModule,MatLegacySliderModule,MatLegacyCardModule,MatDividerModule],
   templateUrl: './stripe-settings.component.html',
   styleUrls: ['./stripe-settings.component.scss']
 })

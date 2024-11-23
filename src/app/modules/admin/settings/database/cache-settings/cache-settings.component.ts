@@ -2,14 +2,18 @@ import { OnInit,  Component } from '@angular/core';
 import { ISetting,  } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 import { SystemService } from 'src/app/_services/system/system.service';
 import { AuthenticationService } from 'src/app/_services';
 import { Observable, of, switchMap } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-cache-settings',
+  standalone: true,
+  imports: [ CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule],
   templateUrl: './cache-settings.component.html',
   styleUrls: ['./cache-settings.component.scss']
 })

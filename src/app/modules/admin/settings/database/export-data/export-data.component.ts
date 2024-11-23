@@ -1,11 +1,23 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 import { Observable,switchMap,of, catchError } from 'rxjs';
 import { ExportDataService } from 'src/app/_services/data/export-data.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
 
 @Component({
   selector: 'app-export-data',
+  standalone: true,
+  imports: [CommonModule,FormSelectListComponent,MatLegacyProgressSpinnerModule,
+            MatLegacyCardModule,
+            FormsModule,ReactiveFormsModule,MatLegacyFormFieldModule,MatIconModule,
+          ],
   templateUrl: './export-data.component.html',
   styleUrls: ['./export-data.component.scss']
 })
@@ -64,7 +76,7 @@ export class ExportDataComponent implements OnInit {
           return of('succeed')
         }
         ),
-        catchError( err => { 
+        catchError( err => {
           this.siteService.notify(`Error : ${err}`, 'Alert' , 2000)
           return of('failed')
         })
@@ -86,7 +98,7 @@ export class ExportDataComponent implements OnInit {
           return of('succeed')
         }
       ),
-        catchError( err => { 
+        catchError( err => {
           this.siteService.notify(`Error : ${err}`, 'Alert' , 2000)
           return of('failed')
         })
@@ -108,7 +120,7 @@ export class ExportDataComponent implements OnInit {
           return of('succeed')
         }
       ),
-        catchError( err => { 
+        catchError( err => {
           this.siteService.notify(`Error : ${err}`, 'Alert' , 2000)
           return of('failed')
         })

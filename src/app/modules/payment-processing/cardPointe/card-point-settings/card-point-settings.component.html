@@ -9,33 +9,11 @@
     <div *ngIf="inputForm"
          [formGroup]="inputForm" >
 
-      <!-- <div>
-        <mat-form-field appearance="outline">
-        <mat-label >Device Name</mat-label>
-        <input matInput
-              type="text"
-              formControlName="deviceName"
-              class="form-control" >
-        </mat-form-field>
-      </div> -->
-<!--
       <div>
+        <!-- [matTooltip]="labelingService.boltCardPoint[3].value" -->
         <mat-icon class="mat-label-info"
                   color="accent"
-                  [matTooltip]="labelingService.boltCardPoint[0].value">info</mat-icon>
-        <mat-form-field appearance="outline">
-        <mat-label >HSN</mat-label>
-        <input matInput
-              type="text"
-              formControlName="hsn"
-              class="form-control" >
-        </mat-form-field>
-      </div> -->
-
-      <div>
-        <mat-icon class="mat-label-info"
-                  color="accent"
-                  [matTooltip]="labelingService.boltCardPoint[3].value">info</mat-icon>
+                 >info</mat-icon>
         <mat-form-field appearance="outline">
         <mat-label >MerchID</mat-label>
         <input matInput
@@ -45,18 +23,7 @@
         </mat-form-field>
       </div>
 
-      <!-- <div>
-        <mat-icon class="mat-label-info"
-                  color="accent"
-                  [matTooltip]="labelingService.boltCardPoint[1].value">info</mat-icon>
-        <mat-form-field appearance="outline">
-        <mat-label >API Url</mat-label>
-        <input matInput
-              type="text"
-              formControlName="apiURL"
-              class="form-control" >
-        </mat-form-field>
-      </div> -->
+
 
     </div>
 

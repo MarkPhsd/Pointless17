@@ -1,4 +1,3 @@
-
 <div *ngIf="isElectronApp && printerList && printerList.length>0">
   <mat-form-field appearance="outline">
     <mat-label><ng-content></ng-content></mat-label>
@@ -17,7 +16,8 @@
     </mat-select>
   </mat-form-field>
 </div>
+
 <ng-template #loading>
-  <mat-spinner [diameter]="50"></mat-spinner>
+  ...loading printers
 </ng-template>
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { of, switchMap,catchError,Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
@@ -10,9 +10,24 @@ import { BoltInfo } from './../../models/models';
 import { CardPointMethodsService } from   './../../services/index';
 import { DeviceInfoService } from  './../../services/index';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
+import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyLabel } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyProgressBarModule } from '@angular/material/legacy-progress-bar';
 
 @Component({
   selector: 'card-point-settings',
+  standalone:true,
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,MatIconModule,
+     MatLegacyProgressSpinnerModule,
+     ValueFieldsComponent,MatLegacyProgressBarModule,MatLegacyButtonModule,
+     MatLegacyInputModule,MatLegacyCardModule,MatDividerModule],
   templateUrl: './card-point-settings.component.html',
   styleUrls: ['./card-point-settings.component.scss']
 })

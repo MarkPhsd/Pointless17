@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input} from '@angular/core';
 import { IItemType,  } from 'src/app/_services/menu/item-type.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -8,17 +8,29 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatDivider, MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 
 @Component({
   selector: 'app-inventory-settings',
+  standalone: true,
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,
+    MatLegacyButtonModule,MatDividerModule,MatIconModule,
+    MatLegacyProgressSpinnerModule,
+  ],
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.scss']
 })
 
 export class InventoryComponent  {
 
-  action$: Observable<any>;
   @Input() role: string;
+  action$: Observable<any>;
   showInitializer: boolean;
   itemTypes : IItemType[];
   itemTypes$: Observable<IItemType[]>;

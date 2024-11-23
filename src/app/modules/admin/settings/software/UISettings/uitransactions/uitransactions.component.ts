@@ -1,7 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, FormGroupDirective,UntypedFormControl ,NgForm, UntypedFormBuilder, FormGroup} from '@angular/forms';
+import { UntypedFormGroup, FormGroupDirective,UntypedFormControl ,NgForm, UntypedFormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { Observable, switchMap, of, ObservableNotification } from 'rxjs';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyLabel } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacySliderModule } from '@angular/material/legacy-slider';
+import { Observable, switchMap, of,  } from 'rxjs';
 import { clientType, IProductCategory, IServiceType, ISetting } from 'src/app/_interfaces';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { AuthenticationService, IItemBasic, MenuService } from 'src/app/_services';
@@ -15,10 +21,24 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { TtsService } from 'src/app/_services/system/tts-service.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
 import { DcapPayAPIService } from 'src/app/modules/payment-processing/services/dcap-pay-api.service';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
+import { EmailSettingsComponent } from '../../../email-settings/email-settings.component';
+import { MatLegacyProgressSpinner, MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyOptionModule } from '@angular/material/legacy-core';
+import { SaveChangesButtonComponent } from 'src/app/shared-ui/save-changes-button/save-changes-button.component';
 
 @Component({
   selector: 'app-uitransactions',
+  standalone: true,
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,MatIconModule,
+    UploaderComponent,EmailSettingsComponent,FormSelectListComponent,SaveChangesButtonComponent,
+    ValueFieldsComponent,MatLegacyProgressSpinnerModule,MatLegacyButtonModule,MatLegacyOptionModule,
+    MatLegacyInputModule,MatLegacySliderModule,MatLegacyCardModule,MatDividerModule],
   templateUrl: './uitransactions.component.html',
   styleUrls: ['./uitransactions.component.scss'],
 })

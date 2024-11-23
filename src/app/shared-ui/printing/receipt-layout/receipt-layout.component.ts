@@ -8,14 +8,17 @@ import { FakeDataService } from 'src/app/_services/system/fake-data.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { catchError, switchMap,  } from 'rxjs/operators';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-receipt-layout',
+  standalone: true,
+  imports: [CommonModule,MatDividerModule],
   templateUrl: './receipt-layout.component.html',
   styleUrls: ['./receipt-layout.component.scss']
 })

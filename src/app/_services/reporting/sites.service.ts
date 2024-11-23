@@ -120,26 +120,33 @@ export class SitesService {
   }
 
   getApplicationInfo(userName: string, ignoreAppCheck?: boolean) {
-    // if (this.platformSevice.isApp && !ignoreAppCheck) {
-    //   //then we don't care
-    //   return ''
-    // }
-    const message = this.getApplicationObject(userName)
-    const stringMessage = JSON.stringify(message)
-    return stringMessage
+    try {
+      const message = this.getApplicationObject(userName)
+      const stringMessage = JSON.stringify(message)
+      return stringMessage
+    } catch (error) {
+      console.log('error getapplication info', error)
+    }
+
   }
 
   getApplicationObject(userName: string) {
-    let location : any
-    if (this.ipAddressCurrent) {
-      location = this.ipAddressCurrent
+    try {
+      let location : any
+      if (this.ipAddressCurrent) {
+        location = this.ipAddressCurrent
+      }
+      const item   = this.deviceService.getDeviceInfo();
+      const height = window.innerHeight;
+      const width  = window.innerWidth;
+      const scaling = this.checkDeviceFontScaling()
+      const message = { userName: userName, location: location, width: width,  height: height,  scaling: scaling, info: item };
+      return message
+    } catch (error) {
+      console.log('getapplicationobject error', error)
+      return {}
     }
-    const item   = this.deviceService.getDeviceInfo();
-    const height = window.innerHeight;
-    const width  = window.innerWidth;
-    const scaling = this.checkDeviceFontScaling()
-    const message = { userName: userName, location: location, width: width,  height: height,  scaling: scaling, info: item };
-    return message
+
   }
 
   toCamelCase(str) {

@@ -1,8 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, forwardRef, Input, ViewChild, EventEmitter, AfterViewInit, Renderer2, Output, TemplateRef } from '@angular/core';
-import { FormArrayName, UntypedFormGroup, NG_VALUE_ACCESSOR, FormGroup } from '@angular/forms';
+import { FormArrayName, UntypedFormGroup, NG_VALUE_ACCESSOR, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatLegacyFormFieldModule, MatLegacyLabel } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacySliderModule } from '@angular/material/legacy-slider';
 
 @Component({
   selector: 'app-value-fields',
+  standalone: true,
+  imports: [CommonModule, FormsModule,ReactiveFormsModule,MatLegacyInputModule,MatLegacyFormFieldModule,MatLegacySliderModule],
   templateUrl: './value-fields.component.html',
   styleUrls: ['./value-fields.component.scss']
 })

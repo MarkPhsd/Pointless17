@@ -20,6 +20,24 @@ import { IItemBasic, OrdersService } from 'src/app/_services';
 import { Router } from '@angular/router';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { Capacitor} from '@capacitor/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { MatLegacySliderModule } from '@angular/material/legacy-slider';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { DefaultReceiptSelectorComponent } from '../default-receipt-selector/default-receipt-selector.component';
+import { MatLegacySelect, MatLegacySelectModule } from '@angular/material/legacy-select';
+import { MatLegacyCheckboxModule } from '@angular/material/legacy-checkbox';
+import { LabelViewSelectorComponent } from 'src/app/shared-ui/printing/label-view-selector/label-view-selector.component';
+import { ListPrintersElectronComponent } from '../list-printers-electron/list-printers-electron.component';
+import { MatIconModule } from '@angular/material/icon';
+import { ReceiptLayoutComponent } from 'src/app/shared-ui/printing/receipt-layout/receipt-layout.component';
+
 // https://github.com/Ans0n-Ti0/esc-pos-encoder-ionic-demo
 // https://github.com/tojocky/node-printer
 //https://stackblitz.com/edit/angular-ivy-13kwjp?file=src%2Fapp%2Fprint-component%2Fprint.component.ts
@@ -40,6 +58,19 @@ import { Capacitor} from '@capacitor/core';
 
 @Component({
   selector: 'app-installed-printers',
+  standalone: true,
+  imports: [
+    CommonModule,FormsModule,ReactiveFormsModule,
+    MatLegacyButtonModule,MatLegacyProgressSpinnerModule,
+    MatLegacyInputModule,MatLegacySliderModule,MatLegacyCardModule,MatDividerModule,
+    MatLegacyCardModule,MatLegacySelectModule,MatLegacyCheckboxModule,
+    MatLegacySelectModule,MatIconModule,
+    ValueFieldsComponent,
+    ReceiptLayoutComponent,
+    LabelViewSelectorComponent,
+    ListPrintersElectronComponent,
+    DefaultReceiptSelectorComponent,
+  ],
   templateUrl: './installed-printers.component.html',
   styleUrls: ['./installed-printers.component.scss'],
   // providers: [ SafeHtmlPipe ]
@@ -501,7 +532,7 @@ export class InstalledPrintersComponent implements OnInit {
 
         // Generate the PNG image from the element
         const dataUrl = await toPng(node, options);
-        
+
         const img = new Image();
         img.src = dataUrl;
 

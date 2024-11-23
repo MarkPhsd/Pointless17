@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { Observable,switchMap,of } from 'rxjs';
 import { SystemService } from 'src/app/_services/system/system.service';
@@ -7,8 +7,22 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import {  MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { MatLegacySliderModule } from '@angular/material/legacy-slider';
+import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
 @Component({
   selector: 'app-email-settings',
+  standalone: true,
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,AppMaterialModule,ValueFieldsComponent,
+    ValueFieldsComponent,MatLegacyButtonModule,MatLegacyProgressSpinnerModule,
+    MatLegacyInputModule,MatLegacySliderModule,MatLegacyCardModule,MatDividerModule
+  ],
   templateUrl: './email-settings.component.html',
   styleUrls: ['./email-settings.component.scss']
 })

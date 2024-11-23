@@ -77,26 +77,44 @@ import { SetTokenComponent } from './set-token/set-token.component';
 import { StripeCheckOutComponent } from '../modules/payment-processing/stripe-check-out/stripe-check-out.component';
 import { NgxStripeModule } from 'ngx-stripe';
 import { SaveChangesButtonComponent } from './save-changes-button/save-changes-button.component';
-
+import { ApiStoredValueComponent } from '../shared/widgets/api-stored-value/api-stored-value.component';
+import { APISettingComponent } from '../modules/login/apisetting/apisetting.component';
+import { CacheSettingsComponent } from '../modules/admin/settings/database/cache-settings/cache-settings.component';
+import { DatabaseSchemaComponent } from '../modules/admin/settings/database/database-schema/database-schema.component';
+import { ExportDataComponent } from '../modules/admin/settings/database/export-data/export-data.component';
+import { InventoryComponent } from '../modules/admin/settings/inventory/inventory.component';
+import { SoftwareSettingsComponent } from '../modules/admin/settings/software/software.component';
+import { ScaleSettingsComponent } from '../modules/admin/settings/software/scale-settings/scale-settings.component';
+import { EmailSettingsComponent } from '../modules/admin/settings/email-settings/email-settings.component';
+import { IonicGeoLocationComponent } from '../shared/widgets/ionic-geo-location/ionic-geo-location.component';
+import { DefaultReceiptSelectorComponent } from '../modules/admin/settings/printing/default-receipt-selector/default-receipt-selector.component';
+import { ListPrintersElectronComponent } from '../modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
+import { EbayFulfillmentPolicyComponent } from '../modules/admin/inventory/ebay/ebay-fulfillment-policy/ebay-fulfillment-policy.component';
+import { EbayReturnPolicyComponent } from '../modules/admin/inventory/ebay/ebay-return-policy/ebay-return-policy.component';
+import { EbayAuthRedirectComponent } from '../modules/admin/settings/software/ebay-settings/ebay-auth-redirect/ebay-auth-redirect.component';
+import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-settings/ebay-settings.component';
 
 @NgModule({
   declarations: [
 
+    ////move to smaller shared module;
+
+    APISettingComponent,
+
+
     AgGridTestComponent,
     AgGridImageFormatterComponent,
     AgGridToggleComponent,
-    
+
     BarcodeScannerComponent,
     ButtonRendererComponent,
     ScaleReaderComponent,
 
-    SetTokenComponent,
-
     MatMenuBasicComponent,
     LogoComponent,
     ProductSearchSelectorComponent,
-    ValueFieldsComponent,
-    UploaderComponent,
+
+
     EditButtonsStandardComponent,
     ToggleThemeComponent,
     ApiStatusDisplayComponent,
@@ -105,36 +123,33 @@ import { SaveChangesButtonComponent } from './save-changes-button/save-changes-b
     ClientSearchSelectorComponent,
 
 
-    FormSelectListComponent,
-
-    CSVImportComponent,
+    //should be in databasemodule
 
     TvPriceTierMenuItemsComponent,
     TvPriceSpecialsComponent,
     TiersCardComponent,
     OrderTotalBoardComponent,
     OrderHeaderDemoGraphicsComponent,
-    
+
     LimitValuesCardComponent,
     ProgressBarComponent,
     LimitValuesProgressBarsComponent,
-    
+
     OrderHeaderDemographicsBoardComponent,
     CategoryItemsBoardComponent,
     CategoryItemsBoardItemComponent,
 
-
     //receipts
-    ReceiptLayoutComponent,
+
     ReceiptViewComponent,
     PrintTemplatePopUpComponent,
     PrintTemplateComponent,
-    LabelViewSelectorComponent,
+
     ClockViewComponent,
-    
+
     CreditCardPaymentsPrintListComponent,
     StripeCheckOutComponent,
-    
+
     //moved from shared
     ItemSalesCardComponent,
     PaymentReportComponent,
@@ -144,12 +159,15 @@ import { SaveChangesButtonComponent } from './save-changes-button/save-changes-b
 
     SalesItemsComponent,
 
-    SaveChangesButtonComponent, //uihomagepage  transactionsettings
-
     BalanceSheetViewComponent,
     BalanceSheetHeaderViewComponent,
     BalanceSheetCalculationsViewComponent,
 
+    //move to module
+
+    EbayAuthRedirectComponent,
+    EbayReturnPolicyComponent,
+    EbayFulfillmentPolicyComponent
   ],
   imports: [
     CommonModule,
@@ -180,19 +198,44 @@ import { SaveChangesButtonComponent } from './save-changes-button/save-changes-b
     NgxImageCaptureModule,
     AngularSignaturePadModule,
 
+    //standalones
+    FormSelectListComponent,
+
+    CacheSettingsComponent,
+    DatabaseSchemaComponent,
+    ExportDataComponent,
+    InventoryComponent,
+    ListPrintersElectronComponent,
+
+    UploaderComponent,
+    EmailSettingsComponent,
+    ValueFieldsComponent,
+    SaveChangesButtonComponent, //uihomagepage  transactionsettings
+    DefaultReceiptSelectorComponent,
+    LabelViewSelectorComponent,
+    ReceiptLayoutComponent,
+    EbaySettingsComponent,
+    ApiStoredValueComponent,
+    IonicGeoLocationComponent,
+    ScaleSettingsComponent,
+    SetTokenComponent,
+    SoftwareSettingsComponent,
+    CSVImportComponent,
   ],
 
   exports: [
+    ApiStoredValueComponent,
     AgGridTestComponent,
     AgGridImageFormatterComponent,
     AgGridToggleComponent,
-    
+
     BarcodeScannerComponent,
     ButtonRendererComponent,
     ScaleReaderComponent,
 
     SetTokenComponent,
-    
+    APISettingComponent,
+
     MatMenuBasicComponent,
     LogoComponent,
     ProductSearchSelectorComponent,
@@ -208,22 +251,27 @@ import { SaveChangesButtonComponent } from './save-changes-button/save-changes-b
     FormSelectListComponent,
     SaveChangesButtonComponent,
 
-    CSVImportComponent, //pos orders and settings
+    CSVImportComponent,
+
+    //should be in databasemodule
+    CacheSettingsComponent,
+    DatabaseSchemaComponent,
+    ExportDataComponent,
+    InventoryComponent,
 
     TvPriceTierMenuItemsComponent,
     TvPriceSpecialsComponent,
     TiersCardComponent,
     OrderTotalBoardComponent,
     OrderHeaderDemoGraphicsComponent,
-    
+
     LimitValuesCardComponent,
     ProgressBarComponent,
     LimitValuesProgressBarsComponent,
-    
+
     OrderHeaderDemographicsBoardComponent,
     CategoryItemsBoardComponent,
     CategoryItemsBoardItemComponent,
-
 
     //receipts
     ReceiptLayoutComponent,
@@ -249,12 +297,26 @@ import { SaveChangesButtonComponent } from './save-changes-button/save-changes-b
     BalanceSheetHeaderViewComponent,
     BalanceSheetCalculationsViewComponent,
 
+    SoftwareSettingsComponent,
+
+    ScaleSettingsComponent,
+    EmailSettingsComponent,
+    InventoryComponent,
+
+    IonicGeoLocationComponent,
+    DefaultReceiptSelectorComponent,
+    ListPrintersElectronComponent,
+
+    //move to module
+    EbaySettingsComponent,
+    EbayAuthRedirectComponent,
+    EbayReturnPolicyComponent,
+    EbayFulfillmentPolicyComponent
   ],
   providers: [
     InventoryEditButtonService,
     ProductEditButtonService,
     MBMenuButtonsService,
-  
   ]
 })
 export class SharedUiModule { }

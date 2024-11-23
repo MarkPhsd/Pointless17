@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ToolBarUIService } from './tool-bar-ui.service';
-import { OrdersService } from '../transactions/orders.service';
 import { POSPaymentService } from '../transactions/pospayment.service';
 import { BehaviorSubject } from 'rxjs';
 import { OrderMethodsService } from '../transactions/order-methods.service';

@@ -10,8 +10,15 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatLegacyOptionModule } from '@angular/material/legacy-core';
+import { MatLegacySelectModule } from '@angular/material/legacy-select';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
 @Component({
   selector: 'app-label-view-selector',
+  standalone: true,
+  imports: [CommonModule,FormsModule,MatLegacyOptionModule,MatLegacySelectModule,MatLegacyFormFieldModule],
   templateUrl: './label-view-selector.component.html',
   styleUrls: ['./label-view-selector.component.scss']
 })
