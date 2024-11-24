@@ -57,7 +57,8 @@ import { IonicGeoLocationComponent } from 'src/app/shared/widgets/ionic-geo-loca
     MatLegacyInputModule,MatLegacySliderModule,MatLegacyCardModule,MatDividerModule],
 
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+  styleUrls: ['./settings.component.scss'],
+
 })
 export class SettingsComponent implements OnInit, OnDestroy {
 

@@ -2,7 +2,7 @@
   <mat-card-content>
     <h4>Device Info</h4>
 
-    <app-set-token></app-set-token>
+    <!-- <app-set-token></app-set-token> -->
 
     <div class="device-info">
       <div>
@@ -52,7 +52,6 @@
       </div>
 
       <div>
-        <!-- {{this.deviceService.isTablet()}} -->
         <mat-checkbox [(ngModel)]="isTablet"
                       color="primary">
         </mat-checkbox>
@@ -62,7 +61,6 @@
         Desktop Device
       </div>
       <div>
-        <!-- {{this.deviceService.isDesktop()}} -->
         <mat-checkbox [(ngModel)]="isDesktopDevice"
                       color="primary">
         </mat-checkbox>

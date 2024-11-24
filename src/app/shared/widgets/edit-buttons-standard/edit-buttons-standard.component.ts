@@ -1,8 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input,  Output} from '@angular/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-edit-buttons-standard',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule],
   templateUrl: './edit-buttons-standard.component.html',
   styleUrls: ['./edit-buttons-standard.component.scss']
 })

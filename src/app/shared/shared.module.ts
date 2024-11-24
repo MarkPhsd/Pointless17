@@ -47,11 +47,11 @@ import { BtPOSPrinterComponent } from '../modules/admin/settings/printing/bt-pos
 import { PriceCategorySelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/price-category-select/price-category-select.component';
 import { MenuTinyComponent } from './widgets/menus/menu-tiny/menu-tiny.component';
 import { ProductTypeSelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/product-type-select/product-type-select.component';
-// import { EditButtonsStandardComponent } from './widgets/edit-buttons-standard/edit-buttons-standard.component';
+
 import { ClientTypesLookupComponent } from '../modules/admin/profiles/parts/client-types-lookup/client-types-lookup.component';
 import { StatusLookupComponent } from '../modules/admin/profiles/parts/status-lookup/status-lookup.component';
 import { UnitTypeFieldsComponent } from '../modules/admin/products/productedit/_product-edit-parts/unit-type-fields/unit-type-fields.component';
-// import { ValueFieldsComponent } from '../modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+
 import { CartButtonComponent } from './widgets/cart-button/cart-button.component';
 import { PriceCategorySearchComponent } from '../modules/admin/products/productedit/_product-edit-parts/price-category-search/price-category-search.component';
 import { MenuSearchBarComponent } from './components/menu-search-bar/menu-search-bar.component';
@@ -328,7 +328,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     EmployeeClockEditComponent,
     EmployeeClockFilterComponent,
     ExitLabelSelectionComponent,
-    // EditButtonsStandardComponent,
+
     FacilitySearchSelectorComponent,
     FastUserSwitchComponent,
     FilterComponent,
@@ -427,7 +427,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     PriceScheduleMenuListComponent,
     RewardsAvailibleComponent,
     RetailProductEditComponent,
-    SimpleTinyComponent,
+
     ScaleValueViewComponent,
     SplitEntrySelectorComponent,
 
@@ -545,7 +545,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     NgxImageCaptureModule,
     NgxDaterangepickerMd.forRoot(),
     AngularSignaturePadModule,
-
+    SimpleTinyComponent,
   ],
 
   exports: [

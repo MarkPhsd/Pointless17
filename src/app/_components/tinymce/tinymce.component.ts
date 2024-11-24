@@ -25,6 +25,8 @@ declare var tinymce: any;
 
 @Component({
   selector: 'simple-tinymce',
+  standalone: true,
+
   template: `<textarea id="{{elementId}}"></textarea>`,
   providers: [
     {
@@ -96,7 +98,7 @@ export class SimpleTinyComponent implements AfterViewInit, OnDestroy, ControlVal
 
   // registers 'fn' that will be fired wheb changes are made
   // this is how we emit the changes back to the form
-  
+
   registerOnChange(fn: (_: any) => void): void {
       this.onChangeCallback = fn;
   }
@@ -162,11 +164,11 @@ export class SimpleTinyComponent implements AfterViewInit, OnDestroy, ControlVal
             }
 
           }
-         
+
         } catch (error) {
-          
+
         }
-      
+
 
       });
     };

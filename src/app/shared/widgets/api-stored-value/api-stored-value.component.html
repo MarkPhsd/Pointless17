@@ -1,15 +1,13 @@
 <mat-card>
   <mat-card-subtitle>
-      <h2>You are using the installed Pointless App</h2>
-      <h2>Version: {{version}}</h2>
-      <!-- <button mat-button (click)="getVersion()">Get Version</button>
-      <button mat-button (click)="checkForUpdate()">Check for Update</button> -->
+      <h2 *ngIf="version">You are using the installed Pointless App</h2>
+      <h2 *ngIf="version">Version: {{version}}</h2>
+      <p>In order to connect to your service, you must know your API.
+        Please input the just the domain of the API.</p>
+    <p>The API url should look something like: https://mycompanyName.com/api</p>
   </mat-card-subtitle>
 
-  <mat-card-content>
-      <p>In order to connect to your service, you must know your API.
-          Please input the just the domain of the API.</p>
-      <p>The API url should look something like: https://mycompanyName.com/api</p>
+  <mat-card-content [formGroup]="inputForm" *ngIf="inputForm">
       <div *ngIf="currentAPIUrl">
         <h4>
           Current API  {{currentAPIUrl}}
@@ -17,7 +15,7 @@
         <h4 *ngIf="newAPI">New API {{newAPI}} </h4>
       </div>
 
-      <div [formGroup]="inputForm" *ngIf="inputForm">
+      <div>
         <mat-form-field appearance="outline"  class="fields" >
           <mat-label >API Domain</mat-label>
           <input matInput

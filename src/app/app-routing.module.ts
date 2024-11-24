@@ -214,19 +214,33 @@ const routes: Routes = [
         { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthGuard], data: {  title: 'Dash Board',  animation: 'isLeft'} },
         { path: 'reports',    component: ReportsComponent, canActivate: [AuthGuard], data: { title: 'Reports', animation: 'isLeft'} },
 
-        { path: 'app-settings',    component: SettingsComponent, canActivate: [AuthGuard], data: { title: 'Settings', animation: 'isLeft'} },
+        // { path: 'app-settings',    component: SettingsComponent, canActivate: [AuthGuard], data: { title: 'Settings', animation: 'isLeft'} },
 
-        // {
-        //   path: 'app-settings', // Path to lazy load the module
-        //   loadChildren: () =>
-        //     import('./modules/admin/settings/settings.module').then((m) => m.SettingsModule),
-        // },
+        {
+          path: 'app-settings', // Path to lazy load the module
+          loadChildren: () =>
+            import('./modules/admin/settings/settings.component').then((m) => m.SettingsComponent),
+        },
 
-        { path: 'sites',     component: SitesComponent,  canActivate: [AuthGuard], data: {  title: 'Sites',  animation:  'isLeft'} },
-        { path: 'site-edit', component: SiteEditComponent,  canActivate: [AuthGuard], data: { animation:  'isLeft'} },
-        //StoresManagerComponent
-        { path: 'store-list', component: StoresManagerComponent, canActivate: [AuthGuard], data: {title: 'Store List', animation: 'isLeft'}},
+        {
+          path: 'sites', // Path to lazy load the module
+          loadChildren: () =>
+            import('./modules/sites/sites.component').then((m) => m.SitesComponent),
+        },
+        {
+          path: 'site-edit', // Path to lazy load the module
+          loadChildren: () =>
+            import('./modules/admin/settings/site-edit/site-edit.component').then((m) => m.SiteEditComponent),
+        },
 
+        {
+          path: 'store-list', // Path to lazy load the module
+          loadChildren: () =>
+            import('./modules/admin/stores-manager/stores-manager.component').then((m) => m.StoresManagerComponent),
+        },
+        // { path: 'sites',     component: SitesComponent,  canActivate: [AuthGuard], data: {  title: 'Sites',  animation:  'isLeft'} },
+        // { path: 'site-edit', component: SiteEditComponent,  canActivate: [AuthGuard], data: { animation:  'isLeft'} },
+        // { path: 'store-list', component: StoresManagerComponent,  canActivate: [AuthGuard], data: { animation:  'isLeft'} },
 
         { path: 'store-credit', component: StoreCreditListComponent, canActivate: [AuthGuard], data: {  title: 'Store Credit Search',  animation:  'isLeft'} },
         { path: 'pos-orders',   component: OrdersMainComponent, canActivate: [AuthGuard], data: {  title: 'Orders',  animation:  'isLeft'} },
@@ -424,7 +438,9 @@ const routes: Routes = [
   imports:[
     // RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
     // RouterModule.forRoot(routes, { preloadingStrategy: QuicklinkStrategy })
-    RouterModule.forRoot(routes, { enableTracing: false })
+    // RouterModule.forRoot(routes)
+    // { enableTracing: false }
+    RouterModule.forRoot(routes)
   ],
   // imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

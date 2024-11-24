@@ -2,20 +2,17 @@
   <mat-icon>settings</mat-icon>
   Settings
 </div>
-<div class="roleDescription">User Level: {{ role }} -  User Platform: {{platForm}} Step: {{accordionStep}}</div>
-
+<div class="roleDescription">User Level: {{ role }} -  User Platform: {{platForm}}</div>
+<br>
 
 <div class="settings" *ngIf="role">
+
   <div *ngIf="role === 'admin' || role === 'manager'">
 
-
     <mat-accordion class="example-headers-align" multi="false">
-
-      <mat-expansion-panel
-          [expanded]="accordionStep === -1"  >
-      </mat-expansion-panel>
-
-      <mat-expansion-panel [expanded]="accordionStep === 0"  (opened)="setStep(0)"  >
+      <mat-expansion-panel [expanded]="accordionStep === 0"
+                           (opened)="setStep(0)"
+                           hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>  Data </mat-panel-title>
           <mat-panel-description>
@@ -27,7 +24,7 @@
         <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
         <ng-template #accordionStep0>
-          <div >
+          <div *ngIf="accordionStep === 0">
             <div>
               <app-database-schema></app-database-schema>
             </div>
@@ -36,6 +33,7 @@
             </div>
 
             <mat-divider></mat-divider>
+
             <app-cache-settings></app-cache-settings>
 
             <mat-divider></mat-divider>
@@ -62,218 +60,243 @@
         </mat-action-row>
       </mat-expansion-panel>
 
-      <mat-expansion-panel [expanded]="accordionStep === 1"  (opened) ="setStep(1)" hideToggle>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-              Software & Hardware Settings
-            </mat-panel-title>
-            <mat-panel-description>
-              Feature lists for initial & ongoing configuration.
-              <mat-icon>store</mat-icon>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
-
-        <ng-template #accordionStep1>
-
-          <div class="grid-settings-2">
-            <app-inventory-settings [role]="role"></app-inventory-settings>
-          </div>
-
-          <div>
-            <app-software-settings></app-software-settings>
-          </div>
-
-        </ng-template>
-
-        <ng-template #loading>
-          ..loading
-          <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
-        </ng-template>
-
-        <mat-action-row>
-          <button mat-button color="warn" (click)="prevStep()">Previous</button>
-          <button mat-button color="primary" (click)="nextStep()">Next</button>
-        </mat-action-row>
-
-      </mat-expansion-panel>
-
-      <mat-expansion-panel [expanded]="accordionStep === 2"   (opened) = "setStep(2)" hideToggle>
-
-        <mat-expansion-panel-header>
+    <mat-expansion-panel [expanded]="accordionStep === 1"
+                          (opened) ="setStep(1)"
+                          hideToggle>
+      <mat-expansion-panel-header>
           <mat-panel-title>
-            Authorizations and Access
+            Software & Hardware Settings
           </mat-panel-title>
           <mat-panel-description>
-              Behavior control and access to system features.
-            <mat-icon>permissions</mat-icon>
+            Feature lists for initial & ongoing configuration.
+            <mat-icon>store</mat-icon>
           </mat-panel-description>
-        </mat-expansion-panel-header>
+      </mat-expansion-panel-header>
 
-          <div>
-            <button mat-raised-button
-                    color  = "primary"
-                    class ="grid-image-button-group "
-                    (click)="clientTypesList()">
-              <div class="grid-image-button">
-                <div class="mat-grid-icon">  </div>
-                <div>
-                  User Types
-                </div>
+      <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
+
+      <ng-template #accordionStep1>
+
+        <div *ngIf="accordionStep === 1" class="grid-settings-2">
+          <app-inventory-settings [role]="role"></app-inventory-settings>
+        </div>
+
+        <div>
+          <app-software-settings></app-software-settings>
+        </div>
+
+      </ng-template>
+
+      <ng-template #loading>
+        ..loading
+        <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+      </ng-template>
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 2"
+                         (opened)="setStep(2)"
+                         hideToggle>
+
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Authorizations and Access
+        </mat-panel-title>
+        <mat-panel-description>
+            Behavior control and access to system features.
+          <mat-icon>permissions</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
+
+      <ng-template #accordionStep2>
+        <div>
+          <button mat-raised-button
+                  color  = "primary"
+                  class ="grid-image-button-group "
+                  (click)="clientTypesList()">
+            <div class="grid-image-button">
+              <div class="mat-grid-icon">  </div>
+              <div>
+                User Types
               </div>
-            </button>
-          </div>
+            </div>
+          </button>
+        </div>
 
-          <div>
-            <button mat-raised-button
-                    color  = "primary"
-                    class ="grid-image-button-group "
-                    (click)="openMenuManager()">
-              <div class="grid-image-button">
-                <div class="mat-grid-icon">  </div>
-                <div>
-                  Menus
-                </div>
+        <div>
+          <button mat-raised-button
+                  color  = "primary"
+                  class ="grid-image-button-group "
+                  (click)="openMenuManager()">
+            <div class="grid-image-button">
+              <div class="mat-grid-icon">  </div>
+              <div>
+                Menus
               </div>
-            </button>
-          </div>
+            </div>
+          </button>
+        </div>
 
-          <div>
-            <button mat-raised-button
-                    color  = "primary"
-                    class ="grid-image-button-group "
-                    (click)="functionGroups()">
-              <div class="grid-image-button">
-                <div class="mat-grid-icon"> </div>
-                <div>
-                  Function Groups
-                </div>
+        <div>
+          <button mat-raised-button
+                  color  = "primary"
+                  class ="grid-image-button-group "
+                  (click)="functionGroups()">
+            <div class="grid-image-button">
+              <div class="mat-grid-icon"> </div>
+              <div>
+                Function Groups
               </div>
-            </button>
-          </div>
+            </div>
+          </button>
+        </div>
+      </ng-template>
 
+      <ng-template #loading>
+        ..loading
+        <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+      </ng-template>
 
+      <mat-action-row>
+        <button mat-button color="warn"    (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 4" (opened)="setStep(4)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Printer
+        </mat-panel-title>
+        <mat-panel-description>
+          Print Test and Settings
+        <mat-icon>printer</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ng-container [ngTemplateOutlet]="currentAccordionStep">
+        <ng-template #accordionStep4>
+            <app-installed-printers></app-installed-printers>
+        </ng-template>
+      </ng-container>
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 5">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Ebay Settings
+        </mat-panel-title>
+        <mat-panel-description>
+            Ebay testing and setup.
+          <mat-icon>permissions</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <app-ebay-settings></app-ebay-settings>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 5" (opened)="setStep(5)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Geo Location
+        </mat-panel-title>
+        <mat-panel-description>
+          Geo Location
+        <mat-icon>location_on</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
+
+      <ng-template #accordionStep5>
+        <app-ionic-geo-location></app-ionic-geo-location>
         <mat-action-row>
           <button mat-button color="warn"    (click)="prevStep()">Previous</button>
           <button mat-button color="primary" (click)="nextStep()">Next</button>
         </mat-action-row>
+      </ng-template>
 
-      </mat-expansion-panel>
+      <ng-template #loading>
+        ..loading
+        <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+      </ng-template>
+    </mat-expansion-panel>
 
-      <mat-expansion-panel [expanded]="accordionStep === 4"    (opened)="setStep(4)" hideToggle>
-        <mat-expansion-panel-header>
+    <mat-expansion-panel [expanded]="accordionStep === 6" (opened)="setStep(6)" hideToggle>
+      <mat-expansion-panel-header>
           <mat-panel-title>
-            Printer
+            Credit Card Processing
           </mat-panel-title>
           <mat-panel-description>
-            Print Test and Settings
-          <mat-icon>printer</mat-icon>
+            Merchant Services
+            <mat-icon>credit_card</mat-icon>
           </mat-panel-description>
-        </mat-expansion-panel-header>
+      </mat-expansion-panel-header>
 
-        <app-installed-printers></app-installed-printers>
+      <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
-        <mat-action-row>
-          <button mat-button color="warn" (click)="prevStep()">Previous</button>
-          <button mat-button color="primary" (click)="nextStep()">Next</button>
-        </mat-action-row>
-      </mat-expansion-panel>
+      <ng-template #accordionStep6>
+        <button mat-raised-button (click)="processorselect(3)">CardPointe with Bolt</button>
+        <button mat-raised-button (click)="processorselect(4)">Stripe</button>
+        <ng-container [ngTemplateOutlet]="processorSelection"></ng-container>
+      </ng-template>
 
-      <mat-expansion-panel [expanded]="accordionStep === 8"   (opened)="setStep(8)" >
-        <mat-expansion-panel-header>
+       <ng-template #loading>
+        ..loading
+        <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+      </ng-template>
+
+      <mat-action-row>
+        <button mat-button color="warn"    (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 7" (opened)="setStep(7)" hideToggle>
+      <mat-expansion-panel-header>
           <mat-panel-title>
-            Ebay Settings
+            Device Info
           </mat-panel-title>
           <mat-panel-description>
-              Ebay testing and setup.
-            <mat-icon>permissions</mat-icon>
+            Device Info
+            <mat-icon>device</mat-icon>
           </mat-panel-description>
-        </mat-expansion-panel-header>
+      </mat-expansion-panel-header>
 
-        <app-ebay-settings></app-ebay-settings>
+      <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
-      </mat-expansion-panel>
+      <ng-template #accordionStep7>
+        <div  *ngIf="accordionStep === 7" >
+          <app-device-info [uiHomePage]="uiHomePage"></app-device-info>
+        </div>
+      </ng-template>
 
-      <mat-expansion-panel [expanded]="accordionStep === 5"    (opened)="setStep(5)" >
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Geo Location
-          </mat-panel-title>
-          <mat-panel-description>
-            Geo Location
-          <mat-icon>location_on</mat-icon>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
+      <ng-template #loading>
+        ..loading
+        <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+      </ng-template>
 
-        <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
-
-        <ng-template #accordionStep5>
-
-          <app-ionic-geo-location></app-ionic-geo-location>
-          <mat-action-row>
-            <button mat-button color="warn"    (click)="prevStep()">Previous</button>
-            <button mat-button color="primary" (click)="nextStep()">Next</button>
-          </mat-action-row>
-        </ng-template>
-
-        <ng-container *ngTemplateOutlet="loading"></ng-container>
-
-      </mat-expansion-panel>
-
-      <mat-expansion-panel [expanded]="accordionStep === 6"  (opened)="setStep(6)" >
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-              Credit Card Processing
-            </mat-panel-title>
-            <mat-panel-description>
-              Merchant Services
-              <mat-icon>credit_card</mat-icon>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
-
-        <ng-template #accordionStep6>
-          <button mat-raised-button (click)="processorselect(3)">CardPointe with Bolt</button>
-          <button mat-raised-button (click)="processorselect(4)">Stripe</button>
-          <ng-container [ngTemplateOutlet]="processorSelection"></ng-container>
-        </ng-template>
-
-        <ng-container *ngTemplateOutlet="loading"></ng-container>
-
-        <mat-action-row>
-          <button mat-button color="warn"    (click)="prevStep()">Previous</button>
-          <button mat-button color="primary" (click)="nextStep()">Next</button>
-        </mat-action-row>
-
-      </mat-expansion-panel>
-
-      <mat-expansion-panel [expanded]="accordionStep === 7"   (opened)="setStep(7)" >
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-              Device Info
-            </mat-panel-title>
-            <mat-panel-description>
-              Device Info
-              <mat-icon>device</mat-icon>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
-
-        <ng-template #accordionStep7>
-            <app-device-info [uiHomePage]="uiHomePage"></app-device-info>
-        </ng-template>
-
-        <ng-container *ngTemplateOutlet="loading"></ng-container>
-
-        <mat-action-row>
-          <button mat-button color="warn"    (click)="prevStep()">Previous</button>
-          <button mat-button color="primary" (click)="nextStep()">Next</button>
-        </mat-action-row>
-      </mat-expansion-panel>
-    </mat-accordion>
+      <mat-action-row>
+        <button mat-button color="warn"    (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
   </div>
 
 </div>
@@ -286,14 +309,9 @@
 </ng-template>
 
 <ng-template #processorItem3>
-  <!-- <div><card-point-settings>Bolt Card Point</card-point-settings></div> -->
+  <div><card-point-settings>Bolt Card Point</card-point-settings></div>
 </ng-template>
 
 <ng-template #processorItem4>
-  <!-- <div><app-stripe-settings>Stripe API Settings</app-stripe-settings> </div> -->
-</ng-template>
-
-<ng-template #loading>
-  ..loading
-  <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+  <div><app-stripe-settings>Stripe API Settings</app-stripe-settings> </div>
 </ng-template>

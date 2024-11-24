@@ -10,11 +10,18 @@ import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'api-stored-value',
   standalone: true,
-  imports: [CommonModule,MatLegacyCardModule,ReactiveFormsModule,FormsModule,MatLegacyFormFieldModule,MatLegacyButtonModule],
+  imports: [CommonModule,
+            ReactiveFormsModule,
+            FormsModule,
+            AppMaterialModule,
+            MatLegacyCardModule,
+            MatLegacyFormFieldModule,
+            MatLegacyButtonModule],
   templateUrl: './api-stored-value.component.html',
   styleUrls: ['./api-stored-value.component.scss']
 })
@@ -34,7 +41,6 @@ export class ApiStoredValueComponent implements OnInit {
       private fb                   : UntypedFormBuilder,
       private authenticationService: AuthenticationService,
       private appInitService       : AppInitService,
-      // public  electronService      : ElectronService,
       private platformService      : PlatformService,
       private siteService          : SitesService,
       private ngZone               : NgZone,
@@ -55,13 +61,32 @@ export class ApiStoredValueComponent implements OnInit {
     this.isApp = this.platformService.isApp();
   }
 
+  ngOnInit(): void {
+
+    this.inputForm = this.fb.group({
+      apiUrl: [],
+    });
+
+    let currentAPIUrl = localStorage.getItem('storedApiUrl');
+
+    if (currentAPIUrl) {
+      currentAPIUrl = currentAPIUrl.replace( 'https://', '')
+      currentAPIUrl = currentAPIUrl.replace( '/api', '')
+    }
+
+    this.inputForm.patchValue({apiUrl:currentAPIUrl});
+
+    this.inputForm.valueChanges.subscribe(data => {
+      this.newAPI  = `https://${data.apiUrl}/api`
+    })
+  }
+
   typeHttps() {
     const value = this.inputForm.controls['apiUrl'].value;
     this.inputForm.patchValue({apiUrl: 'https://'})
   }
 
   typeAPI() {
-    //apiUrl
     const value = this.inputForm.controls['apiUrl'].value;
     let url = `${value}/api`
     this.inputForm.patchValue({apiUrl: url})
@@ -84,22 +109,6 @@ export class ApiStoredValueComponent implements OnInit {
     } catch (error) {
       console.log('init render error')
     }
-  }
-
-  ngOnInit(): void {
-    let currentAPIUrl = localStorage.getItem('storedApiUrl');
-
-    if (currentAPIUrl) {
-      currentAPIUrl = currentAPIUrl.replace( 'https://', '')
-      currentAPIUrl = currentAPIUrl.replace( '/api', '')
-    }
-
-    this.inputForm = this.fb.group({
-      apiUrl: [currentAPIUrl],
-    });
-    this.inputForm.valueChanges.subscribe(data => {
-      this.newAPI  = `https://${data.apiUrl}/api`
-    })
   }
 
   setAPIUrl(){

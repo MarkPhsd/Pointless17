@@ -376,7 +376,7 @@ import {NgcCookieConsentConfig} from 'ngx-cookieconsent';
 import {NgcCookieConsentModule} from 'ngx-cookieconsent';
 import { NewUserGuestComponent } from '../modules/profile/new-user-guest/new-user-guest.component';
 import { PosOrderItemEditorComponent } from '../modules/posorders/pos-order/pos-order-items/pos-order-item-edit/pos-order-item-editor.component';
-import { StoresManagerComponent } from '../modules/admin/stores-manager/stores-manager.component';
+
 import { SharedUiModule } from '../shared-ui/shared-ui.module';
 import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
 import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
@@ -525,9 +525,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     StrainPackagesComponent,
     StrainProductEditComponent,
 
-    StoresManagerComponent,
-    SiteEditComponent,
-    SiteEditFormComponent,
+
+
+
 
     ServiceTypeEditComponent,
     ServiceTypeListComponent,

@@ -825,18 +825,7 @@ export class UISettingsService {
 
 
 
-  initStripeAPISettingsForm(config: any, fb: UntypedFormGroup): UntypedFormGroup {
-    fb = this._fb.group({
-      id               : [''],
-      apiSecret        : [''],
-      apiKey           : [''],
-      enabled          : [''],
-      paymentAgreement : [''],
-    })
-    if (!config) { return fb}
-    fb.patchValue(config)
-    return fb
-  }
+
 
   initEmailModel(config: any, fb: UntypedFormGroup): UntypedFormGroup {
     fb = this._fb.group({
@@ -1098,11 +1087,11 @@ export class UISettingsService {
     }
 
     if (name == 'StripeAPISettings') {
-      return this.initStripeAPISettingsForm(config, inputForm);
+      // return this.initStripeAPISettingsForm(config, inputForm);
     }
 
     if (name == 'EmailModel') {
-      return this.initStripeAPISettingsForm(config, inputForm);
+      // return this.initStripeAPISettingsForm(config, inputForm);
     }
   }
 

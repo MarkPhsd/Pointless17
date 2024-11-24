@@ -20,11 +20,13 @@ import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progres
 import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyProgressBarModule } from '@angular/material/legacy-progress-bar';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'card-point-settings',
   standalone:true,
   imports: [CommonModule,FormsModule,ReactiveFormsModule,MatIconModule,
+     AppMaterialModule,
      MatLegacyProgressSpinnerModule,
      ValueFieldsComponent,MatLegacyProgressBarModule,MatLegacyButtonModule,
      MatLegacyInputModule,MatLegacyCardModule,MatDividerModule],

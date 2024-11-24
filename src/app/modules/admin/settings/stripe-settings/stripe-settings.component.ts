@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatLegacyButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyCardModule } from '@angular/material/legacy-card';
@@ -16,12 +16,15 @@ import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/f
 import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
 
 import { MatIconModule } from '@angular/material/icon';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SimpleTinyComponent } from 'src/app/_components/tinymce/tinymce.component';
 
 @Component({
   selector: 'app-stripe-settings',
   standalone:true,
   imports: [CommonModule,FormsModule,ReactiveFormsModule,
     FormSelectListComponent,MatIconModule,
+    AppMaterialModule,SimpleTinyComponent,
     ValueFieldsComponent,MatLegacyProgressSpinnerModule,MatLegacyButtonModule,
     MatLegacyInputModule,MatLegacySliderModule,MatLegacyCardModule,MatDividerModule],
   templateUrl: './stripe-settings.component.html',
@@ -37,9 +40,12 @@ export class StripeSettingsComponent implements OnInit {
   paymentAgreement: string;
 
   constructor(private uISettingsService: UISettingsService,
+              private fb: FormBuilder,
               private matSnack         : MatSnackBar) { }
 
   ngOnInit(): void {
+
+
     this.uISettingsService.getSetting('StripeAPISettings').subscribe(data => {
       if (data) {
         this.uiSettings = data;
@@ -61,8 +67,21 @@ export class StripeSettingsComponent implements OnInit {
 
   initForm(setting: StripeAPISettings) {
     const form = this.inputForm
-    this.inputForm = this.uISettingsService.initStripeAPISettingsForm(setting, form)
+    this.inputForm = this.initStripeAPISettingsForm(setting, form)
    }
+
+   initStripeAPISettingsForm(config: any, fb: UntypedFormGroup): UntypedFormGroup {
+    fb = this.fb.group({
+      id               : [''],
+      apiSecret        : [''],
+      apiKey           : [''],
+      enabled          : [''],
+      paymentAgreement : [''],
+    })
+    if (!config) { return fb}
+    fb.patchValue(config)
+    return fb
+  }
 
    updateSetting(){
     if (!this.inputForm) {

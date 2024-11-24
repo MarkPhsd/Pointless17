@@ -1,14 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { store, StoresService } from 'src/app/_services/system/stores.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
 
 @Component({
   selector: 'app-site-edit-form',
+  standalone:true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,UploaderComponent,EditButtonsStandardComponent,FormSelectListComponent],
   templateUrl: './site-edit-form.component.html',
   styleUrls: ['./site-edit-form.component.scss']
 })
@@ -47,8 +54,8 @@ export class SiteEditFormComponent implements OnInit {
     this.initForm();
     this.refreshStores()
   }
-    
-  refreshStores() { 
+
+  refreshStores() {
     this.stores$ = this.storeService.getStores()
   }
 

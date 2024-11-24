@@ -15,12 +15,14 @@ import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UIHomePageSettings } from 'src/app/_services/system/settings/uisettings.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
 import { SetTokenComponent } from 'src/app/shared-ui/set-token/set-token.component';
 
 @Component({
   selector: 'app-device-info',
   standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule,SetTokenComponent,
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,FormsModule,SetTokenComponent,
+    AppMaterialModule,
     MatLegacyCardModule,MatLegacyFormFieldModule,MatIconModule,
     MatLegacyProgressSpinnerModule,
     MatLegacyCheckboxModule,MatLegacySlideToggleModule,MatLegacyButtonModule,

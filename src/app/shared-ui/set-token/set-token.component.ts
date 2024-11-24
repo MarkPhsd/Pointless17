@@ -7,11 +7,12 @@ import { MatLegacyFormFieldModule, MatLegacyLabel } from '@angular/material/lega
 import { of, switchMap,Observable } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SystemService } from 'src/app/_services/system/system.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-set-token',
   standalone: true,
-  imports: [CommonModule,FormsModule,MatLegacyButtonModule,MatLegacyFormFieldModule,MatIconModule],
+  imports: [CommonModule,FormsModule,AppMaterialModule,MatLegacyButtonModule,MatLegacyFormFieldModule,MatIconModule],
   templateUrl: './set-token.component.html',
   styleUrls: ['./set-token.component.scss']
 })

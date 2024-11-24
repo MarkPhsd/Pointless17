@@ -4,7 +4,6 @@ import { UntypedFormGroup, FormGroupDirective,UntypedFormControl ,NgForm, Untype
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatLegacyCardModule } from '@angular/material/legacy-card';
-import { MatLegacyLabel } from '@angular/material/legacy-form-field';
 import { MatLegacyInputModule } from '@angular/material/legacy-input';
 import { MatLegacySliderModule } from '@angular/material/legacy-slider';
 import { Observable, switchMap, of,  } from 'rxjs';
@@ -26,18 +25,20 @@ import { DcapPayAPIService } from 'src/app/modules/payment-processing/services/d
 import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
 import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
 import { EmailSettingsComponent } from '../../../email-settings/email-settings.component';
-import { MatLegacyProgressSpinner, MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import {  MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 import { MatLegacyButtonModule } from '@angular/material/legacy-button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyOptionModule } from '@angular/material/legacy-core';
 import { SaveChangesButtonComponent } from 'src/app/shared-ui/save-changes-button/save-changes-button.component';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-uitransactions',
   standalone: true,
   imports: [CommonModule,FormsModule,ReactiveFormsModule,MatIconModule,
     UploaderComponent,EmailSettingsComponent,FormSelectListComponent,SaveChangesButtonComponent,
-    ValueFieldsComponent,MatLegacyProgressSpinnerModule,MatLegacyButtonModule,MatLegacyOptionModule,
+    ValueFieldsComponent,AppMaterialModule,
+    MatLegacyProgressSpinnerModule,MatLegacyButtonModule,MatLegacyOptionModule,
     MatLegacyInputModule,MatLegacySliderModule,MatLegacyCardModule,MatDividerModule],
   templateUrl: './uitransactions.component.html',
   styleUrls: ['./uitransactions.component.scss'],

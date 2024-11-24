@@ -1,7 +1,7 @@
 import { Component, OnInit,  ViewChild } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable} from 'rxjs';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
@@ -10,9 +10,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { SiteEditFormComponent } from './site-edit-form/site-edit-form.component';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-site-edit',
+  standalone:true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule],
   templateUrl: './site-edit.component.html',
   styleUrls: ['./site-edit.component.scss']
 })

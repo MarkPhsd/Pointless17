@@ -7,6 +7,10 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { MenuService } from 'src/app/_services';
 import { IProduct } from 'src/app/_interfaces';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { AgGridModule } from 'ag-grid-angular';
 
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
@@ -22,6 +26,8 @@ function myComparator(value1, value2) {
 }
 @Component({
   selector: 'stores-manager',
+  standalone:true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,AgGridModule],
   templateUrl: './stores-manager.component.html',
   styleUrls: ['./stores-manager.component.scss']
 })

@@ -115,7 +115,7 @@ import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-s
     ProductSearchSelectorComponent,
 
 
-    EditButtonsStandardComponent,
+
     ToggleThemeComponent,
     ApiStatusDisplayComponent,
     StrainIndicatorComponent,
@@ -221,6 +221,7 @@ import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-s
     SetTokenComponent,
     SoftwareSettingsComponent,
     CSVImportComponent,
+    EditButtonsStandardComponent,
   ],
 
   exports: [

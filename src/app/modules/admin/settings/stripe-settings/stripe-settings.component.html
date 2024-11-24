@@ -3,21 +3,13 @@
     <ng-content></ng-content>
   </mat-card-subtitle>
 
-  <ng-template #loading>... loading
-    <mat-spinner [diameter]="25"></mat-spinner>
-  </ng-template>
+  <mat-card-content *ngIf="inputForm" [formGroup]="inputForm" >
 
-  <mat-card-content *ngIf="inputForm; else loading">
-
-    <div
-        [formGroup]="inputForm"
-        class="grid-views">
-
+    <div  class="grid-views">
         <div  class="mat-label">
           <mat-slide-toggle
               name="webMode"
               class="mat-label"
-              [(ngModel)]="stripeEnabled"
               formControlName="enabled">
             <mat-label class="mat-label">Enabled</mat-label>
           </mat-slide-toggle>
@@ -32,12 +24,13 @@
           </mat-form-field>
         </div>
 
+        <mat-label>Payment Agreement </mat-label><br>
         <simple-tinymce cols="50"
-                rows="25"
+                rows="20"
                 style="height: 400px;"
-                name="paymentAgreement"
+                name="description"
                 formControlName="paymentAgreement"
-                [ngModel]="paymentAgreement">
+                [ngModel]="paymentAgreement" >
         </simple-tinymce>
     </div>
 
@@ -55,3 +48,6 @@
   </mat-card-content>
 
 </mat-card>
+<ng-template #loading>... loading
+  <mat-spinner [diameter]="25"></mat-spinner>
+</ng-template>

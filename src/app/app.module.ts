@@ -54,6 +54,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { AuthenticationService } from './_services/system/authentication.service';
 import { SitesService } from './_services/reporting/sites.service';
 import { SystemManagerService } from './_services/system/system-manager.service';
+import { SettingsComponent } from './modules/admin/settings/settings.component';
 
 // const cookieConfig:NgcCookieConsentConfig = {
 //   cookie: {
@@ -162,7 +163,6 @@ enableProdMode();
 //   .catch(err => console.error(err));
 
 
-
 @NgModule({
   declarations: [
 
@@ -186,10 +186,8 @@ enableProdMode();
     DisplayToggleAndroidComponent,
     DashboardMenuComponent,
     GridcomponentPropertiesDesignComponent,
-
     SplashLoadingComponent,
     ResizeDirective,
-
   ],
 
 
@@ -218,6 +216,8 @@ enableProdMode();
 
     SharedModule,
     NGXMaterialModule,
+
+
   ],
 
   exports: [
@@ -235,6 +235,6 @@ enableProdMode();
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
-
+  
 })
 export class AppModule { }
