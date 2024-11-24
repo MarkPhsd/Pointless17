@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, forwardRef,OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {  NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'cash-value-calc',

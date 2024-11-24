@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit,OnDestroy,EventEmitter, Output } from '@angular/core';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
@@ -9,6 +10,10 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 
 @Component({
   selector: 'balance-sheet-calculations-view',
+  standalone: true,
+  imports:   [
+    CommonModule, // Includes directives like *ngIf and pipes like | currency, | date
+  ],
   templateUrl: './balance-sheet-calculations-view.component.html',
   styleUrls: ['./balance-sheet-calculations-view.component.scss']
 })

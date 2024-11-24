@@ -68,7 +68,7 @@
 
           <span #coachingStartShift></span>
 
-          <!-- <div  class="button" *ngIf="sheet?.type == 4 && !sheet.endTime && sheet.shiftStarted != 1"> 
+          <!-- <div  class="button" *ngIf="sheet?.type == 4 && !sheet.endTime && sheet.shiftStarted != 1">
             <button style="height:60px; line-height:1em" color="accent" mat-raised-button (click)="getStartingValue()">Last Sheet <br> Cash Amount</button>
           </div> -->
 
@@ -84,7 +84,7 @@
 
           <span #coachingCloseShift></span>
           <div   class="button" *ngIf="!sheet.endTime">
-            <span *ngIf ="sheet.shiftStarted == 1 && ordersOpen == 0">
+            <span *ngIf ="sheet.shiftStarted === 1 && ordersOpen === 0">
               <button  style="height:60px" color="warn" mat-raised-button
                       (click)="closeSheet('/login')">Close Sheet</button>
             </span>
@@ -92,7 +92,7 @@
 
           <div  *ngIf="!sheet.endTime">
             <div class="button" *ngIf="(auths$ | async) as auths">
-              <span *ngIf ="sheet.shiftStarted == 1 && ordersOpen == 0 && (auths && auths?.closeDay)">
+              <span *ngIf ="sheet.shiftStarted === 1 && ordersOpen === 0 && (auths && auths?.closeDay)">
                 <button  style="height:60px; line-height:1em" color="warn" mat-raised-button (click)="closeSheet('/operations')">Close Sheet <br> & Day</button>
               </span>
             </div>

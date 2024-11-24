@@ -1,5 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input,OnDestroy,OnInit, Output  } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { IPOSOrderSearchModel, IPaymentSearchModel, IServiceType } from 'src/app/_interfaces';
@@ -13,6 +17,13 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 
 @Component({
   selector: 'balance-sheet-header-view',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatLegacyButtonModule,
+    MatIconModule,
+    FormsModule,
+  ],
   templateUrl: './balance-sheet-header-view.component.html',
   styleUrls: ['./balance-sheet-header-view.component.scss']
 })

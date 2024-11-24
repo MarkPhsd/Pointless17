@@ -4,7 +4,7 @@
   <div style="max-width:125px;" class="printFont-14" *ngIf="!auths?.balanceSheetDisableBank && !auths?.blindBalanceSheet">
     <span *ngIf="sheet.overUnderTotal > 0 && !auths?.blindBalanceSheet">Balance over</span>
     <span *ngIf="sheet.overUnderTotal < 0 && !auths?.blindBalanceSheet">Balance under</span>
-    <span *ngIf="sheet.overUnderTotal == 0 && !auths?.blindBalanceSheet">Balanced</span>
+    <span *ngIf="sheet.overUnderTotal === 0 && !auths?.blindBalanceSheet">Balanced</span>
   </div>
 
   <div class="calculation printFont-14" *ngIf="!auths?.balanceSheetDisableBank && !auths?.blindBalanceSheet">

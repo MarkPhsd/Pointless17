@@ -93,6 +93,7 @@ import { EbayFulfillmentPolicyComponent } from '../modules/admin/inventory/ebay/
 import { EbayReturnPolicyComponent } from '../modules/admin/inventory/ebay/ebay-return-policy/ebay-return-policy.component';
 import { EbayAuthRedirectComponent } from '../modules/admin/settings/software/ebay-settings/ebay-auth-redirect/ebay-auth-redirect.component';
 import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-settings/ebay-settings.component';
+import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/balanceSheets/balance-sheet-edit/balance-sheet-employee-sales/balance-sheet-employee-sales.component';
 
 @NgModule({
   declarations: [
@@ -158,8 +159,8 @@ import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-s
 
 
     BalanceSheetViewComponent,
-    BalanceSheetHeaderViewComponent,
-    BalanceSheetCalculationsViewComponent,
+
+
 
     //move to module
 
@@ -226,6 +227,10 @@ import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-s
     MatMenuBasicComponent,
     ItemSalesCardComponent,
     SalesItemsComponent,
+    BalanceSheetCalculationsViewComponent,
+    BalanceSheetHeaderViewComponent,
+    BalanceSheetEmployeeSalesComponent
+
   ],
 
   exports: [
@@ -299,7 +304,7 @@ import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-s
     SalesItemsComponent,
 
     BalanceSheetViewComponent,
-    BalanceSheetHeaderViewComponent,
+
     BalanceSheetCalculationsViewComponent,
 
     SoftwareSettingsComponent,
@@ -316,7 +321,11 @@ import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-s
     EbaySettingsComponent,
     EbayAuthRedirectComponent,
     EbayReturnPolicyComponent,
-    EbayFulfillmentPolicyComponent
+    EbayFulfillmentPolicyComponent,
+
+    BalanceSheetCalculationsViewComponent,
+    BalanceSheetHeaderViewComponent,
+    BalanceSheetEmployeeSalesComponent
   ],
   providers: [
     InventoryEditButtonService,

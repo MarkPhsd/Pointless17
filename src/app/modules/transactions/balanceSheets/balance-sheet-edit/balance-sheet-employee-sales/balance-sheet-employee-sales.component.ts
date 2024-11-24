@@ -1,11 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit , Input} from '@angular/core';
 import { Observable } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
 
 @Component({
   selector: 'balance-sheet-employee-sales',
+  standalone: true,
+  imports:   [
+    CommonModule, // Includes directives like *ngIf and pipes like | currency, | date
+  ],
   templateUrl: './balance-sheet-employee-sales.component.html',
   styleUrls: ['./balance-sheet-employee-sales.component.scss']
 })
