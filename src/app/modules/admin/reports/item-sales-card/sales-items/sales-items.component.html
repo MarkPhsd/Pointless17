@@ -7,8 +7,8 @@
 
 <div *ngIf="includeDepartments">
   <div  *ngFor="let item of groupedReport | keyvalue">
-    <h4 *ngIf="item?.key != 'null'">{{item?.key }}</h4>
-    <h4 *ngIf="!item?.key || item?.key == 'null'">Department not Assigned</h4>
+    <h4 *ngIf="item?.key !== 'null'">{{item?.key }}</h4>
+    <h4 *ngIf="!item?.key || item?.key === 'null'">Department not Assigned</h4>
 
     <ng-container [ngTemplateOutlet]="headers"></ng-container>
     <div  *ngFor="let sale of item | keyvalue">
@@ -30,17 +30,15 @@
   <!-- {{sales | json}} -->
   <div  class="item-sales-grid-body"  *ngFor="let sale of (showAll ? sales : sales?.slice(0,10))" >
 
-
-
       <div class="product-name" *ngIf="groupBy === 'void' " >{{sale?.employee | truncateText : 20}}</div>
       <div class="product-name" >{{sale?.productName | truncateText : 20   }}      </div>
       <div class="totals"  *ngIf="groupBy === 'transactionType' "> {{sale?.netSales | currency }}  </div>
       <div class="totals"  *ngIf="groupBy === 'void' ">  {{sale?.voidAmount | currency }}  </div>
-      <div  class="totals" *ngIf="groupBy != 'transactionType' && groupBy != 'void'">  {{sale?.itemTotal | currency }}</div>
-      <div class="totals"  *ngIf="groupBy != 'void'" >  {{sale?.quantity  | number: '1.0-0' }} </div>
+      <div  class="totals" *ngIf="groupBy !== 'transactionType' && groupBy != 'void'">  {{sale?.itemTotal | currency }}</div>
+      <div class="totals"  *ngIf="groupBy !== 'void'" >  {{sale?.quantity  | number: '1.0-0' }} </div>
 
-      <div *ngIf="!autoPrint && groupBy == 'items' " class="totals">  {{sale?.productCount  | number: '1.0-0' }}   </div>
-      <div *ngIf="!autoPrint && (groupBy != 'transactionType' && groupBy != 'void')" class="totals">  {{sale?.cost | currency }}   </div>
+      <div *ngIf="!autoPrint && groupBy === 'items' " class="totals">  {{sale?.productCount  | number: '1.0-0' }}   </div>
+      <div *ngIf="!autoPrint && (groupBy !== 'transactionType' && groupBy != 'void')" class="totals">  {{sale?.cost | currency }}   </div>
 
       <div class="totals" *ngIf="groupBy === 'void' ">
         <button mat-raised-button color="accent" (click)="viewOrder(sale?.orderID)"><mat-icon>open_in_new</mat-icon> </button>
@@ -61,14 +59,19 @@
 <ng-template #headers>
   <!-- groupBy{{groupBy}}  || includeDepartments {{includeDepartments}} -->
  <div class="item-sales-grid-body">
-    <div class="product-name" *ngIf="groupBy == 'void'">Staff :    </div>
+    <div class="product-name" *ngIf="groupBy === 'void'">Staff :    </div>
     <div class="product-name">Item :    </div>
-    <div class="product-name" *ngIf="groupBy == 'void'">Void :    </div>
-    <div class="totalslabel"  *ngIf="groupBy != 'void'">Pre Tax :</div>
+    <div class="product-name" *ngIf="groupBy === 'void'">Void :    </div>
+    <div class="totalslabel"  *ngIf="groupBy !== 'void'">Pre Tax :</div>
     <div class="totalslabel" > # </div>
-    <div class="totalslabel" *ngIf="groupBy != 'department'  && (groupBy == 'items' || (groupBy == 'category' && includeDepartments)) "> Stock </div>
-    <div *ngIf="!autoPrint && (groupBy != 'void' && groupBy == 'items' || groupBy == 'department' || groupBy == 'category') " class="totalslabel">Cost :</div>
-    <div class="totalslabel" *ngIf="groupBy == 'void'"> Order </div>
+    <div class="totalslabel" *ngIf="groupBy !== 'department'  &&
+                                    (groupBy === 'items' || (groupBy === 'category' && includeDepartments)) "> Stock </div>
+    <div *ngIf="!autoPrint &&
+                (groupBy !== 'void' && groupBy === 'items'
+                || groupBy === 'department' ||
+                groupBy === 'category') "
+                 class="totalslabel">Cost :</div>
+    <div class="totalslabel" *ngIf="groupBy === 'void'"> Order </div>
   </div>
   <div  *ngIf="!autoPrint" class="margin-divider">  <mat-divider></mat-divider> </div>
 </ng-template>

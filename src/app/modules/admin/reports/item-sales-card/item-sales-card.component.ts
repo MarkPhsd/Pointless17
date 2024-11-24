@@ -1,14 +1,31 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 import { Observable, of, Subject, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService, IReportItemSaleSummary, POSItemSearchModel, TaxSalesReportResults } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { SalesItemsComponent } from './sales-items/sales-items.component';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatIconModule } from '@angular/material/icon';
 // https://stackoverflow.com/questions/51487689/angular-5-how-to-export-data-to-csv-file
 
 @Component({
   selector: 'item-sales-card',
+  standalone: true,
+  imports: [CommonModule,MatLegacyCardModule,
+    MatLegacyButtonModule,
+    MatIconModule,
+    MatDividerModule,
+    MatLegacyProgressSpinnerModule,
+    SalesItemsComponent,
+    SharedPipesModule,
+  ],
   templateUrl: './item-sales-card.component.html',
   styleUrls: ['./item-sales-card.component.scss']
 })
@@ -120,7 +137,7 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
       return
     }
 
-    if (this.prepView) { 
+    if (this.prepView) {
       this.getPrepSummary()
     }
 
@@ -154,13 +171,13 @@ export class ItemSalesCardComponent implements OnInit,OnChanges {
     return
   }
 
-  getPrepSummary() { 
+  getPrepSummary() {
     let search = {}  as IReportingSearchModel
     search.itemsPrepped = this.prepStatus;
     search.locationID   = this.locationID
     search.itemsPrinted = 1;
     // locationID : this.locationID, prepStatus: this.prepStatus, itemsPrinted : 1
-    this.prepSummary$ = this.reportingItemsSalesService.getItemsToPrep(this.site, search ).pipe(switchMap(data => { 
+    this.prepSummary$ = this.reportingItemsSalesService.getItemsToPrep(this.site, search ).pipe(switchMap(data => {
       this.sales = data;
       return of(data)
     }))

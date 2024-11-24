@@ -110,11 +110,9 @@ import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-s
     ButtonRendererComponent,
     ScaleReaderComponent,
 
-    MatMenuBasicComponent,
+
     LogoComponent,
     ProductSearchSelectorComponent,
-
-
 
     ToggleThemeComponent,
     ApiStatusDisplayComponent,
@@ -151,13 +149,13 @@ import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-s
     StripeCheckOutComponent,
 
     //moved from shared
-    ItemSalesCardComponent,
+
     PaymentReportComponent,
     PaymentReportDataComponent,
     ReceiptViewComponent,
     PaymentReportCardComponent,
 
-    SalesItemsComponent,
+
 
     BalanceSheetViewComponent,
     BalanceSheetHeaderViewComponent,
@@ -167,7 +165,9 @@ import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-s
 
     EbayAuthRedirectComponent,
     EbayReturnPolicyComponent,
-    EbayFulfillmentPolicyComponent
+    EbayFulfillmentPolicyComponent,
+
+
   ],
   imports: [
     CommonModule,
@@ -222,6 +222,10 @@ import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-s
     SoftwareSettingsComponent,
     CSVImportComponent,
     EditButtonsStandardComponent,
+
+    MatMenuBasicComponent,
+    ItemSalesCardComponent,
+    SalesItemsComponent,
   ],
 
   exports: [

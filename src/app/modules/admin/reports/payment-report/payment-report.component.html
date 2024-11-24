@@ -22,7 +22,7 @@
   </div>
 </div>
 
-<div *ngIf="type === 'sales' || type =='refunds'">
+<div *ngIf="type === 'sales' || type === 'refunds'">
   <div *ngIf="(refunds$ | async) as sales; else loadingRefunds">
     <app-payment-report-data
         [sales]="sales"
@@ -34,7 +34,7 @@
         [type]="'refunds'"
         [zrunID]="zrunID"
         [autoPrint]="autoPrint"
-       
+
         (outPutRefresh)="refreshReport($event)"
       >Payment Refunds </app-payment-report-data>
   </div>

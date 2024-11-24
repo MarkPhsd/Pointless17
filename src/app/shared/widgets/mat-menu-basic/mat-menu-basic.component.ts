@@ -1,7 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyMenuModule } from '@angular/material/legacy-menu';
 
 @Component({
   selector: 'mat-menu-basic',
+  standalone: true,
+  imports: [CommonModule,MatLegacyButtonModule,MatIconModule,MatLegacyMenuModule],
   templateUrl: './mat-menu-basic.component.html',
   styleUrls: ['./mat-menu-basic.component.scss']
 })

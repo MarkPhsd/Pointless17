@@ -5,9 +5,22 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { of, switchMap, Observable } from 'rxjs';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-sales-items',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatLegacyButtonModule,
+    MatIconModule,
+    MatDividerModule,
+    SharedPipesModule, // Import custom pipes
+  ],
   templateUrl: './sales-items.component.html',
   styleUrls: ['./sales-items.component.scss']
 })
