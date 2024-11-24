@@ -3,9 +3,24 @@ import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { AuthenticationService } from 'src/app/_services';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 import { DashboardModel } from '../grid-models';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacySlideToggleModule } from '@angular/material/legacy-slide-toggle';
+import { DisplayToggleAndroidComponent } from './display-toggle-android/display-toggle-android.component';
+import { CommonModule } from '@angular/common';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-dashboard-menu',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatLegacySlideToggleModule,
+    MatIconModule,
+    MatLegacyButtonModule,
+    MatButtonToggleModule,
+    DisplayToggleAndroidComponent, // Import the custom component
+  ],
   templateUrl: './dashboard-menu.component.html',
   styleUrls: ['./dashboard-menu.component.scss']
 })

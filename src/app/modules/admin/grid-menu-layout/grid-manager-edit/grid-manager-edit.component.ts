@@ -1,14 +1,63 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DashboardModel, DashBoardProperties, widgetRoles } from '../grid-models';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
+import { MatLegacyTabsModule } from '@angular/material/legacy-tabs';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacySlideToggleModule } from '@angular/material/legacy-slide-toggle';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacySelectModule } from '@angular/material/legacy-select';
+import { MatLegacySliderModule } from '@angular/material/legacy-slider';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { DashboardClientTypeSelectionComponent } from '../client-type-selection/client-type-selection.component';
+import { ColorPickerComponent, ColorPickerModule } from 'ngx-color-picker';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-grid-manager-edit',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    // MatLegacyTabsModule,
+    // MatLegacyCardModule,
+    // MatLegacySlideToggleModule,
+    // MatLegacyButtonModule,
+    // MatLegacyFormFieldModule,
+    // MatLegacyInputModule,
+    // MatLegacySelectModule,
+    // MatLegacySliderModule,
+    // MatButtonToggleModule,
+    // MatLegacySliderModule,
+    // MatIconModule,
+    // MatDividerModule,
+    // MatLegacyProgressSpinnerModule,
+    AppMaterialModule,
+    ColorPickerModule,
+    EditButtonsStandardComponent,
+    ValueFieldsComponent,
+    UploaderComponent,
+    DashboardClientTypeSelectionComponent,
+    // Add your custom components here
+    // AppEditButtonsStandardComponent,
+    // AppValueFieldsComponent,
+    // AppWidgetUploaderComponent,
+    // DashboardClientTypeSelectionComponent
+  ],
   templateUrl: './grid-manager-edit.component.html',
   styleUrls: ['./grid-manager-edit.component.scss']
 })

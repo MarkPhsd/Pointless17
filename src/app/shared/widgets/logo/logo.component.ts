@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit,Input, OnDestroy } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
@@ -6,6 +7,8 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 
 @Component({
   selector   : 'app-logo',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './logo.component.html',
   styleUrls: ['./logo.component.scss']
 })

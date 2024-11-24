@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { BooleanValueAccessor } from '@ionic/angular';
 import { interval, Observable, of, Subscription, switchMap } from 'rxjs';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
-import { DSIEMVSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import {  UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
-import { FbServiceTypeService } from 'src/app/_form-builder/fb-service-type.service';
-import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSPayment,  } from 'src/app/_interfaces';
+import { CommonModule } from '@angular/common';
 
 export interface partialVoidAction{
   device:  ITerminalSettings;
@@ -19,6 +17,8 @@ export interface partialVoidAction{
 
 @Component({
   selector: 'display-toggle-android',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './display-toggle-android.component.html',
   styleUrls: ['./display-toggle-android.component.scss']
 })
@@ -130,7 +130,7 @@ export class DisplayToggleAndroidComponent implements OnInit {
           let action = { device: data, payment: null } as partialVoidAction;
 
           // If there's a check for partial payment status, handle it
-     
+
           console.log('partialAuth', this.posDevice.dsiEMVSettings?.checkPartialAuth);
 
           if (this.posDevice.dsiEMVSettings?.checkPartialAuth && this.posDevice.dsiEMVSettings?.checkPartialAuth != 0) {

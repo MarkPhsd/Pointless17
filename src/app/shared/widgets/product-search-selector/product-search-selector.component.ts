@@ -1,6 +1,6 @@
 import { Component,  Input, Output, OnInit,  ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup,  UntypedFormControl} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup,  UntypedFormControl, ReactiveFormsModule} from '@angular/forms';
 import { ISite } from 'src/app/_interfaces/site';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -8,9 +8,25 @@ import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/o
 import { Observable, Subject, fromEvent, of } from 'rxjs';
 import { MenuService,  IItemBasic, AWSBucketService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { CommonModule } from '@angular/common';
+import { MatLegacyOptionModule } from '@angular/material/legacy-core';
+import { MatLegacyAutocompleteModule } from '@angular/material/legacy-autocomplete';
 
 @Component({
   selector: 'app-product-search-selector',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatLegacyFormFieldModule,
+    MatLegacyInputModule,
+    MatLegacyCardModule,
+    MatLegacyOptionModule,
+    MatLegacyAutocompleteModule,
+  ],
   templateUrl: './product-search-selector.component.html',
   styleUrls: ['./product-search-selector.component.scss']
 })

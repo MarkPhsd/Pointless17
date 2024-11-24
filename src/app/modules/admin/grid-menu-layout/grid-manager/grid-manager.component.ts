@@ -3,15 +3,51 @@ import { GridsterLayoutService   } from 'src/app/_services/system/gridster-layou
 import { DashboardModel  } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 import { GridManagerEditComponent } from '../grid-manager-edit/grid-manager-edit.component';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { FormBuilder, FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { AuthenticationService } from 'src/app/_services';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
+import { DashboardMenuComponent } from '../dashboard-menu/dashboard-menu.component';
+import { ToggleThemeComponent } from 'src/app/shared/widgets/toggle-theme/toggle-theme.component';
+import { ApiStatusDisplayComponent } from 'src/app/shared/widgets/api-status-display/api-status-display.component';
+import { GridDesignerInfoComponent } from '../grid-designer-info/grid-designer-info.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ColorPickerModule } from 'ngx-color-picker';
 // import { NavigationService } from 'src/app/_services/system/navigation.service';
 
 @Component({
   selector: 'menu-manager',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    ReactiveFormsModule,
+    MatLegacyCardModule,
+    MatLegacyCheckboxModule,
+    MatDividerModule,
+    MatIconModule,
+    MatExpansionModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    LogoComponent,
+    SharedPipesModule,
+    DashboardMenuComponent,
+    ToggleThemeComponent,
+    ColorPickerModule,
+    ApiStatusDisplayComponent,
+    GridDesignerInfoComponent
+  ],
   templateUrl: './grid-manager.component.html',
   styleUrls: ['./grid-manager.component.scss']
 })
@@ -42,9 +78,6 @@ export class GridManagerComponent implements OnInit, OnDestroy {
               private authenticationService: AuthenticationService,
               private fb: FormBuilder ){};
 
-
-
-  
 	// On component init we store Widget Marketplace in a WidgetModel array
 	ngOnInit(): void {
     this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);

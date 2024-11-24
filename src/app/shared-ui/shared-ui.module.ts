@@ -112,15 +112,10 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
     ScaleReaderComponent,
 
 
-    LogoComponent,
-    ProductSearchSelectorComponent,
 
-    ToggleThemeComponent,
-    ApiStatusDisplayComponent,
     StrainIndicatorComponent,
     OrderTotalComponent,
     ClientSearchSelectorComponent,
-
 
     //should be in databasemodule
 
@@ -171,6 +166,7 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
 
   ],
   imports: [
+    ApiStatusDisplayComponent,
     CommonModule,
     IonicModule,
     AppMaterialModule,
@@ -178,7 +174,7 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
     FormsModule,
     SharedPipesModule,
     QRCodeModule,
-
+    LogoComponent,
     AgGridModule,
     DragDropModule,
     BrowserAnimationsModule,
@@ -198,7 +194,7 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
     NgxStripeModule,
     NgxImageCaptureModule,
     AngularSignaturePadModule,
-
+    ToggleThemeComponent,
     //standalones
     FormSelectListComponent,
 
@@ -229,8 +225,8 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
     SalesItemsComponent,
     BalanceSheetCalculationsViewComponent,
     BalanceSheetHeaderViewComponent,
-    BalanceSheetEmployeeSalesComponent
-
+    BalanceSheetEmployeeSalesComponent,
+    ProductSearchSelectorComponent,
   ],
 
   exports: [

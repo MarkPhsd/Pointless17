@@ -6,11 +6,10 @@ import { AgGridModule } from 'ag-grid-angular';
 import { GridsterModule } from 'angular-gridster2';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { FormsModule } from '@angular/forms';
-import { CurrencyFormatterDirective } from '../_directives/currency-reactive.directive';
 
 @NgModule({
   declarations: [
-    // CurrencyFormatterDirective,
+
   ],
   imports: [
     CommonModule,

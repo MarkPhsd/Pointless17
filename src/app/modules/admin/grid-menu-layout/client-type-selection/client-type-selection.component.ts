@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, UntypedFormGroup } from '@angular/forms';
 import { Subscription, } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IItemBasic } from 'src/app/_services';
@@ -7,6 +7,10 @@ import { ClientTypeService } from 'src/app/_services/people/client-type.service'
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 import { DashboardModel } from '../grid-models';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyListModule } from '@angular/material/legacy-list';
+import { CommonModule } from '@angular/common';
 
 export interface ClientType {
   id:              number;
@@ -16,6 +20,14 @@ export interface ClientType {
 
 @Component({
   selector: 'dashboard-client-type-selection',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatLegacyCardModule,
+    MatDividerModule,
+    MatLegacyListModule
+  ],
   templateUrl: './client-type-selection.component.html',
   styleUrls: ['./client-type-selection.component.scss']
 })

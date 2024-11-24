@@ -1,5 +1,5 @@
 import { Component, HostListener, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DashBoardComponentProperties, DashboardContentModel, DashboardModel } from '../grid-models';
@@ -11,6 +11,23 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { HttpClient } from '@angular/common/http';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { MatLegacyFormFieldControl, MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacySelectModule } from '@angular/material/legacy-select';
+import { MatLegacySlideToggleModule } from '@angular/material/legacy-slide-toggle';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
+import { GridcomponentPropertiesDesignComponent } from './gridcomponent-properties-design/gridcomponent-properties-design.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatLegacySliderModule } from '@angular/material/legacy-slider';
+import { MatDividerModule } from '@angular/material/divider';
 
 export interface ItemValue {
   name: string;
@@ -19,13 +36,35 @@ export interface ItemValue {
 }
 @Component({
   selector: 'app-grid-component-properties',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatLegacyButtonModule,
+    MatLegacyCardModule,
+    ValueFieldsComponent,
+    MatLegacyFormFieldModule,
+    MatLegacySelectModule,
+    MatLegacySlideToggleModule,
+    MatLegacyProgressSpinnerModule,
+    EditButtonsStandardComponent,
+    MatButtonToggleModule,
+    MatLegacySliderModule,
+    MatDividerModule,
+    ValueFieldsComponent,
+    UploaderComponent,
+    ProductSearchSelectorComponent,
+    FormSelectListComponent,
+    GridcomponentPropertiesDesignComponent
+  ],
   templateUrl: './grid-component-properties.component.html',
   styleUrls: ['./grid-component-properties.component.scss']
 })
 
 export class GridComponentPropertiesComponent implements OnInit {
   action$: Observable<any>;
-
 
   message         : string[];
 
@@ -102,7 +141,7 @@ export class GridComponentPropertiesComponent implements OnInit {
       console.log('Ctrl+S pressed!');
     }
   }
-  
+
   ngOnInit() {
     this.chartTypes = this.layoutService.cartTypeCollection;
     if (!this.dashBoardContent) { return }

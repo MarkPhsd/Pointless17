@@ -36,9 +36,9 @@
           </div>
 
           <div [class]="gridsteritemclass">
-            <mat-label class="title">
-               {{ item?.object?.name }} <br>
-            </mat-label >
+            <!-- <mat-label class="title">
+            </mat-label > -->
+            <h5>{{ item?.object?.name }}</h5> <br>
             <div class="description">
               <div [innerHtml]="item?.text"></div>
             </div>
@@ -50,10 +50,10 @@
             </ng-container>
           </div>
         </div>
-    </gridster-item> 
+    </gridster-item>
   </gridster>
 
 </div>
 
- 
+
 <!-- {{options | json}} -->

@@ -23,17 +23,15 @@ import { CategoriesAlternateComponent } from './modules/menu/categories/categori
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import '@capacitor-community/camera-preview';
 import '@capacitor-community/barcode-scanner';
-
-import { CurrencyFormatterDirective } from './_directives/currency-reactive.directive';
 import { NGXMaterialModule } from './ngx-material.module';
 
 import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
 import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
 import { UserIdleModule } from 'angular-user-idle';
-import { ResizeDirective } from './_directives/resize.directive';
+
 import { NgcCookieConsentConfig} from 'ngx-cookieconsent';
-import { NgcCookieConsentModule} from 'ngx-cookieconsent';
+
 import { AppConfigService } from './_services/system/app-config.service';
 
 import { DisplayToggleAndroidComponent } from './modules/admin/grid-menu-layout/dashboard-menu/display-toggle-android/display-toggle-android.component';
@@ -165,10 +163,9 @@ enableProdMode();
 
 @NgModule({
   declarations: [
-
+    SplashLoadingComponent,
     AppComponent,
     AppGateComponent,
-    // BarcodeScannerComponent,
     ChangepasswordComponent,
     CategoriesAlternateComponent,
 
@@ -177,17 +174,15 @@ enableProdMode();
     RegisterAccountMainComponent,
     ResetpasswordComponent,
 
-    CurrencyFormatterDirective,
-    GridManagerComponent,
-    GridMenuLayoutComponent,
-    GridManagerEditComponent,
-    GridComponentPropertiesComponent,
-    GridDesignerInfoComponent,
-    DisplayToggleAndroidComponent,
-    DashboardMenuComponent,
-    GridcomponentPropertiesDesignComponent,
-    SplashLoadingComponent,
-    ResizeDirective,
+    // GridManagerComponent,
+    // GridMenuLayoutComponent,
+    // GridManagerEditComponent,
+    // GridComponentPropertiesComponent,
+    // GridDesignerInfoComponent,
+    // DisplayToggleAndroidComponent,
+    // DashboardMenuComponent,
+    // GridcomponentPropertiesDesignComponent,
+
   ],
 
 
@@ -199,25 +194,21 @@ enableProdMode();
     CommonModule,
     AppRoutingModule,
     CoreModule,
+    BrowserModule,
     IonicModule.forRoot(),
     SharedPipesModule,
     UserIdleModule.forRoot({idle: 10, timeout: 100, ping: 120}),
     AppMaterialModule,
     DefaultModule,
     AgGridModule,
-    HttpClientModule,
-    //environment.enableAnimations ? BrowserAnimationsModule :
+
     BrowserAnimationsModule,
-    // NoopAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
-    BrowserModule,
-    DynamicModule,
 
+    DynamicModule,
     SharedModule,
     NGXMaterialModule,
-
-
   ],
 
   exports: [
@@ -235,6 +226,6 @@ enableProdMode();
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
-  
+
 })
 export class AppModule { }

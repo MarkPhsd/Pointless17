@@ -1,7 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacySliderModule } from '@angular/material/legacy-slider';
 
 @Component({
   selector: 'gridcomponent-properties-design',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatLegacyCardModule,
+    MatLegacySliderModule,
+  ],
   templateUrl: './gridcomponent-properties-design.component.html',
   styleUrls: ['./gridcomponent-properties-design.component.scss']
 })
@@ -35,9 +46,9 @@ export class GridcomponentPropertiesDesignComponent implements OnInit, OnDestroy
   ngOnDestroy(): void {
     try {
       if(this.opacity) { this.opacity.unsubscribe()}
-      
+
     } catch (error) {
-      
+
     }
   }
 

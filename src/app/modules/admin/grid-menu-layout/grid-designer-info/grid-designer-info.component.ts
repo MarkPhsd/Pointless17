@@ -6,9 +6,25 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { GridsterSettings } from '../grid-models';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatDivider, MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'grid-designer-info',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatLegacyCardModule,
+    MatLegacyCheckboxModule,
+    MatDividerModule,
+    MatIconModule
+  ],
   templateUrl: './grid-designer-info.component.html',
   styleUrls: ['./grid-designer-info.component.scss']
 })

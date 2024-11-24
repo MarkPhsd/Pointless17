@@ -1,9 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit ,OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { Observable, Subscription,   } from 'rxjs';
 import { PollingService } from 'src/app/_services/system/polling.service';
 
 @Component({
   selector: 'api-status-display',
+  standalone: true,
+  imports: [CommonModule,MatIconModule,],
   templateUrl: './api-status-display.component.html',
   styleUrls: ['./api-status-display.component.scss']
 })
@@ -20,7 +24,7 @@ export class ApiStatusDisplayComponent implements OnInit, OnDestroy {
   pollOnce$          : Observable<any>;
 
   initSubscriptions() {
-  
+
     this._poll = this.pollingService.poll$.subscribe( data => {
       this.connectedToApi = data;
     })

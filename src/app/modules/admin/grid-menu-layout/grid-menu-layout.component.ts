@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { GridsterLayoutService, IComponent  } from 'src/app/_services/system/gridster-layout.service';
-import { DisplayGrid, GridsterConfig, GridsterItem, GridType, } from 'angular-gridster2';
+import { DisplayGrid, GridsterConfig, GridsterItem, GridsterModule, GridType, } from 'angular-gridster2';
 import { DashBoardComponentProperties, DashboardContentModel, DashBoardProperties,  } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 
 // COMPONENTS
@@ -11,9 +11,25 @@ import { AuthenticationService, AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISite } from 'src/app/_interfaces';
 import { ActivatedRoute } from '@angular/router';
+import { MatLegacyMenuModule } from '@angular/material/legacy-menu';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { DynamicModule } from 'ng-dynamic-component';
+import { CommonModule } from '@angular/common';
+import { MatMenuBasicComponent } from 'src/app/shared/widgets/mat-menu-basic/mat-menu-basic.component';
 
 @Component({
   selector: 'grid-menu-layout',
+  standalone: true,
+  imports: [
+    CommonModule,
+    GridsterModule,
+    DynamicModule,
+    MatLegacyMenuModule,
+    MatLegacyFormFieldModule,
+    // Add your custom components here
+    // MatMenuBasicComponent,
+    MatMenuBasicComponent
+  ],
   templateUrl: './grid-menu-layout.component.html',
   styleUrls: ['./grid-menu-layout.component.scss']
 })

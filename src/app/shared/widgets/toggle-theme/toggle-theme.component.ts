@@ -1,4 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
 import { Observable } from 'rxjs';
 import { UserPreferences } from 'src/app/_interfaces';
 import { AuthenticationService, ContactsService, ThemesService } from 'src/app/_services';
@@ -7,9 +11,10 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
-
 @Component({
   selector: 'app-toggle-theme',
+  standalone: true,
+  imports: [CommonModule,FormsModule,MatLegacyButtonModule,MatIconModule],
   templateUrl: './toggle-theme.component.html',
   styleUrls: ['./toggle-theme.component.scss']
 })
