@@ -1,8 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { SplashScreenStateService } from 'src/app/_services/system/splash-screen-state.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-splash-loading',
+  standalone: true,
+  imports: [CommonModule,FormsModule ,],
   templateUrl: './splash-loading.component.html',
   styleUrls: ['./splash-loading.component.scss']
 })

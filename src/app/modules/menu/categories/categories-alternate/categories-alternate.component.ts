@@ -1,15 +1,17 @@
-import { AfterViewInit, Component, ElementRef, OnInit, } from '@angular/core';
-import { ThemePalette} from '@angular/material/core';
-import { LegacyProgressSpinnerMode as ProgressSpinnerMode} from '@angular/material/legacy-progress-spinner';
+import {  Component, ElementRef, OnInit, } from '@angular/core';
 import { IProductCategory }  from 'src/app/_interfaces';
 import { AWSBucketService, MenuService} from 'src/app/_services';
-import { trigger, transition, animate, style, query, stagger } from '@angular/animations';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { CommonModule } from '@angular/common';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-categories-alternate',
+  standalone: true,
+  imports: [CommonModule,MatLegacyCardModule, MatLegacyButtonModule,MatIconModule,],
   templateUrl: './categories-alternate.component.html',
   styleUrls: ['./categories-alternate.component.scss']
 })
@@ -86,7 +88,7 @@ async ngOnInit() {
     return this.awsBucket.getImageURLFromNameArray(this.bucketName, nameArray)
   }
 
-  getImage(item) { 
+  getImage(item) {
     return `https://${this.bucketName}.s3.amazonaws.com/${item?.urlImageMain}`
   }
 
