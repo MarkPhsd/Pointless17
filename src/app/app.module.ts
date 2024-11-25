@@ -10,33 +10,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { DefaultModule } from './dashboard/default.module';
 import { AppMaterialModule } from './app-material.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './modules/login/login.component';
-import { SharedModule } from './shared/shared.module';
-import { ChangepasswordComponent } from './modules/login/changepassword/changepassword.component';
-import { ResetpasswordComponent } from './modules/login/resetpassword/resetpassword.component';
 import { ErrorInterceptor } from './_http-interceptors/error.interceptor';
-import { AppGateComponent } from './modules/app-gate/app-gate/app-gate.component';
-import { RegisterAccountMainComponent } from './modules/login/registration/register-account-main/register-account-main.component';
-import { RegisterAccountExistingUserWithTokenComponent } from './modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component';
-import { AgGridModule } from 'ag-grid-angular'
-import { CategoriesAlternateComponent } from './modules/menu/categories/categories-alternate/categories-alternate.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import '@capacitor-community/camera-preview';
 import '@capacitor-community/barcode-scanner';
-import { NGXMaterialModule } from './ngx-material.module';
-
 import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
-import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
 import { UserIdleModule } from 'angular-user-idle';
-
 import { NgcCookieConsentConfig} from 'ngx-cookieconsent';
-
 import { AppConfigService } from './_services/system/app-config.service';
-
-
-// import { DynamicModule } from 'ng-dynamic-component';
-
 import { SharedPipesModule } from './shared-pipes/shared-pipes.module';
 import { CoreModule } from './core.module';
 import { RouteReuseStrategy } from '@angular/router';
