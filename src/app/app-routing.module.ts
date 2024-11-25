@@ -444,15 +444,26 @@ const routes: Routes = [
         import('./modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component').then((m) => m.RegisterAccountExistingUserWithTokenComponent),
     },
     {
-      path: 'rregister-token', // Path to lazy load the module
+      path: 'register-token', // Path to lazy load the module
       loadChildren: () =>
         import('./modules/login/registration/register-account-main/register-account-main.component').then((m) => m.RegisterAccountMainComponent),
     },
 
 
+    {
+      path: 'api-setting', // Path to lazy load the module
+      loadChildren: () =>
+        import('./modules/login/apisetting/apisetting.component').then((m) => m.APISettingComponent),
+    },
+    {
+      path: 'apisetting', // Path to lazy load the module
+      loadChildren: () =>
+        import('./modules/login/apisetting/apisetting.component').then((m) => m.APISettingComponent),
+    },
+    // { path: 'api-setting', component: APISettingComponent , data: { title: 'API Setting',  animation: 'isLeft'}},
+    // { path: 'apisetting',  component: APISettingComponent , data: { title: 'API Setting', animation: 'isLeft'}},
 
-    { path: 'api-setting', component: APISettingComponent , data: { title: 'API Setting',  animation: 'isLeft'}},
-    { path: 'apisetting',  component: APISettingComponent , data: { title: 'API Setting', animation: 'isLeft'}},
+
     { path: 'appgate', component: AppGateComponent, data: { animation: 'isLeft'}},
 
     { path: 'menu-modal', component: MenuItemModalComponent, data: { animation: 'isLeft'}},
