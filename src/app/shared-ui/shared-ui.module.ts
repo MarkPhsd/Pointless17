@@ -100,7 +100,7 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
 
     ////move to smaller shared module;
 
-    APISettingComponent,
+
 
 
     AgGridTestComponent,
@@ -240,7 +240,7 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
     ScaleReaderComponent,
 
     SetTokenComponent,
-    APISettingComponent,
+
 
     MatMenuBasicComponent,
     LogoComponent,
