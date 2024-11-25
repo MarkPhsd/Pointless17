@@ -34,16 +34,7 @@ import { NgcCookieConsentConfig} from 'ngx-cookieconsent';
 
 import { AppConfigService } from './_services/system/app-config.service';
 
-import { DisplayToggleAndroidComponent } from './modules/admin/grid-menu-layout/dashboard-menu/display-toggle-android/display-toggle-android.component';
-import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
-import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
-import { GridManagerEditComponent } from './modules/admin/grid-menu-layout/grid-manager-edit/grid-manager-edit.component';
 
-import { GridComponentPropertiesComponent } from './modules/admin/grid-menu-layout/grid-component-properties/grid-component-properties.component';
-import { GridDesignerInfoComponent } from './modules/admin/grid-menu-layout/grid-designer-info/grid-designer-info.component';
-import { DashboardMenuComponent } from './modules/admin/grid-menu-layout/dashboard-menu/dashboard-menu.component';
-import { GridcomponentPropertiesDesignComponent } from './modules/admin/grid-menu-layout/grid-component-properties/gridcomponent-properties-design/gridcomponent-properties-design.component';
-import { AgGridTestComponent } from './shared/widgets/ag-grid-test/ag-grid-test.component';
 // import { DynamicModule } from 'ng-dynamic-component';
 
 import { SharedPipesModule } from './shared-pipes/shared-pipes.module';
