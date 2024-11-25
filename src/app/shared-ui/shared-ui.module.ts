@@ -8,10 +8,10 @@ import { ProductEditButtonService } from '../_services/menu/product-edit-button.
 // Services
 import { InventoryEditButtonService } from '../_services/inventory/inventory-edit-button.service';
 import { MBMenuButtonsService } from '../_services/system/mb-menu-buttons.service';
-import { BarcodeScannerComponent } from '../shared/widgets/barcode-scanner/barcode-scanner.component';
+
 import { IonicModule } from '@ionic/angular';
 import { AppMaterialModule } from '../app-material.module';
-import { ScaleReaderComponent } from '../shared/widgets/scale-reader/scale-reader.component';
+
 import { MatMenuBasicComponent } from '../shared/widgets/mat-menu-basic/mat-menu-basic.component';
 import { ClientSearchSelectorComponent } from '../shared/widgets/client-search-selector/client-search-selector.component';
 import { ValueFieldsComponent } from '../modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
@@ -100,23 +100,13 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
 
     ////move to smaller shared module;
 
-
-
-
-    AgGridTestComponent,
     AgGridImageFormatterComponent,
     AgGridToggleComponent,
-
-    BarcodeScannerComponent,
     ButtonRendererComponent,
-    ScaleReaderComponent,
-
-
 
     StrainIndicatorComponent,
     OrderTotalComponent,
     ClientSearchSelectorComponent,
-
     //should be in databasemodule
 
     TvPriceTierMenuItemsComponent,
@@ -151,14 +141,8 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
     ReceiptViewComponent,
     PaymentReportCardComponent,
 
-
-
     BalanceSheetViewComponent,
-
-
-
     //move to module
-
     EbayAuthRedirectComponent,
     EbayReturnPolicyComponent,
     EbayFulfillmentPolicyComponent,
@@ -231,16 +215,10 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
 
   exports: [
     ApiStoredValueComponent,
-    AgGridTestComponent,
-    AgGridImageFormatterComponent,
     AgGridToggleComponent,
 
-    BarcodeScannerComponent,
     ButtonRendererComponent,
-    ScaleReaderComponent,
-
     SetTokenComponent,
-
 
     MatMenuBasicComponent,
     LogoComponent,

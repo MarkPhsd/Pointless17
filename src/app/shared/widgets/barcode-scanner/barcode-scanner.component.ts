@@ -17,9 +17,16 @@ const { CameraPreview } = Plugins;
 // (window.document.querySelector('ion-app') as HTMLElement).classList.remove('cameraView');
 import { catchError, Observable, of, switchMap } from 'rxjs';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { CommonModule } from '@angular/common';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-barcode-scanner',
+  standalone: true,
+  imports: [CommonModule,MatIconModule,MatLegacyCardModule,MatLegacyButtonModule, MatToolbarModule],
   templateUrl: './barcode-scanner.component.html',
   styleUrls: ['./barcode-scanner.component.scss']
 })

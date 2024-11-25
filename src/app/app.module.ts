@@ -183,7 +183,7 @@ enableProdMode();
     ReactiveFormsModule,
     FormsModule,
 
-    SharedModule,
+
   ],
 
   providers: [

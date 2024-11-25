@@ -1,5 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCard, MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInput, MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 import { concatMap, Observable, of } from 'rxjs';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -10,9 +18,16 @@ import { UserSwitchingService } from 'src/app/_services/system/user-switching.se
 import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { ApiStatusDisplayComponent } from '../api-status-display/api-status-display.component';
 
 @Component({
   selector: 'app-login-info',
+  standalone: true,
+  imports: [CommonModule,MatLegacyCardModule,
+    FormsModule,ReactiveFormsModule,
+    MatLegacyButtonModule,ApiStatusDisplayComponent,
+    MatLegacyCheckboxModule,MatLegacyProgressSpinnerModule,
+    MatDividerModule,MatLegacyInputModule,MatLegacyFormFieldModule,],
   templateUrl: './login-info.component.html',
   styleUrl: './login-info.component.scss'
 })

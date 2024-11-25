@@ -1,16 +1,16 @@
 <!-- <ion-header> -->
   <div *ngIf="(parser$ | async) as parse"></div>
 
-  <ion-toolbar class ='toolbar' color="primary">
+  <mat-toolbar class ='toolbar' color="primary">
     <span class="site-info">
       <button mat-button (click)="goHome()">
         <mat-icon >close</mat-icon> Exit
       </button>
     </span>
     <span>
-      <ion-title>ID / Driver License  Scanner</ion-title>
+      <div>ID / Driver License  Scanner</div>
     </span>
-  </ion-toolbar>
+  </mat-toolbar>
 
 <mat-card class="mat-card">
 
@@ -31,37 +31,31 @@
     <div *ngIf="error">
       Error              : {{error}}
     </div>
-
   </div>
 </mat-card>
 
-<ion-content>
+<mat-card>
   <div class="overlay" [style.z-index]="cameraActive ? 10 : 0">
     <div class="cameraPreview">
-
       <div>
 
-        <ion-button (click)="cameraOff(true)" expand="block" id="close">
-          <ion-icon name="close-circle"
-                    slot="icon-only"></ion-icon>
-        </ion-button>
+        <button mat-fab-buttom (click)="cameraOff(true)" expand="block" id="close">
+          <mat-icon>close</mat-icon>
+        </button>
 
         <div  *ngIf="(uiTransactions$ | async) as uiTransactions; else loading">
-          <ion-button (click)="startScan()" expand="block" id="capture">
-            <ion-icon name="barcode"
-                      slot="icon-only"></ion-icon>
-            <!-- <mat-icon>barcode</mat-icon> -->
-          </ion-button>
+          <button mat-fab-button (click)="startScan()" expand="block" id="capture">
+            Scan <br> <mat-icon>barcode</mat-icon>
+          </button>
         </div>
 
-        <ion-button (click)="flipCamera()" expand="block" id="flip">
-          <ion-icon name="camera-reverse" slot="icon-only"></ion-icon>
-        </ion-button>
-
+        <button mat-fab-button  (click)="flipCamera()" expand="block" id="flip">
+          Flip <br> <mat-icon >camera_reverse</mat-icon>
+        </button>
 
       </div>
     </div>
   </div>
-</ion-content>
+</mat-card>
 
 <ng-template #loading>...loading</ng-template>

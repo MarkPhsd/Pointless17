@@ -1,11 +1,11 @@
 <div class="menu" aria-label="menu">
   <div *ngIf="trackerService?.lastSelectedInput" >
-    <!-- {{trackerService?.lastSelectedInput.value | json}}
-    <br>
-    current value {{value | json}} -->
+
   </div>
   <div *ngIf="!trackerService?.lastSelectedInput" >
-    <mat-label><ng-content></ng-content></mat-label>
+    <h4>
+      <ng-content></ng-content>
+    </h4>
   </div>
   <button class="button-margins"
           color="primary"

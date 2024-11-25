@@ -2,9 +2,13 @@ import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, 
 import { get } from 'lodash';
 import { Subscription } from 'rxjs';
 import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { KeyboardComponent } from '../keyboard/keyboard.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-keyboard-view',
+  standalone: true,
+  imports: [CommonModule,  KeyboardComponent],
   templateUrl: './keyboard-view.component.html',
   styleUrls: ['./keyboard-view.component.scss']
 })

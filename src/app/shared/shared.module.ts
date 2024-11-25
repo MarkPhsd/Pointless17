@@ -432,7 +432,6 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SplitEntrySelectorComponent,
 
     SalesTaxReportComponent,
-    // ScaleReaderComponent,
 
     SidebarComponent,
     SiteSelectorComponent,
@@ -476,8 +475,8 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ValueFromListSelectorComponent,
     CallUsSelectorComponent,
     LastImageDisplayComponent,
-    KeyboardComponent,
-    KeyboardViewComponent,
+
+
     FreeDraggingDirective,
     FreeDraggingHandleDirective,
 
@@ -511,7 +510,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     CloseFloatingButtonComponent,
     SiteFooterComponent,
     SignatureComponent,
-    LoginInfoComponent
+
   ],
 
   imports: [
@@ -547,10 +546,12 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     AngularSignaturePadModule,
     SimpleTinyComponent,
 
-    KeyboardButtonComponent,
+
     EmployeesOnClockListComponent,
     FastUserSwitchComponent,
     KeyPadComponent,
+    LoginInfoComponent,
+
   ],
 
   exports: [
@@ -657,9 +658,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     // SalesItemsComponent,
     // ImageSwiperComponent,
 
-    KeyboardComponent,
-    KeyboardButtonComponent,
-    KeyboardViewComponent,
+
     LastImageDisplayComponent,
 
     // LimitValuesProgressBarsComponent,

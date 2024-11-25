@@ -14,11 +14,7 @@ export class ScaleReaderComponent{
   }
 
   readReg() {
-    //  this.regKey = new Registry({
-    //   hipve: Registry.HKCU,
-    //   key: '\\Software\\Microsoft\\Windows\\CurrentVersion',
-    //   utf8: true
-    // });
+
   }
 
 }

@@ -70,7 +70,7 @@ import { ClientTypeListComponent } from './modules/admin/clients/client-types/cl
 import { ServiceTypeListComponent } from './modules/admin/transactions/serviceTypes/service-type-list/service-type-list.component';
 import { ServiceTypeEditComponent } from './modules/admin/transactions/serviceTypes/service-type-edit/service-type-edit.component';
 import { OrdersMainComponent } from './modules/orders/orders-main/orders-main.component';
-import { ScaleReaderComponent } from './shared/widgets/scale-reader/scale-reader.component';
+
 import { PrinterLocationsComponent } from './modules/admin/products/printer-locations/printer-locations.component';
 import { PaymentMethodEditComponent } from './modules/admin/transactions/paymentMethods/payment-method-edit/payment-method-edit.component';
 import { PaymentMethodListComponent } from './modules/admin/transactions/paymentMethods/payment-method-list/payment-method-list.component';
@@ -404,6 +404,8 @@ const routes: Routes = [
       ]
     },
 
+    // import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
+    // import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
     { path: 'menu-board'    ,  component: GridManagerComponent,
        children: [
         // { path: '', component: GridManagerComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
@@ -411,14 +413,19 @@ const routes: Routes = [
         { path: 'grid-menu-layout', component: GridMenuLayoutComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
       ]
     },
+
     { path: 'blog-post-list',  component: BlogPostListComponent, data: { title: 'BlogPosts', animation: 'isLeft'} },
     { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: {  title: 'Tiers',  animation: 'isLeft'}},
     { path: 'view-price-tiers', component: TierPricesComponent ,data: {  title: 'Price Tiers', animation: 'isLeft'}},
-    { path: 'scale-reader', component: ScaleReaderComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
-
-    { path: 'barcodescanner', component: BarcodeScannerComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
     { path: 'login', component: LoginComponent, data: { title: 'Pointless Login', animation: 'isLeft'}},
+
+    // { path: 'barcodescanner', component: BarcodeScannerComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
+    {
+      path: 'changepassword', // Path to lazy load the module
+      loadChildren: () =>
+        import('./shared/widgets/barcode-scanner/barcode-scanner.component').then((m) => m.BarcodeScannerComponent),
+    },
 
 
     //apply lazy loading

@@ -1,9 +1,14 @@
+import { CommonModule } from "@angular/common";
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, Output, ViewEncapsulation } from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
+import { MatLegacyButtonModule } from "@angular/material/legacy-button";
 import Keyboard from "simple-keyboard";
 import { InputTrackerService } from "src/app/_services/system/input-tracker.service";
 import { UISettingsService } from "src/app/_services/system/settings/uisettings.service";
 @Component({
   selector: 'app-keyboard',
+  standalone: true,
+  imports: [CommonModule, MatLegacyButtonModule,MatIconModule,],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './keyboard.component.html',
   styleUrls: ['./keyboard.component.scss']
