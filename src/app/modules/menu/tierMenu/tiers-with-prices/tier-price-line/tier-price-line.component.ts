@@ -9,9 +9,14 @@ import { PriceTiers,PriceTierPrice, } from 'src/app/_interfaces/menu/price-categ
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
 
 @Component({
   selector: 'tier-price-line',
+  standalone: true,
+  imports: [CommonModule,MatLegacyCardModule, MatLegacyButtonModule],
   templateUrl: './tier-price-line.component.html',
   styleUrls: ['./tier-price-line.component.scss']
 })

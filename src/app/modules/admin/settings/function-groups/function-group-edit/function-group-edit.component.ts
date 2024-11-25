@@ -8,9 +8,15 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subscription } from 'rxjs';
 import { IUser } from 'src/app/_interfaces';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { FunctionGroupButtonEditComponent } from './function-group-button-edit/function-group-button-edit.component';
 
 @Component({
   selector: 'app-function-group-edit',
+  standalone: true,
+  imports: [CommonModule,FunctionGroupButtonEditComponent, AppMaterialModule,ValueFieldsComponent,],
   templateUrl: './function-group-edit.component.html',
   styleUrls: ['./function-group-edit.component.scss']
 })

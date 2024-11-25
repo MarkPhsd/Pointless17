@@ -1,11 +1,20 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyFormFieldControl, MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { IProductSearchResults } from 'src/app/_services';
 
 @Component({
   selector: 'search-debounce-input',
+  standalone:true,
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,
+          MatLegacyButtonModule,MatIconModule,
+          MatLegacyFormFieldModule,MatLegacyInputModule],
   templateUrl: './search-debounce-input.component.html',
   styleUrls: ['./search-debounce-input.component.scss']
 })

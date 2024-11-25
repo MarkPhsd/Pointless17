@@ -2,7 +2,7 @@ import {Component, OnDestroy, Output,
         OnInit, AfterViewInit,
          ViewChild, ElementRef, EventEmitter, Inject, LOCALE_ID}  from '@angular/core';
 import { IServiceType, ISetting, IUser } from 'src/app/_interfaces';
-import {  IPOSOrderSearchModel, IPOSPayment, IPaymentSearchModel} from 'src/app/_interfaces/transactions/posorder';
+import {  IPOSPayment, IPaymentSearchModel} from 'src/app/_interfaces/transactions/posorder';
 import { IItemBasic,  } from 'src/app/_services';
 import { OrdersService } from 'src/app/_services';
 import { ActivatedRoute, } from '@angular/router';
@@ -10,20 +10,28 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter,switchMap,tap } from 'rxjs/operators';
 import { Observable, fromEvent, Subscription, of } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { EmployeeSearchModel, EmployeeService } from 'src/app/_services/people/employee-service.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { MatToggleSelectorComponent } from 'src/app/shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { MatDateRangeComponent } from 'src/app/shared/widgets/mat-date-range/mat-date-range.component';
 
 @Component({
   selector: 'app-pos-payments-filter',
+  standalone: true,
+  imports: [CommonModule, MatToggleSelectorComponent,AppMaterialModule,
+    ValueFieldsComponent,MatDateRangeComponent,
+    FormsModule,ReactiveFormsModule,],
   templateUrl: './pos-payments-filter.component.html',
   styleUrls: ['./pos-payments-filter.component.scss']
 })

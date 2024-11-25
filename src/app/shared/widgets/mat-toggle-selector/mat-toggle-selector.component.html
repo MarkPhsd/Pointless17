@@ -38,7 +38,7 @@
 
                     <div class="grid-toggle-tiny">
                       <div class="item-font"
-                            *ngIf="showIcon && item.icon && item.icon != ''">
+                            *ngIf="showIcon && item.icon && item.icon !== ''">
                         <span *ngIf="materialIcons">
                           <mat-icon>{{item.icon}}</mat-icon>
                         </span>
@@ -102,7 +102,7 @@
 
               <div class="grid-toggle-tiny">
                 <div class="item-font"
-                      *ngIf="showIcon && item.icon && item.icon != ''">
+                      *ngIf="showIcon && item.icon && item.icon !== ''">
 
                   <span *ngIf="materialIcons">
                       <mat-icon>{{item?.icon}}</mat-icon>

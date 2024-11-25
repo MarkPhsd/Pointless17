@@ -1,13 +1,18 @@
-import { Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import { TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { environment } from 'src/environments/environment';
+import { Component, OnInit} from '@angular/core';
 import { ICompany } from 'src/app/_interfaces';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { AuthenticationService } from 'src/app/_services';
+import { TiersWithPricesComponent } from '../tiers-with-prices/tiers-with-prices.component';
+import { TierItemsComponent } from '../tier-items/tier-items.component';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-tier-prices',
+  standalone: true,
+  imports: [CommonModule, TiersWithPricesComponent, SharedPipesModule,
+            TierItemsComponent,MatLegacyCardModule, SharedPipesModule],
   templateUrl: './tier-prices.component.html',
   styleUrls: ['./tier-prices.component.scss'],
 })

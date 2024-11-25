@@ -5,9 +5,19 @@ import { IFlowerMenu, TvMenuPriceTierService } from 'src/app/_services/menu/tv-m
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatLegacyCardMdImage, MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-tier-items',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,MatLegacyCardModule,
+            MatIconModule,
+           SharedPipesModule, MatLegacyButtonModule],
   templateUrl: './tier-items.component.html',
   styleUrls: ['./tier-items.component.scss'],
 })

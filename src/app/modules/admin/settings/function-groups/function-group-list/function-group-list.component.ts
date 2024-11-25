@@ -2,18 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { IMenuButtonGroups, MBMenuButtonsService } from 'src/app/_services/system/mb-menu-buttons.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { Observable,  switchMap } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { IGetRowsParams, GridApi } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Capacitor,  } from '@capacitor/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { AgGridModule } from 'ag-grid-angular';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
 @Component({
   selector: 'app-function-group-list',
+  standalone: true,
+  imports: [CommonModule, AppMaterialModule,AgGridModule,SearchDebounceInputComponent,],
   templateUrl: './function-group-list.component.html',
   styleUrls: ['./function-group-list.component.scss']
 })

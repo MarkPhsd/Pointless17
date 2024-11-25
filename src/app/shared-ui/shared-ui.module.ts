@@ -96,6 +96,13 @@ import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-s
 import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/balanceSheets/balance-sheet-edit/balance-sheet-employee-sales/balance-sheet-employee-sales.component';
 import { KeyboardButtonComponent } from '../shared/widgets/keyboard-button/keyboard-button.component';
 import { KeyboardComponent } from '../shared/widgets/keyboard/keyboard.component';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import { MatDateRangeComponent } from '../shared/widgets/mat-date-range/mat-date-range.component';
+import { NgxMatDateRangePicker } from '@angular-material-components/datetime-picker';
+import { MatToggleSelectorComponent } from '../shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
+import { TierPricesComponent } from '../modules/menu/tierMenu/tier-prices/tier-prices.component';
+import { TierPriceLineComponent } from '../modules/menu/tierMenu/tiers-with-prices/tier-price-line/tier-price-line.component';
+import { TierItemsComponent } from '../modules/menu/tierMenu/tier-items/tier-items.component';
 
 @NgModule({
   declarations: [
@@ -180,6 +187,9 @@ import { KeyboardComponent } from '../shared/widgets/keyboard/keyboard.component
     NgxColorsModule,
     NgxStripeModule,
     NgxImageCaptureModule,
+
+    NgxDaterangepickerMd.forRoot(),
+
     AngularSignaturePadModule,
     ToggleThemeComponent,
     //standalones
@@ -219,9 +229,16 @@ import { KeyboardComponent } from '../shared/widgets/keyboard/keyboard.component
     KeyboardComponent,
 
     StrainIndicatorComponent,
+    MatDateRangeComponent,
+    MatToggleSelectorComponent,
+    TierItemsComponent,
+    TierPriceLineComponent,
+    TierPricesComponent,
   ],
 
   exports: [
+    MatToggleSelectorComponent,
+    MatDateRangeComponent,
     ApiStoredValueComponent,
     AgGridToggleComponent,
 
@@ -311,6 +328,10 @@ import { KeyboardComponent } from '../shared/widgets/keyboard/keyboard.component
 
     KeyboardButtonComponent,
     KeyboardComponent,
+
+    TierItemsComponent,
+    TierPriceLineComponent,
+    TierPricesComponent,
   ],
   providers: [
     InventoryEditButtonService,

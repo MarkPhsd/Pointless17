@@ -1,13 +1,10 @@
 
   <ng-template #dateRangeSelector>
-    <!-- <mat-form-field
-        appearance="outline"> -->
-
   </ng-template>
 
   <div *ngIf="enableBigPIcker" class="margin-botton:5px">
 
-    <input
+    <!-- <input
         ngxDaterangepickerMd
         [closeOnAutoApply]="true"
         [autoApply]="true"
@@ -19,13 +16,9 @@
         (datesUpdated)="datesUpdated($event)"
         class="datepicker-calendar-icon date-picker-input"
         >
-    <!-- </mat-form-field> -->
-
       <a class="ngx-daterangepicker-action calendar-button" (click)="openDatepicker()">
          <mat-icon>event</mat-icon>
-      </a>
-
-  <!-- <button mat-raised-button (click)="openDatepicker()"><mat-icon>open_in_new</mat-icon></button> -->
+      </a> -->
 </div>
 
 <div class="container" *ngIf="!enableBigPIcker && inputForm">
@@ -33,7 +26,6 @@
           mat-button (click)="emitDatePickerData()">
       <mat-icon>refresh</mat-icon>
   </button>
-  <!-- magPickerView -->
   <ng-container [ngTemplateOutlet]="magPickerView"></ng-container>
 </div>
 
@@ -105,6 +97,5 @@
 </ng-template>
 
 <ng-template #ngxDateRangeSelector>
-
 
 </ng-template>

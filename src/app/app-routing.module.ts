@@ -20,7 +20,7 @@ import { PosOrderComponent } from './modules/posorders/pos-order/pos-order.compo
 import { SearchResultsComponent } from './modules/menu/search-results/search-results.component';
 import { ProductlistviewComponent } from './modules/admin/products/productlistview/productlistview.component';
 import { PageNotFoundComponent } from './shared/widgets/page-not-found/page-not-found.component';
-import { SiteEditComponent } from './modules/admin/settings/site-edit/site-edit.component';
+
 import { ReviewEditComponent } from './modules/reviews/review-edit/review-edit.component';
 import { ReportsComponent } from './modules/admin/reports/reports.component';
 import { PosListComponent } from './modules/admin/settings/pos-list/pos-list.component';
@@ -32,16 +32,12 @@ import { AuthGuard } from './_http-interceptors/auth.guard';
 import { AgeVerificationGuardService } from './_http-interceptors/age-verification-guard.service';
 import { MainMenuComponent } from './modules/menu/mainMenu/main-menu/main-menu.component';
 import { MenuItemModalComponent } from './modules/menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
-import { HammerCardComponent } from './shared/widgets/hammer-card/hammer-card.component';
+// import { HammerCardComponent } from './shared/widgets/hammer-card/hammer-card.component';
 import { TvPriceSpecialsComponent } from './modules/tv-menu/tv-price-specials/tv-price-specials.component';
 import { TierMenuComponent } from './modules/menu/tierMenu/tier-menu/tier-menu.component';
 import { PriceCategoriesComponent } from './modules/admin/products/pricing/price-categories/price-categories.component';
 
 import { LoginComponent} from './modules/login/login.component';
-import { ChangepasswordComponent } from './modules/login/changepassword/changepassword.component';
-import { ResetpasswordComponent } from './modules/login/resetpassword/resetpassword.component';
-import { RegisterAccountExistingUserWithTokenComponent } from './modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component';
-import { RegisterAccountMainComponent } from './modules/login/registration/register-account-main/register-account-main.component';
 
 
 import { CategoriesAlternateComponent } from './modules/menu/categories/categories-alternate/categories-alternate.component';
@@ -72,14 +68,14 @@ import { ServiceTypeEditComponent } from './modules/admin/transactions/serviceTy
 import { OrdersMainComponent } from './modules/orders/orders-main/orders-main.component';
 
 import { PrinterLocationsComponent } from './modules/admin/products/printer-locations/printer-locations.component';
-import { PaymentMethodEditComponent } from './modules/admin/transactions/paymentMethods/payment-method-edit/payment-method-edit.component';
-import { PaymentMethodListComponent } from './modules/admin/transactions/paymentMethods/payment-method-list/payment-method-list.component';
-import { POSPaymentsComponent } from './modules/transactions/pos-payments-main/pospayments/pospayments.component';
+
 import { KeyPadComponent } from './shared/widgets/key-pad/key-pad.component';
 import { PosPaymentComponent } from './modules/posorders/pos-payment/pos-payment.component';
+import { POSPaymentsComponent } from './modules/transactions/pos-payments-main/pospayments/pospayments.component';
+
+
 import { BalanceSheetsComponent } from './modules/transactions/balanceSheets/balance-sheets/balance-sheets.component';
 import { BalanceSheetEditComponent } from './modules/transactions/balanceSheets/balance-sheet-edit/balance-sheet-edit.component';
-import { PosPaymentEditComponent } from './modules/posorders/pos-payment/pos-payment-edit/pos-payment-edit.component';
 import { IonicSwipeToDeleteComponent } from './shared/widgets/ionic-swipe-to-delete/ionic-swipe-to-delete.component';
 import { PromptGroupsComponent } from './modules/admin/menuPrompt/prompt-groups/prompt-groups.component';
 import { PromptGroupEditComponent } from './modules/admin/menuPrompt/prompt-groups/prompt-group-edit/prompt-group-edit.component';
@@ -129,6 +125,10 @@ import { DesignerListComponent } from './modules/admin/report-designer/designer/
 import { DesignerEditorComponent } from './modules/admin/report-designer/designer/designer-editor/designer-editor.component';
 import { ProductFilterComponent } from './shared/widgets/product-filter/product-filter.component';
 
+import { PaymentMethodEditComponent } from './modules/admin/transactions/paymentMethods/payment-method-edit/payment-method-edit.component';
+import { PaymentMethodListComponent } from './modules/admin/transactions/paymentMethods/payment-method-list/payment-method-list.component';
+import { PosPaymentEditComponent } from './modules/posorders/pos-payment/pos-payment-edit/pos-payment-edit.component';
+
 import { PartBuilderMainComponent } from './modules/admin/products/part-builder/part-builder-main/part-builder-main.component';
 import { PartBuilderEditComponent } from './modules/admin/products/part-builder/part-builder-edit/part-builder-edit.component';
 import { PartBuilderUsageListComponent } from './modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';
@@ -148,12 +148,12 @@ import { PosEditSettingsComponent } from './modules/admin/settings/pos-list/pos-
 import { PosOrderItemsComponent } from './modules/posorders/pos-order/pos-order-items/pos-order-items.component';
 import { QrPaymentComponent } from './modules/orders/qr-payment/qr-payment.component';
 import { OnlinePaymentCompletedComponent } from './modules/payment-processing/online-payment-completed/online-payment-completed.component';
-import { StoresManagerComponent } from './modules/admin/stores-manager/stores-manager.component';
 import { ScheduleSelectorComponent } from './shared/widgets/schedule-selector/schedule-selector.component';
 import { ScheduleDateRangeSelectorComponent } from './shared/widgets/schedule-date-range-selector/schedule-date-range-selector.component';
 import { SignatureComponent } from './shared/widgets/signature-pad/signature-pad.component';
 import { MessageEditorListComponent } from './modules/admin/message-editor-list/message-editor-list.component';
-import { SettingsComponent } from './modules/admin/settings/settings.component';
+import { StoresManagerComponent } from './modules/admin/stores-manager/stores-manager.component';
+
 // import { SettingsComponent } from './modules/admin/settings/settings.component';
 
 const routes: Routes = [
@@ -228,7 +228,6 @@ const routes: Routes = [
         },
 
         // { path: 'app-settings',    component: SettingsComponent, canActivate: [AuthGuard], data: { title: 'Settings', animation: 'isLeft'} },
-
         {
           path: 'app-settings', // Path to lazy load the module
           loadChildren: () =>
@@ -255,6 +254,32 @@ const routes: Routes = [
         // { path: 'site-edit', component: SiteEditComponent,  canActivate: [AuthGuard], data: { animation:  'isLeft'} },
         // { path: 'store-list', component: StoresManagerComponent,  canActivate: [AuthGuard], data: { animation:  'isLeft'} },
 
+        //'./modules/transactions/pos-payments-main/pospayments/pospayments.component'
+        // { path: 'pos-payments', component: POSPaymentsComponent, canActivate: [AuthGuard], data: {title: 'Payments Listing', animation: 'isLeft'} },
+        {
+          path: 'pos-payments', // Path to lazy load the module
+          loadChildren: () =>
+            import('./modules/transactions/pos-payments-main/pospayments/pospayments.component').then((m) => m.POSPaymentsComponent),
+        },
+
+        { path: 'pos-payment-edit', component: PosPaymentEditComponent, canActivate: [AuthGuard], data: { title: 'Edit Payment', animation: 'isLeft'} },
+
+
+        // function-group-list
+        // { path: 'function-group-list', component: FunctionGroupListComponent,  canActivate: [AuthGuard], data: {  title: 'Function List', animation: 'isLeft'}},
+        // { path: 'function-group-edit', component: FunctionGroupEditComponent, canActivate: [AuthGuard], data: { title: 'Function Edit', animation: 'isLeft'}},
+        {
+          path: 'function-group-list', // Path to lazy load the module
+          loadChildren: () =>
+            import('./modules/admin/settings/function-groups/function-group-list/function-group-list.component').then((m) => m.FunctionGroupListComponent),
+        },
+        {
+          path: 'function-group-edit', // Path to lazy load the module
+          loadChildren: () =>
+            import('./modules/admin/settings/function-groups/function-group-edit/function-group-edit.component').then((m) => m.FunctionGroupEditComponent),
+        },
+
+
         { path: 'store-credit', component: StoreCreditListComponent, canActivate: [AuthGuard], data: {  title: 'Store Credit Search',  animation:  'isLeft'} },
         { path: 'pos-orders',   component: OrdersMainComponent, canActivate: [AuthGuard], data: {  title: 'Orders',  animation:  'isLeft'} },
         { path: 'currentorder', component: PosOrderComponent, canActivate: [AuthGuard], data: { title: 'Current Order', animation: 'isLeft'} },
@@ -270,9 +295,6 @@ const routes: Routes = [
 
         //PosOperationsComponent
         { path: 'operations', component: PosOperationsComponent, canActivate: [AuthGuard], data: {title: 'Operations', animation: 'isLeft'} },
-
-        { path: 'pos-payments', component: POSPaymentsComponent, canActivate: [AuthGuard], data: {title: 'Payments Listing', animation: 'isLeft'} },
-        { path: 'pos-payment-edit', component: PosPaymentEditComponent, canActivate: [AuthGuard], data: { title: 'Edit Payment', animation: 'isLeft'} },
 
         { path: 'item-sales', component: ItemsMainComponent, canActivate: [AuthGuard], data: {title: 'Item Sales', animation: 'isLeft'} },
 
@@ -314,11 +336,6 @@ const routes: Routes = [
 
         ///price schedule layout menu
         {path: 'psmenu-group-list', component: PSMenuGroupListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
-
-
-        // function-group-list
-        { path: 'function-group-list', component: FunctionGroupListComponent,  canActivate: [AuthGuard], data: {  title: 'Function List', animation: 'isLeft'}},
-        { path: 'function-group-edit', component: FunctionGroupEditComponent, canActivate: [AuthGuard], data: { title: 'Function Edit', animation: 'isLeft'}},
 
         //app-department-menu
         { path: 'categorylist', component: CategorieslistviewComponent,  canActivate: [AuthGuard], data: {  title: 'Category List', animation: 'isLeft'}},
@@ -401,10 +418,10 @@ const routes: Routes = [
 
         { path: 'keypad', component: KeyPadComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
-        { path: 'hammerjs', component: HammerCardComponent ,data: { animation: 'isLeft'}},
+        // { path: 'hammerjs', component: HammerCardComponent ,data: { animation: 'isLeft'}},
         { path: 'company-edit', component: CompanyEditComponent,   canActivate: [AuthGuard], data: {  title: 'Company Edit',  animation: 'isLeft'} },
 
-        { path: 'view-tier-menu', component: TierMenuComponent, canActivate: [AuthGuard],data: {  title: 'Tier Menu',  animation: 'isLeft'}},
+        { path: 'view-tier-menu', component: TierPricesComponent, canActivate: [AuthGuard],data: {  title: 'Tier Menu',  animation: 'isLeft'}},
 
         { path: 'pos-order-schedule', component: POSOrderScheduleComponent, canActivate: [AuthGuard], data: {title: 'Schedule Order', animation: 'isLeft'}},
 

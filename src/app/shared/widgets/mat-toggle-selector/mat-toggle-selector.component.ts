@@ -2,8 +2,14 @@ import { Component, OnInit,Output, Input, EventEmitter, HostListener, ViewChild,
 import { Observable, of, switchMap } from 'rxjs';
 import { MatLegacyMenuTrigger as MatMenuTrigger } from '@angular/material/legacy-menu';
 import { IMenuItem, menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'app-mat-toggle-selector',
+  standalone: true,
+  imports: [CommonModule, AppMaterialModule,FormsModule,ReactiveFormsModule,SharedPipesModule,],
   templateUrl: './mat-toggle-selector.component.html',
   styleUrls: ['./mat-toggle-selector.component.scss']
 })
@@ -65,12 +71,12 @@ export class MatToggleSelectorComponent implements OnChanges {
       if (this.list$ && this.list$ != undefined) {
         this.action$ = this.list$.pipe(
           switchMap(data => {
-          
+
             let list = data as any;
-            if (list.result)  { 
+            if (list.result)  {
               list = list.result
             }
-       
+
             this.subscribed = true
             this.list = []
             if (list) {

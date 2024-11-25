@@ -59,7 +59,6 @@ import { MatSpinnerOverlayComponent } from './widgets/mat-spinner-overlay/mat-sp
 import { ChemicalSpinnersComponent } from '../modules/menu/menuitem/menuItemParts/chemical-spinners/chemical-spinners.component';
 import { ValueSpinnerComponent } from './widgets/value-spinner/value-spinner.component';
 import { ChipsDisplayComponent } from './widgets/chips-display/chips-display.component';
-import { MatToggleSelectorComponent } from './widgets/mat-toggle-selector/mat-toggle-selector.component';
 import { ButtonRendererComponent } from '../_components/btn-renderer.component';
 import { BtBlueToothScannerComponent } from './widgets/bt-blue-tooth-scanner/bt-blue-tooth-scanner.component';
 import { AutofocusDirective } from '../_directives/auto-focus-input.directive';
@@ -94,7 +93,6 @@ import { PaymentReportComponent } from '../modules/admin/reports/payment-report/
 import { SearchDebounceInputComponent } from './widgets/search-debounce-input/search-debounce-input.component';
 import { UserAuthorizedDirective } from '../_directives/user-authorized.directive';
 import { MatSelectNGModelComponent } from './widgets/mat-select-ngmodel/mat-select-ngmodel.component';
-import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.component';
 import { OrderHeaderComponent } from '../modules/posorders/pos-order/order-header/order-header.component';
 import { PriceTierScheduleComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-schedule/price-tier-schedule.component';
 import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-selector.component';
@@ -246,6 +244,7 @@ import { LoginInfoComponent } from './widgets/login-info/login-info.component';
 import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
 import { SharedUiModule } from '../shared-ui/shared-ui.module';
 import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
+import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.component';
 
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
@@ -356,10 +355,10 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     OrderItemScannerComponent,
 
     MatChipListComponent,
-    MatDateRangeComponent,
+
     MatSelectComponent,
     MatSpinnerOverlayComponent,
-    MatToggleSelectorComponent,
+
     // MatMenuBasicComponent,
     MatSelectNGModelComponent,
     MetaTagChipsComponent,
@@ -459,7 +458,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     QRCodeTableComponent,
     ValueSpinnerComponent,
 
-    SearchDebounceInputComponent,
+
 
     OverLayComponent,
     MyThingComponent,
@@ -494,7 +493,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ReportGroupSelectorComponent,
     ReportTypesComponent,
     SortSelectorComponent,
-    SortSelectorsComponent,
+
     MatSelectorComponent,
     EditBarComponent,
     UserBarComponent,
@@ -515,6 +514,9 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
 
   imports: [
     IonicModule.forRoot(),
+    NgxDaterangepickerMd.forRoot(),
+    MatDateRangeComponent,
+    SearchDebounceInputComponent,
     CommonModule,
     SharedUiModule,
     SharedUtilsModule,
@@ -537,21 +539,21 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     GridsterModule,
     RouterModule,
     ReactiveFormsModule,
-    // SwiperModule,
+
     YouTubePlayerModule,
     NgxJsonViewerModule,
     NgxColorsModule,
     NgxImageCaptureModule,
-    NgxDaterangepickerMd.forRoot(),
+
     AngularSignaturePadModule,
     SimpleTinyComponent,
 
+    SortSelectorsComponent,
 
     EmployeesOnClockListComponent,
     FastUserSwitchComponent,
     KeyPadComponent,
     LoginInfoComponent,
-
   ],
 
   exports: [
@@ -559,7 +561,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     SharedUiModule,
     SharedUtilsModule,
     SharedPipesModule,
-
+    MatDateRangeComponent,
     LoginInfoComponent,
     NgxJsonViewerModule,
     AgGridModule,
@@ -666,14 +668,14 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
 
     // LogoComponent,
     Label1by8Component,
-    MatDateRangeComponent,
+
     MatChipListComponent,
     ScheduleSelectorComponent,
     ScheduleDateRangeSelectorComponent,
     // NgcCookieConsentModule.forRoot(cookieConfig),
     NgxDaterangepickerMd,
     // MatMenuBasicComponent,
-    MatToggleSelectorComponent,
+
     MatSelectComponent,
     MatSelectNGModelComponent,
     MatSpinnerOverlayComponent,

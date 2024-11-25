@@ -1,13 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit,Input,Output ,EventEmitter} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 import { IPOSOrderSearchModel, IPaymentSearchModel } from 'src/app/_interfaces';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-sort-selectors',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule],
   templateUrl: './sort-selectors.component.html',
   styleUrls: ['./sort-selectors.component.scss']
 })

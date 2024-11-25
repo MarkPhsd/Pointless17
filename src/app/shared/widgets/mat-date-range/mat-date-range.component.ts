@@ -1,15 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, TemplateRef, ViewChild, OnInit, AfterViewInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
 import dayjs from 'dayjs/esm';
 import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
 // import { DaterangepickerDirective } from 'ngx-daterangepicker-material/daterangepicker.directive';
 import { AuthenticationService } from 'src/app/_services';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
-import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
-
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'mat-date-range',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,
+            MatLegacyInputModule,MatLegacyFormFieldModule,
+            FormsModule,ReactiveFormsModule],
   templateUrl: './mat-date-range.component.html',
   styleUrls: ['./mat-date-range.component.scss']
 })

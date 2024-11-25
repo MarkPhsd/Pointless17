@@ -4,9 +4,17 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable} from 'rxjs';
 import { AuthenticationService } from 'src/app/_services';
 import { PriceTierMethodsService } from 'src/app/_services/menu/price-tier-methods.service';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'tiers-with-prices',
+  standalone: true,
+  imports: [CommonModule, MatLegacyCardModule,SharedPipesModule, SharedPipesModule,
+            MatLegacyButtonModule,MatLegacyProgressSpinnerModule],
   templateUrl: './tiers-with-prices.component.html',
   styleUrls: ['./tiers-with-prices.component.scss']
 })

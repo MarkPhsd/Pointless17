@@ -18,6 +18,11 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { PosPaymentEditComponent } from 'src/app/modules/posorders/pos-payment/pos-payment-edit/pos-payment-edit.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { CommonModule } from '@angular/common';
+import { SortSelectorsComponent } from 'src/app/shared/widgets/sort-selectors/sort-selectors.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { PosPaymentsFilterComponent } from '../pos-payments-filter/pos-payments-filter.component';
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
     return 0;
@@ -32,6 +37,8 @@ function myComparator(value1, value2) {
 }
 @Component({
   selector: 'app-pospayments',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SortSelectorsComponent,AgGridModule,PosPaymentsFilterComponent],
   templateUrl: './pospayments.component.html',
   styleUrls: ['./pospayments.component.scss']
 })
@@ -54,8 +61,8 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   demoMode: boolean;
   action$: Observable<any>;
 
-  demoMode$ = this.siteService.getDemoMode().pipe(switchMap(data => { 
-    if (data === '424242'){ 
+  demoMode$ = this.siteService.getDemoMode().pipe(switchMap(data => {
+    if (data === '424242'){
       this.demoMode = true;
     }
     return of(data)
@@ -678,49 +685,49 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     let selectedRowsString = '';
     let maxToShow = this.pageSize;
     let selected = [];
-  
+
     // Initialize the totals
     let totalAmountPaid = 0;
     let totalTipAmount = 0;
     let totalWithTip = 0;
-  
+
     selectedRows.forEach(function (selectedRow, index) {
       if (index >= maxToShow) {
         return;
       }
-  
+
       // Push the selected row ID for further operations
       selected.push(selectedRow.id);
-  
+
       // Sum the amount paid and tip amount
       totalAmountPaid += selectedRow.amountPaid ? parseFloat(selectedRow.amountPaid) : 0;
       totalTipAmount += selectedRow.tipAmount ? parseFloat(selectedRow.tipAmount) : 0;
-      
+
       // Calculate total with tip
       totalWithTip = totalAmountPaid + totalTipAmount;
-  
+
       if (index > 0) {
         selectedRowsString += ', ';
       }
       selectedRowsString += selectedRow.name;
     });
-  
+
     if (selectedRows.length > maxToShow) {
       let othersCount = selectedRows.length - maxToShow;
       selectedRowsString +=
         ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
     }
-  
+
     // Update the selected items
     this.selected = selected;
-  
+
     // Create the summary object to store the totals
     const summary = {
       totalAmountPaid: totalAmountPaid.toFixed(2),
       totalTipAmount: totalTipAmount.toFixed(2),
       totalWithTip: totalWithTip.toFixed(2),
     };
-  
+
     // Log or display the summary object
     console.log('Summary:', summary);
     this.selectedSummary = summary;
@@ -732,16 +739,16 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     }
   }
 
-  deleteSelected() { 
+  deleteSelected() {
     let list = [] as number[];
-    this.selected.forEach(item => { 
-      
+    this.selected.forEach(item => {
+
       list.push(item)
       console.log(item)
     })
     console.log(list)
     const site = this.siteService.getAssignedSite()
-    this.action$ = this.orderService.removeOrderList(site, list).pipe(switchMap(data => { 
+    this.action$ = this.orderService.removeOrderList(site, list).pipe(switchMap(data => {
       this.siteService.notify('Removed', 'Close', 1000)
       return of (data)
     }))
@@ -757,7 +764,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     }
   }
 
-  
+
   editItemFroMButton(e) {
     if (!e) {
       // console.log('edit product from grid no data')
@@ -770,7 +777,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
         // this.assignItem(e)
       }
   }
-  
+
 
   editItemWithId(payment:any) {
     if(!payment) { return }

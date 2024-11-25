@@ -1,11 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuButtonProperties, MBMenuButtonsService, mb_MenuButton } from 'src/app/_services/system/mb-menu-buttons.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
 
 @Component({
   selector: 'function-group-button-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,ValueFieldsComponent,FormsModule,ReactiveFormsModule],
   templateUrl: './function-group-button-edit.component.html',
   styleUrls: ['./function-group-button-edit.component.scss']
 })

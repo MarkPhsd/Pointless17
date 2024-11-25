@@ -527,9 +527,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     EmployeeSelectPopUpComponent,
 
-    FunctionGroupListComponent,
-    FunctionGroupEditComponent,
-    FunctionGroupButtonEditComponent,
+    // FunctionGroupListComponent,
+    // FunctionGroupEditComponent,
+    // FunctionGroupButtonEditComponent,
+
     HTMLEditPrintingComponent,
 
     JobTypesEditComponent,
@@ -628,9 +629,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     NewOrderItemComponent,
     PosOrderListComponent,
     PosOperationsComponent,
-    PosPaymentsFilterComponent,
+
     PosPaymentComponent,
-    POSPaymentsComponent,
+
     POSOrderScheduleComponent,
     POSOrderServiceTypeComponent,
     POSOrderShippingAddressComponent,
@@ -716,10 +717,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     TaxListComponent,
     TaxRateListComponent,
     TierMenuComponent,
-    TierItemsComponent,
-    TierPriceLineComponent,
-    TierPricesComponent,
-    TiersWithPricesComponent,
+
+
+
+
 
     TriPosTransactionsComponent,
     TriposSettingsComponent,
@@ -762,6 +763,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       NgPipesModule,
       ReactiveFormsModule,
       RouterModule,
+
+
 
       SharedModule,
       SharedUtilsModule,

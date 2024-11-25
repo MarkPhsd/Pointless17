@@ -45,13 +45,10 @@
          <mat-icon>add</mat-icon>Add Button
       </button>
 
-
     </mat-card-subtitle>
     <mat-divider></mat-divider>
       <!-- class='drag-container'  -->
     <div class="grid-container">
-
-  
       <div  cdkDropList
             #accordionList="cdkDropList"
             (cdkDropListDropped)="dropAccordion($event)">
@@ -68,7 +65,6 @@
         </div>
 
       </div>
-      
 
       <div *ngIf="menuButton">
         <function-group-button-edit
