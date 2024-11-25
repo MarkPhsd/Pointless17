@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { of ,switchMap,BehaviorSubject, Observable, catchError } from 'rxjs';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
@@ -15,8 +15,20 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
 @Component({
   selector: 'app-fast-user-switch',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatLegacyButtonModule,
+    MatIconModule,
+    KeyPadComponent
+  ],
+  standalone: true,
   templateUrl: './fast-user-switch.component.html',
   styleUrls: ['./fast-user-switch.component.scss']
 })
@@ -192,15 +204,15 @@ export class FastUserSwitchComponent implements OnInit {
               if (data.voidOrder) { result = true  }
             }
 
-        
+
             if (result) {
-        
+
               this.dialogRefOption.close(true);
             } else {
-         
+
               this.dialogRefOption.close(false);
             }
-            
+
             return of(data)
           }
           if (!data) {
@@ -262,7 +274,7 @@ export class FastUserSwitchComponent implements OnInit {
     // if (user?.id) {
       const site = this.siteService.getAssignedSite()
       const device = localStorage.getItem('devicename')
-     
+
       if (!user) { return of(null)}
 
       return  this.balanceSheetService.getCurrentUserBalanceSheet(site, device ).pipe(switchMap(data => {
@@ -274,7 +286,7 @@ export class FastUserSwitchComponent implements OnInit {
             this.router.navigate(['/balance-sheet-edit']);
           } else  {
             this.router.navigate(['/app-main-menu']);
-          } 
+          }
           this.onCancel()
           return of(data)
         }
@@ -283,11 +295,11 @@ export class FastUserSwitchComponent implements OnInit {
         this.onCancel()
         return of(data)
       }))
- 
+
   }
 
   submitLogin(userName: string, password: string, employeeIDAllowed?: number) {
-  
+
     this.loginAction$ = this.userSwitchingService.login(userName, password, false).pipe(
       switchMap(data =>
         {
@@ -327,7 +339,7 @@ export class FastUserSwitchComponent implements OnInit {
 
             if (this.platformService.isApp()) {
               this.loginApp(user)
-      
+
               return this.checkBalanceSheet(user).pipe(switchMap(data => {
                 return of(data)
               }))
@@ -345,7 +357,7 @@ export class FastUserSwitchComponent implements OnInit {
                 }
               }
               if (!pass) {
-                this.userSwitchingService.processLogin(user, 'app-main-menu') 
+                this.userSwitchingService.processLogin(user, 'app-main-menu')
               }
               this.onCancel()
               return of('success')

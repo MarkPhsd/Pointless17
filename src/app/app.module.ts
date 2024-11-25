@@ -164,8 +164,6 @@ enableProdMode();
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-
   ],
 
     // G-6BNWKZ7VY8
@@ -181,7 +179,6 @@ enableProdMode();
     SharedPipesModule,
     UserIdleModule.forRoot({idle: 10, timeout: 100, ping: 120}),
     AppMaterialModule,
-
     BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,

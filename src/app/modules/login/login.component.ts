@@ -1,7 +1,7 @@
 ﻿import { CompanyService, AuthenticationService, AWSBucketService} from 'src/app/_services';
 import { ICompany, IPOSOrder, IUser}  from 'src/app/_interfaces';
 import { Component, Inject, Input, OnDestroy, OnInit, Optional, Renderer2, TemplateRef, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { fadeInAnimation } from 'src/app/_animations';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -17,11 +17,42 @@ import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.serv
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { PollingService } from 'src/app/_services/system/polling.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { CommonModule } from '@angular/common';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { ApiStatusDisplayComponent } from 'src/app/shared/widgets/api-status-display/api-status-display.component';
+import { KeyboardButtonComponent } from 'src/app/shared/widgets/keyboard-button/keyboard-button.component';
+import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
+import { EmployeesOnClockListComponent } from '../admin/employeeClockAdmin/employees-on-clock-list/employees-on-clock-list.component';
+import { FastUserSwitchComponent } from '../profile/fast-user-switch/fast-user-switch.component';
 
 @Component({
     selector   : 'login-dashboard',
-
-
+    standalone: true,
+    imports: [
+      CommonModule,
+      ReactiveFormsModule,
+      FormsModule,
+      MatLegacyCardModule,
+      MatLegacyFormFieldModule,
+      MatLegacyInputModule,
+      MatLegacyButtonModule,
+      MatDividerModule,
+      MatLegacyProgressSpinnerModule,
+      MatIconModule,
+      MatCheckboxModule,
+      LogoComponent,
+      ApiStatusDisplayComponent,
+      KeyboardButtonComponent,
+      FastUserSwitchComponent,
+      EmployeesOnClockListComponent
+    ],
     templateUrl: './login.component.html',
     styleUrls  : ['./login.component.scss'],
     animations : [ fadeInAnimation ],

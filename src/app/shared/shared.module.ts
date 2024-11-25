@@ -324,13 +324,13 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
 
     EmailEntryComponent,
     EmployeeClockListComponent,
-    EmployeesOnClockListComponent,
+
     EmployeeClockEditComponent,
     EmployeeClockFilterComponent,
     ExitLabelSelectionComponent,
 
     FacilitySearchSelectorComponent,
-    FastUserSwitchComponent,
+
     FilterComponent,
     FilterPipe,
 
@@ -348,7 +348,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     // ImageSwiperComponent,
     ImageContainerComponent,
     InstructionDirective,
-    KeyPadComponent,
+
     Label1by8Component,
     // LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
@@ -480,7 +480,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     KeyboardViewComponent,
     FreeDraggingDirective,
     FreeDraggingHandleDirective,
-    KeyboardButtonComponent,
+
     M22ResizableComponent,
     AggregateSelectorComponent,
     AndOrSelectorComponent,
@@ -546,6 +546,11 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     NgxDaterangepickerMd.forRoot(),
     AngularSignaturePadModule,
     SimpleTinyComponent,
+
+    KeyboardButtonComponent,
+    EmployeesOnClockListComponent,
+    FastUserSwitchComponent,
+    KeyPadComponent,
   ],
 
   exports: [
@@ -632,6 +637,8 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     ImageGalleryComponent,
     FacilitySearchSelectorComponent,
     FastUserSwitchComponent,
+    KeyPadComponent,
+
     FilterComponent,
     FooterComponent,
 
@@ -649,7 +656,7 @@ import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
     // ItemSalesCardComponent,
     // SalesItemsComponent,
     // ImageSwiperComponent,
-    KeyPadComponent,
+
     KeyboardComponent,
     KeyboardButtonComponent,
     KeyboardViewComponent,

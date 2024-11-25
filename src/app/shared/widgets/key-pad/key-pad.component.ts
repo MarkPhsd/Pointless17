@@ -1,12 +1,29 @@
 import { Component, OnInit,OnChanges, EventEmitter, Output, Input, ElementRef, ViewChild, ChangeDetectionStrategy, SimpleChange } from '@angular/core';
-import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { fromEvent, Subscription, of } from 'rxjs';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AutofocusDirective } from 'src/app/_directives/auto-focus-input.directive';
 
 // https://market.ionicframework.com/plugins/ion-numeric-keyboard
 @Component({
   selector: 'app-key-pad',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatLegacyFormFieldModule,
+    MatLegacyInputModule,
+    MatLegacyButtonModule,
+    MatIconModule,
+    SharedPipesModule
+  ],
   templateUrl: './key-pad.component.html',
   styleUrls: ['./key-pad.component.scss'],
 })
@@ -58,7 +75,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
       if (this.inputTypeValue.toLowerCase() === 'decimal')
       { this.showDoubleZero = true}
     }
-    
+
   }
 
   ngOnInit() {
@@ -154,7 +171,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this._showInput(this.showInput)
   }
 
-  _showInput(option: boolean) { 
+  _showInput(option: boolean) {
     if (option) {
       this.initForm()
       this.initSearchOption();

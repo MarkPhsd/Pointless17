@@ -3,9 +3,7 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 // import { QuicklinkStrategy, QuicklinkModule} from 'ngx-quicklink';
 import { DefaultComponent  } from './dashboard/default.component';
 import { SitesComponent } from './modules/sites/sites.component';
-import { LoginComponent} from './modules/login/login.component';
-import { ChangepasswordComponent } from './modules/login/changepassword/changepassword.component';
-import { ResetpasswordComponent } from './modules/login/resetpassword/resetpassword.component';
+
 import { ProducteditComponent } from './modules/admin/products/productedit/productedit.component';
 import { CategoriesComponent } from './modules/menu/categories/categories.component';
 import { WishlistComponent } from './modules/profile/wishlist/wishlist.component';
@@ -38,8 +36,14 @@ import { HammerCardComponent } from './shared/widgets/hammer-card/hammer-card.co
 import { TvPriceSpecialsComponent } from './modules/tv-menu/tv-price-specials/tv-price-specials.component';
 import { TierMenuComponent } from './modules/menu/tierMenu/tier-menu/tier-menu.component';
 import { PriceCategoriesComponent } from './modules/admin/products/pricing/price-categories/price-categories.component';
+
+import { LoginComponent} from './modules/login/login.component';
+import { ChangepasswordComponent } from './modules/login/changepassword/changepassword.component';
+import { ResetpasswordComponent } from './modules/login/resetpassword/resetpassword.component';
 import { RegisterAccountExistingUserWithTokenComponent } from './modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component';
 import { RegisterAccountMainComponent } from './modules/login/registration/register-account-main/register-account-main.component';
+
+
 import { CategoriesAlternateComponent } from './modules/menu/categories/categories-alternate/categories-alternate.component';
 import { BarcodeScannerComponent } from './shared/widgets/barcode-scanner/barcode-scanner.component';
 import { PackageListComponent } from './modules/admin/metrc/packages/package-list.component';
@@ -418,10 +422,33 @@ const routes: Routes = [
 
 
     //apply lazy loading
-    { path: 'changepassword', component: ChangepasswordComponent,data: {  title: 'Change Password',  animation: 'isLeft'}},
-    { path: 'resetpassword', component: ResetpasswordComponent,data: {  title: 'Reset Password',  animation: 'isLeft'}},
-    { path: 'register-user', component: RegisterAccountMainComponent, data: { animation: 'isLeft'}},
-    { path: 'register-token', component: RegisterAccountExistingUserWithTokenComponent, data: { animation: 'isLeft'}},
+    // { path: 'changepassword', component: ChangepasswordComponent,data: {  title: 'Change Password',  animation: 'isLeft'}},
+    // { path: 'resetpassword', component: ResetpasswordComponent,data: {  title: 'Reset Password',  animation: 'isLeft'}},
+    // { path: 'register-user', component: RegisterAccountMainComponent, data: { animation: 'isLeft'}},
+    // { path: 'register-token', component: RegisterAccountExistingUserWithTokenComponent, data: { animation: 'isLeft'}},
+
+    {
+      path: 'changepassword', // Path to lazy load the module
+      loadChildren: () =>
+        import('./modules/login/changepassword/changepassword.component').then((m) => m.ChangepasswordComponent),
+    },
+
+    {
+      path: 'resetpassword', // Path to lazy load the module
+      loadChildren: () =>
+        import('./modules/login/resetpassword/resetpassword.component').then((m) => m.ResetpasswordComponent),
+    },
+    {
+      path: 'register-user', // Path to lazy load the module
+      loadChildren: () =>
+        import('./modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component').then((m) => m.RegisterAccountExistingUserWithTokenComponent),
+    },
+    {
+      path: 'rregister-token', // Path to lazy load the module
+      loadChildren: () =>
+        import('./modules/login/registration/register-account-main/register-account-main.component').then((m) => m.RegisterAccountMainComponent),
+    },
+
 
 
     { path: 'api-setting', component: APISettingComponent , data: { title: 'API Setting',  animation: 'isLeft'}},

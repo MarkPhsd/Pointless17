@@ -1,4 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
 import { Observable, interval, of, startWith, switchMap } from 'rxjs';
 import { EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
 import { EmployeeClockService } from 'src/app/_services/employeeClock/employee-clock.service';
@@ -6,6 +10,13 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
   selector: 'employees-on-clock-list',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatLegacyCardModule,
+    MatIconModule,
+    MatLegacyButtonModule
+  ],
   templateUrl: './employees-on-clock-list.component.html',
   styleUrls: ['./employees-on-clock-list.component.scss']
 })
