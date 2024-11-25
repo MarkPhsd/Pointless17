@@ -1,10 +1,8 @@
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { APP_INITIALIZER, enableProdMode, NgModule } from '@angular/core';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { Printer } from '@ionic-native/printer/ngx';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule,   } from '@angular/platform-browser/animations';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { DefaultModule } from './dashboard/default.module';
@@ -25,7 +23,6 @@ import { RouteReuseStrategy } from '@angular/router';
 import { AuthenticationService } from './_services/system/authentication.service';
 import { SitesService } from './_services/reporting/sites.service';
 import { SystemManagerService } from './_services/system/system-manager.service';
-import { SettingsComponent } from './modules/admin/settings/settings.component';
 
 // const cookieConfig:NgcCookieConsentConfig = {
 //   cookie: {
@@ -155,8 +152,6 @@ enableProdMode();
     BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
-
-
   ],
 
   providers: [
