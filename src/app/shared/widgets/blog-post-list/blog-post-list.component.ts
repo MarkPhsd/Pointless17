@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, Input, OnChanges, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -6,9 +7,13 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BlogService, IBlog, ISearchBlogs } from 'src/app/_services/system/blog.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'blog-post-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule],
   templateUrl: './blog-post-list.component.html',
   styleUrls: ['./blog-post-list.component.scss'],
   // encapsulation: ViewEncapsulation.None,
@@ -54,11 +59,11 @@ export class BlogPostListComponent implements OnInit , OnChanges {
                private http            : HttpClient,
   ) {
     const group = this.route.snapshot.paramMap.get('group');
-    if (group) { 
+    if (group) {
       this.group = group;
     }
     const viewType  = this.route.snapshot.paramMap.get('viewType');
-    if (viewType) { 
+    if (viewType) {
       this.viewType = viewType;
     }
   }
@@ -69,17 +74,17 @@ export class BlogPostListComponent implements OnInit , OnChanges {
     // this.refreshList()
   }
 
-  ngOnChanges() { 
+  ngOnChanges() {
     if (this.platformService.isApp()) { return }
     this.loadStyles()
     this.refreshList()
   };
 
   getHomePageSettings() {
-    if (this.homePageSettings){ 
+    if (this.homePageSettings){
       return of(this.homePageSettings)
     }
-    if (this.uiSettings.homePageSetting){ 
+    if (this.uiSettings.homePageSetting){
       this.homePageSettings = this.uiSettings.homePageSetting
       return of(this.uiSettings.homePageSetting)
     }
@@ -102,8 +107,8 @@ export class BlogPostListComponent implements OnInit , OnChanges {
     search.enabled = true;
     const homePage$ = this.getHomePageSettings();
     // console.log('refresh list')
-    this.blogs$ = 
-        homePage$.pipe(switchMap( data => { 
+    this.blogs$ =
+        homePage$.pipe(switchMap( data => {
           return this.blogService.searchBlogs( site, search )
         })).pipe(
           switchMap( data => {
@@ -117,7 +122,7 @@ export class BlogPostListComponent implements OnInit , OnChanges {
             console.log(err)
             return of(err)
           })
-        ).pipe(switchMap(data => { 
+        ).pipe(switchMap(data => {
             this.obs$ = []
             if (!data || !data) {
               return of('no menu')
@@ -139,7 +144,7 @@ export class BlogPostListComponent implements OnInit , OnChanges {
 
 
 
-  ngDestroy() { 
+  ngDestroy() {
     this.styleElement.nativeElement.remove();
   }
 
@@ -147,10 +152,10 @@ export class BlogPostListComponent implements OnInit , OnChanges {
     const  styles$ = this.getAssestsStyles()
 
     this.getAssestsStyles().subscribe(
-      // data => console.log('styles file', data), 
+      // data => console.log('styles file', data),
     );
 
-    this.styles$ = styles$.pipe(switchMap( data => { 
+    this.styles$ = styles$.pipe(switchMap( data => {
         if (!data) {return }
           const styles    = data;
           const style = document.createElement('styleElement'); // is a node
@@ -158,7 +163,7 @@ export class BlogPostListComponent implements OnInit , OnChanges {
           document.body.appendChild(style);
           return of('');
         }
-      ),catchError(err => { 
+      ),catchError(err => {
         console.log(err)
         return of('')
       })
@@ -166,7 +171,7 @@ export class BlogPostListComponent implements OnInit , OnChanges {
   }
 
   //    const result = await this.httpClient.get('assets/app-config.json').toPromise() //;( result => {
-  getAssestsStyles(): Observable<any> { 
+  getAssestsStyles(): Observable<any> {
     const data  =  this.http.get('assets/wp/styles.css', {responseType: 'text'})
     return data
   }

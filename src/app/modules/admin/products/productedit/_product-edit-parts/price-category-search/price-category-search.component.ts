@@ -7,9 +7,16 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@ang
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Subject ,fromEvent } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-price-category-search',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './price-category-search.component.html',
   styleUrls: ['./price-category-search.component.scss'],
 })

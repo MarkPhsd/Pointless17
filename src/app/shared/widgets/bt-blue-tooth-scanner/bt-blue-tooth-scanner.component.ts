@@ -6,11 +6,18 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 // import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { Observable, Subscription } from 'rxjs';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 const { BluetoothSerial } = Plugins;
 
 @
  Component({
   selector: 'app-bt-blue-tooth-scanner',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './bt-blue-tooth-scanner.component.html',
   styleUrls: ['./bt-blue-tooth-scanner.component.scss']
 })

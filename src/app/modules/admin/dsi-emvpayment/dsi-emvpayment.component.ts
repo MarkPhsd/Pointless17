@@ -1,9 +1,16 @@
 import { Component } from '@angular/core';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-dsi-emvpayment',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './dsi-emvpayment.component.html',
   styleUrls: ['./dsi-emvpayment.component.scss']
 })

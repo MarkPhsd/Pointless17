@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
-import { NgSignaturePadOptions, SignaturePadComponent } from '@almothafar/angular-signature-pad';
+import { AngularSignaturePadModule, NgSignaturePadOptions, SignaturePadComponent } from '@almothafar/angular-signature-pad';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { OrdersService } from 'src/app/_services';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
@@ -8,11 +8,14 @@ import { IPOSOrder, JSONOrder } from 'src/app/_interfaces';
 import { _MatListItemGraphicBase } from '@angular/material/list';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import * as Hammer from 'hammerjs';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
 @Component({
   selector: 'app-signature-pad',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,AngularSignaturePadModule],
   templateUrl: './signature-pad.component.html',
   styleUrls: ['./signature-pad.component.scss']
 })

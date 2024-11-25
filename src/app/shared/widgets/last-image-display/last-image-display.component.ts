@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component,  OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
@@ -7,9 +8,15 @@ import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services'
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'last-image-display',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './last-image-display.component.html',
   styleUrls: ['./last-image-display.component.scss']
 })

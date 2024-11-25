@@ -1,15 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { AgGridModule } from 'ag-grid-angular';
 import { GridApi, Optional } from 'ag-grid-community';
-import { of } from 'rxjs';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-// import { MenuItem } from 'electron';
-// import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-// import { ReportItemSalesOptimized } from 'src/app/_services/reporting/reporting-items-sales.service';
-// import { PaymentSummary } from 'src/app/_services/reporting/sales-payments.service';
 
+import { AppMaterialModule } from 'src/app/app-material.module';
 @Component({
   selector: 'dynamic-ag-grid',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,AgGridModule],
   templateUrl: './dynamic-ag-grid.component.html',
   styleUrls: ['./dynamic-ag-grid.component.scss']
 })
@@ -23,7 +22,7 @@ export class DynamicAgGridComponent implements  AfterViewInit {
   private gridApi      : GridApi;
   get gridAPI(): GridApi {  return this.gridApi;  }
   openingProduct: boolean;
-  
+
   buttonName: string;
   columnDefs = [];
 
@@ -91,9 +90,9 @@ export class DynamicAgGridComponent implements  AfterViewInit {
           colDefs.push({ field: key });
         }
       });
-      
 
-    } else { 
+
+    } else {
       keys.forEach((key) => colDefs.push({
         field: key
       }));

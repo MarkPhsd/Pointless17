@@ -22,6 +22,14 @@ import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { _getOptionScrollPosition } from '@angular/material/core';
 import { SystemService } from 'src/app/_services/system/system.service';
+import { DCAPResponseMessageComponent } from 'src/app/modules/dsiEMV/Dcap/dcaptransaction/dcapresponse-message/dcapresponse-message.component';
+import { PaymentBalanceComponent } from 'src/app/modules/posorders/payment-balance/payment-balance.component';
+import { TipEntryComponent } from 'src/app/modules/posorders/components/tip-entry/tip-entry.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
 
 // import  * from '@capacitor/capacitor-android-foreground-service';
 // import '@anuradev/capacitor-background-mode';
@@ -37,6 +45,11 @@ import { SystemService } from 'src/app/_services/system/system.service';
 
 @Component({
   selector: 'pointlesscc-dsi-emvandroid',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    DCAPResponseMessageComponent,PaymentBalanceComponent,TipEntryComponent,
+    LogoComponent,
+  SharedPipesModule],
   templateUrl: './dsi-emvandroid.component.html',
   styleUrls: ['./dsi-emvandroid.component.scss']
 })
@@ -120,7 +133,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
 
   initPOSDevice() {
     this.posDevice$      = this.uISettingsService.posDevice$.pipe(switchMap(data => {
- 
+
       if (!data)  {
         const item = localStorage.getItem('devicename')
         return this.uISettingsService.getPOSDevice(item).pipe(switchMap(data => {
@@ -460,9 +473,9 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       if (response) {
         const result =   this.readResult(response, "AdjustByRecordNo");
         console.log('result', result.success, result.message)
-        if (result?.message === 'continue') { 
+        if (result?.message === 'continue') {
           //is probably getting a in process result;
-          return 
+          return
         }
 
         this.cancelResponse = false;
@@ -487,21 +500,21 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     try {
       let responseSuccess = '';
       const options = {};
-  
+
       if (!this.cancelResponse && !this.isComponentActive) {
         console.log('clear interval')
         clearInterval(timer);
         return;
       }
       const paymentResponse = await dsiemvandroid.getResponse(options);
-     
+
       if (paymentResponse && (paymentResponse.value !== '' )) {
 
         const response = this.dcapMethodsService.convertToObject(paymentResponse.value);
 
-   
 
-        if (response) { 
+
+        if (response) {
           const result = this.readResult(response, tranType);
           if (result?.message === 'continue') {
             return
@@ -512,7 +525,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
         this.processing = false;
         responseSuccess = 'complete';
         this.instructions = ''
-     
+
         if (response) {
             const result = this.readResult(response, tranType);
             if (result.success) {
@@ -527,7 +540,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
             }
 
 
-        } else { 
+        } else {
             clearInterval(timer);
             await dsiemvandroid.clearResponse(options);
         }
@@ -551,7 +564,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
         this.instructions = 'Please tap or insert card'
       }
 
-      
+
       if (options) {
         this.logTransaction(options, 'Request')
         const item = await dsiemvandroid.processSale(options);
@@ -569,7 +582,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     item.UseForms = ""
     item.tranCode    = "PrintReceipt";
     let printData    = this.responseData?.PrintData;
-    if (this.responseData?.PrintData) { 
+    if (this.responseData?.PrintData) {
 
     }
     const printInfo = this.mergePrintDataToTransaction(printData, item)
@@ -581,12 +594,12 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     let item         = this.initTransaction()
     item.UseForms    = ""
     item.tranCode    = "PrintReceipt";
-    if (this.responseData?.PrintData) { 
+    if (this.responseData?.PrintData) {
       let printData    = this.responseData?.PrintData;
       const printInfo = this.mergePrintDataToTransaction(printData, item)
       const printResult  = await dsiemvandroid.bringToFront(printInfo)
-    } else { 
-      
+    } else {
+
       await dsiemvandroid.bringToFront({})
     }
   }
@@ -654,8 +667,8 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
           this.textResponse = (obj?.RStream?.CmdResponse?.TextResponse);
           this.tranResponse =  obj?.RStream?.TranResponse as TranResponse;
         }
-        
-      
+
+
         console.log('Response',  this.textResponse )
 
         if (this.cmdResponse) {
@@ -706,7 +719,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
   }
 
   async processDcapTip(amount) {
-      
+
       if (this.processing) { return }
       this.processing = true
 
@@ -714,17 +727,17 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       const tran = this.initTipTransaction(amount);
 
       console.log('processDcapTip' ,tran);
-    
+
       if (tran) {
-        
+
         this.logTransaction(tran, 'Request')
         await dsiemvandroid.adjustByRecordNo(tran)
         this.checkResponse_Transaction('AdjustByRecordNo');
-       
+
       }
   }
 
-  logTransaction(tran, requestResponse) { 
+  logTransaction(tran, requestResponse) {
     console.log('log ', tran, requestResponse)
     let log = {} as any;
     log.messageString = JSON.stringify(tran);
@@ -748,7 +761,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       item.TranResponse = stream?.TranResponse  as any;
       this.payment.transactionData = JSON.stringify(item)
       let payment = this.payment
-      
+
       //the amount paid and received that have been returned include the total amount
       //so we have to remove that from the total amount
       payment.amountPaid = payment.amountPaid  - payment.tipAmount
@@ -771,11 +784,11 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     return this.orderService.getOrder(site, this.order.id.toString(), false).pipe(switchMap(data => {
          this.orderMethodsService.updateOrder(data)
         return of(data)
-      } 
+      }
     ))
   }
 
-  clearResponse() { 
+  clearResponse() {
     this.errorMessage =null
     this.message =""
     this.resultMessage =""
@@ -840,7 +853,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
     tran.authCode   = this.payment?.preAuth;
     tran.recordNo   = this.payment?.ccNumber;
     tran.RecordNo   = this.payment?.ccNumber;
-    
+
     tran.procesData = this.payment?.processData
     if (!this.payment.acqRefData) {
       try {
@@ -878,7 +891,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       tran.RecordNo   = this.payment?.recordNo;
     }
     tran.ProcessData = this.payment?.processData;
- 
+
     return tran
   }
 
@@ -969,7 +982,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
       this.saleComplete = item?.success;
     }
 
-    
+
     if (tranType == 'EMVRESET' || tranType == 'RESET' ) {
       this.saleComplete = item?.success;
     }
@@ -1055,7 +1068,7 @@ export class DsiEMVAndroidComponent implements OnInit, OnDestroy {
                            history: order.history} as any;
         const site = this.siteService.getAssignedSite()
         this.printAction$ =  this.paymentService.remotePrintMessage(site, remotePrint).pipe(switchMap(data => {
-         
+
           if (data) {
             this.siteService.notify('Print job sent', 'Close', 3000, 'green')
           } else {

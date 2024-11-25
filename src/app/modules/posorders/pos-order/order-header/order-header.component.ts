@@ -1,6 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, Input , OnChanges, OnInit, TemplateRef, ViewChild, OnDestroy, ElementRef} from '@angular/core';
 import { Router } from '@angular/router';
+import { QRCodeModule } from 'angularx-qrcode';
 import { of, switchMap, Observable, Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
@@ -18,10 +20,22 @@ import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'sr
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { FunctionButtonsListComponent } from 'src/app/modules/admin/settings/function-groups/function-buttons-list/function-buttons-list.component';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
+import { SplitEntrySelectorComponent } from '../split-entry-selector/split-entry-selector.component';
+import { ValueFromListSelectorComponent } from 'src/app/shared/widgets/value-from-list-selector/value-from-list-selector.component';
+import { CoachMarksButtonComponent } from 'src/app/shared/widgets/coach-marks-button/coach-marks-button.component';
 
 @Component({
   selector: 'app-order-header',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    QRCodeModule,FunctionButtonsListComponent,
+    SplitEntrySelectorComponent,ValueFromListSelectorComponent,
+    CoachMarksButtonComponent,
+  ],
   templateUrl: './order-header.component.html',
   styleUrls: ['./order-header.component.scss']
 })

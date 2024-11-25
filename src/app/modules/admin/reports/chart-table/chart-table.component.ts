@@ -7,9 +7,17 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { ISalesPayments, ISite }  from 'src/app/_interfaces';
 import { Subject,Observable } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-widget-chart-table',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    HighchartsChartModule,
+  ],
   templateUrl: './chart-table.component.html',
   styleUrls: ['./chart-table.component.scss'],
   animations: [

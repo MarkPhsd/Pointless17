@@ -1,7 +1,8 @@
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges,  SimpleChanges, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
+import { HighchartsChartModule } from 'highcharts-angular';
 import HC_exporting from 'highcharts/modules/exporting';
 import { BehaviorSubject, Observable, Subject, Subscription, finalize, forkJoin, of, switchMap, take } from 'rxjs';
 import { ISalesPayments, ISite }  from 'src/app/_interfaces';
@@ -11,6 +12,8 @@ import { IPaymentSalesSearchModel, PaymentSummary, SalesPaymentsService } from '
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 export interface ProductSale {
   name: string;
   value: number;
@@ -18,6 +21,10 @@ export interface ProductSale {
 }
 @Component({
   selector: 'app-widget-card',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    HighchartsChartModule,
+  ],
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })

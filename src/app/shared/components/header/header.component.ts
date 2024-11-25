@@ -9,7 +9,7 @@ import { MatLegacySlideToggle as MatSlideToggle } from '@angular/material/legacy
 import { catchError, Observable, of, Subject, Subscription,switchMap   } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SiteSelectorComponent } from '../../widgets/site-selector/site-selector.component';
-import { Location} from '@angular/common';
+import { CommonModule, Location} from '@angular/common';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ScaleInfo, ScaleSetup } from 'src/app/_services/system/scale-service.service';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
@@ -27,6 +27,23 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { NavigationHistoryService } from 'src/app/_services/system/navigation-history.service';
 import { TtsService } from 'src/app/_services/system/tts-service.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { CoachMarksButtonComponent } from '../../widgets/coach-marks-button/coach-marks-button.component';
+import { ListProductSearchInputComponent } from '../../widgets/search-list-selectors/list-product-search-input/list-product-search-input.component';
+import { CartButtonComponent } from '../../widgets/cart-button/cart-button.component';
+import { LogoComponent } from '../../widgets/logo/logo.component';
+import { ScaleValueViewComponent } from '../../widgets/scale-value-view/scale-value-view.component';
+import { SplitEntrySelectorComponent } from 'src/app/modules/posorders/pos-order/split-entry-selector/split-entry-selector.component';
+import { ApiStatusDisplayComponent } from '../../widgets/api-status-display/api-status-display.component';
+import { CompanyInfoHeaderComponent } from '../../widgets/company-info-header/company-info-header.component';
+import { KeyboardButtonComponent } from '../../widgets/keyboard-button/keyboard-button.component';
+import { ClockInOutComponent } from '../../widgets/clock-in-out/clock-in-out.component';
+import { AppWizardProgressButtonComponent } from '../../widgets/app-wizard-progress-button/app-wizard-progress-button.component';
+import { RequestMessageComponent } from 'src/app/modules/admin/profiles/request-messages/request-message/request-message.component';
+import { RequestMessagesComponent } from 'src/app/modules/admin/profiles/request-messages/request-messages.component';
+import { ToggleThemeComponent } from '../../widgets/toggle-theme/toggle-theme.component';
+import { PosCheckOutButtonsComponent } from 'src/app/modules/posorders/pos-order/pos-check-out-buttons/pos-check-out-buttons.component';
 
 interface IIsOnline {
   result: string;
@@ -34,6 +51,15 @@ interface IIsOnline {
 
 @Component({
   selector: 'app-header',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    CoachMarksButtonComponent,ListProductSearchInputComponent,CartButtonComponent,
+    LogoComponent,ScaleValueViewComponent,SplitEntrySelectorComponent,ApiStatusDisplayComponent,
+    CompanyInfoHeaderComponent,KeyboardButtonComponent,ClockInOutComponent,
+    AppWizardProgressButtonComponent,RequestMessageComponent,RequestMessagesComponent,
+    ToggleThemeComponent,PosCheckOutButtonsComponent,
+
+  ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })

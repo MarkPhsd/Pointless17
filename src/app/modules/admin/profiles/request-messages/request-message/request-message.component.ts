@@ -1,8 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Output,EventEmitter,Input } from '@angular/core';
 import { IRequestMessage } from 'src/app/_services/system/request-message.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-request-message',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,],
   templateUrl: './request-message.component.html',
   styleUrls: ['./request-message.component.scss']
 })

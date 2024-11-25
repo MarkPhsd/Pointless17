@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit,Input, OnDestroy } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -10,9 +10,16 @@ import { IReportingSearchModel, IReportItemSaleSummary, ReportingItemsSalesServi
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { CardComponent } from '../card/card.component';
 
 @Component({
   selector: 'app-card-dashboard',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+      CardComponent
+  ],
   templateUrl: './card-dashboard.component.html',
   styleUrls: ['./card-dashboard.component.scss']
 })

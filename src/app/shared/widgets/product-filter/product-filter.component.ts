@@ -1,12 +1,22 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import {  UntypedFormGroup } from '@angular/forms';
+import {  FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import {  BehaviorSubject, Observable, Subscription, of, switchMap } from 'rxjs';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { AWSBucketService, AuthenticationService, MenuService } from 'src/app/_services';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { CategoryMenuSelectorComponent } from '../category-menu-selector/category-menu-selector.component';
+import { CategorySelectListFilterComponent } from '../category-select-list-filter/category-select-list-filter.component';
+import { OptionsSelectFilterComponent } from '../options-select-filter/options-select-filter.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
 @Component({
   selector: 'app-product-filter',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    CategoryMenuSelectorComponent,CategorySelectListFilterComponent,
+    OptionsSelectFilterComponent,
+  ],
   templateUrl: './product-filter.component.html',
   styleUrls: ['./product-filter.component.scss']
 })
@@ -48,7 +58,7 @@ export class ProductFilterComponent implements OnInit {
   phoneDevice: boolean;
   inputForm: UntypedFormGroup;
   uiSetting: UIHomePageSettings;
-  
+
   // private _posPaymentStepSelection     = new BehaviorSubject<IPaymentMethod>(null);
   // public posPaymentStepSelection$      = this._posPaymentStepSelection.asObservable();
 
@@ -81,7 +91,7 @@ export class ProductFilterComponent implements OnInit {
 
   ngOnInit(): void {
     const device = this.authService.deviceInfo
-    if (device) { 
+    if (device) {
       this.phoneDevice = device.phoneDevice;
     }
 
@@ -102,7 +112,7 @@ export class ProductFilterComponent implements OnInit {
 
   initSearchModel() {
     if (!this.menuService.searchModel) {
- 
+
     }
   }
 
@@ -114,11 +124,11 @@ export class ProductFilterComponent implements OnInit {
     this._reset.next(true)
   }
 
-  hideToolbar() { 
+  hideToolbar() {
     this.uiToolBarService.hidetoolBars()
   }
 
-  get accordionMenuView() { 
+  get accordionMenuView() {
     if (( this.uiSetting && this.uiSetting.accordionMenu )) {
       return this.accordionMenu
     }

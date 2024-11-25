@@ -13,9 +13,18 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { OrderFilterPanelComponent } from 'src/app/modules/orders/order-filter-panel/order-filter-panel.component';
 import { PosOrderItemsComponent } from 'src/app/modules/posorders/pos-order/pos-order-items/pos-order-items.component';
+import { CartButtonComponent } from '../../widgets/cart-button/cart-button.component';
+import { DSIEMVAndroidPayBtnComponent } from 'src/app/modules/posorders/pos-payment/dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-footer',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    CartButtonComponent,DSIEMVAndroidPayBtnComponent,
+  ],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
@@ -237,7 +246,7 @@ export class FooterComponent implements OnInit, OnDestroy {
       return this.roundToPrecision( this.order?.balanceRemaining * (1 + +ui.dcapDualPriceValue) , 5)
     }
 
-    return  this.order?.creditBalanceRemaining 
+    return  this.order?.creditBalanceRemaining
   }
 
 

@@ -20,10 +20,22 @@ import { MatLegacyMenuTrigger as MatMenuTrigger } from '@angular/material/legacy
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { ProductFilterComponent } from '../../widgets/product-filter/product-filter.component';
+import { SearchDebounceInputComponent } from '../../widgets/search-debounce-input/search-debounce-input.component';
+import { PriceScheduleMenuListComponent } from 'src/app/modules/priceSchedule/price-schedule-menu-list/price-schedule-menu-list.component';
+import { MatToggleSelectorComponent } from '../../widgets/mat-toggle-selector/mat-toggle-selector.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 const { Keyboard } = Plugins;
 
 @Component({
   selector:    'app-menu-search-bar',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    ProductFilterComponent,SearchDebounceInputComponent,PriceScheduleMenuListComponent,
+    MatToggleSelectorComponent
+  ],
   templateUrl: `./menu-search-bar.component.html`,
   styleUrls: ['./menu-search-bar.component.scss'],
 })
@@ -342,7 +354,7 @@ constructor(
     this.departments$ = null;
 
     const site           = this.siteService.getAssignedSite()
-    
+
     this.categories$    = this.menuService.getListOfCategoriesV2(site, false).pipe(switchMap(data => {
       let result = data.filter(data => { return data.active} )
         return of(result)

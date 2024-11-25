@@ -4,7 +4,7 @@ import { Component,Output,OnInit,
           Input,
           } from '@angular/core';
 import { MenuService, OrdersService } from 'src/app/_services';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap, map, concatMap } from 'rxjs/operators';
 import { Subject ,fromEvent, Subscription, of, forkJoin, ReplaySubject } from 'rxjs';
 import { IPOSOrder,  } from 'src/app/_interfaces';
@@ -17,11 +17,18 @@ import { Observable,  } from 'rxjs';
 
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { setTimeout } from 'timers/promises';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 // https://github.com/rednez/angular-user-idle
 const { Keyboard } = Plugins;
 
 @Component({
   selector: 'list-product-search-input',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './list-product-search-input.component.html',
   styleUrls: ['./list-product-search-input.component.scss']
 })

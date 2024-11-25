@@ -1,5 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { QRCodeModule } from 'angularx-qrcode';
 import { Subscription, Observable, switchMap, of } from 'rxjs';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
@@ -10,9 +12,20 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
+import { PaymentBalanceComponent } from '../../posorders/payment-balance/payment-balance.component';
+import { PosOrderItemsComponent } from '../../posorders/pos-order/pos-order-items/pos-order-items.component';
 
 @Component({
   selector: 'qr-order',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    QRCodeModule,LogoComponent,
+    PaymentBalanceComponent,
+    PosOrderItemsComponent,
+  ],
   templateUrl: './qrcode-table.component.html',
   styleUrls: ['./qrcode-table.component.scss']
 })

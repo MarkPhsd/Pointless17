@@ -1,12 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input , EventEmitter, Output} from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { IPriceSchedule, ClientType, DateFrame, DiscountInfo,
   TimeFrame, WeekDay
 } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-week-day-selection',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './week-day-selection.component.html',
   styleUrls: ['./week-day-selection.component.scss']
 })

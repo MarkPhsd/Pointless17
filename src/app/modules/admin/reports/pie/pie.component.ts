@@ -1,8 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input} from '@angular/core';
 import * as Highcharts from 'highcharts';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-widget-pie',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+  HighchartsChartModule,
+  ],
   templateUrl: './pie.component.html',
   styleUrls: ['./pie.component.scss']
 })

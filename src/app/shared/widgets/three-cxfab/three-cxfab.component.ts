@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { Renderer2, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { UIHomePageSettings } from 'src/app/_services/system/settings/uisettings.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { of, switchMap,Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-three-cxfab',
+  standalone: true,
+  imports: [CommonModule,SharedPipesModule,AppMaterialModule],
   templateUrl: './three-cxfab.component.html', // `<call-us-selector phonesystem-url="{{server}}" party="{{party}}">  </call-us-selector>`,
   styleUrls: ['./three-cxfab.component.scss']
 })

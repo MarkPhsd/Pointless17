@@ -10,9 +10,16 @@ import { switchMap } from 'rxjs/operators';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-menu-minimal',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './menu-minimal.component.html',
   styleUrls: ['./menu-minimal.component.scss'],
   animations: [

@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import {  Subject} from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 // https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6
 //we are only using one section now.
@@ -14,6 +17,10 @@ import {  Subject} from 'rxjs';
 
 @Component({
   selector: 'app-category-scroll',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './category-scroll.component.html',
   styleUrls: ['./category-scroll.component.scss']
 })

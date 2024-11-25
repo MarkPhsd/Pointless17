@@ -1,4 +1,5 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
 import { MatLegacyAutocomplete as MatAutocomplete, MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent } from '@angular/material/legacy-autocomplete';
@@ -7,11 +8,19 @@ import { IProduct, ISite } from 'src/app/_interfaces';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { IItemBasic, MenuService } from 'src/app/_services';
 import { MatricesService, IMatrix } from 'src/app/_services/menu/matrices.service';
-import { MetaTagsService } from 'src/app/_services/menu/meta-tags.service';
+
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
 
 @Component({
   selector: 'app-item-Associations',
+
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    ProductSearchSelectorComponent
+  ],
   templateUrl: './itemassociations.component.html',
   styleUrls: ['./itemassociations.component.scss']
 })

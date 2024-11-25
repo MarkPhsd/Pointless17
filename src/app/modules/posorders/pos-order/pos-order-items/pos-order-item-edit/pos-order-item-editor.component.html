@@ -5,7 +5,7 @@
     <div class="header-container" >
       <div>
         <h4>
-          <div *ngIf="item.id != 0">
+          <div *ngIf="item.id !== 0">
             Edit   {{ item?.productName  }}  {{ item?.serialCode }} <br>
             {{actionInstructions}}
           </div>
@@ -31,12 +31,12 @@
   </mat-card-title>
 
   <mat-card-content>
-    
+
     <div class="ps-grid-items ">
-      <div> 
+      <div>
         Ordered: {{item?.orderDate | date: 'short'}}
       </div>
-      <div> 
+      <div>
         Completed: {{item?.completionDate | date: 'short'}}
       </div>
     </div>
@@ -80,7 +80,7 @@
 <mat-card *ngIf="action === 'billOnHold'">
   <mat-card-subtitle>Received Items</mat-card-subtitle>
   <mat-card-content>
-    
+
     <div class="ps-grid-items " *ngFor="let item of orderSubItems">
       <div>QTY: {{item?.quantity}}</div>
       <div>Date: {{item?.receivedDate | date: 'short'}}</div>

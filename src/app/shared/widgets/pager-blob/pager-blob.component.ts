@@ -1,7 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ElementRef, Renderer2 } from '@angular/core';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'pager-blob',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './pager-blob.component.html',
   styleUrls: ['./pager-blob.component.scss']
 })
@@ -47,8 +54,6 @@ export class PagerBlobComponent implements OnInit {
   @Output() update: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild('point') point: ElementRef;
-
-
   constructor(private cd: ChangeDetectorRef, private rend: Renderer2) { }
 
   ngOnInit() { }

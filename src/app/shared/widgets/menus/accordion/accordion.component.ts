@@ -1,9 +1,16 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AccordionMenu, accordionConfig } from 'src/app/_interfaces/index';
 import { Observable, } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-accordion',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './accordion.component.html',
   styleUrls: ['./accordion.component.scss']
 })

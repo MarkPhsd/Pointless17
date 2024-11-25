@@ -8,8 +8,18 @@ import { MenusService } from 'src/app/_services/system/menus.service';
 import { AccordionMenu, IClientTable, ISite, IUser, MenuGroup, SubMenu } from 'src/app/_interfaces';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { AWSBucketService } from 'src/app/_services';
+import { SiteFooterComponent } from '../site-footer/site-footer.component';
+import { ToggleThemeComponent } from '../../widgets/toggle-theme/toggle-theme.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { RequestMessageComponent } from 'src/app/modules/admin/profiles/request-messages/request-message/request-message.component';
+import { MenuTinyComponent } from '../../widgets/menus/menu-tiny/menu-tiny.component';
 @Component({
   selector: 'user-bar',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SiteFooterComponent,
+    MenuTinyComponent,
+    ToggleThemeComponent,RequestMessageComponent],
   templateUrl: './user-bar.component.html',
   styleUrls: ['./user-bar.component.scss']
 })
@@ -39,10 +49,10 @@ export class UserBarComponent implements OnInit {
     this.bucketName =  await this.awsBucketService.awsBucket();
     const siteAss = this.siteService.getAssignedSite()
     this.site = siteAss;
-    this.siteService.getSite(siteAss.id).subscribe(data => { 
+    this.siteService.getSite(siteAss.id).subscribe(data => {
       this.site = data;
     })
-   
+
     this.user$ = this.authenticationService.user$.pipe(
       switchMap(data => {
           // console.log('userbar update user', data)

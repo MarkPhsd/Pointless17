@@ -8,8 +8,17 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'part-usage-graph',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    HighchartsChartModule
+  ],
+
   templateUrl: './part-usage-graph.component.html',
   styleUrls: ['./part-usage-graph.component.scss']
 })

@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, Optional } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Observable,  of, switchMap } from 'rxjs';
 import { IUser, UserPreferences } from 'src/app/_interfaces';
@@ -7,9 +8,17 @@ import { AuthenticationService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ToggleThemeComponent } from 'src/app/shared/widgets/toggle-theme/toggle-theme.component';
+import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
 
 @Component({
   selector: 'app-user-preferences',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
+  ToggleThemeComponent,ValueFieldsComponent,
+  SharedPipesModule],
   templateUrl: './user-preferences.component.html',
   styleUrls: ['./user-preferences.component.scss']
 })
@@ -71,7 +80,7 @@ export class UserPreferencesComponent implements OnInit {
       const formValue = data;
       if (this.headerColor) {   data.headerColor = this.headerColor  }
       let pref =     this.user.userPreferences = formValue;
-      
+
       this.action$ = this.savePreferences(data, this.userAuthorizationService?.user?.id).pipe(switchMap(formValue => {
         pref.firstTime_FilterOrderInstruction = false;
         this.user.preferences = pref;

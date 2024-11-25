@@ -1,19 +1,25 @@
 import { Component, OnInit, ViewChild, Inject} from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, switchMap} from 'rxjs';
-import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSort } from '@angular/material/sort';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { AdjustmentReason, AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
-import { CurrencyPipe } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/_services';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-adjustment-note',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './adjustment-note.component.html',
   styleUrls: ['./adjustment-note.component.scss']
 })
@@ -80,15 +86,15 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
       inv.adjustmentNote        =  note ;
       inv.adjustmentType        =  adjustMent;
 
-      if (this.user) { 
+      if (this.user) {
         inv.employeeName  = this.user.username
         inv.employeeID    = this.user.id;
-      } 
-      
+      }
+
       inv.packageCountRemaining =  pacakgeCount
       if (inv.unitMulitplier == 0) { inv.unitMulitplier = 1}
       inv.baseQuantityRemaining = inv.packageCountRemaining * inv.unitMulitplier;
- 
+
       const d = new Date();
       inv.adjustmentDate = d.toISOString()
 

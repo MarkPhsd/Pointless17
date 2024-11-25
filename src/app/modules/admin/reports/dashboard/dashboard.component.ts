@@ -5,13 +5,13 @@ import { ReportingService} from 'src/app/_services/reporting/reporting.service';
 import { ISite,Item,IUser }  from 'src/app/_interfaces';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { DatePipe } from '@angular/common'
+import { CommonModule, DatePipe } from '@angular/common'
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { IDeviceInfo, MenuService, OrdersService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { IPaymentSalesSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
@@ -20,9 +20,40 @@ import { BalanceSheetService } from 'src/app/_services/transactions/balance-shee
 import { TransferDataService } from 'src/app/_services/transactions/transfer-data.service';
 import dayjs from 'dayjs/esm';
 import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
+import { MatSelectComponent } from 'src/app/shared/widgets/mat-select/mat-select.component';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { DynamicAgGridComponent } from 'src/app/shared/widgets/dynamic-ag-grid/dynamic-ag-grid.component';
+import { SalesTaxReportComponent } from '../sales-tax-report/sales-tax-report.component';
+import { PaymentReportCardComponent } from '../payment-report/payment-report-card/payment-report-card.component';
+import { PaymentReportComponent } from '../payment-report/payment-report.component';
+import { ItemSalesCardComponent } from '../item-sales-card/item-sales-card.component';
+import { MetrcSummaryComponent } from '../metrc-summary/metrc-summary.component';
+import { CardComponent } from '../card/card.component';
+import { TimeChartReportComponent } from '../time-chart-report/time-chart-report.component';
+import { ProductChartReportComponent } from '../product-chart-report/product-chart-report.component';
+import { EmployeeClockListComponent } from '../../employeeClockAdmin/employee-clock-list/employee-clock-list.component';
+import { AuditPaymentComponent } from '../item-sales-card/audit-payment/audit-payment.component';
+import { BalanceSheetReportComponent } from '../balance-sheet-report/balance-sheet-report.component';
 
 @Component({
   selector: 'app-dashboard',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  MatSelectComponent,DynamicAgGridComponent,
+  SalesTaxReportComponent,
+  PaymentReportComponent,
+  ItemSalesCardComponent,
+  MetrcSummaryComponent,
+  CardComponent,
+  TimeChartReportComponent,
+  ProductChartReportComponent,
+  EmployeeClockListComponent,
+  AuditPaymentComponent,
+  BalanceSheetReportComponent,
+  SharedPipesModule],
+
+
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })

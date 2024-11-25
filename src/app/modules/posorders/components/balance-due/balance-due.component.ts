@@ -1,5 +1,5 @@
 import { Component, OnInit,Input, Inject, ChangeDetectorRef } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { interval, Observable, of,Subject,Subscription, timer } from 'rxjs';
@@ -29,11 +29,23 @@ import { DSIEMVTransactionsService, PrintData, RStream } from 'src/app/_services
 import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
 import { LogMessageInfo, SystemService } from 'src/app/_services/system/system.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ListProductSearchInputComponent } from 'src/app/shared/widgets/search-list-selectors/list-product-search-input/list-product-search-input.component';
+import { TipEntryComponent } from '../tip-entry/tip-entry.component';
+import { NewOrderTypeComponent } from '../new-order-type/new-order-type.component';
 
 
 
 @Component({
   selector: 'app-balance-due',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  ListProductSearchInputComponent,TipEntryComponent,
+  NewOrderTypeComponent,
+  SharedPipesModule],
+
   templateUrl: './balance-due.component.html',
   styleUrls: ['./balance-due.component.scss']
 })
@@ -164,7 +176,7 @@ export class ChangeDueComponent implements OnInit  {
     if (data) {
       this.order = data.order
       this.payment = data.payment
-      if (this.payment) { 
+      if (this.payment) {
         this.getPrintData(this.payment.id)
       }
       this.paymentMethod = data.paymentMethod;
@@ -688,28 +700,28 @@ export class ChangeDueComponent implements OnInit  {
   async creditTicketPrint(data: string) {
     try {
         const tran = JSON.parse(data); // Parse the JSON string into an object
-        if (!tran) { 
+        if (!tran) {
           this.siteService.notify('No tran data' , 'close', 100000);
           return;
         }
-        if (!tran.RStream) { 
+        if (!tran.RStream) {
           this.siteService.notify('No rstream data', 'close', 100000);
           return
         }
         const printData = this.dcapMethodsService.extractLineProperties(tran?.RStream); // Pass only the RStream object
         try {
-          if (!printData) {  
+          if (!printData) {
             this.siteService.notify('No printData', 'close', 100000)
             return;
           }
           await   this.printToPax(printData)
         } catch (error) {
           this.siteService.notify('Printing error' + JSON.stringify(error), 'close', 100000)
-          console.log('error', error)  
+          console.log('error', error)
         }
     } catch (error) {
       this.siteService.notify('Printing error 2' + JSON.stringify(error), 'close', 100000)
-      console.log('error', error)     
+      console.log('error', error)
     }
   }
 
@@ -743,7 +755,7 @@ export class ChangeDueComponent implements OnInit  {
       }
     }, 500);
   }
-  
+
   async intervalCheckPrint(timer: any) {
     let responseSuccess = '';
     const options = {}
@@ -775,11 +787,11 @@ export class ChangeDueComponent implements OnInit  {
     }
   }
 
-  getPrintData(id: number) { 
+  getPrintData(id: number) {
     if (id === 0) { return }
     const site = this.siteService.getAssignedSite();
     this.printData$ = this.paymentService.getTransactionData(site, id, this.order?.history);
   }
-  
-  
+
+
 }

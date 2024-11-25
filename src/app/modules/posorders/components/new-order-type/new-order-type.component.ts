@@ -13,9 +13,18 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { options } from 'numeral';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatToggleSelectorComponent } from 'src/app/shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
 
 @Component({
   selector: 'new-order-type',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    MatToggleSelectorComponent,
+  ],
+
   templateUrl: './new-order-type.component.html',
   styleUrls: ['./new-order-type.component.scss']
 })

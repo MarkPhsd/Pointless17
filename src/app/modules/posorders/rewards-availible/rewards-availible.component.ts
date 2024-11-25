@@ -6,6 +6,9 @@ import { MenuService, OrdersService } from 'src/app/_services';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPOSOrder, ISite } from 'src/app/_interfaces';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 export interface RewardItem {
   id: number;
@@ -15,6 +18,11 @@ export interface RewardItem {
 }
 @Component({
   selector: 'app-rewards-availible',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
+
   templateUrl: './rewards-availible.component.html',
   styleUrls: ['./rewards-availible.component.scss'],
   animations: [

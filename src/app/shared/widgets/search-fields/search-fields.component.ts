@@ -1,8 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, forwardRef, Input, ViewChild, EventEmitter, AfterViewInit, Renderer2, Output, TemplateRef } from '@angular/core';
-import { FormArrayName, UntypedFormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormArrayName, UntypedFormGroup, NG_VALUE_ACCESSOR, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-search-fields',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule],
   templateUrl: './search-fields.component.html',
   styleUrls: ['./search-fields.component.scss']
 })

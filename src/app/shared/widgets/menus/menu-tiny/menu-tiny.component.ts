@@ -9,8 +9,13 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { fadeAnimation } from 'src/app/_animations';
 import { switchMap } from 'rxjs/operators';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'app-menu-tiny',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule],
   templateUrl: './menu-tiny.component.html',
   styleUrls: ['./menu-tiny.component.scss'],
   animations: [

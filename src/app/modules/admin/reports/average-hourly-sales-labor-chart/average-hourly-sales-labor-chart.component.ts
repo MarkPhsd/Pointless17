@@ -1,9 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
+import { HighchartsChartModule } from 'highcharts-angular';
 import HC_exporting from 'highcharts/modules/exporting';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'average-hourly-sales-labor-chart',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+  HighchartsChartModule,
+  ],
   templateUrl: './average-hourly-sales-labor-chart.component.html',
   styleUrls: ['./average-hourly-sales-labor-chart.component.scss']
 })

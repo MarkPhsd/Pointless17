@@ -1,4 +1,5 @@
 import { CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
+import { CommonModule } from '@angular/common';
 import {
   Component,
   ChangeDetectionStrategy,
@@ -8,9 +9,15 @@ import {
 } from '@angular/core';
 import { Subject, merge, of } from 'rxjs';
 import { tap, auditTime, withLatestFrom } from 'rxjs/operators';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: '[m22Resizable]',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './m22-resizable.component.html',
   styleUrls: ['./m22-resizable.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

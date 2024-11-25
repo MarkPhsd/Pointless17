@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit,OnDestroy } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 
@@ -8,9 +9,16 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatToggleSelectorComponent } from 'src/app/shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
 
 @Component({
   selector: 'app-menu-price-selection',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    MatToggleSelectorComponent
+  ],
   templateUrl: './menu-price-selection.component.html',
   styleUrls: ['./menu-price-selection.component.scss']
 })

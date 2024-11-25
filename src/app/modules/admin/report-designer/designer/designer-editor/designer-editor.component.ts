@@ -6,9 +6,16 @@ import { ReportDesignerService } from '../../services/report-designer.service';
 import { viewBuilder_ViewList, viewBuilder_ReportJSON, viewBuilder_View_Field_Values, viewBuilder_Where_Selector, viewBuilder_View_Builder_GroupBy, chartTypeCollection, viewBuilderList, viewBuilder_Report } from '../../interfaces/reports';
 import { Router } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'psReporting-designer-editor',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './designer-editor.component.html',
   styleUrls: ['./designer-editor.component.scss']
 })

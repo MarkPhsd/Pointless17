@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input, Output,OnChanges, OnInit, Optional, ViewChild ,ElementRef,
          AfterViewInit, EventEmitter } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
@@ -13,6 +13,10 @@ import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-form
 import { DiscountInfo, IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { AgGridModule } from 'ag-grid-angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 
 function myComparator(value1, value2) {
@@ -30,6 +34,11 @@ function myComparator(value1, value2) {
 
 @Component({
   selector: 'app-type-results-selector',
+
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,
+  ],
   templateUrl: './type-results-selector.component.html',
   styleUrls: ['./type-results-selector.component.scss']
 })
@@ -245,8 +254,8 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     }
   }
 
-  getSubCategory() { 
-    if (this.subCategoryID) { 
+  getSubCategory() {
+    if (this.subCategoryID) {
       return this.subCategoryID
     }
     return null;
@@ -254,7 +263,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   //the category in this component comes from input
   getCategoryID(): number  {
 
-    if (this.categoryID) { 
+    if (this.categoryID) {
       return this.categoryID;
     }
 
@@ -414,7 +423,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
         this.pageSize,
         this.currentPage,
         this.getSelectedItemTypeID(),
-        brandID, 
+        brandID,
         subCategoryID,
     );
   }
@@ -585,7 +594,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   refreshGroupingDataOnly() {
     const site             = this.siteService.getAssignedSite()
     this.categories$       = this.menuService.getListOfCategoriesAll(site);
-    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(switchMap(data => { 
+    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(switchMap(data => {
       this.subCategoriesList = data;
       return of(data)
     }))

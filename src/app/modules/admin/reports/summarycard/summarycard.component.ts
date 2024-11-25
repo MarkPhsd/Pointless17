@@ -3,9 +3,16 @@ import * as Highcharts from 'highcharts';
 import { Observable, Subject } from 'rxjs';
 import { ReportingService} from 'src/app/_services';
 import { ISalesPayments, ISite, ISalesReportingOrdersSummary }  from 'src/app/_interfaces';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-summarycard',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './summarycard.component.html',
   styleUrls: ['./summarycard.component.scss']
 })

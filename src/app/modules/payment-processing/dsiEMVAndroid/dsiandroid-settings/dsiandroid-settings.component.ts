@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { Observable, of , switchMap} from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
@@ -7,9 +7,18 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { Transaction } from './../../models/models';
 import { PointlessCCDSIEMVAndroidService } from './../../services/index';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatSelectionList } from '@angular/material/list';
 
 @Component({
   selector: 'pointlesscc-dsiandroid-settings',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
+
   templateUrl: './dsiandroid-settings.component.html',
   styleUrls: ['./dsiandroid-settings.component.scss']
 })

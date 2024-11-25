@@ -4,9 +4,14 @@ import { UUID } from 'angular2-uuid';
 import { Subscription } from 'rxjs';
 import { ReportDesignerService } from '../../services/report-designer.service';
 import { viewBuilder_View_Field_Values, viewBuilder_ReportJSON } from '../../interfaces/reports';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'psReporting-sort-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule],
   templateUrl: './sort-selector.component.html',
   styleUrls: ['./sort-selector.component.scss']
 })

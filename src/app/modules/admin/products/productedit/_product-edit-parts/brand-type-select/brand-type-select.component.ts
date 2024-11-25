@@ -3,11 +3,18 @@ import { Component, OnInit, Input , EventEmitter,
 import { ClientSearchModel, ClientSearchResults, ISite, IUserProfile } from 'src/app/_interfaces';
 import { ContactsService  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormBuilder, FormControl, UntypedFormGroup,  } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule,  } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'app-brand-type-select',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './brand-type-select.component.html',
   styleUrls: ['./brand-type-select.component.scss'],
 })

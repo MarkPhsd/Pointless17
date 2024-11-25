@@ -12,8 +12,12 @@ import 'hammerjs';
 import { AWSBucketService } from 'src/app/_services';
 
 import { UUID } from 'angular2-uuid';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
 @Component({
   selector: 'app-image-gallery',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,GalleryModule],
   templateUrl: './image-gallery.component.html',
   styleUrls: ['./image-gallery.component.scss'],
 

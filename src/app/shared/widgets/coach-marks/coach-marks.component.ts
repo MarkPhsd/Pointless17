@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CoachMarksService } from './coach-marks.service';
 import { NavParams, PopoverController } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-coach-marks',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,],
   templateUrl: './coach-marks.component.html',
   styleUrls: ['./coach-marks.component.scss']
 })

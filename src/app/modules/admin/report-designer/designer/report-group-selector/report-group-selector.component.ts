@@ -4,8 +4,17 @@ import { Subscription } from 'rxjs';
 import { UUID } from 'angular2-uuid';
 import { ReportDesignerService } from '../../services/report-designer.service';
 import { viewBuilder_View_Field_Values, viewBuilder_ReportJSON, viewBuilder_View_Builder_GroupBy } from '../../interfaces/reports';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatSelectorComponent } from '../../widgets/mat-selector/mat-selector.component';
+import { FieldValueSelectorComponent } from '../field-value-selector/field-value-selector.component';
 @Component({
   selector: 'psReporting-report-group-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    FieldValueSelectorComponent,
+    MatSelectorComponent],
   templateUrl: './report-group-selector.component.html',
   styleUrls: ['./report-group-selector.component.scss']
 })

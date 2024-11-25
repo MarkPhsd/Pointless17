@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
@@ -6,9 +7,15 @@ import { METRCSalesReportPaged, PointlessMETRCSalesService, PointlessMetrcSearch
 import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { IPaymentSalesSummary } from 'src/app/_services/reporting/sales-payments.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-metrc-summary',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './metrc-summary.component.html',
   styleUrls: ['./metrc-summary.component.scss']
 })

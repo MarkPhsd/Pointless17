@@ -1,8 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'psReporting-and-or-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    AndOrSelectorComponent
+  ],
   templateUrl: './and-or-selector.component.html',
   styleUrls: ['./and-or-selector.component.scss']
 })

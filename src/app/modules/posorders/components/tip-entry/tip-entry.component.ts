@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit,Input, Inject,EventEmitter , Output} from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
@@ -7,9 +8,16 @@ import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { TransactionUISettings,  UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
 
 @Component({
   selector: 'tip-entry-amount',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+  KeyPadComponent,
+  ],
   templateUrl: './tip-entry.component.html',
   styleUrls: ['./tip-entry.component.scss']
 })

@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { IItemBasic, OrdersService } from 'src/app/_services';
@@ -7,9 +8,15 @@ import { EmployeeClockSearchModel, EmployeeClockService } from 'src/app/_service
 import { EmployeeService } from 'src/app/_services/people/employee-service.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'employee-clock-filter',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './employee-clock-filter.component.html',
   styleUrls: ['./employee-clock-filter.component.scss']
 })
@@ -44,8 +51,8 @@ export class EmployeeClockFilterComponent implements OnInit {
     this.employees$      = this.employeeService.getAllActiveEmployees(site);
   }
 
-  toggleView(id) { 
-    if (id == 1) { 
+  toggleView(id) {
+    if (id == 1) {
       this.toggleID = 0;
       return
     }
@@ -95,7 +102,7 @@ export class EmployeeClockFilterComponent implements OnInit {
   getSearch() {
     if (this.dateTo === '12/31/1969') { return }
     const dateTo = this.dateHelper.format(this.dateTo, 'MM/dd/yyyy');
- 
+
     if (dateTo === '12/31/1969') { return }
 
     return  { summary: false,
@@ -120,19 +127,19 @@ export class EmployeeClockFilterComponent implements OnInit {
   }
 
   emitDatePickerData(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement) {
-   
+
     if (dateRangeStart && dateRangeEnd) {
         this.dateFrom = this.dateRangeForm.get("start").value
         this.dateTo   = this.dateRangeForm.get("end").value
-        if (this.dateFrom && this.dateTo) { 
+        if (this.dateFrom && this.dateTo) {
           this.refreshSearch()
           this.refreshDateList(this.dateFrom, this.dateTo)
         }
-      
+
     }
   }
 
-  refreshDateList(startDate, endDate) { 
+  refreshDateList(startDate, endDate) {
     if (startDate && endDate) {
       const start = new Date(this.dateHelper.format(startDate, 'medium'))
       const end = new Date(this.dateHelper.format(endDate, 'medium'))
@@ -140,10 +147,10 @@ export class EmployeeClockFilterComponent implements OnInit {
     }
   }
 
-  setDate(value) { 
+  setDate(value) {
     this.dateFrom = value;
     this.dateTo = value;
-    if (this.dateFrom && this.dateTo) { 
+    if (this.dateFrom && this.dateTo) {
       this.refreshSearch()
     }
   }

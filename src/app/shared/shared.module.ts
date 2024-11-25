@@ -21,7 +21,7 @@ import { PageNotFoundComponent } from './widgets/page-not-found/page-not-found.c
 import { SalesTaxReportComponent } from 'src/app/modules/admin/reports/sales-tax-report/sales-tax-report.component';
 import { PagerBlobComponent } from './widgets/pager-blob/pager-blob.component';
 import { SiteSelectorComponent } from './widgets/site-selector/site-selector.component';
-import { HammerCardComponent } from './widgets/hammer-card/hammer-card.component';
+
 import { FacilitySearchSelectorComponent } from 'src/app/shared/widgets/facility-search-selector/facility-search-selector.component';
 import { DSIEMVAndroidPayBtnComponent } from '../modules/posorders/pos-payment/dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
 import { ListProductSearchInputComponent } from './widgets/search-list-selectors/list-product-search-input/list-product-search-input.component';
@@ -34,10 +34,7 @@ import { ChemicalValuesComponent } from '../modules/admin/products/productedit/_
 import { SpeciesListComponent } from '../modules/admin/products/productedit/_product-edit-parts/species-list/species-list.component';
 import { CategorySelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/category-select/category-select.component';
 import { DepartmentSelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/department-select/department-select.component';
-import { GenericIdSelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/generic-id-select/generic-id-select.component';
-import { GenericNameSelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/generic-name-select/generic-name-select.component';
 import { TaxFieldsComponent } from '../modules/admin/products/productedit/_product-edit-parts/tax-fields/tax-fields.component';
-import { WebEnabledComponent } from '../modules/admin/products/productedit/_product-edit-parts/web-enabled/web-enabled.component';
 import { ItemTypeSortComponent } from '../modules/admin/products/item-type/item-type-sort/item-type-sort.component';
 import { MenuMinimalComponent } from './widgets/menus/menu-minimal/menu-minimal.component';
 import { AccordionComponent } from './widgets/menus/accordion/accordion.component';
@@ -100,14 +97,14 @@ import { BackgroundCoverComponent } from './widgets/background-cover/background-
 import { DSIEMVElectronComponent } from '../modules/admin/settings/software/dsiemvelectron/dsiemvelectron.component';
 import { DepartmentMenuComponent } from '../modules/menu/department-menu/department-menu.component';
 import { OverLayComponent } from './widgets/over-lay/over-lay.component';
-import { MyThingComponent } from './widgets/over-lay/my-thing/my-thing.component';
+
 import { FilterPipe } from '../_pipes/filter.pipe';
 import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile-med-info/profile-med-info.component';
 import { CompanyInfoHeaderComponent } from './widgets/company-info-header/company-info-header.component';
 import { GridsterModule } from 'angular-gridster2';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { IFrameComponent } from './widgets/i-frame/i-frame.component';
-import { YoutubePlayerComponent } from './widgets/youtube-player/youtube-player.component';
+
 import { SafeHtmlPipe } from '../_pipes/safe-html.pipe';
 import {YouTubePlayerModule} from '@angular/youtube-player'
 import { CardDashboardComponent } from '../modules/admin/reports/card-dashboard/card-dashboard.component';
@@ -245,6 +242,8 @@ import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
 import { SharedUiModule } from '../shared-ui/shared-ui.module';
 import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
 import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.component';
+import { YoutubePlayerComponent } from './widgets/youtube-player/youtube-player.component';
+import { OrderTotalComponent } from '../modules/posorders/pos-order/order-total/order-total.component';
 
 // import { QrPaymentComponent } from '../modules/orders/qr-payment/qr-payment.component';
 
@@ -259,45 +258,44 @@ import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.c
 // }
 @NgModule({
   declarations: [
-    SafeHtmlPipe,
-    ArrayFilterPipe,
-    ArraySortPipe,
 
-    BackgroundUrlPipe,
-    TruncateRightPipe,
+    //move last
 
-    DsiEMVCardPayBtnComponent,
-    BrandTypeSelectComponent,
-    AccordionComponent,
-    AdjustmentReasonsComponent,
-    AdjustPaymentComponent,
-    AreaComponent,
-    AppWizardProgressButtonComponent,
+  ],
 
+  imports: [
+    IonicSwipeToDeleteComponent,
 
-    AutofocusDirective,
+    HeaderComponent,
+    FooterComponent,
+    DashboardComponent,
     BalanceSheetReportComponent,
-    BlogPostListComponent,
+    AppWizardProgressButtonComponent,
+    AreaComponent,
+    AdjustPaymentComponent,
+    AdjustmentReasonsComponent,
+    AccordionComponent,
+    DsiEMVCardPayBtnComponent,
     BlogPostComponent,
     ChangeDueComponent,
     CoachMarksComponent,
     BackgroundCoverComponent,
+
     AgIconFormatterComponent,
     ButtonRendererComponent,
+
     BtBlueToothScannerComponent,
     BtPOSPrinterComponent,
-    DashboardComponent,
-    DisableControlDirective,
     DisplayMenuMenuComponent,
     CashValueCalcComponent,
     CashDrawerSettingsComponent,
-    CardComponent,
     TimeChartReportComponent,
     ProductChartReportComponent,
     CardDashboardComponent,
+    CardComponent,
     CompanyInfoHeaderComponent,
-    // ClientSearchSelectorComponent,
     CannabisItemEditComponent,
+    BrandTypeSelectComponent,
     CategorySelectComponent,
     CategoryScrollComponent,
     ChipsDisplayComponent,
@@ -305,180 +303,117 @@ import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.c
     ChemicalValuesComponent,
     ChemicalSpinnersComponent,
     ClientTypesLookupComponent,
-    // ClientSearchSelectorComponent,
     ClockInOutComponent,
-    // ClockViewComponent,
     ClockInPanelComponent,
-
     CustomerDateSelectorComponent,
     UserPreferencesComponent,
-    DepartmentSelectComponent,
 
+    DepartmentSelectComponent,
     DSIEMVElectronComponent,
     DsiEMVPaymentComponent,
     DepartmentMenuComponent,
     DCAPResponseMessageComponent,
-    DynamicAgGridComponent,
-    DSIEMVAndroidPayBtnComponent,
-
     EmailEntryComponent,
     EmployeeClockListComponent,
-
     EmployeeClockEditComponent,
     EmployeeClockFilterComponent,
     ExitLabelSelectionComponent,
-
     FacilitySearchSelectorComponent,
-
     FilterComponent,
-    FilterPipe,
-
-    FooterComponent,
-    HeaderComponent,
-    GenericIdSelectComponent,
-    GenericNameSelectComponent,
-    HammerCardComponent,
     InventoryAdjustmentNoteComponent,
-
     ItemTypeSortComponent,
-    // ItemSalesCardComponent,
-
-    // SalesItemsComponent,
-    // ImageSwiperComponent,
     ImageContainerComponent,
-    InstructionDirective,
-
     Label1by8Component,
-    // LimitValuesProgressBarsComponent,
+
     LiquorProductEditComponent,
     ListProductSearchInputComponent,
+
     OrderItemScannerComponent,
-
     MatChipListComponent,
-
     MatSelectComponent,
     MatSpinnerOverlayComponent,
-
-    // MatMenuBasicComponent,
     MatSelectNGModelComponent,
     MetaTagChipsComponent,
     ItemassociationsComponent,
     MenuCompactComponent,
-    MenuCompactComponent,
     MenuMinimalComponent,
     MenuPriceSelectionComponent,
     MenuSearchBarComponent,
-    MenuTinyComponent,
     MetrcSummaryComponent,
-    MessageMenuSenderComponent,
     TtsComponent,
     FunctionButtonsListComponent,
     AverageHourlySalesLaborChartComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
-    NgControlAttributeDirective,
-    NumericDirective,
-    // OrderHeaderDemoGraphicsComponent,
-    // OrderTotalComponent,
     OrderHeaderComponent,
     QROrderComponent,
     ScheduleSelectorComponent,
-    ScheduleDateRangeSelectorComponent,
     OnlinePaymentCompletedComponent,
     PagingInfoComponent,
     PagerBlobComponent,
-    PageNotFoundComponent,
-    PaymentBalanceComponent,
-    // PaymentReportComponent,
-    // PaymentReportCardComponent,
-    // PaymentReportDataComponent,
     PaymentTypesSelectionComponent,
     PieComponent,
-    POSOrderScheduleCardComponent,
+
     PosOrderItemComponent,
     PosOrderItemsComponent,
     PosCheckOutButtonsComponent,
-    IonicSwipeToDeleteComponent,
+
     PosOrderFunctionButtonsComponent,
+    MessageMenuSenderComponent,
     PosOrderTransactionDataComponent,
+    POSOrderScheduleCardComponent,
     PosPaymentEditComponent,
     PriceCategorySelectComponent,
     PriceTierScheduleComponent,
     PrinterLocationSelectionComponent,
     PrinterLocationsComponent,
+
     ProgressUploaderComponent,
-    // ProductSearchSelectorComponent,
     ProductSearchSelector2Component,
     ProductTypeSelectComponent,
+
     ProfileShippingAddressComponent,
     ProfileBillingAddressComponent,
     ProfileMedInfoComponent,
-    // ProgressBarComponent,
     PriceCategorySearchComponent,
+
     PartUsageGraphComponent,
-    //ProductFilterComponent
-    ProductFilterComponent,
-    CategorySelectListFilterComponent,
-    OptionsSelectFilterComponent,
-    CategoryMenuSelectorComponent,
+    PriceScheduleMenuListComponent,
     MenuCardCategoriesComponent,
     AuditPaymentComponent,
-    PriceScheduleMenuListComponent,
     RewardsAvailibleComponent,
     RetailProductEditComponent,
-
     ScaleValueViewComponent,
-    SplitEntrySelectorComponent,
-
     SalesTaxReportComponent,
-
     SidebarComponent,
     SiteSelectorComponent,
     SiteCardComponent,
     SpeciesListComponent,
     StatusLookupComponent,
     StoreCreditInfoComponent,
-
     StoreCreditSearchComponent,
-
     SummarycardComponent,
+
     TagChipsProductsComponent,
     TaxFieldsComponent,
-
     QuantiySelectorComponent,
-
     UnitTypeFieldsComponent,
-    WebEnabledComponent,
-
     CartButtonComponent,
-
-
-    UserAuthorizedDirective,
     MatSpinnerOverlayComponent,
     QRCodeTableComponent,
+    PaymentBalanceComponent,
+    SplitEntrySelectorComponent,
+    DSIEMVAndroidPayBtnComponent,
     ValueSpinnerComponent,
-
-
-
     OverLayComponent,
-    MyThingComponent,
     TipEntryComponent,
-
     IFrameComponent,
-    YoutubePlayerComponent,
-    SafeHtmlPipe,
     ElectronZoomControlComponent,
-    RequestMessageComponent,
     RequestMessagesComponent,
-    ThreeCXFabComponent,
+    RequestMessagesComponent,
     ValueFromListSelectorComponent,
     CallUsSelectorComponent,
     LastImageDisplayComponent,
-
-
-    FreeDraggingDirective,
-    FreeDraggingHandleDirective,
-
     M22ResizableComponent,
     AggregateSelectorComponent,
     AndOrSelectorComponent,
@@ -493,41 +428,56 @@ import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.c
     ReportGroupSelectorComponent,
     ReportTypesComponent,
     SortSelectorComponent,
-
     MatSelectorComponent,
     EditBarComponent,
+    MenuTinyComponent,
+    RequestMessageComponent,
+    BlogPostListComponent,
+    SiteFooterComponent,
     UserBarComponent,
     CheckBoxCellComponent,
     ZoomComponent,
-    CoachMarksComponent,
     CoachMarksButtonComponent,
+    CoachMarksComponent,
+
     UnitTypeSelectorComponent,
     SearchFieldsComponent,
     ImageGalleryComponent,
     ImageLightHouseComponent,
-    // ClockViewComponent,
     CloseFloatingButtonComponent,
-    SiteFooterComponent,
+    YoutubePlayerComponent,
+    AngularSignaturePadModule,
+    SimpleTinyComponent,
+    SortSelectorsComponent,
+    EmployeesOnClockListComponent,
+    FastUserSwitchComponent,
+    KeyPadComponent,
+    LoginInfoComponent,
+    ThreeCXFabComponent,
     SignatureComponent,
-
-  ],
-
-  imports: [
-    IonicModule.forRoot(),
-    NgxDaterangepickerMd.forRoot(),
+    ProductFilterComponent,
+    CategoryMenuSelectorComponent,
+    CategorySelectListFilterComponent,
+    OptionsSelectFilterComponent,
+    ScheduleDateRangeSelectorComponent,
+    PageNotFoundComponent,
+    DynamicAgGridComponent,
     MatDateRangeComponent,
     SearchDebounceInputComponent,
+
+    IonicModule.forRoot(),
+    NgxDaterangepickerMd.forRoot(),
     CommonModule,
     SharedUiModule,
     SharedUtilsModule,
     SharedPipesModule,
-
+    AppMaterialModule,
     AgGridModule,
     AppRoutingModule,
+    RouterModule,
     DashBoardRoutingModule,
     DragDropModule,
     AppMaterialModule,
-
     BrowserAnimationsModule,
     HighchartsChartModule,
     FormsModule,
@@ -537,23 +487,11 @@ import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.c
     LightboxModule ,
     ColorPickerModule,
     GridsterModule,
-    RouterModule,
     ReactiveFormsModule,
-
-    YouTubePlayerModule,
     NgxJsonViewerModule,
     NgxColorsModule,
     NgxImageCaptureModule,
 
-    AngularSignaturePadModule,
-    SimpleTinyComponent,
-
-    SortSelectorsComponent,
-
-    EmployeesOnClockListComponent,
-    FastUserSwitchComponent,
-    KeyPadComponent,
-    LoginInfoComponent,
   ],
 
   exports: [
@@ -561,227 +499,186 @@ import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.c
     SharedUiModule,
     SharedUtilsModule,
     SharedPipesModule,
-    MatDateRangeComponent,
-    LoginInfoComponent,
-    NgxJsonViewerModule,
+
+    IonicModule,
+    NgxDaterangepickerMd,
+    CommonModule,
+    SharedUiModule,
+    SharedUtilsModule,
+    SharedPipesModule,
+    AppMaterialModule,
     AgGridModule,
+    AppRoutingModule,
+    RouterModule,
+    DashBoardRoutingModule,
     DragDropModule,
-    SafeHtmlPipe,
-    ArrayFilterPipe,
-    ArraySortPipe,
-    BackgroundUrlPipe,
+    AppMaterialModule,
+    BrowserAnimationsModule,
+    HighchartsChartModule,
+    FormsModule,
+    HammerModule,
+    QRCodeModule,
+    GalleryModule,
+    LightboxModule ,
+    ColorPickerModule,
+    GridsterModule,
+    ReactiveFormsModule,
+    NgxJsonViewerModule,
+    NgxColorsModule,
+    NgxImageCaptureModule,
 
-    BrandTypeSelectComponent,
-    ListProductSearchInputComponent,
-    OrderItemScannerComponent,
-    FunctionButtonsListComponent,
-    AuditPaymentComponent,
-    AccordionComponent,
-    AdjustPaymentComponent,
-    AreaComponent,
     AutofocusDirective,
-
-
-    AppWizardProgressButtonComponent,
-    BalanceSheetReportComponent,
-    BlogPostListComponent,
-    BlogPostComponent,
-    EmailEntryComponent,
     UserAuthorizedDirective,
-    CashValueCalcComponent,
+
+    HeaderComponent,
+    FooterComponent,
+    DashboardComponent,
+    BalanceSheetReportComponent,
+    AppWizardProgressButtonComponent,
+    AreaComponent,
+    AdjustPaymentComponent,
+    AdjustmentReasonsComponent,
+    AccordionComponent,
+    DsiEMVCardPayBtnComponent,
+    BlogPostComponent,
     ChangeDueComponent,
     CoachMarksComponent,
+    BackgroundCoverComponent,
+
     AgIconFormatterComponent,
     ButtonRendererComponent,
+
     BtBlueToothScannerComponent,
     BtPOSPrinterComponent,
+    DisplayMenuMenuComponent,
+    CashValueCalcComponent,
     CashDrawerSettingsComponent,
-    CallUsSelectorComponent,
-    CardComponent,
-    CustomerDateSelectorComponent,
-    DSIEMVAndroidPayBtnComponent,
-    DsiEMVCardPayBtnComponent,
     TimeChartReportComponent,
     ProductChartReportComponent,
     CardDashboardComponent,
-    ColorPickerModule,
-    CoachMarksButtonComponent,
-    CategorySelectComponent,
-
-    CloseFloatingButtonComponent,
-    ExitLabelSelectionComponent,
-    CannabisItemEditComponent,
-    ChartTableComponent,
-    ChemicalSpinnersComponent,
-    ChemicalValuesComponent,
-    ChipsDisplayComponent,
-    ClientTypesLookupComponent,
-
-    OnlinePaymentCompletedComponent,
-
+    CardComponent,
     CompanyInfoHeaderComponent,
+    CannabisItemEditComponent,
+    BrandTypeSelectComponent,
+    CategorySelectComponent,
+    CategoryScrollComponent,
+    ChipsDisplayComponent,
+    ChartTableComponent,
+    ChemicalValuesComponent,
+    ChemicalSpinnersComponent,
+    ClientTypesLookupComponent,
+    ClockInOutComponent,
+    ClockInPanelComponent,
+    CustomerDateSelectorComponent,
+    UserPreferencesComponent,
 
-    ElectronZoomControlComponent,
-    DashboardComponent,
-    DCAPResponseMessageComponent,
     DepartmentSelectComponent,
-
-    DisableControlDirective,
-    DisplayMenuMenuComponent,
     DSIEMVElectronComponent,
     DsiEMVPaymentComponent,
     DepartmentMenuComponent,
-    DynamicAgGridComponent,
-
+    DCAPResponseMessageComponent,
+    EmailEntryComponent,
     EmployeeClockListComponent,
     EmployeeClockEditComponent,
-    EmployeesOnClockListComponent,
     EmployeeClockFilterComponent,
-    ImageGalleryComponent,
+    ExitLabelSelectionComponent,
     FacilitySearchSelectorComponent,
-    FastUserSwitchComponent,
-    KeyPadComponent,
-
     FilterComponent,
-    FooterComponent,
-
-    FreeDraggingDirective,
-    FreeDraggingHandleDirective,
-    GenericIdSelectComponent,
-    GenericNameSelectComponent,
-    GridsterModule,
-    HeaderComponent,
-
-    IonicSwipeToDeleteComponent,
-    ImageContainerComponent,
-    InstructionDirective,
+    InventoryAdjustmentNoteComponent,
     ItemTypeSortComponent,
-    // ItemSalesCardComponent,
-    // SalesItemsComponent,
-    // ImageSwiperComponent,
-
-
-    LastImageDisplayComponent,
-
-    // LimitValuesProgressBarsComponent,
-    LiquorProductEditComponent,
-
-    // LogoComponent,
+    ImageContainerComponent,
     Label1by8Component,
 
-    MatChipListComponent,
-    ScheduleSelectorComponent,
-    ScheduleDateRangeSelectorComponent,
-    // NgcCookieConsentModule.forRoot(cookieConfig),
-    NgxDaterangepickerMd,
-    // MatMenuBasicComponent,
+    LiquorProductEditComponent,
+    ListProductSearchInputComponent,
 
+    OrderItemScannerComponent,
+    MatChipListComponent,
     MatSelectComponent,
-    MatSelectNGModelComponent,
     MatSpinnerOverlayComponent,
+    MatSelectNGModelComponent,
     MetaTagChipsComponent,
     ItemassociationsComponent,
-    MenuCardCategoriesComponent,
     MenuCompactComponent,
-    MenuPriceSelectionComponent,
     MenuMinimalComponent,
+    MenuPriceSelectionComponent,
     MenuSearchBarComponent,
-    MenuTinyComponent,
-    MessageMenuSenderComponent,
-
-    UserBarComponent,
     MetrcSummaryComponent,
+    TtsComponent,
+    FunctionButtonsListComponent,
     AverageHourlySalesLaborChartComponent,
-    M22ResizableComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
-    NgControlAttributeDirective,
-    // OrderHeaderDemoGraphicsComponent,
-    // OrderTotalComponent,
     OrderHeaderComponent,
     QROrderComponent,
-    QRCodeTableComponent,
-    // QrPaymentComponent,
+    ScheduleSelectorComponent,
+    OnlinePaymentCompletedComponent,
     PagingInfoComponent,
-    PageNotFoundComponent,
-    PaymentBalanceComponent,
-    // PaymentReportDataComponent,
-    PieComponent,
-    PriceCategorySearchComponent,
-    PriceCategorySelectComponent,
-    PriceCategorySearchComponent,
-    PriceTierScheduleComponent,
-    PrinterLocationSelectionComponent,
-    PrinterLocationsComponent,
-    PriceScheduleMenuListComponent,
-
-    POSOrderScheduleCardComponent,
-    //ProductFilterComponent
-    ProductFilterComponent,
-    CategorySelectListFilterComponent,
-    OptionsSelectFilterComponent,
-    CategoryMenuSelectorComponent,
-    //*** */
-    SiteFooterComponent,
-    PartUsageGraphComponent,
+    PagerBlobComponent,
     PaymentTypesSelectionComponent,
-    ProfileMedInfoComponent,
-    PaymentReportComponent,
+    PieComponent,
+
     PosOrderItemComponent,
     PosOrderItemsComponent,
     PosCheckOutButtonsComponent,
-    PosOrderFunctionButtonsComponent,
-    PosOrderTransactionDataComponent,
-    PosPaymentEditComponent,
-    ProductTypeSelectComponent,
-    // ProductSearchSelectorComponent,
-    ProductSearchSelector2Component,
-    ProfileBillingAddressComponent,
-    ProfileShippingAddressComponent,
 
+    PosOrderFunctionButtonsComponent,
+    MessageMenuSenderComponent,
+    PosOrderTransactionDataComponent,
+    POSOrderScheduleCardComponent,
+    PosPaymentEditComponent,
+    PriceCategorySelectComponent,
+    PriceTierScheduleComponent,
+    PrinterLocationSelectionComponent,
+    PrinterLocationsComponent,
+
+    ProgressUploaderComponent,
+    ProductSearchSelector2Component,
+    ProductTypeSelectComponent,
+
+    ProfileShippingAddressComponent,
+    ProfileBillingAddressComponent,
+    ProfileMedInfoComponent,
+    PriceCategorySearchComponent,
+
+    PartUsageGraphComponent,
+    PriceScheduleMenuListComponent,
+    MenuCardCategoriesComponent,
+    AuditPaymentComponent,
     RewardsAvailibleComponent,
     RetailProductEditComponent,
-    RequestMessageComponent,
-    RequestMessagesComponent,
-
-    QuantiySelectorComponent,
-    UnitTypeSelectorComponent,
-    UserPreferencesComponent,
-    SiteCardComponent,
-    SearchFieldsComponent,
-
     ScaleValueViewComponent,
-    SplitEntrySelectorComponent,
     SalesTaxReportComponent,
-
-    // ScaleReaderComponent,
-    SearchDebounceInputComponent,
-
     SidebarComponent,
+    SiteSelectorComponent,
+    SiteCardComponent,
     SpeciesListComponent,
     StatusLookupComponent,
-    // StrainIndicatorComponent,
     StoreCreditInfoComponent,
     StoreCreditSearchComponent,
-    SortSelectorComponent,
-    SortSelectorsComponent,
     SummarycardComponent,
+
     TagChipsProductsComponent,
     TaxFieldsComponent,
-
-    TipEntryComponent,
-    ThreeCXFabComponent,
-
-
-    TruncateRightPipe,
-
+    QuantiySelectorComponent,
     UnitTypeFieldsComponent,
-
-    WebEnabledComponent,
-    SimpleTinyComponent,
-    NumericDirective,
+    CartButtonComponent,
+    MatSpinnerOverlayComponent,
+    QRCodeTableComponent,
+    PaymentBalanceComponent,
+    SplitEntrySelectorComponent,
+    DSIEMVAndroidPayBtnComponent,
+    ValueSpinnerComponent,
+    OverLayComponent,
+    TipEntryComponent,
+    IFrameComponent,
+    ElectronZoomControlComponent,
+    RequestMessagesComponent,
+    RequestMessagesComponent,
     ValueFromListSelectorComponent,
-    TtsComponent,
+    CallUsSelectorComponent,
+    LastImageDisplayComponent,
+    M22ResizableComponent,
     AggregateSelectorComponent,
     AndOrSelectorComponent,
     DesignerEditorComponent,
@@ -789,15 +686,48 @@ import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.c
     FieldTypeSelectorComponent,
     FieldSelectorComponent,
     FieldValueSelectorComponent,
-    FilterBuilderComponent,
     FieldListTypeAssignerComponent,
+    FilterBuilderComponent,
     GroupByTypesComponent,
     ReportGroupSelectorComponent,
     ReportTypesComponent,
+    SortSelectorComponent,
     MatSelectorComponent,
     EditBarComponent,
+    MenuTinyComponent,
+    RequestMessageComponent,
+    BlogPostListComponent,
+    SiteFooterComponent,
+    UserBarComponent,
+    CheckBoxCellComponent,
+    ZoomComponent,
+    CoachMarksButtonComponent,
+    CoachMarksComponent,
+
+    UnitTypeSelectorComponent,
+    SearchFieldsComponent,
+    ImageGalleryComponent,
+    ImageLightHouseComponent,
+    CloseFloatingButtonComponent,
+    YoutubePlayerComponent,
+    AngularSignaturePadModule,
+    SimpleTinyComponent,
+    SortSelectorsComponent,
+    EmployeesOnClockListComponent,
+    FastUserSwitchComponent,
+    KeyPadComponent,
+    LoginInfoComponent,
+    ThreeCXFabComponent,
     SignatureComponent,
-    QRCodeModule,
+    ProductFilterComponent,
+    CategoryMenuSelectorComponent,
+    CategorySelectListFilterComponent,
+    OptionsSelectFilterComponent,
+    ScheduleDateRangeSelectorComponent,
+    PageNotFoundComponent,
+    DynamicAgGridComponent,
+    MatDateRangeComponent,
+    SearchDebounceInputComponent,
 
   ],
 

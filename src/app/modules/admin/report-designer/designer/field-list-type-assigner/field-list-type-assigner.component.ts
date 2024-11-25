@@ -3,6 +3,9 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ReportDesignerService } from '../../services/report-designer.service';
 import { aggregateFunctions, viewBuilder_ReportJSON, viewBuilder_View_Field_Values } from '../../interfaces/reports';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 export interface ItemBasic {
   id: number;
@@ -11,6 +14,8 @@ export interface ItemBasic {
 }
 @Component({
   selector: 'pgReporting-field-list-type-assigner',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule],
   templateUrl: './field-list-type-assigner.component.html',
   styleUrls: ['./field-list-type-assigner.component.scss']
 })

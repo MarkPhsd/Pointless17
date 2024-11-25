@@ -6,9 +6,19 @@ import { OrdersService } from 'src/app/_services';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { OrderTotalComponent } from '../pos-order/order-total/order-total.component';
+import { POSOrderScheduleCardComponent } from '../posorder-schedule/posorder-schedule-card/posorder-schedule-card.component';
+import { OrderHeaderComponent } from '../pos-order/order-header/order-header.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'pos-order-transaction-data',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    OrderTotalComponent,POSOrderScheduleCardComponent,OrderHeaderComponent
+  ],
   templateUrl: './pos-order-transaction-data.component.html',
   styleUrls: ['./pos-order-transaction-data.component.scss']
 })

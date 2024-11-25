@@ -1,6 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, EventEmitter, Output, HostListener, Input, OnChanges } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ReportingService,DashboardService,AuthenticationService } from 'src/app/_services';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 export const MY_FORMATS = {
     parse: {
@@ -23,6 +26,10 @@ interface IDaterange {
 }
 @Component({
     selector:   'app-widget-filter',
+    standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
+
+    SharedPipesModule],
     templateUrl: './filter.component.html',
     styleUrls: [ './filter.component.scss']
   })

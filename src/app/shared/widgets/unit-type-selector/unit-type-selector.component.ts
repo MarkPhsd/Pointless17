@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { IItemBasic } from '../category-select-list-filter/category-select-list-filter.component';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, fromEvent, filter, tap, of } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
@@ -9,9 +9,14 @@ import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { SearchModel } from 'src/app/_services/system/paging.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'unit-type-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    FormsModule,ReactiveFormsModule],
   templateUrl: './unit-type-selector.component.html',
   styleUrls: ['./unit-type-selector.component.scss']
 })

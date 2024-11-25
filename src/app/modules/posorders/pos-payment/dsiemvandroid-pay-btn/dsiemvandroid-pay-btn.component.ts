@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IPaymentMethod } from 'ngx-paypal';
@@ -6,8 +7,14 @@ import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { TransactionUISettings, } from 'src/app/_services/system/settings/uisettings.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'dsiemvandroid-pay-btn',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './dsiemvandroid-pay-btn.component.html',
   styleUrls: ['./dsiemvandroid-pay-btn.component.scss']
 })

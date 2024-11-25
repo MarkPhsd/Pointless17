@@ -2,7 +2,7 @@ import { Component,   OnInit,
   ViewChild ,ElementRef,  HostListener, OnDestroy, Input, TemplateRef,
   ɵɵtrustConstantResourceUrl} from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subject, Subscription, of, switchMap  } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
@@ -18,6 +18,9 @@ import { Capacitor,  } from '@capacitor/core';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { Clipboard} from '@angular/cdk/clipboard';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 export interface rowItem {
   field: string,
   cellRenderer: string,
@@ -32,6 +35,10 @@ export interface rowItem {
 
 @Component({
   selector: 'employee-clock-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './employee-clock-list.component.html',
   styleUrls: ['./employee-clock-list.component.scss']
 })
@@ -414,7 +421,7 @@ export class EmployeeClockListComponent implements OnInit {
       search.orderBy    = data?.orderBy;
     }
     this.searchModel = search
-   
+
     this.onGridReady(this.params)
   }
 
@@ -431,7 +438,7 @@ export class EmployeeClockListComponent implements OnInit {
     }
 
     this.onFirstDataRendered(this.params)
-  
+
     if (params == undefined) { return }
     if (!params.startRow ||  !params.endRow) {
       params.startRow = 1
@@ -457,7 +464,7 @@ export class EmployeeClockListComponent implements OnInit {
               let results  =  this.refreshImages(data?.results)
               params.successCallback(results)
               this.rowData = results
-            } else { 
+            } else {
               params.successCallback(null)
             }
           }
@@ -471,7 +478,7 @@ export class EmployeeClockListComponent implements OnInit {
     this.autoSizeAll(true)
   }
 
-  refreshData(data) { 
+  refreshData(data) {
     const resp           =  data?.paging
     this.summary         = data?.summary
 
@@ -494,7 +501,7 @@ export class EmployeeClockListComponent implements OnInit {
           this.jsonData = data.results;
         }
       }
-   
+
     }
   }
 
@@ -507,13 +514,13 @@ export class EmployeeClockListComponent implements OnInit {
       search.pageNumber = this.currentPage;
       search.pageSize =   this.pageSize;
 
-      if (!this.searchModel.startDate) { 
+      if (!this.searchModel.startDate) {
         search.startDate =  this.startDate;
       }
-      if (!this.searchModel.startDate) { 
+      if (!this.searchModel.startDate) {
         search.endDate   =  this.endDate;
       }
-    
+
       search.employeeID = this.employeeID
     }
 

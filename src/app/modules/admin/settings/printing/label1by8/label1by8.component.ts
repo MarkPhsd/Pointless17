@@ -8,6 +8,9 @@ import { Printer, PrintOptions } from '@ionic-native/printer/ngx'
 // import { ZebraLabelPrinterPlugin } from 'ionic-zebra-label-printer';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { NavController, Platform, ToastController } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 // https://ionicframework.com/docs/native/printer
 
@@ -37,6 +40,10 @@ import { NavController, Platform, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-label1by8',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './label1by8.component.html',
   styleUrls: ['./label1by8.component.scss'],
 })

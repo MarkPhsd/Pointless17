@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, } from '@angular/core';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
 let apiLoaded = false;
 export interface playerConfig {
   controls: number;
@@ -8,6 +10,9 @@ export interface playerConfig {
 }
 @Component({
   selector: 'app-youtube-player',
+  standalone:
+  true,
+  imports: [YouTubePlayerModule,AppMaterialModule],
   templateUrl: './youtube-player.component.html',
   styleUrls: ['./youtube-player.component.scss'],
 })

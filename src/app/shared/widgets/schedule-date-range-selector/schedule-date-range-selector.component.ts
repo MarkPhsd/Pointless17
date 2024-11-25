@@ -1,9 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, Output, TemplateRef, ViewChild, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DateRangeValidator, ScheduleDateValidator } from 'src/app/_interfaces';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-schedule-date-range-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule],
   templateUrl: './schedule-date-range-selector.component.html',
   styleUrls: ['./schedule-date-range-selector.component.scss']
 })
@@ -15,11 +19,11 @@ export class ScheduleDateRangeSelectorComponent implements OnInit {
   @Output() saveForm = new EventEmitter();
   @ViewChild('dataEntry') dataEntry: TemplateRef<any>;
   @ViewChild('presentation') presentation: TemplateRef<any>;
-  
+
   dateRangeForm: FormGroup;
 
   get viewOption() {
-    if (this.presenationMode) { 
+    if (this.presenationMode) {
       return this.presentation
     }
     return this.dataEntry;
@@ -78,15 +82,15 @@ export class ScheduleDateRangeSelectorComponent implements OnInit {
     if (!date) {
       return '';
     }
-  
+
     const parsedDate = new Date(date);
-  
+
     // Adjust for timezone offset to prevent shifting the date
     const localDate = new Date(parsedDate.getTime() - parsedDate.getTimezoneOffset() * 60000);
-  
+
     return localDate.toISOString().split('T')[0]; // Convert to YYYY-MM-DD format
   }
-  
+
 
   loadDateRanges(dateRanges: ScheduleDateValidator) {
     this.initializeForm(dateRanges);

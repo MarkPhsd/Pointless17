@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, TemplateRef,ViewChild, Optional, EventEmitter, Output } from '@angular/core';
 import { Observable , switchMap, of, repeatWhen, catchError, delay, retryWhen, delayWhen, timer, throwError, Subject, finalize} from 'rxjs';
 import { employeeBreak, EmployeeClock } from 'src/app/_interfaces/people/employeeClock';
@@ -9,9 +10,15 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'clock-in-out',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './clock-in-out.component.html',
   styleUrls: ['./clock-in-out.component.scss']
 })

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit,Input, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -5,9 +6,15 @@ import { IPOSOrder } from 'src/app/_interfaces';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { UIHomePageSettings } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'pos-check-out-buttons',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './pos-check-out-buttons.component.html',
   styleUrls: ['./pos-check-out-buttons.component.scss']
 })

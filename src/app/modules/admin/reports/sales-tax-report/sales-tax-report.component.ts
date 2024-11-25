@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit,Output,ViewChild } from '@angular/core';
 import { catchError, Observable, of, Subject, switchMap } from 'rxjs';
@@ -9,9 +10,15 @@ import { IReportingSearchModel,  ITaxReport, ReportingItemsSalesService } from '
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'sales-tax-report',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './sales-tax-report.component.html',
   styleUrls: ['./sales-tax-report.component.scss']
 })
@@ -27,7 +34,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   @Input() dateTo: string;
   @Input() dateFrom: string;
   @Input() zrunID  : string;
-  
+
   @Input() employeeID: number;
   @Input() scheduleDateStart: string;
   @Input() scheduleDateEnd: string;
@@ -88,20 +95,20 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       this.siteService.notify('Error with time clock summary' + data.toString(), 'close', 2000, 'red')
       return of(item)
     }))
-    
-    let employeeID = this.employeeID 
+
+    let employeeID = this.employeeID
     this.getSalesReport(this.employeeID )
   }
 
   getSalesReport(employeeID: number) {
-          
+
     let item = {startDate: this.dateFrom, endDate: this.dateTo, zrunID: this.zrunID,
                 pendingTransactions: this.pendingTransactions,
                 scheduleDateEnd: this.scheduleDateEnd,
               scheduleDateStart: this.scheduleDateStart } as IReportingSearchModel;
 
     if (employeeID != 0) {
-        item.employeeID = employeeID  
+        item.employeeID = employeeID
     }
 
     if (item.scheduleDateEnd && item.scheduleDateStart) {
@@ -129,7 +136,7 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
       return
     }
 
-      // if (!item.zrunID) { 
+      // if (!item.zrunID) {
     this.sales$ =  this.laborSummary$.pipe(switchMap(data => {
         this.laborSummary = data;
         return this.reportingItemsSalesService.putSalesTaxReport(this.site, item )

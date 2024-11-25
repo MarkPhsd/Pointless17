@@ -32,9 +32,7 @@ import { AuthGuard } from './_http-interceptors/auth.guard';
 import { AgeVerificationGuardService } from './_http-interceptors/age-verification-guard.service';
 import { MainMenuComponent } from './modules/menu/mainMenu/main-menu/main-menu.component';
 import { MenuItemModalComponent } from './modules/menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
-// import { HammerCardComponent } from './shared/widgets/hammer-card/hammer-card.component';
 import { TvPriceSpecialsComponent } from './modules/tv-menu/tv-price-specials/tv-price-specials.component';
-import { TierMenuComponent } from './modules/menu/tierMenu/tier-menu/tier-menu.component';
 import { PriceCategoriesComponent } from './modules/admin/products/pricing/price-categories/price-categories.component';
 
 import { LoginComponent} from './modules/login/login.component';

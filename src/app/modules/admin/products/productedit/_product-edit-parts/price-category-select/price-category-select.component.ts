@@ -1,14 +1,24 @@
 import { Component, OnInit, Input , EventEmitter, Output, ChangeDetectorRef, ViewChild, TemplateRef} from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable, of, switchMap } from 'rxjs';
-import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { IItemType } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { PriceCategories, IPriceCategoryPaged } from 'src/app/_interfaces/menu/price-categories';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
+import { PriceCategorySearchComponent } from '../price-category-search/price-category-search.component';
+import { ValueFieldsComponent } from '../value-fields/value-fields.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-price-category-select',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
+  PriceCategorySearchComponent,ValueFieldsComponent,
+  SharedPipesModule],
+
   templateUrl: './price-category-select.component.html',
   styleUrls: ['./price-category-select.component.scss']
 })

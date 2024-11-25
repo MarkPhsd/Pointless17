@@ -4,9 +4,18 @@ import { Observable, of, switchMap } from 'rxjs';
 import { ClientType, IClientTable } from 'src/app/_interfaces';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'profile-med-info',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    ValueFieldsComponent,UploaderComponent
+  ],
   templateUrl: './profile-med-info.component.html',
   styleUrls: ['./profile-med-info.component.scss']
 })

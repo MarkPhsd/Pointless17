@@ -1,10 +1,17 @@
 
 import { Platform } from '@angular/cdk/platform';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 // import { Platform } from '@angular/cdk/platform';
 
 @Component({
   selector: 'app-value-spinner',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './value-spinner.component.html',
   styleUrls: ['./value-spinner.component.scss']
 })

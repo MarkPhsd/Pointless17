@@ -12,9 +12,16 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NewOrderTypeComponent } from 'src/app/modules/posorders/components/new-order-type/new-order-type.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'function-buttons-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './function-buttons-list.component.html',
   styleUrls: ['./function-buttons-list.component.scss']
 })

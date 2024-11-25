@@ -11,9 +11,16 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSPayment } from 'src/app/_interfaces';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-cardpointe-transactions',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+            SharedPipesModule],
   templateUrl: './cardpointe-transactions.component.html',
   styleUrls: ['./cardpointe-transactions.component.scss']
 })

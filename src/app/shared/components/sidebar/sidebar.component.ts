@@ -5,9 +5,17 @@ import { AccordionMenu, accordionConfig, SubMenu } from 'src/app/_interfaces/ind
 import { Observable,  Subscription } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-sidebar',
+
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })

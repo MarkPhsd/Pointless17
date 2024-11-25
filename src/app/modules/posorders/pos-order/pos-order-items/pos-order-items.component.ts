@@ -24,13 +24,24 @@ import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { RequestMessageMethodsService } from 'src/app/_services/system/request-message-methods.service';
 import { IMenuButtonGroups, MBMenuButtonsService } from 'src/app/_services/system/mb-menu-buttons.service';
-import { ItemReorderEventDetail } from '@ionic/angular';
+import { IonicModule, ItemReorderEventDetail } from '@ionic/angular';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { filter } from 'lodash';
+import { PosOrderItemComponent } from '../../pos-order-item/pos-order-item.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { FunctionButtonsListComponent } from 'src/app/modules/admin/settings/function-groups/function-buttons-list/function-buttons-list.component';
+import { MessageMenuSenderComponent } from 'src/app/modules/admin/message-editor-list/message-menu-sender/message-menu-sender.component';
 
 @Component({
   selector: 'pos-order-items',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    PosOrderItemComponent,FunctionButtonsListComponent,
+    MessageMenuSenderComponent,IonicModule
+  ],
   templateUrl: './pos-order-items.component.html',
   styleUrls: ['./pos-order-items.component.scss'],
 })

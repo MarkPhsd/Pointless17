@@ -8,8 +8,16 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+
 @Component({
   selector: 'app-qrorder',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './qrorder.component.html',
   styleUrls: ['./qrorder.component.scss']
 })

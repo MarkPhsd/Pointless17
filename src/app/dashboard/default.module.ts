@@ -549,7 +549,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ItemCategoriesListComponent,
     ItemSortComponent,
     ItemCategoriesEditComponent,
-    ImageCaptureComponent,
+
 
     MenuGroupItemEditComponent,
 
@@ -628,7 +628,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PosOrderItemEditComponent,
     NewOrderItemComponent,
     PosOrderListComponent,
-    PosOperationsComponent,
+    // PosOperationsComponent,
 
     PosPaymentComponent,
 
@@ -722,29 +722,30 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
 
 
-    TriPosTransactionsComponent,
-    TriposSettingsComponent,
-    TypeFilterComponent,
-    TypeResultsSelectorComponent,
-    TypeBoardComponent,
-    TypeBoardItemsComponent,
+    // TriPosTransactionsComponent,
+    // TriposSettingsComponent,
+    // TypeFilterComponent,
+    // TypeResultsSelectorComponent,
+    // TypeBoardComponent,
 
-    UsermessagesComponent,
-    UseGroupTaxAssignmentComponent,
-    WeekDaySelectionComponent,
-    WishlistComponent,
 
-    CardPointIDTECHAndroidComponent,
-    CardpointeTransactionsComponent,
-    CpVIVO3300Component,
-    DsiEMVAndroidComponent,
-    DSIAndroidSettingsComponent,
-    DsiAndroidResultsComponent,
+    // UsermessagesComponent,
+    // UseGroupTaxAssignmentComponent,
+    // WeekDaySelectionComponent,
+    // WishlistComponent,
 
-    EditSettingsComponent,
+    // CardPointIDTECHAndroidComponent,
+    // CardpointeTransactionsComponent,
 
-    DateScheduleComponent,
-    TimeScheduleComponent,
+    // DsiEMVAndroidComponent,
+
+
+    // DSIAndroidSettingsComponent,
+    // DsiAndroidResultsComponent,
+    // EditSettingsComponent,
+
+    // DateScheduleComponent,
+    // TimeScheduleComponent,
     //
    ],
 
@@ -764,8 +765,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       ReactiveFormsModule,
       RouterModule,
 
-
-
       SharedModule,
       SharedUtilsModule,
       SharedUiModule,
@@ -780,8 +779,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       KeyboardButtonComponent,
       KeyboardComponent,
 
-      StrainCardComponent,
-      StrainBoardComponent, //imported in menu board
+      // StrainCardComponent,
+      // StrainBoardComponent, //imported in menu board
 
     ],
 

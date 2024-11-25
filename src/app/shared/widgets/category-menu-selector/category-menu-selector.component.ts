@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subject, Subscription, of, switchMap } from 'rxjs';
 import { IProductCategory, IUserProfile } from 'src/app/_interfaces';
@@ -10,6 +11,7 @@ import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { IItemBasic, MenuService } from 'src/app/_services/menu/menu.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
 import { ItemBasic } from 'src/app/modules/admin/report-designer/interfaces/reports';
 
 // export interface IItemBasic{
@@ -26,6 +28,10 @@ export interface IItemBasicProduct extends IItemBasic{
 }
 @Component({
   selector: 'category-menu-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    CategoryMenuSelectorComponent
+  ],
   templateUrl: './category-menu-selector.component.html',
   styleUrls: ['./category-menu-selector.component.scss']
 })

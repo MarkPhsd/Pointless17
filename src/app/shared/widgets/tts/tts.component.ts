@@ -1,8 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { TtsService } from 'src/app/_services/system/tts-service.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-tts-component',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   template: `
     <button (click)="addText()">Add Text to Queue</button>
   `,

@@ -1,11 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, AfterContentInit, Input } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { AppMaterialModule } from '../app-material.module';
+import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
 
 //https://stackoverflow.com/questions/50778659/ag-grid-cellrender-with-button-click
 //https://stackblitz.com/edit/angular-ag-grid-button-renderer?file=src%2Fapp%2Fapp.component.ts
 // <button mat-raised-button  class="agGridButton" color="primary"  type="button" (click)="onClick($event)">{{label}}</button>
 
 @Component({
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   selector: 'app-button-renderer',
   template:     `<div [style]="showHide"  >
                   <button   mat-button

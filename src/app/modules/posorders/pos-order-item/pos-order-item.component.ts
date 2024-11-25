@@ -1,7 +1,7 @@
 
 import { AfterViewInit,OnChanges, Component, ElementRef,  HostListener,
          Input, OnInit, Output, EventEmitter, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { LegacyProgressSpinnerMode as ProgressSpinnerMode } from '@angular/material/legacy-progress-spinner';
@@ -31,12 +31,21 @@ import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-o
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { ValueFieldsComponent } from '../../admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { IonicModule } from '@ionic/angular';
 export interface payload{
   index : number;
   item  : PosOrderItem;
 }
 @Component({
   selector: 'pos-order-item',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
+  ValueFieldsComponent,IonicModule,
+  SharedPipesModule],
   templateUrl: './pos-order-item.component.html',
   styleUrls: ['./pos-order-item.component.scss'],
   providers: [ TruncateTextPipe ],

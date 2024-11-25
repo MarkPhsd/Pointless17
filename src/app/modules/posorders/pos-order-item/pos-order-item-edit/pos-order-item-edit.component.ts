@@ -12,6 +12,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-pos-order-item-edit',
+
   templateUrl: './pos-order-item-edit.component.html',
   styleUrls: ['./pos-order-item-edit.component.scss']
 })
@@ -57,7 +58,7 @@ export class PosOrderItemEditComponent  {
       this.instructions = data.instructions
       this.editField    = data.editField
       this.posOrderItem = data.orderItem;
-      this.menuItem     = data.menuItem 
+      this.menuItem     = data.menuItem
       this.requireWholeNumber  = data.requireWholeNumber
       if (this.editField == 'quantity') {
         if (this.menuItem && this.menuItem.itemType) {
@@ -68,7 +69,7 @@ export class PosOrderItemEditComponent  {
         this.decimals = 2
       }
     }
-    
+
     console.log('keypad', data, this.requireWholeNumber)
     this.initForm();
 
@@ -84,7 +85,7 @@ export class PosOrderItemEditComponent  {
           itemName: [],
         })
       }
-      
+
       if (this.editField == 'modifierNote') {
         this.inputForm = this._fb.group({
           modifierNote: [this.posOrderItem.modifierNote],
@@ -134,7 +135,7 @@ export class PosOrderItemEditComponent  {
         })
       }
 
-  
+
 
     }
   }
@@ -242,7 +243,7 @@ export class PosOrderItemEditComponent  {
       item.wholeSaleCost = value;
     }
 
-    if (this.editField=='itemPerDiscount') { 
+    if (this.editField=='itemPerDiscount') {
       item.itemPercentageDiscountValue = value;
     }
 

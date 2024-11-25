@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component,Inject,OnInit, Optional, } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { concatMap, Observable, of, switchMap } from 'rxjs';
 import { PosOrderItem } from 'src/app/_interfaces';
@@ -8,9 +9,17 @@ import { DateHelperService } from 'src/app/_services/reporting/date-helper.servi
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
 
 @Component({
   selector: 'pos-order-item-editor',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent,ValueFieldsComponent,
+  SharedPipesModule],
   templateUrl: './pos-order-item-editor.component.html',
   styleUrls: ['./pos-order-item-editor.component.scss']
 })
@@ -35,7 +44,7 @@ export class PosOrderItemEditorComponent implements OnInit {
     @Optional() private dialogRef       : MatDialogRef<PosOrderItemEditorComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    if (data) { 
+    if (data) {
       this.item = data?.item;
       this.action = data?.action
       this.orderSubItems = data?.orderItems;
@@ -53,7 +62,7 @@ export class PosOrderItemEditorComponent implements OnInit {
       quantity: [],
       id: []
     })
-    
+
 
     this.inputForm.patchValue(this.item)
     this.inputForm.patchValue({quantity : +this.item.quantity - +this.item.qtyReceived})
@@ -66,7 +75,7 @@ export class PosOrderItemEditorComponent implements OnInit {
     }
   }
 
-  receiveItem() { 
+  receiveItem() {
     const posItem = this.inputForm.value as PosOrderItem;
     const site = this.siteService.getAssignedSite()
     console.log('positem1', posItem)
@@ -76,9 +85,9 @@ export class PosOrderItemEditorComponent implements OnInit {
     posItem.receivedDate = this.dateHelper.format(this.inputForm.controls['receivedDate'].value, 'mm/dd/yyyy')
 
     // console.log()
-    const data = {posItem: posItem, action: this.action} 
+    const data = {posItem: posItem, action: this.action}
     // console.log('data', data)
-    const item$ = this.posOrderItemService.postInventoryAction(site, data).pipe(concatMap(data => { 
+    const item$ = this.posOrderItemService.postInventoryAction(site, data).pipe(concatMap(data => {
 
       this.onCancel(true)
       return of(data)
@@ -95,10 +104,10 @@ export class PosOrderItemEditorComponent implements OnInit {
     }))
   }
 
-  deleteSubItem(item) { 
+  deleteSubItem(item) {
     const site = this.siteService.getAssignedSite()
-    this.action$ = this.posOrderItemService.deletePOSOrderItem(site, item?.id, item?.OrderID).pipe(switchMap(data => { 
-      if (data) { 
+    this.action$ = this.posOrderItemService.deletePOSOrderItem(site, item?.id, item?.OrderID).pipe(switchMap(data => {
+      if (data) {
         this.dialogRef.close(true)
       }
       return of(data)
@@ -114,11 +123,11 @@ export class PosOrderItemEditorComponent implements OnInit {
   }
 
   delete() {
-    const warn = window.confirm('Are you sure you want to delete') 
-    if (warn) { 
+    const warn = window.confirm('Are you sure you want to delete')
+    if (warn) {
       const site = this.siteService.getAssignedSite()
-      this.action$ = this.posOrderItemService.deletePOSOrderItem(site, this.item.id,this.item.orderID).pipe(switchMap(data => { 
-        if (data) { 
+      this.action$ = this.posOrderItemService.deletePOSOrderItem(site, this.item.id,this.item.orderID).pipe(switchMap(data => {
+        if (data) {
           this.onCancel(true)
         }
         return of(data)
@@ -126,7 +135,7 @@ export class PosOrderItemEditorComponent implements OnInit {
     }
   }
 
-  onCancel(result: boolean) { 
+  onCancel(result: boolean) {
     this.dialogRef.close(result)
   }
 

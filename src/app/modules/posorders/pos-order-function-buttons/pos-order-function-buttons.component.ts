@@ -15,8 +15,16 @@ import { RequestMessageService } from 'src/app/_services/system/request-message.
 import { PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MessageMenuSenderComponent } from '../../admin/message-editor-list/message-menu-sender/message-menu-sender.component';
 @Component({
   selector: 'pos-order-function-buttons',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    MessageMenuSenderComponent,
+  ],
   templateUrl: './pos-order-function-buttons.component.html',
   styleUrls: ['./pos-order-function-buttons.component.scss']
 })

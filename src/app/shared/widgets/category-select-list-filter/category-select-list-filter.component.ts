@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { IProductCategory, IUserProfile } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -8,7 +9,9 @@ import { AWSBucketService, ContactsService } from 'src/app/_services';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
 import { ItemBasic } from 'src/app/modules/admin/report-designer/interfaces/reports';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 export interface IItemBasic{
   name: string;
@@ -19,6 +22,8 @@ export interface IItemBasic{
 
 @Component({
   selector: 'category-select-list-filter',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,SharedPipesModule],
   templateUrl: './category-select-list-filter.component.html',
   styleUrls: ['./category-select-list-filter.component.scss']
 })

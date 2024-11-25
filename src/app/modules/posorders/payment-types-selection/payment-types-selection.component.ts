@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
@@ -8,9 +9,16 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'payment-types-selection',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
+
   templateUrl: './payment-types-selection.component.html',
   styleUrls: ['./payment-types-selection.component.scss']
 })
@@ -58,7 +66,7 @@ export class PaymentTypesSelectionComponent {
     if ( this._order) { this._order.unsubscribe()}
   }
 
-  convertList(data: IPaymentMethod[]) { 
+  convertList(data: IPaymentMethod[]) {
     data.forEach(item => {
       const itemFeatures = JSON.parse(item?.json);
       item.itemFeatures = itemFeatures

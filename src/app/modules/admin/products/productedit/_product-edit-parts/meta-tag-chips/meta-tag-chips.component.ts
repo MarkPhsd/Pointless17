@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, ViewChild, AfterViewInit, Output, OnInit, EventEmitter} from '@angular/core';
 import { COMMA, ENTER} from '@angular/cdk/keycodes';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import { MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent, MatLegacyAutocomplete as MatAutocomplete} from '@angular/material/legacy-autocomplete';
 import { MatLegacyChipInputEvent as MatChipInputEvent} from '@angular/material/legacy-chips';
 import { fromEvent, Observable, Subject} from 'rxjs';
@@ -10,9 +10,18 @@ import { MenuService } from 'src/app/_services';
 import { IMetaTag, MetaTagsService } from 'src/app/_services/menu/meta-tags.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-meta-tag-chips',
+  standalone: true,
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
+
   templateUrl: './meta-tag-chips.component.html',
   styleUrls: ['./meta-tag-chips.component.scss']
 })
@@ -85,7 +94,7 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
 
     //the nput from the parent shouold work
     if (this.metaTags) {
-      if (! this.metaTags.value) { 
+      if (! this.metaTags.value) {
         return;
       }
       this.initMetaTags( this.metaTags.value)// this.metaTagsList
@@ -114,7 +123,7 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
       .subscribe();
     }
 
-    if (this.metaTags && this.metaTags.value) { 
+    if (this.metaTags && this.metaTags.value) {
       this.initMetaTags(this.metaTags.value)
     }
 

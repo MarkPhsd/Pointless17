@@ -23,10 +23,31 @@ import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach
 import { IPaymentSalesSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
-import { TouchBarOtherItemsProxy } from 'electron';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ItemSalesCardComponent } from 'src/app/modules/admin/reports/item-sales-card/item-sales-card.component';
+import { SalesTaxReportComponent } from 'src/app/modules/admin/reports/sales-tax-report/sales-tax-report.component';
+import { ListPrintersElectronComponent } from 'src/app/modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { CloseDayValidationComponent } from './close-day-validation/close-day-validation.component';
+import { CardComponent } from 'src/app/modules/admin/reports/card/card.component';
+import { PaymentReportComponent } from 'src/app/modules/admin/reports/payment-report/payment-report.component';
+import { AuditPaymentComponent } from 'src/app/modules/admin/reports/item-sales-card/audit-payment/audit-payment.component';
+import { BalanceSheetReportComponent } from 'src/app/modules/admin/reports/balance-sheet-report/balance-sheet-report.component';
+import { MetrcSummaryComponent } from 'src/app/modules/admin/reports/metrc-summary/metrc-summary.component';
+import { CoachMarksButtonComponent } from 'src/app/shared/widgets/coach-marks-button/coach-marks-button.component';
 
 @Component({
   selector: 'pos-operations',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  ItemSalesCardComponent,SalesTaxReportComponent,ListPrintersElectronComponent,
+  NgxJsonViewerModule,CloseDayValidationComponent,CardComponent,PaymentReportComponent,
+  AuditPaymentComponent,BalanceSheetReportComponent,MetrcSummaryComponent,CoachMarksButtonComponent,
+
+  SharedPipesModule],
   templateUrl: './pos-operations.component.html',
   styleUrls: ['./pos-operations.component.scss']
 })
@@ -115,7 +136,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     private orderService       : OrdersService,
     private platFormService    : PlatformService,
     private printingService    : PrintingService,
-  
+
     private sendGridService    : SendGridService,
     private matSnack           : MatSnackBar,
     private uISettingsService  : UISettingsService,
@@ -349,7 +370,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
     this.localSite = this.siteService.getAssignedSite();
   }
 
- 
+
 
   viewdcapBatchSummary() {
     this.batchSummary$ = this.dcapBatchSummary
@@ -411,7 +432,7 @@ export class PosOperationsComponent implements OnInit, OnDestroy {
 
     try {
       if (this.isElectronApp) {
-    
+
       }
     } catch (error) {
       const answer = window.confirm(`Batch error ${error}, did you want to continue closing? You can batch separately.`)

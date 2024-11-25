@@ -4,7 +4,7 @@ import { Component,Output,OnInit,
    Input,
    } from '@angular/core';
 import { MenuService, OrdersService } from 'src/app/_services';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap, map, concatMap } from 'rxjs/operators';
 import { Subject ,fromEvent, Subscription, of, forkJoin, ReplaySubject } from 'rxjs';
 import { IPOSOrder,  } from 'src/app/_interfaces';
@@ -16,18 +16,24 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { finalize, take } from 'rxjs/operators';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 // https://github.com/rednez/angular-user-idle
 const { Keyboard } = Plugins;
 
 @Component({
   selector: 'order-item-scanner',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
+  SharedPipesModule],
   templateUrl: './order-item-scanner.component.html',
   styleUrls: ['./order-item-scanner.component.scss']
 })
 export class OrderItemScannerComponent implements  OnDestroy, OnInit {
 
   @Input() scanMode: boolean
-  
+
   scans = [] as unknown[];
   obs$ : Observable<unknown>[];
   barcodeScanner$ : Observable<unknown>;
@@ -186,7 +192,7 @@ export class OrderItemScannerComponent implements  OnDestroy, OnInit {
     if (!barcode) { return }
     if (!this.scanMode) {
       this.siteService.notify('Select Driver or Prep', 'close',4000)
-      return 
+      return
     }
     return this.orderMethodService.scanCheckInItem(barcode,  this.scanMode, this.order.id).pipe(switchMap(data => {
       this.orderMethodService.updateOrder(data)

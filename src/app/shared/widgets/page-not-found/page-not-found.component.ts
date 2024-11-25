@@ -4,9 +4,13 @@ import { CompanyService, AWSBucketService} from 'src/app/_services';
 import { ICompany }  from 'src/app/_interfaces';
 import { environment } from 'src/environments/environment';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-page-not-found',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule],
   templateUrl: './page-not-found.component.html',
   styleUrls: ['./page-not-found.component.scss']
 })

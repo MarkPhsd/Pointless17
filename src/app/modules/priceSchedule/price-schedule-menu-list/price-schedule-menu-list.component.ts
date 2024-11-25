@@ -5,8 +5,17 @@ import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.serv
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Router } from '@angular/router';
 import { AWSBucketService } from 'src/app/_services';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MenuCardCategoriesComponent } from '../../menu/categories/menu-card-categories/menu-card-categories.component';
 @Component({
   selector: 'price-schedule-menu-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    MenuCardCategoriesComponent,
+  ],
+
   templateUrl: './price-schedule-menu-list.component.html',
   styleUrls: ['./price-schedule-menu-list.component.scss']
 })
@@ -14,7 +23,7 @@ export class PriceScheduleMenuListComponent implements OnInit {
 
   @Input()  retailView: boolean;
   @Output() outPutMenu  = new EventEmitter();
-  
+
   phoneSize: boolean;
   id: number;
   menus$: Observable<any>;
@@ -53,13 +62,13 @@ export class PriceScheduleMenuListComponent implements OnInit {
     if (this.menuStyle === 'fancy') {
       this.menus$ = this.priceScheduleService.getSimpleMenuList(site).pipe(switchMap(data => {
 
-        if (!data || !data.results) { 
+        if (!data || !data.results) {
           return of(null)
         }
 
         if (data.results) {
-          if (this.retailView) { 
-            const id = data?.results[0]?.id 
+          if (this.retailView) {
+            const id = data?.results[0]?.id
             this._listItems(id)
           }
         }
@@ -73,13 +82,13 @@ export class PriceScheduleMenuListComponent implements OnInit {
     }
     this.menus$ = this.priceScheduleService.getSimpleMenuList(site).pipe(switchMap(data => {
 
-      if (!data || !data.results) { 
+      if (!data || !data.results) {
         return of(null)
       }
 
       if(data.results) {
-        if (this.retailView) { 
-          const id = data?.results[0]?.id 
+        if (this.retailView) {
+          const id = data?.results[0]?.id
           this._listItems(id)
         }
       }
@@ -92,7 +101,7 @@ export class PriceScheduleMenuListComponent implements OnInit {
   }
 
   setItem(menu) {
-    if (this.retailView) { 
+    if (this.retailView) {
       this.outPutMenu.emit(menu?.id)
       return;
     }
@@ -102,7 +111,7 @@ export class PriceScheduleMenuListComponent implements OnInit {
 
   _listItems(event) {
 
-    if (this.retailView) { 
+    if (this.retailView) {
       this.outPutMenu.emit(event)
       return
     }

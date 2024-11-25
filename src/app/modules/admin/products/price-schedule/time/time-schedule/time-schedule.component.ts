@@ -1,5 +1,5 @@
 import { Component, OnInit, Input , EventEmitter, Output} from '@angular/core';
-import { UntypedFormArray, FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormArray, FormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule, ClientType, DateFrame,DiscountInfo,
   TimeFrame, WeekDay
@@ -7,9 +7,16 @@ import { IPriceSchedule, ClientType, DateFrame,DiscountInfo,
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-time-schedule',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './time-schedule.component.html',
   styleUrls: ['./time-schedule.component.scss']
 })

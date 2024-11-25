@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input,  OnInit } from '@angular/core';
 import { Observable, Subject, of, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
@@ -5,9 +6,15 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BalanceSheetOptimized, BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet, IBalanceSheetPagedResults } from 'src/app/_services/transactions/balance-sheet.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'balance-sheet-report',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './balance-sheet-report.component.html',
   styleUrls: ['./balance-sheet-report.component.scss']
 })

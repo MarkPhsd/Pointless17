@@ -103,18 +103,34 @@ import { MatToggleSelectorComponent } from '../shared/widgets/mat-toggle-selecto
 import { TierPricesComponent } from '../modules/menu/tierMenu/tier-prices/tier-prices.component';
 import { TierPriceLineComponent } from '../modules/menu/tierMenu/tiers-with-prices/tier-price-line/tier-price-line.component';
 import { TierItemsComponent } from '../modules/menu/tierMenu/tier-items/tier-items.component';
+import { AutofocusDirective } from '../_directives/auto-focus-input.directive';
+import { DisableControlDirective } from '../_directives/disable-control-directive.directive';
+import { FreeDraggingHandleDirective } from '../_directives/free-dragging-handle.directive';
+import { FreeDraggingDirective } from '../_directives/free-dragging.directive';
+import { InstructionDirective } from '../_directives/instruction.directive';
+import { NgControlAttributeDirective } from '../_directives/ng-control-attribute.directive';
+import { NumericDirective } from '../_directives/numeric-directive.directive';
+import { UserAuthorizedDirective } from '../_directives/user-authorized.directive';
 
 @NgModule({
   declarations: [
 
-    ////move to smaller shared module;
+    NgControlAttributeDirective,
+    NumericDirective,
+    UserAuthorizedDirective,
+    NgxDaterangepickerMd,
+    NgControlAttributeDirective,
+    FreeDraggingDirective,
+    FreeDraggingHandleDirective,
+    AutofocusDirective,
+    DisableControlDirective,
+    InstructionDirective,
 
     AgGridImageFormatterComponent,
     AgGridToggleComponent,
     ButtonRendererComponent,
 
 
-    OrderTotalComponent,
     ClientSearchSelectorComponent,
 
 
@@ -237,14 +253,24 @@ import { TierItemsComponent } from '../modules/menu/tierMenu/tier-items/tier-ite
   ],
 
   exports: [
+    NgControlAttributeDirective,
+    NumericDirective,
+    UserAuthorizedDirective,
+    NgxDaterangepickerMd,
+    NgControlAttributeDirective,
+    FreeDraggingDirective,
+    FreeDraggingHandleDirective,
+    AutofocusDirective,
+    DisableControlDirective,
+    InstructionDirective,
+
+
     MatToggleSelectorComponent,
     MatDateRangeComponent,
     ApiStoredValueComponent,
     AgGridToggleComponent,
-
     ButtonRendererComponent,
     SetTokenComponent,
-
     MatMenuBasicComponent,
     LogoComponent,
     ProductSearchSelectorComponent,
@@ -256,10 +282,8 @@ import { TierItemsComponent } from '../modules/menu/tierMenu/tier-items/tier-ite
     StrainIndicatorComponent,
     OrderTotalComponent,
     ClientSearchSelectorComponent,
-
     FormSelectListComponent,
     SaveChangesButtonComponent,
-
     CSVImportComponent,
 
     //should be in databasemodule

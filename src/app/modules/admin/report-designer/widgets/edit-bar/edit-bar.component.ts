@@ -1,7 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'pgReporting-edit-bar',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule],
   templateUrl: './edit-bar.component.html',
   styleUrls: ['./edit-bar.component.scss']
 })

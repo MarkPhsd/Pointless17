@@ -3,8 +3,16 @@ import { DisplayMenuService } from 'src/app/_services/menu/display-menu.service'
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'display-menu-menu',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
+
   templateUrl: './display-menu-menu.component.html',
   styleUrls: ['./display-menu-menu.component.scss']
 })

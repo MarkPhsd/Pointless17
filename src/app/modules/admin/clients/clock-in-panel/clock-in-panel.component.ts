@@ -1,12 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Optional, TemplateRef, ViewChild } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Observable, of, switchMap } from 'rxjs';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ClockInOutComponent } from 'src/app/shared/widgets/clock-in-out/clock-in-out.component';
 
 @Component({
   selector: 'app-clock-in-panel',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+FastUserSwitchComponent,ClockInOutComponent
+  ],
   templateUrl: './clock-in-panel.component.html',
   styleUrls: ['./clock-in-panel.component.scss']
 })

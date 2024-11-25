@@ -4,8 +4,15 @@ import { Subscription } from 'rxjs';
 import { UUID } from 'angular2-uuid';
 import { ReportDesignerService } from '../../services/report-designer.service';
 import { ItemBasic, viewBuilder_ReportJSON, viewBuilder_View_Field_Values, viewBuilder_Where_Selector, whereTypeList } from '../../interfaces/reports';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'pgReporting-filter-builder',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './filter-builder.component.html',
   styleUrls: ['./filter-builder.component.scss']
 })

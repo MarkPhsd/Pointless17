@@ -6,8 +6,13 @@ import { ReportDesignerService } from '../../services/report-designer.service';
 import { viewBuilder_View_Field_Values, viewBuilder_ReportJSON } from '../../interfaces/reports';
 import { IListBoxItem, IListBoxItemC } from 'src/app/_interfaces/dual-lists';
 import { UUID } from 'angular2-uuid';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'psReporting-field-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule],
   templateUrl: './field-selector.component.html',
   styleUrls: ['./field-selector.component.scss']
 })

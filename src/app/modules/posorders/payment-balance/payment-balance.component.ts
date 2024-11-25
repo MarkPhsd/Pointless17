@@ -25,9 +25,22 @@ import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { LogMessageInfo, SystemService } from 'src/app/_services/system/system.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { OrderHeaderComponent } from '../pos-order/order-header/order-header.component';
+import { OrderTotalBoardComponent } from '../pos-order/order-total-board/order-total-board.component';
+import { OrderTotalComponent } from '../pos-order/order-total/order-total.component';
+import { DSIEMVAndroidPayBtnComponent } from '../pos-payment/dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
 
 @Component({
   selector: 'app-payment-balance',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    OrderHeaderComponent,
+    OrderTotalComponent,
+    DSIEMVAndroidPayBtnComponent,
+  ],
   templateUrl: './payment-balance.component.html',
   styleUrls: ['./payment-balance.component.scss']
 })
@@ -91,7 +104,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   triggerPrintData(id: number): void {
     this.selectedId$.next(id);
   }
-  
+
 
   initSubscriptions() {
     this._order = this.orderMethodsService.currentOrder$.subscribe( data => {
@@ -609,37 +622,37 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.matSnackBar.open(message, title, {duration: duration, verticalPosition: 'top'})
   }
 
-  async printPax(data) { 
+  async printPax(data) {
     const site = this.siteService.getAssignedSite()
     if (!data) { return }
-     await this.creditTicketPrint(data) 
+     await this.creditTicketPrint(data)
   }
-  
+
   async creditTicketPrint(data: string) {
     try {
 
         const tran = JSON.parse(data); // Parse the JSON string into an object
-        if (!tran) { 
+        if (!tran) {
           this.siteService.notify('No tran data' , 'close', 100000);
           return;
         }
-        if (!tran.RStream) { 
+        if (!tran.RStream) {
           this.siteService.notify('No rstream data', 'close', 100000);
           return
         }
 
         const printData = this.dcapMethodsService.extractLineProperties(tran.RStream); // Pass only the RStream object
         try {
-          if (!printData) {   
+          if (!printData) {
             this.siteService.notify('No Print Data Created', 'close', 100000);
             return
            }
           await   this.printToPax(printData)
         } catch (error) {
-          console.log('error', error)  
+          console.log('error', error)
         }
     } catch (error) {
-      console.log('error', error)     
+      console.log('error', error)
     }
   }
 
@@ -669,7 +682,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       }
     }, 500);
   }
-  
+
   async intervalCheckPrint(timer: any) {
     let responseSuccess = '';
     const options = {}
@@ -701,5 +714,5 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       }
     }
   }
-  
+
 }

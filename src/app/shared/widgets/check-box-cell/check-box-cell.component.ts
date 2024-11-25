@@ -1,9 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-check-box-cell',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,],
   template: `<input type="checkbox" [checked]="params.data.athlete==''" (change)="onChange($event)">`,
   styleUrls: ['./check-box-cell.component.scss']
 })

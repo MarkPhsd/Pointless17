@@ -10,12 +10,20 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
 
 @Component({
   selector: 'app-tri-pos-transactions',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    KeyPadComponent,
+  SharedPipesModule],
   templateUrl: './tri-pos-transactions.component.html',
   styleUrls: ['./tri-pos-transactions.component.scss']
 })

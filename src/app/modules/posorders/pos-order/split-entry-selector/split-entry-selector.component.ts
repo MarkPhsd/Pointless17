@@ -1,9 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'split-entry-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+  FormsModule,ReactiveFormsModule,
+  ],
   templateUrl: './split-entry-selector.component.html',
   styleUrls: ['./split-entry-selector.component.scss']
 })
@@ -16,7 +24,7 @@ export class SplitEntrySelectorComponent implements OnInit {
   constructor(public orderMethodsService: OrderMethodsService) { }
 
   ngOnInit(): void {
-    if (this.orderMethodsService.splitEntryValue == 0){ 
+    if (this.orderMethodsService.splitEntryValue == 0){
       this.orderMethodsService.splitEntryValue  = 1;
     }
     const i = 1

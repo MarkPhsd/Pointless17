@@ -9,9 +9,13 @@ import {
 } from 'ng-gallery';
 import { LightboxModule, Lightbox } from 'ng-gallery/lightbox';
 import 'hammerjs';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'image-light-house',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,GalleryModule],
   templateUrl: './image-light-house.component.html',
   styleUrls: ['./image-light-house.component.scss']
 })

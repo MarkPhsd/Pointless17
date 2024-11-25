@@ -5,9 +5,17 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
 import { UnitType } from 'src/app/_interfaces/menu/price-categories';
 import { SearchModel } from 'src/app/_services/system/paging.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-unit-type-fields',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
+
   templateUrl: './unit-type-fields.component.html',
   styleUrls: ['./unit-type-fields.component.scss']
 })

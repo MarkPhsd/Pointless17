@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {  UntypedFormGroup } from '@angular/forms';
+import {  FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule,  DiscountInfo} from 'src/app/_interfaces/menu/price-schedule';
 import { Observable, Subscription } from 'rxjs';
@@ -8,9 +8,17 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 import { IUserProfile } from 'src/app/_interfaces';
 import { trigger, transition,  animate, animation, style, state, keyframes, query, stagger,animateChild } from '@angular/animations';
+import { TypeResultsSelectorComponent } from '../type-results-selector/type-results-selector.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-type-filter',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    TypeResultsSelectorComponent,
+  SharedPipesModule],
   templateUrl: './type-filter.component.html',
   styleUrls: ['./type-filter.component.scss'],
   animations: [

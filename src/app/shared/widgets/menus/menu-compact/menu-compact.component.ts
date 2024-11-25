@@ -8,9 +8,16 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AuthenticationService } from 'src/app/_services';
 import { switchMap } from 'rxjs/operators';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-menu-compact',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './menu-compact.component.html',
   styleUrls: ['./menu-compact.component.scss'],
 })

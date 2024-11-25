@@ -4,9 +4,17 @@ import { catchError, delay, repeatWhen } from 'rxjs/operators';
 import { IEighthMenu,  TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { StrainCardComponent } from '../strainBoard/strain-card/strain-card.component';
 
 @Component({
   selector: 'app-type-board',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+  StrainCardComponent
+  ],
   templateUrl: './type-board.component.html',
   styleUrls: ['./type-board.component.scss'],
   animations: [

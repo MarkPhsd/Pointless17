@@ -8,8 +8,19 @@ import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PaymentBalanceComponent } from '../../posorders/payment-balance/payment-balance.component';
+import { POSOrderScheduleCardComponent } from '../../posorders/posorder-schedule/posorder-schedule-card/posorder-schedule-card.component';
+import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
 @Component({
   selector: 'online-payment-completed',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    PaymentBalanceComponent,POSOrderScheduleCardComponent,LogoComponent
+  ],
+
   templateUrl: './online-payment-completed.component.html',
   styleUrls: ['./online-payment-completed.component.scss']
 })
@@ -30,14 +41,14 @@ export class OnlinePaymentCompletedComponent {
     private siteService: SitesService,
     private uiSettingService: UISettingsService,
     private serviceTypeService: ServiceTypeService,
-    private settingService: SettingsService,) { 
+    private settingService: SettingsService,) {
 
       this.id = +this.route.snapshot.paramMap.get('id');
       this.orderCode = this.route.snapshot.paramMap.get('orderCode');
-      if (this.route.snapshot.paramMap.get('history')) { 
+      if (this.route.snapshot.paramMap.get('history')) {
         this.history = true;
       }
-  
+
       this.ui$ = of(this.uiSettingService.getUIHomePageSettings()).pipe(switchMap(data => {
         if (!data) {
           return this.settingService.getUIHomePageSettings()
@@ -49,18 +60,18 @@ export class OnlinePaymentCompletedComponent {
   }
 
 
-  getOrder() { 
+  getOrder() {
       const site = this.siteService.getAssignedSite();
 
       let order$ : Observable<IPOSOrder>;
-      if (this.id) { 
+      if (this.id) {
         order$ = this.orderService.getOrder(site, this.id.toString(), this.history)
       }
-      if (this.orderCode) { 
+      if (this.orderCode) {
         order$ = this.orderService.getQROrder(site, this.orderCode)
       }
 
-      this.order$ = order$.pipe(switchMap(data => { 
+      this.order$ = order$.pipe(switchMap(data => {
         this.order = data;
         return this.serviceTypeService.getTypeCached(site, data?.serviceTypeID)
       })).pipe(switchMap(data => {
@@ -74,7 +85,7 @@ export class OnlinePaymentCompletedComponent {
           }
           return of(this.order)
       }))
-  
+
   }
 
 }

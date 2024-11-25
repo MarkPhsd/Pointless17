@@ -9,11 +9,18 @@ import { ReportDesignerService } from '../../services/report-designer.service';
 import { viewBuilder_Report, viewBuilder_ReportJSON } from '../../interfaces/reports';
 import { ButtonRendererComponent } from '../../widgets/button-renderer/button-renderer.component';
 import { Observable, of, switchMap } from 'rxjs';
-import { threadId } from 'worker_threads';
-import { json } from 'stream/consumers';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditBarComponent } from '../../widgets/edit-bar/edit-bar.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 @Component({
   selector: 'ps-designer-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    EditBarComponent,AgGridModule,
+  ],
   templateUrl: './designer-list.component.html',
   styleUrls: ['./designer-list.component.scss']
 })

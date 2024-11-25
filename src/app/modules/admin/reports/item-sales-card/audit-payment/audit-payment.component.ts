@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { timeStamp } from 'console';
 import { Observable } from 'rxjs';
@@ -6,9 +7,15 @@ import { OrdersService } from 'src/app/_services';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { IPaymentSalesSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-audit-payment',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './audit-payment.component.html',
   styleUrls: ['./audit-payment.component.scss']
 })

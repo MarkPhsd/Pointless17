@@ -154,8 +154,6 @@
 
     </div>
 
-
-
     <div *ngIf="!isToggleisDisabled || !serviceTypeOrder">
     <ion-item-sliding
                       [class]="nopadd"
@@ -248,7 +246,7 @@
       [wideBar]             ="wideBar"
       [smallDevice]         ="phoneDevice"
       [prepScreen]          ="prepScreen"
-      [deliveryPrep]        = "scanMode == 1 || scanMode == 2"
+      [deliveryPrep]        = "scanMode === 1 || scanMode === 2"
       [enableExitLabel]     = "enableExitLabel"
       [disableActions]      = "disableActions"
       [isStaff]             ="isStaff"

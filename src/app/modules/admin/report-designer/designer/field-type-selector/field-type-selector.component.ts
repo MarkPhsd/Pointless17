@@ -1,9 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ItemBasic } from '../../interfaces/reports';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatSelectorComponent } from '../../widgets/mat-selector/mat-selector.component';
 
 @Component({
   selector: 'psReporting-field-type-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    MatSelectorComponent
+  ],
   templateUrl: './field-type-selector.component.html',
   styleUrls: ['./field-type-selector.component.scss']
 })

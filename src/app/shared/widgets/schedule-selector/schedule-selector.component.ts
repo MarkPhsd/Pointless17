@@ -1,10 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, Output, TemplateRef, ViewChild, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IServiceType, ScheduleValidator, DayTimeRangeValidator } from 'src/app/_interfaces/raw/serviceTypes';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @Component({
   selector: 'app-schedule-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule],
   templateUrl: './schedule-selector.component.html',
   styleUrls: ['./schedule-selector.component.scss']
 })
@@ -12,7 +16,7 @@ export class ScheduleSelectorComponent implements OnInit {
 
   allDaysOfWeek: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-  
+
   @Input() initialSchedule: ScheduleValidator;  // Input to accept initial data
   @Input() serviceType: IServiceType;
   @Input() presenationMode: boolean;
@@ -23,7 +27,7 @@ export class ScheduleSelectorComponent implements OnInit {
   scheduleForm: FormGroup;
 
   get viewOption() {
-    if (this.presenationMode) { 
+    if (this.presenationMode) {
       return this.presentation
     }
     return this.dataEntry;
@@ -41,7 +45,7 @@ export class ScheduleSelectorComponent implements OnInit {
     if (!schedule || !schedule.week) {
       schedule = this.getDefaultSchedule();  // Fall back to default if needed
     }
-  
+
     this.scheduleForm = this.fb.group({
       week: this.fb.array(schedule.week.map(day => this.createDayControl(day)))
     });
@@ -54,14 +58,14 @@ export class ScheduleSelectorComponent implements OnInit {
       timeRanges: this.fb.array(dayTimeRange.timeRanges.map(range => this.createTimeRangeControl(range)) || [])
     });
   }
-  
+
   createTimeRangeControl(range: { startTime: string, endTime: string }): FormGroup {
     return this.fb.group({
       startTime: [range.startTime],
       endTime: [range.endTime]
     });
   }
-  
+
 
   get timeRanges(): FormArray {
     return this.scheduleForm.get('week') as FormArray;
@@ -74,14 +78,14 @@ export class ScheduleSelectorComponent implements OnInit {
       ranges.push(this.createTimeRangeControl({ startTime: '', endTime: '' }));
     }
   }
-  
+
 
   saveSchedule() {
     const savedSchedule = this.scheduleForm.value;
     console.log('Saved Schedule:', savedSchedule);
     this.saveForm.emit(savedSchedule);
   }
-  
+
 
   loadSchedule(schedule: ScheduleValidator) {
     this.initializeForm(schedule);

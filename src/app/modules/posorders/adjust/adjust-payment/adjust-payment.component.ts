@@ -23,13 +23,23 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { authorizationPOST, TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
 import { TriposResult } from 'src/app/_services/tripos/triposModels';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 // import { MatDialog } from '@angular/material/dialog';
 import { MatLegacyDialog } from '@angular/material/legacy-dialog';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatToggleSelectorComponent } from 'src/app/shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
+import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
 @Component({
   selector: 'app-adjust-payment',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    MatToggleSelectorComponent,KeyPadComponent,
+  SharedPipesModule],
+
   templateUrl: './adjust-payment.component.html',
   styleUrls: ['./adjust-payment.component.scss']
 })
@@ -686,7 +696,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   //     return this.saveTerminalSetting(false)
   //   })).pipe(switchMap(data => {
   //     this.settingsService.updateTerminalSetting(this.terminalSettings)
-     
+
   //     setTimeout(this.closePrompt , 200)
   //     return of(data)
   //   }))
@@ -726,7 +736,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       }))
     return device$
   }
-  
+
 
   closePrompt() {
     console.log('close prompt')
@@ -745,8 +755,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   voidDCapPayment() {
 
-    if (!this.voidPayment) { 
-      this.acceptPayment() 
+    if (!this.voidPayment) {
+      this.acceptPayment()
       return;
     }
 
@@ -762,14 +772,14 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
             const void$ = this.clearVoidCheck()
             const action$ = this.paymentsMethodsService.processDcapCreditVoidV2(this.resultAction);
 
-            this.action$ =  void$.pipe(switchMap(data => { 
+            this.action$ =  void$.pipe(switchMap(data => {
               return action$
             })).pipe(switchMap(data => {
-             
+
               console.log('data.errorMessage',  data)
               if (data) {
                 if (data?.errorMessage ) {
-                  if (data.errorMessage != 'Partial Approval') { 
+                  if (data.errorMessage != 'Partial Approval') {
                     this.siteService.notify(data?.errorMessage, 'close', 10000)
                   }
                 }
@@ -921,7 +931,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       console.log('terminal', item)
     }
     // Ensure dsiEMVSettings.sendToBack is set correctly based on the close parameter
-  
+
     item.dsiEMVSettings.sendToBack = close;
     item.id = this.terminalSettings?.id;
     const text = JSON.stringify(item);

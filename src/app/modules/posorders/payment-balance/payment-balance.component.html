@@ -94,7 +94,7 @@
         <ng-container *ngTemplateOutlet="cardInfoView,  context: {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="printButtonView,  context:  {$implicit: item}"></ng-container>
         <ng-container *ngTemplateOutlet="printPaxReceipt,  context:  {$implicit: item}"></ng-container>
-       
+
         <ng-container *ngTemplateOutlet="voidActionView,  context:  {$implicit: item}"></ng-container>
 
         <div *ngIf="item.voidReason && item.voidReason != 0" >
@@ -372,8 +372,6 @@
   <div *ngIf="isPax">
 
     <ng-container *ngIf="triggerPrintData(item.id); false"></ng-container>
-
-    <!-- Trigger data retrieval -->
     <div *ngIf="printData$ | async as itemData">
       <button class="payment-button-balance"
               color="accent"

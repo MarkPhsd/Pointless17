@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, Output,EventEmitter, Inject } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
@@ -14,9 +15,16 @@ import { TransactionUISettings } from 'src/app/_services/system/settings/uisetti
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { RequestMessageComponent } from './request-message/request-message.component';
 
 @Component({
   selector: 'app-request-messages',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    RequestMessageComponent
+  ],
   templateUrl: './request-messages.component.html',
   styleUrls: ['./request-messages.component.scss']
 })
