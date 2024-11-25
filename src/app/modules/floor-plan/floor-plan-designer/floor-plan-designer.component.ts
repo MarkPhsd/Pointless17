@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { UntypedFormGroup,  UntypedFormBuilder } from '@angular/forms';
+import { UntypedFormGroup,  UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { Observable, Subject } from 'rxjs';
 import { delay, repeatWhen  } from 'rxjs/operators';
@@ -10,6 +10,27 @@ import { FURNISHINGS } from '../models/furnishings';
 import { ChairsLayoutComponent } from '../chairs-layout/chairs-layout.component';
 import { UUID } from 'angular2-uuid';
 import { tableProperties } from '../models/helpers';
+import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyOptionModule } from '@angular/material/legacy-core';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacyListModule } from '@angular/material/legacy-list';
+import { MatLegacyRadioModule } from '@angular/material/legacy-radio';
+import { MatLegacySelectModule } from '@angular/material/legacy-select';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { PointlessFloorPlanViewComponent } from '../pointless-floor-plan-view/pointless-floor-plan-view.component';
+import { MatLegacyTooltipModule } from '@angular/material/legacy-tooltip';
+import { MatLegacyMenuModule } from '@angular/material/legacy-menu';
+import { MatLegacyTabNavPanel } from '@angular/material/legacy-tabs';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { PreviewFurnitureComponent } from '../preview-furniture/preview-furniture.component';
+import { ZoomFloorPlanComponent } from '../zoom-floor-plan/zoom-floor-plan.component';
 // import { ChairsLayoutComponent } from 'pointless-room-layout';
 // import { FURNISHINGS } from './models/furnishings';
 // import { AppService, uuidList } from './app.service';
@@ -29,6 +50,16 @@ export interface IFloorPlan {
 }
 @Component({
   selector: 'floor-plan-designer',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AppMaterialModule,
+    PointlessFloorPlanViewComponent,
+    PreviewFurnitureComponent,
+    ZoomFloorPlanComponent,
+  ],
   templateUrl: './floor-plan-designer.component.html',
   styleUrls: ['./floor-plan-designer.component.scss']
 })

@@ -218,6 +218,15 @@ const routes: Routes = [
         { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthGuard], data: {  title: 'Dash Board',  animation: 'isLeft'} },
         { path: 'reports',    component: ReportsComponent, canActivate: [AuthGuard], data: { title: 'Reports', animation: 'isLeft'} },
 
+
+        ///price schedule layout menu
+        // {path: 'table-layout', component: FloorPlanComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
+        {
+          path:  'table-layout', // Path to lazy load the module
+          loadChildren: () =>
+            import( './modules/floor-plan/floor-plan/floor-plan.component').then((m) => m.FloorPlanComponent),
+        },
+
         // { path: 'app-settings',    component: SettingsComponent, canActivate: [AuthGuard], data: { title: 'Settings', animation: 'isLeft'} },
 
         {
@@ -306,8 +315,6 @@ const routes: Routes = [
         ///price schedule layout menu
         {path: 'psmenu-group-list', component: PSMenuGroupListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
-        ///price schedule layout menu
-        {path: 'table-layout', component: FloorPlanComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
         // function-group-list
         { path: 'function-group-list', component: FunctionGroupListComponent,  canActivate: [AuthGuard], data: {  title: 'Function List', animation: 'isLeft'}},

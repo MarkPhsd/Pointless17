@@ -35,7 +35,6 @@ import { SearchResultsComponent } from 'src/app/modules/menu/search-results/sear
 import { PosListComponent } from 'src/app/modules/admin/settings/pos-list/pos-list.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ProductlistviewComponent } from 'src/app/modules/admin/products/productlistview/productlistview.component';
-import { SiteEditComponent } from 'src/app/modules/admin/settings/site-edit/site-edit.component';
 import { ReviewEditComponent } from 'src/app/modules/reviews/review-edit/review-edit.component';
 import { ReviewComponent } from 'src/app/modules/reviews/review/review.component';
 import { ReviewsComponent } from 'src/app/modules/reviews/reviews.component';
@@ -63,12 +62,8 @@ import { ItemCategoriesListComponent } from '../modules/admin/metrc/items/item-c
 import { ItemCategoriesEditComponent } from '../modules/admin/metrc/items/item-categories-edit/item-categories-edit.component';
 import { InventoryListComponent } from '../modules/admin/inventory/inventory-list/inventory-list/inventory-list.component';
 import { MetrcSalesListComponent } from '../modules/admin/metrc/metrc-sales-list/metrc-sales-list.component';
-// import { StrainProductEditComponent } from '../modules/admin/products/productedit/strain-product-edit/strain-product-edit.component';
 import { ItemTypeComponent } from '../modules/admin/products/item-type/item-type.component';
 import { ItemTypeEditorComponent } from '../modules/admin/products/item-type/item-type-editor/item-type-editor.component';
-// import { FlatRateEditComponent } from '../modules/admin/products/flatRate/flat-rate-edit/flat-rate-edit.component';
-// import { FlatRateListComponent } from '../modules/admin/products/flatRate/flat-rate-list/flat-rate-list.component';
-// import { FlatTaxRateListComponent } from '../modules/admin/products/item-type/flat-tax-rate-list/flat-tax-rate-list.component';
 import { TaxRateListComponent } from '../modules/admin/products/item-type/tax-rate-list/tax-rate-list.component';
 import { TaxEditComponent } from '../modules/admin/products/taxes/tax-edit/tax-edit.component';
 import { TaxListComponent } from '../modules/admin/products/taxes/tax-list/tax-list.component';
@@ -213,21 +208,17 @@ import { PosEditSettingsComponent } from '../modules/admin/settings/pos-list/pos
 
 import { StoreCreditPopUpComponent } from '../modules/posorders/pos-payment/store-credit-pop-up/store-credit-pop-up.component';
 import { StoreCreditIssueComponent } from '../modules/posorders/pos-order/store-credit-issue/store-credit-issue.component';
-// import { BalanceSheetViewComponent } from '../shared-ui/printing/balance-sheet-view/balance-sheet-view.component';
 import { CloseDayValidationComponent } from '../modules/transactions/operations/pos-operations/close-day-validation/close-day-validation.component';
 import { PasswordValidationComponent } from '../modules/admin/profiles/password-validation/password-validation.component';
-// import { CreditCardPaymentsPrintListComponent } from '../modules/transactions/balanceSheets/credit-card-payments-print-list/credit-card-payments-print-list.component';
 import { AngularResizeEventModule } from 'angular-resize-event';
 import { ProductListByBarcodeComponent } from '../modules/menu/product-list-by-barcode/product-list-by-barcode.component';
 import { AppWizardStatusComponent } from '../modules/admin/settings/software/app-wizard-status/app-wizard-status.component';
-import { FloorPlanComponent } from '../modules/floor-plan/floor-plan/floor-plan.component';
 import { CardpointeTransactionsComponent } from '../modules/payment-processing/cardPointe/cardpointe-transactions/cardpointe-transactions.component';
 import { CardPointIDTECHAndroidComponent } from '../modules/payment-processing/cardPointe/card-point-idtechandroid/card-point-idtechandroid.component';
 import { CpVIVO3300Component } from '../modules/payment-processing/cardPointe/cp-vivo3300/cp-vivo3300.component';
 import { DsiAndroidResultsComponent } from '../modules/payment-processing/dsiEMVAndroid/dsi-android-results/dsi-android-results.component';
 import { DSIAndroidSettingsComponent } from '../modules/payment-processing/dsiEMVAndroid/dsiandroid-settings/dsiandroid-settings.component';
 import { DsiEMVAndroidComponent } from '../modules/payment-processing/dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
-import { ZoomFloorPlanComponent } from '../modules/floor-plan/zoom-floor-plan/zoom-floor-plan.component';
 
 import { PSMenuGroupListComponent } from '../modules/admin/products/price-schedule-menu-groups/psmenu-group-list/psmenu-group-list.component';
 import { PSMenuGroupEditComponent } from '../modules/admin/products/price-schedule-menu-groups/psmenu-group-edit/psmenu-group-edit.component';
@@ -280,7 +271,6 @@ import { DisplayMenuListComponent } from '../modules/display-menu/display-menu-l
 import { AdminDisplayMenuSelctorComponent } from '../modules/admin/products/display-menu/display-menu/display-menu-selctor/display-menu-selctor.component';
 import { DisplayMenuMainComponent } from '../modules/display-menu/display-menu/display-menu-main/display-menu-main.component';
 import { DisplayMenuTitleComponent } from '../modules/display-menu/display-menu-title/display-menu-title.component';
-import { OrderMethodsService } from '../_services/transactions/order-methods.service';
 import { PriceScheduleMenuItemsComponent } from '../modules/priceSchedule/price-schedule-menu-items/price-schedule-menu-items.component';
 import { PriceScheduleSortComponent } from '../modules/admin/products/price-schedule/price-schedule-sort/price-schedule-sort.component';
 import { DisplayMenuSortComponent } from '../modules/admin/products/display-menu/display-menu-sort/display-menu-sort.component';
@@ -290,9 +280,6 @@ import { BlogListEditComponent } from '../modules/admin/blogEditor/blog-list-edi
 import { BlogPostEditComponent } from '../modules/admin/blogEditor/blog-post-edit/blog-post-edit.component';
 import { BlogPostSortComponent } from '../modules/admin/blogEditor/blog-post-sort/blog-post-sort.component';
 import { PosOrderItemListComponent } from '../modules/posorders/pos-order/pos-order-item-list/pos-order-item-list.component';
-// import { PrintTemplateComponent } from '../shared-ui/printing/reciept-pop-up/print-template/print-template.component';
-// import { PrintTemplatePopUpComponent } from '../shared-ui/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
-// import { DxReportDesignerModule, DxReportViewerModule } from 'devexpress-reporting-angular';
 import { DevxReportDesignerComponent } from '../modules/admin/devx-reporting/devx-report-designer/devx-report-designer.component';
 import { ReportViewerComponent } from '../modules/admin/devx-reporting/report-viewer/report-viewer.component';
 import { JobTypesEditComponent } from '../modules/admin/clients/jobs/job-types-edit/job-types-edit.component';
@@ -327,10 +314,6 @@ import { HouseAccountsListComponent } from '../modules/orders/house-accounts-lis
 import { PartBuilderFilterComponent } from '../modules/admin/products/part-builder/part-builder-filter/part-builder-filter.component';
 import { ProductSelectorComponent } from '../modules/admin/products/productedit/_product-edit-parts/product-selector/product-selector.component';
 import { PartBuilderSelectorComponent } from '../modules/admin/products/productedit/_product-edit-parts/part-builder-selector/part-builder-selector.component';
-import { RoomLayoutDesignerComponent } from '../modules/floor-plan/floor-plan-designer/floor-plan-designer.component';
-import { ChairsLayoutComponent } from '../modules/floor-plan/chairs-layout/chairs-layout.component';
-import { PreviewFurnitureComponent } from '../modules/floor-plan/preview-furniture/preview-furniture.component';
-import { PointlessFloorPlanViewComponent } from '../modules/floor-plan/pointless-floor-plan-view/pointless-floor-plan-view.component';
 import { NewOrderItemComponent } from '../modules/posorders/pos-order/new-order-item/new-order-item.component';
 import { PartBuilderUsageListComponent } from '../modules/admin/products/part-builder/part-builder-usage-list/part-builder-usage-list.component';
 import { PartBuilderTreeComponent } from '../modules/admin/products/part-builder/part-builder-tree/part-builder-tree.component';
@@ -349,9 +332,6 @@ import { BrandClassEditorComponent } from '../modules/admin/resale_manager/brand
 import { EbayPublishProductComponent } from '../modules/admin/inventory/ebay/ebay-publish-product/ebay-publish-product.component';
 import { ItemsMainComponent } from '../modules/transactions/itemTransactions/items-main/items-main.component';
 import { ItemsFilterComponent } from '../modules/transactions/itemTransactions/items-filter/items-filter.component';
-import { EbayAuthRedirectComponent } from '../modules/admin/settings/software/ebay-settings/ebay-auth-redirect/ebay-auth-redirect.component';
-import { EbayReturnPolicyComponent } from '../modules/admin/inventory/ebay/ebay-return-policy/ebay-return-policy.component';
-import { EbayFulfillmentPolicyComponent } from '../modules/admin/inventory/ebay/ebay-fulfillment-policy/ebay-fulfillment-policy.component';
 import { EbayAspectsComponent } from '../modules/admin/inventory/ebay/ebay-publish-product/ebay-aspects/ebay-aspects.component';
 import { PosSplitOrdersComponent } from '../modules/posorders/pos-payment/possplit-items/pos-split-orders/pos-split-orders.component';
 import { TransferOrderComponent } from '../modules/orders/transfer-order/transfer-order.component';
@@ -375,8 +355,8 @@ import { PosOrderItemEditorComponent } from '../modules/posorders/pos-order/pos-
 
 import { SharedUiModule } from '../shared-ui/shared-ui.module';
 import { SharedUtilsModule } from '../shared-utils/shared-utils.module';
-import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
-import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-settings/ebay-settings.component';
+import { KeyboardButtonComponent } from '../shared/widgets/keyboard-button/keyboard-button.component';
+import { KeyboardComponent } from '../shared/widgets/keyboard/keyboard.component';
 // import { PosOrderItemEditorComponent } from '../modules/posorders/pos-order/pos-order-items/pos-order-item-edit/pos-order-item-edit.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
@@ -422,10 +402,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     BalanceSheetsComponent,
     BalanceSheetFilterComponent,
     BalanceSheetEditComponent,
-    // BalanceSheetCalculationsViewComponent,
-    // BalanceSheetHeaderViewComponent,
     BalanceSheetQuickViewComponent,
-    // BalanceSheetViewComponent,
 
     BrandslistComponent,
 
@@ -446,14 +423,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     AdminDisplayMenuComponent,
     AdminDisplayMenuSelctorComponent,
 
-
     BlogListEditComponent,
     BlogPostEditComponent,
     BlogPostSortComponent,
-
-    // EmployeeClockEditComponent,
-    // EmployeeClockListComponent,
-    // EmployeeClockFilterComponent,
 
     ClientTypeListComponent,
     ClientTypeEditComponent,
@@ -520,19 +492,12 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     StrainPackagesComponent,
     StrainProductEditComponent,
 
-
-
-
-
     ServiceTypeEditComponent,
     ServiceTypeListComponent,
 
     StoreCreditEditorComponent,
     StoreCreditListComponent,
 
-    // PrintTemplatePopUpComponent,
-    // PrintTemplateComponent,
-    ///end admin
 
     CatalogScheduleInfoComponent,
     CatalogScheduleInfoListComponent,
@@ -541,7 +506,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DisplayMenuTitleComponent,
     DisplayMenuSortComponent,
     MenuSectionComponent,
-    // DisplayMenuComponent,
 
     DefaultComponent,
     DiscountOptionsComponent,
@@ -563,13 +527,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     EmployeeSelectPopUpComponent,
 
-    ZoomFloorPlanComponent,
-    ChairsLayoutComponent,
-    FloorPlanComponent,
-    PreviewFurnitureComponent,
-    RoomLayoutDesignerComponent,
-    PointlessFloorPlanViewComponent,
-    // PointlessFloorPlanViewComponent,
     FunctionGroupListComponent,
     FunctionGroupEditComponent,
     FunctionGroupButtonEditComponent,
@@ -592,7 +549,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ItemSortComponent,
     ItemCategoriesEditComponent,
     ImageCaptureComponent,
-    // LabelViewSelectorComponent,
 
     MenuGroupItemEditComponent,
 
@@ -620,7 +576,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     EbayAspectsComponent,
     EbayPublishProductComponent,
 
-
     // NumericDirective,
     OrderItemsListComponent,
     OrderItemListComponent,
@@ -634,9 +589,11 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     OrdersMainComponent,
     OrderPanelComponent,
     TransferOrderComponent,
+
     QrPaymentComponent,
     PayAPIComponent,
     PayAPIFrameComponent,
+
     PartBuilderMainComponent,
     PartBuilderEditComponent,
     PartBuilderFilterComponent,
@@ -659,8 +616,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PrepOrderFilterComponent,
     PrepOrderItemComponent,
     PriceTierLineEditComponent,
-    // PriceTierEditComponent,
-    // PriceTiersComponent,
+
     ProductListByBarcodeComponent,
     TVPriceTiersComponent,
     PosListComponent,
@@ -727,7 +683,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PSMenuGroupListComponent,
     PSMenuGroupEditComponent,
 
-
     RecieptPopUpComponent,
     ReportsComponent,
     RequiresSerialComponent,
@@ -751,17 +706,11 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     SitepurchasesComponent,
 
     SitesComponent,
-    StrainBoardComponent,
-    StrainCardComponent,
-
     StickyHeaderComponent,
     StoreCreditIssueComponent,
-
     StoreCreditPopUpComponent,
 
     MenuItemCardDashboardComponent,
-
-
 
     TaxEditComponent,
     TaxListComponent,
@@ -783,8 +732,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     UseGroupTaxAssignmentComponent,
     WeekDaySelectionComponent,
     WishlistComponent,
-    ZoomFloorPlanComponent,
-
 
     CardPointIDTECHAndroidComponent,
     CardpointeTransactionsComponent,
@@ -827,6 +774,12 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       NgxColorsModule,
       FormsModule,
       NgcCookieConsentModule,
+      KeyboardButtonComponent,
+      KeyboardComponent,
+
+      StrainCardComponent,
+      StrainBoardComponent, //imported in menu board
+
     ],
 
   exports: [
@@ -838,6 +791,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     NgxJsonViewerModule,
     NgxColorsModule,
     SharedModule,
+    KeyboardButtonComponent,
+    KeyboardComponent,
   ],
 
   providers: [

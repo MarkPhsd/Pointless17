@@ -94,6 +94,8 @@ import { EbayReturnPolicyComponent } from '../modules/admin/inventory/ebay/ebay-
 import { EbayAuthRedirectComponent } from '../modules/admin/settings/software/ebay-settings/ebay-auth-redirect/ebay-auth-redirect.component';
 import { EbaySettingsComponent } from '../modules/admin/settings/software/ebay-settings/ebay-settings.component';
 import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/balanceSheets/balance-sheet-edit/balance-sheet-employee-sales/balance-sheet-employee-sales.component';
+import { KeyboardButtonComponent } from '../shared/widgets/keyboard-button/keyboard-button.component';
+import { KeyboardComponent } from '../shared/widgets/keyboard/keyboard.component';
 
 @NgModule({
   declarations: [
@@ -104,10 +106,10 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
     AgGridToggleComponent,
     ButtonRendererComponent,
 
-    StrainIndicatorComponent,
+
     OrderTotalComponent,
     ClientSearchSelectorComponent,
-    //should be in databasemodule
+
 
     TvPriceTierMenuItemsComponent,
     TvPriceSpecialsComponent,
@@ -150,6 +152,7 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
 
   ],
   imports: [
+
     ApiStatusDisplayComponent,
     CommonModule,
     IonicModule,
@@ -211,6 +214,11 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
     BalanceSheetHeaderViewComponent,
     BalanceSheetEmployeeSalesComponent,
     ProductSearchSelectorComponent,
+
+    KeyboardButtonComponent,
+    KeyboardComponent,
+
+    StrainIndicatorComponent,
   ],
 
   exports: [
@@ -299,7 +307,10 @@ import { BalanceSheetEmployeeSalesComponent } from '../modules/transactions/bala
 
     BalanceSheetCalculationsViewComponent,
     BalanceSheetHeaderViewComponent,
-    BalanceSheetEmployeeSalesComponent
+    BalanceSheetEmployeeSalesComponent,
+
+    KeyboardButtonComponent,
+    KeyboardComponent,
   ],
   providers: [
     InventoryEditButtonService,

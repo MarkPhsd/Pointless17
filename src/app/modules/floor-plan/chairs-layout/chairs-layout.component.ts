@@ -1,9 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormGroup,  FormBuilder, UntypedFormControl } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup,  FormBuilder, UntypedFormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { fabric } from 'fabric';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { RL_FILL, RL_STROKE, createShape } from '../models/helpers';
 import { FURNISHINGS } from '../models/furnishings';
+import { MatLegacyRadioModule } from '@angular/material/legacy-radio';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatLegacySelectModule } from '@angular/material/legacy-select';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { ZoomFloorPlanComponent } from '../zoom-floor-plan/zoom-floor-plan.component';
 
 // import { FURNISHINGS } from '../../models/furnishings';
 // import { createShape, RL_FILL, RL_STROKE } from '../../helpers';
@@ -12,6 +22,14 @@ const WIDTH = 1100, HEIGHT = 400;
 
 @Component({
   selector: 'pointless-chairs-layout',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    AppMaterialModule,
+    ZoomFloorPlanComponent
+  ],
   templateUrl: './chairs-layout.component.html',
   styleUrls: ['./chairs-layout.component.scss']
 })

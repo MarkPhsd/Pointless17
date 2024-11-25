@@ -4,6 +4,7 @@ import * as _ from '../models/helpers';
 import { FloorPlanMethodService } from '../floor-plan.service';
 import { UUID } from 'angular2-uuid';
 import { FloorPlanService } from 'src/app/_services/floor-plan.service';
+import { CommonModule } from '@angular/common';
 
 const {
   RL_VIEW_WIDTH,
@@ -32,6 +33,8 @@ const Bottom = (wall) => wall.y1 > wall.y2 ? wall.y1 : wall.y2;
 
 @Component({
   selector: 'pointless-floor-plan-view',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './pointless-floor-plan-view.component.html',
   styleUrls: ['./pointless-floor-plan-view.component.scss']
 })

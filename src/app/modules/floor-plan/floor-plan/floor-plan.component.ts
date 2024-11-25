@@ -10,6 +10,14 @@ import { FloorPlanMethodService } from '../floor-plan.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { tableProperties } from '../models/helpers';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { ZoomFloorPlanComponent } from '../zoom-floor-plan/zoom-floor-plan.component';
+import { RoomLayoutDesignerComponent } from '../floor-plan-designer/floor-plan-designer.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { CommonModule } from '@angular/common';
 
 export interface uuidList {
   uuID: string;
@@ -17,6 +25,13 @@ export interface uuidList {
 }
 @Component({
   selector: 'app-floor-plan',
+  standalone: true,
+  imports: [CommonModule,
+            RoomLayoutDesignerComponent,
+            UploaderComponent,
+            AppMaterialModule,
+            ZoomFloorPlanComponent,
+  ],
   templateUrl: './floor-plan.component.html',
   styleUrls: ['./floor-plan.component.scss']
 })

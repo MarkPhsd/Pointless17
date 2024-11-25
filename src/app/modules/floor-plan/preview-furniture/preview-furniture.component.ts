@@ -3,6 +3,7 @@ import { fabric } from 'fabric';
 import * as uuid from 'uuid';
 import { FloorPlanMethodService } from '../floor-plan.service';
 import { RL_PREVIEW_HEIGHT, RL_PREVIEW_WIDTH, createFurniture } from '../models/helpers';
+import { CommonModule } from '@angular/common';
 
 // import { RL_PREVIEW_HEIGHT, RL_PREVIEW_WIDTH, createFurniture } from '../../helpers';
 
@@ -10,6 +11,8 @@ let RL_DEFAULT_CHAIR = null;
 
 @Component({
   selector: 'pointless-preview-furniture',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './preview-furniture.component.html',
   styleUrls: ['./preview-furniture.component.scss']
 })
