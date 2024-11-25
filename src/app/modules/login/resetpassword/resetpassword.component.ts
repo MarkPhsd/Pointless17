@@ -1,13 +1,34 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser }  from 'src/app/_interfaces';
 import { Observable, of, switchMap} from 'rxjs'
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 @Component({
   selector: 'app-resetpassword',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatLegacyCardModule,
+    MatLegacyFormFieldModule,
+    MatLegacyInputModule,
+    MatLegacyButtonModule,
+    MatIconModule,
+    MatDividerModule,
+    MatLegacyProgressSpinnerModule,
+    RouterModule
+  ],
   templateUrl: './resetpassword.component.html',
   styleUrls: ['./resetpassword.component.scss']
 })
@@ -88,17 +109,17 @@ export class ResetpasswordComponent implements OnInit {
       this.request$ = this.authenticationService.requestPasswordResetToken(this.f.username.value).pipe(
         switchMap(data => {
           this.processing = false
-          if (data?.userExists) { 
+          if (data?.userExists) {
             this.siteService.notify('Please check your phone or email for a reset code.', 'Close', 5000, 'green')
             this.changePassword(this.f.username.value)
-          } else { 
+          } else {
             this.initForm();
           }
           return of(data)
         }
         )
       )
-      
+
 
     } catch (error) {
       this.statusMessage = "Password reset request failed."

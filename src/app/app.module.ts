@@ -164,13 +164,8 @@ enableProdMode();
 @NgModule({
   declarations: [
     AppComponent,
-    AppGateComponent,
-    ChangepasswordComponent,
-
     LoginComponent,
-    RegisterAccountExistingUserWithTokenComponent,
-    RegisterAccountMainComponent,
-    ResetpasswordComponent,
+
   ],
 
     // G-6BNWKZ7VY8

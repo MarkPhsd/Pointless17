@@ -1,15 +1,36 @@
 import { AuthenticationService} from 'src/app/_services';
 import { ICompany }  from 'src/app/_interfaces';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Subscription, switchMap,of,Observable } from 'rxjs';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { ApiStatusDisplayComponent } from 'src/app/shared/widgets/api-status-display/api-status-display.component';
+import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
 
 @Component({
   selector: 'app-register-account-main',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatLegacyCardModule,
+    MatLegacyFormFieldModule,
+    MatLegacyInputModule,
+    MatLegacyButtonModule,
+    MatDividerModule,
+    MatLegacyProgressSpinnerModule,
+    LogoComponent,
+    ApiStatusDisplayComponent
+  ],
   templateUrl: './register-account-main.component.html',
   styleUrls: ['./register-account-main.component.scss']
 })

@@ -3,9 +3,14 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { CommonModule } from '@angular/common';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-app-gate',
+  standalone: true,
+  imports: [CommonModule,MatLegacyButtonModule, MatIconModule],
   templateUrl: './app-gate.component.html',
   styleUrls: ['./app-gate.component.scss']
 })

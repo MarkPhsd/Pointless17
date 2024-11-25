@@ -20,6 +20,8 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
 
 @Component({
     selector   : 'login-dashboard',
+
+
     templateUrl: './login.component.html',
     styleUrls  : ['./login.component.scss'],
     animations : [ fadeInAnimation ],

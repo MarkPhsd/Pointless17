@@ -415,12 +415,17 @@ const routes: Routes = [
     { path: 'barcodescanner', component: BarcodeScannerComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
     { path: 'login', component: LoginComponent, data: { title: 'Pointless Login', animation: 'isLeft'}},
-    { path: 'resetpassword', component: ResetpasswordComponent,data: {  title: 'Reset Password',  animation: 'isLeft'}},
+
+
+    //apply lazy loading
     { path: 'changepassword', component: ChangepasswordComponent,data: {  title: 'Change Password',  animation: 'isLeft'}},
+    { path: 'resetpassword', component: ResetpasswordComponent,data: {  title: 'Reset Password',  animation: 'isLeft'}},
+    { path: 'register-user', component: RegisterAccountMainComponent, data: { animation: 'isLeft'}},
+    { path: 'register-token', component: RegisterAccountExistingUserWithTokenComponent, data: { animation: 'isLeft'}},
+
+
     { path: 'api-setting', component: APISettingComponent , data: { title: 'API Setting',  animation: 'isLeft'}},
     { path: 'apisetting',  component: APISettingComponent , data: { title: 'API Setting', animation: 'isLeft'}},
-    { path: 'register-token', component: RegisterAccountExistingUserWithTokenComponent, data: { animation: 'isLeft'}},
-    { path: 'register-user', component: RegisterAccountMainComponent, data: { animation: 'isLeft'}},
     { path: 'appgate', component: AppGateComponent, data: { animation: 'isLeft'}},
 
     { path: 'menu-modal', component: MenuItemModalComponent, data: { animation: 'isLeft'}},

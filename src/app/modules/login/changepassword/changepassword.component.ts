@@ -1,13 +1,32 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { AbstractControl, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser }  from 'src/app/_interfaces';
 import { Observable, of, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
 
 @Component({
   selector: 'app-changepassword',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatLegacyCardModule,
+    MatLegacyFormFieldModule,
+    MatLegacyInputModule,
+    MatIconModule,
+    MatLegacyButtonModule,
+    MatDividerModule,
+    RouterModule
+  ],
   templateUrl: './changepassword.component.html',
   styleUrls: ['./changepassword.component.scss'],
 })
@@ -24,7 +43,7 @@ export class ChangepasswordComponent implements OnInit {
   //receive user
   @Input() user: IUser;
   action$ : Observable<any>;
-  
+
   constructor(
       private formBuilder: UntypedFormBuilder,
       private route: ActivatedRoute,

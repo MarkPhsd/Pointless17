@@ -1,22 +1,46 @@
 import { AuthenticationService, IUserExists} from 'src/app/_services';
 import { ICompany, IUser }  from 'src/app/_interfaces';
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule } from '@angular/material/legacy-card';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { ApiStatusDisplayComponent } from 'src/app/shared/widgets/api-status-display/api-status-display.component';
+import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
 
 @Component({
   selector: 'app-register-account-existing-user-with-token',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatLegacyCardModule,
+    MatLegacyFormFieldModule,
+    MatLegacyInputModule,
+    MatLegacyButtonModule,
+    MatDividerModule,
+    MatLegacyProgressSpinnerModule,
+    MatIconModule,
+    LogoComponent,
+    ApiStatusDisplayComponent
+  ],
   templateUrl: './register-account-existing-user-with-token.component.html',
   styleUrls: ['./register-account-existing-user-with-token.component.scss']
 })
 export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
 
-  
+
   @Input() statusMessage: string;
   compName   : string;
   company    = {} as ICompany;
