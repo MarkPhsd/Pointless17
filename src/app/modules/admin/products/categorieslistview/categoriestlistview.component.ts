@@ -12,9 +12,17 @@ import { AWSBucketService } from 'src/app/_services';
 import { MatSort } from '@angular/material/sort';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-categorieslistview',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './categorieslistview.component.html',
   styleUrls: ['./categorieslistview.component.scss'],
   animations:  [ fadeInAnimation ],

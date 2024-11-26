@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Review } from 'src/app/_interfaces/menu/menu-products';
@@ -5,9 +6,15 @@ import { AWSBucketService, UserService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { ReviewsService } from 'src/app/_services/people/reviews.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-reviews',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './reviews.component.html',
   styleUrls: ['./reviews.component.scss']
 })

@@ -1,6 +1,10 @@
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import { Component, OnInit, Input, SimpleChange, Output, EventEmitter } from '@angular/core';
 import { PagerService } from 'src/app/_services/system/agpager.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 export interface paginationInfo {
   currentPage: number;
@@ -13,6 +17,10 @@ export interface paginationInfo {
 
 @Component({
   selector: 'app-ag-pagination',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './ag-pagination.component.html',
   styleUrls: ['./ag-pagination.component.scss'],
   providers: [PagerService]

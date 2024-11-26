@@ -1,8 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component,  OnInit, Input } from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'category-items-board-item',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
+
   templateUrl: './category-items-board-item.component.html',
   styleUrls: ['./category-items-board-item.component.scss']
 })

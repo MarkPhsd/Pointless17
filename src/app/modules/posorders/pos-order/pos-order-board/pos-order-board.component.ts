@@ -4,9 +4,17 @@ import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { catchError, delay, Observable, of, repeatWhen, switchMap, throwError } from 'rxjs';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PosOrderItemsComponent } from '../pos-order-items/pos-order-items.component';
 
 @Component({
   selector: 'app-pos-order-board',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    PosOrderItemsComponent,
+  ],
   templateUrl: './pos-order-board.component.html',
   styleUrls: ['./pos-order-board.component.scss']
 })

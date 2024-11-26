@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, AfterViewInit, ViewChild, Input, } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import {  catchError, Observable, of, Subject, switchMap  } from 'rxjs';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import  {GridApi, IGetRowsParams, } from '@ag-grid-community/all-modules';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
@@ -26,10 +26,21 @@ import {
 import { METRCFacilities } from 'src/app/_interfaces/metrcs/facilities';
 import { MetrcFacilitiesService } from 'src/app/_services/metrc/metrc-facilities.service';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
+import { MatSelectComponent } from 'src/app/shared/widgets/mat-select/mat-select.component';
 
 @Component({
   selector    : 'app-package-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  SearchDebounceInputComponent,FormSelectListComponent,MatSelectComponent,
+  AgGridModule,
+  SharedPipesModule],
   templateUrl : './package-list.component.html',
   styleUrls   : ['./package-list.component.scss']
 })

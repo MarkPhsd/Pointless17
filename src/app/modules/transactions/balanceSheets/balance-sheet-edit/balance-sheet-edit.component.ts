@@ -2,13 +2,13 @@ import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/co
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
 import { concatMap, Observable, of, Subscription, switchMap, switchMapTo } from 'rxjs';
 import { Capacitor, } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetSearchModel, BalanceSheetService, CashDrop, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser } from 'src/app/_interfaces';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
@@ -19,9 +19,27 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { BalanceSheetHeaderViewComponent } from '../balance-sheet-header-view/balance-sheet-header-view.component';
+import { BalanceSheetCalculationsViewComponent } from '../balance-sheet-calculations-view/balance-sheet-calculations-view.component';
+import { BalanceSheetEmployeeSalesComponent } from './balance-sheet-employee-sales/balance-sheet-employee-sales.component';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { CashValueCalcComponent } from './cash-value-calc/cash-value-calc.component';
+import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
+import { CoachMarksButtonComponent } from 'src/app/shared/widgets/coach-marks-button/coach-marks-button.component';
 
 @Component({
   selector: 'app-balance-sheet-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    BalanceSheetHeaderViewComponent,
+    BalanceSheetCalculationsViewComponent,
+    BalanceSheetEmployeeSalesComponent,
+    EditButtonsStandardComponent,CashValueCalcComponent,
+    KeyPadComponent,
+    CoachMarksButtonComponent,
+  SharedPipesModule],
   templateUrl: './balance-sheet-edit.component.html',
   styleUrls: ['./balance-sheet-edit.component.scss']
 })
@@ -357,7 +375,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   getStartingValue() {
     if (!this.sheet) {return }
     const site = this.siteService.getAssignedSite()
-    this.action$ = this.balanceSheetService.getLastBalanceEndingValue(site,this.sheet.id).pipe(switchMap(data => { 
+    this.action$ = this.balanceSheetService.getLastBalanceEndingValue(site,this.sheet.id).pipe(switchMap(data => {
       this.sheetMethodsService.updateBalanceSheet(data)
       return of(data)
     }))

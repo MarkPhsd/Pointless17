@@ -1,7 +1,7 @@
 import { Component,  Output, OnInit,
   ViewChild ,ElementRef, EventEmitter, TemplateRef } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, of } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -16,9 +16,19 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { Capacitor } from '@capacitor/core';
 import { IRequestMessage, IRequestMessageSearchModel, IRequestMessagesResult, RequestMessageService } from 'src/app/_services/system/request-message.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { SaveChangesButtonComponent } from 'src/app/shared-ui/save-changes-button/save-changes-button.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-message-editor-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,SaveChangesButtonComponent,
+
+  SharedPipesModule],
   templateUrl: './message-editor-list.component.html',
   styleUrls: ['./message-editor-list.component.scss']
 })

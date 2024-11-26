@@ -1,10 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit,Output } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'house-accounts-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './house-accounts-list.component.html',
   styleUrls: ['./house-accounts-list.component.scss']
 })

@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,9 +8,16 @@ import { IClientTable, IUserProfile } from 'src/app/_interfaces';
 import { ContactsService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-profile-editor',
+
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,
+
+  SharedPipesModule],
   templateUrl: './profile-editor.component.html',
   styleUrls: ['./profile-editor.component.scss']
 })

@@ -9,6 +9,11 @@ import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { AccordionMenuItemEditComponent } from '../accordion-menu-item-edit/accordion-menu-item-edit.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MenuGroupItemEditComponent } from '../menu-group-item-edit/menu-group-item-edit.component';
 
 // https://marceljuenemann.github.io/angular-drag-and-drop-lists/demo/#/nested
 // https://material.angular.io/cdk/drag-drop/overview
@@ -16,6 +21,10 @@ import { AccordionMenuItemEditComponent } from '../accordion-menu-item-edit/acco
 
 @Component({
   selector: 'app-menu-manager',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AccordionMenuItemEditComponent,MenuGroupItemEditComponent,
+  SharedPipesModule],
   templateUrl: './menu-manager.component.html',
   styleUrls: ['./menu-manager.component.scss']
 })

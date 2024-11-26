@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Inject, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, Subject, of, switchMap } from 'rxjs';
@@ -7,10 +8,16 @@ import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { __asyncValues } from 'tslib';
 
 @Component({
   selector: 'app-requires-serial',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './requires-serial.component.html',
   styleUrls: ['./requires-serial.component.scss']
 })

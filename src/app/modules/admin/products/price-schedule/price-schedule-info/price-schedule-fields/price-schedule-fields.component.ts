@@ -1,5 +1,5 @@
 import { Component, OnInit, Input,  } from '@angular/core';
-import { UntypedFormArray,  FormBuilder,  UntypedFormGroup, FormGroupName } from '@angular/forms';
+import { UntypedFormArray,  FormBuilder,  UntypedFormGroup, FormGroupName, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
@@ -9,9 +9,16 @@ import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.serv
 import { Title } from '@angular/platform-browser';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AWSBucketService } from 'src/app/_services';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-price-schedule-fields',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './price-schedule-fields.component.html',
   styleUrls: ['./price-schedule-fields.component.scss']
 })

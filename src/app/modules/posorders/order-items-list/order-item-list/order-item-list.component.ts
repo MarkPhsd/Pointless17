@@ -1,14 +1,21 @@
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { AgGridModule } from 'ag-grid-angular';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { GridApi } from 'ag-grid-community';
 import { Observable } from 'rxjs';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { IReportingSearchModel, IReportItemSales } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-order-item-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+  AgGridModule,
+  ],
   templateUrl: './order-item-list.component.html',
   styleUrls: ['./order-item-list.component.scss']
 })

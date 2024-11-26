@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { clientType } from 'src/app/_interfaces';
 import { ClientType, IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
@@ -9,8 +9,15 @@ import { IItemBasic } from 'src/app/_services';
 import { Subscription } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+
 @Component({
   selector: 'app-client-type-selection',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  SharedPipesModule],
   templateUrl: './client-type-selection.component.html',
   styleUrls: ['./client-type-selection.component.scss']
 })
@@ -79,8 +86,8 @@ export class ClientTypeSelectionComponent implements OnInit {
     this.priceScheduleDataService.updatePriceSchedule(this.priceSchedule);
   }
 
-  addToList(list: any[], 
-            typeList: IItemBasic[], 
+  addToList(list: any[],
+            typeList: IItemBasic[],
             priceSchedule: IPriceSchedule  ) {
     const clientList = [] as ClientType[];
     list.forEach( data => {

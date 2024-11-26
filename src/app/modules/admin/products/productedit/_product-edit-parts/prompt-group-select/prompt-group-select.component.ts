@@ -4,9 +4,17 @@ import { Observable } from 'rxjs';
 import { UntypedFormGroup , UntypedFormBuilder } from '@angular/forms';
 import {  MenuPromptSearchModel, PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'prompt-group-select',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
+
   templateUrl: './prompt-group-select.component.html',
   styleUrls: ['./prompt-group-select.component.scss']
 })
@@ -36,7 +44,7 @@ export class PromptGroupSelectComponent implements OnInit {
     this.outputProductTypeID.emit(event.value)
   }
 
-  removePrompt() { 
+  removePrompt() {
     this.outputProductTypeID.emit(0)
   }
 

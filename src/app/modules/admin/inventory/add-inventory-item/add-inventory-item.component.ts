@@ -5,7 +5,7 @@ import { InventoryAssignmentService, IInventoryAssignment,  } from 'src/app/_ser
 import { ISite } from 'src/app/_interfaces/site';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { AuthenticationService, MenuService, OrdersService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -24,9 +24,25 @@ import { DateHelperService } from 'src/app/_services/reporting/date-helper.servi
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { ProductSearchSelector2Component } from '../../products/productedit/_product-edit-parts/product-search-selector/product-search-selector.component';
+import { PriceCategorySelectComponent } from '../../products/productedit/_product-edit-parts/price-category-select/price-category-select.component';
+import { LabelViewSelectorComponent } from 'src/app/shared-ui/printing/label-view-selector/label-view-selector.component';
+import { MetaTagChipsComponent } from '../../products/productedit/_product-edit-parts/meta-tag-chips/meta-tag-chips.component';
 
 @Component({
   selector: 'app-add-inventory-item',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent,ValueFieldsComponent,
+    ProductSearchSelector2Component, PriceCategorySelectComponent,
+    LabelViewSelectorComponent,
+    MetaTagChipsComponent,
+  SharedPipesModule],
   templateUrl: './add-inventory-item.component.html',
   styleUrls: ['./add-inventory-item.component.scss']
 })

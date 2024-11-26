@@ -1,7 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, Subject, of, switchMap  } from 'rxjs';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { GridApi } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,9 +9,17 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MetrcFacilitiesService } from 'src/app/_services/metrc/metrc-facilities.service';
 import { METRCFacilities }  from 'src/app/_interfaces/metrcs/facilities';
 import { ISite } from 'src/app/_interfaces';
+import { AgGridModule } from 'ag-grid-angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-facilities-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,
+  SharedPipesModule],
   templateUrl: './facilities-list.component.html',
   styleUrls: ['./facilities-list.component.scss']
 })
@@ -65,7 +73,7 @@ export class FacilitiesListComponent {
     this.searchItems()
     this.initGridResults()
     this.site = this.siteService.getAssignedSite();
-   
+
   }
 
   initGridResults() {
@@ -125,19 +133,19 @@ export class FacilitiesListComponent {
   import() {
      const site = this.siteService.getAssignedSite()
 
-    if (!site?.id) { 
+    if (!site?.id) {
       this.siteService.notify('No site identified', 'close', 3000)
-      return 
+      return
     }
-    if (!site?.metrcURL) { 
+    if (!site?.metrcURL) {
       this.siteService.notify('No site url identified.', 'close', 3000)
-      return 
+      return
     }
-     
+
     const mETRCFacilities$ =  this.metrcFacilitiesService.importFacilities(site)
     this.importing = true;
     this.action$ = mETRCFacilities$.pipe(
-      switchMap(data => { 
+      switchMap(data => {
         this.searchItems();
         this.importing = false;
         return of(data)
@@ -159,7 +167,7 @@ export class FacilitiesListComponent {
     this.metrcFacilitiesService.getFacilities(this.site).subscribe(data =>  {
       this.mETRCFacilities = data;
     })
-  
+
   }
 
   onSearchgridReady({ api } : {api: GridApi}) {

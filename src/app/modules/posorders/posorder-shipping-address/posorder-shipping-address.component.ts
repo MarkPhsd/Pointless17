@@ -5,10 +5,18 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
-import { UntypedFormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, Validators, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ValueFieldsComponent } from '../../admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'posorder-shipping-address',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  ValueFieldsComponent,
+  SharedPipesModule],
   templateUrl: './posorder-shipping-address.component.html',
   styleUrls: ['./posorder-shipping-address.component.scss']
 })
@@ -36,9 +44,9 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
     })
   }
 
-  get isFormValid() { 
+  get isFormValid() {
     if (this.inputForm) {
-      if (this.inputForm.valid) { 
+      if (this.inputForm.valid) {
         return true
       }
     }
@@ -79,7 +87,7 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
     }
     this.serviceType$ = this.serviceTypeService.getTypeCached(site, this.order?.serviceTypeID).pipe(switchMap(data => {
       const features = JSON.parse(data?.json) as ServiceTypeFeatures;
-      if (features?.addressList) { 
+      if (features?.addressList) {
         this.addressList = features.addressList
       }
       // console.log('addresses', this.addressList)

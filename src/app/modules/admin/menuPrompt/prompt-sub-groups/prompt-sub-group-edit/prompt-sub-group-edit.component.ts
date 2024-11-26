@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -7,8 +8,17 @@ import { Observable } from 'rxjs';
 import { IPromptSubProperites, PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  EditButtonsStandardComponent,ValueFieldsComponent,UploaderComponent,
+  SharedPipesModule],
   selector: 'app-prompt-sub-group-edit',
   templateUrl: './prompt-sub-group-edit.component.html',
   styleUrls: ['./prompt-sub-group-edit.component.scss']
@@ -86,12 +96,12 @@ export class PromptSubGroupEditComponent implements OnInit {
   getPrompt(): PromptSubGroups {
     this.prompt = this.inputForm.value as PromptSubGroups
     try {
-      if (this.promptPropertiesForm) { 
+      if (this.promptPropertiesForm) {
         const values = JSON.stringify(this.promptPropertiesForm.value)
         this.prompt.json = values;
       }
     } catch (error) {
-      
+
     }
     return this.prompt
   }

@@ -1,16 +1,23 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, Output,EventEmitter } from '@angular/core';
-import { FormGroup, UntypedFormBuilder } from '@angular/forms';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
-import { Router } from '@angular/router';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
 import { of, switchMap } from 'rxjs';
-import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-import { AWSBucketService, MenuService } from 'src/app/_services';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BrandsResaleService, Brands_Resale } from 'src/app/_services/resale/brands-resale.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
 
 @Component({
   selector: 'brand-class-editor',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    ValueFieldsComponent,UploaderComponent,
+    EditButtonsStandardComponent,
+  SharedPipesModule],
   templateUrl: './brand-class-editor.component.html',
   styleUrls: ['./brand-class-editor.component.scss']
 })

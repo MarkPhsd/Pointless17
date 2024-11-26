@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DcapPayAPIService, KeyResponse } from '../services/dcap-pay-api.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSPayment, IUser } from 'src/app/_interfaces';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -9,6 +9,9 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 // declare var DatacapWebToken : any; // This allows TypeScript to recognize the global variable
 // declare let window: any; // Broad approach, makes window accept any property
 // declare global {
@@ -16,6 +19,10 @@ import { Router } from '@angular/router';
 // }
 @Component({
   selector: 'app-pay-api',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './pay-api.component.html',
   styleUrls: ['./pay-api.component.scss']
 })

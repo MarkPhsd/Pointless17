@@ -3,7 +3,7 @@ import { AWSBucketService,  MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable,  of, switchMap } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { IGetRowsParams, GridApi } from 'ag-grid-community';
@@ -16,6 +16,12 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { BrandClassSearch, BrandClassSearchResults, BrandsResaleService, Brands_Resale } from 'src/app/_services/resale/brands-resale.service';
 import { Router } from '@angular/router';
 import { IProduct, IUserProfile } from 'src/app/_interfaces';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AgGridModule } from 'ag-grid-angular';
+import { BrandClassEditorComponent } from '../brand-class-editor/brand-class-editor.component';
+import { BrandFilterComponent } from '../filter/filter.component';
 
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
@@ -32,6 +38,10 @@ function myComparator(value1, value2) {
 
 @Component({
   selector: 'brand-editor-main',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,BrandFilterComponent,
+  SharedPipesModule],
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })

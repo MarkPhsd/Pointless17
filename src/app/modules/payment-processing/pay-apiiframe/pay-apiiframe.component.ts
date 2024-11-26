@@ -1,12 +1,19 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DcapPayAPIService } from '../services/dcap-pay-api.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { Observable, of, switchMap } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 // declare var DatacapHostedWebToken: any; // This allows TypeScript to recognize the global variable
 
 @Component({
   selector: 'app-pay-apiframe',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './pay-apiiframe.component.html',
   styleUrls: ['./pay-apiiframe.component.scss']
 })

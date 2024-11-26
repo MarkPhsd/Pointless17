@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,9 +11,19 @@ import { AWSBucketService, CompanyService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { ValueFieldsComponent } from '../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'company-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    UploaderComponent,ValueFieldsComponent,EditButtonsStandardComponent,
+  SharedPipesModule],
   templateUrl: './company-edit.component.html',
   styleUrls: ['./company-edit.component.scss']
 })

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AWSBucketService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, filter, tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription,  of } from 'rxjs';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
@@ -19,9 +19,18 @@ import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.
 import { AgGridToggleComponent } from 'src/app/_components/_aggrid/ag-grid-toggle/ag-grid-toggle.component';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AgGridModule } from 'ag-grid-angular';
+import { PriceScheduleSortComponent } from '../price-schedule-sort/price-schedule-sort.component';
 
 @Component({
   selector: 'app-price-schedule-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,PriceScheduleSortComponent,
+  SharedPipesModule],
   templateUrl: './price-schedule-list.component.html',
   styleUrls: ['./price-schedule-list.component.scss']
 })

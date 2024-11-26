@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, Input, Output, } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
@@ -9,10 +9,17 @@ import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-o
 import { Observable, of, switchMap } from 'rxjs';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
 
 @Component({
   selector: 'app-pos-order-item-edit',
-
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  KeyPadComponent,
+  SharedPipesModule],
   templateUrl: './pos-order-item-edit.component.html',
   styleUrls: ['./pos-order-item-edit.component.scss']
 })

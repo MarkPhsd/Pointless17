@@ -3,7 +3,7 @@ import { Observable, debounceTime, of, switchMap } from 'rxjs';
 import { ActivatedRoute, } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProduct, ISetting, ISite } from 'src/app/_interfaces';
-import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 // import { ElectronService } from 'ngx-electron';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -13,9 +13,29 @@ import { InventoryEditButtonService } from 'src/app/_services/inventory/inventor
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { InventoryCountsViewComponent } from '../../inventory/inventory-counts-view/inventory-counts-view.component';
+import { LabelSelectPrinterComponent } from '../label-select-printer/label-select-printer.component';
+import { PurchaseItemCostHistoryComponent } from 'src/app/modules/posorders/pos-order/purchase-item-cost-history/purchase-item-cost-history.component';
+import { PurchaseItemSalesComponent } from 'src/app/modules/posorders/pos-order/purchase-item-sales/purchase-item-sales.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { CannabisItemEditComponent } from '../productedit/cannabis-item-edit/cannabis-item-edit.component';
+import { ValueFieldsComponent } from '../productedit/_product-edit-parts/value-fields/value-fields.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-product-info-panel',
+    standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  InventoryCountsViewComponent,
+  LabelSelectPrinterComponent,
+  PurchaseItemCostHistoryComponent,
+  PurchaseItemSalesComponent,
+  UploaderComponent,
+  CannabisItemEditComponent,
+  ValueFieldsComponent,
+  SharedPipesModule],
   templateUrl: './product-info-panel.component.html',
   styleUrls: ['./product-info-panel.component.scss'],
   // animations: [slideInOutAnimation]

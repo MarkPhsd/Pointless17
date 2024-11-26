@@ -4,7 +4,7 @@ import { Component,Output,OnInit,
    } from '@angular/core';
 import { OrdersService } from 'src/app/_services';
 import { IProductSearchResults } from 'src/app/_services/menu/menu.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap, map } from 'rxjs/operators';
 import { Subject ,fromEvent, Subscription } from 'rxjs';
 import { IPOSOrder,  } from 'src/app/_interfaces';
@@ -20,9 +20,10 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'store-credit-search',
   standalone: true,
-  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
 
-  ],
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './store-credit-search.component.html',
   styleUrls: ['./store-credit-search.component.scss']
 })

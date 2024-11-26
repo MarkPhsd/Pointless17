@@ -1,9 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { fromEvent, filter, debounceTime, distinctUntilChanged, tap } from 'rxjs';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
 
 @Component({
   selector: 'part-builder-filter',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    SearchDebounceInputComponent,
+  SharedPipesModule],
   templateUrl: './part-builder-filter.component.html',
   styleUrls: ['./part-builder-filter.component.scss']
 })
@@ -17,7 +25,7 @@ export class PartBuilderFilterComponent implements OnInit,AfterViewInit {
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
   searchForm: UntypedFormGroup;
 
-  constructor(     
+  constructor(
     private fb  : UntypedFormBuilder,
     ) { }
 
@@ -25,7 +33,7 @@ export class PartBuilderFilterComponent implements OnInit,AfterViewInit {
   }
 
   ngAfterViewInit() {
-      if (!this.searchForm) { 
+      if (!this.searchForm) {
         this.initSearchForm()
       }
       if (this.searchForm && this.input) {

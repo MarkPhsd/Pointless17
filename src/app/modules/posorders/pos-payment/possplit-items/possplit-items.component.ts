@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output, HostListener } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
 import { concatMap, map, Observable, of, switchMap} from 'rxjs';
@@ -11,6 +11,10 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { group } from 'console';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PrintGroupReceiptComponent } from './print-group-receipt/print-group-receipt.component';
 
 export interface   ISelectedItems{
   id        : number;
@@ -20,6 +24,10 @@ export interface   ISelectedItems{
 
 @Component({
   selector: 'app-possplit-items',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    PrintGroupReceiptComponent,
+  SharedPipesModule],
   templateUrl: './possplit-items.component.html',
   styleUrls: ['./possplit-items.component.scss']
 })

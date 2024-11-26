@@ -1,14 +1,23 @@
 import { Component, OnInit, Input ,OnDestroy } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PromptSubGroups, PromptMenuItem } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptMenuItemsService } from 'src/app/_services/menuPrompt/prompt-menu-items.service';
 import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ProductlistviewComponent } from '../../products/productlistview/productlistview.component';
+import { PromptSelectedItemsComponent } from './prompt-selected-items/prompt-selected-items.component';
 
 @Component({
   selector: 'prompt-item-selection',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    ProductlistviewComponent,PromptSelectedItemsComponent,
+  SharedPipesModule],
+
   templateUrl: './prompt-item-selection.component.html',
   styleUrls: ['./prompt-item-selection.component.scss']
 })

@@ -7,7 +7,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { Observable,  Subscription, concatMap, of, switchMap } from 'rxjs';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
@@ -17,11 +17,21 @@ import { EmployeeService } from 'src/app/_services/people/employee-service.servi
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { DSIEMVSettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
-import { DCAPAndroidRStream, DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
+import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 import { TranResponse } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { MatSelectComponent } from 'src/app/shared/widgets/mat-select/mat-select.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
 
 @Component({
   selector: 'pos-payment-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  MatSelectComponent,NgxJsonViewerModule,EditButtonsStandardComponent,
+  SharedPipesModule],
   templateUrl: './pos-payment-edit.component.html',
   styleUrls: ['./pos-payment-edit.component.scss']
 })

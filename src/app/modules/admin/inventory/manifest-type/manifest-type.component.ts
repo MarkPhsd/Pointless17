@@ -1,21 +1,21 @@
 import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject} from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable} from 'rxjs';
-import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
-import { ISite } from 'src/app/_interfaces';
-import { InventoryLocationsService , IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatSort } from '@angular/material/sort';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { ManifestType, ManifestTypesService } from 'src/app/_services/inventory/manifest-types.service';
 import { GridApi, IGetRowsParams } from 'ag-grid-community';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-manifest-type',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './manifest-type.component.html',
   styleUrls: ['./manifest-type.component.scss']
 })

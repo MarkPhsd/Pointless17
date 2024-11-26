@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, Optional,OnDestroy, Input } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Observable, Subject, catchError, concatMap, of, switchMap, takeUntil, timeout, timer } from 'rxjs';
 import { IPOSPayment, IPOSOrder, ISetting } from 'src/app/_interfaces';
@@ -18,8 +18,17 @@ import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { DCAPResponseMessageComponent } from './dcapresponse-message/dcapresponse-message.component';
+import { NgxJsonViewerComponent, NgxJsonViewerModule } from 'ngx-json-viewer';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'app-dcaptransaction',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  DCAPResponseMessageComponent,NgxJsonViewerModule,
+  SharedPipesModule],
   templateUrl: './dcaptransaction.component.html',
   styleUrls: ['./dcaptransaction.component.scss']
 })

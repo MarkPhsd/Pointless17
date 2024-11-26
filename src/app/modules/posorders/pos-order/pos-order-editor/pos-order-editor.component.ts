@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { Observable, of, switchMap } from 'rxjs';
@@ -10,8 +11,19 @@ import { DateHelperService } from 'src/app/_services/reporting/date-helper.servi
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { OrderHeaderDemoGraphicsComponent } from '../order-header-demo-graphics/order-header-demo-graphics.component';
+import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { MatSelectComponent } from 'src/app/shared/widgets/mat-select/mat-select.component';
 @Component({
   selector: 'app-pos-order-editor',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent,OrderHeaderDemoGraphicsComponent,
+    ValueFieldsComponent,MatSelectComponent,
+  SharedPipesModule],
   templateUrl: './pos-order-editor.component.html',
   styleUrls: ['./pos-order-editor.component.scss']
 })

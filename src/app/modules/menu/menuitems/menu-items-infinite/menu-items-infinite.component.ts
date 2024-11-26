@@ -10,15 +10,28 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { Capacitor} from '@capacitor/core';
 import { Title } from '@angular/platform-browser';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ISite } from 'src/app/_interfaces';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { MatChipListComponent } from 'src/app/shared/widgets/mat-chip-list/mat-chip-list.component';
+import { MenuItemCardComponent } from '../menu-item-card/menu-item-card.component';
 
 @Component({
     selector: 'menu-items-infinite',
+    standalone: true,
+    imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    SearchDebounceInputComponent,
+    MatChipListComponent,
+    MenuItemCardComponent,
+
+    SharedPipesModule],
     templateUrl: './menu-items-infinite.component.html',
     styleUrls: ['./menu-items-infinite.component.scss'],
     // changeDetection: ChangeDetectionStrategy.OnPush

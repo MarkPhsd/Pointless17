@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { from, Observable, of, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -12,8 +12,17 @@ import { DCAPAndroidRStream, DcapRStream, DcapService } from 'src/app/modules/pa
 // import { TranResponse, Transaction } from './../../models/models';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { Transaction } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { DCAPResponseMessageComponent } from 'src/app/modules/dsiEMV/Dcap/dcaptransaction/dcapresponse-message/dcapresponse-message.component';
 @Component({
   selector: 'app-dc-direct-settings',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  ValueFieldsComponent,DCAPResponseMessageComponent,
+  SharedPipesModule],
   templateUrl: './dc-direct-settings.component.html',
   styleUrls: ['./dc-direct-settings.component.scss']
 })
@@ -36,7 +45,7 @@ export class DcDirectSettingsComponent implements OnInit {
   @Input() dsiEMVSettings: DSIEMVSettings;
   @Input() terminal : ITerminalSettings;
   @Input() isDSIEnabled: boolean;
-  
+
   dcapResult: any;
   transactionForm: FormGroup;
   responseSuccess: string;
@@ -52,7 +61,7 @@ export class DcDirectSettingsComponent implements OnInit {
   saleComplete: boolean;
   transaction: Transaction;
   isDevMode: boolean;
-  
+
   get getPaxInfo() {
     if (!this.dsiEMVSettings) {return false}
     const dsiEMVSettings = this.dsiEMVSettings
@@ -135,7 +144,7 @@ export class DcDirectSettingsComponent implements OnInit {
     this.dcapAndroidDeviceList = list;
   }
 
-  
+
   async dsiEMVReset() {
     try {
       this.resetResponse();
@@ -145,11 +154,11 @@ export class DcDirectSettingsComponent implements OnInit {
       let options = this.dSIEMVAndroidService.getResetInfo(dsiEMV)
       const item =  await this.dSIEMVAndroidService.dsiEMVReset(dsiEMV);
 
-      this.log$ = this.logTransaction(options).pipe(switchMap(data => { 
+      this.log$ = this.logTransaction(options).pipe(switchMap(data => {
         console.log('transaction reset')
         return of(data)
       }))
-    
+
       this.checkResponse_Transaction("RESET")
       this.resultMessage = item?.value;
       this.processing = false;
@@ -214,7 +223,7 @@ export class DcDirectSettingsComponent implements OnInit {
     item.pinPadIpAddress = device?.HostOrIP;
     item.pinPadIpPort    = device?.PinPadIpPort;
     item.userTrace       = device?.OperatorID;
- 
+
     item.prodCertMode    = this.certProdMode(device?.MerchantID);
 
     item.pOSPackageID    = device?.POSPackageID
@@ -314,7 +323,7 @@ export class DcDirectSettingsComponent implements OnInit {
       responseSuccess = 'complete';
       const response = this.dcapMethodsService.convertToObject(paymentResponse.value)
       if (response) {
-        this.log$ = this.logTransaction(response).pipe(switchMap(data => { 
+        this.log$ = this.logTransaction(response).pipe(switchMap(data => {
           console.log('transaction logged')
           return of(data)
         }))
@@ -331,7 +340,7 @@ export class DcDirectSettingsComponent implements OnInit {
     item.UseForms = ""
     const printResult  = await dsiemvandroid.bringToFront(this.transaction)
   }
-  
+
   readResult(cmdResponse: DCAPAndroidRStream, tranType: string) {
     const item = this.dcapMethodsService.readAndroidResult(cmdResponse, tranType);
     this.responseData = cmdResponse;
@@ -358,7 +367,7 @@ export class DcDirectSettingsComponent implements OnInit {
     return item;
   }
 
-  logTransaction(tran) { 
+  logTransaction(tran) {
     let log = {} as any;
     log.messageString = JSON.stringify(tran);
     log.type = 'DCAPPaxAndroid';

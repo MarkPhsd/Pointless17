@@ -1,6 +1,6 @@
 import { Component,   Input, Output, OnInit, Optional, ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup,  UntypedFormControl} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup,  UntypedFormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ISite } from 'src/app/_interfaces/site';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -8,9 +8,17 @@ import { Subject } from 'rxjs';
 import { IItemBasic } from 'src/app/_services';
 import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.service';
 import { METRCPackage, PackageFilter }  from 'src/app/_interfaces/metrcs/packages';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-package-search-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
+
   templateUrl: './package-search-selector.component.html',
   styleUrls: ['./package-search-selector.component.scss']
 })

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component,  Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IPaymentMethod } from 'ngx-paypal';
@@ -10,9 +11,15 @@ import { TransactionUISettings } from 'src/app/_services/system/settings/uisetti
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'cash-payment-buttons',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './cash-payment-button.component.html',
   styleUrls: ['./cash-payment-button.component.scss']
 })

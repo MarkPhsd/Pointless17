@@ -12,12 +12,22 @@ import { IStoreCreditSearchModel, StoreCredit, StoreCreditMethodsService, StoreC
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { values } from 'lodash';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { StoreCreditSearchComponent } from 'src/app/shared/widgets/search-list-selectors/store-credit-search/store-credit-search.component';
+import { StoreCreditInfoComponent } from '../store-credit-info/store-credit-info.component';
+import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
 
 @Component({
   selector: 'app-store-credit-issue',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  StoreCreditSearchComponent,StoreCreditInfoComponent,KeyPadComponent,
+  SharedPipesModule],
   templateUrl: './store-credit-issue.component.html',
   styleUrls: ['./store-credit-issue.component.scss']
 })

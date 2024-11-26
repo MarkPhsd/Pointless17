@@ -6,9 +6,16 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder, ISite } from 'src/app/_interfaces';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { OrdersService } from 'src/app/_services';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'pos-order-schedule-description',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './pos-order-schedule-description.component.html',
   styleUrls: ['./pos-order-schedule-description.component.scss']
 })

@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit,OnDestroy, EventEmitter ,Output, HostListener} from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
@@ -12,10 +14,17 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ItemWithAction, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatToggleSelectorComponent } from 'src/app/shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
 // import { EventEmitter } from 'stream';
 
 @Component({
   selector: 'app-adjust-item',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    MatToggleSelectorComponent,
+  SharedPipesModule],
   templateUrl: './adjust-item.component.html',
   styleUrls: ['./adjust-item.component.scss']
 })
@@ -150,16 +159,16 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   }
 
 
-  saleAuth(order: number, item: IMenuItem, quantity) { 
+  saleAuth(order: number, item: IMenuItem, quantity) {
     // itemWithAction.action   = 4// actions.SaleAuth;
     // itemWithAction.menuItem = item;
     // itemWithAction.orderId  = orderID;
     // itemWithAction.typeOfAction = 'SaleAuth';
-    return this.orderMethodService.addItemSimpleOverRide(this.order, item, quantity).pipe(switchMap(data => { 
-      if (!data) { 
+    return this.orderMethodService.addItemSimpleOverRide(this.order, item, quantity).pipe(switchMap(data => {
+      if (!data) {
         this.siteService.notify(`No data!`, 'Close', 20000, 'red')
       }
-      if (data.resultErrorDescription) { 
+      if (data.resultErrorDescription) {
         this.siteService.notify(`Error: ${data.resultErrorDescription}`, 'Close', 20000, 'red')
       }
       this.updateOrderSub(data.order)
@@ -175,12 +184,12 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
       return;
     }
     console.log(this.IsSmallDevice, this.IsTinyDevice, window.innerWidth )
-    if (!this.IsSmallDevice) { 
-      setTimeout(data => { 
+    if (!this.IsSmallDevice) {
+      setTimeout(data => {
         console.log('timoutclose')
         this.dialogRef.close();
       }, 500);
-    }else { 
+    }else {
       console.log('dismiss')
       this.dialogRef.close();
       // this.dismiss()
@@ -258,11 +267,11 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     this.orderMethodService.updateLastItemAdded(null)
     this.orderMethodService.updateOrderSubscription(order)
     // this.dismiss()
-    setTimeout(data => { 
+    setTimeout(data => {
       this.dialogRef.close();
     }, 500);
 
-    // if (this.bottomSheetRef) { 
+    // if (this.bottomSheetRef) {
     //   this.bottomSheetRef.dismiss();
     // }
   }
@@ -270,7 +279,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
 
   selectItem(setting) {
 
-    if (this.itemWithAction.action == 3 || 
+    if (this.itemWithAction.action == 3 ||
         this.itemWithAction.typeOfAction.toLowerCase() === 'VoidOrder'.toLowerCase()) {
       this.actionResponse$ = this.voidOrder(setting)
       return
@@ -293,9 +302,9 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
             this.actionResponse$ = response$.pipe(switchMap(
               data => {
                   console.log('data', data)
-                  if (data) { 
+                  if (data) {
                     let result = data as string;
-                    const passGo = result.toLowerCase() === 'item voided' 
+                    const passGo = result.toLowerCase() === 'item voided'
                     console.log('passgo, ', passGo)
                     if (passGo ) {
                       this.updateSubscription()

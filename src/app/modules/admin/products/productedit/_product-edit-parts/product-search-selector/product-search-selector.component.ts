@@ -15,9 +15,9 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'product-search-selector2',
   standalone: true,
-  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    FormsModule,ReactiveFormsModule,
   SharedPipesModule],
-
   templateUrl: './product-search-selector.component.html',
   styleUrls: ['./product-search-selector.component.scss']
 })

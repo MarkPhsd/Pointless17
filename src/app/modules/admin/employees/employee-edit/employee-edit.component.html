@@ -220,22 +220,22 @@
             </mat-form-field>
           </div>
         </div>
-        
+
         <mat-label *ngIf="(clientForm && confirmPassword)  &&
-                          (clientForm.controls['apiPassword'].value!= '' &&
-                          confirmPassword.controls['confirmPassword'].value != '')
-                          && clientForm.controls['apiPassword'].value != confirmPassword.controls['confirmPassword'].value">
+                          (clientForm.controls['apiPassword'].value!== '' &&
+                          confirmPassword.controls['confirmPassword'].value !== '')
+                          && clientForm.controls['apiPassword'].value !== confirmPassword.controls['confirmPassword'].value">
             Passwords do not match
         </mat-label>
 
         <mat-label *ngIf="(clientForm && confirmPassword) &&
-                          (clientForm.controls['apiPassword'].value != '' &&
-                          confirmPassword.controls['confirmPassword'].value != '')
-                          && clientForm.controls['apiPassword'].value == confirmPassword.controls['confirmPassword'].value">
+                          (clientForm.controls['apiPassword'].value !== '' &&
+                          confirmPassword.controls['confirmPassword'].value !== '')
+                          && clientForm.controls['apiPassword'].value === confirmPassword.controls['confirmPassword'].value">
               Passwords match.
         </mat-label>
 
-        <div *ngIf="client && client.id && client.id != 0 && !flagSaved">
+        <div *ngIf="client && client.id && client.id !== 0 && !flagSaved">
             <button mat-raised-button
                     (click)="viewContact()">
                 <mat-icon>expand</mat-icon>View As User

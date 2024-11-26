@@ -1,14 +1,21 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, switchMap } from 'rxjs';
 import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
 import { DisplayMenuService } from 'src/app/_services/menu/display-menu.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { CdkDragDrop, moveItemInArray,  } from '@angular/cdk/drag-drop';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'display-menu-sort',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './display-menu-sort.component.html',
   styleUrls: ['./display-menu-sort.component.scss']
 })

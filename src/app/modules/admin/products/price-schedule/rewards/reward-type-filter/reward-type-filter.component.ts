@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, TemplateRef, ViewChildren } from '@angular/core';
-import { CheckboxRequiredValidator, FormArray, FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { CheckboxRequiredValidator, FormArray, FormBuilder, FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule,  DiscountInfo } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
@@ -9,9 +9,19 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 import { IUserProfile } from 'src/app/_interfaces';
 import { trigger, transition,  animate, animation, style, state, keyframes, query, stagger,animateChild } from '@angular/animations';
+import { RewardsAvailibleComponent } from 'src/app/modules/posorders/rewards-availible/rewards-availible.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { RewardTypeResultsSelectorComponent } from '../reward-type-results-selector/reward-type-results-selector.component';
 
 @Component({
   selector: 'app-reward-type-filter',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    RewardTypeResultsSelectorComponent,
+  SharedPipesModule],
+
   templateUrl: './reward-type-filter.component.html',
   styleUrls: ['./reward-type-filter.component.scss'],
   animations: [

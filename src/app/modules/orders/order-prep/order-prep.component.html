@@ -10,7 +10,7 @@
         <div class='date-header font-1-3em font-bold' *ngIf="order.orderDate">
           {{order?.orderDate |  date: 'shortTime'}}   <br>
           {{order?.orderDate |  date: 'shortDate'}}   <br>
-          min: {{minutesOpen}} 
+          min: {{minutesOpen}}
         </div>
 
         <div [class]="tableFont" >
@@ -36,9 +36,9 @@
         <div class="flex-row margin-top-10">
 
           <div style="margin-top:8px" class="field-center ">
-            <span class=" font-1-3em font-bold">#{{order?.id}}</span> 
+            <span class=" font-1-3em font-bold">#{{order?.id}}</span>
             <div class="orderID grid-action">
-              
+
               <div *ngIf="prepScreen && (prepStatus == 1)">
                 <button
                         mat-raised-button color='primary'
@@ -46,7 +46,7 @@
                       <mat-icon>done</mat-icon>
                 </button>
               </div>
-              
+
               <div *ngIf="prepScreen && (prepStatus == 2)">
                 <button
                       mat-raised-button color='primary'
@@ -69,7 +69,7 @@
           <div>
 
             <div *ngIf="prepScreen" class="items" style="width:50px;">
-              <mat-icon>shopping_cart</mat-icon> {{itemCount}} 
+              <mat-icon>shopping_cart</mat-icon> {{itemCount}}
             </div>
             <!-- <div *ngIf="prepScreen" class="itemcount"> </div> -->
 
@@ -83,14 +83,14 @@
                 </div>
               </div>
             </div>
-<!--   
+<!--
             <div *ngIf="!prepScreen" class="items">Items</div>
             <div *ngIf="!prepScreen" class="itemcount">{{order?.itemCount}} </div> -->
           </div>
 
         </div>
       </div>
-    
+
     </mat-card-content>
 
   </mat-card>

@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit,OnDestroy, Inject } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, Subscription, switchMap } from 'rxjs';
@@ -9,9 +10,20 @@ import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/i
 import { ManifestStatus, ManifestStatusService } from 'src/app/_services/inventory/manifest-status.service';
 import { ManifestType, ManifestTypesService } from 'src/app/_services/inventory/manifest-types.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { InventoryListComponent } from '../../inventory-list/inventory-list/inventory-list.component';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { ManifestEditorHeaderComponent } from './manifest-editor-header/manifest-editor-header.component';
 
 @Component({
   selector: 'app-mainfest-editor',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    InventoryListComponent,
+    ValueFieldsComponent,
+    ManifestEditorHeaderComponent,
+  SharedPipesModule],
   templateUrl: './mainfest-editor.component.html',
   styleUrls: ['./mainfest-editor.component.scss']
 })

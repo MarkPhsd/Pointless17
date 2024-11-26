@@ -1,6 +1,7 @@
 // import { isNull } from '@angular/compiler/src/output/output_ast';
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, FormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { merge, Observable, of, Subject } from 'rxjs';
@@ -11,9 +12,16 @@ import { PriceTierMethodsService, WeightProfile } from 'src/app/_services/menu/p
 import { PriceTierPriceService } from 'src/app/_services/menu/price-tier-price.service';
 import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
 
 @Component({
   selector: 'app-price-tier-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  EditButtonsStandardComponent,
+  SharedPipesModule],
   templateUrl: './price-tier-edit.component.html',
   styleUrls: ['./price-tier-edit.component.scss']
 })

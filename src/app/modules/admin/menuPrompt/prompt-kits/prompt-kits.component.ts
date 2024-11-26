@@ -1,9 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { editWindowState, PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PromptSubGroupAssociationComponent } from '../prompt-sub-group-association/prompt-sub-group-association.component';
+import { PromptSubGroupsComponent } from '../prompt-sub-groups/prompt-sub-groups.component';
+import { PromptGroupsComponent } from '../prompt-groups/prompt-groups.component';
 
 @Component({
   selector: 'prompt-kits',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    PromptSubGroupAssociationComponent,PromptSubGroupsComponent,
+    PromptGroupsComponent
+  ],
+
     templateUrl: './prompt-kits.component.html',
   styleUrls: ['./prompt-kits.component.scss']
 })

@@ -1,15 +1,16 @@
-import {Component, HostListener, OnInit, OnDestroy,
-  ViewChild, ElementRef, QueryList, ViewChildren, Input}  from '@angular/core';
-import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
-import { OrdersService } from 'src/app/_services';
-import { ActivatedRoute} from '@angular/router';
-import { Observable, Subscription} from 'rxjs';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
-// import { share } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import {Component, HostListener, OnInit,  Input}  from '@angular/core';
+import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+
 
 @Component({
   selector: 'app-order-panel',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './order-panel.component.html',
   styleUrls: ['./order-panel.component.scss']
 })

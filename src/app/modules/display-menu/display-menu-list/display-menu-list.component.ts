@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { concatMap, forkJoin, Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
@@ -9,9 +11,16 @@ import { DisplayMenuService } from 'src/app/_services/menu/display-menu.service'
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { DisplayMenuTitleComponent } from '../display-menu-title/display-menu-title.component';
 
 @Component({
   selector: 'display-menu-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    DisplayMenuTitleComponent,
+  SharedPipesModule],
   templateUrl: './display-menu-list.component.html',
   styleUrls: ['./display-menu-list.component.scss']
 })

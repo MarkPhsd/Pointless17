@@ -1,12 +1,12 @@
 import { Component, Inject,  Input,  OnDestroy,  OnInit, } from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, UntypedFormControl} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, UntypedFormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AWSBucketService,  AuthenticationService,  MenuService,  } from 'src/app/_services';
 import { ISite } from 'src/app/_interfaces/site';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
-import { CurrencyPipe } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import * as numeral from 'numeral';
 import { IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.service';
 import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
@@ -18,9 +18,23 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ConversionsService, IUnitConversion, IUnitsConverted } from 'src/app/_services/measurement/conversions.service';
 import { IProduct, UserPreferences } from 'src/app/_interfaces';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MetrcIntakeHeaderComponent } from '../metrc-inventory-properties/metrc-intake-header/metrc-intake-header.component';
+import { ActivityTogglesMetrcComponent } from '../metrc-inventory-properties/activity-toggles-metrc/activity-toggles-metrc.component';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { MetrcInventoryPropertiesComponent } from '../metrc-inventory-properties/metrc-inventory-properties.component';
+import { MetrcIndividualPackageComponent } from '../metrc-individual-package/metrc-individual-package.component';
 
 @Component({
   selector: 'app-products-add',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    MetrcIntakeHeaderComponent,ActivityTogglesMetrcComponent,
+    EditButtonsStandardComponent,MetrcInventoryPropertiesComponent,
+    MetrcIndividualPackageComponent,
+
+  SharedPipesModule],
   templateUrl: './products-add.component.html',
   styleUrls: ['./products-add.component.scss']
 })
@@ -28,7 +42,7 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
   //move to inventory
 
   _menuItemUpdate : Subscription;
-  
+
   saved: boolean;
   action$ : Observable<any>;
   conversionName:         string;
@@ -44,7 +58,7 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
   inventoryLocations$:    Observable<IInventoryLocation[]>;
   inventoryLocations:     IInventoryLocation[];
   inventoryLocation:      IInventoryLocation;
-  
+
 
   cost:                   any;
   costValue:              number;
@@ -68,7 +82,7 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
 
       const userPref  = this.authenticationService._user.value.userPreferences;
       if (userPref ) {
-        return userPref 
+        return userPref
       }
 
       try {
@@ -78,7 +92,7 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
           return preferences;
         }
       } catch (error) {
-        this.siteService.notify('Error user pref', 'Close', 3000, 'red')        
+        this.siteService.notify('Error user pref', 'Close', 3000, 'red')
       }
     }
     return {} as UserPreferences;
@@ -157,8 +171,8 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
     this.inventoryAssigments = [];
     this.inventoryLocations$ =  this.setInventoryLocation()
     this.initForm();
-    this._menuItemUpdate = this.menuService.menuItemUpdate$.subscribe(data => { 
-      if (data) { 
+    this._menuItemUpdate = this.menuService.menuItemUpdate$.subscribe(data => {
+      if (data) {
         this.menuItem = data;
       }
     })
@@ -166,11 +180,11 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    if (this._menuItemUpdate) { 
+    if (this._menuItemUpdate) {
       this._menuItemUpdate.unsubscribe()
-    } 
+    }
   }
-  
+
   setInventoryLocation() {
     return  this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
       this.inventoryLocations = data
@@ -241,11 +255,11 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
           cost:                             0,
           price:                            0,
           jointWeight:                      1,
-        
+
           intakeConversionValue:            this.intakeConversion?.value,
           active                        : active,
           sellByDate                    : data?.sellByDate,
-   
+
           packagedDate                  : data?.packagedDate.toString(),
           expirationDate                : data?.expirationDate,
           useByDate                     : data?.useByDate,
@@ -481,7 +495,7 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
     }
 
     let inventoryLocation = this.getLocationAssignment(this.inventoryLocationID);
-    if (inventoryLocation) { 
+    if (inventoryLocation) {
       inventoryAssignment.locationID                 = this.inventoryLocation?.id
       inventoryAssignment.location                   = this.inventoryLocation?.name
       inventoryAssignment.intakeUOM                  = this.intakeConversion?.name
@@ -677,10 +691,10 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
     this.inventoryAssigments.forEach(data => {data.metrcPackageID = this.package.id })
     const inv$=  this.inventoryAssignmentService.addInventoryList(site, this.inventoryAssigments[0].label,
                                                                   this.inventoryAssigments)
-    this.action$ = inv$.pipe(switchMap(data => { 
+    this.action$ = inv$.pipe(switchMap(data => {
 
       console.log('data', data)
-      if (!data) { 
+      if (!data) {
         this.siteService.notify('Inventory Packages not imported', 'Failed', 2000, 'red');
         return of(data)
       }
@@ -697,14 +711,14 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
             const dialogRef = this.inventoryAssignmentService.openInventoryItem(data[0].id)
           }
         }
-      } else { 
+      } else {
         setTimeout(() => {
           this.dialogRef.close()
         }, 200);
       }
 
       return of(data)
-    
+
     }))
 
   }
@@ -733,12 +747,12 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
 
           console.log('menu item Item Type',this.menuItem.itemType)
 
-          if (!this.menuItem.itemType) { 
+          if (!this.menuItem.itemType) {
             console.log("setItemType")
             return this.setItemType(this.package?.productCategoryName)
-          } 
+          }
 
-          if (!this.menuItem.departmentID || this.menuItem.departmentID == 0) { 
+          if (!this.menuItem.departmentID || this.menuItem.departmentID == 0) {
             console.log('departmentID', this.menuItem.departmentID)
             return this.setItemDepartment(this.package?.productCategoryName)
           }
@@ -750,11 +764,11 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
         }
         return of(data)
       }
-    )).pipe(switchMap(data => { 
+    )).pipe(switchMap(data => {
       return this.menuService.getMenuItemByID(this.site, id)
-      
-    })).subscribe(data => { 
-      if (data) { 
+
+    })).subscribe(data => {
+      if (data) {
         this.packageForm.patchValue({productName: this.menuItem.name, productID: this.menuItem.id})
       }
       this.menuItem = data;
@@ -762,10 +776,10 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
     })
     }
 
-  setItemType(productCategoryName: string) { 
-    return this.itemTypeService.getItemTypeByName(this.site, productCategoryName).pipe(switchMap(data => { 
+  setItemType(productCategoryName: string) {
+    return this.itemTypeService.getItemTypeByName(this.site, productCategoryName).pipe(switchMap(data => {
       console.log('setItemType', data)
-      if (!data) { 
+      if (!data) {
         const prod = {} as IProduct;
         return of(prod)
       }
@@ -774,39 +788,39 @@ export class METRCProductsAddComponent implements OnInit, OnDestroy {
       return this.menuService.getItemsNameBySearch(site, productCategoryName, 6)
     })).pipe(switchMap(dept => {
       console.log('depts', dept)
-      if (dept && dept[0]) { 
+      if (dept && dept[0]) {
         this.menuItem.departmentID = dept[0]?.id;
       }
-      
+
       return this.menuService.getProduct(this.site, this.menuItem.id)
-    })).pipe(switchMap(data => { 
-      if (!data || !data?.id) { 
+    })).pipe(switchMap(data => {
+      if (!data || !data?.id) {
         return of(null)
       }
-      data.departmentID =  this.menuItem.departmentID 
+      data.departmentID =  this.menuItem.departmentID
       data.prodModifierType = this.menuItem.prodModifierType
       return this.menuService.putProduct(this.site, this.menuItem.id, data)
-    })).pipe(switchMap(data => { 
+    })).pipe(switchMap(data => {
       return of(this.menuItem)
     }))
   }
 
   setItemDepartment(productCategoryName: string) {
 
-    console.log("setItemDepartment", productCategoryName)  
+    console.log("setItemDepartment", productCategoryName)
     const site = this.siteService.getAssignedSite()
     let catID: number = 0;
 
-    return this.menuService.getItemsNameBySearch(site, productCategoryName, 6).pipe(switchMap(dept => { 
+    return this.menuService.getItemsNameBySearch(site, productCategoryName, 6).pipe(switchMap(dept => {
 
       console.log('depts', dept)
-      if (dept && dept[0]) { 
+      if (dept && dept[0]) {
         this.menuItem.departmentID = dept[0]?.id;
         catID = dept[0].id;
       }
       return this.menuService.getProduct(this.site, this.menuItem.id)
     })).pipe(switchMap(data => {
-      this.menuItem.departmentID = catID; 
+      this.menuItem.departmentID = catID;
       data.departmentID = catID;
       return this.menuService.putProduct(this.site, this.menuItem.id, data)
     }

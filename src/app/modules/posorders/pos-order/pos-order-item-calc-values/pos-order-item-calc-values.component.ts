@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit,OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, switchMap, of, debounceTime, Subscription } from 'rxjs';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { IProduct, ISite } from 'src/app/_interfaces';
@@ -9,9 +10,16 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'pos-order-item-calc-values',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  ValueFieldsComponent,
+  SharedPipesModule],
   templateUrl: './pos-order-item-calc-values.component.html',
   styleUrls: ['./pos-order-item-calc-values.component.scss']
 })

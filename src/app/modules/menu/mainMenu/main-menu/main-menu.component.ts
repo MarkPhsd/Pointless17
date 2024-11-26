@@ -5,15 +5,37 @@ import { IPOSOrder, ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { MenuService } from 'src/app/_services';
 import { PollingService } from 'src/app/_services/system/polling.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { DisplayMenuMainComponent } from 'src/app/modules/display-menu/display-menu/display-menu-main/display-menu-main.component';
+import { PriceScheduleMenuListComponent } from 'src/app/modules/priceSchedule/price-schedule-menu-list/price-schedule-menu-list.component';
+import { BlogPostListComponent } from 'src/app/shared/widgets/blog-post-list/blog-post-list.component';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { CategoriesComponent } from '../../categories/categories.component';
+import { BuySellMainComponent } from 'src/app/modules/buySell/buy-sell-main/buy-sell-main.component';
+import { TierMenuComponent } from '../../tierMenu/tier-menu/tier-menu.component';
+import { BrandslistComponent } from '../../brandslist/brandslist.component';
 
 @Component({
   selector: 'app-main-menu',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    DisplayMenuMainComponent,
+    PriceScheduleMenuListComponent,
+    BlogPostListComponent,
+    SearchDebounceInputComponent,
+    CategoriesComponent,
+    BuySellMainComponent,
+    TierMenuComponent,
+    BrandslistComponent,
+    SharedPipesModule],
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.scss'],
 
@@ -164,9 +186,9 @@ export class MainMenuComponent implements OnInit  {
         // console.log('initHomePageSettings', deviceData?.name, deviceData?.disableImages)
         const user = localStorage.getItem('user')
         const devicename = localStorage.getItem('devicename')
-        
+
         // console.log('userdevice', user, devicename)
-        if (!user || !devicename) { 
+        if (!user || !devicename) {
           return  of(this.homePageSetings)
         }
 

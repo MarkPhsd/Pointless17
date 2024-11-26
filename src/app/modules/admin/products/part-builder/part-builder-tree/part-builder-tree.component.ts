@@ -5,6 +5,11 @@ import { MatTreeFlatDataSource, MatTreeFlattener, MatTreeNestedDataSource } from
 import { PB_Components, PB_Main } from 'src/app/_services/partbuilder/part-builder-main.service';
 import { CollectionViewer, SelectionChange } from '@angular/cdk/collections';
 import { BooleanValueAccessor } from '@ionic/angular';
+import { NgxJsonViewerComponent, NgxJsonViewerModule } from 'ngx-json-viewer';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 interface RecipeFlatNode {
   expandable: boolean;
@@ -20,6 +25,10 @@ interface PB_MainTreeNode {
 
 @Component({
   selector: 'part-builder-tree',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  NgxJsonViewerModule,
+  SharedPipesModule],
   templateUrl: './part-builder-tree.component.html',
   styleUrls: ['./part-builder-tree.component.scss']
 })

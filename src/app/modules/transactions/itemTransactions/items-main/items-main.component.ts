@@ -4,7 +4,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { AWSBucketService, OrdersService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Observable, Subject ,Subscription, of } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -21,6 +21,11 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 import { IOrderItemSearchModel, OrderItemHistorySearch, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPagedList } from 'src/app/_services/system/paging.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AgGridModule } from 'ag-grid-angular';
+import { ItemsFilterComponent } from '../items-filter/items-filter.component';
 
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
@@ -37,6 +42,10 @@ function myComparator(value1, value2) {
 
 @Component({
   selector: 'app-items-main',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  AgGridModule,ItemsFilterComponent,
+  SharedPipesModule],
   templateUrl: './items-main.component.html',
   styleUrls: ['./items-main.component.scss']
 })

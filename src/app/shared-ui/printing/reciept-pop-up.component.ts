@@ -3,9 +3,17 @@ import { IPOSOrder } from 'src/app/_interfaces';
 import { printOptions } from 'src/app/_services/system/printing.service';
 import { Subscription } from 'rxjs';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ReceiptViewComponent } from './reciept-pop-up/receipt-view/receipt-view.component';
 
 @Component({
   selector: 'app-reciept-pop-up',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    ReceiptViewComponent,
+  ],
   templateUrl: './reciept-pop-up.component.html',
   styleUrls: ['./reciept-pop-up.component.scss']
 })

@@ -16,14 +16,22 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 // import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 // import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { IClientTable }   from  'src/app/_interfaces';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AgGridModule } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-adminbrandslist',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+      AgGridModule,
+  SharedPipesModule],
   templateUrl: './adminbrandslist.component.html',
   styleUrls: ['./adminbrandslist.component.scss']
 })

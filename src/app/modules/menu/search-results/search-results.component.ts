@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input, Output, OnInit, Optional,OnDestroy ,
   ViewChild ,ElementRef, AfterViewInit, EventEmitter, SimpleChange } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AWSBucketService, MenuService, MessageService, OrdersService } from 'src/app/_services';
@@ -11,9 +11,16 @@ import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-se
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatSort } from '@angular/material/sort';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-search-results',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    FormsModule,ReactiveFormsModule,
+  ],
   templateUrl: './search-results.component.html',
   styleUrls: ['./search-results.component.scss']
 })

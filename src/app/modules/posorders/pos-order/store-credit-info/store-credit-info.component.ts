@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit,  Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { result } from 'lodash';
@@ -20,9 +21,10 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'store-credit-info',
   standalone: true,
-  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
 
-  ],
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './store-credit-info.component.html',
   styleUrls: ['./store-credit-info.component.scss'],
 })

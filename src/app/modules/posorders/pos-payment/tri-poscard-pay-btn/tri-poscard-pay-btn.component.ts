@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IPaymentMethod } from 'ngx-paypal';
@@ -8,9 +9,15 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 import { TriPOSMethodService } from 'src/app/_services/tripos/tri-posmethod.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-tri-poscard-pay-btn',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './tri-poscard-pay-btn.component.html',
   styleUrls: ['./tri-poscard-pay-btn.component.scss']
 })

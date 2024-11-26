@@ -1,6 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, EventEmitter, Input, Output, OnChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { QRCodeModule } from 'angularx-qrcode';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { ContactsService, OrdersService,  } from 'src/app/_services';
@@ -8,9 +10,16 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-order-header-demo-graphics',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+  QRCodeModule,ValueFieldsComponent
+  ],
   templateUrl: './order-header-demo-graphics.component.html',
   styleUrls: ['./order-header-demo-graphics.component.scss']
 })

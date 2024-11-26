@@ -5,16 +5,27 @@ import { IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeService} from 'src/app/_services/people/employee-service.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetSearchModel, } from 'src/app/_services/transactions/balance-sheet.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
+import { MatDateRangeComponent } from 'src/app/shared/widgets/mat-date-range/mat-date-range.component';
+import { MatToggleSelectorComponent } from 'src/app/shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
 
 @Component({
   selector: 'balance-sheet-filter',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    KeyPadComponent, MatDateRangeComponent,
+    MatToggleSelectorComponent,
+  SharedPipesModule],
   templateUrl: './balance-sheet-filter.component.html',
   styleUrls: ['./balance-sheet-filter.component.scss']
 })

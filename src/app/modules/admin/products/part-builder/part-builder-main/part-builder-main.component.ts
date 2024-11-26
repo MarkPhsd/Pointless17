@@ -1,12 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
+import { AgGridModule } from 'ag-grid-angular';
 import { GridApi, IGetRowsParams } from 'ag-grid-community';
 import { Observable, of, switchMap } from 'rxjs';
 import { AgGridFormatingService, rowItem } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { PB_Main, PB_SearchResults, PartBuilderMainService } from 'src/app/_services/partbuilder/part-builder-main.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PartBuilderFilterComponent } from '../part-builder-filter/part-builder-filter.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 export interface IPartSearchModel {
   name: string;
@@ -16,6 +22,10 @@ export interface IPartSearchModel {
 
 @Component({
   selector: 'app-part-builder-main',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  AgGridModule,PartBuilderFilterComponent,
+  SharedPipesModule],
   templateUrl: './part-builder-main.component.html',
   styleUrls: ['./part-builder-main.component.scss']
 })

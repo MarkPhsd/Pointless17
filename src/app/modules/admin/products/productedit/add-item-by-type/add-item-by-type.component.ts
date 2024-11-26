@@ -4,9 +4,17 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-add-item-by-type',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './add-item-by-type.component.html',
   styleUrls: ['./add-item-by-type.component.scss']
 })
@@ -43,17 +51,17 @@ ngOnInit() {
     console.log('data', data);
 
     // Filtering products or modifiers
-    this.itemTypeProducts = data.filter(item => 
+    this.itemTypeProducts = data.filter(item =>
       item.useType && (this.getItem(item) === 'product' || this.getItem(item) === 'modifier')
     );
 
     // Filtering groupings
-    this.itemTypeCategories = data.filter(item => 
+    this.itemTypeCategories = data.filter(item =>
       item.useType && this.getItem(item) === 'category'
     );
 
     // Filtering adjustments
-    this.itemTypeAdjustments = data.filter(item => 
+    this.itemTypeAdjustments = data.filter(item =>
       item.useType && this.getItem(item) === 'adjustment'
     );
   });
@@ -62,11 +70,11 @@ ngOnInit() {
 }
 
 
-  getItem(items) { 
-    try { 
-      return items?.useType.toLowerCase() 
+  getItem(items) {
+    try {
+      return items?.useType.toLowerCase()
     } catch (error) {
-        
+
     }
     return ''
   }

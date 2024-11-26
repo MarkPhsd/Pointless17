@@ -18,7 +18,6 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
   PriceCategorySearchComponent,ValueFieldsComponent,
   SharedPipesModule],
-
   templateUrl: './price-category-select.component.html',
   styleUrls: ['./price-category-select.component.scss']
 })

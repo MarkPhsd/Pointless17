@@ -7,9 +7,18 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { OrdersService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ScheduledMenuItemComponent } from './scheduled-menu-item/scheduled-menu-item.component';
 
 @Component({
   selector: 'scheduled-menu-items',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    ScheduledMenuItemComponent,
+  ],
+
   templateUrl: './scheduled-menu-items.component.html',
   styleUrls: ['./scheduled-menu-items.component.scss']
 })

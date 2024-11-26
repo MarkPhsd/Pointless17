@@ -1,12 +1,20 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { catchError, delay, Observable, repeatWhen, throwError } from 'rxjs';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { IMenuItemsResultsPaged, MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-category-items-board',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+      CategoryItemsBoardComponent
+  ],
+
   templateUrl: './category-items-board.component.html',
   styleUrls: ['./category-items-board.component.scss']
 })

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, Inject, Output,EventEmitter, Optional} from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { FbNavMenuService } from 'src/app/_form-builder/fb-nav-menu.service';
 import { AccordionMenu, SubMenu }  from 'src/app/_interfaces/index';
@@ -7,9 +7,16 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-menu-group-item-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './menu-group-item-edit.component.html',
   styleUrls: ['./menu-group-item-edit.component.scss'],
   providers: [

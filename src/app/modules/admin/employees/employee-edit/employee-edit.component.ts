@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,8 +19,18 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 import { T } from '@angular/cdk/keycodes';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ProfileEditorComponent } from '../../profiles/profile-editor/profile-editor.component';
+import { CoachMarksButtonComponent } from 'src/app/shared/widgets/coach-marks-button/coach-marks-button.component';
 @Component({
   selector: 'employee-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+EditButtonsStandardComponent,ProfileEditorComponent,CoachMarksButtonComponent,
+  SharedPipesModule],
   templateUrl: './employee-edit.component.html',
   styleUrls: ['./employee-edit.component.scss']
 })

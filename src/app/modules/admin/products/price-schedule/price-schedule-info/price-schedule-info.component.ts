@@ -1,10 +1,16 @@
 import { Component, OnInit, Input, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
-import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { Subscription } from 'rxjs';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 import { trigger, transition, query, style, animate, group } from '@angular/animations';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ScheduledMenuHeaderComponent } from 'src/app/modules/menu/scheduleMenus/scheduled-menu-container/scheduled-menu-header/scheduled-menu-header.component';
+import { ScheduledMenuImageComponent } from 'src/app/modules/menu/scheduleMenus/scheduled-menu-container/scheduled-menu-image/scheduled-menu-image.component';
+import { ItemSortComponent } from '../item-selections/item-sort/item-sort.component';
+import { PriceScheduleFieldsComponent } from './price-schedule-fields/price-schedule-fields.component';
 
 // | date: 'shortDate'
 const left = [
@@ -33,6 +39,14 @@ const right = [
 
 @Component({
   selector: 'app-price-schedule-info',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  ScheduledMenuHeaderComponent,
+  ScheduledMenuImageComponent,
+  ItemSortComponent,
+  PriceScheduleFieldsComponent,
+
+  SharedPipesModule],
   templateUrl: './price-schedule-info.component.html',
   styleUrls: ['./price-schedule-info.component.scss'],
   // animations: [slideInOutAnimation]

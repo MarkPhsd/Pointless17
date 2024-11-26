@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
@@ -7,9 +8,15 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { AppStatus, IAppWizardStatus, SystemInitializationService } from 'src/app/_services/system/settings/app-wizard.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-app-wizard-status',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './app-wizard-status.component.html',
   styleUrls: ['./app-wizard-status.component.scss']
 })
@@ -19,7 +26,7 @@ export class AppWizardStatusComponent implements OnInit, OnDestroy {
   _appWizard: Subscription;
   inputForm: UntypedFormGroup;
   action$: Observable<any>;
-  
+
   constructor(private fb: UntypedFormBuilder,
               private router: Router,
               private userAuth: UserAuthorizationService,
@@ -48,10 +55,10 @@ export class AppWizardStatusComponent implements OnInit, OnDestroy {
     })
   }
 
-  initializeSideMenu() { 
+  initializeSideMenu() {
     const user = this.userAuth.user;
     const site = this.siteService.getAssignedSite()
-    this.action$ = this.menuService.createMainMenu(user, site).pipe(switchMap(data => { 
+    this.action$ = this.menuService.createMainMenu(user, site).pipe(switchMap(data => {
       this.siteService.notify('Menu Updated - you may need to restart the app to see the side menu.' , 'Close', 3000, 'green')
       return of(data)
     }))

@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input, OnInit} from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { UntypedFormBuilder,  UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder,  UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UnitType,  } from 'src/app/_interfaces/menu/price-categories';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
@@ -8,9 +8,17 @@ import { FbUnitTypeService } from 'src/app/_form-builder/fb-unit-type.service';
 import { Observable, of, switchMap} from 'rxjs';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
 
 @Component({
   selector: 'app-unit-type-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent,
+  SharedPipesModule],
   templateUrl: './unit-type-edit.component.html',
   styleUrls: ['./unit-type-edit.component.scss']
 })

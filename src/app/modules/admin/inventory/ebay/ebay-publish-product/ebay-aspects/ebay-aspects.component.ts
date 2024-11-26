@@ -1,10 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormArray, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 
 @Component({
   selector: 'app-ebay-aspects',
+
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './ebay-aspects.component.html',
   styleUrls: ['./ebay-aspects.component.scss']
 })
@@ -25,7 +33,7 @@ export class EbayAspectsComponent implements OnInit, OnChanges {
     this.initializeForm()
   }
 
-  clearSelectedValues() { 
+  clearSelectedValues() {
     this.aspectSelected = null;
     this.outPutAspects.emit(null);
     this.initializeForm()
@@ -54,20 +62,20 @@ export class EbayAspectsComponent implements OnInit, OnChanges {
         aspectArray.push(aspectGroup);
       }
     } else {
-    
+
     }
 
     let aspects = this.aspectData?.aspects;
     try {
       aspects.forEach(aspect => {
-        if (aspect.aspectConstraint.aspectRequired || this.useAllOptions ) { 
+        if (aspect.aspectConstraint.aspectRequired || this.useAllOptions ) {
           aspectArray.push(this.createAspectGroup(aspect));
         }
       });
     } catch (error) {
-      
+
     }
-  
+
   }
 
   _initializeForm() {
@@ -80,7 +88,7 @@ export class EbayAspectsComponent implements OnInit, OnChanges {
     const aspectArray = this.aspectForm.get('aspects') as FormArray;
 
     let aspects = this.aspectData?.aspects;
-    if (!this.aspectData) { 
+    if (!this.aspectData) {
       aspects = this.aspectSelected
     }
 
@@ -90,29 +98,29 @@ export class EbayAspectsComponent implements OnInit, OnChanges {
 
     try {
       aspects.forEach(aspect => {
-        if (aspect.aspectConstraint.aspectRequired || this.useAllOptions ) { 
+        if (aspect.aspectConstraint.aspectRequired || this.useAllOptions ) {
           aspectArray.push(this.createAspectGroup(aspect));
         }
       });
     } catch (error) {
-      
+
     }
 
-    if (this.aspectSelected) { 
+    if (this.aspectSelected) {
       this.aspectForm.patchValue(this.aspectSelected)
     }
   }
 
-  toggleAllOptions() { 
+  toggleAllOptions() {
     this.useAllOptions = !this.useAllOptions
     this.initializeForm()
   }
 
-  saveData() { 
+  saveData() {
     localStorage.setItem('aspectData', JSON.stringify(this.aspectData))
   }
 
-  loadData() { 
+  loadData() {
     this.aspectData = JSON.parse(localStorage.getItem('aspectData'))
     // console.log('aspect', this.aspectData)
     this.initializeForm()
@@ -133,7 +141,7 @@ export class EbayAspectsComponent implements OnInit, OnChanges {
       aspectValues: this.fb.array(aspect.aspectValues.map(val => this.fb.control(val.localizedValue || '')))
     });
   }
-  
+
   createAspectGroupFromSaved(aspect): FormGroup {
     return this.fb.group({
       localizedAspectName: [aspect.localizedAspectName],
@@ -144,12 +152,12 @@ export class EbayAspectsComponent implements OnInit, OnChanges {
   transformFormToAspectsObject(): any {
     const formValue = this.aspectForm.value;
     let aspectsObject = {};
-  
+
     formValue.aspects.forEach(aspect => {
       // Using the localizedAspectName as the key and the selectedValue in an array
       aspectsObject[aspect.localizedAspectName] = [aspect.selectedValue];
     });
-  
+
     return aspectsObject;
   }
 
@@ -157,7 +165,7 @@ export class EbayAspectsComponent implements OnInit, OnChanges {
     const aspectsObject = this.transformFormToAspectsObject();
     // console.log(aspectsObject);
     this.outPutAspects.emit(aspectsObject)
-    
+
   }
-  
+
 }

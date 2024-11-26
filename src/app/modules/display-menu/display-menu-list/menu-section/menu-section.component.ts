@@ -1,5 +1,6 @@
-import { DOCUMENT } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, Input, OnInit,  Renderer2,  TemplateRef, ViewChild } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { concatMap,  Observable, of,  switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
@@ -9,9 +10,15 @@ import { AWSBucketService } from 'src/app/_services';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-menu-section',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './menu-section.component.html',
   styleUrls: ['./menu-section.component.scss']
 })
@@ -100,9 +107,9 @@ export class MenuSectionComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.menuCategoryID != 0) { 
+    if (this.menuCategoryID != 0) {
       this.id = this.menuCategoryID;
-      this.listItemID = this.menuCategoryID; 
+      this.listItemID = this.menuCategoryID;
       this.initCategoryByID(this.id);
       return
     }
@@ -113,7 +120,7 @@ export class MenuSectionComponent implements OnInit {
     this.initCategoryByID(this.id)
   }
 
-  initCategoryByID(id) { 
+  initCategoryByID(id) {
     if (this.id) {
       const site   = this.siteService.getAssignedSite();
       this.obs$ = this.priceScheduleService.getPriceScheduleFull(site, this.id).pipe(switchMap(data =>{

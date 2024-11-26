@@ -5,13 +5,20 @@ import { catchError, of, switchMap , Observable} from 'rxjs';
 import { CdkDragDrop, moveItemInArray,  } from '@angular/cdk/drag-drop';
 import { DiscountInfo, IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-item-sort',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './item-sort.component.html',
   styleUrls: ['./item-sort.component.scss']
 })

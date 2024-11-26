@@ -3,16 +3,24 @@ import { employee, IUser, jobTypes } from 'src/app/_interfaces';
 import {IItemBasic } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeSearchModel, EmployeeService} from 'src/app/_services/people/employee-service.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { JobTypesService } from 'src/app/_services/people/job-types.service';
 import { Router } from '@angular/router';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
 
 @Component({
   selector: 'employee-filter-panel',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  SearchDebounceInputComponent,
+  SharedPipesModule],
   templateUrl: './employee-filter-panel.component.html',
   styleUrls: ['./employee-filter-panel.component.scss']
 })

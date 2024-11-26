@@ -10,7 +10,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Plugins } from '@capacitor/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -20,11 +20,19 @@ import { ManifestInventoryService, ManifestSearchModel } from 'src/app/_services
 import { InventoryStatusList } from '../../inventory-list/inventory-list/inventory-list.component';
 import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatDateRangeComponent } from 'src/app/shared/widgets/mat-date-range/mat-date-range.component';
 
 const { Keyboard } = Plugins;
 
 @Component({
   selector: 'app-mainfest-filter',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    MatDateRangeComponent,
+  SharedPipesModule],
   templateUrl: './mainfest-filter.component.html',
   styleUrls: ['./mainfest-filter.component.scss']
 })

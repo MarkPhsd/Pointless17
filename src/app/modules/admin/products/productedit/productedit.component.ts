@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, Input,  OnInit,} from '@angular/core';
 import { AWSBucketService, MenuService } from 'src/app/_services';
-import { UntypedFormBuilder, UntypedFormGroup, UntypedFormControl,  } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, UntypedFormControl, FormsModule, ReactiveFormsModule,  } from '@angular/forms';
 import { ActivatedRoute,  } from '@angular/router';
 import { Subject, of } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -17,11 +17,36 @@ import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { employee } from 'src/app/_interfaces';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ActivityTogglesMetrcComponent } from '../../metrc/packages/metrc-inventory-properties/activity-toggles-metrc/activity-toggles-metrc.component';
+import { ActivityTogglesComponent } from './_product-edit-parts/activity-toggles/activity-toggles.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ValueFieldsComponent } from './_product-edit-parts/value-fields/value-fields.component';
+import { CategorySelectComponent } from './_product-edit-parts/category-select/category-select.component';
+import { DepartmentSelectComponent } from './_product-edit-parts/department-select/department-select.component';
+import { BrandTypeSelectComponent } from './_product-edit-parts/brand-type-select/brand-type-select.component';
+import { PriceCategorySelectComponent } from './_product-edit-parts/price-category-select/price-category-select.component';
+import { MetaTagChipsComponent } from './_product-edit-parts/meta-tag-chips/meta-tag-chips.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
 
 // http://jsfiddle.net/0ftj7w1q/
 
 @Component({
   selector: 'app-productedit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  EditButtonsStandardComponent,ActivityTogglesMetrcComponent,
+  ActivityTogglesComponent,
+  ValueFieldsComponent,
+  CategorySelectComponent,
+  DepartmentSelectComponent,
+  BrandTypeSelectComponent,
+  PriceCategorySelectComponent,
+  MetaTagChipsComponent,
+  UploaderComponent,
+  SharedPipesModule],
   templateUrl: './productedit.component.html',
   styleUrls: ['./productedit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -113,7 +138,7 @@ export class ProducteditComponent implements  OnInit  {
 
   openProductEditor() {
     // this.inventoryEditButon.openProductDialog(this.product.id,)
-    this.action$ =  this.productEditButtonService.openProductEditorOBS(this.product.id, this.product.prodModifierType).pipe(switchMap(data => { 
+    this.action$ =  this.productEditButtonService.openProductEditorOBS(this.product.id, this.product.prodModifierType).pipe(switchMap(data => {
       this.dialogRef.close()
       return of(data)
     }))

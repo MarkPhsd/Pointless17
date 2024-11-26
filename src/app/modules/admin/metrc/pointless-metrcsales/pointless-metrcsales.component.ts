@@ -1,11 +1,11 @@
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {  IPOSOrder, ISite } from 'src/app/_interfaces';
 import { OrdersService, ReportingService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { METRCSalesReportPaged, PointlessMetrcSales, PointlessMETRCSalesService, PointlessMetrcSearchModel } from 'src/app/_services/metrc/pointless-metrcsales.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
@@ -19,6 +19,10 @@ import { UnparseConfig } from 'ngx-papaparse';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { MetrcSalesService } from 'src/app/_services/metrc/metrc-sales.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { MetrcSalesFilterComponent } from './metrc-sales-filter/metrc-sales-filter.component';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 export interface metrcSalesReport {
   completeDate: string;
@@ -51,6 +55,10 @@ export interface metrcSalesReport {
 
 @Component({
   selector: 'app-pointless-metrcsales',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  AgGridModule, MetrcSalesFilterComponent,
+  SharedPipesModule],
   templateUrl: './pointless-metrcsales.component.html',
   styleUrls: ['./pointless-metrcsales.component.scss']
 })

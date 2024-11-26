@@ -1,14 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subject, debounceTime, distinctUntilChanged, filter, fromEvent, of, switchMap, tap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { MenuService } from 'src/app/_services';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { PartBuilderMainService } from 'src/app/_services/partbuilder/part-builder-main.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'field-value-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './part-builder-selector.component.html',
   styleUrls: ['./part-builder-selector.component.scss']
 })

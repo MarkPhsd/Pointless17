@@ -19,9 +19,18 @@ import { Capacitor, Plugins } from '@capacitor/core';
 import { IPromptSubResults, MenuSubPromptSearchModel, PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import { editWindowState, IPromptResults, MenuPromptSearchModel, PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
+import { AgGridModule } from 'ag-grid-angular';
+import { PromptSelectedItemsComponent } from '../prompt-item-selection/prompt-selected-items/prompt-selected-items.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'prompt-sub-groups',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+  AgGridModule,PromptSelectedItemsComponent
+  ],
   templateUrl: './prompt-sub-groups.component.html',
   styleUrls: ['./prompt-sub-groups.component.scss']
 })

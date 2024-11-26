@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
 import { Observable, switchMap,  } from 'rxjs';
@@ -8,9 +8,16 @@ import { IItemBasic, IItemBasicB, MenuService } from 'src/app/_services/menu/men
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IItemType, ItemTypeService,ItemType_Categories_Reference,ItemCounts } from 'src/app/_services/menu/item-type.service';
 import { IProductCategory } from 'src/app/_interfaces';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-item-type-category-assignment',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './item-type-category-assignment.component.html',
   styleUrls: ['./item-type-category-assignment.component.scss']
 })
@@ -94,10 +101,10 @@ export class ItemTypeCategoryAssignmentComponent implements OnInit {
       const categories$ = this.menuService.getCategoryListNoChildren(site)
       const assigned$ = this.menuService.getCategoryListNoChildren(site)
 
-      return categories$.pipe(switchMap(categories => { 
+      return categories$.pipe(switchMap(categories => {
         this.categoriesStatic =  categories
         return this.itemTypeService.getItemTypeCategoriesAll(site)
-      })).pipe(switchMap(assigned => { 
+      })).pipe(switchMap(assigned => {
         this.availableItems  =  this.removeSelectedFromAvailable(this.categoriesStatic, assigned)
         return of(assigned)
       }))
@@ -150,7 +157,7 @@ export class ItemTypeCategoryAssignmentComponent implements OnInit {
 
     refreshItemTypesAssociation() {
       const site = this.siteService.getAssignedSite()
-      this.itemTypes$    = this.itemTypeService.getItemTypes(site).pipe(switchMap(data => { 
+      this.itemTypes$    = this.itemTypeService.getItemTypes(site).pipe(switchMap(data => {
         data =  data.sort((a, b) => (a.name > b.name) ? 1 : -1)
         return of(data)
       }))

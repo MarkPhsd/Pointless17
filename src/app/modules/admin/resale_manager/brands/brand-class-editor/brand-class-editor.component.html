@@ -3,7 +3,7 @@
 
   <ng-content></ng-content>
 
-  <div *ngIf=" (brand && brand.id == 0)">
+  <div *ngIf=" (brand && brand.id === 0)">
     <button mat-raised-button (click)="addBrand()"><mat-icon>add</mat-icon> Add </button>
   </div>
 

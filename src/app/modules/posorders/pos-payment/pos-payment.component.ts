@@ -7,7 +7,7 @@ import { Component,
          TemplateRef,
          ChangeDetectorRef,
          ElementRef} from '@angular/core';
-import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
@@ -32,10 +32,23 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { dsiemvandroid } from 'dsiemvandroidplugin';
+import { PaymentBalanceComponent } from '../payment-balance/payment-balance.component';
+import { POSOrderScheduleCardComponent } from '../posorder-schedule/posorder-schedule-card/posorder-schedule-card.component';
+import { POSOrderScheduleComponent } from '../posorder-schedule/posorder-schedule.component';
+import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-pos-payment',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  PaymentBalanceComponent,
+  POSOrderScheduleCardComponent,
+  POSOrderScheduleComponent,
+  KeyPadComponent,
+  SharedPipesModule],
   templateUrl: './pos-payment.component.html',
   styleUrls: ['./pos-payment.component.scss']
 })

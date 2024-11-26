@@ -1,8 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector    : 'scheduled-menu-item',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
+
   templateUrl  : './scheduled-menu-item.component.html',
   styleUrls   : ['./scheduled-menu-item.component.scss']
 })

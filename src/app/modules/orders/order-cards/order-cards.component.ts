@@ -17,11 +17,22 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { PosOrderItemsComponent } from '../../posorders/pos-order/pos-order-items/pos-order-items.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { OrderPrepComponent } from '../order-prep/order-prep.component';
+import { OrderPanelComponent } from '../order-panel/order-panel.component';
+import { OrderCardComponent } from '../order-card/order-card.component';
 
 // import { share } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-cards',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    OrderPrepComponent,OrderPanelComponent,OrderCardComponent,
+  SharedPipesModule],
   templateUrl: './order-cards.component.html',
   styleUrls: ['./order-cards.component.scss']
 })
@@ -430,7 +441,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
     } else {
       sendOrder$ = of(null)
     }
-    
+
     let order$  =   this.orderService.getOrder(site, order.id, order.history )
     let newOrder$ : Observable<any>;
 

@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, Output, SimpleChanges, OnChanges,OnDestroy, EventEmitter } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { IPOSOrder, IProduct } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
@@ -7,9 +9,15 @@ import { InventoryEditButtonService } from 'src/app/_services/inventory/inventor
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'inventory-counts-view',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './inventory-counts-view.component.html',
   styleUrls: ['./inventory-counts-view.component.scss']
 })

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { Observable, of, startWith, switchMap } from 'rxjs';
@@ -5,6 +6,8 @@ import { IPOSOrder, IPurchaseOrderItem, ProductPrice } from 'src/app/_interfaces
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 export interface Item {
   order: IPOSOrder;
   item: IMenuItem;
@@ -13,6 +16,10 @@ export interface Item {
 
 @Component({
   selector: 'app-price-options',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './price-options.component.html',
   styleUrls: ['./price-options.component.scss']
 })

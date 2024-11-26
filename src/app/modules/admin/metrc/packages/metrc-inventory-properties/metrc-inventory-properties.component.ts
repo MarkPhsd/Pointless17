@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { catchError, concatMap, switchMap } from 'rxjs/operators';
 import { IProduct, ISite, UnitType } from 'src/app/_interfaces';
@@ -12,9 +12,18 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'metrc-inventory-properties',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  ProductSearchSelectorComponent,ValueFieldsComponent,
+  SharedPipesModule],
   templateUrl: './metrc-inventory-properties.component.html',
   styleUrls: ['./metrc-inventory-properties.component.scss']
 })
@@ -55,12 +64,12 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
     }
   }
 
-  getMetrcPackageInfo(item: METRCPackage) { 
-    if (item) { 
-      if (item.json) { 
+  getMetrcPackageInfo(item: METRCPackage) {
+    if (item) {
+      if (item.json) {
         const itemPackage = JSON.parse(item.json) as any
         // console.log('itemPackage1', itemPackage, itemPackage.ProductName )
-        if (itemPackage.ProductName) { 
+        if (itemPackage.ProductName) {
           if (!item.productName) {
             item.productName = itemPackage.ProductName;
           }
@@ -72,7 +81,7 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
   }
 
   assignDefaultCatalogItem(metrcPackage: METRCPackage) {
-   
+
     if (metrcPackage && metrcPackage.productName) {
       this.inputForm.patchValue({productName: ``})
       const site = this.siteService.getAssignedSite();
@@ -119,12 +128,12 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
           },
           error: data => {
             this.siteService.notify(JSON.parse(data), 'Close',  5000, 'red');
-         
+
           }
         }
       )
 
-    } else { 
+    } else {
       this.setProductNameEmpty(this.inputForm);
     }
   }
@@ -147,7 +156,7 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       try {
         if (data.json) {
           jsonInfo = JSON.parse(data.json) as ItemType_Properties
-          if (jsonInfo) { 
+          if (jsonInfo) {
             packageWeight = jsonInfo?.metrcPackageWeight;
           }
         }
@@ -166,7 +175,7 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       product.unitTypeID = uom?.id;
       product.productCount = 0;
 
-      if(met?.item?.unitWeight) { 
+      if(met?.item?.unitWeight) {
 
         const result = +met?.item?.unitWeight - +packageWeight;
         const roundedResult = Math.round(result * 100) / 100;
@@ -226,7 +235,7 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
 
       if (data && productID) {
          const diag$ = this.productButtonService.openProductEditor(productID, data?.id)
-        
+
       }
       return of(data)
     }))
@@ -248,20 +257,20 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
   }
 
   deleteProductID() {
-    if (this.package) { 
+    if (this.package) {
       this.package.productID = null;
     }
     this.inputForm.patchValue({productID: 0, productName: ''})
   }
 
   openNewProductByType() {
-    
+
     const site= this.siteService.getAssignedSite()
     let typeName = this.package?.productCategoryName;
 
     let product = {} as IProduct
     product.name = this.package.productName;
-    
+
     let unit = {} as UnitType;
     const unitType$ = this.unitTypeService.getUnitTypeByName(site, this.package.unitOfMeasureName)
 
@@ -270,12 +279,12 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
 
     let product$  = this.menuService.postProduct(site, product)
 
-    this.action$ = unitType$.pipe(concatMap(data => { 
+    this.action$ = unitType$.pipe(concatMap(data => {
       unit = data;
       if (data){
         product.unitTypeID = +data?.id
       }
-      return type$ 
+      return type$
     })).pipe(switchMap(data => {
       if (data){
         product.prodModifierType = +data?.id
@@ -288,7 +297,7 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       )
       return of(data)
     }))
-   
+
   }
 
   getCatalogItem(event) {

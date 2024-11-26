@@ -1,11 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { ScheduledMenuHeaderComponent } from 'src/app/modules/menu/scheduleMenus/scheduled-menu-container/scheduled-menu-header/scheduled-menu-header.component';
+import { ScheduledMenuImageComponent } from 'src/app/modules/menu/scheduleMenus/scheduled-menu-container/scheduled-menu-image/scheduled-menu-image.component';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'catalog-schedule-info',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    ScheduledMenuImageComponent,
+    ScheduledMenuHeaderComponent,
+  SharedPipesModule],
   templateUrl: './catalog-schedule-info.component.html',
   styleUrls: ['./catalog-schedule-info.component.scss']
 })

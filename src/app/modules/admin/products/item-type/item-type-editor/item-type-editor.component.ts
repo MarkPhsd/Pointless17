@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit, } from '@angular/core';
 import { FbItemTypeService } from 'src/app/_form-builder/fb-item-type.service';
 import { IItemType, ItemTypeService, ItemType_Properties } from 'src/app/_services/menu/item-type.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
 import { ActivatedRoute,  } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import { BehaviorSubject, Observable, Subscription, of, switchMap,  } from 'rxjs';
@@ -14,9 +14,25 @@ import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items
 import { METRCItemsCategories } from 'src/app/_interfaces/metrcs/items';
 import { IItemBasic, MenuService } from 'src/app/_services';
 import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ValueFieldsComponent } from '../../productedit/_product-edit-parts/value-fields/value-fields.component';
+import { LabelViewSelectorComponent } from 'src/app/shared-ui/printing/label-view-selector/label-view-selector.component';
+import { ProductSearchSelector2Component } from '../../productedit/_product-edit-parts/product-search-selector/product-search-selector.component';
+import { TagChipsProductsComponent } from '../../productedit/_product-edit-parts/tag-chips-products/tag-chips-products.component';
 
 @Component({
   selector: 'app-item-type-editor',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent, ValueFieldsComponent,
+    LabelViewSelectorComponent,
+    ProductSearchSelector2Component,
+    TagChipsProductsComponent,
+
+  SharedPipesModule],
   templateUrl: './item-type-editor.component.html',
   styleUrls: ['./item-type-editor.component.scss']
 })

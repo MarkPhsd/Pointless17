@@ -1,12 +1,20 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IPaymentMethod } from 'ngx-paypal';
 import { Observable } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'gift-card-pay-btn',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './gift-card-pay-btn.component.html',
   styleUrls: ['./gift-card-pay-btn.component.scss']
 })

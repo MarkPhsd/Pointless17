@@ -3,16 +3,24 @@ import { Observable ,switchMap,of  } from 'rxjs';
 import { ActivatedRoute,} from '@angular/router';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
-import { UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import { ConversionsService } from 'src/app/_services/measurement/conversions.service';
 
 import {
   METRCItemsCategories,
 } from 'src/app/_interfaces/metrcs/items';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-item-categories-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  EditButtonsStandardComponent,
+  SharedPipesModule],
   templateUrl: './item-categories-edit.component.html',
   styleUrls: ['./item-categories-edit.component.scss']
 })
@@ -95,7 +103,7 @@ export class ItemCategoriesEditComponent implements OnInit {
   delete(event) {
     // window.alert('This feature is not implemented')
     const site = this.siteService.getAssignedSite()
-    this.action$ = this.metrcItemsCategoriesService.deleteMetrcCategory(site, this.id).pipe(switchMap(data => { 
+    this.action$ = this.metrcItemsCategoriesService.deleteMetrcCategory(site, this.id).pipe(switchMap(data => {
       this.dialogRef.close(true)
       // this.siteService.notify("Deleted please referesh")
       return of(data)

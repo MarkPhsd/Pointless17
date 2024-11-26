@@ -47,7 +47,7 @@
           [style]='overFlow'
           [id]="scrollStyle">
 
-    <div *ngIf="departmentID && departmentID != 0"
+    <div *ngIf="departmentID && departmentID !== 0"
         class="overlay">
       <app-department-menu
         [departmentID]="departmentID">

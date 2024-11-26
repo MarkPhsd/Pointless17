@@ -4,9 +4,16 @@ import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-pag
 import { UserService,ReportingService } from 'src/app/_services';
 import { ISite,IUser, IUserProfile}  from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-sitepoints',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './sitepoints.component.html',
   styleUrls: ['./sitepoints.component.scss']
 })

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, FormGroup, UntypedFormBuilder } from '@angular/forms';
+import { UntypedFormGroup, FormGroup, UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
@@ -15,6 +15,12 @@ import { ClassClothingSearch, Classes_Clothing, Classes_Clothing_Sub, Classes_Cl
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ButtonRendererComponent } from '../../../report-designer/widgets/button-renderer/button-renderer.component';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AgGridModule } from 'ag-grid-angular';
+import { BrandClassEditorComponent } from '../../brands/brand-class-editor/brand-class-editor.component';
+import { ResaleClassesEditorComponent } from '../resale-classes-editor/resale-classes-editor.component';
 
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
@@ -31,6 +37,10 @@ function myComparator(value1, value2) {
 
 @Component({
   selector: 'app-resale-classes-main',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,BrandClassEditorComponent, ResaleClassesEditorComponent,
+  SharedPipesModule],
   templateUrl: './resale-classes-main.component.html',
   styleUrls: ['./resale-classes-main.component.scss']
 })

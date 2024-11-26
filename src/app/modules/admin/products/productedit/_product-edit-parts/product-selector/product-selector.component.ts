@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject, debounceTime, distinctUntilChanged, filter, fromEvent, of, switchMap, tap } from 'rxjs';
 import { IProduct, ISite, PosOrderItem } from 'src/app/_interfaces';
@@ -8,9 +9,15 @@ import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-se
 import { AWSBucketService, MenuService } from 'src/app/_services';
 import { PB_Components } from 'src/app/_services/partbuilder/part-builder-main.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'product-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './product-selector.component.html',
   styleUrls: ['./product-selector.component.scss']
 })

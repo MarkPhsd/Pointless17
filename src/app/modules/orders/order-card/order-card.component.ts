@@ -1,14 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { IServiceType } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 // https://www.freecodecamp.org/news/everything-you-need-to-know-about-ng-template-ng-content-ng-container-and-ngtemplateoutlet-4b7b51223691/
 
 @Component({
   selector: 'app-order-card',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,
+
+  SharedPipesModule],
   templateUrl: './order-card.component.html',
   styleUrls: ['./order-card.component.scss']
 })
@@ -43,9 +51,9 @@ export class OrderCardComponent implements OnInit {
      if (window.innerWidth < 599) {
       this.orderNameLength = 12
       this.phoneDevice = true
-      this.tableFont = `${this.tableFont} table-font` 
+      this.tableFont = `${this.tableFont} table-font`
      }
-  
+
    }
 
   ngOnInit() {

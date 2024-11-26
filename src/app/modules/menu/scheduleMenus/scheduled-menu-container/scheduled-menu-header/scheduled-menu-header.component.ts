@@ -1,12 +1,20 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'scheduled-menu-header',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
+
   templateUrl: './scheduled-menu-header.component.html',
   styleUrls: ['./scheduled-menu-header.component.scss']
 })

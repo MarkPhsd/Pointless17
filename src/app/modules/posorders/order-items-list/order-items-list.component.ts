@@ -1,5 +1,5 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, Subject } from 'rxjs';
 import {  IServiceType, ISite } from 'src/app/_interfaces';
@@ -8,9 +8,17 @@ import { EmployeeService } from 'src/app/_services/people/employee-service.servi
 import { IReportingSearchModel, IReportItemSales, ReportingItemsSalesService,IReportItemSaleSummary } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { OrderItemListComponent } from './order-item-list/order-item-list.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-order-items-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    OrderItemListComponent,,FormsModule,ReactiveFormsModule
+  ],
   templateUrl: './order-items-list.component.html',
   styleUrls: ['./order-items-list.component.scss']
 })

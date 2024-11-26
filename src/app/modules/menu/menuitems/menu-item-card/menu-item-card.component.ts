@@ -10,6 +10,10 @@ import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-se
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { UIHomePageSettings} from 'src/app/_services/system/settings/uisettings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 // import { NgOptimizedImage } from '@angular/common'
 // https://stackoverflow.com/questions/54687522/best-practice-in-angular-material-to-reuse-component-in-dialog
 export interface DialogData {
@@ -18,6 +22,10 @@ export interface DialogData {
 
 @Component({
   selector: 'app-menu-item-card',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl:  './menu-item-card.component.html',
   styleUrls: ['./menu-item-card.component.scss'],
   providers: [ TruncateTextPipe ],

@@ -5,29 +5,26 @@
         <button mat-icon-button (click)='refreshComponent()'>
           <mat-icon>refresh</mat-icon>
         </button>
-
-        
-        
       </mat-card-title>
         <mat-card-content>
             <div class="mat-elevation-z8">
               <mat-table [dataSource]="sites" >
-                  
+
                 <ng-container matColumnDef="Name">
                       <mat-header-cell *matHeaderCellDef> Name. </mat-header-cell>
                       <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
                   </ng-container>
-                  
+
                   <ng-container matColumnDef="status">
                       <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
                       <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
                   </ng-container>
-                  
+
                   <ng-container matColumnDef="storeID">
                     <mat-header-cell *matHeaderCellDef> Store </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.storeID}} </mat-cell>
                   </ng-container>
-                  
+
                   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
               </mat-table>

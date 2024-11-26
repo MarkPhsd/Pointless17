@@ -74,7 +74,7 @@
 
         <!-- Handling Time -->
         <div formGroupName="handlingTime">
-          
+
           <mat-form-field appearance="outline">
             <mat-label>Handling Time Unit</mat-label>
             <mat-select formControlName="unit">
@@ -108,7 +108,7 @@
       <button mat-button  color="primary" (click)="addCategoryType()">Add Category Type</button>
       <div formArrayName="categoryTypes">
         <div *ngFor="let categoryType of categoryTypes.controls; let i=index">
-          <div  [formGroup]="categoryType" *ngIf="i"> 
+          <div  [formGroup]="categoryType" *ngIf="i">
 
               <mat-form-field appearance="outline">
                 <mat-label>Category Type Name</mat-label>
@@ -123,7 +123,7 @@
 
               <button mat-button  color="warn" (click)="removeCategoryType(i)">Remove</button>
           </div>
-         
+
         </div>
       </div>
 
@@ -148,9 +148,9 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-            
+
               <mat-slide-toggle formControlName="insuranceOffered">Insurance Offered</mat-slide-toggle>
-              <mat-slide-toggle formControlName="shippingPromotionOffered">Shipping Promotion Offered</mat-slide-toggle> 
+              <mat-slide-toggle formControlName="shippingPromotionOffered">Shipping Promotion Offered</mat-slide-toggle>
               <!-- section 2 -->
               <div>
                 <mat-form-field  appearance="outline"class="margin-5">
@@ -164,7 +164,7 @@
                   <input matInput formControlName="shippingDiscountProfileId">
                 </mat-form-field>
               </div>
-              
+
               <div>
                 <mat-form-field appearance="outline">
                   <mat-label>Option International/Domestic</mat-label>
@@ -189,12 +189,12 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
-                
+
                 <mat-form-field  appearance="outline"class="margin-5">
                   <mat-label>value</mat-label>
                   <input matInput formControlName="value" type="number">
                 </mat-form-field>
-               
+
               </div>
 
               <h4>Insurance Fee</h4>
@@ -209,23 +209,23 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                
+
                 <mat-form-field  appearance="outline"class="margin-5">
                   <mat-label>value</mat-label>
                   <input matInput formControlName="value" type="number">
                 </mat-form-field>
-               
+
               </div>
 
               <mat-card>
                 <h4>Shipping Services</h4>
                 <!-- <button mat-button (click)="addShippingService(j)">Add Shipping Servivces</button> -->
-                
+
                 <mat-card-content>
                   <!-- {{getShippingServicesControls(j).value | json}} -->
                   <div formArrayName="shippingServices">
                     <div *ngFor="let shippingService of getShippingServicesControls(j).controls; let k=index" >
-                 
+
 
                       <div [formGroup]="shippingService">
                         <mat-label>Buyer responsible for pickup</mat-label>
@@ -315,7 +315,7 @@
                                 <mat-label>Region Name</mat-label>
                                 <input matInput formControlName="regionName" >
                               </mat-form-field>
-                        
+
                               <mat-form-field appearance="outline">
                                 <mat-label>Region Type</mat-label>
                                 <mat-select formControlName="regionType">
@@ -336,7 +336,7 @@
 
                     </div>
                   </div>
-                </mat-card-content> 
+                </mat-card-content>
               </mat-card>
 
               <button mat-button  color="warn" (click)="removeShippingOption(j)">Remove</button>
@@ -350,7 +350,7 @@
       <div formGroupName="shipToLocations">
         <h4> Shipping Regions  </h4>
         <button button mat-button  color="primary" (click)="addRegions()">Add Regions</button>
-      
+
         <h4>Excluded  Regions  </h4>
         <div *ngFor="let options of getShipToLocationsRegionExcluded; let j=index" >
           <div formArrayName="options">
@@ -358,7 +358,7 @@
               <mat-label>Region Name</mat-label>
               <input matInput formControlName="regionName" >
             </mat-form-field>
-      
+
             <mat-form-field appearance="outline">
               <mat-label>Region Type</mat-label>
               <mat-select formControlName="regionType">
@@ -377,7 +377,7 @@
               <mat-label>Region Name</mat-label>
               <input matInput formControlName="regionName" >
             </mat-form-field>
-      
+
             <mat-form-field appearance="outline">
               <mat-label>Region Type</mat-label>
               <mat-select formControlName="regionType">
@@ -400,7 +400,7 @@
     <mat-label>Cost Type</mat-label>
     <input matInput formControlName="costType">
   </mat-form-field>
-  
+
   <mat-slide-toggle formControlName="insuranceOffered">Insurance Offered</mat-slide-toggle>
 
 

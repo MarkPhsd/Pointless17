@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable} from 'rxjs';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { GridApi } from 'ag-grid-community';
 // import "ag-grid-community/dist/styles/ag-grid.css";
@@ -14,9 +14,17 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { TaxEditComponent } from '../tax-edit/tax-edit.component';
 import { TaxesService } from 'src/app/_services/menu/taxes.service';
 import { TaxRate } from 'src/app/_interfaces';
+import { AgGridModule } from 'ag-grid-angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-tax-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  AgGridModule,
+  SharedPipesModule],
   templateUrl: './tax-list.component.html',
   styleUrls: ['./tax-list.component.scss']
 })

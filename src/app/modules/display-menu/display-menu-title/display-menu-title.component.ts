@@ -1,10 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
 import { AWSBucketService } from 'src/app/_services';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'display-menu-title',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './display-menu-title.component.html',
   styleUrls: ['./display-menu-title.component.scss']
 })

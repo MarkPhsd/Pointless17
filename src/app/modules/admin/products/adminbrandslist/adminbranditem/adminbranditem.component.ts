@@ -3,16 +3,26 @@ import { AWSBucketService, ContactsService, MenuService } from 'src/app/_service
 import { IClientTable, IUserProfile }  from 'src/app/_interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DevService } from 'src/app/_services/system/dev-service.service';
-import { UntypedFormBuilder, UntypedFormGroup, FormControl, FormArray, Validator } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, FormControl, FormArray, Validator, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ValueFieldsComponent } from '../../productedit/_product-edit-parts/value-fields/value-fields.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
 
 @Component({
   selector: 'app-adminbranditem',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent,ValueFieldsComponent,UploaderComponent,
+  SharedPipesModule],
   templateUrl: './adminbranditem.component.html',
   styleUrls: ['./adminbranditem.component.scss'],
 })

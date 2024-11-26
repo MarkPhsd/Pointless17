@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AWSBucketService,  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { AgGridFormatingService, rowItem } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -18,9 +18,18 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { EmployeeSearchModel, EmployeeSearchResults, EmployeeService } from 'src/app/_services/people/employee-service.service';
 import { EmployeeEditComponent } from '../employee-edit/employee-edit.component';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { EmployeeFilterPanelComponent } from '../employee-filter-panel/employee-filter-panel.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'employee-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  AgGridModule,EmployeeFilterPanelComponent,
+  SharedPipesModule],
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.scss']
 })

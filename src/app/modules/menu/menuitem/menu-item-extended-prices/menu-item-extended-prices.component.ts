@@ -1,10 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit,EventEmitter, Output } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { ProductPrice } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'menu-item-extended-prices',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './menu-item-extended-prices.component.html',
   styleUrls: ['./menu-item-extended-prices.component.scss']
 })
@@ -27,7 +34,7 @@ export class MenuItemExtendedPricesComponent implements OnInit,OnChanges {
         return of(data)
       }))
     }
-    
+
   }
 
   ngOnChanges() {

@@ -1,14 +1,26 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { clientType, ClientType, IClientTable, IUserProfile } from 'src/app/_interfaces';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { ProfileMedInfoComponent } from '../profile-med-info/profile-med-info.component';
+import { StatusLookupComponent } from '../status-lookup/status-lookup.component';
 
 @Component({
   selector: 'app-profile-demographics',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  ValueFieldsComponent,
+  ProfileMedInfoComponent,
+  StatusLookupComponent,
+  SharedPipesModule],
   templateUrl: './demographics.component.html',
   styleUrls: ['./demographics.component.scss']
 })

@@ -1,12 +1,20 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
+import { AgGridModule } from 'ag-grid-angular';
 import { Observable } from 'rxjs'
 import { FlatRateService } from 'src/app/_services/map-routing/flat-rate.service';
 import { FlatRateTax } from 'src/app/_services/menu/item-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-flat-tax-rate-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,
+  SharedPipesModule],
   templateUrl: './flat-tax-rate-list.component.html',
   styleUrls: ['./flat-tax-rate-list.component.scss']
 })

@@ -4,7 +4,7 @@ import { ClientSearchModel, ClientSearchResults, Item,  IUserProfile, }  from 's
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService, OrdersService,AWSBucketService } from 'src/app/_services';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter, tap } from 'rxjs/operators';
@@ -16,9 +16,18 @@ import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-gr
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AgGridModule } from 'ag-grid-angular';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
 
 @Component({
   selector: 'app-profile-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,KeyboardEvent,SearchDebounceInputComponent,
+  SharedPipesModule],
   templateUrl: './profile-list.component.html',
   styleUrls: ['./profile-list.component.scss']
 })

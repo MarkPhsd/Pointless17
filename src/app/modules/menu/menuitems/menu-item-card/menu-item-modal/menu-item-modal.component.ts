@@ -4,7 +4,7 @@ import { IMenuItem  }  from 'src/app/_interfaces/menu/menu-products';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, Subject, Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -14,9 +14,17 @@ import { Capacitor,  } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { switchMap } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MenuitemComponent } from '../../../menuitem/menuitem.component';
 
 @Component({
   selector: 'app-menu-item-modal',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    MenuitemComponent,
+  SharedPipesModule],
   templateUrl: './menu-item-modal.component.html',
   styleUrls: ['./menu-item-modal.component.scss'],
 

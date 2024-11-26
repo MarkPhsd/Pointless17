@@ -1,6 +1,7 @@
 import { T } from '@angular/cdk/keycodes';
 import { Component, Input, OnInit, Output,EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AgGridModule } from 'ag-grid-angular';
 import { GridApi } from 'ag-grid-community';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -15,9 +16,20 @@ import { PartBuilderMainMethodsService } from 'src/app/_services/partbuilder/par
 import { PB_Components, PB_Main, PartBuilderMainService } from 'src/app/_services/partbuilder/part-builder-main.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
+import { ValueFieldsComponent } from '../../productedit/_product-edit-parts/value-fields/value-fields.component';
+import { UnitTypeSelectComponent } from '../../productedit/_product-edit-parts/unit-type-select/unit-type-select.component';
+import { ProductSelectorComponent } from '../../productedit/_product-edit-parts/product-selector/product-selector.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'part-builder-component-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  AgGridModule,ValueFieldsComponent,UnitTypeSelectComponent,ProductSelectorComponent,
+
+  SharedPipesModule],
   templateUrl: './part-builder-component-edit.component.html',
   styleUrls: ['./part-builder-component-edit.component.scss']
 })

@@ -16,9 +16,18 @@ import { PromptSubGroups, SelectedPromptSubGroup } from 'src/app/_interfaces/men
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'prompt-associations',
+
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
+
   templateUrl: './prompt-sub-group-association.component.html',
   styleUrls: ['./prompt-sub-group-association.component.scss']
 })
@@ -115,16 +124,16 @@ export class PromptSubGroupAssociationComponent implements OnInit {
     const site     = this.siteService.getAssignedSite()
     const prompts$ = this.promptGroupService.getPrompt(site, id)
     const prompts = await prompts$.pipe().toPromise();
-    // prompts$.subscribe(prompts => { 
+    // prompts$.subscribe(prompts => {
     if (prompts) {
       //then we have each group assisnged from the prompts.
       // console.log('prompt', prompts)
       this.assignSelectedAndAvalible(prompts.selected_PromptSubGroups)
     }
-    
+
   }
 
-  refreshGroups() { 
+  refreshGroups() {
     const site = this.siteService.getAssignedSite()
     const searchModel = {} as MenuPromptSearchModel
     searchModel.pageSize = 100;
@@ -167,11 +176,11 @@ export class PromptSubGroupAssociationComponent implements OnInit {
     searchModel.pageNumber = 1
     searchModel.pageSize   = 200;
     const site             = this.siteService.getAssignedSite()
-    if (selectedGroups.length > 0) {  
+    if (selectedGroups.length > 0) {
       this.promptSubService.searchSubPrompts(site, searchModel).subscribe(
         {
-          next: data => { 
-            if (data) { 
+          next: data => {
+            if (data) {
               const allGroups        = data.results;
               // console.log('allgroups', allGroups )
               // console.log(', selectedGroups.length', selectedGroups.length)
@@ -191,7 +200,7 @@ export class PromptSubGroupAssociationComponent implements OnInit {
               if (selectedGroups.length == 0) { }
               this.removeSelectedFromAvailable(allGroups, undefined)
           }},
-          error: err => { 
+          error: err => {
             if (selectedGroups.length == 0) { }
             this.removeSelectedFromAvailable(undefined, undefined)
             return;
@@ -230,11 +239,11 @@ export class PromptSubGroupAssociationComponent implements OnInit {
       // return;
     }
 
-    // if (!xallAssignedGroups) { 
+    // if (!xallAssignedGroups) {
       this.refreshUnselected(allGroups)
       return allGroups;
     // }
-  
+
   }
 
   refreshUnselected(allGroups) {

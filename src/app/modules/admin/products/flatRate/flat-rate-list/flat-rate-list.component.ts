@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, Subject ,fromEvent } from 'rxjs';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 // import "ag-grid-community/dist/styles/ag-grid.css";
@@ -14,9 +14,17 @@ import { FlatRateTax } from 'src/app/_services/menu/item-type.service';
 import { FlatRateService } from 'src/app/_services/map-routing/flat-rate.service';
 import { FlatRateEditComponent } from '../flat-rate-edit/flat-rate-edit.component';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-flat-rate-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,
+  SharedPipesModule],
   templateUrl: './flat-rate-list.component.html',
   styleUrls: ['./flat-rate-list.component.scss']
 })

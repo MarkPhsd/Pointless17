@@ -10,7 +10,7 @@ import { IItemBasicB, IProductSearchResultsPaged } from 'src/app/_services/menu/
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { IGetRowsParams, GridApi } from 'ag-grid-community';
@@ -27,6 +27,15 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { StoresManagerComponent } from '../../stores-manager/stores-manager.component';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
+import { BrandTypeSelectComponent } from '../productedit/_product-edit-parts/brand-type-select/brand-type-select.component';
+import { ValueFieldsComponent } from '../productedit/_product-edit-parts/value-fields/value-fields.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { ProductInfoPanelComponent } from '../product-info-panel/product-info-panel.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
     return 0;
@@ -71,6 +80,13 @@ function sortData(data, sortModel) {
 
 @Component({
   selector: 'app-productlistview',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  SearchDebounceInputComponent,FormSelectListComponent,
+  BrandTypeSelectComponent,
+  ValueFieldsComponent,AgGridModule,
+  ProductInfoPanelComponent,
+  SharedPipesModule],
   templateUrl: './productlistview.component.html',
   styleUrls: ['./productlistview.component.scss'],
   // animations:  [ fadeInAnimation ],

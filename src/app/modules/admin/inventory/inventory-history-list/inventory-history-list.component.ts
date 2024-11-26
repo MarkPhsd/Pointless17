@@ -6,7 +6,7 @@ import { MoveInventoryLocationComponent } from '../move-inventory-location/move-
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 // import { ElectronService } from 'ngx-electron';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -19,9 +19,20 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { LabelViewSelectorComponent } from 'src/app/shared-ui/printing/label-view-selector/label-view-selector.component';
+import { ListPrintersElectronComponent } from '../../settings/printing/list-printers-electron/list-printers-electron.component';
+import { InventoryHistoryItemComponent } from '../inventory-history-item/inventory-history-item.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-inventory-history-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  LabelViewSelectorComponent,ListPrintersElectronComponent,InventoryHistoryItemComponent,
+
+  SharedPipesModule],
   templateUrl: './inventory-history-list.component.html',
   styleUrls: ['./inventory-history-list.component.scss']
 })

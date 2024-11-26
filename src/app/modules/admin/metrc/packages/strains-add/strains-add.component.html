@@ -9,12 +9,12 @@
     <span *ngIf="package">
       <metrc-requirements [name]="package?.productCategoryName"></metrc-requirements>
     </span>
-  
+
     <div *ngIf="showJSONData" style="overflow-y: scroll; max-height: 625px;">
       <ngx-json-viewer [expanded]="true" [json]="jsonData"></ngx-json-viewer>
     </div>
   </div>
-  
+
   <div style="min-width: 900px;
               width: calc(100vw - 700px);">
     <mat-card  *ngIf="package && packageForm; else loading"

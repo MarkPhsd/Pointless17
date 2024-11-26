@@ -1,6 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { QRCodeModule } from 'angularx-qrcode';
 import { numberFormat } from 'highcharts';
 import { Subscription, Observable, switchMap, of } from 'rxjs';
 import { IPOSOrder, IUser } from 'src/app/_interfaces';
@@ -12,9 +14,20 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PaymentBalanceComponent } from '../../posorders/payment-balance/payment-balance.component';
+import { PosOrderItemsComponent } from '../../posorders/pos-order/pos-order-items/pos-order-items.component';
+import { PayAPIComponent } from '../../payment-processing/pay-api/pay-api.component';
+import { ValueFieldsComponent } from '../../admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
 
 @Component({
   selector: 'app-qr-payment',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  QRCodeModule,PaymentBalanceComponent,PosOrderItemsComponent,
+  PayAPIComponent,ValueFieldsComponent,
+  SharedPipesModule],
   templateUrl: './qr-payment.component.html',
   styleUrls: ['./qr-payment.component.scss']
 })
@@ -47,11 +60,11 @@ export class QrPaymentComponent {
     this.order = data;
     return of(data)
   }))
- 
+
   user$ = this.authenticationService.user$.pipe(switchMap(data => {
 
-    if (this.user && data) { 
-      if (this.user.id != data.id) { 
+    if (this.user && data) {
+      if (this.user.id != data.id) {
         console.log('user refresh1', this.user)
         this.user = data;
         this.refresh()
@@ -93,7 +106,7 @@ export class QrPaymentComponent {
 
     // this.id = this.route.snapshot.paramMap.get('id');
     localStorage.removeItem('loginAction');
-   
+
     if (!this.checkUserLoggedIn()) {
       return
     }
@@ -222,7 +235,7 @@ export class QrPaymentComponent {
       }
 
       this.action$ = null;
-    
+
       let order$ : Observable<IPOSOrder>
       if (orderCode) {
         order$ =this.orderService.getQROrderAnon(site, orderCode);
@@ -234,7 +247,7 @@ export class QrPaymentComponent {
       }
       return order$.pipe(switchMap(data => {
         this.processing = false;
-      
+
         this.orderMethodsService.updateOrder(data)
         if (setToPay) {
 

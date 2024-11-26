@@ -6,9 +6,18 @@ import { IPriceSearchModel,
          PS_SearchResultsPaged } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { trigger, transition, animate, style, query, stagger } from '@angular/animations';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ScheduledMenuContainerComponent } from '../scheduled-menu-container/scheduled-menu-container.component';
 
 @Component({
   selector: 'scheduled-menu-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    ScheduledMenuContainerComponent,
+  ],
+
   templateUrl: './scheduled-menu-list.component.html',
   styleUrls: ['./scheduled-menu-list.component.scss'],
   animations: [

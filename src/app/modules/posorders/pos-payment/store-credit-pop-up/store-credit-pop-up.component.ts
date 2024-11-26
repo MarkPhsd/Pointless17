@@ -11,9 +11,18 @@ import { IPOSOrder,  } from 'src/app/_interfaces';
 import { IStoreCreditSearchModel, StoreCreditMethodsService, StoreCreditResultsPaged } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { StoreCreditSearchComponent } from 'src/app/shared/widgets/search-list-selectors/store-credit-search/store-credit-search.component';
+import { StoreCreditInfoComponent } from '../../pos-order/store-credit-info/store-credit-info.component';
 
 @Component({
   selector: 'app-store-credit-pop-up',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    StoreCreditSearchComponent,StoreCreditInfoComponent,
+  ],
   templateUrl: './store-credit-pop-up.component.html',
   styleUrls: ['./store-credit-pop-up.component.scss'],
 

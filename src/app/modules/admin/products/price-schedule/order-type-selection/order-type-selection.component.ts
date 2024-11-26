@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IServiceType } from 'src/app/_interfaces';
@@ -9,9 +9,16 @@ import { IItemBasic } from 'src/app/_services';
 import { Subscription } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-order-type-selection',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './order-type-selection.component.html',
   styleUrls: ['./order-type-selection.component.scss']
 })
@@ -61,7 +68,7 @@ export class OrderTypeSelectionComponent implements OnInit {
   async initForm() {
     const site = this.siteService.getAssignedSite();
 
-    if (this.userAuthorizationService.isManagement) { 
+    if (this.userAuthorizationService.isManagement) {
       const serviceTypes$  = this.serviceTypeService.getAllServiceTypes(site)
       serviceTypes$.subscribe(serviceTypes => {
             serviceTypes.forEach( data => {
@@ -70,7 +77,7 @@ export class OrderTypeSelectionComponent implements OnInit {
           )
         }
       )
-      return; 
+      return;
     }
 
     const serviceTypesSales$  = this.serviceTypeService.getSaleTypes(site)

@@ -5,12 +5,24 @@ import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
 import { DisplayMenuService } from 'src/app/_services/menu/display-menu.service';
 import { Observable, switchMap, of,  catchError} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormBuilder, UntypedFormGroup, Validators,} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators,} from '@angular/forms';
 import { IListBoxItemB } from 'src/app/_interfaces/dual-lists';
 import { Router } from '@angular/router';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ValueFieldsComponent } from '../../productedit/_product-edit-parts/value-fields/value-fields.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AdminDisplayMenuSelctorComponent } from './display-menu-selctor/display-menu-selctor.component';
 
 @Component({
   selector: 'Admin-display-menu',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  EditButtonsStandardComponent,ValueFieldsComponent,UploaderComponent,
+  AdminDisplayMenuSelctorComponent,
+  SharedPipesModule],
   templateUrl: './display-menu.component.html',
   styleUrls: ['./display-menu.component.scss']
 })

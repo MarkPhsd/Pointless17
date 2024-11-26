@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FbItemTypeService } from 'src/app/_form-builder/fb-item-type.service';
 import { FlatRateTaxValue, FlatRateTax } from 'src/app/_services/menu/item-type.service';
-import { UntypedFormBuilder, UntypedFormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, FormControl, Validators, FormArray, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
@@ -10,12 +10,18 @@ import { tap } from 'rxjs/operators';
 import { TaxesService } from 'src/app/_services/menu/taxes.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
-import { FlatRateService } from 'src/app/_services/map-routing/flat-rate.service';
-import { FBFlatRateService } from 'src/app/_form-builder/fbflat-rate.service';
+
 import { TaxRate } from 'src/app/_interfaces';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-tax-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './tax-edit.component.html',
   styleUrls: ['./tax-edit.component.scss']
 })

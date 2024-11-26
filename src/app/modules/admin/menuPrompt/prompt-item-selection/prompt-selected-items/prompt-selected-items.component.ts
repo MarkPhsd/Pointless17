@@ -8,9 +8,16 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { PromptSubGroups, PromptMenuItem } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptMenuItemsService } from 'src/app/_services/menuPrompt/prompt-menu-items.service';
 import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'prompt-selected-items',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './prompt-selected-items.component.html',
   styleUrls: ['./prompt-selected-items.component.scss']
 })

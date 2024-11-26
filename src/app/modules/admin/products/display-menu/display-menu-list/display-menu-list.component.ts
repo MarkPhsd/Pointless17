@@ -2,7 +2,7 @@ import { Component,  Inject,  Input, Output, OnInit, Optional,
          ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AWSBucketService} from 'src/app/_services';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -21,9 +21,18 @@ import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.serv
 import { IDisplayMenu, IDisplayMenuSearchResults } from 'src/app/_interfaces/menu/price-schedule';
 import { Capacitor } from '@capacitor/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AgGridModule } from 'ag-grid-angular';
+import { PromptInfoPanelComponent } from '../../../menuPrompt/prompt-groups/prompt-info-panel/prompt-info-panel.component';
 
 @Component({
   selector: 'admin-display-menu-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,PromptInfoPanelComponent,
+  SharedPipesModule],
   templateUrl: './display-menu-list.component.html',
   styleUrls: ['./display-menu-list.component.scss']
 })

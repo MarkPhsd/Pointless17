@@ -4,9 +4,20 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
+import { BalanceSheetHeaderViewComponent } from '../balance-sheet-header-view/balance-sheet-header-view.component';
+import { BalanceSheetCalculationsViewComponent } from '../balance-sheet-calculations-view/balance-sheet-calculations-view.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'balance-sheet-quick-view',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    BalanceSheetHeaderViewComponent,
+    BalanceSheetCalculationsViewComponent,
+  SharedPipesModule],
   templateUrl: './balance-sheet-quick-view.component.html',
   styleUrls: ['./balance-sheet-quick-view.component.scss']
 })
@@ -44,7 +55,7 @@ export class BalanceSheetQuickViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this._sheet) { this._sheet.unsubscribe()}  
+    if (this._sheet) { this._sheet.unsubscribe()}
   }
 
   view() {

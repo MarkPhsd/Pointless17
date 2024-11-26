@@ -1,11 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { IProductSearchResults } from 'src/app/_services';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'search-inventory-input',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './search-inventory-input.component.html',
   styleUrls: ['./search-inventory-input.component.scss']
 })
@@ -16,16 +23,16 @@ export class SearchInventoryInputComponent implements OnInit,AfterViewInit {
   @Output() itemSelect     = new EventEmitter();
   @Input()  searchForm:    UntypedFormGroup;
   @Input()  itemNameControl : string;
-  
+
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
 
   get itemName() { return this.searchForm.get("itemName") as UntypedFormControl;}
-  
+
   private readonly onDestroy = new Subject<void>();
   // //search with debounce
   searchItems$  : Subject<IProductSearchResults[]> = new Subject();
-  
+
   searchPhrase:      Subject<any> = new Subject();
 
   _searchItems$ = this.searchPhrase.pipe(

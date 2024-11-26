@@ -37,7 +37,7 @@
               </div>
               <h4>
                 {{ clientTable?.firstName  }}  {{ clientTable?.lastName }}
-                | Account :  {{clientTable?.accountNumber}} 
+                | Account :  {{clientTable?.accountNumber}}
               </h4>
               <h5>User Name: {{clientTable?.apiUserName}}</h5>
             </div>
@@ -45,7 +45,7 @@
 
           <div class="grid-buttons-flow">
             <div>
-         
+
               <app-edit-buttons-standard
                 (outputeupdateItem)     ="updateUser(null)"
                 (outputupdateItemExit)  ="updateUserExit($event)"
@@ -61,7 +61,7 @@
                 </span>
                 <span>
                   <button color="accent" mat-raised-button (click)="generatePurchaseOrder(true)"><mat-icon>list</mat-icon>ReOrder List +</button>
-                </span> 
+                </span>
               </span>
               <div *ngIf="clientTable?.apiUserName && (clientTable.email || clientTable.phone)">
                 <!--  -->
@@ -98,11 +98,7 @@
                   <mat-label>Locked</mat-label>
                 </mat-slide-toggle>
               </div>
-
-            
-
             </div>
-
           </div>
       </div>
       <mat-divider></mat-divider>
@@ -183,7 +179,7 @@
 
               <div class="ps-flex-group-content-start" >
 
-                  <button mat-raised-button  
+                  <button mat-raised-button
                         (click)="refreshTodays()">
                   <mat-icon>refresh</mat-icon>Today's</button>
 
@@ -231,7 +227,7 @@
                     </button>
                   </div>
                 </div>
-                
+
                 <div *ngIf="isAuthorized || isUser">
                    <app-orders-list
                       [suspendedOrders]="suspendedOrder"

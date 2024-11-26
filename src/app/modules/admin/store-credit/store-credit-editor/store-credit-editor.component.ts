@@ -2,7 +2,7 @@ import { Component,  Inject, OnInit,
 } from '@angular/core';
 import { AWSBucketService, ContactsService,   } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { clientType, IUserProfile } from 'src/app/_interfaces';
@@ -13,9 +13,18 @@ import { StoreCredit, StoreCreditMethodsService } from 'src/app/_services/storec
 import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.service';
 import { Observable, of } from 'rxjs';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
 
 @Component({
   selector: 'app-store-credit-editor',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent,ValueFieldsComponent,
+  SharedPipesModule],
   templateUrl: './store-credit-editor.component.html',
   styleUrls: ['./store-credit-editor.component.scss']
 })

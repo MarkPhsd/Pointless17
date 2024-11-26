@@ -11,9 +11,17 @@ import { POSOrderItemService } from 'src/app/_services/transactions/posorder-ite
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { Subscription } from 'rxjs';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PromptPanelMenuItemComponent } from './prompt-panel-menu-item/prompt-panel-menu-item.component';
 
 @Component({
   selector: 'prompt-panel-menu-items',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    PromptPanelMenuItemComponent
+  ],
   templateUrl: './prompt-panel-menu-items.component.html',
   styleUrls: ['./prompt-panel-menu-items.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -17,12 +17,21 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MenuItemCardComponent } from 'src/app/modules/menu/menuitems/menu-item-card/menu-item-card.component';
 interface itemOption {
   name: string;
   quantity: number;
 }
 @Component({
   selector: 'prompt-panel-menu-item',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    MenuItemCardComponent,
+  SharedPipesModule],
   templateUrl: './prompt-panel-menu-item.component.html',
   styleUrls: ['./prompt-panel-menu-item.component.scss']
 })

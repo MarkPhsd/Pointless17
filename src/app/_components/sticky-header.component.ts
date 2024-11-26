@@ -5,6 +5,7 @@ import {
   transition,
   trigger
 } from '@angular/animations';
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, HostBinding } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import {
@@ -15,6 +16,8 @@ import {
   share,
   throttleTime
 } from 'rxjs/operators';
+import { AppMaterialModule } from '../app-material.module';
+import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
 
 enum VisibilityState {
   Visible = 'visible',
@@ -28,6 +31,11 @@ enum Direction {
 
 @Component({
   selector: 'app-sticky-header',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
+
   template: `<ng-content></ng-content>`,
   styles: [
     `

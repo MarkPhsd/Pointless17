@@ -1,6 +1,6 @@
 import { Component, Inject,  OnInit, Optional, TemplateRef, ViewChild,} from '@angular/core';
 import { IItemBasic, MenuService } from 'src/app/_services';
-import { FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IProduct } from 'src/app/_interfaces/raw/products';
 import { Observable, of } from 'rxjs';
@@ -20,8 +20,47 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ActivityTogglesComponent } from '../_product-edit-parts/activity-toggles/activity-toggles.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { PriceCategorySelectComponent } from '../_product-edit-parts/price-category-select/price-category-select.component';
+import { PromptGroupSelectComponent } from '../_product-edit-parts/prompt-group-select/prompt-group-select.component';
+import { ValueFieldsComponent } from '../_product-edit-parts/value-fields/value-fields.component';
+import { MatSelectComponent } from 'src/app/shared/widgets/mat-select/mat-select.component';
+import { FieldValueSelectorComponent } from '../../../report-designer/designer/field-value-selector/field-value-selector.component';
+import { UnitTypeSelectComponent } from '../_product-edit-parts/unit-type-select/unit-type-select.component';
+import { MetaTagChipsComponent } from '../_product-edit-parts/meta-tag-chips/meta-tag-chips.component';
+import { TagChipsProductsComponent } from '../_product-edit-parts/tag-chips-products/tag-chips-products.component';
+import { CategorySelectComponent } from '../_product-edit-parts/category-select/category-select.component';
+import { DepartmentSelectComponent } from '../_product-edit-parts/department-select/department-select.component';
+import { BrandTypeSelectComponent } from '../_product-edit-parts/brand-type-select/brand-type-select.component';
+import { ProductTypeSelectComponent } from '../_product-edit-parts/product-type-select/product-type-select.component';
+import { RetailProductEditComponent } from '../retail-product-edit/retail-product-edit.component';
+import { CannabisItemEditComponent } from '../cannabis-item-edit/cannabis-item-edit.component';
 @Component({
   selector: 'app-strain-product-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent,ActivityTogglesComponent,UploaderComponent,
+    PriceCategorySelectComponent,
+    PromptGroupSelectComponent,
+    ValueFieldsComponent,
+    MatSelectComponent,
+    FieldValueSelectorComponent,
+    UnitTypeSelectComponent,
+    MetaTagChipsComponent,
+    TagChipsProductsComponent,
+    CategorySelectComponent,
+    DepartmentSelectComponent,
+    BrandTypeSelectComponent,
+    ProductTypeSelectComponent,
+    RetailProductEditComponent,
+    CannabisItemEditComponent,
+
+  SharedPipesModule],
   templateUrl: './strain-product-edit.component.html',
   styleUrls: ['./strain-product-edit.component.scss']
 })

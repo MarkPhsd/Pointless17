@@ -5,16 +5,24 @@ import { IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeService} from 'src/app/_services/people/employee-service.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { PointlessMETRCSalesService, PointlessMetrcSearchModel } from 'src/app/_services/metrc/pointless-metrcsales.service';
 import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
 
 @Component({
   selector: 'metrc-sales-filter',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    KeyPadComponent,
+  SharedPipesModule],
   templateUrl: './metrc-sales-filter.component.html',
   styleUrls: ['./metrc-sales-filter.component.scss']
 })

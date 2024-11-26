@@ -3,9 +3,17 @@ import { ISite}  from 'src/app/_interfaces';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ReportingService,AuthenticationService} from 'src/app/_services';
 import { Subject } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ChartTableComponent } from './chart-table/chart-table.component';
 
 @Component({
   selector: 'app-reports',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    ChartTableComponent
+  ],
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss'],
 })

@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnInit, ViewChild, Output, HostListener } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, Subject, Subscription  } from 'rxjs';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { InventoryAssignmentService, IInventoryAssignment, InventoryFilter, InventorySearchResultsPaged, InventoryStatusList } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ISite, IUserProfile } from 'src/app/_interfaces';
@@ -18,10 +18,23 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IItemBasicB } from 'src/app/_services';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { InventoryManifest, ManifestInventoryService, ManifestSearchModel, ManifestSearchResults } from 'src/app/_services/inventory/manifest-inventory.service';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { MainfestFilterComponent } from './mainfest-filter/mainfest-filter.component';
 
 @Component({
   selector: 'app-manifests',
+
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    SearchDebounceInputComponent,
+    AgGridModule,
+    MainfestFilterComponent,
+
+  SharedPipesModule],
   templateUrl: './manifests.component.html',
   styleUrls: ['./manifests.component.scss']
 })

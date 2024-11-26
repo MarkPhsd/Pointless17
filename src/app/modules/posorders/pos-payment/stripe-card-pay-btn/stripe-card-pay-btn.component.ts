@@ -9,8 +9,15 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'stripe-card-pay-btn',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './stripe-card-pay-btn.component.html',
   styleUrls: ['./stripe-card-pay-btn.component.scss']
 })

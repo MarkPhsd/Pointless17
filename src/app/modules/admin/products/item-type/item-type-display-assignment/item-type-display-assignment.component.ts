@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
 import { Observable} from 'rxjs';
@@ -8,9 +8,16 @@ import { IItemBasicB } from 'src/app/_services/menu/menu.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { IDisplayAssignment, ItemTypeDisplayAssignmentService } from 'src/app/_services/menu/item-type-display-assignment.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-item-type-display-assignment',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './item-type-display-assignment.component.html',
   styleUrls: ['./item-type-display-assignment.component.scss']
 })

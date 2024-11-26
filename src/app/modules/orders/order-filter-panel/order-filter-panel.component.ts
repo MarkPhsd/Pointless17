@@ -13,7 +13,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Plugins } from '@capacitor/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -28,10 +28,20 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { EmployeeSearchModel, EmployeeService } from 'src/app/_services/people/employee-service.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
+import { MatDateRangeComponent } from 'src/app/shared/widgets/mat-date-range/mat-date-range.component';
+import { MatToggleSelectorComponent } from 'src/app/shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
 const { Keyboard } = Plugins;
 
 @Component({
   selector: 'app-order-filter-panel',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    KeyPadComponent,MatDateRangeComponent,MatToggleSelectorComponent,
+  SharedPipesModule],
   templateUrl: './order-filter-panel.component.html',
   styleUrls: ['./order-filter-panel.component.scss']
 })

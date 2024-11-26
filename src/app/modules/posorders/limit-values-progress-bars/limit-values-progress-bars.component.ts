@@ -6,8 +6,17 @@ import { Observable, of, switchMap } from 'rxjs';
 import { ContactsService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ProgressBarComponent } from 'src/app/shared/widgets/progress-bar/progress-bar.component';
 @Component({
+
   selector: 'limit-values-progress-bars',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    ProgressBarComponent,
+  ],
   templateUrl: './limit-values-progress-bars.component.html',
   styleUrls: ['./limit-values-progress-bars.component.scss']
 })
@@ -179,7 +188,7 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
             if (client.metrcGroup2 && client.metrcGroup2 != 0){
               metrcGroup2Ratio =   client.metrcGroup2
             }
-            
+
             if (client.medGramLimit && client.medGramLimit != 0){
               gramRatio = client.medGramLimit
             }

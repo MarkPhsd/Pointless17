@@ -7,7 +7,7 @@ import { ISite } from 'src/app/_interfaces/site';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -19,9 +19,36 @@ import { AuthenticationService } from 'src/app/_services';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { InventoryHeaderValuesComponent } from '../inventory-header-values/inventory-header-values.component';
+import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { ProductSearchSelector2Component } from '../../products/productedit/_product-edit-parts/product-search-selector/product-search-selector.component';
+import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
+import { FacilitySearchSelectorComponent } from 'src/app/shared/widgets/facility-search-selector/facility-search-selector.component';
+import { MetaTagChipsComponent } from '../../products/productedit/_product-edit-parts/meta-tag-chips/meta-tag-chips.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { PriceCategorySearchComponent } from '../../products/productedit/_product-edit-parts/price-category-search/price-category-search.component';
+import { PriceCategorySelectComponent } from '../../products/productedit/_product-edit-parts/price-category-select/price-category-select.component';
+import { ChemicalValuesComponent } from '../../products/productedit/_product-edit-parts/chemical-values/chemical-values.component';
+import { NgxColorsModule } from 'ngx-colors';
 
 @Component({
   selector: 'app-new-inventory-item',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent,
+    InventoryHeaderValuesComponent,ValueFieldsComponent,
+    ProductSearchSelectorComponent,
+    FacilitySearchSelectorComponent,
+    MetaTagChipsComponent,
+    UploaderComponent,
+    PriceCategorySelectComponent,
+    ChemicalValuesComponent,
+    NgxColorsModule,
+    SharedPipesModule],
   templateUrl: './new-inventory-item.component.html',
   styleUrls: ['./new-inventory-item.component.scss']
 })
@@ -176,13 +203,13 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   setFormInventoryData(data) {
     this.item      = data
     try {
-      if (data) { 
+      if (data) {
         this.images    = data?.images;
         this.itemTags  = data.metaTags;
         this.color     = data?.color;
       }
     } catch (error) {
-      
+
     }
     this.inputForm = this.fbInventory.initForm(this.inputForm)
     this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
@@ -334,9 +361,9 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
     delete$.subscribe(
       {
         next: data => {
-          if (data.errorMessage) { 
+          if (data.errorMessage) {
             this.notifyEvent(data?.errorMessage, 'Success')
-            return 
+            return
           }
           if (data.id) {
             this.notifyEvent('Item Deleted. ', 'Success')
@@ -355,7 +382,7 @@ export class NewInventoryItemComponent implements OnInit , OnDestroy{
   }
 
   onCancel(event) {
-    
+
     this.dialogRef.close(event);
   }
 

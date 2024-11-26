@@ -1,11 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ProductPrice } from 'src/app/_interfaces/menu/price-categories';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { UnitTypeSelectComponent } from '../../../productedit/_product-edit-parts/unit-type-select/unit-type-select.component';
 
 @Component({
   selector: 'app-unit-type-prompt',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    UnitTypeSelectComponent,
+  SharedPipesModule],
   templateUrl: './unit-type-prompt.component.html',
   styleUrls: ['./unit-type-prompt.component.scss']
 })

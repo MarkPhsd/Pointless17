@@ -1,5 +1,5 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, HostListener,OnDestroy, Output ,EventEmitter} from '@angular/core';
-import { SelectControlValueAccessor } from '@angular/forms';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { IServiceType, ISite } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
@@ -8,9 +8,16 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PosOrderItemsComponent } from '../../posorders/pos-order/pos-order-items/pos-order-items.component';
 
 @Component({
   selector: 'app-order-prep',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    PosOrderItemsComponent,
+  ],
   templateUrl: './order-prep.component.html',
   styleUrls: ['./order-prep.component.scss']
 })
@@ -125,38 +132,38 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
         this.order = data
         const items = data.posOrderItems
         let count = 0;
-        if (items && items.length>0) { 
+        if (items && items.length>0) {
           data.posOrderItems = items.filter(item => {
               let display = false;
               let printLocation = false;
               this.setColor(data.serviceTypeID)
-  
+
               if (this.prepStatus == 0) {
                 if (!item.itemPrepped && !item.printed) {
                   display = true;
                 }
               }
-  
+
               if (this.prepStatus == 1) {
                 if (!item.itemPrepped && item.printed) {
                   display = true;
                 }
               }
-  
+
               if (this.prepStatus == 2) {
                 if (item.itemPrepped &&  item.printed) {
                   display = true;
                 }
               }
-  
+
               if (printerLocation == item.printLocation )  {
                 printLocation = true;
               }
-  
+
               if (printerLocation == 0) {
                 printLocation = true;
               }
-  
+
               if (printLocation && display) {
                 if (item.id == item.idRef) {
                   count = item.quantity + count
@@ -166,7 +173,7 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
               }
             }
           )
-  
+
           if (data.posOrderItems.length == 0) {
             const item = { index: this.index, count: count}
             this.outPutSetVisibility.emit(item);

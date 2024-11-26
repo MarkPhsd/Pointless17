@@ -1,6 +1,6 @@
 import { Component,   Input,  OnInit,  Output, EventEmitter} from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, UntypedFormControl} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray, UntypedFormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, switchMap,  } from 'rxjs';
 import * as numeral from 'numeral';
@@ -15,9 +15,18 @@ import { ConversionsService, IUnitConversion, IUnitsConverted } from 'src/app/_s
 import { ReversePipe } from 'ngx-pipes';
 import { UserPreferences } from 'src/app/_interfaces/people/users';
 import { AuthenticationService } from 'src/app/_services';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { MetrcIndividualPackageComponent } from '../../metrc-individual-package/metrc-individual-package.component';
 
 @Component({
   selector: 'app-strain-packages',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    NgxJsonViewerModule,MetrcIndividualPackageComponent,
+  SharedPipesModule],
   templateUrl: './strain-packages.component.html',
   styleUrls: ['./strain-packages.component.scss'],
   providers: [ReversePipe]
@@ -80,20 +89,20 @@ export class StrainPackagesComponent implements OnInit {
       const user = this.authenticationService._user.value;
       if (user) {
         const pref = this.authenticationService._user.value.preferences;
-        
+
         const userPref = this.authenticationService._user.value.userPreferences
-        if (userPref) { 
+        if (userPref) {
           return userPref;
         }
-        if (!pref) { 
+        if (!pref) {
           console.log('error pref', pref, this.authenticationService._user.value)
           const preferences = {} as UserPreferences;
           return preferences;
         }
-        try { 
+        try {
           const preferences = JSON.parse(pref) as UserPreferences;
           return preferences;
-        } catch(error) { 
+        } catch(error) {
           console.log('error pref', pref, this.authenticationService._user.value)
         }
         const preferences = {} as UserPreferences;
@@ -127,7 +136,7 @@ export class StrainPackagesComponent implements OnInit {
       this.baseUnitsRemaining = this.intakeconversionQuantity
       this.initialQuantity = this.intakeconversionQuantity
       this.setDefaultIntakeUnit()
-      
+
     }
 
     setDefaultIntakeUnit() {
@@ -138,7 +147,7 @@ export class StrainPackagesComponent implements OnInit {
       // this.packageForm.patchValue{ item }
       this.packageForm.patchValue(item)
     }
-    
+
     setInventoryLocation() {
       return  this.inventoryLocationsService.getLocations().pipe(switchMap(data => {
         this.inventoryLocations = data
@@ -254,7 +263,7 @@ export class StrainPackagesComponent implements OnInit {
     let totalInputQuantity =  0;
     try {
 
-    
+
       if (unitsConverted?.unitConvertTo?.value) {
         totalInputQuantity = this.jointWeight * this.inputQuantity * unitsConverted.unitConvertTo.value;
       }
@@ -262,7 +271,7 @@ export class StrainPackagesComponent implements OnInit {
       if (!usingJointsField) {
         if ( totalInputQuantity == 0 )  { return totalInputQuantity};
       }
-     
+
       if (usingJointsField) {
         if (this.unitsConverted?.unitOutPutQuantity) {
           this.inputQuantity = Math.floor(this.unitsConverted?.unitOutPutQuantity / this.jointWeight)
@@ -273,7 +282,7 @@ export class StrainPackagesComponent implements OnInit {
       if ( this.doesInputQuantityExcceedTotal(totalInputQuantity) ) { return 0 }
       //gets the summary of the remaining  packages.
       const remainingValue  = this.conversionService.getBaseUnitsConvertedTo(this.unitsConverted, this.baseUnitsRemaining, totalInputQuantity);
-    
+
       unitsConverted = this.conversionService.getAvailibleQuantityByUnitType(unitsConverted,this.jointWeight )
 
       if (unitsConverted) {
@@ -377,7 +386,7 @@ export class StrainPackagesComponent implements OnInit {
         const index                               =  this.inventoryAssignments.length + 1
 
         this.inventoryLocation                    =  this.getLocationAssignment(this.inventoryLocationID);
-        
+
         inventoryAssignment.sku                   =  this.generateSku(this.package?.label, index);
 
         console.log('pricecostvalues',inventoryAssignment, f.value);
@@ -388,7 +397,7 @@ export class StrainPackagesComponent implements OnInit {
         this.price  = price
 
         console.log('pricecostvalues', f.value);
-        
+
         inventoryAssignment.cost = +cost;
         inventoryAssignment.price = +price;
 
@@ -400,11 +409,11 @@ export class StrainPackagesComponent implements OnInit {
         inventoryAssignment.sourceHarvestNumber  = itemPackage.sourceHarvestNumber
 
         inventoryAssignment.facilityLicenseName = itemPackage?.facilityLicenseName
-        
+
         inventoryAssignment.cbd = +itemPackage?.cbd;
         inventoryAssignment.thc = +itemPackage?.tch;
         inventoryAssignment.thc = +itemPackage?.thca;
-        
+
 
         inventoryAssignment = this.inventoryAssignmentService.setNonConvertingFieldValues(
                             inventoryAssignment ,this.facility, this.inventoryLocation,
@@ -413,7 +422,7 @@ export class StrainPackagesComponent implements OnInit {
       catch (error) {
         console.log('error', error)
       }
-  
+
       return inventoryAssignment
   }
 
@@ -434,25 +443,25 @@ export class StrainPackagesComponent implements OnInit {
     let inventoryAssignment = {} as IInventoryAssignment
     if ( ! this.isValidEntry() )  { return }
     try {
-      
+
       inventoryAssignment                       = this.getPriceValues(inventoryAssignment);
       inventoryAssignment                       = this.setNonConvertingFieldValues(inventoryAssignment);
       console.log('getPriceValues 1', inventoryAssignment)
 
       const unitConversion                      = this.conversionService.getConversionItemByName(this.conversionName);
-    
-      if (!inventoryAssignment) {  
-        this.siteService.notify('No Item assigned', 'close', 5000)  
+
+      if (!inventoryAssignment) {
+        this.siteService.notify('No Item assigned', 'close', 5000)
         return
       }
 
       inventoryAssignment.unitConvertedtoName   = unitConversion?.name;
       inventoryAssignment.unitMulitplier        = unitConversion?.value;
-      
+
       if (this.unitsConverted.unitConvertTo) {
         inventoryAssignment = this.conversionService.getConversionQuantities(inventoryAssignment, this.unitsConverted, this.inputQuantity, this.jointWeight)
         // console.log('addInventoryAssignmentGroup 2', inventoryAssignment)
-      
+
         if (!this.inventoryAssignments) { this.inventoryAssignments = {} as IInventoryAssignment[]}
         this.inventoryAssignments.unshift(inventoryAssignment);
         this.unitOfMeasure = {} as IUnitConversion;
@@ -538,9 +547,9 @@ export class StrainPackagesComponent implements OnInit {
       this.notifyEvent(`Package not completed. There are ${remaining} gram(s) left.`, 'Entry required')
       return
     }
-   
+
     const packageItem = this.packageForm.value;
-    
+
     this.inventoryAssignments.forEach((assignment, index) => {
       assignment.thc  = packageItem?.thc;
       assignment.thca = packageItem?.thca;
@@ -571,15 +580,15 @@ export class StrainPackagesComponent implements OnInit {
       assignment.jointWeight =  packageItem.jointWeight;
 
     });
-  
 
-    const inv$=  this.inventoryAssignmentService.addInventoryList(site, 
+
+    const inv$=  this.inventoryAssignmentService.addInventoryList(site,
                                                                   this.inventoryAssignments[0].label,
                                                                   this.inventoryAssignments)
     this.action$ = inv$.pipe(
       switchMap(data => {
         this.outoutClosePackage.emit('close')
-       
+
         this.siteService.notify('Inventory Packages Imported', 'Success', 2000, 'green');
         if (this.userPref?.metrcUseMetrcLabel) {
           if (data) {

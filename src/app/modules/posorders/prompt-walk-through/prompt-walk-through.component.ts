@@ -14,8 +14,16 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { InputTrackerService } from 'src/app/_services/system/input-tracker.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PromptSubGroupPanelComponent } from './prompt-sub-group-panel/prompt-sub-group-panel.component';
 @Component({
   selector: 'app-prompt-walk-through',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    PromptSubGroupPanelComponent
+  ],
   templateUrl: './prompt-walk-through.component.html',
   styleUrls: ['./prompt-walk-through.component.scss'],
   encapsulation: ViewEncapsulation.None

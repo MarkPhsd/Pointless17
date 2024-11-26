@@ -1,5 +1,5 @@
 import { Component, OnInit, Input,OnDestroy } from '@angular/core';
-import { UntypedFormGroup,UntypedFormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormGroup,UntypedFormBuilder, Validators, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { DateRangeValidator, DayTimeRangeValidator, IPOSOrder, IServiceType, IUser, ServiceTypeFeatures,   } from 'src/app/_interfaces';
@@ -13,8 +13,27 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RequestMessageService } from 'src/app/_services/system/request-message.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { OrderHeaderDemoGraphicsComponent } from '../pos-order/order-header-demo-graphics/order-header-demo-graphics.component';
+import { POSOrderServiceTypeComponent } from '../posorder-service-type/posorder-service-type.component';
+import { POSOrderShippingAddressComponent } from '../posorder-shipping-address/posorder-shipping-address.component';
+import { POSOrderScheduleFormComponent } from '../posorder-schedule-form/posorder-schedule-form.component';
+import { ScheduleSelectorComponent } from 'src/app/shared/widgets/schedule-selector/schedule-selector.component';
+import { ScheduleDateRangeSelectorComponent } from 'src/app/shared/widgets/schedule-date-range-selector/schedule-date-range-selector.component';
+import { PosOrderNotesComponent } from '../pos-order-notes/pos-order-notes.component';
 @Component({
   selector   : 'pos-order-schedule',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  OrderHeaderDemoGraphicsComponent,POSOrderServiceTypeComponent,
+  POSOrderShippingAddressComponent,
+  POSOrderScheduleFormComponent,
+  ScheduleSelectorComponent,
+  ScheduleDateRangeSelectorComponent,
+  PosOrderNotesComponent,
+  SharedPipesModule],
   templateUrl: './posorder-schedule.component.html',
   styleUrls  : ['./posorder-schedule.component.scss']
 })

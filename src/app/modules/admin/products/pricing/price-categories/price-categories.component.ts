@@ -3,7 +3,7 @@ import { Component, Output, OnInit,
 import { Router } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, Subject ,fromEvent } from 'rxjs';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -18,10 +18,18 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 // import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { SearchModel } from 'src/app/_services/system/paging.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AgGridModule } from 'ag-grid-angular';
 
 
 @Component({
   selector: 'app-price-categories',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,
+  SharedPipesModule],
   templateUrl: './price-categories.component.html',
   styleUrls: ['./price-categories.component.scss']
 })

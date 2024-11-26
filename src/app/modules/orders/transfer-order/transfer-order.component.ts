@@ -11,11 +11,18 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
-import { IItemBasic } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { ItemBasic } from '../../admin/report-designer/interfaces/reports';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-transfer-order',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './transfer-order.component.html',
   styleUrls: ['./transfer-order.component.scss']
 })

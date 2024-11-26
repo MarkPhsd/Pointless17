@@ -4,7 +4,7 @@ import { Component, HostBinding, OnInit, AfterViewInit,
          ElementRef,
          ViewChild,
          TemplateRef} from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { catchError, concatMap, delay, filter, Observable, of, repeatWhen, Subscription,switchMap, throwError } from 'rxjs';
 import { ToolBarUIService } from '../_services/system/tool-bar-ui.service';
@@ -27,9 +27,25 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { PrintQueService } from '../_services/transactions/print-que.service';
 import { IItemType, ItemTypeService } from '../_services/menu/item-type.service';
 import { MBMenuButtonsService } from '../_services/system/mb-menu-buttons.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from '../app-material.module';
+import { SharedPipesModule } from '../shared-pipes/shared-pipes.module';
+import { DepartmentMenuComponent } from '../modules/menu/department-menu/department-menu.component';
+import { ThreeCXFabComponent } from '../shared/widgets/three-cxfab/three-cxfab.component';
+import { MenuSearchBarComponent } from '../shared/components/menu-search-bar/menu-search-bar.component';
+import { UserBarComponent } from '../shared/components/user-bar/user-bar.component';
+import { MenuMinimalComponent } from '../shared/widgets/menus/menu-minimal/menu-minimal.component';
+import { MenuTinyComponent } from '../shared/widgets/menus/menu-tiny/menu-tiny.component';
+import { OrderBarComponent } from '../shared/components/order-bar/order-bar.component';
 // import { MBMenuButtonsService } from '../_services/system/mb-menu-buttons.service';
 @Component({
   selector: 'app-default',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    DepartmentMenuComponent,ThreeCXFabComponent, MenuSearchBarComponent,
+    UserBarComponent,MenuMinimalComponent, MenuTinyComponent,
+    OrderBarComponent,
+  SharedPipesModule],
   templateUrl: './default.component.html',
   styleUrls: ['./default.component.scss'],
   // animations: [ fader ],

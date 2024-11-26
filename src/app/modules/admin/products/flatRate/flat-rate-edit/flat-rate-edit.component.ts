@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FbItemTypeService } from 'src/app/_form-builder/fb-item-type.service';
 import { FlatRateTaxValue, FlatRateTax, IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
-import { UntypedFormBuilder, UntypedFormGroup, FormControl, Validators, UntypedFormArray } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, FormControl, Validators, UntypedFormArray, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
@@ -14,9 +14,16 @@ import { FlatRateService } from 'src/app/_services/map-routing/flat-rate.service
 import { FBFlatRateService } from 'src/app/_form-builder/fbflat-rate.service';
 import { group } from '@angular/animations';
 import { DefaultMatCalendarRangeStrategy } from '@angular/material/datepicker';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-flat-rate-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './flat-rate-edit.component.html',
   styleUrls: ['./flat-rate-edit.component.scss']
 })

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Capacitor } from '@capacitor/core';
@@ -17,9 +17,22 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ButtonRendererComponent } from '../../../report-designer/widgets/button-renderer/button-renderer.component';
 import { EditSelectedItemsComponent } from '../../productedit/edit-selected-items/edit-selected-items.component';
 import { Router } from '@angular/router';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { ProductInfoPanelComponent } from '../../product-info-panel/product-info-panel.component';
+import { PartUsageGraphComponent } from '../part-usage-graph/part-usage-graph.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-part-builder-usage-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  SearchDebounceInputComponent,FormSelectListComponent,AgGridModule,
+  ProductInfoPanelComponent,PartUsageGraphComponent,
+  SharedPipesModule],
   templateUrl: './part-builder-usage-list.component.html',
   styleUrls: ['./part-builder-usage-list.component.scss']
 })

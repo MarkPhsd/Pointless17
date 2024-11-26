@@ -2,7 +2,7 @@ import { Component,  Inject,  Input, OnInit, TemplateRef, ViewChild } from '@ang
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, switchMap,  } from 'rxjs';
 import { IItemBasic } from 'src/app/_services';
-import { UntypedFormBuilder, UntypedFormGroup, UntypedFormArray, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, UntypedFormArray, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { PriceCategories, IPriceCategory2,
@@ -18,9 +18,22 @@ import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
 import { PriceTierMethodsService } from 'src/app/_services/menu/price-tier-methods.service';
 import { TransactionUISettings,UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { UnitTypeSelectComponent } from '../../productedit/_product-edit-parts/unit-type-select/unit-type-select.component';
+import { PriceCategoryTimeFiltersComponent } from './price-category-time-filters/price-category-time-filters.component';
 
 @Component({
   selector: 'app-price-categories-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    FormSelectListComponent,EditButtonsStandardComponent,
+    UnitTypeSelectComponent,PriceCategoryTimeFiltersComponent,
+
+  SharedPipesModule],
   templateUrl: './price-categories-edit.component.html',
   styleUrls: ['./price-categories-edit.component.scss']
 })

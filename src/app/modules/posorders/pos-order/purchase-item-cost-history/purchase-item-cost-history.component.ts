@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Observable, switchMap, of, Subscription } from 'rxjs';
 import { IPOSOrder, ISite, PosOrderItem } from 'src/app/_interfaces';
 import { HistoricalSalesPurchaseOrderMetrcs, OrdersService, ReportingService } from 'src/app/_services';
@@ -7,9 +8,15 @@ import { DateHelperService } from 'src/app/_services/reporting/date-helper.servi
 import { POSItemSearchModel } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'purchase-item-cost-history',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './purchase-item-cost-history.component.html',
   styleUrls: ['./purchase-item-cost-history.component.scss']
 })

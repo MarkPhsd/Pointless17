@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, switchMap} from 'rxjs';
-import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -10,9 +10,16 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
 import { IItemBasic } from 'src/app/_services';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { EmployeeClockService } from 'src/app/_services/employeeClock/employee-clock.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'clock-breaks-types',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './clock-breaks-types.component.html',
   styleUrls: ['./clock-breaks-types.component.scss']
 })

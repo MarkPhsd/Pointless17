@@ -3,9 +3,17 @@ import { Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PosOrderScheduleDescriptionComponent } from './pos-order-schedule-description/pos-order-schedule-description.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'pos-order-price-schedule-info',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    PosOrderScheduleDescriptionComponent,
+  ],
   templateUrl: './pos-order-price-schedule-info.component.html',
   styleUrls: ['./pos-order-price-schedule-info.component.scss']
 })

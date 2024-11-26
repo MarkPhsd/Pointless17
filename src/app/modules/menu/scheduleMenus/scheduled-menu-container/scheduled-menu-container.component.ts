@@ -14,9 +14,21 @@ import { IPriceSchedule,
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { Title } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ScheduledMenuHeaderComponent } from './scheduled-menu-header/scheduled-menu-header.component';
+import { ScheduledMenuImageComponent } from './scheduled-menu-image/scheduled-menu-image.component';
+import { ScheduledMenuItemsComponent } from '../scheduled-menu-items/scheduled-menu-items.component';
 
 @Component({
   selector: 'scheduled-menu-container',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    ScheduledMenuHeaderComponent,ScheduledMenuImageComponent,
+    ScheduledMenuItemsComponent,
+  ],
+
   templateUrl: './scheduled-menu-container.component.html',
   styleUrls: ['./scheduled-menu-container.component.scss'],
   animations: [

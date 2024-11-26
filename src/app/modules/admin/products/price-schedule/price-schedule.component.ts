@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, UntypedFormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, UntypedFormGroup, FormArray, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
@@ -12,11 +12,28 @@ import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { PriceScheduleConstraintsComponent } from './price-schedule-constraints/price-schedule-constraints.component';
+import { TypeFilterComponent } from './item-selections/type-filter/type-filter.component';
+import { RewardTypeFilterComponent } from './rewards/reward-type-filter/reward-type-filter.component';
+import { ValueFieldsComponent } from '../productedit/_product-edit-parts/value-fields/value-fields.component';
+import { PriceScheduleInfoComponent } from './price-schedule-info/price-schedule-info.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 // https://angular.io/guide/component-interaction#!#bidirectional-service
 
 @Component({
   selector: 'app-price-schedule',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  PriceScheduleConstraintsComponent,
+  RewardTypeFilterComponent,
+  TypeFilterComponent,
+  ValueFieldsComponent,
+  PriceScheduleInfoComponent,
+  SharedPipesModule],
+
   templateUrl: './price-schedule.component.html',
   styleUrls: ['./price-schedule.component.scss']
 })

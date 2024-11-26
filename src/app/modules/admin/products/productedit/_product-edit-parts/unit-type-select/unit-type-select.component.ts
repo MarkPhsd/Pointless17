@@ -1,6 +1,6 @@
 import { Component, OnInit, Input , EventEmitter, Output, ViewChild, ElementRef, AfterViewInit, OnChanges, } from '@angular/core';
 import {  IProduct, ISite, PosOrderItem, ProductPrice,  } from 'src/app/_interfaces';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, of } from 'rxjs';
 import { ActivatedRoute,  } from '@angular/router';
@@ -9,9 +9,16 @@ import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { UnitType } from 'src/app/_interfaces/menu/price-categories';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PB_Components } from 'src/app/_services/partbuilder/part-builder-main.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
-  selector: 'unit-type-select',
+  selector: 'unit-type-select',  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
+
   templateUrl: './unit-type-select.component.html',
   styleUrls: ['./unit-type-select.component.scss']
 })
@@ -140,7 +147,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
     if (item) {
 
       this.selectItem(item)
-   
+
       return
       this.item = item
       return item?.name
@@ -164,7 +171,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit, OnChanges
       this.inputForm.patchValue(  unit  )
       this.setValue(item);
       this.getName(item.id)
-      // 
+      //
       return;
     }
 

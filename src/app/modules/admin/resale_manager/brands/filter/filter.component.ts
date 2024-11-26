@@ -1,14 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, switchMap, of } from 'rxjs';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BrandClassSearch, BrandsResaleService } from 'src/app/_services/resale/brands-resale.service';
 import { ClassClothingSearch, ClassesResaleService } from 'src/app/_services/resale/classes-resale.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
 
 @Component({
   selector: 'brand-class-filter',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    ValueFieldsComponent,
+  SharedPipesModule],
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss']
 })

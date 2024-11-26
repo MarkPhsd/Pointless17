@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input, Output,OnChanges, OnInit, Optional, ViewChild ,ElementRef,
   AfterViewInit, EventEmitter } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
@@ -16,6 +16,11 @@ import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-form
 import { DiscountInfo, IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
     return 0;
@@ -30,6 +35,10 @@ function myComparator(value1, value2) {
 }
 @Component({
   selector: 'app-reward-type-panel',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    FormSelectListComponent,AgGridModule,
+  SharedPipesModule],
   templateUrl: './reward-type-results-selector.component.html',
   styleUrls: ['./reward-type-results-selector.component.scss']
 })
@@ -55,7 +64,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
   productTypes$    : Observable<IItemBasicB[]>;
   categoryID: number;
   subCategoryID: number;
-  
+
   searchItems$              : Subject<IProductSearchResults[]> = new Subject();
   _searchItems$ = this.searchPhrase.pipe(
     debounceTime(300),
@@ -250,8 +259,8 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
      }
    }
 
-   getSubCategory() { 
-    if (this.subCategoryID) { 
+   getSubCategory() {
+    if (this.subCategoryID) {
       return this.subCategoryID
     }
     return null;
@@ -259,7 +268,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
   //the category in this component comes from input
   getCategoryID(): number  {
 
-    if (this.categoryID) { 
+    if (this.categoryID) {
       return this.categoryID;
     }
     if (!this.selectedCategory) { return }
@@ -412,7 +421,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
         this.pageSize,
         this.currentPage,
         this.getSelectedItemTypeID(),
-        brandID, 
+        brandID,
         subCategoryID,
     );
   }
@@ -462,7 +471,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
   selectItemFromGrid(e) {
     if (e.rowData.id)  {
       let item =  this.assigItem(e.rowData);
-      if (item) { 
+      if (item) {
         this.applyChanges(item);
       }
       this.lastSelectedItem = e.rowData;
@@ -485,7 +494,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
         newItem.itemID   =  itemID;
         newItem.name     =  item.name;
         newItem.quantity =  1;
-        if (index) { 
+        if (index) {
           newItem.sort     = index
         }
         this.itemDiscounts.push(newItem);
@@ -509,13 +518,13 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
     model.pageSize = 50;
     this.itemDiscounts = [] as DiscountInfo[]
     const site               = this.siteService.getAssignedSite()
-    this.action$ =  this.menuService.getProductsBySearchForLists(site, model).pipe(switchMap(data => { 
-      if (!data || data.errorMessage) { 
+    this.action$ =  this.menuService.getProductsBySearchForLists(site, model).pipe(switchMap(data => {
+      if (!data || data.errorMessage) {
         return of(data)
       }
       if (data && data.results) {
         let i = 0
-        data.results.forEach(menuItem=>{ 
+        data.results.forEach(menuItem=>{
           i += i
           let item =  this.assigItem(menuItem, i)
           this.applyChanges(item);
@@ -535,8 +544,8 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
   refreshGroupingDataOnly() {
     const site             = this.siteService.getAssignedSite()
     this.categories$       = this.menuService.getListOfCategoriesAll(site);
-    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(switchMap(data => { 
- 
+    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(switchMap(data => {
+
       this.subCategoriesList = data;
       return of(data)
     }))
@@ -550,7 +559,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
         this.subCategoriesList  = data;
         if (this.categoryID != 0  && !this.categoryID) {
           this.subCategoriesList = data.filter(data => {return data.categoryID == this.categoryID});
-          if (!this.subCategoriesList) { 
+          if (!this.subCategoriesList) {
             this.subCategoriesList = data;
           }
         }
@@ -578,9 +587,9 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
     this.categoryID = event;
     this.refreshSearch(this.searchForm.controls['itemName'].value);
 
-    if (this.categoryID && this.categoryID != 0) { 
+    if (this.categoryID && this.categoryID != 0) {
       this.refreshSubCategories();
-    } else { 
+    } else {
       const site          = this.siteService.getAssignedSite()
       this.subCategories$ = this.menuService.getListOfSubCategoriesAll(site)
     }

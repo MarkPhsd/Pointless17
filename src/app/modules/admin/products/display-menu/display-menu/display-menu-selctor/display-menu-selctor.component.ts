@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent, IListBoxItemB } from 'src/app/_interfaces/dual-lists';
 import { Observable, Subject ,fromEvent, of ,switchMap, map} from 'rxjs';
@@ -13,6 +13,9 @@ import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
 import { IPriceSchedule, PS_SearchResultsPaged } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 export interface ISelectedMenu {
   name: string;
@@ -21,6 +24,10 @@ export interface ISelectedMenu {
 
 @Component({
   selector: 'display-menu-selctor',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './display-menu-selctor.component.html',
   styleUrls: ['./display-menu-selctor.component.scss']
 })

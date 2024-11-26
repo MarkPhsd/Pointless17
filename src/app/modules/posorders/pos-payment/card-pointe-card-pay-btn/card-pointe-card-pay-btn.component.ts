@@ -10,9 +10,16 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'card-pointe-card-pay-btn',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './card-pointe-card-pay-btn.component.html',
   styleUrls: ['./card-pointe-card-pay-btn.component.scss']
 })

@@ -1,5 +1,5 @@
 import { Component, OnInit ,Input, Inject } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, switchMap } from 'rxjs';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
@@ -9,8 +9,15 @@ import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'app-edit-cssstyles',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './edit-cssstyles.component.html',
   styleUrls: ['./edit-cssstyles.component.scss']
 })
@@ -50,11 +57,11 @@ export class EditCSSStylesComponent implements OnInit {
   interpolatedPaymentsTexts = [] as string[];
   interpolatedSubFooterTexts = [] as string[];
 
-  receiptStyle$       = this.settingsService.getSettingByNameCached(this.siteService.getAssignedSite(), 'ReceiptStyles').pipe(switchMap(data => { 
+  receiptStyle$       = this.settingsService.getSettingByNameCached(this.siteService.getAssignedSite(), 'ReceiptStyles').pipe(switchMap(data => {
     console.log(data.text)
     return of(data)
-  })) 
-  
+  }))
+
   constructor(
     private settingsService  : SettingsService,
     private siteService      : SitesService,
@@ -105,11 +112,11 @@ export class EditCSSStylesComponent implements OnInit {
        switchMap(data => {
          this.notify('Saved', 'Success')
           return of(data)
-       }) 
+       })
     )
   }
 
-  deleteCachedStyles() { 
+  deleteCachedStyles() {
 
   }
 

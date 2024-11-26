@@ -7,9 +7,17 @@ import { IPriceSchedule, ClientType, DateFrame, DiscountInfo,
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { METRCItemsCategories } from 'src/app/_interfaces/metrcs/items';
+import { TypeFilterComponent } from '../type-filter/type-filter.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-search-panel',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    TypeFilterComponent,
+  ],
   templateUrl: './search-panel.component.html',
   styleUrls: ['./search-panel.component.scss']
 })

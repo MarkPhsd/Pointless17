@@ -2,7 +2,7 @@ import { Component,  Inject, OnInit,
 } from '@angular/core';
 import { AWSBucketService,  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { jobTypes } from 'src/app/_interfaces';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
@@ -10,9 +10,16 @@ import { FbClientTypesService } from 'src/app/_form-builder/fb-client-types.serv
 import { Observable, switchMap , of, catchError} from 'rxjs';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { JobTypesService } from 'src/app/_services/people/job-types.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-job-types-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './job-types-edit.component.html',
   styleUrls: ['./job-types-edit.component.scss']
 })

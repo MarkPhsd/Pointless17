@@ -1,14 +1,39 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { catchError, Observable, of, switchMap } from 'rxjs';
-import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
+
 import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProducteditComponent } from '../productedit.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ProductTypeSelectComponent } from '../_product-edit-parts/product-type-select/product-type-select.component';
+import { DepartmentSelectComponent } from '../_product-edit-parts/department-select/department-select.component';
+import { CategorySelectListFilterComponent } from 'src/app/shared/widgets/category-select-list-filter/category-select-list-filter.component';
+import { CategorySelectComponent } from '../_product-edit-parts/category-select/category-select.component';
+import { BrandTypeSelectComponent } from '../_product-edit-parts/brand-type-select/brand-type-select.component';
+import { SpeciesListComponent } from '../_product-edit-parts/species-list/species-list.component';
+import { ValueFieldsComponent } from '../_product-edit-parts/value-fields/value-fields.component';
+import { PromptGroupSelectComponent } from '../_product-edit-parts/prompt-group-select/prompt-group-select.component';
+import { FieldSelectorComponent } from '../../../report-designer/designer/field-selector/field-selector.component';
+import { FieldValueSelectorComponent } from '../../../report-designer/designer/field-value-selector/field-value-selector.component';
 @Component({
   selector: 'app-edit-selected-items',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    ProductTypeSelectComponent,
+    DepartmentSelectComponent,
+    CategorySelectComponent,
+    BrandTypeSelectComponent,
+    SpeciesListComponent,
+    ValueFieldsComponent,
+    PromptGroupSelectComponent,
+    FieldValueSelectorComponent,
+
+  SharedPipesModule],
   templateUrl: './edit-selected-items.component.html',
   styleUrls: ['./edit-selected-items.component.scss']
 })

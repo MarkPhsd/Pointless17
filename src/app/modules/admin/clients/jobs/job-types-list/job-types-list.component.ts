@@ -7,7 +7,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { AWSBucketService, ContactsService, MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -20,9 +20,17 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { jobTypes } from 'src/app/_interfaces';
 import { JobTypesService } from 'src/app/_services/people/job-types.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-job-type-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  AgGridModule,
+  SharedPipesModule],
   templateUrl: './job-types-list.component.html',
   styleUrls: ['./job-types-list.component.scss']
 })

@@ -7,7 +7,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { AWSBucketService, ContactsService, MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, of } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -20,9 +20,18 @@ import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { clientType } from 'src/app/_interfaces';
+import { AgGridModule } from 'ag-grid-angular';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-client-type-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,SearchDebounceInputComponent,
+  SharedPipesModule],
   templateUrl: './client-type-list.component.html',
   styleUrls: ['./client-type-list.component.scss']
 })

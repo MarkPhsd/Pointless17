@@ -13,15 +13,11 @@ import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assi
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
-
 @Component({
   selector: 'app-meta-tag-chips',
   standalone: true,
-  standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
-
   SharedPipesModule],
-
   templateUrl: './meta-tag-chips.component.html',
   styleUrls: ['./meta-tag-chips.component.scss']
 })

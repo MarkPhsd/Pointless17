@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder, IPurchaseOrderItem, PosOrderItem, UnitType } from 'src/app/_interfaces';
 import { IMenuItem, menuButtonJSON } from 'src/app/_interfaces/menu/menu-products';
@@ -12,9 +13,18 @@ import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ItemPostResults, NewItem, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { ProductSelectorComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/product-selector/product-selector.component';
+import { UnitTypeFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/unit-type-fields/unit-type-fields.component';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'new-order-item',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  ProductSelectorComponent,UnitTypeFieldsComponent,
+
+  SharedPipesModule],
   templateUrl: './new-order-item.component.html',
   styleUrls: ['./new-order-item.component.scss']
 })

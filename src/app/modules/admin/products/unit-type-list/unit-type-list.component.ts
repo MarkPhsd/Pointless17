@@ -3,7 +3,7 @@ import { Component,  Output, OnInit, AfterViewInit,
 import { Router } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, Subject ,fromEvent } from 'rxjs';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -18,9 +18,17 @@ import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 // import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { SearchModel } from 'src/app/_services/system/paging.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'unit-types',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  AgGridModule,
+  SharedPipesModule],
   templateUrl: './unit-type-list.component.html',
   styleUrls: ['./unit-type-list.component.scss']
 })

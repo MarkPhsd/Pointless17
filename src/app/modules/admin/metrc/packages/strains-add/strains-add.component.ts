@@ -1,6 +1,6 @@
 import { Component,  Inject,   Input,   OnDestroy,   OnInit,} from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { AWSBucketService, AuthenticationService, IItemBasic, MenuService,  } from 'src/app/_services';
 import { ISite } from 'src/app/_interfaces/site';
@@ -16,9 +16,30 @@ import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-se
 import { IProduct, UserPreferences } from 'src/app/_interfaces';
 import { LabTestResult, LabTestResultResponse, MetrcLabTestsService } from 'src/app/_services/metrc/metrc-lab-tests.service';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MetrcIntakeHeaderComponent } from '../metrc-inventory-properties/metrc-intake-header/metrc-intake-header.component';
+import { ActivityTogglesMetrcComponent } from '../metrc-inventory-properties/activity-toggles-metrc/activity-toggles-metrc.component';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { MetrcInventoryPropertiesComponent } from '../metrc-inventory-properties/metrc-inventory-properties.component';
+import { PriceCategorySelectComponent } from '../../../products/productedit/_product-edit-parts/price-category-select/price-category-select.component';
+import { ChemicalValuesComponent } from '../../../products/productedit/_product-edit-parts/chemical-values/chemical-values.component';
+import { StrainPackagesComponent } from './strain-packages/strain-packages.component';
 
 @Component({
   selector: 'app-strains-add',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    MetrcIntakeHeaderComponent,
+    ActivityTogglesMetrcComponent,
+    EditButtonsStandardComponent,
+    MetrcInventoryPropertiesComponent,
+    PriceCategorySelectComponent,
+    ChemicalValuesComponent,
+    StrainPackagesComponent,
+
+  SharedPipesModule],
   templateUrl: './strains-add.component.html',
   styleUrls: ['./strains-add.component.scss']
 })
@@ -26,7 +47,7 @@ import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 export class StrainsAddComponent implements OnInit, OnDestroy {
 
   _menuItemUpdate : Subscription;
-  
+
   productionBatchNumber:  string;
   facilityLicenseNumber:  string;
   action$: Observable<any>;
@@ -70,7 +91,7 @@ export class StrainsAddComponent implements OnInit, OnDestroy {
           private metrcPackagesService: MetrcPackagesService,
           private itemTypeService: ItemTypeService,
           private metrcLabService: MetrcLabTestsService,
-     
+
           private dialogRef: MatDialogRef<StrainsAddComponent>,
           @Inject(MAT_DIALOG_DATA) public data: any,
           private inventoryAssignmentService: InventoryAssignmentService,
@@ -97,7 +118,7 @@ export class StrainsAddComponent implements OnInit, OnDestroy {
           if (this.package) {
             if (this.package?.productID) {
               this.assignMenItem(+this.package?.productID)
-              
+
             }
           }
           if (!data.labResults || data.labResults == null ||
@@ -119,9 +140,9 @@ export class StrainsAddComponent implements OnInit, OnDestroy {
         return of(data)
       }
     ))
-    
-    this._menuItemUpdate = this.menuService.menuItemUpdate$.subscribe(data => { 
-      if (data) { 
+
+    this._menuItemUpdate = this.menuService.menuItemUpdate$.subscribe(data => {
+      if (data) {
         this.menuItem = data;
       }
     })
@@ -130,11 +151,11 @@ export class StrainsAddComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    if (this._menuItemUpdate) { 
+    if (this._menuItemUpdate) {
       this._menuItemUpdate.unsubscribe()
-    } 
+    }
   }
-  
+
 
   setLabResultsInPackage( labResults: string) {
     let checked : boolean;
@@ -257,7 +278,7 @@ export class StrainsAddComponent implements OnInit, OnDestroy {
     }
 
     // console.log('metrcPackage', metrcPackage)
-    // return 
+    // return
 
     const package$       = this.metrcPackagesService.putPackage(site, this.id, metrcPackage)
     package$.subscribe( data => {
@@ -267,7 +288,7 @@ export class StrainsAddComponent implements OnInit, OnDestroy {
 
     this.saved = true
     this.packageForm.valueChanges.subscribe(data => {
-      this.assignMenItem(this.menuItem?.id) 
+      this.assignMenItem(this.menuItem?.id)
       this.saved = false;
     })
   }
@@ -324,12 +345,12 @@ export class StrainsAddComponent implements OnInit, OnDestroy {
 
           console.log('menu item Item Type',this.menuItem.itemType)
 
-          if (!this.menuItem.itemType) { 
+          if (!this.menuItem.itemType) {
             console.log("setItemType")
             return this.setItemType(this.package?.productCategoryName)
-          } 
+          }
 
-          if (!this.menuItem.departmentID || this.menuItem.departmentID == 0) { 
+          if (!this.menuItem.departmentID || this.menuItem.departmentID == 0) {
             console.log('departmentID', this.menuItem.departmentID)
             return this.setItemDepartment(this.package?.productCategoryName)
           }
@@ -341,9 +362,9 @@ export class StrainsAddComponent implements OnInit, OnDestroy {
         }
         return of(data)
       }
-    )).subscribe(data => { 
+    )).subscribe(data => {
 
-      if (data) { 
+      if (data) {
         this.packageForm.patchValue({productName: this.menuItem.name, productID: this.menuItem.id})
         // this.setProductNameEmpty(this.packageForm)
       }
@@ -352,10 +373,10 @@ export class StrainsAddComponent implements OnInit, OnDestroy {
     })
   }
 
-  setItemType(productCategoryName: string) { 
-    return this.itemTypeService.getItemTypeByName(this.site, productCategoryName).pipe(switchMap(data => { 
+  setItemType(productCategoryName: string) {
+    return this.itemTypeService.getItemTypeByName(this.site, productCategoryName).pipe(switchMap(data => {
       console.log('setItemType', data)
-      if (!data) { 
+      if (!data) {
         const prod = {} as IProduct;
         return of(prod)
       }
@@ -364,37 +385,37 @@ export class StrainsAddComponent implements OnInit, OnDestroy {
       return this.menuService.getItemsNameBySearch(site, productCategoryName, 6)
     })).pipe(switchMap(dept => {
       console.log('depts', dept)
-      if (dept && dept[0]) { 
+      if (dept && dept[0]) {
         this.menuItem.departmentID = dept[0]?.id;
       }
-      
+
       return this.menuService.getProduct(this.site, this.menuItem.id)
-    })).pipe(switchMap(data => { 
-      if (!data || !data?.id) { 
+    })).pipe(switchMap(data => {
+      if (!data || !data?.id) {
         return of(null)
       }
-      data.departmentID =  this.menuItem.departmentID 
+      data.departmentID =  this.menuItem.departmentID
       data.prodModifierType = this.menuItem.prodModifierType
       return this.menuService.putProduct(this.site, this.menuItem.id, data)
-    })).pipe(switchMap(data => { 
+    })).pipe(switchMap(data => {
       return of(this.menuItem)
     }))
   }
 
   setItemDepartment(productCategoryName: string) {
 
-    console.log("setItemDepartment", productCategoryName)  
+    console.log("setItemDepartment", productCategoryName)
     const site = this.siteService.getAssignedSite()
     let catID: number = 0;
 
-    return this.menuService.getItemsNameBySearch(site, productCategoryName, 6).pipe(switchMap(dept => { 
-      if (dept && dept[0]) { 
+    return this.menuService.getItemsNameBySearch(site, productCategoryName, 6).pipe(switchMap(dept => {
+      if (dept && dept[0]) {
         this.menuItem.departmentID = dept[0]?.id;
         catID = dept[0].id;
       }
       return this.menuService.getProduct(this.site, this.menuItem.id)
     })).pipe(switchMap(data => {
-      this.menuItem.departmentID = catID; 
+      this.menuItem.departmentID = catID;
       data.departmentID = catID;
       return this.menuService.putProduct(this.site, this.menuItem.id, data)
     }
@@ -474,7 +495,7 @@ export class StrainsAddComponent implements OnInit, OnDestroy {
 
             useByDate                       : data?.useByDate,
             productionBatchNumber           : data?.productionBatchNumber,
-            
+
             productName                     : data?.productName,
             productID                       : data?.productID,
 

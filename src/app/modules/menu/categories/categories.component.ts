@@ -9,7 +9,7 @@ import { AWSBucketService, AuthenticationService, IProductSearchResults, MenuSer
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Capacitor, Plugins } from '@capacitor/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent,of } from 'rxjs';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -20,6 +20,9 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 const  { Keyboard } = Plugins;
 
 // https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6
@@ -35,6 +38,10 @@ const  { Keyboard } = Plugins;
 
 @Component({
   selector: 'app-categories',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
@@ -137,7 +144,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     this.getBucket()
     this.init();
     this.setPanelSyle();
-    if (this.authSevice && this.authSevice.deviceInfo && 
+    if (this.authSevice && this.authSevice.deviceInfo &&
           this.authSevice.deviceInfo?.phoneDevice) {
       this.textLength = 24
     }
@@ -316,7 +323,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
        productSearchModel.hideSubCategoryItems = false;
       { productSearchModel.categoryID  = id }
     }
- 
+
     productSearchModel.pageSize   = 45
     productSearchModel.pageNumber = 1
     this.menuService.updateSearchModel(productSearchModel)

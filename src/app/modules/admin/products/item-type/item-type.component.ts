@@ -13,9 +13,24 @@ import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-gr
 import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
 import { ActivatedRoute } from '@angular/router';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { ItemTypeCategoryAssignmentComponent } from './item-type-category-assignment/item-type-category-assignment.component';
+import { UseGroupTaxAssignmentComponent } from './use-group-tax-assignment/use-group-tax-assignment.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-item-type',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,
+    ItemTypeCategoryAssignmentComponent,
+    ItemTypeDisplayAssignmentService,
+    UseGroupTaxAssignmentComponent,
+
+  SharedPipesModule],
   templateUrl: './item-type.component.html',
   styleUrls: ['./item-type.component.scss'],
   encapsulation: ViewEncapsulation.None // Disable encapsulation

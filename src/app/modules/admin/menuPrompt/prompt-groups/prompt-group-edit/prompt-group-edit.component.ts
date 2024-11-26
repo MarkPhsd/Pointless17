@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
@@ -6,9 +7,18 @@ import { ActivatedRoute } from '@angular/router';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
 
 @Component({
   selector: 'app-prompt-group-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    EditButtonsStandardComponent,UploaderComponent
+  ],
+
   templateUrl: './prompt-group-edit.component.html',
   styleUrls: ['./prompt-group-edit.component.scss']
 })

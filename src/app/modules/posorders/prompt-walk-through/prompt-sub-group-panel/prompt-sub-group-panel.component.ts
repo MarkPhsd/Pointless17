@@ -8,9 +8,17 @@ import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { Subscription } from 'rxjs';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PromptPanelMenuItemsComponent } from './prompt-panel-menu-items/prompt-panel-menu-items.component';
 
 @Component({
   selector: 'prompt-sub-group-panel',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    PromptPanelMenuItemsComponent
+  ],
   templateUrl: './prompt-sub-group-panel.component.html',
   styleUrls: ['./prompt-sub-group-panel.component.scss']
 })

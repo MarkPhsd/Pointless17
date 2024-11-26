@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnInit, ViewChild, Output, HostListener, OnDestroy, Input } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, of, Subject, Subscription, switchMap  } from 'rxjs';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { InventoryAssignmentService, IInventoryAssignment, InventoryFilter, InventorySearchResultsPaged } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ClientSearchModel, ISite, IUserProfile, OperationWithAction } from 'src/app/_interfaces';
@@ -28,6 +28,12 @@ import { AdjustPaymentComponent } from 'src/app/modules/posorders/adjust/adjust-
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-reasons/adjustment-reasons.component';
 import { NewInventoryItemComponent } from '../../new-inventory-item/new-inventory-item.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { InventoryHistoryListComponent } from '../../inventory-history-list/inventory-history-list.component';
 export interface InventoryStatusList {
   name: string;
   id:   number;
@@ -35,6 +41,11 @@ export interface InventoryStatusList {
 
 @Component({
   selector: 'app-inventory-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  SearchDebounceInputComponent,AgGridModule,
+  InventoryHistoryListComponent,
+  SharedPipesModule],
   templateUrl: './inventory-list.component.html',
   styleUrls: ['./inventory-list.component.scss']
 })

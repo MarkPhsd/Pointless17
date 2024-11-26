@@ -1,13 +1,20 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UntypedFormArray, FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormArray, FormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IPriceSchedule, PriceAdjustScheduleTypes } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable, Subscription,switchMap,of } from 'rxjs';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-discount-type-selection',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './discount-type-selection.component.html',
   styleUrls: ['./discount-type-selection.component.scss']
 })

@@ -9,9 +9,17 @@ import { BalanceSheetService,  IBalanceSheet } from 'src/app/_services/transacti
 import { BalanceSheetQuickViewComponent } from '../../../balanceSheets/balance-sheet-quick-view/balance-sheet-quick-view.component';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { Observable, of, switchMap } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'close-day-validation',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './close-day-validation.component.html',
   styleUrls: ['./close-day-validation.component.scss']
 })

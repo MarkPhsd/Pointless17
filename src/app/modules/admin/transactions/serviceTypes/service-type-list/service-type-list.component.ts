@@ -5,7 +5,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -18,9 +18,18 @@ import { IServiceType, ISetting } from 'src/app/_interfaces';
 // import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { MatToggleSelectorComponent } from 'src/app/shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-service-type-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,MatToggleSelectorComponent,
+  SharedPipesModule],
   templateUrl: './service-type-list.component.html',
   styleUrls: ['./service-type-list.component.scss']
 })

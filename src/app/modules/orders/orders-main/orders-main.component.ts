@@ -20,8 +20,30 @@ import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IOrderItemSearchModel, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { TransferOrderComponent } from '../transfer-order/transfer-order.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { SortSelectorsComponent } from 'src/app/shared/widgets/sort-selectors/sort-selectors.component';
+import { HouseAccountsListComponent } from '../house-accounts-list/house-accounts-list.component';
+import { OrderCardsComponent } from '../order-cards/order-cards.component';
+import { PosOrderItemsComponent } from '../../posorders/pos-order/pos-order-items/pos-order-items.component';
+import { ItemSalesCardComponent } from '../../admin/reports/item-sales-card/item-sales-card.component';
+import { CoachMarksButtonComponent } from 'src/app/shared/widgets/coach-marks-button/coach-marks-button.component';
+import { OrdersListComponent } from '../orders-list/orders-list.component';
 @Component({
   selector: 'app-orders-main',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  OrderFilterPanelComponent,
+  SortSelectorsComponent,
+  HouseAccountsListComponent,
+  OrdersListComponent,
+  OrderCardsComponent,
+  PosOrderItemsComponent,
+  ItemSalesCardComponent,
+  CoachMarksButtonComponent,
+  SharedPipesModule],
   templateUrl: './orders-main.component.html',
   styleUrls: ['./orders-main.component.scss'],
 })

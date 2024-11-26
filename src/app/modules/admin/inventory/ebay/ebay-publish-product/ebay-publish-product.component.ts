@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
 import { IClientTable, IProduct, IUser } from 'src/app/_interfaces';
@@ -11,9 +11,18 @@ import { AvailabilityTypeEnum, Dimensions, EbayAPIService, FulfillmentTime,Packa
 import { EbayConditions } from 'src/app/_services/resale/ebayConditions';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
+import { EbayAspectsComponent } from './ebay-aspects/ebay-aspects.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'ebay-publish-product',
+
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  EbayAspectsComponent,
+  SharedPipesModule],
   templateUrl: './ebay-publish-product.component.html',
   styleUrls: ['./ebay-publish-product.component.scss']
 })

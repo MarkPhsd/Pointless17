@@ -37,11 +37,71 @@ import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PosOrderTransactionDataComponent } from '../pos-order-transaction-data/pos-order-transaction-data.component';
+import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
+import { StoreCreditInfoComponent } from './store-credit-info/store-credit-info.component';
+import { LimitValuesProgressBarsComponent } from '../limit-values-progress-bars/limit-values-progress-bars.component';
+import { OrderHeaderDemoGraphicsComponent } from './order-header-demo-graphics/order-header-demo-graphics.component';
+import { PosOrderFunctionButtonsComponent } from '../pos-order-function-buttons/pos-order-function-buttons.component';
+import { PriceScheduleMenuListComponent } from '../../priceSchedule/price-schedule-menu-list/price-schedule-menu-list.component';
+import { PriceScheduleMenuItemsComponent } from '../../priceSchedule/price-schedule-menu-items/price-schedule-menu-items.component';
+import { PosOrderItemListComponent } from './pos-order-item-list/pos-order-item-list.component';
+import { PosCheckOutButtonsComponent } from './pos-check-out-buttons/pos-check-out-buttons.component';
+import { CardPointeCardPayBtnComponent } from '../pos-payment/card-pointe-card-pay-btn/card-pointe-card-pay-btn.component';
+import { DsiEMVCardPayBtnComponent } from '../pos-payment/dsi-emvcard-pay-btn/dsi-emvcard-pay-btn.component';
+import { TriPOSCardPayBtnComponent } from '../pos-payment/tri-poscard-pay-btn/tri-poscard-pay-btn.component';
+import { GiftCardPayBtnComponent } from '../pos-payment/gift-card-pay-btn/gift-card-pay-btn.component';
+import { WicEBTCardPayBtnComponent } from '../pos-payment/wic-ebtcard-pay-btn/wic-ebtcard-pay-btn.component';
+import { StripeCardPayBtnComponent } from '../pos-payment/stripe-card-pay-btn/stripe-card-pay-btn.component';
+import { CashPaymentButtonComponent } from '../pos-payment/cash-payment-button/cash-payment-button.component';
+import { LabelSelectPrinterComponent } from '../../admin/products/label-select-printer/label-select-printer.component';
+import { PurchaseItemSalesComponent } from './purchase-item-sales/purchase-item-sales.component';
+import { PurchaseItemCostHistoryComponent } from './purchase-item-cost-history/purchase-item-cost-history.component';
+import { PosOrderItemCalcValuesComponent } from './pos-order-item-calc-values/pos-order-item-calc-values.component';
+import { CSVImportComponent } from '../../admin/settings/database/csv-import/csv-import.component';
+import { NewOrderItemComponent } from './new-order-item/new-order-item.component';
+import { CoachMarksButtonComponent } from 'src/app/shared/widgets/coach-marks-button/coach-marks-button.component';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
+import { PosOrderPriceScheduleInfoComponent } from '../pos-order-price-schedule-info/pos-order-price-schedule-info.component';
 
 @Component({
 selector: 'app-pos-order',
+standalone: true,
+imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+PosOrderTransactionDataComponent,KeyPadComponent,StoreCreditInfoComponent,
+LimitValuesProgressBarsComponent,OrderHeaderDemoGraphicsComponent,
+PosOrderFunctionButtonsComponent,
+PriceScheduleMenuListComponent,
+PriceScheduleMenuItemsComponent,
+PosOrderItemsComponent,
+PosOrderItemListComponent,
+PosCheckOutButtonsComponent,
+CardPointeCardPayBtnComponent,
+DsiEMVCardPayBtnComponent,
+TriPOSCardPayBtnComponent,
+GiftCardPayBtnComponent,
+StoreCreditInfoComponent,
+WicEBTCardPayBtnComponent,
+StripeCardPayBtnComponent,
+CashPaymentButtonComponent,
+LabelSelectPrinterComponent,
+PurchaseItemSalesComponent,
+PurchaseItemCostHistoryComponent,
+PosOrderItemCalcValuesComponent,
+CSVImportComponent,
+NewOrderItemComponent,
+CoachMarksButtonComponent,
+KeyPadComponent,
+SearchDebounceInputComponent,
+FormSelectListComponent,
+PosOrderPriceScheduleInfoComponent,
+SharedPipesModule],
 templateUrl: './pos-order.component.html',
 styleUrls: ['./pos-order.component.scss'],
   animations: [

@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -11,9 +11,17 @@ import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ReceiptLayoutComponent } from 'src/app/shared-ui/printing/receipt-layout/receipt-layout.component';
 
 @Component({
   selector: 'app-htmledit-printing',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    ReceiptLayoutComponent,
+  SharedPipesModule],
   templateUrl: './htmledit-printing.component.html',
   styleUrls: ['./htmledit-printing.component.scss']
 })

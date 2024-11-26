@@ -7,8 +7,15 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
 import { Observable, } from 'rxjs';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'app-posorder-schedule-form',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './posorder-schedule-form.component.html',
   styleUrls: ['./posorder-schedule-form.component.scss']
 })

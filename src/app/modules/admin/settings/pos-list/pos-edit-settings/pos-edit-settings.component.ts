@@ -1,5 +1,5 @@
 import { Component,  OnInit,  ViewChild,  TemplateRef , Inject} from '@angular/core';
-import { FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Observable, of, switchMap } from 'rxjs';
@@ -18,10 +18,28 @@ import { ActivatedRoute, } from '@angular/router';
 import { DcapService } from 'src/app/modules/payment-processing/services/dcap.service';
 import { MenuService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { TriposSettingsComponent } from 'src/app/modules/payment-processing/tri-pos-transactions/tripos-settings/tripos-settings.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { DcDirectSettingsComponent } from './dc-direct-settings/dc-direct-settings.component';
+import { ZoomFloorPlanComponent } from 'src/app/modules/floor-plan/zoom-floor-plan/zoom-floor-plan.component';
+import { ElectronZoomControlComponent } from 'src/app/shared/widgets/electron-zoom-control/electron-zoom-control.component';
 
 
 @Component({
   selector: 'app-pos-edit-settings',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  EditButtonsStandardComponent,ValueFieldsComponent,
+  TriposSettingsComponent,
+  NgxJsonViewerModule,
+  DcDirectSettingsComponent,
+  ElectronZoomControlComponent,
+  SharedPipesModule],
   templateUrl: './pos-edit-settings.component.html',
   styleUrls: ['./pos-edit-settings.component.scss']
 })

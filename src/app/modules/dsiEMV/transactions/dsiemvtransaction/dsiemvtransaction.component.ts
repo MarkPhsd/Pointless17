@@ -12,9 +12,17 @@ import { switchMap, Observable, of, pipe} from 'rxjs';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { DcapMethodsService } from 'src/app/modules/payment-processing/services/dcap-methods.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-dsiemvtransaction',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './dsiemvtransaction.component.html',
   styleUrls: ['./dsiemvtransaction.component.scss']
 })
@@ -313,7 +321,7 @@ export class DSIEMVTransactionComponent implements OnInit {
 
   processDCAPVoidResults(response: RStream) {
     try {
-    
+
       const cmdResponse = response?.CmdResponse;
       const result =  this.dcapMethodsService.readResult(cmdResponse);
       if (!result.success) {

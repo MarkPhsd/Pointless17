@@ -24,6 +24,17 @@ import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { MatricesService } from 'src/app/_services/menu/matrices.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MenuItemExtendedPricesComponent } from './menu-item-extended-prices/menu-item-extended-prices.component';
+import { MenuItemProductCountComponent } from './menu-item-product-count/menu-item-product-count.component';
+import { InventoryCountsViewComponent } from '../../admin/inventory/inventory-counts-view/inventory-counts-view.component';
+import { TierPriceLineComponent } from '../tierMenu/tiers-with-prices/tier-price-line/tier-price-line.component';
+import { ChemicalSpinnersComponent } from './menuItemParts/chemical-spinners/chemical-spinners.component';
+import { ChipsDisplayComponent } from 'src/app/shared/widgets/chips-display/chips-display.component';
+import { InventoryMenuItemComponent } from './inventory-menu-item/inventory-menu-item.component';
+import { MenuItemCardComponent } from '../menuitems/menu-item-card/menu-item-card.component';
 
 // https://www.npmjs.com/package/ngx-gallery
 // Possible additional info options
@@ -31,6 +42,18 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 
 @Component({
   selector: 'app-menuitem',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    MenuItemExtendedPricesComponent,
+    MenuItemProductCountComponent,
+    InventoryCountsViewComponent,
+    TierPriceLineComponent,
+    ChemicalSpinnersComponent,
+    ChipsDisplayComponent,
+    InventoryMenuItemComponent,
+    MenuItemCardComponent,
+
+  ],
   templateUrl: './menuitem.component.html',
   styleUrls: ['./menuitem.component.scss'],
 })
@@ -98,7 +121,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     }
 
     get modalScroll() {
-      if (this.showCloseButton) { 
+      if (this.showCloseButton) {
         return 'overflow-y: auto;max-height: 75vh;'
       }
     }

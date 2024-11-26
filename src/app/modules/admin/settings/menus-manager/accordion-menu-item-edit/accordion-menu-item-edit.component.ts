@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Inject, OnDestroy, EventEmitter, Output } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { FbNavMenuService } from 'src/app/_form-builder/fb-nav-menu.service';
 import { AccordionMenu}  from 'src/app/_interfaces/index';
@@ -7,6 +7,9 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable, Subscription } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 export interface data {
   id: number;
@@ -14,6 +17,10 @@ export interface data {
 }
 @Component({
   selector: 'app-accordion-menu-item-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './accordion-menu-item-edit.component.html',
   styleUrls: ['./accordion-menu-item-edit.component.scss'],
   providers: [

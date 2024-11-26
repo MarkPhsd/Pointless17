@@ -1,8 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit , ViewEncapsulation} from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 // import { Component, ViewEncapsulation } from '@angular/core';
 // "../../node_modules/devextreme/dist/css/dx.light.css",
 @Component({
   selector: 'app-devx-report-designer',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './devx-report-designer.component.html',
   styleUrls: ['./devx-report-designer.component.scss']
 

@@ -2,7 +2,7 @@ import { Component,  Inject, OnInit,
   } from '@angular/core';
 import { AWSBucketService,  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { clientType } from 'src/app/_interfaces';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
@@ -11,9 +11,18 @@ import { FbClientTypesService } from 'src/app/_form-builder/fb-client-types.serv
 import { Observable, switchMap , of, catchError} from 'rxjs';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
 
 @Component({
   selector: 'app-client-type-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent,ValueFieldsComponent,
+  SharedPipesModule],
   templateUrl: './client-type-edit.component.html',
   styleUrls: ['./client-type-edit.component.scss']
 })

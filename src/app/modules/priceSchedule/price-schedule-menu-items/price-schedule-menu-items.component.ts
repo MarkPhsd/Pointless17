@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component,  Input,  OnChanges, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, switchMap } from 'rxjs';
@@ -9,14 +10,20 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'price-schedule-menu-items',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './price-schedule-menu-items.component.html',
   styleUrls: ['./price-schedule-menu-items.component.scss']
 })
 export class PriceScheduleMenuItemsComponent implements OnInit, OnChanges {
-  
+
   @Input() menuCategoryID : number;
   id: number;
   addItem$: Observable<any>;
@@ -65,9 +72,9 @@ export class PriceScheduleMenuItemsComponent implements OnInit, OnChanges {
     this.refreshMenu()
   }
 
-  refreshMenu() { 
+  refreshMenu() {
     console.log(this.id, this.menuCategoryID)
-    if(this.menuCategoryID !=0 && this.menuCategoryID != undefined) { 
+    if(this.menuCategoryID !=0 && this.menuCategoryID != undefined) {
       this.id = this.menuCategoryID
     }
     if (this.id) {

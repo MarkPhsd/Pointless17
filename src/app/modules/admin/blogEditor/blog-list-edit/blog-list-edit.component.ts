@@ -1,7 +1,7 @@
 import { Component,  Inject,  Input, Output, OnInit, Optional,
   ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -11,9 +11,19 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { Capacitor } from '@capacitor/core';
 import { BlogService, IBlog, IBlogResults, ISearchBlogs } from 'src/app/_services/system/blog.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { BlogPostSortComponent } from '../blog-post-sort/blog-post-sort.component';
 
 @Component({
   selector: 'app-blog-list-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,SearchDebounceInputComponent,BlogPostSortComponent,
+  SharedPipesModule],
   templateUrl: './blog-list-edit.component.html',
   styleUrls: ['./blog-list-edit.component.scss']
 })

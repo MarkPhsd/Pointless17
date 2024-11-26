@@ -1,5 +1,5 @@
 import { Component, OnInit,Input,OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { of, switchMap , Observable, Subject, Subscription, BehaviorSubject} from 'rxjs';
 import { IPOSOrder, IProduct, ISetting, PosOrderItem } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -8,9 +8,18 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ItemLabelPrintOut, PrintingService } from 'src/app/_services/system/printing.service';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
+import { LabelViewSelectorComponent } from 'src/app/shared-ui/printing/label-view-selector/label-view-selector.component';
+import { ListPrintersElectronComponent } from '../../settings/printing/list-printers-electron/list-printers-electron.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'label-select-printer',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  LabelViewSelectorComponent,ListPrintersElectronComponent,
+  SharedPipesModule],
   templateUrl: './label-select-printer.component.html',
   styleUrls: ['./label-select-printer.component.scss']
 })
@@ -38,11 +47,11 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
   public _notifier       : Subscription ; //new BehaviorSubject<boolean>(null);
   // public notifier$       = this._notifier.asObservable();
 
-  currentItemIndex: number; 
-  initAutoQue() { 
+  currentItemIndex: number;
+  initAutoQue() {
 
-    this._notifier = this.printingService.itemLabelPrintingComplete$.subscribe(data => { 
-      //we have already started the loop. 
+    this._notifier = this.printingService.itemLabelPrintingComplete$.subscribe(data => {
+      //we have already started the loop.
       //at this point, we have completed the first label print
       //nowe we received a signal that sales we can do the the next item
       // instead of doing anything, we can just trigger the same function we started with
@@ -51,18 +60,18 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
       this.poItem = this.poItems[this.currentItemIndex]
       this.printItemLabel()
     })
-   
-    this.autoPrintQUe = this.printingService.autoLabelPrinting$.subscribe(data => { 
+
+    this.autoPrintQUe = this.printingService.autoLabelPrinting$.subscribe(data => {
       if (data && data.printOutAuto) {
 
         //then we print
-        
+
         //when we are done printing
-        //we update the subscriber. 
+        //we update the subscriber.
         //then on the parent
         //we know that the print has completed and we can move to the next item
         //from there, we update the subscribert to say that the printing is not complete, but first we submit a new item
-        //that new item is triggered such that the next print out prints the next item on the transaction. 
+        //that new item is triggered such that the next print out prints the next item on the transaction.
         //from there we repeat until the order is complete
       }
     })
@@ -123,7 +132,7 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
       return of(data)
     }))
   }
-  
+
 
 
   initForm() {
@@ -203,7 +212,7 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
     this.printOutItems(0)
   }
 
-  printOutItems(index: number) { 
+  printOutItems(index: number) {
     this.currentItemIndex = index;
     this.poItem = this.poItems[index]
     this.printItemLabel()
@@ -227,7 +236,7 @@ export class LabelSelectPrinterComponent implements OnInit, OnChanges {
         this.printingService.labelContentList = [];
         remainingQuantity -= currentBatchQuantity;
         this.remainingQuantity = remainingQuantity;
-        if (this.remainingQuantity == 0) { 
+        if (this.remainingQuantity == 0) {
           this.printingService._itemLabelPrintingComplete.next(true)
         }
       }

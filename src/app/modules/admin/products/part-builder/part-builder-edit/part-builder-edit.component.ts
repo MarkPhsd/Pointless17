@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
@@ -7,9 +8,19 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { PartBuilderMainMethodsService } from 'src/app/_services/partbuilder/part-builder-main-methods.service';
 import { PB_Main, PartBuilderMainService } from 'src/app/_services/partbuilder/part-builder-main.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PartBuilderComponentEditComponent } from '../part-builder-component-edit/part-builder-component-edit.component';
+import { ValueFieldsComponent } from '../../productedit/_product-edit-parts/value-fields/value-fields.component';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
 
 @Component({
   selector: 'app-part-builder-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    PartBuilderComponentEditComponent,ValueFieldsComponent,
+    EditButtonsStandardComponent,
+  SharedPipesModule],
   templateUrl: './part-builder-edit.component.html',
   styleUrls: ['./part-builder-edit.component.scss']
 })

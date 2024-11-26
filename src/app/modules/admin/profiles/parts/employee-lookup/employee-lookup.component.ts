@@ -1,17 +1,21 @@
 import { Component, OnInit, Input , EventEmitter, Output, ViewChild, ElementRef, AfterViewInit, OnChanges} from '@angular/core';
-
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChangeDetectionStrategy, NgModule } from "@angular/core";
 import { EmployeeSearchModel, EmployeeSearchResults, EmployeeService } from 'src/app/_services/people/employee-service.service';
 import { employee, IClientTable, ISite, IUserProfile } from 'src/app/_interfaces';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'employee-lookup',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './employee-lookup.component.html',
   styleUrls: ['./employee-lookup.component.scss']
 })

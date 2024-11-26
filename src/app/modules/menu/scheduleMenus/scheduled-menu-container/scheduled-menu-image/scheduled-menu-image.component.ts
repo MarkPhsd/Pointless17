@@ -1,12 +1,20 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { AWSBucketService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'scheduled-menu-image',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
+
   templateUrl: './scheduled-menu-image.component.html',
   styleUrls: ['./scheduled-menu-image.component.scss']
 })

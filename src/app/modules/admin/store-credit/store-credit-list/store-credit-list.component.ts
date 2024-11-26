@@ -5,7 +5,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { AWSBucketService,} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
@@ -23,9 +23,19 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IStoreCreditSearchModel, StoreCredit, StoreCreditMethodsService, StoreCreditResultsPaged } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AgGridModule } from 'ag-grid-angular';
+import { ProductInfoPanelComponent } from '../../products/product-info-panel/product-info-panel.component';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
 
 @Component({
   selector: 'app-store-credit-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+        AgGridModule,ProductInfoPanelComponent,SearchDebounceInputComponent,
+  SharedPipesModule],
   templateUrl: './store-credit-list.component.html',
   styleUrls: ['./store-credit-list.component.scss']
 })

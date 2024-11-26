@@ -1,17 +1,34 @@
 
 import { Component,  Inject, OnInit } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormArray, FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, UntypedFormGroup, Validators } from '@angular/forms';
 import { IServiceType, IServiceTypePOSPut, ScheduleDateValidator, ScheduleValidator, ServiceTypeFeatures } from 'src/app/_interfaces';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { FbServiceTypeService } from 'src/app/_form-builder/fb-service-type.service';
 import { catchError, of, switchMap, Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ProductSearchSelector2Component } from '../../../products/productedit/_product-edit-parts/product-search-selector/product-search-selector.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { MetaTagChipsComponent } from '../../../products/productedit/_product-edit-parts/meta-tag-chips/meta-tag-chips.component';
+import { NgxColorsModule } from 'ngx-colors';
+import { ScheduleSelectorComponent } from 'src/app/shared/widgets/schedule-selector/schedule-selector.component';
+import { ScheduleDateRangeSelectorComponent } from 'src/app/shared/widgets/schedule-date-range-selector/schedule-date-range-selector.component';
 // import { ItemBasic } from '../../../report-designer/interfaces/reports';
 
 @Component({
   selector: 'app-service-type-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent,ProductSearchSelector2Component,
+    UploaderComponent,MetaTagChipsComponent,NgxColorsModule,
+    ScheduleSelectorComponent,ScheduleDateRangeSelectorComponent,
+
+  SharedPipesModule],
   templateUrl: './service-type-edit.component.html',
   styleUrls: ['./service-type-edit.component.scss']
 })

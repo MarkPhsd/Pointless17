@@ -15,13 +15,17 @@ import { IPOSOrder,  PosOrderItem } from 'src/app/_interfaces';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { PosOrderItemMethodsService } from 'src/app/_services/transactions/pos-order-item-methods.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
+import { IonicModule } from '@ionic/angular';
+import { AgGridModule } from 'ag-grid-angular';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 function multilineRenderer(params): any {
   // console.log(params.data)
@@ -32,6 +36,10 @@ function multilineRenderer(params): any {
 
 @Component({
   selector: 'pos-order-item-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    IonicModule,AgGridModule,
+  ],
   templateUrl: './pos-order-item-list.component.html',
   styleUrls: ['./pos-order-item-list.component.scss']
 })

@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
 import { AWSBucketService } from 'src/app/_services';
 import { AvalibleInventoryResults, IInventoryAssignment, InventoryAssignmentService, InventoryFilter, InventorySearchResultsPaged } from 'src/app/_services/inventory/inventory-assignment.service';
@@ -8,9 +10,15 @@ import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'inventory-menu-item',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './inventory-menu-item.component.html',
   styleUrls: ['./inventory-menu-item.component.scss']
 })

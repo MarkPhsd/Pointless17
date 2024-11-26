@@ -2,16 +2,28 @@ import { Component,  Inject,   OnInit,  } from '@angular/core';
 import { Router } from '@angular/router';
 import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import {  UntypedFormGroup } from '@angular/forms';
+import {  FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { tap } from 'rxjs/operators';
 import { IPaymentMethod, PaymentMethodsService, PaymentMethodFeatures } from 'src/app/_services/transactions/payment-methods.service';
 
 import { EMPTY, Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ValueAccessor } from '@ionic/angular/directives/control-value-accessors/value-accessor';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
 
 @Component({
   selector: 'app-payment-method-edit',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent,ValueFieldsComponent,UploaderComponent
+
+  SharedPipesModule],
   templateUrl: './payment-method-edit.component.html',
   styleUrls: ['./payment-method-edit.component.scss']
 })
@@ -22,7 +34,7 @@ export class PaymentMethodEditComponent  implements OnInit {
   bucketName             :string;
   awsBucketURL           :string;
   inputForm              :UntypedFormGroup;
-  featuresForm           :UntypedFormGroup;         
+  featuresForm           :UntypedFormGroup;
   instructions: string;
   itemFeatures : PaymentMethodFeatures;
 
@@ -93,7 +105,7 @@ export class PaymentMethodEditComponent  implements OnInit {
 
     updateItem(event): Observable<IPaymentMethod> {
         if (this.inputForm.valid) {
-          const payment = this.getPaymentInfo()            
+          const payment = this.getPaymentInfo()
           const site = this.siteService.getAssignedSite()
           return this.paymentMethodService.saveItem(site, payment)
         }

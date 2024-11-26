@@ -6,7 +6,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -16,9 +16,19 @@ import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 // import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { PaymentMethodSettingsComponent } from '../payment-method-settings/payment-method-settings.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-payment-method-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,PaymentMethodSettingsComponent,
+
+  SharedPipesModule],
   templateUrl: './payment-method-list.component.html',
   styleUrls: ['./payment-method-list.component.scss']
 })

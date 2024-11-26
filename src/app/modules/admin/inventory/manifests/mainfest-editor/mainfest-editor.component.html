@@ -12,7 +12,7 @@
                 md-stretch-tabs >
 
     <mat-tab label="Items" >
-      <mat-card *ngIf="currentManifest && manifestID !=0 ">
+      <mat-card *ngIf="currentManifest && manifestID !==0 ">
         <app-inventory-list
           [manifestID]="manifestID"
           [siteID]    ="site"

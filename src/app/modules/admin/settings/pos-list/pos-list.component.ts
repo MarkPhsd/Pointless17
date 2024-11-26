@@ -2,6 +2,7 @@ import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@a
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { AgGridModule } from 'ag-grid-angular';
 import { Observable, of, switchMap } from 'rxjs';
 import { ISetting, IUser } from 'src/app/_interfaces';
 import { AuthenticationService,  } from 'src/app/_services';
@@ -10,9 +11,18 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-pos-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  AgGridModule,ValueFieldsComponent,
+  SharedPipesModule],
   templateUrl: './pos-list.component.html',
   styleUrls: ['./pos-list.component.scss']
 })

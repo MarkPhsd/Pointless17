@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -15,9 +16,24 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { InventoryMenuItemComponent } from '../../menu/menuitem/inventory-menu-item/inventory-menu-item.component';
+import { MenuItemCardComponent } from '../../menu/menuitems/menu-item-card/menu-item-card.component';
+import { SearchFieldsComponent } from 'src/app/shared/widgets/search-fields/search-fields.component';
+import { PurchaseItemSalesComponent } from '../../posorders/pos-order/purchase-item-sales/purchase-item-sales.component';
+import { PurchaseItemCostHistoryComponent } from '../../posorders/pos-order/purchase-item-cost-history/purchase-item-cost-history.component';
 
 @Component({
   selector: 'buy-sell-main',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    SearchFieldsComponent,
+    InventoryMenuItemComponent,
+    MenuItemCardComponent,
+    PurchaseItemSalesComponent,
+    PurchaseItemCostHistoryComponent,
+  SharedPipesModule],
   templateUrl: './buy-sell-main.component.html',
   styleUrls: ['./buy-sell-main.component.scss']
 })

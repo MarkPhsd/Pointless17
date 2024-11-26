@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -21,9 +21,36 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { NewOrderTypeComponent } from 'src/app/modules/posorders/components/new-order-type/new-order-type.component';
 import { CoachMarksClass, CoachMarksService } from 'src/app/shared/widgets/coach-marks/coach-marks.service';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { ProfileDemographicsComponent } from '../parts/demographics/demographics.component';
+import { ProfileShippingAddressComponent } from '../parts/profile-shipping-address/profile-shipping-address.component';
+import { ProfileIDCardInfoComponent } from '../parts/profile-idcard-info/profile-idcard-info.component';
+import { MatSelectComponent } from 'src/app/shared/widgets/mat-select/mat-select.component';
+import { OrdersListComponent } from 'src/app/modules/orders/orders-list/orders-list.component';
+import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { PasswordValidationComponent } from '../password-validation/password-validation.component';
+import { ProfileRolesComponent } from '../profile-roles/profile-roles.component';
+import { EmployeeLookupComponent } from '../parts/employee-lookup/employee-lookup.component';
+import { CoachMarksButtonComponent } from 'src/app/shared/widgets/coach-marks-button/coach-marks-button.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-check-in-profile',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    EditButtonsStandardComponent,ProfileDemographicsComponent,
+    ProfileShippingAddressComponent,
+    ProfileIDCardInfoComponent,
+    MatSelectComponent,
+    OrdersListComponent,
+     ValueFieldsComponent,
+     PasswordValidationComponent,
+     ProfileRolesComponent,
+     EmployeeLookupComponent,
+     CoachMarksButtonComponent,
+      SharedPipesModule],
   templateUrl: './check-in-profile.component.html',
   styleUrls: ['./check-in-profile.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush,

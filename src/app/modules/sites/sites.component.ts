@@ -5,9 +5,17 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-sites',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
+
   templateUrl: './sites.component.html',
   styleUrls: ['./sites.component.scss'],
 })

@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IServiceType, ISite, IUser, ServiceType } from 'src/app/_interfaces';
 import { AWSBucketService, OrdersService } from 'src/app/_services';
@@ -8,9 +9,15 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'posorder-service-type',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './posorder-service-type.component.html',
   styleUrls: ['./posorder-service-type.component.scss']
 })

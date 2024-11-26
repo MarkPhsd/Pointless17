@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit,Output,EventEmitter } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
@@ -5,9 +6,15 @@ import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'print-group-receipt',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+
+  ],
   templateUrl: './print-group-receipt.component.html',
   styleUrls: ['./print-group-receipt.component.scss']
 })

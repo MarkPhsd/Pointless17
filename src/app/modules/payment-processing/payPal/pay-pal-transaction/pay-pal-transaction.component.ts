@@ -1,10 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import {
   IPayPalConfig,
   ICreateOrderRequest,
   IOnApproveCallbackData,
-  IClientAuthorizeCallbackData
+  IClientAuthorizeCallbackData,
+  NgxPayPalModule
 } from 'ngx-paypal';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSPayment, ISetting } from 'src/app/_interfaces';
@@ -16,9 +19,15 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-pay-pal-transaction',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    NgxPayPalModule,
+  SharedPipesModule],
   templateUrl: './pay-pal-transaction.component.html',
   styleUrls: ['./pay-pal-transaction.component.scss']
 })

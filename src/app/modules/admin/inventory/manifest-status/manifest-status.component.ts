@@ -1,7 +1,7 @@
 import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject} from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable} from 'rxjs';
-import { UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder,  UntypedFormGroup, Validators } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
@@ -10,9 +10,17 @@ import { ManifestStatus, ManifestStatusService } from 'src/app/_services/invento
 import { GridApi, IGetRowsParams } from 'ag-grid-community';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AgGridModule } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-manifest-status',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,
+  SharedPipesModule],
   templateUrl: './manifest-status.component.html',
   styleUrls: ['./manifest-status.component.scss']
 })

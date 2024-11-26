@@ -5,8 +5,17 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AWSBucketService } from 'src/app/_services';
 import { Router } from '@angular/router';
 import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { DisplayMenuTitleComponent } from '../../display-menu-title/display-menu-title.component';
 @Component({
   selector: 'display-menu-main',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    DisplayMenuTitleComponent,
+  SharedPipesModule],
   templateUrl: './display-menu-main.component.html',
   styleUrls: ['./display-menu-main.component.scss']
 })

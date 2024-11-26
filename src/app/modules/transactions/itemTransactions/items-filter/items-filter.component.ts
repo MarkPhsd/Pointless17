@@ -6,7 +6,7 @@ import { IItemBasic,  } from 'src/app/_services';
 import { OrdersService } from 'src/app/_services';
 import { ActivatedRoute, } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter,tap } from 'rxjs/operators';
 import { Observable, fromEvent, Subscription } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
@@ -15,9 +15,18 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { IOrderItemSearchModel, POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { MatToggleSelectorComponent } from 'src/app/shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-items-filter',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  SearchDebounceInputComponent,MatToggleSelectorComponent,
+  SharedPipesModule],
   templateUrl: './items-filter.component.html',
   styleUrls: ['./items-filter.component.scss']
 })

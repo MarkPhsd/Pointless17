@@ -1,11 +1,11 @@
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { GridApi } from 'ag-grid-community';
 import { Observable, Subject } from 'rxjs';
 import { IMETRCSales } from 'src/app/_interfaces/transactions/metrc-sales';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { employee, IServiceType, ISite } from 'src/app/_interfaces';
 import { ReportingService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -13,9 +13,17 @@ import { MetrcSalesService } from 'src/app/_services/metrc/metrc-sales.service';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { PointlessMETRCSalesService } from 'src/app/_services/metrc/pointless-metrcsales.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatSelectComponent } from 'src/app/shared/widgets/mat-select/mat-select.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-metrc-sales-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    MatSelectComponent,AgGridModule,
+  SharedPipesModule],
   templateUrl: './metrc-sales-list.component.html',
   styleUrls: ['./metrc-sales-list.component.scss']
 })

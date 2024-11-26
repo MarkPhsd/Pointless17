@@ -1,13 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
 import { switchMap, of, Observable } from 'rxjs';
 import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BrandsResaleService } from 'src/app/_services/resale/brands-resale.service';
 import { Classes_Clothing ,ClassesResaleService } from 'src/app/_services/resale/classes-resale.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
 
 @Component({
   selector: 'resale-classes-editor',
+  standalone: true,
+  imports:  [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    UploaderComponent,ValueFieldsComponent,
+  SharedPipesModule],
   templateUrl: './resale-classes-editor.component.html',
   styleUrls: ['./resale-classes-editor.component.scss']
 })

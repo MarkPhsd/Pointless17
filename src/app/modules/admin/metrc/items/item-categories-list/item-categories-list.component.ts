@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable, Subject  } from 'rxjs';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { GridApi } from 'ag-grid-community';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
@@ -15,9 +15,17 @@ import {
   METRCItemsCategories,
 } from 'src/app/_interfaces/metrcs/items';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-item-categories-list',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  AgGridModule,
+  SharedPipesModule],
   templateUrl: './item-categories-list.component.html',
   styleUrls: ['./item-categories-list.component.scss']
 })
@@ -126,7 +134,7 @@ export class ItemCategoriesListComponent implements OnInit {
         headerName: "Row",
         valueGetter: "node.rowIndex + 1"
       },
-      
+
       {
         field: "id",
         cellRenderer: "btnCellRenderer",

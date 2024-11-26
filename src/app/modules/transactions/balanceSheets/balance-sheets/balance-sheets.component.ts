@@ -5,7 +5,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap} from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
@@ -20,9 +20,18 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { BalanceSheetFilterComponent } from '../balance-sheet-filter/balance-sheet-filter.component';
 import { BalanceSheetQuickViewComponent } from '../balance-sheet-quick-view/balance-sheet-quick-view.component';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-balance-sheets',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,
+    BalanceSheetFilterComponent,
+  SharedPipesModule],
   templateUrl: './balance-sheets.component.html',
   styleUrls: ['./balance-sheets.component.scss']
 })

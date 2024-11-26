@@ -1,7 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { StrainBoardComponent } from '../strainBoard/strain-board/strain-board.component';
+import { TypeBoardComponent } from '../type-board/type-board.component';
 
 @Component({
   selector: 'app-menu-board',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+StrainBoardComponent,TypeBoardComponent,
+  ],
+
   templateUrl: './menu-board.component.html',
   styleUrls: ['./menu-board.component.scss']
 })

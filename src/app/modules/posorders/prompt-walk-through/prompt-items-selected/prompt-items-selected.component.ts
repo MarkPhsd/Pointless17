@@ -9,11 +9,18 @@ import { AWSBucketService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { POSOrderItemService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { OrdersService } from 'src/app/_services/transactions/orders.service';
-import { MenuService } from 'src/app/_services/menu/menu.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'prompt-items-selected',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './prompt-items-selected.component.html',
   styleUrls: ['./prompt-items-selected.component.scss']
 })
