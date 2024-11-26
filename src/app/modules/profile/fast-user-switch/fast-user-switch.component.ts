@@ -246,7 +246,7 @@ export class FastUserSwitchComponent implements OnInit {
   }
 
   smallDeviceLimiter() {
-    if (this.smallDevice) { this.toolbarUIService.updateOrderBar(false) }
+    if (this.smallDevice) { this.toolbarUIService.updateOrderBar(false ,this.authenticationService.deviceInfo) }
   }
 
   onCancel() {

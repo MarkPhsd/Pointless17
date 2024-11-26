@@ -37,6 +37,7 @@ import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { ProfileBillingAddressComponent } from '../parts/profile-billing-address/profile-billing-address.component';
 import { MatDateRangeComponent } from 'src/app/shared/widgets/mat-date-range/mat-date-range.component';
+import { AuthLoginService } from 'src/app/_services/system/auth-login.service';
 
 @Component({
   selector: 'app-check-in-profile',
@@ -205,6 +206,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
               private clientTableService  : ClientTableService,
               private orderService        : OrdersService,
               private siteService         : SitesService,
+              private authLogin: AuthLoginService,
               private fbContactsService   : FbContactsService,
               private fb                  : UntypedFormBuilder,
               private userAuthorization   : UserAuthorizationService,
@@ -380,7 +382,13 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 
   sendPasswordReset() {
     if (this.clientTable) {
-      this.action$ =  this.authenticationService.requestPasswordResetToken(this.clientTable.apiUserName).pipe(switchMap(data => {
+
+
+      const site = this.siteService.getAssignedSite();
+      const message = this.siteService.getApplicationInfo('user')
+      // this.action$ = this.authLogin.updatePassword(site, message, user).pipe(
+
+      this.action$ =  this.authLogin.requestPasswordResetToken(site, message,this.clientTable.apiUserName).pipe(switchMap(data => {
         this.siteService.notify('Email sent', 'close', 3000)
         return of(data)
       }))

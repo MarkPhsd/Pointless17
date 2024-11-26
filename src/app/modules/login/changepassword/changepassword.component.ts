@@ -12,6 +12,7 @@ import { MatLegacyButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyCardModule } from '@angular/material/legacy-card';
 import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
 import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { AuthLoginService } from 'src/app/_services/system/auth-login.service';
 
 @Component({
   selector: 'app-changepassword',
@@ -49,6 +50,7 @@ export class ChangepasswordComponent implements OnInit {
       private route: ActivatedRoute,
       private siteService: SitesService,
       private router: Router,
+      private authLogin: AuthLoginService,
       private authenticationService: AuthenticationService
   )
   {
@@ -118,7 +120,11 @@ export class ChangepasswordComponent implements OnInit {
       this.loading = true;
 
       if(this.f.password.value == this.f.confirmpassword.value){
-        this.action$ = this.authenticationService.updatePassword(user).pipe(
+
+        const site = this.siteService.getAssignedSite();
+        const message = this.siteService.getApplicationInfo('user')
+
+        this.action$ = this.authLogin.updatePassword(site, message, user).pipe(
           switchMap(data => {
           this.statusMessage = data?.message
           this.siteService.notify(data?.message, 'Close', 10000 )

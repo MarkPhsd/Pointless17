@@ -1,6 +1,6 @@
 import { AuthenticationService} from 'src/app/_services';
 import { ICompany }  from 'src/app/_interfaces';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Injector, Input, OnDestroy, OnInit } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
@@ -15,6 +15,8 @@ import { MatLegacyInputModule } from '@angular/material/legacy-input';
 import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 import { ApiStatusDisplayComponent } from 'src/app/shared/widgets/api-status-display/api-status-display.component';
 import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AuthLoginService } from 'src/app/_services/system/auth-login.service';
 
 @Component({
   selector: 'app-register-account-main',
@@ -71,9 +73,11 @@ export class RegisterAccountMainComponent implements OnInit,OnDestroy {
       private route: ActivatedRoute,
       private uiSettings: UISettingsService,
       private router: Router,
+      private siteService: SitesService,
       private authenticationService: AuthenticationService,
       private _snackBar: MatSnackBar,
       private uiSettingService     : UISettingsService,
+      private authLogin : AuthLoginService,
   ) {
     if (this.authenticationService.userValue) {
       this.router.navigate(['/app-main-menu']);
@@ -131,7 +135,11 @@ export class RegisterAccountMainComponent implements OnInit,OnDestroy {
     if (this.loginForm.invalid) { return }
 
     const userName = this.f.username.value;
-    const auth$ =this.authenticationService.requestUserSetupToken(userName);
+
+    // authlogin =  new Injector(AuthLoginService)
+    const site = this.siteService.getAssignedSite();
+    const message = this.siteService.getApplicationInfo('user')
+    const auth$ = this.authLogin.requestUserSetupToken(site, message, userName);
 
     this.result$ = auth$.pipe(
       switchMap(data => {

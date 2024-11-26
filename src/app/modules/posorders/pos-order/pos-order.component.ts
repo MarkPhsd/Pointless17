@@ -758,7 +758,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
 
     if (!this.toolbarUIService.swapMenuWithOrderBoolean) {
-      this.toolbarUIService.hidetoolBars();
+      // this.toolbarUIService.hidetoolBars();
+      this.toolbarUIService.hidetoolBars(this.authenticationService.deviceInfo)
     }
   }
 
@@ -1294,7 +1295,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   showItems() {
-    this.toolbarUIService.updateOrderBar(false)
+    this.toolbarUIService.updateOrderBar(false,this.authenticationService.deviceInfo)
     if (this.order) {
       this.bottomSheetItemsOpen = true
       this.orderMethodsService.updateBottomSheetOpen(true)
@@ -1318,7 +1319,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.action$ = result$.pipe(switchMap(data =>  {
         this.paymentService.updatePaymentSubscription(null)
         this.orderMethodsService.updateOrderSubscription(null)
-        this.toolbarUIService.updateOrderBar(false)
+        this.toolbarUIService.updateOrderBar(false, this.authenticationService.deviceInfo)
         return of(data)
       })).pipe(switchMap(data => {
       this.router.navigateByUrl('/pos-orders')

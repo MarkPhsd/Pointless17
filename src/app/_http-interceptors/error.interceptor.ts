@@ -23,12 +23,8 @@ export class ErrorInterceptor implements HttpInterceptor {
       return false;
     }
 
-
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
         if (request.headers.get('X-Skip-Error-Handling')) {
-            // Clone the request to remove the custom header before sending it to the server
-            // console.log('error handling ignored')
             const newRequest = request.clone({ headers: request.headers.delete('X-Skip-Error-Handling') });
             return next.handle(newRequest);
         }
@@ -52,10 +48,10 @@ export class ErrorInterceptor implements HttpInterceptor {
             }
             if (err.status === 401) {
               //if this is on the current api then we want to log out
-              if (this.isLocalAPI(request)) { 
+              if (this.isLocalAPI(request)) {
                 this.authenticationSerivce.logout(false);
               }
-              
+
               if (this.getdebugOnThisDevice()) {
                 this.notifyEvent(errorMessage, 'Close.' );
               }
@@ -81,12 +77,12 @@ export class ErrorInterceptor implements HttpInterceptor {
     }
 
 
-    isLocalAPI(request) { 
+    isLocalAPI(request) {
       const urlA = localStorage.getItem("site.url")
       const urlB = localStorage.getItem('storedApiUrl')
 
       const url = request.url;
-      if (url === urlA || url === urlB ) { 
+      if (url === urlA || url === urlB ) {
         return true;
       }
     }

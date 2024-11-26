@@ -68,6 +68,7 @@
               "sourceMap": true,
               "optimization": false,
               "namedChunks": true,
+              "aot": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

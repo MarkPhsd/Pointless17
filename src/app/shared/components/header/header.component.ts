@@ -506,7 +506,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   }
 
   smallDeviceLimiter() {
-    if (this.smallDevice) { this.toolbarUIService.updateOrderBar(false) }
+    if (this.smallDevice) { this.toolbarUIService.updateOrderBar(false, this.authenticationService.deviceInfo) }
   }
 
   get isfloorPlan() {
@@ -836,7 +836,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
     if (this.userSwitchingService.swapMenuWithOrderBoolean) {
       if (this.openOrderBar) {
-        this.toolbarUIService.updateOrderBar(false)
+        this.toolbarUIService.updateOrderBar(false,this.authenticationService.deviceInfo)
         this.toolbarUIService.updateToolBarSideBar(true)
         return;
       }
@@ -855,11 +855,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
   toggleOpenOrderBar() {
     if (this.router.url.substring(0, 28 ) === '/currentorder;mainPanel=true') {
       this.openOrderBar = false
-      this.toolbarUIService.updateOrderBar(this.openOrderBar)
+      this.toolbarUIService.updateOrderBar(this.openOrderBar,this.authenticationService.deviceInfo)
       return;
     }
     this.openOrderBar = !this.openOrderBar
-    this.toolbarUIService.updateOrderBar(this.openOrderBar)
+    this.toolbarUIService.updateOrderBar(this.openOrderBar,this.authenticationService.deviceInfo)
   }
 
   toggleSearchMenu() {
@@ -869,7 +869,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges,AfterViewIn
 
   toggleOrderBar(event) {
     if (this.openOrderBar){ this.smallDeviceLimiter();    }
-    this.toolbarUIService.updateOrderBar(this.openOrderBar)
+    this.toolbarUIService.updateOrderBar(this.openOrderBar,this.authenticationService.deviceInfo)
   }
 
   logout() {

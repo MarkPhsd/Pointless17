@@ -13,6 +13,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
 import { ValueFieldsComponent } from '../../admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
 import { LoginInfoComponent } from 'src/app/shared/widgets/login-info/login-info.component';
+import { AuthLoginService } from 'src/app/_services/system/auth-login.service';
 
 @Component({
   selector: 'app-new-user-guest',
@@ -38,6 +39,7 @@ export class NewUserGuestComponent implements OnInit {
               private siteService: SitesService,
               private userAuthService: AuthenticationService,
               private router: Router,
+              private authLogin: AuthLoginService,
               @Optional() private dialogRef  : MatDialogRef<NewUserGuestComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
             )
@@ -85,7 +87,10 @@ export class NewUserGuestComponent implements OnInit {
     } else {
       iUser.username = iUser.phone;
     }
-    const updateUser$ = this.userAuthService.requestNewUser(iUser);
+
+    const site = this.siteService.getAssignedSite();
+    const message = this.siteService.getApplicationInfo('user')
+    const updateUser$ = this.authLogin.requestNewUser(site, message, iUser);
 
     this.action$ = updateUser$.pipe(switchMap(data => {
       if (data) {

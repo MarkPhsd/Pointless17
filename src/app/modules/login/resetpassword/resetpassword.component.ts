@@ -14,6 +14,7 @@ import { MatLegacyCardModule } from '@angular/material/legacy-card';
 import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
 import { MatLegacyInputModule } from '@angular/material/legacy-input';
 import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { AuthLoginService } from 'src/app/_services/system/auth-login.service';
 @Component({
   selector: 'app-resetpassword',
   standalone: true,
@@ -63,7 +64,8 @@ export class ResetpasswordComponent implements OnInit {
       private route: ActivatedRoute,
       private router: Router,
       private siteService: SitesService,
-      private authenticationService: AuthenticationService
+      private authenticationService: AuthenticationService,
+      private authLogin: AuthLoginService,
   )
   {
     // redirect to home if already logged in
@@ -105,8 +107,9 @@ export class ResetpasswordComponent implements OnInit {
 
       this.loading = true;
       this.processing = true;
-
-      this.request$ = this.authenticationService.requestPasswordResetToken(this.f.username.value).pipe(
+      const site = this.siteService.getAssignedSite();
+      const message = this.siteService.getApplicationInfo('user')
+      this.request$ = this.authLogin.requestPasswordResetToken(site,message, this.f.username.value).pipe(
         switchMap(data => {
           this.processing = false
           if (data?.userExists) {

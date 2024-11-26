@@ -252,7 +252,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
             if (data && data.id) {
               this.order = data
               this.order$.next(this.orderMethodsService.currentOrder$)
-              this.toolbarServiceUI.updateOrderBar(true)
+              // this.toolbarServiceUI.updateOrderBar(true)
+              this.toolbarServiceUI.updateOrderBar(true, this.authenticationService.deviceInfo)
             }
           })
         })
@@ -336,7 +337,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     if (this.router.url.substring(0, 28 ) === '/currentorder;mainPanel=true') {
       // console.log('order bar setting false')
       this.openOrderBar = false
-      this.toolbarServiceUI.updateOrderBar(this.openOrderBar)
+      this.toolbarServiceUI.updateOrderBar(this.openOrderBar, this.authenticationService.deviceInfo)
       return;
     }
 
@@ -346,7 +347,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
       // console.log('order bar setting swapMenuWithOrderBoolean true')
       this.openOrderBar = !this.openOrderBar
       const item = this.openOrderBar
-      this.toolbarServiceUI.updateOrderBar(item)
+      this.toolbarServiceUI.updateOrderBar(item, this.authenticationService.deviceInfo)
       this.toolbarServiceUI.updateToolBarSideBar(item)
       return
     }
@@ -354,7 +355,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     if (!this.userSwitchingService.swapMenuWithOrderBoolean) {
       // console.log('order bar setting false, swapMenuWithOrderBoolean false')
       this.openOrderBar = !this.openOrderBar
-      this.toolbarServiceUI.updateOrderBar(this.openOrderBar)
+      this.toolbarServiceUI.updateOrderBar(this.openOrderBar, this.authenticationService.deviceInfo)
       return;
     }
 

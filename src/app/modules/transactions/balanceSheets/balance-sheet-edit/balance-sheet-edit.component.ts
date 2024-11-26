@@ -309,7 +309,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   hideToolbars() {
-    this.toolbarUIService.hidetoolBars()
+    // this.toolbarUIService.hidetoolBars()
+    this.toolbarUIService.hidetoolBars(this.authenticationService.deviceInfo)
   }
 
   toggleSearchMenu() {

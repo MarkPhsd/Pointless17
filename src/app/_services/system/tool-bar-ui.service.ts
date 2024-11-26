@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { UserSwitchingService } from './user-switching.service';
-import { AuthenticationService } from '..';
-
+import { IDeviceInfo } from '..';
+// import { UserSwitchingService } from './user-switching.service';
+// import { AuthenticationService } from '..';
+// private authenticationService: AuthenticationService
 @Injectable({
   providedIn: 'root'
 })
@@ -22,7 +23,6 @@ export class ToolBarUIService {
 
   private _searchBarWidth     = new BehaviorSubject<number>(null);
   public  _searchBarWidth$    = this._searchBarWidth.asObservable();
-
 
   private _rightSideBarToggle    = new BehaviorSubject<boolean>(null);
   public  rightSideBarToggle$    = this._rightSideBarToggle.asObservable();
@@ -48,7 +48,9 @@ export class ToolBarUIService {
   public searchBar : boolean;
   public orderBar  : boolean;
 
-  constructor( private router: Router, private authenticationService: AuthenticationService) {
+  constructor(
+    private router: Router,
+   ) {
     this.mainMenuSideBar = false;
     this.searchBar = false;
   }
@@ -95,12 +97,16 @@ export class ToolBarUIService {
   }
 
   updateSideBar(value: boolean) {
-
   }
 
-  updateOrderBar(value: boolean) {
-    const deviceInfo = this.authenticationService.deviceInfo;
-    if (deviceInfo && deviceInfo.phoneDevice) {
+  hidetoolBars( deviceInfo: IDeviceInfo) {
+    this.updateSearchBarSideBar(false)
+    this.updateOrderBar(false, deviceInfo)
+  }
+
+  updateOrderBar(value: boolean, deviceInfo: IDeviceInfo) {
+    // const deviceInfo = this.authenticationService.deviceInfo;
+    if (deviceInfo && deviceInfo?.phoneDevice) {
       return;
     }
 
@@ -157,10 +163,7 @@ export class ToolBarUIService {
     this.resizeWindow();
   }
 
-  hidetoolBars() {
-    this.updateSearchBarSideBar(false)
-    this.updateOrderBar(false)
-  }
+
 
   hideToolbarSearchBar() {
     this.searchBar = false

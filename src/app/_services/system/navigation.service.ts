@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { Router } from '@angular/router';
 import { IPOSOrder } from 'src/app/_interfaces';
+import { AuthenticationService } from '..';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { IPOSOrder } from 'src/app/_interfaces';
 export class NavigationService {
 
   constructor(
-
+    private authService       : AuthenticationService,
     private toolbarUIService: ToolBarUIService,
     private router:           Router,
   ) { }
@@ -22,31 +23,31 @@ export class NavigationService {
   }
 
   navPOSOrders() {
-    this.toolbarUIService.hidetoolBars();
+    this.toolbarUIService.hidetoolBars(this.authService.deviceInfo);
     this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigate(['/pos-orders']);
   }
 
   navProfile() {
-    this.toolbarUIService.hidetoolBars();
+    this.toolbarUIService.hidetoolBars(this.authService.deviceInfo);
     this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigate(['/app-profile']);
   }
 
   gotoPolicies() {
-    this.toolbarUIService.hidetoolBars();
+    this.toolbarUIService.hidetoolBars(this.authService.deviceInfo);
     this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigate(['/policies']);
   }
 
   contactUs() {
-    this.toolbarUIService.hidetoolBars();
+    this.toolbarUIService.hidetoolBars(this.authService.deviceInfo);
     this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigate(['/contact-us']);
   }
 
   navTableService() {
-    this.toolbarUIService.hidetoolBars();
+    this.toolbarUIService.hidetoolBars(this.authService.deviceInfo);
     this.router.navigate(['/table-layout']);
   }
 
@@ -59,8 +60,8 @@ export class NavigationService {
 
   makePaymentFromSidePanel(openOrderBar: boolean, smallDevice: boolean, isStaff: boolean, order: IPOSOrder) {
     // this.openOrderBar = false
-    if (!smallDevice) { 
-      this.toolbarUIService.updateOrderBar(false);
+    if (!smallDevice) {
+      this.toolbarUIService.updateOrderBar(false,this.authService.deviceInfo);
       this.toolbarUIService.updateSideBar(false)
       this.toolbarUIService.updateToolBarSideBar(false)
     }
@@ -78,8 +79,8 @@ export class NavigationService {
   makePayment(openOrderBar: boolean , smallDevive: boolean,
               isStaff: boolean, completionDate: string, path: string) {
 
-                
-    this.toolbarUIService.updateOrderBar(openOrderBar)
+
+    this.toolbarUIService.updateOrderBar(openOrderBar,this.authService.deviceInfo)
     this.toolbarUIService.resetOrderBar(false)
     this.toolbarUIService.updateSearchBarSideBar(false)
     this.toolbarUIService.updateSideBar(false)
@@ -109,7 +110,7 @@ export class NavigationService {
     let schedule = 'currentorder'
     if (isStaff) { schedule = '/currentorder/' }
     this.router.navigate([ schedule , {mainPanel:true}]);
-    this.toolbarUIService.updateOrderBar(false)
+    this.toolbarUIService.updateOrderBar(false,this.authService.deviceInfo)
     this.toolbarUIService.resetOrderBar(true)
   }
 

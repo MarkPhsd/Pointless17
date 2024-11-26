@@ -470,7 +470,8 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   gotoFilter() {
 
     this.router.navigate(['filter'])
-    this.toolbarUIService.hideToolbarSearchBar()
+    // this.toolbarUIService.hideToolbarSearchBar()
+    this.toolbarUIService.hidetoolBars(this.authenticationService.deviceInfo)
   }
 
 }

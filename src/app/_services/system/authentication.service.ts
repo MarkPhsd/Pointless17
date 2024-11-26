@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { IUser, UserPreferences } from 'src/app/_interfaces';
 import { AppInitService } from './app-init.service';
@@ -11,6 +11,7 @@ import { SitesService} from 'src/app/_services/reporting/sites.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { IUserAuth_Properties } from '../people/client-type.service';
 import { NewUserGuestComponent } from 'src/app/modules/profile/new-user-guest/new-user-guest.component';
+import { InterceptorSkipHeader } from '../aws/awsbucket.service';
 
 export interface IUserExists {
   id:           number;
@@ -43,14 +44,14 @@ export interface IDeviceInfo {
 export class AuthenticationService {
 
     baseColor = '#F5F5F5'; // Starting color
-    gradient: string;
-    authenticationInProgress: boolean;
+    gradient: string = '';
+    authenticationInProgress: boolean = false;
 
     //used for ebay oAuth.
     ebayHeader: any;
 
-    apiUrl                      : any;
-    public  externalAPI         : boolean;
+    apiUrl                      : any = '';
+    public  externalAPI         : boolean = false;
 
     private _setPinPad        = new BehaviorSubject<boolean>(null);
     public  setPinPad$        = this._setPinPad.asObservable();
@@ -71,7 +72,7 @@ export class AuthenticationService {
     _userAuthstemp            = new BehaviorSubject<IUserAuth_Properties>(null);
     public  _userAuthstemp$   = this._userAuthstemp.asObservable();
 
-    _deviceInfo: IDeviceInfo;
+    _deviceInfo: IDeviceInfo = {} as IDeviceInfo;
 
     updatePinPad(value: boolean) {
       this._setPinPad.next(value)
@@ -172,10 +173,9 @@ export class AuthenticationService {
 
     constructor(
         private router           : Router,
-        private http             : HttpClient,
+
         private appInitService   : AppInitService,
         private platFormservice  : PlatformService,
-        private toolbarUIService : ToolBarUIService,
         private siteService      : SitesService,
         private dialog           : MatDialog,
     ) {
@@ -192,6 +192,15 @@ export class AuthenticationService {
     public overRideUser(user) {
       this._userTemp.next(user);
       // if (!user) { this.userValue }
+    }
+
+
+    getSatelliteHeaders() {
+      const username = localStorage.getItem("username")
+      const password = localStorage.getItem("password")
+      const user = {} as IUser
+      this.updateUserX(user);
+      return new HttpHeaders().set(InterceptorSkipHeader, '');
     }
 
     decodeAuth(data) {
@@ -316,8 +325,9 @@ export class AuthenticationService {
     logout(pinPadDefaultOnApp: boolean) {
       // console.trace('trance')
       this.clearUserSettings();
-      this.toolbarUIService.updateOrderBar(false)
-      this.toolbarUIService.updateToolBarSideBar(false)
+      // this.toolbarUIService.updateOrderBar(false)
+      // this.toolbarUIService.updateToolBarSideBar(false)
+
 
       if (!this.platFormservice.isApp()) {
         if (!this.appInitService?.useAppGate) {
@@ -404,72 +414,7 @@ export class AuthenticationService {
       this.updateUserX(null);
     }
 
-    requestUserSetupToken(userName: string): Observable<IUserExists> {
 
-      const api = this.siteService.getAssignedSite().url
-      const url = `${api}/users/RequestUserSetupToken`
-
-      const messsage = this.getTracker(userName)
-
-      return this.http.post<any>(url, { userName: userName, message: messsage });
-    };
-
-    requestPasswordResetToken(userName: string): Observable<any> {
-      const api = this.siteService.getAssignedSite().url;
-      const url = `${api}/users/RequestPasswordResetToken`;
-
-      const messsage = this.getTracker(userName)
-
-      return this.http.post<any>(url, { userName: userName, message: messsage });
-    }
-
-    getTracker(userName: string, ignoreAppCheck?: boolean) {
-      try {
-        return this.siteService.getApplicationInfo(userName);
-      } catch (error) {
-        console.log('error getapplication info', error)
-      }
-    }
-
-    assignUserNameAndPassword(user: IUser): Observable<IUserExists>  {
-      const api = this.siteService.getAssignedSite().url
-      const url = `${api}/users/CreateNewUserName`
-      return  this.http.post<any>(url, user)
-    };
-
-    createTempUser() : Observable<any> {
-      //check local storage.
-      //if local user exists then return that as observable
-      const user = localStorage.getItem('user');
-      if (user) {
-        return of(user);
-      }
-
-      const api = this.siteService.getAssignedSite().url
-      const url = `${api}/users/CreateTempUser`
-      return  this.http.get<any>(url);
-
-    }
-
-    updatePassword(user: IUser): Observable<any> {
-      const api = this.siteService.getAssignedSite().url
-      const url = `${api}/users/updatePassword`
-      // return  this.http.post<any>(url, user)
-
-      const message = this.getTracker(user?.username)
-      user.message = message;
-      return this.http.post<any>(url, user);
-    }
-
-    requestNewUser(user: IUser): Observable<IUserExists> {
-      const api = this.siteService.getAssignedSite().url
-      const url = `${api}/users/RequestNewUser`
-      // return  this.http.post<any>(url, user)
-
-      const message = this.getTracker(user?.username)
-      user.message = message;
-      return this.http.post<any>(url, user);
-    }
 
     //get app toolbar
     getAppToolBarStyle(color: string, width: number) {

@@ -187,10 +187,10 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   smallDeviceLimiter() {
     if (this.smallDevice) {
-      this.toolbarUIService.updateOrderBar(false)
+      this.toolbarUIService.updateOrderBar(false,this.authenticationService.deviceInfo)
     }
     if (this.phoneDevice) {
-      this.toolbarUIService.updateOrderBar(false)
+      this.toolbarUIService.updateOrderBar(false,this.authenticationService.deviceInfo)
       this.toolbarUIService.updateSearchBarSideBar(false)
     }
   }
@@ -203,7 +203,7 @@ export class FooterComponent implements OnInit, OnDestroy {
 
     if (this.phoneDevice && this.platFormService.androidApp) {
       this.router.navigate([ 'pos-items' , {mainPanel:true}]);
-      this.toolbarUIService.updateOrderBar(false)
+      this.toolbarUIService.updateOrderBar(false, this.authenticationService.deviceInfo)
       this.toolbarUIService.resetOrderBar(true)
       return
     }

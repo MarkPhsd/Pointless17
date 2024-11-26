@@ -247,7 +247,7 @@ export class OrderMethodsService implements OnDestroy {
 
   clearOrderSubscription() {
     this.clearOrderSettings()
-    this.toolbarServiceUI.updateOrderBar(false)
+    this.toolbarServiceUI.updateOrderBar(false,this.authenticationService.deviceInfo)
     this._currentOrder.next(null)
     this.updateLastItemAdded(null)
     this.updateOrderSubscription(null);
@@ -381,11 +381,11 @@ export class OrderMethodsService implements OnDestroy {
     if (!order || order == null) {
       order = this.getStateOrder();
       if (order) {
-        this.toolbarServiceUI.updateOrderBar(false)
+        this.toolbarServiceUI.updateOrderBar(false,this.authenticationService.deviceInfo)
         return;
       }
       if (!order) {
-        this.toolbarServiceUI.updateOrderBar(false);
+        this.toolbarServiceUI.updateOrderBar(false,this.authenticationService.deviceInfo);
       }
     }
 
@@ -1558,7 +1558,7 @@ export class OrderMethodsService implements OnDestroy {
 
           // console.log((order?.posOrderItems?.length , order.posOrderItems))
           if ((order && order.posOrderItems.length == 1) || this.authenticationService.isStaff) {
-            this.toolbarServiceUI.updateOrderBar(true);
+            this.toolbarServiceUI.updateOrderBar(true,this.authenticationService.deviceInfo);
             return;
           }
 
@@ -1589,12 +1589,12 @@ export class OrderMethodsService implements OnDestroy {
     if (isStaff) { schedule = '/currentorder/' }
     this.router.navigate([ schedule , {mainPanel:true}]);
 
-    this.toolbarServiceUI.updateOrderBar(false)
+    this.toolbarServiceUI.updateOrderBar(false,this.authenticationService.deviceInfo)
     this.toolbarServiceUI.resetOrderBar(true)
   }
 
   toggleOpenOrderBarSub(id: number) {
-    this.toolbarServiceUI.updateOrderBar(false)
+    this.toolbarServiceUI.updateOrderBar(false,this.authenticationService.deviceInfo)
     this.toolbarServiceUI.resetOrderBar(true)
     this.router.navigate(["/currentorder/", {mainPanel:true, id: id}]);
     this.setScanner()
@@ -1766,7 +1766,7 @@ export class OrderMethodsService implements OnDestroy {
 
     // console.log('resaleType', resaleType)
     if (resaleType) {
-      this.toolbarServiceUI.hidetoolBars()
+      this.toolbarServiceUI.hidetoolBars(this.authenticationService.deviceInfo)
       this.router.navigate(["/buy-sell"])
       return;
     }
@@ -1800,7 +1800,7 @@ export class OrderMethodsService implements OnDestroy {
   setActiveOrder(order: IPOSOrder) {
     if (order) {
       if (!this.authenticationService?.deviceInfo?.phoneDevice) {
-        this.toolbarServiceUI.updateOrderBar(true)
+        this.toolbarServiceUI.updateOrderBar(true,this.authenticationService.deviceInfo)
       }
 
       this.updateOrderSubscription(order)

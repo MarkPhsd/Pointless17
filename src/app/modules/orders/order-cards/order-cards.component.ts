@@ -421,7 +421,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy,OnChanges {
 
     if (this.smallDevice && this.platFormService.androidApp) {
       this.router.navigate([ 'pos-items' , {mainPanel:true}]);
-      this.toolbarUIService.updateOrderBar(false)
+      this.toolbarUIService.updateOrderBar(false,this.authenticationService.deviceInfo)
       this.toolbarUIService.resetOrderBar(true)
       return
     }

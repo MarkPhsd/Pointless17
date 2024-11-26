@@ -18,6 +18,7 @@ import { MatLegacyInputModule } from '@angular/material/legacy-input';
 import { MatLegacyProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 import { ApiStatusDisplayComponent } from 'src/app/shared/widgets/api-status-display/api-status-display.component';
 import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
+import { AuthLoginService } from 'src/app/_services/system/auth-login.service';
 
 @Component({
   selector: 'app-register-account-existing-user-with-token',
@@ -81,9 +82,11 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
       private route: ActivatedRoute,
       private router: Router,
       private _snackBar: MatSnackBar,
+      private authLogin: AuthLoginService,
       private authenticationService: AuthenticationService,
       private sitesService: SitesService,
       private appInitService: AppInitService,
+
       private uiSettingService     : UISettingsService,
   ) {
     const item =   this.route.snapshot.paramMap.get('data')
@@ -156,7 +159,10 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
         user.type = "phone"
       }
 
-      this.authenticationService.assignUserNameAndPassword(user).subscribe( {
+      const site = this.sitesService.getAssignedSite();
+      const message = this.sitesService.getApplicationInfo('user')
+      // this.action$ = this.authLogin.updatePassword(site, message, user).pipe(
+      this.authLogin.assignUserNameAndPassword(site, user).subscribe( {
         next: data =>
             {
               this.initForm()

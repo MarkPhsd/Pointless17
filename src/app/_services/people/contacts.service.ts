@@ -5,12 +5,6 @@ import { BehaviorSubject, Observable, } from 'rxjs';
 import { ClientSearchModel, ClientSearchResults, ISite, IUserProfile, Last30DaysSales }   from  'src/app/_interfaces';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { HttpClient } from '@angular/common/http';
-import { IItemBasic } from '../menuPrompt/prompt-group.service';
-import { I } from '@angular/cdk/keycodes';
-
-// import { HttpClientService } from 'src/app/_http-interceptors/http-client.service';
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -28,22 +22,14 @@ export class ContactsService {
 
   constructor(
                private httpLive: HttpClient,
-               private http: HttpClientCacheService,
-               private auth: AuthenticationService) { }
-
+               private http: HttpClientCacheService) { }
 
   addClient(site: ISite, userProfile: IUserProfile): Observable<IUserProfile> {
-
     const  controller =  "/clients/"
-
     const endPoint = "postClient"
-
 	  const parameters = ''
-
     const uri = `${site.url}${controller}${endPoint}${parameters}`
-
     return  this.httpLive.post<IUserProfile>(uri, userProfile)
-
   };
 
   deleteClient(site: ISite, id: number): Observable<IUserProfile> {

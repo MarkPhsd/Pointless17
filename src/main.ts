@@ -7,10 +7,10 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { CurrencyPipe, CommonModule } from '@angular/common';
 import { UserIdleModule } from 'angular-user-idle';
 import { RouteReuseStrategy } from '@angular/router';
-import { AuthenticationService } from './app/_services';
-import { SitesService } from './app/_services/reporting/sites.service';
+// import { AuthenticationService } from './app/_services';
+// import { SitesService } from './app/_services/reporting/sites.service';
+// import { SystemManagerService } from './app/_services/system/system-manager.service';
 import { AppConfigService } from './app/_services/system/app-config.service';
-import { SystemManagerService } from './app/_services/system/system-manager.service';
 import { AppMaterialModule } from './app/app-material.module';
 import { CoreModule } from './app/core.module';
 import { SharedPipesModule } from './app/shared-pipes/shared-pipes.module';
@@ -43,12 +43,11 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     CurrencyPipe,
     { provide: APP_INITIALIZER, useFactory: initializeApp, deps: [AppConfigService], multi: true },
-    AuthenticationService,
-    SitesService,
-    SystemManagerService
   ],
 }).catch(err => console.error(err));
-
+// AuthenticationService,
+// SitesService,
+// SystemManagerService
 
 // import { enableProdMode } from '@angular/core';
 // import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';

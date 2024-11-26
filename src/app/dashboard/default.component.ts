@@ -135,7 +135,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   user$: Observable<IUser>;
   _user       : Subscription;
-  user        : IUser;
+  user        : IUser = { } as IUser ;
   scrollStyle = this.platformService.scrollStyleWide;
   private styleTag: HTMLStyleElement;
   private customStyleEl: HTMLStyleElement | null = null;
@@ -150,17 +150,17 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   uiTransactions$: Observable<any>;
   uiTransactions : TransactionUISettings
   printAction$   : Observable<any>;
-  devMode     : boolean;
-  chatURL     : string;
-  phoneDevice : boolean;
-  pointlessPOSDemo: boolean;
-  hideAppHeader: boolean;
+  devMode     : boolean = false;
+  chatURL     : string = '';
+  phoneDevice : boolean = false;
+  pointlessPOSDemo: boolean = false;
+  hideAppHeader: boolean = false;
   posDevice$ : Observable<ITerminalSettings>
 
   action$ : Observable<any>;
   _sendAndLogOut: Subscription;
   _sendOrderOnExit: Subscription;
-  viewPrep: boolean;
+  viewPrep: boolean = false;
   matDrawerContentClass = 'mat-drawer-content'
   matDrawerContaienr = 'mat-drawer-container'
   viewType$ = this.orderMethodsSevice.viewOrderType$.pipe(switchMap(data => {
@@ -344,7 +344,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   initMenuButtonList(ui:TransactionUISettings) {
     const site = this.siteService.getAssignedSite()
-    if (!this.authorizationService._user.value) { return of(null)}
+    if (!this.authService._user.value) { return of(null)}
 
     if (this.menuButtonsInitialized) {
       if (this.mbMenuGroupService._menuButtonList.value) {
@@ -365,13 +365,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   initDevice() {
-
     const devicename = localStorage.getItem('devicename');
-
     if (!devicename) { return ;}
-
     this.posDevice$ = this.getDeviceInfo(devicename)
-
   }
 
   getDeviceInfo(devicename) {
@@ -381,9 +377,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       const device = JSON.parse(data.text) as ITerminalSettings;
       this.settingService.updateTerminalSetting(device)
       this.initPrintServer(device)
-
       this.zoom(device)
-
       if (device.enableScale) {  }
       this.posDevice = device;
       return of(device)
@@ -482,7 +476,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   userSubscriber() {
-    this.user$ =   this.authorizationService.user$.pipe(
+    this.user$ =   this.authService.user$.pipe(
       switchMap(data => {
       this.setScrollBarColor(data?.userPreferences?.headerColor)
       this.user = data;
@@ -542,7 +536,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       if (this.swapMenuWithOrder) {
         if (data) {
-          this.toolbarUIService.updateOrderBar(data)
+          this.toolbarUIService.updateOrderBar(data, this.authService.deviceInfo)
         }
         this.rightSideBarToggle = data;
         return;
@@ -677,14 +671,13 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   constructor(
-               private platformService: PlatformService,
-               public  toolBarUIService: ToolBarUIService,
-               private _renderer       : Renderer2,
-               private cd              : ChangeDetectorRef,
-               private mbMenuGroupService: MBMenuButtonsService,
-               private itemTypeService : ItemTypeService,
+               private platformService         : PlatformService,
+               public  toolBarUIService        : ToolBarUIService,
+               private _renderer               : Renderer2,
+               private cd                      : ChangeDetectorRef,
+               private mbMenuGroupService      : MBMenuButtonsService,
+               private itemTypeService         : ItemTypeService,
                private appInitService          : AppInitService,
-               private authorizationService    : AuthenticationService,
                public  toolbarUIService        : ToolBarUIService,
                private uiSettingsService       : UISettingsService,
                private router                  : Router,
@@ -701,7 +694,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private dialog                  : MatDialog,
                private printQueService         : PrintQueService,
                private authService             : AuthenticationService,
-               private renderer                 : Renderer2,
+               private renderer                : Renderer2,
     ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     if (!this.platFormService.isApp() && this.smallDevice) {
@@ -814,7 +807,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   };
 
   orderBarToggler(event){
-    this.toolBarUIService.updateOrderBar(event)
+    this.toolBarUIService.updateOrderBar(event,this.authService.deviceInfo)
   }
 
   @HostListener('window:beforeunload')

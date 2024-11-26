@@ -375,7 +375,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.initAuthorization()
     const site = this.sitesService.getAssignedSite();
     this.paymentService.updatePaymentSubscription(this.posPayment)
-    this.toolbarUI.updateOrderBar(false)
+    this.toolbarUI.updateOrderBar(false,this.authenticationService.deviceInfo)
     this.initForms();
     this.initSubscriptions();
     this.getPaymentMethods(site)

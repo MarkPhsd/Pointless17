@@ -1,6 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient, HttpHeaders  } from '@angular/common/http';
-import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { BehaviorSubject, Observable, of, switchMap, } from 'rxjs';
 import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
 import { InterceptorSkipHeader } from 'src/app/_http-interceptors/basic-auth.interceptor';
@@ -65,14 +64,13 @@ export class SitesService {
   }
 
   constructor( private http            : HttpClient,
-               private authentication  : AuthenticationService,
                private appInitService  : AppInitService,
                private platformSevice  : PlatformService,
                private httpClient      : HttpClient,
                private httpCache       : HttpClientCacheService,
                public  deviceService   : DeviceDetectorService,
                private ttsService      : TtsService ,
-               private zone: NgZone,
+               private zone            : NgZone,
                private snackBar        : MatSnackBar,
 
     ) {
@@ -290,8 +288,8 @@ export class SitesService {
   getSatelliteHeaders() {
     const username = localStorage.getItem("username")
     const password = localStorage.getItem("password")
-    const user = {} as IUser
-    this.authentication.updateUserX(user);
+    // const user = {} as IUser
+    // this.authentication.updateUserX(user);
     return new HttpHeaders().set(InterceptorSkipHeader, '');
   }
 

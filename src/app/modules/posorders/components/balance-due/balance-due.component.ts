@@ -371,7 +371,7 @@ export class ChangeDueComponent implements OnInit  {
 
   clearSubscriptions() {
     this.orderMethodsService.updateOrderSubscription(null) ;
-    this.toolbarServiceUI.updateOrderBar(false);
+    this.toolbarServiceUI.updateOrderBar(false,this.authenticationService.deviceInfo);
   }
 
 

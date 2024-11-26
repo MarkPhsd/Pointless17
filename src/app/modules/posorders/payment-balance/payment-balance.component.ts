@@ -242,7 +242,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
   editCart() {
-    this.toolbarUIService.updateOrderBar(false)
+    this.toolbarUIService.updateOrderBar(false,this.authenticationService.deviceInfo)
     this.toolbarUIService.resetOrderBar(true)
     this.router.navigate(["/currentorder/", {mainPanel:true}]);
     this.orderMethodsService.setScanner()
@@ -550,7 +550,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
      this.action$ = result$.pipe(switchMap(data =>  {
        this.paymentService.updatePaymentSubscription(null)
        this.orderMethodsService.updateOrderSubscription(null)
-       this.toolBarUI.updateOrderBar(false)
+       this.toolBarUI.updateOrderBar(false,this.authenticationService.deviceInfo)
        return of(data)
      })).pipe(switchMap(data => {
       this.router.navigateByUrl('/pos-orders')

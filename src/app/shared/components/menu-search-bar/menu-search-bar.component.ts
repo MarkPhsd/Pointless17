@@ -551,7 +551,8 @@ constructor(
 
   gotoFilter() {
     this.router.navigate(['filter'])
-    this.toolbarUIService.hideToolbarSearchBar()
+    // this.toolbarUIService.hideToolbarSearchBar()
+    this.toolbarUIService.hidetoolBars(this.authService.deviceInfo)
   }
 
 

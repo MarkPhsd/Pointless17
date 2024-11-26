@@ -78,7 +78,14 @@ export class DeviceInfoComponent implements OnInit {
 
   getDeviceInfo() {
     this.ipAddress$ = this.siteService.getIpAddress(this.uiHomePage?.ipInfoToken)
-    this.deviceInfo =  this.authService.getTracker(this.authService.userValue?.username, true)
+
+
+    const site = this.siteService.getAssignedSite();
+    const message = this.siteService.getApplicationInfo('user')
+
+    // this.action$ = this.authLogin.updatePassword(site, message, user).pipe(
+
+    this.deviceInfo =  this.siteService.getApplicationInfo(this.authService.userValue?.username) //this.authService.userValue?.username, true)
     this.isMobile = this.deviceService.isMobile();
     this.isTablet = this.deviceService.isTablet();
     this.isDesktopDevice = this.deviceService.isDesktop();

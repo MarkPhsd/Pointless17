@@ -14,7 +14,7 @@
   "scripts": {
     "ng": "ng",
     "start with SSL": "node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng serve --configuration dev --public-host --host=192.168.0.17 --port=4600 --ssl true --ssl-key ./localhost-key.pem --ssl-cert ./localhost.pem",
-    "start with IP": "node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng serve --configuration dev --public-host --host=192.168.0.17 --port=4500",
+    "start with IP": "node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng serve --configuration dev --public-host --host=192.168.0.17 --port=4500 --verbose",
     "startLocal": "npx ng serve --configuration dev --host=localhost --port=4500",
     "startLocalNode": "ng serve --configuration dev --host=localhost --port=4500",
     "BuildPointless production": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build--configuration production ",

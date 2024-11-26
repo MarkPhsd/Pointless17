@@ -125,7 +125,7 @@ export class ProductFilterComponent implements OnInit {
   }
 
   hideToolbar() {
-    this.uiToolBarService.hidetoolBars()
+    this.uiToolBarService.hidetoolBars(this.authService.deviceInfo)
   }
 
   get accordionMenuView() {
