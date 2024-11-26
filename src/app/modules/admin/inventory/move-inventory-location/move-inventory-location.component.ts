@@ -7,7 +7,7 @@ import { ISite } from 'src/app/_interfaces/site';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
@@ -16,7 +16,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   selector: 'app-move-inventory-location',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
+    FormsModule,ReactiveFormsModule,
   ],
   templateUrl: './move-inventory-location.component.html',
   styleUrls: ['./move-inventory-location.component.scss']

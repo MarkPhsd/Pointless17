@@ -3,7 +3,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISite } from 'src/app/_interfaces';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Subject ,fromEvent } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -15,7 +15,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   selector: 'app-price-category-search',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
+    FormsModule,ReactiveFormsModule,
   ],
   templateUrl: './price-category-search.component.html',
   styleUrls: ['./price-category-search.component.scss'],

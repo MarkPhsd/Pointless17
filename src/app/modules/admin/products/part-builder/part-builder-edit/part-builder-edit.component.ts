@@ -13,13 +13,14 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { PartBuilderComponentEditComponent } from '../part-builder-component-edit/part-builder-component-edit.component';
 import { ValueFieldsComponent } from '../../productedit/_product-edit-parts/value-fields/value-fields.component';
 import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
+import { PartBuilderTreeComponent } from '../part-builder-tree/part-builder-tree.component';
 
 @Component({
   selector: 'app-part-builder-edit',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
     PartBuilderComponentEditComponent,ValueFieldsComponent,
-    EditButtonsStandardComponent,
+    EditButtonsStandardComponent,PartBuilderTreeComponent,
   SharedPipesModule],
   templateUrl: './part-builder-edit.component.html',
   styleUrls: ['./part-builder-edit.component.scss']

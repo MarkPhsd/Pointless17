@@ -12,12 +12,13 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ClockViewComponent } from './clock-view/clock-view.component';
 
 @Component({
   selector: 'clock-in-out',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
+    ClockViewComponent,
   ],
   templateUrl: './clock-in-out.component.html',
   styleUrls: ['./clock-in-out.component.scss']

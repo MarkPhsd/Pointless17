@@ -9,12 +9,13 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { AgGridModule } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-manifest-type',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-
+    AgGridModule,
   SharedPipesModule],
   templateUrl: './manifest-type.component.html',
   styleUrls: ['./manifest-type.component.scss']

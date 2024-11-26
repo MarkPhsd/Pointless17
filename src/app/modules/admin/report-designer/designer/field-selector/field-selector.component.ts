@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription, of, switchMap } from 'rxjs';
 import { ReportDesignerService } from '../../services/report-designer.service';
 import { viewBuilder_View_Field_Values, viewBuilder_ReportJSON } from '../../interfaces/reports';
@@ -9,10 +9,13 @@ import { UUID } from 'angular2-uuid';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { NgxJsonViewerComponent, NgxJsonViewerModule } from 'ngx-json-viewer';
 @Component({
   selector: 'psReporting-field-selector',
   standalone: true,
-  imports: [CommonModule,AppMaterialModule,SharedPipesModule],
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    FormsModule,ReactiveFormsModule,NgxJsonViewerModule,
+  ],
   templateUrl: './field-selector.component.html',
   styleUrls: ['./field-selector.component.scss']
 })

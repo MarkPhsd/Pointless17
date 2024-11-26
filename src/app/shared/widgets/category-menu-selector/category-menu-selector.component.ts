@@ -13,6 +13,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { ItemBasic } from 'src/app/modules/admin/report-designer/interfaces/reports';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 // export interface IItemBasic{
 //   name: string;
@@ -30,7 +31,7 @@ export interface IItemBasicProduct extends IItemBasic{
   selector: 'category-menu-selector',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-    CategoryMenuSelectorComponent
+    CategoryMenuSelectorComponent,SharedPipesModule,
   ],
   templateUrl: './category-menu-selector.component.html',
   styleUrls: ['./category-menu-selector.component.scss']

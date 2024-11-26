@@ -11,7 +11,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'paypal-card-pay-btn',
   standalone: true,
-  imports: [CommonModule,AppMaterialModule
+  imports: [CommonModule,AppMaterialModule,
 
   SharedPipesModule],
   templateUrl: './paypal-card-pay-btn.component.html',

@@ -40,7 +40,7 @@ function myComparator(value1, value2) {
   selector: 'brand-editor-main',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-    AgGridModule,BrandFilterComponent,
+    AgGridModule,BrandFilterComponent,BrandClassEditorComponent,
   SharedPipesModule],
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']

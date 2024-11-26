@@ -10,12 +10,13 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ImageContainerComponent } from '../image-container/image-container.component';
 
 @Component({
   selector: 'last-image-display',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
+    ImageContainerComponent,
   ],
   templateUrl: './last-image-display.component.html',
   styleUrls: ['./last-image-display.component.scss']

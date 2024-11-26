@@ -26,12 +26,13 @@ import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { AgGridModule } from 'ag-grid-angular';
 import { PromptInfoPanelComponent } from '../../../menuPrompt/prompt-groups/prompt-info-panel/prompt-info-panel.component';
+import { DisplayMenuSortComponent } from '../display-menu-sort/display-menu-sort.component';
 
 @Component({
   selector: 'admin-display-menu-list',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-    AgGridModule,PromptInfoPanelComponent,
+    AgGridModule,PromptInfoPanelComponent,DisplayMenuSortComponent,
   SharedPipesModule],
   templateUrl: './display-menu-list.component.html',
   styleUrls: ['./display-menu-list.component.scss']

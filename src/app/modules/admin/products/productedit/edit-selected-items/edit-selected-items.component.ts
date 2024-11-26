@@ -4,7 +4,7 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { catchError, Observable, of, switchMap } from 'rxjs';
 
-import { MenuService } from 'src/app/_services';
+import { MenuService, RouteDispatchingService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProducteditComponent } from '../productedit.component';
 import { CommonModule } from '@angular/common';
@@ -20,6 +20,7 @@ import { ValueFieldsComponent } from '../_product-edit-parts/value-fields/value-
 import { PromptGroupSelectComponent } from '../_product-edit-parts/prompt-group-select/prompt-group-select.component';
 import { FieldSelectorComponent } from '../../../report-designer/designer/field-selector/field-selector.component';
 import { FieldValueSelectorComponent } from '../../../report-designer/designer/field-value-selector/field-value-selector.component';
+import { PartBuilderSelectorComponent } from '../_product-edit-parts/part-builder-selector/part-builder-selector.component';
 @Component({
   selector: 'app-edit-selected-items',
   standalone: true,
@@ -32,7 +33,8 @@ import { FieldValueSelectorComponent } from '../../../report-designer/designer/f
     ValueFieldsComponent,
     PromptGroupSelectComponent,
     FieldValueSelectorComponent,
-
+    FormsModule,ReactiveFormsModule,
+    PartBuilderSelectorComponent,
   SharedPipesModule],
   templateUrl: './edit-selected-items.component.html',
   styleUrls: ['./edit-selected-items.component.scss']

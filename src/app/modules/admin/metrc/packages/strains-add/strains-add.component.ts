@@ -26,6 +26,8 @@ import { MetrcInventoryPropertiesComponent } from '../metrc-inventory-properties
 import { PriceCategorySelectComponent } from '../../../products/productedit/_product-edit-parts/price-category-select/price-category-select.component';
 import { ChemicalValuesComponent } from '../../../products/productedit/_product-edit-parts/chemical-values/chemical-values.component';
 import { StrainPackagesComponent } from './strain-packages/strain-packages.component';
+import { MetrcRequirementsComponent } from '../metrc-requirements/metrc-requirements.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @Component({
   selector: 'app-strains-add',
@@ -38,7 +40,8 @@ import { StrainPackagesComponent } from './strain-packages/strain-packages.compo
     PriceCategorySelectComponent,
     ChemicalValuesComponent,
     StrainPackagesComponent,
-
+    MetrcRequirementsComponent,
+    NgxJsonViewerModule,
   SharedPipesModule],
   templateUrl: './strains-add.component.html',
   styleUrls: ['./strains-add.component.scss']

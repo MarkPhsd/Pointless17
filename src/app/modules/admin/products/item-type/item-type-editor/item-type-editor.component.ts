@@ -22,6 +22,9 @@ import { ValueFieldsComponent } from '../../productedit/_product-edit-parts/valu
 import { LabelViewSelectorComponent } from 'src/app/shared-ui/printing/label-view-selector/label-view-selector.component';
 import { ProductSearchSelector2Component } from '../../productedit/_product-edit-parts/product-search-selector/product-search-selector.component';
 import { TagChipsProductsComponent } from '../../productedit/_product-edit-parts/tag-chips-products/tag-chips-products.component';
+import { ItemTypeTogglesEditComponent } from './item-type-toggles-edit/item-type-toggles-edit.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
 
 @Component({
   selector: 'app-item-type-editor',
@@ -31,7 +34,9 @@ import { TagChipsProductsComponent } from '../../productedit/_product-edit-parts
     LabelViewSelectorComponent,
     ProductSearchSelector2Component,
     TagChipsProductsComponent,
-
+    ItemTypeTogglesEditComponent,
+    UploaderComponent,
+    ProductSearchSelectorComponent,
   SharedPipesModule],
   templateUrl: './item-type-editor.component.html',
   styleUrls: ['./item-type-editor.component.scss']

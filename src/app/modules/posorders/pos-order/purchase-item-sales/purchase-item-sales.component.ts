@@ -9,13 +9,14 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ClientInfoComponent } from '../../client-info/client-info.component';
 
 @Component({
   selector: 'purchase-item-sales',
 
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-
+    ClientInfoComponent,
   SharedPipesModule],
   templateUrl: './purchase-item-sales.component.html',
   styleUrls: ['./purchase-item-sales.component.scss']

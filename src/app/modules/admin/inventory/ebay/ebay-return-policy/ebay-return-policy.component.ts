@@ -1,13 +1,23 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxXml2jsonModule } from 'ngx-xml2json';
 import { Observable, switchMap, of } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EbayAPIService } from 'src/app/_services/resale/ebay-api.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @Component({
   selector: 'app-ebay-return-policy',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+           ValueFieldsComponent,NgxJsonViewerModule,
+            SharedPipesModule],
   templateUrl: './ebay-return-policy.component.html',
   styleUrls: ['./ebay-return-policy.component.scss']
 })
@@ -162,7 +172,7 @@ export class EbayReturnPolicyComponent implements OnInit {
 
   publish() {
     const site = this.siteService.getAssignedSite()
-    this.action$ = this.ebayService.publishPolicy(site, 'EbayReturnPolicy').pipe(switchMap(data => { 
+    this.action$ = this.ebayService.publishPolicy(site, 'EbayReturnPolicy').pipe(switchMap(data => {
       this.inventoryCheck = data;
       return of(data)
     }))

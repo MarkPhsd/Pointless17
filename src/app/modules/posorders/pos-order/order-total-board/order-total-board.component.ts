@@ -4,9 +4,18 @@ import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { catchError, delay, delayWhen, Observable, of, repeatWhen, retryWhen, switchMap, tap, throwError, timer } from 'rxjs';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { OrderTotalComponent } from '../order-total/order-total.component';
 
 @Component({
   selector: 'app-order-total-board',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    OrderTotalComponent,
+  SharedPipesModule],
   templateUrl: './order-total-board.component.html',
   styleUrls: ['./order-total-board.component.scss']
 })

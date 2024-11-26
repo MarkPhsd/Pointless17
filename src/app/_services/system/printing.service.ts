@@ -126,11 +126,11 @@ export class PrintingService {
                 private http              : HttpClient,
                 private posOrderItemService : POSOrderItemService,
                 private metrcPackageService: MetrcPackagesService,
-                private renderingService  : RenderingService,
-                private settingService    : SettingsService,
-                private siteService       : SitesService,
-                private uiSettingsService : UISettingsService,
-                private systemService: SystemService,
+                private renderingService    : RenderingService,
+                private settingService      : SettingsService,
+                private siteService         : SitesService,
+                private uiSettingsService   : UISettingsService,
+                private systemService       : SystemService,
     ) {
   }
 

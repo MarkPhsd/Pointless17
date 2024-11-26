@@ -13,12 +13,14 @@ import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.component';
+import { KeyboardComponent } from 'src/app/shared/widgets/keyboard/keyboard.component';
+import { Keyboard } from 'swiper';
 
 @Component({
   selector: 'app-pos-order-item-edit',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-  KeyPadComponent,
+  KeyPadComponent,KeyboardComponent,
   SharedPipesModule],
   templateUrl: './pos-order-item-edit.component.html',
   styleUrls: ['./pos-order-item-edit.component.scss']

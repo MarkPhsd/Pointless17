@@ -8,7 +8,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
 
-  ]
+  ],
   templateUrl: './dcapresponse-message.component.html',
   styleUrls: ['./dcapresponse-message.component.scss']
 })

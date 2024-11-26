@@ -3,12 +3,13 @@ import { Component,  OnInit, Input } from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { StrainIndicatorComponent } from '../../strain-indicator/strain-indicator.component';
 
 @Component({
   selector: 'category-items-board-item',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
+    StrainIndicatorComponent,
   ],
 
   templateUrl: './category-items-board-item.component.html',

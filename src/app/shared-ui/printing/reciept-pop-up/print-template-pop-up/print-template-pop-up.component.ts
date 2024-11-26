@@ -1,13 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { BehaviorSubject } from 'rxjs';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { OrdersService } from 'src/app/_services';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PrintTemplateComponent } from '../print-template/print-template.component';
 
 @Component({
   selector: 'app-print-template-pop-up',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    PrintTemplateComponent,
+  SharedPipesModule],
   templateUrl: './print-template-pop-up.component.html',
   styleUrls: ['./print-template-pop-up.component.scss']
 })

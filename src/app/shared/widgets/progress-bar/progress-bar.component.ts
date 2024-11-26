@@ -1,7 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input , OnChanges} from '@angular/core';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-progress-bar',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,
+  SharedPipesModule],
   templateUrl: './progress-bar.component.html',
   styleUrls: ['./progress-bar.component.scss']
 })

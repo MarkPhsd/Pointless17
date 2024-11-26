@@ -8,12 +8,13 @@ import { EmployeeService } from 'src/app/_services/people/employee-service.servi
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
 
 @Component({
   selector: 'app-employee-metrc-key-entry',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-
+    ValueFieldsComponent,
   SharedPipesModule],
   templateUrl: './employee-metrc-key-entry.component.html',
   styleUrls: ['./employee-metrc-key-entry.component.scss']

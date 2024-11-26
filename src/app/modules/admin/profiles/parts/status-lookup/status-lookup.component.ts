@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { clientType } from 'src/app/_interfaces';
-import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { StatusTypeService } from 'src/app/_services/people/status-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
@@ -13,8 +11,8 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   selector: 'app-status-lookup',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
-  ],
+           FormsModule,ReactiveFormsModule,
+         ],
   templateUrl: './status-lookup.component.html',
   styleUrls: ['./status-lookup.component.scss']
 })

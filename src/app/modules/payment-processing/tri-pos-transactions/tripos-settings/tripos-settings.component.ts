@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { Observable, of, switchMap } from 'rxjs';
 import { LabelingService } from 'src/app/_labeling/labeling.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -11,7 +12,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   selector: 'app-tripos-settings',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-
+    NgxJsonViewerModule,
   SharedPipesModule],
   templateUrl: './tripos-settings.component.html',
   styleUrls: ['./tripos-settings.component.scss']

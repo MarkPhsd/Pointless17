@@ -2,7 +2,7 @@ import { Component,  Inject,  Input, Output, OnInit, Optional,
   ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable} from 'rxjs';
 // import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import "ag-grid-community/dist/styles/ag-grid.css";
@@ -25,7 +25,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
+    FormsModule,ReactiveFormsModule,
   ],
 
   templateUrl: './prompt-sub-group-association.component.html',

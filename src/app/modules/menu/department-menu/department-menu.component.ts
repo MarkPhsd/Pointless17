@@ -12,12 +12,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { BlogPostComponent } from 'src/app/shared/widgets/blog-post/blog-post.component';
 
 @Component({
   selector: 'app-department-menu',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
-
+    BlogPostComponent,
   SharedPipesModule],
   templateUrl: './department-menu.component.html',
   styleUrls: ['./department-menu.component.scss'],

@@ -23,6 +23,7 @@ import { MenuItemCardComponent } from '../../menu/menuitems/menu-item-card/menu-
 import { SearchFieldsComponent } from 'src/app/shared/widgets/search-fields/search-fields.component';
 import { PurchaseItemSalesComponent } from '../../posorders/pos-order/purchase-item-sales/purchase-item-sales.component';
 import { PurchaseItemCostHistoryComponent } from '../../posorders/pos-order/purchase-item-cost-history/purchase-item-cost-history.component';
+import { ChipsDisplayComponent } from 'src/app/shared/widgets/chips-display/chips-display.component';
 
 @Component({
   selector: 'buy-sell-main',
@@ -33,6 +34,7 @@ import { PurchaseItemCostHistoryComponent } from '../../posorders/pos-order/purc
     MenuItemCardComponent,
     PurchaseItemSalesComponent,
     PurchaseItemCostHistoryComponent,
+    ChipsDisplayComponent,
   SharedPipesModule],
   templateUrl: './buy-sell-main.component.html',
   styleUrls: ['./buy-sell-main.component.scss']

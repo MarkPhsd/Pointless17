@@ -10,13 +10,14 @@ import { ClientTableService } from 'src/app/_services/people/client-table.servic
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { CheckInProfileComponent } from '../check-in-profile/check-in-profile.component';
 
 @Component({
   selector: 'app-profile-editor',
 
   standalone: true,
   imports: [CommonModule,AppMaterialModule,
-
+    CheckInProfileComponent,
   SharedPipesModule],
   templateUrl: './profile-editor.component.html',
   styleUrls: ['./profile-editor.component.scss']

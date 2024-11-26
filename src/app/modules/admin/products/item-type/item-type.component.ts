@@ -20,6 +20,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ItemTypeDisplayAssignmentComponent } from './item-type-display-assignment/item-type-display-assignment.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @Component({
   selector: 'app-item-type',
@@ -27,10 +29,10 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
     AgGridModule,
     ItemTypeCategoryAssignmentComponent,
-    ItemTypeDisplayAssignmentService,
+    ItemTypeDisplayAssignmentComponent,
     UseGroupTaxAssignmentComponent,
-
-  SharedPipesModule],
+    NgxJsonViewerModule,
+    SharedPipesModule],
   templateUrl: './item-type.component.html',
   styleUrls: ['./item-type.component.scss'],
   encapsulation: ViewEncapsulation.None // Disable encapsulation

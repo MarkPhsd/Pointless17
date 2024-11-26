@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription, catchError, of, switchMap } from 'rxjs';
 
 import { ReportDesignerService } from '../../services/report-designer.service';
@@ -9,11 +9,26 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatSelectorComponent } from '../../widgets/mat-selector/mat-selector.component';
+import { EditBarComponent } from '../../widgets/edit-bar/edit-bar.component';
+import { FieldListTypeAssignerComponent } from '../field-list-type-assigner/field-list-type-assigner.component';
+import { ReportGroupSelectorComponent } from '../report-group-selector/report-group-selector.component';
+import { DynamicModule } from 'ng-dynamic-component';
+import { DynamicAgGridComponent } from 'src/app/shared/widgets/dynamic-ag-grid/dynamic-ag-grid.component';
+import { FilterBuilderComponent } from '../filter-builder/filter-builder.component';
+import { SortSelectorComponent } from '../sort-selector/sort-selector.component';
+import { FieldValueSelectorComponent } from '../field-value-selector/field-value-selector.component';
+import { FieldSelectorComponent } from '../field-selector/field-selector.component';
 
 @Component({
   selector: 'psReporting-designer-editor',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+    MatSelectorComponent,EditBarComponent,FormsModule,ReactiveFormsModule,
+    FieldListTypeAssignerComponent,ReportGroupSelectorComponent,
+    DynamicModule,DynamicAgGridComponent,FilterBuilderComponent,
+    SortSelectorComponent,FieldValueSelectorComponent,
+    FieldSelectorComponent
 
   ],
   templateUrl: './designer-editor.component.html',

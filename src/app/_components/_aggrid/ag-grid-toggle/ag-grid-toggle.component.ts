@@ -1,8 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit,Input } from '@angular/core';
-import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AgGridModule, ICellRendererAngularComp } from 'ag-grid-angular';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-ag-grid-toggle',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    AgGridModule,
+  SharedPipesModule],
   templateUrl: './ag-grid-toggle.component.html',
   styleUrls: ['./ag-grid-toggle.component.scss']
 })

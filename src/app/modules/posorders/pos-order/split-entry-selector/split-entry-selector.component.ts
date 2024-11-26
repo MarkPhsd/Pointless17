@@ -6,11 +6,12 @@ import { TransactionUISettings } from 'src/app/_services/system/settings/uisetti
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ValueFromListSelectorComponent } from 'src/app/shared/widgets/value-from-list-selector/value-from-list-selector.component';
 @Component({
   selector: 'split-entry-selector',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-  FormsModule,ReactiveFormsModule,
+  FormsModule,ReactiveFormsModule,ValueFromListSelectorComponent
   ],
   templateUrl: './split-entry-selector.component.html',
   styleUrls: ['./split-entry-selector.component.scss']

@@ -1,5 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subject, of, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -7,9 +9,16 @@ import { ITaxReport, ReportingItemsSalesService } from 'src/app/_services/report
 import { IPaymentSalesSummary } from 'src/app/_services/reporting/sales-payments.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PaymentReportCardComponent } from '../payment-report-card/payment-report-card.component';
 
 @Component({
   selector: 'app-payment-report-data',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    PaymentReportCardComponent,
+  SharedPipesModule],
   templateUrl: './payment-report-data.component.html',
   styleUrls: ['./payment-report-data.component.scss']
 })
@@ -49,7 +58,7 @@ export class PaymentReportDataComponent implements OnInit {
   {
     // const item = {} as ITaxReport;
     // item.grossSales;
-    
+
   }
 
   get groupByPayment() {
@@ -66,13 +75,13 @@ export class PaymentReportDataComponent implements OnInit {
   ngOnInit(): void {
     const i = 0
     this.type = this.type.toUpperCase()
-    
-    if (this.salesReportOBS) { 
+
+    if (this.salesReportOBS) {
       this.getSalesReport(this.salesReportOBS)
     }
   }
 
-  getSalesReport(reportCriteria: any) { 
+  getSalesReport(reportCriteria: any) {
     // if (!reportCriteria) {return }
     // const item = reportCriteria;
     // this.processing = true;

@@ -21,6 +21,11 @@ import { Clipboard} from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ListPrintersElectronComponent } from '../../settings/printing/list-printers-electron/list-printers-electron.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { EmployeeClockFilterComponent } from '../employee-clock-filter/employee-clock-filter.component';
+import { SalesTaxReportComponent } from '../../reports/sales-tax-report/sales-tax-report.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 export interface rowItem {
   field: string,
   cellRenderer: string,
@@ -36,9 +41,14 @@ export interface rowItem {
 @Component({
   selector: 'employee-clock-list',
   standalone: true,
-  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
-
-  SharedPipesModule],
+  imports: [CommonModule,AppMaterialModule,FormsModule,
+          ReactiveFormsModule,
+          ListPrintersElectronComponent,
+          AgGridModule,
+          SalesTaxReportComponent,
+          EmployeeClockFilterComponent,
+          NgxJsonViewerModule,
+          SharedPipesModule],
   templateUrl: './employee-clock-list.component.html',
   styleUrls: ['./employee-clock-list.component.scss']
 })

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit,Output } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
-import { UntypedFormGroup , UntypedFormBuilder } from '@angular/forms';
+import { UntypedFormGroup , UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {  MenuPromptSearchModel, PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   selector: 'prompt-group-select',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
+    FormsModule,ReactiveFormsModule,
   ],
 
   templateUrl: './prompt-group-select.component.html',

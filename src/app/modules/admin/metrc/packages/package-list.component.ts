@@ -33,13 +33,14 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
 import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
 import { MatSelectComponent } from 'src/app/shared/widgets/mat-select/mat-select.component';
+import { MatDateRangeComponent } from 'src/app/shared/widgets/mat-date-range/mat-date-range.component';
 
 @Component({
   selector    : 'app-package-list',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
   SearchDebounceInputComponent,FormSelectListComponent,MatSelectComponent,
-  AgGridModule,
+  AgGridModule,MatDateRangeComponent,
   SharedPipesModule],
   templateUrl : './package-list.component.html',
   styleUrls   : ['./package-list.component.scss']

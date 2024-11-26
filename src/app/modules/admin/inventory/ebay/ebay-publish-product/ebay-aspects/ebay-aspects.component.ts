@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
@@ -11,7 +12,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-
+    NgxJsonViewerModule,
   SharedPipesModule],
   templateUrl: './ebay-aspects.component.html',
   styleUrls: ['./ebay-aspects.component.scss']

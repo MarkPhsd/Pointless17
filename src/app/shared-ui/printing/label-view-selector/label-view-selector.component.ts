@@ -18,21 +18,23 @@ import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
 @Component({
   selector: 'app-label-view-selector',
   standalone: true,
-  imports: [CommonModule,FormsModule,MatLegacyOptionModule,MatLegacySelectModule,MatLegacyFormFieldModule],
+  imports: [CommonModule,FormsModule,
+            MatLegacyOptionModule,
+            MatLegacySelectModule,MatLegacyFormFieldModule],
   templateUrl: './label-view-selector.component.html',
   styleUrls: ['./label-view-selector.component.scss']
 })
 export class LabelViewSelectorComponent implements OnInit {
-  @Output() outputLabelSetting  :      EventEmitter<any> = new EventEmitter();
-  @Output() outPutLabelID:      EventEmitter<any> = new EventEmitter();
+  @Output() outputLabelSetting  : EventEmitter<any> = new EventEmitter();
+  @Output() outPutLabelID       : EventEmitter<any> = new EventEmitter();
   @Input() labelList$           : Observable<ISetting[]>;
-  @Input() zplSetting           : ISetting;
-  @Input() labelID              : number;
+  @Input() zplSetting           : ISetting = {} as ISetting//  };
+  @Input() labelID              : number = 0
   @Input() inventoryItem        : IInventoryAssignment;
   label$ : Observable<any>;
 
-  labelImage64                  : any;
-  product                       : IProduct
+  labelImage64                  : any = {};
+  product                       : IProduct = {} as IProduct;
   @Input()  labelImageHeight     = 200;
 
   @Input() set setProduct(product: IProduct) {
@@ -50,22 +52,16 @@ export class LabelViewSelectorComponent implements OnInit {
     }
   }
 
-  // private electronService  : ElectronService,
   constructor(
-              private snack             : MatSnackBar,
               private settingService    : SettingsService,
               private siteService       : SitesService,
               private printingService   : PrintingService,
-              private fakeData          : FakeDataService,
-              private renderingService  : RenderingService,
-              private dialog            : MatDialog,) { }
+       ) { }
 
   ngOnInit(): void {
     const site = this.siteService.getAssignedSite();
-
     this.labelList$       =  this.settingService.getLabels(site);
     if (this.labelID) {
-      // console.log('refreshLabelSettings')
       this.refreshLabelSettings(this.labelID)
       return
     }

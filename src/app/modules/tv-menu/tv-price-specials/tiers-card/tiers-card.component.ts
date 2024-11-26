@@ -5,9 +5,18 @@ import { Observable,  throwError } from 'rxjs';
 import { catchError, delay,  repeatWhen } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ICompany } from 'src/app/_interfaces';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
 
 @Component({
   selector: 'app-tiers-card',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    LogoComponent,
+  SharedPipesModule],
   templateUrl: './tiers-card.component.html',
   styleUrls: ['./tiers-card.component.scss']
 })

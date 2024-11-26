@@ -370,11 +370,13 @@
 <ng-template #partBuilderSelector>
   <div *ngIf="!fbProductsService.isCannabis(itemType)" class="grid-container-3Column">
     <div>
+      <!--  [searchType]="'pB_MainID'" -->
+        <!--  [fieldProperty]="'pB_MainID'" -->
       <field-value-selector
         [inputForm]="productForm"
         [searchForm]="pbSearchForm"
-        [searchType]="'pB_MainID'"
-        [fieldProperty]="'pB_MainID'"
+
+
         [placeHolder]="'Kit/Recipe'"
         [id]="product?.pB_MainID"
         (itemSelect)="setPartBuilder($event)">

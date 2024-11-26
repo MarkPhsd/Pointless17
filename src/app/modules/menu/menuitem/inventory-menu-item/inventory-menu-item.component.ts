@@ -12,12 +12,14 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ChipsDisplayComponent } from 'src/app/shared/widgets/chips-display/chips-display.component';
+import { ImageGalleryComponent } from 'src/app/shared/widgets/image-gallery/image-gallery.component';
 
 @Component({
   selector: 'inventory-menu-item',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-
+    ChipsDisplayComponent,ImageGalleryComponent,
   SharedPipesModule],
   templateUrl: './inventory-menu-item.component.html',
   styleUrls: ['./inventory-menu-item.component.scss']

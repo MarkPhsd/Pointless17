@@ -34,13 +34,15 @@ import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { FunctionButtonsListComponent } from 'src/app/modules/admin/settings/function-groups/function-buttons-list/function-buttons-list.component';
 import { MessageMenuSenderComponent } from 'src/app/modules/admin/message-editor-list/message-menu-sender/message-menu-sender.component';
+import { OrderItemScannerComponent } from 'src/app/shared/widgets/search-list-selectors/order-item-scanner/order-item-scanner.component';
 
 @Component({
   selector: 'pos-order-items',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
     PosOrderItemComponent,FunctionButtonsListComponent,
-    MessageMenuSenderComponent,IonicModule
+    MessageMenuSenderComponent,IonicModule,
+    OrderItemScannerComponent,
   ],
   templateUrl: './pos-order-items.component.html',
   styleUrls: ['./pos-order-items.component.scss'],

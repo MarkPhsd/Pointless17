@@ -23,6 +23,8 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MenuCardCategoriesComponent } from './menu-card-categories/menu-card-categories.component';
 const  { Keyboard } = Plugins;
 
 // https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6
@@ -40,7 +42,7 @@ const  { Keyboard } = Plugins;
   selector: 'app-categories',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-
+    InfiniteScrollModule,MenuCardCategoriesComponent,
   SharedPipesModule],
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss'],

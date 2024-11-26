@@ -13,12 +13,13 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ClientSearchSelectorComponent } from 'src/app/shared/widgets/client-search-selector/client-search-selector.component';
 
 @Component({
   selector: 'app-order-header-demo-graphics',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-  QRCodeModule,ValueFieldsComponent
+  QRCodeModule,ValueFieldsComponent,ClientSearchSelectorComponent,
   ],
   templateUrl: './order-header-demo-graphics.component.html',
   styleUrls: ['./order-header-demo-graphics.component.scss']

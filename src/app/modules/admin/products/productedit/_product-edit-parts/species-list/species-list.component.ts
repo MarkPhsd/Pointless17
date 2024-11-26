@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { MenuService } from 'src/app/_services';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
@@ -10,7 +10,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   selector: 'app-species-list',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
+    FormsModule,ReactiveFormsModule,
   ],
   templateUrl: './species-list.component.html',
   styleUrls: ['./species-list.component.scss']

@@ -15,12 +15,13 @@ import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { PromptPanelMenuItemComponent } from './prompt-panel-menu-item/prompt-panel-menu-item.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'prompt-panel-menu-items',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-    PromptPanelMenuItemComponent
+    PromptPanelMenuItemComponent,FormsModule,ReactiveFormsModule,
   ],
   templateUrl: './prompt-panel-menu-items.component.html',
   styleUrls: ['./prompt-panel-menu-items.component.scss'],

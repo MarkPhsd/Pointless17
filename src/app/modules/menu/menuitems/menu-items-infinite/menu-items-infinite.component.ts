@@ -22,6 +22,8 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
 import { MatChipListComponent } from 'src/app/shared/widgets/mat-chip-list/mat-chip-list.component';
 import { MenuItemCardComponent } from '../menu-item-card/menu-item-card.component';
+import { InfiniteScrollDirective, InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { ListProductSearchInputComponent } from 'src/app/shared/widgets/search-list-selectors/list-product-search-input/list-product-search-input.component';
 
 @Component({
     selector: 'menu-items-infinite',
@@ -30,7 +32,8 @@ import { MenuItemCardComponent } from '../menu-item-card/menu-item-card.componen
     SearchDebounceInputComponent,
     MatChipListComponent,
     MenuItemCardComponent,
-
+    InfiniteScrollModule,
+    ListProductSearchInputComponent,
     SharedPipesModule],
     templateUrl: './menu-items-infinite.component.html',
     styleUrls: ['./menu-items-infinite.component.scss'],

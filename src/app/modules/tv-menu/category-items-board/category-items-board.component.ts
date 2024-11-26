@@ -7,12 +7,13 @@ import { IMenuItemsResultsPaged, MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { CategoryItemsBoardItemComponent } from './category-items-board-item/category-items-board-item.component';
 
 @Component({
   selector: 'app-category-items-board',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-      CategoryItemsBoardComponent
+     CategoryItemsBoardItemComponent,
   ],
 
   templateUrl: './category-items-board.component.html',

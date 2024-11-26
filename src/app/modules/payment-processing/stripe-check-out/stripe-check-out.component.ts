@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild , OnDestroy, Input, Output,EventEmitter, Inject, TemplateRef, Optional, ElementRef} from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
-import { StripeService, StripeCardComponent, StripeInstance, StripePaymentElementComponent } from 'ngx-stripe';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StripeService, StripeCardComponent, StripeInstance, StripePaymentElementComponent, NgxStripeModule } from 'ngx-stripe';
 import {
   StripeCardElementOptions,
   StripeElementsOptions
@@ -15,9 +15,17 @@ import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ValueFieldsComponent } from '../../admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
 
 @Component({
   selector: 'stripe-check-out',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    ValueFieldsComponent,NgxStripeModule,
+  SharedPipesModule],
   templateUrl: './stripe-check-out.component.html',
   styleUrls: ['./stripe-check-out.component.scss']
 })

@@ -1,14 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { Observable, switchMap, of } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EbayAPIService } from 'src/app/_services/resale/ebay-api.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 
 @Component({
   selector: 'app-ebay-fulfillment-policy',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    NgxJsonViewerModule,
+  SharedPipesModule],
   templateUrl: './ebay-fulfillment-policy.component.html',
   styleUrls: ['./ebay-fulfillment-policy.component.scss']
 })
@@ -111,14 +119,14 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
     this.createForm();
     this.loadPolicy()
   }
- 
+
   addCategoryType() {
     this.categoryTypes.push(this.createCategoryType());
   }
 
   addShippingLocaitons() {
     const locations =    this.inputForm.controls['shipToLocations']
-    
+
     const item = this.formBuilder.group({
       regionExcluded: this.formBuilder.array([this.createRegion()]),
       regionIncluded: this.formBuilder.array([this.createRegion()])
@@ -135,12 +143,12 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
   }
 
   addpackageHandlingCost(j) {
-    if (!this.inputForm.get('shippingOptions')) { 
+    if (!this.inputForm.get('shippingOptions')) {
       this.createShippingOption()
     }
   }
- 
- 
+
+
   createForm() {
     this.inputForm = this.formBuilder.group({
       categoryTypes: this.formBuilder.array([this.createCategoryType()]),
@@ -193,7 +201,7 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
   get categoryTypes(): FormArray {
     return this.inputForm.get('categoryTypes') as FormArray;
   }
-  
+
   get shippingOptions(): FormArray {
     return this.inputForm.get('shippingOptions') as FormArray;
   }
@@ -216,7 +224,7 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
       rateTableId: [''],
       shippingDiscountProfileId: [''],
       shippingPromotionOffered: [false],
-    
+
       // section2
       packageHandlingCost: this.formBuilder.group({
         currency: ['USD', Validators.required],
@@ -232,7 +240,7 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
     });
   }
 
-  getShipToLocationsRegionExcluded(i: number) { 
+  getShipToLocationsRegionExcluded(i: number) {
     if (!this.inputForm) { return }
     if (!(this.inputForm.get('shipToLocations') as FormGroup)) { return}
     const shippingOption = (this.inputForm.get('shipToLocations.regionExcluded') as FormArray).at(i) as FormGroup;
@@ -246,7 +254,7 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
   }
 
   addShippingServices(k) {
-    if (!this.inputForm.get('shippingServices')) { 
+    if (!this.inputForm.get('shippingServices')) {
       this.createShippingOption()
     }
     const item = this.inputForm.get('shippingServices') as FormArray
@@ -371,7 +379,7 @@ export class EbayFulfillmentPolicyComponent implements OnInit {
 
   publish() {
     const site = this.siteService.getAssignedSite()
-      this.action$ = this.ebayService.publishPolicy(site, 'EbayReturnPolicy').pipe(switchMap(data => { 
+      this.action$ = this.ebayService.publishPolicy(site, 'EbayReturnPolicy').pipe(switchMap(data => {
         this.inventoryCheck = data;
         return of(data)
     }))

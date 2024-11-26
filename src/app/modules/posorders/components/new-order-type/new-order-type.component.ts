@@ -17,12 +17,13 @@ import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { MatToggleSelectorComponent } from 'src/app/shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'new-order-type',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-    MatToggleSelectorComponent,
+    MatToggleSelectorComponent,FormsModule,ReactiveFormsModule,
   ],
 
   templateUrl: './new-order-type.component.html',

@@ -20,13 +20,18 @@ import { PaymentBalanceComponent } from '../../posorders/payment-balance/payment
 import { PosOrderItemsComponent } from '../../posorders/pos-order/pos-order-items/pos-order-items.component';
 import { PayAPIComponent } from '../../payment-processing/pay-api/pay-api.component';
 import { ValueFieldsComponent } from '../../admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { BlogPostListComponent } from 'src/app/shared/widgets/blog-post-list/blog-post-list.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
 
 @Component({
   selector: 'app-qr-payment',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
   QRCodeModule,PaymentBalanceComponent,PosOrderItemsComponent,
-  PayAPIComponent,ValueFieldsComponent,
+  PayAPIComponent,ValueFieldsComponent,BlogPostListComponent,
+  LogoComponent,
+  NgxJsonViewerModule,
   SharedPipesModule],
   templateUrl: './qr-payment.component.html',
   styleUrls: ['./qr-payment.component.scss']

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { UUID } from 'angular2-uuid';
 import { ReportDesignerService } from '../../services/report-designer.service';
@@ -7,11 +7,14 @@ import { ItemBasic, viewBuilder_ReportJSON, viewBuilder_View_Field_Values, viewB
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatSelectorComponent } from '../../widgets/mat-selector/mat-selector.component';
+import { FieldValueSelectorComponent } from '../field-value-selector/field-value-selector.component';
 @Component({
   selector: 'pgReporting-filter-builder',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
+    MatSelectorComponent,FormsModule,ReactiveFormsModule,
+    FieldValueSelectorComponent,
   ],
   templateUrl: './filter-builder.component.html',
   styleUrls: ['./filter-builder.component.scss']

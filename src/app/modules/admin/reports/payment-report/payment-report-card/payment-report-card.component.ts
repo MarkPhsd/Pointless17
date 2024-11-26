@@ -1,8 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, TemplateRef, ViewChild } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IPaymentSalesSummary } from 'src/app/_services/reporting/sales-payments.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-payment-report-card',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './payment-report-card.component.html',
   styleUrls: ['./payment-report-card.component.scss']
 })

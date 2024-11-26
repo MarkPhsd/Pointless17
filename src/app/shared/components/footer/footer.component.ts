@@ -18,13 +18,15 @@ import { DSIEMVAndroidPayBtnComponent } from 'src/app/modules/posorders/pos-paym
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { DsiEMVCardPayBtnComponent } from 'src/app/modules/posorders/pos-payment/dsi-emvcard-pay-btn/dsi-emvcard-pay-btn.component';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-    CartButtonComponent,DSIEMVAndroidPayBtnComponent,
-  ],
+            CartButtonComponent,DSIEMVAndroidPayBtnComponent,
+            DsiEMVCardPayBtnComponent,
+          ],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })

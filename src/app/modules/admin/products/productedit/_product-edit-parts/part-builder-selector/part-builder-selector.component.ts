@@ -13,9 +13,9 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'field-value-selector',
   standalone: true,
-  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-
-  SharedPipesModule],
+  imports: [CommonModule,AppMaterialModule,
+            FormsModule,ReactiveFormsModule,
+            SharedPipesModule],
   templateUrl: './part-builder-selector.component.html',
   styleUrls: ['./part-builder-selector.component.scss']
 })

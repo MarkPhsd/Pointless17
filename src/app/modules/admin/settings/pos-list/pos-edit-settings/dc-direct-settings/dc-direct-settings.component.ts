@@ -17,11 +17,16 @@ import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
 import { DCAPResponseMessageComponent } from 'src/app/modules/dsiEMV/Dcap/dcaptransaction/dcapresponse-message/dcapresponse-message.component';
+import { NgxJsonViewerComponent, NgxJsonViewerModule } from 'ngx-json-viewer';
+import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
 @Component({
   selector: 'app-dc-direct-settings',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
   ValueFieldsComponent,DCAPResponseMessageComponent,
+  NgxJsonViewerModule,
+  FormsModule,ReactiveFormsModule,
+  FormSelectListComponent,
   SharedPipesModule],
   templateUrl: './dc-direct-settings.component.html',
   styleUrls: ['./dc-direct-settings.component.scss']

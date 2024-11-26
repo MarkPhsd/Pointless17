@@ -6,7 +6,7 @@ import { AWSBucketService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap,  } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -29,7 +29,8 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   selector: 'prompt-sub-groups',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-  AgGridModule,PromptSelectedItemsComponent
+  AgGridModule,PromptSelectedItemsComponent,
+  FormsModule,ReactiveFormsModule,
   ],
   templateUrl: './prompt-sub-groups.component.html',
   styleUrls: ['./prompt-sub-groups.component.scss']

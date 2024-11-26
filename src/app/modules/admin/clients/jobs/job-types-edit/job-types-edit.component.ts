@@ -13,12 +13,13 @@ import { JobTypesService } from 'src/app/_services/people/job-types.service';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
 
 @Component({
   selector: 'app-job-types-edit',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-
+    EditButtonsStandardComponent,
   SharedPipesModule],
   templateUrl: './job-types-edit.component.html',
   styleUrls: ['./job-types-edit.component.scss']

@@ -4,7 +4,7 @@ import { IMenuItem,   }  from 'src/app/_interfaces/menu/menu-products';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, Subject, Subscription, of } from 'rxjs';
 import { DomSanitizer, Title } from '@angular/platform-browser';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormGroupName, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { IClientTable, IPOSOrder, ISite, IUserProfile, ProductPrice } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -35,6 +35,8 @@ import { ChemicalSpinnersComponent } from './menuItemParts/chemical-spinners/che
 import { ChipsDisplayComponent } from 'src/app/shared/widgets/chips-display/chips-display.component';
 import { InventoryMenuItemComponent } from './inventory-menu-item/inventory-menu-item.component';
 import { MenuItemCardComponent } from '../menuitems/menu-item-card/menu-item-card.component';
+import { ImageGalleryComponent } from 'src/app/shared/widgets/image-gallery/image-gallery.component';
+import { QuantiySelectorComponent } from 'src/app/shared/widgets/quantiy-selector/quantiy-selector.component';
 
 // https://www.npmjs.com/package/ngx-gallery
 // Possible additional info options
@@ -52,7 +54,10 @@ import { MenuItemCardComponent } from '../menuitems/menu-item-card/menu-item-car
     ChipsDisplayComponent,
     InventoryMenuItemComponent,
     MenuItemCardComponent,
-
+    FormsModule,ReactiveFormsModule,
+    ImageGalleryComponent,
+    FormsModule,ReactiveFormsModule,
+    QuantiySelectorComponent,
   ],
   templateUrl: './menuitem.component.html',
   styleUrls: ['./menuitem.component.scss'],

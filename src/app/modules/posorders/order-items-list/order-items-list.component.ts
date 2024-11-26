@@ -17,7 +17,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   selector: 'app-order-items-list',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-    OrderItemListComponent,,FormsModule,ReactiveFormsModule
+    OrderItemListComponent,FormsModule,ReactiveFormsModule
   ],
   templateUrl: './order-items-list.component.html',
   styleUrls: ['./order-items-list.component.scss']

@@ -12,10 +12,12 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'stripe-card-pay-btn',
   standalone: true,
-  imports: [CommonModule,AppMaterialModule,SharedPipesModule,
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule
+    ,FormsModule,ReactiveFormsModule,
 
   ],
   templateUrl: './stripe-card-pay-btn.component.html',

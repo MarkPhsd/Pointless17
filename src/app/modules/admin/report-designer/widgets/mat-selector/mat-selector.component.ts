@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'pgReporting-mat-selector',
   standalone: true,
-  imports: [CommonModule,AppMaterialModule,SharedPipesModule],
+  imports: [CommonModule,AppMaterialModule,SharedPipesModule
+    ,FormsModule,ReactiveFormsModule,
+  ],
   templateUrl: './mat-selector.component.html',
   styleUrls: ['./mat-selector.component.scss']
 })

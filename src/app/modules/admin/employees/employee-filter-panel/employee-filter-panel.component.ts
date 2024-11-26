@@ -14,12 +14,13 @@ import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { MatToggleSelectorComponent } from 'src/app/shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
 
 @Component({
   selector: 'employee-filter-panel',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-  SearchDebounceInputComponent,
+  SearchDebounceInputComponent,MatToggleSelectorComponent,
   SharedPipesModule],
   templateUrl: './employee-filter-panel.component.html',
   styleUrls: ['./employee-filter-panel.component.scss']

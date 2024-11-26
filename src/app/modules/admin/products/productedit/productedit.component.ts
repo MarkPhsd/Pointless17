@@ -30,6 +30,7 @@ import { BrandTypeSelectComponent } from './_product-edit-parts/brand-type-selec
 import { PriceCategorySelectComponent } from './_product-edit-parts/price-category-select/price-category-select.component';
 import { MetaTagChipsComponent } from './_product-edit-parts/meta-tag-chips/meta-tag-chips.component';
 import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { ProductTypeSelectComponent } from './_product-edit-parts/product-type-select/product-type-select.component';
 
 // http://jsfiddle.net/0ftj7w1q/
 
@@ -46,6 +47,7 @@ import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
   PriceCategorySelectComponent,
   MetaTagChipsComponent,
   UploaderComponent,
+  ProductTypeSelectComponent,
   SharedPipesModule],
   templateUrl: './productedit.component.html',
   styleUrls: ['./productedit.component.scss'],

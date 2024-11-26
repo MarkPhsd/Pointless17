@@ -33,16 +33,22 @@ import { ProductSearchSelector2Component } from '../../products/productedit/_pro
 import { PriceCategorySelectComponent } from '../../products/productedit/_product-edit-parts/price-category-select/price-category-select.component';
 import { LabelViewSelectorComponent } from 'src/app/shared-ui/printing/label-view-selector/label-view-selector.component';
 import { MetaTagChipsComponent } from '../../products/productedit/_product-edit-parts/meta-tag-chips/meta-tag-chips.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { ProductSearchSelectorComponent } from 'src/app/shared/widgets/product-search-selector/product-search-selector.component';
+import { FacilitySearchSelectorComponent } from 'src/app/shared/widgets/facility-search-selector/facility-search-selector.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
 
 @Component({
   selector: 'app-add-inventory-item',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-    EditButtonsStandardComponent,ValueFieldsComponent,
-    ProductSearchSelector2Component, PriceCategorySelectComponent,
-    LabelViewSelectorComponent,
-    MetaTagChipsComponent,
-  SharedPipesModule],
+            EditButtonsStandardComponent,ValueFieldsComponent,
+            ProductSearchSelector2Component, PriceCategorySelectComponent,
+            LabelViewSelectorComponent,
+            MetaTagChipsComponent,NgxJsonViewerModule,
+            ProductSearchSelectorComponent,
+            FacilitySearchSelectorComponent,UploaderComponent,
+            SharedPipesModule],
   templateUrl: './add-inventory-item.component.html',
   styleUrls: ['./add-inventory-item.component.scss']
 })

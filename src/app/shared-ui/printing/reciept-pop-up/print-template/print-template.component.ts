@@ -8,9 +8,18 @@ import { OrdersService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { ReceiptLayoutComponent } from '../../receipt-layout/receipt-layout.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-print-template',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    ReceiptLayoutComponent,
+  SharedPipesModule],
   templateUrl: './print-template.component.html',
   styleUrls: ['./print-template.component.scss']
 })
@@ -321,7 +330,7 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
 
     if (content === '<!---->') { return }
 
-    // 
+    //
     const  title   = 'Receipt';
     const loadView = ({ title }) => {
       return (`

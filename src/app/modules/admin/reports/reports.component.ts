@@ -7,12 +7,13 @@ import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { ChartTableComponent } from './chart-table/chart-table.component';
+import { FilterComponent } from 'src/app/shared/widgets/filter/filter.component';
 
 @Component({
   selector: 'app-reports',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-    ChartTableComponent
+    ChartTableComponent,FilterComponent
   ],
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss'],

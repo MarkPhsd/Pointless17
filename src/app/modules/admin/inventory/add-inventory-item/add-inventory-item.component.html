@@ -275,7 +275,7 @@
           </div>
         </div>
 
-        <div *ngIf="menuItem && menuItem?.itemType && menuItem?.itemType.labelTypeID">
+        <div *ngIf="menuItem?.itemType.labelTypeID !== 0">
 
           <app-label-view-selector
               [labelID]="menuItem?.itemType?.labelTypeID"

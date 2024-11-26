@@ -18,7 +18,7 @@ import { AgGridToggleComponent } from 'src/app/_components/_aggrid/ag-grid-toggl
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { PriceScheduleMenuGroupService } from 'src/app/_services/menu/price-schedule-menu-group.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 import { PriceScheduleInfoComponent } from '../../price-schedule/price-schedule-info/price-schedule-info.component';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
@@ -28,7 +28,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   selector: 'psmenu-group-list',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-  AgGridAngular,PriceScheduleInfoComponent,
+  AgGridModule,PriceScheduleInfoComponent,
   SharedPipesModule],
   templateUrl: './psmenu-group-list.component.html',
   styleUrls: ['./psmenu-group-list.component.scss']

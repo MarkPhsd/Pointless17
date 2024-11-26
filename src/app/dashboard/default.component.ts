@@ -5,7 +5,7 @@ import { Component, HostBinding, OnInit, AfterViewInit,
          ViewChild,
          TemplateRef} from '@angular/core';
 import { FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { catchError, concatMap, delay, filter, Observable, of, repeatWhen, Subscription,switchMap, throwError } from 'rxjs';
 import { ToolBarUIService } from '../_services/system/tool-bar-ui.service';
 import { Capacitor } from '@capacitor/core';
@@ -37,15 +37,30 @@ import { UserBarComponent } from '../shared/components/user-bar/user-bar.compone
 import { MenuMinimalComponent } from '../shared/widgets/menus/menu-minimal/menu-minimal.component';
 import { MenuTinyComponent } from '../shared/widgets/menus/menu-tiny/menu-tiny.component';
 import { OrderBarComponent } from '../shared/components/order-bar/order-bar.component';
+import { SiteFooterComponent } from '../shared/components/site-footer/site-footer.component';
+import { HeaderComponent } from '../shared/components/header/header.component';
+import { FooterComponent } from '../shared/components/footer/footer.component';
+
 // import { MBMenuButtonsService } from '../_services/system/mb-menu-buttons.service';
 @Component({
   selector: 'app-default',
   standalone: true,
-  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-    DepartmentMenuComponent,ThreeCXFabComponent, MenuSearchBarComponent,
-    UserBarComponent,MenuMinimalComponent, MenuTinyComponent,
-    OrderBarComponent,
-  SharedPipesModule],
+  imports: [CommonModule,
+            RouterModule,
+            AppMaterialModule,
+            FormsModule,
+            ReactiveFormsModule,
+            DepartmentMenuComponent,
+            ThreeCXFabComponent,
+            MenuSearchBarComponent,
+            UserBarComponent,
+            MenuMinimalComponent,
+            MenuTinyComponent,
+            OrderBarComponent,
+            SiteFooterComponent,
+            HeaderComponent,
+            FooterComponent,
+            SharedPipesModule],
   templateUrl: './default.component.html',
   styleUrls: ['./default.component.scss'],
   // animations: [ fader ],

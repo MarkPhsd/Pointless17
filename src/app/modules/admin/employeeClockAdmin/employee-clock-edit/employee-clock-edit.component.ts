@@ -10,12 +10,14 @@ import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-button
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { ClockInOutComponent } from 'src/app/shared/widgets/clock-in-out/clock-in-out.component';
 
 @Component({
   selector: 'app-employee-clock-edit',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
-  EditButtonsStandardComponent,
+  EditButtonsStandardComponent,ValueFieldsComponent,ClockInOutComponent,
   SharedPipesModule],
   templateUrl: './employee-clock-edit.component.html',
   styleUrls: ['./employee-clock-edit.component.scss'],

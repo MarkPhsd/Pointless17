@@ -35,6 +35,8 @@ import { ProductChartReportComponent } from '../product-chart-report/product-cha
 import { EmployeeClockListComponent } from '../../employeeClockAdmin/employee-clock-list/employee-clock-list.component';
 import { AuditPaymentComponent } from '../item-sales-card/audit-payment/audit-payment.component';
 import { BalanceSheetReportComponent } from '../balance-sheet-report/balance-sheet-report.component';
+import { MatDateRangeComponent } from 'src/app/shared/widgets/mat-date-range/mat-date-range.component';
+import { AverageHourlySalesLaborChartComponent } from '../average-hourly-sales-labor-chart/average-hourly-sales-labor-chart.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -51,6 +53,8 @@ import { BalanceSheetReportComponent } from '../balance-sheet-report/balance-she
   EmployeeClockListComponent,
   AuditPaymentComponent,
   BalanceSheetReportComponent,
+  MatDateRangeComponent,
+  AverageHourlySalesLaborChartComponent,
   SharedPipesModule],
 
 

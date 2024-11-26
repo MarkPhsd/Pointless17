@@ -33,7 +33,7 @@
               [style]="infiniteStyle"
               *ngIf="cardStyle === 'block' && orders" >
           <ng-container *ngFor="let order of orders; let i = index">
-            <div *ngIf="order.id && order.id != 0"  >
+            <div *ngIf="order.id && order.id !== 0"  >
               <app-order-card
                 (click)="setActiveOrderObs(order)"
                 [androidApp]="platformService.androidApp"

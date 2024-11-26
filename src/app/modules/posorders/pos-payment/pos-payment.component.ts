@@ -39,6 +39,29 @@ import { KeyPadComponent } from 'src/app/shared/widgets/key-pad/key-pad.componen
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { GiftCardPayBtnComponent } from './gift-card-pay-btn/gift-card-pay-btn.component';
+import { TipEntryComponent } from '../components/tip-entry/tip-entry.component';
+import { PayAPIComponent } from '../../payment-processing/pay-api/pay-api.component';
+import { ValueFieldsComponent } from '../../admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { StoreCreditInfoComponent } from '../pos-order/store-credit-info/store-credit-info.component';
+import { PaypalCardPayBtnComponent } from './paypal-card-pay-btn/paypal-card-pay-btn.component';
+import { DsiEMVCardPayBtnComponent } from './dsi-emvcard-pay-btn/dsi-emvcard-pay-btn.component';
+import { WicEBTCardPayBtnComponent } from './wic-ebtcard-pay-btn/wic-ebtcard-pay-btn.component';
+import { ReceiptViewComponent } from 'src/app/shared-ui/printing/reciept-pop-up/receipt-view/receipt-view.component';
+import { CoachMarksButtonComponent } from 'src/app/shared/widgets/coach-marks-button/coach-marks-button.component';
+import { OrderHeaderDemoGraphicsComponent } from '../pos-order/order-header-demo-graphics/order-header-demo-graphics.component';
+import { PaymentTypesSelectionComponent } from '../payment-types-selection/payment-types-selection.component';
+import { StripeCheckOutComponent } from '../../payment-processing/stripe-check-out/stripe-check-out.component';
+import { TriposSettingsComponent } from '../../payment-processing/tri-pos-transactions/tripos-settings/tripos-settings.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { TriPOSCardPayBtnComponent } from './tri-poscard-pay-btn/tri-poscard-pay-btn.component';
+import { PosSplitGroupsComponent } from './possplit-items/pos-split-groups/pos-split-groups.component';
+import { POSSplitItemsComponent } from './possplit-items/possplit-items.component';
+import { StripeCardPayBtnComponent } from './stripe-card-pay-btn/stripe-card-pay-btn.component';
+import { CashPaymentButtonComponent } from './cash-payment-button/cash-payment-button.component';
+import { DSIEMVAndroidPayBtnComponent } from './dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
+import { CardPointeCardPayBtnComponent } from './card-pointe-card-pay-btn/card-pointe-card-pay-btn.component';
+import { PosSplitOrdersComponent } from './possplit-items/pos-split-orders/pos-split-orders.component';
 
 @Component({
   selector: 'app-pos-payment',
@@ -47,7 +70,28 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   PaymentBalanceComponent,
   POSOrderScheduleCardComponent,
   POSOrderScheduleComponent,
+  GiftCardPayBtnComponent,
   KeyPadComponent,
+  TipEntryComponent,
+  ValueFieldsComponent,
+  PayAPIComponent,
+  PaypalCardPayBtnComponent,
+  StoreCreditInfoComponent,
+  DsiEMVCardPayBtnComponent,
+  WicEBTCardPayBtnComponent,
+  ReceiptViewComponent,
+  StripeCheckOutComponent,
+  TriPOSCardPayBtnComponent,
+  PosSplitGroupsComponent,
+  POSSplitItemsComponent,
+  StripeCardPayBtnComponent,
+  NgxJsonViewerModule,
+  CoachMarksButtonComponent,OrderHeaderDemoGraphicsComponent,
+  PaymentTypesSelectionComponent,
+  CashPaymentButtonComponent,
+  CardPointeCardPayBtnComponent,
+    DSIEMVAndroidPayBtnComponent,
+    PosSplitOrdersComponent,
   SharedPipesModule],
   templateUrl: './pos-payment.component.html',
   styleUrls: ['./pos-payment.component.scss']

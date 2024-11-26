@@ -1,15 +1,22 @@
 import { Component,  Inject,  Input, Output, OnInit, Optional, ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, FormArray, UntypedFormControl} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormArray, UntypedFormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ISite } from 'src/app/_interfaces/site';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Subject, fromEvent } from 'rxjs';
 import { ContactsService, IItemBasic } from 'src/app/_services';
 import { IUserProfile } from 'src/app/_interfaces';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
   selector: 'app-client-search-selector',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   templateUrl: './client-search-selector.component.html',
   styleUrls: ['./client-search-selector.component.scss']
 })

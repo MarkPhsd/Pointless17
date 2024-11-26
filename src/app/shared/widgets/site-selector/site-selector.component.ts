@@ -8,13 +8,14 @@ import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { SiteCardComponent } from '../site-card/site-card.component';
 
 @Component({
   selector: 'app-site-selector',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
-  ],
+              SiteCardComponent,
+            ],
   templateUrl: './site-selector.component.html',
   styleUrls: ['./site-selector.component.scss']
 })

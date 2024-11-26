@@ -36,6 +36,7 @@ import { ProductInfoPanelComponent } from '../product-info-panel/product-info-pa
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { SortSelectorsComponent } from 'src/app/shared/widgets/sort-selectors/sort-selectors.component';
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
     return 0;
@@ -86,6 +87,7 @@ function sortData(data, sortModel) {
   BrandTypeSelectComponent,
   ValueFieldsComponent,AgGridModule,
   ProductInfoPanelComponent,
+  SortSelectorsComponent,
   SharedPipesModule],
   templateUrl: './productlistview.component.html',
   styleUrls: ['./productlistview.component.scss'],

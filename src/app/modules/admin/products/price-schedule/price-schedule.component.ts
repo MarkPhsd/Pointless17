@@ -20,20 +20,27 @@ import { PriceScheduleInfoComponent } from './price-schedule-info/price-schedule
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PriceScheduleMenuOptionsComponent } from './price-schedule-menu-options/price-schedule-menu-options.component';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
+import { DiscountOptionsComponent } from './discounts/discount-options/discount-options.component';
 
 // https://angular.io/guide/component-interaction#!#bidirectional-service
 
 @Component({
   selector: 'app-price-schedule',
   standalone: true,
-  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+  imports: [CommonModule,AppMaterialModule,
+  FormsModule,ReactiveFormsModule,
   PriceScheduleConstraintsComponent,
   RewardTypeFilterComponent,
   TypeFilterComponent,
   ValueFieldsComponent,
+  PriceScheduleMenuOptionsComponent,
   PriceScheduleInfoComponent,
+  UploaderComponent,
+  PriceScheduleComponent,
+  DiscountOptionsComponent,
   SharedPipesModule],
-
   templateUrl: './price-schedule.component.html',
   styleUrls: ['./price-schedule.component.scss']
 })

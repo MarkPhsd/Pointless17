@@ -14,11 +14,13 @@ import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { RequestMessageComponent } from 'src/app/modules/admin/profiles/request-messages/request-message/request-message.component';
 import { MenuTinyComponent } from '../../widgets/menus/menu-tiny/menu-tiny.component';
+import { RequestMessagesComponent } from 'src/app/modules/admin/profiles/request-messages/request-messages.component';
+import { LogoComponent } from '../../widgets/logo/logo.component';
 @Component({
   selector: 'user-bar',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SiteFooterComponent,
-    MenuTinyComponent,
+    MenuTinyComponent,RequestMessagesComponent,LogoComponent,
     ToggleThemeComponent,RequestMessageComponent],
   templateUrl: './user-bar.component.html',
   styleUrls: ['./user-bar.component.scss']

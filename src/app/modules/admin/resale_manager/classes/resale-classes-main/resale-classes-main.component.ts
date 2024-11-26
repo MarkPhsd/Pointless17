@@ -21,6 +21,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { AgGridModule } from 'ag-grid-angular';
 import { BrandClassEditorComponent } from '../../brands/brand-class-editor/brand-class-editor.component';
 import { ResaleClassesEditorComponent } from '../resale-classes-editor/resale-classes-editor.component';
+import { BrandFilterComponent } from '../../brands/filter/filter.component';
 
 function myComparator(value1, value2) {
   if (value1 === null && value2 === null) {
@@ -40,6 +41,7 @@ function myComparator(value1, value2) {
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
     AgGridModule,BrandClassEditorComponent, ResaleClassesEditorComponent,
+    BrandFilterComponent,
   SharedPipesModule],
   templateUrl: './resale-classes-main.component.html',
   styleUrls: ['./resale-classes-main.component.scss']

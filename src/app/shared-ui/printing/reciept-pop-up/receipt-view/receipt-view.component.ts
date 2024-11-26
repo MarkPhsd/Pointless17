@@ -15,8 +15,22 @@ import { EmployeeClockMethodsService } from 'src/app/_services/employeeClock/emp
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { HttpClient } from '@angular/common/http';
 import { IAppConfig } from 'src/app/_services/system/app-init.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { BalanceSheetViewComponent } from '../../balance-sheet-view/balance-sheet-view.component';
+import { ReceiptLayoutComponent } from '../../receipt-layout/receipt-layout.component';
+import { ClockViewComponent } from 'src/app/shared/widgets/clock-in-out/clock-view/clock-view.component';
+import { QRCodeModule } from 'angularx-qrcode';
 @Component({
   selector: 'app-receipt-view',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    BalanceSheetViewComponent,
+    ReceiptLayoutComponent,
+    ClockViewComponent,QRCodeModule,
+  SharedPipesModule],
   templateUrl: './receipt-view.component.html',
   styleUrls: ['./receipt-view.component.scss']
 })

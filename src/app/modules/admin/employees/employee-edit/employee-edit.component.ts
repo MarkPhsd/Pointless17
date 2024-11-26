@@ -25,12 +25,14 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
 import { ProfileEditorComponent } from '../../profiles/profile-editor/profile-editor.component';
 import { CoachMarksButtonComponent } from 'src/app/shared/widgets/coach-marks-button/coach-marks-button.component';
+import { ProfileRolesComponent } from '../../profiles/profile-roles/profile-roles.component';
 @Component({
   selector: 'employee-edit',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-EditButtonsStandardComponent,ProfileEditorComponent,CoachMarksButtonComponent,
-  SharedPipesModule],
+            EditButtonsStandardComponent,ProfileEditorComponent,CoachMarksButtonComponent,
+            ProfileRolesComponent,
+            SharedPipesModule],
   templateUrl: './employee-edit.component.html',
   styleUrls: ['./employee-edit.component.scss']
 })

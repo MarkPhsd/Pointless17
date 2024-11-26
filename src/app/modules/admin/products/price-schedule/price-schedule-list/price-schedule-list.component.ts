@@ -24,12 +24,14 @@ import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { AgGridModule } from 'ag-grid-angular';
 import { PriceScheduleSortComponent } from '../price-schedule-sort/price-schedule-sort.component';
+import { PriceScheduleInfoComponent } from '../price-schedule-info/price-schedule-info.component';
 
 @Component({
   selector: 'app-price-schedule-list',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
     AgGridModule,PriceScheduleSortComponent,
+    PriceScheduleInfoComponent,
   SharedPipesModule],
   templateUrl: './price-schedule-list.component.html',
   styleUrls: ['./price-schedule-list.component.scss']

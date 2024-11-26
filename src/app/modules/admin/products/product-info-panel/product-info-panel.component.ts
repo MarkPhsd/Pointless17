@@ -23,6 +23,7 @@ import { ValueFieldsComponent } from '../productedit/_product-edit-parts/value-f
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { PriceCategorySelectComponent } from '../productedit/_product-edit-parts/price-category-select/price-category-select.component';
 
 @Component({
   selector: 'app-product-info-panel',
@@ -35,6 +36,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   UploaderComponent,
   CannabisItemEditComponent,
   ValueFieldsComponent,
+  PriceCategorySelectComponent,
   SharedPipesModule],
   templateUrl: './product-info-panel.component.html',
   styleUrls: ['./product-info-panel.component.scss'],

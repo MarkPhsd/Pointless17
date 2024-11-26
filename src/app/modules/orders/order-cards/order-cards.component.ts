@@ -13,7 +13,7 @@ import { IUserAuth_Properties } from 'src/app/_services/people/client-type.servi
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+import { InfiniteScrollDirective, InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { PosOrderItemsComponent } from '../../posorders/pos-order/pos-order-items/pos-order-items.component';
@@ -32,6 +32,7 @@ import { OrderCardComponent } from '../order-card/order-card.component';
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
     OrderPrepComponent,OrderPanelComponent,OrderCardComponent,
+    InfiniteScrollModule,
   SharedPipesModule],
   templateUrl: './order-cards.component.html',
   styleUrls: ['./order-cards.component.scss']

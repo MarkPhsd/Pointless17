@@ -1,6 +1,8 @@
 
+import { CommonModule } from '@angular/common';
 import { TemplateLiteral } from '@angular/compiler';
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subscription, switchMap,of } from 'rxjs';
 import { IPaymentSearchModel, IPOSOrder, IPOSPaymentsOptimzed, ISetting } from 'src/app/_interfaces';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
@@ -11,9 +13,24 @@ import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { BalanceSheetService, CashDrop, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { ItemSalesCardComponent } from 'src/app/modules/admin/reports/item-sales-card/item-sales-card.component';
+import { PaymentReportCardComponent } from 'src/app/modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
+import { PaymentReportComponent } from 'src/app/modules/admin/reports/payment-report/payment-report.component';
+import { BalanceSheetCalculationsViewComponent } from 'src/app/modules/transactions/balanceSheets/balance-sheet-calculations-view/balance-sheet-calculations-view.component';
+import { BalanceSheetHeaderViewComponent } from 'src/app/modules/transactions/balanceSheets/balance-sheet-header-view/balance-sheet-header-view.component';
+import { CreditCardPaymentsPrintListComponent } from 'src/app/modules/transactions/balanceSheets/credit-card-payments-print-list/credit-card-payments-print-list.component';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 //printType balanceSheetValues balanceSheetFinal cashDrop
 @Component({
   selector: 'balance-sheet-view',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    BalanceSheetHeaderViewComponent,
+    BalanceSheetCalculationsViewComponent,PaymentReportComponent,
+    ItemSalesCardComponent,CreditCardPaymentsPrintListComponent,
+
+  SharedPipesModule],
   templateUrl: './balance-sheet-view.component.html',
   styleUrls: ['./balance-sheet-view.component.scss']
 })

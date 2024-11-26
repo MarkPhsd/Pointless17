@@ -13,16 +13,21 @@ import { Observable } from 'rxjs';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { InputTrackerService } from 'src/app/_services/system/input-tracker.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { PromptSubGroupPanelComponent } from './prompt-sub-group-panel/prompt-sub-group-panel.component';
+import { Keyboard } from 'swiper';
+import { KeyboardComponent } from 'src/app/shared/widgets/keyboard/keyboard.component';
+import { PromptItemsSelectedComponent } from './prompt-items-selected/prompt-items-selected.component';
 @Component({
   selector: 'app-prompt-walk-through',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-    PromptSubGroupPanelComponent
+    PromptSubGroupPanelComponent,
+    PromptItemsSelectedComponent,
+    KeyboardComponent,FormsModule,ReactiveFormsModule,
   ],
   templateUrl: './prompt-walk-through.component.html',
   styleUrls: ['./prompt-walk-through.component.scss'],

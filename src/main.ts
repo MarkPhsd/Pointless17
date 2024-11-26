@@ -14,8 +14,8 @@ import { SystemManagerService } from './app/_services/system/system-manager.serv
 import { AppMaterialModule } from './app/app-material.module';
 import { CoreModule } from './app/core.module';
 import { SharedPipesModule } from './app/shared-pipes/shared-pipes.module';
-import { AppRoutingModule } from './app/app-routing.module';
 import { AppComponent } from './app/app.component';
+import { AppRoutingModule } from './app/app-routing.module';
 
 // Enable production mode
 enableProdMode();

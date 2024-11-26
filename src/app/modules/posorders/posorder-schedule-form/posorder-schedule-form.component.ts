@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit,Output,Input,  } from '@angular/core';
-import { FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { DayTimeRangeValidator, IPOSOrder, IServiceType, ScheduleValidator, ServiceTypeFeatures } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -14,7 +14,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   selector: 'app-posorder-schedule-form',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
+    FormsModule,ReactiveFormsModule,
   ],
   templateUrl: './posorder-schedule-form.component.html',
   styleUrls: ['./posorder-schedule-form.component.scss']

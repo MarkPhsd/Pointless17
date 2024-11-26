@@ -21,8 +21,7 @@ import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
   selector: 'app-payment-method-edit',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-    EditButtonsStandardComponent,ValueFieldsComponent,UploaderComponent
-
+    EditButtonsStandardComponent,ValueFieldsComponent,UploaderComponent,
   SharedPipesModule],
   templateUrl: './payment-method-edit.component.html',
   styleUrls: ['./payment-method-edit.component.scss']

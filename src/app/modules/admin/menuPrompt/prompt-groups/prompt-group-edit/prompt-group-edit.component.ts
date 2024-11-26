@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { NgxJsonViewerComponent, NgxJsonViewerModule } from 'ngx-json-viewer';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -16,9 +17,9 @@ import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-button
   selector: 'app-prompt-group-edit',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-    EditButtonsStandardComponent,UploaderComponent
+    ReactiveFormsModule,FormsModule,
+    EditButtonsStandardComponent,UploaderComponent,    NgxJsonViewerModule,
   ],
-
   templateUrl: './prompt-group-edit.component.html',
   styleUrls: ['./prompt-group-edit.component.scss']
 })

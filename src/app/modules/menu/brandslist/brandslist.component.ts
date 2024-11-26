@@ -10,11 +10,15 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Capacitor, Plugins } from '@capacitor/core';
 // import { ElectronService } from 'ngx-electron';
 import { IPagedList } from 'src/app/_services/system/paging.service';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 // https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6
 // horizontal scroll
@@ -23,6 +27,10 @@ const { Keyboard } = Plugins;
 
 @Component({
   selector: 'app-brandslist',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    InfiniteScrollModule,
+   SharedPipesModule],
   templateUrl: './brandslist.component.html',
   styleUrls: ['./brandslist.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush

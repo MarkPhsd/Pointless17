@@ -1,5 +1,5 @@
 import { Component, OnInit,Input } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Observable, of, switchMap } from 'rxjs';
 import { ClientType, IClientTable } from 'src/app/_interfaces';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
@@ -14,7 +14,8 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   selector: 'profile-med-info',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-    ValueFieldsComponent,UploaderComponent
+    ValueFieldsComponent,UploaderComponent,
+    FormsModule,ReactiveFormsModule,
   ],
   templateUrl: './profile-med-info.component.html',
   styleUrls: ['./profile-med-info.component.scss']

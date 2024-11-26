@@ -16,6 +16,8 @@ import { ItemPostResults, NewItem, POSOrderItemService } from 'src/app/_services
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { ProductSelectorComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/product-selector/product-selector.component';
 import { UnitTypeFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/unit-type-fields/unit-type-fields.component';
+import { UnitTypeSelectComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/unit-type-select/unit-type-select.component';
+import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 @Component({
@@ -23,7 +25,8 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
   ProductSelectorComponent,UnitTypeFieldsComponent,
-
+    UnitTypeSelectComponent,
+    ValueFieldsComponent,
   SharedPipesModule],
   templateUrl: './new-order-item.component.html',
   styleUrls: ['./new-order-item.component.scss']

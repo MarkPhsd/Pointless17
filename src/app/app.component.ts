@@ -4,8 +4,8 @@ import { Component, QueryList,  ViewChildren,ChangeDetectorRef, ElementRef,
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthenticationService } from './_services';
 import { IUser }  from 'src/app/_interfaces';
-import { UntypedFormControl } from '@angular/forms';
-import { Platform, IonRouterOutlet } from '@ionic/angular';
+import { FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { Platform, IonRouterOutlet, IonicModule } from '@ionic/angular';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Observable, Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
@@ -16,11 +16,22 @@ import { UISettingsService } from './_services/system/settings/uisettings.servic
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { PlatformService } from './_services/system/platform.service';
 import { SitesService } from './_services/reporting/sites.service';
+import { CommonModule } from '@angular/common';
+import { AppMaterialModule } from './app-material.module';
+import { SharedPipesModule } from './shared-pipes/shared-pipes.module';
+import { KeyboardComponent } from './shared/widgets/keyboard/keyboard.component';
+import { KeyboardViewComponent } from './shared/widgets/keyboard-view/keyboard-view.component';
+import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
 
 
 // LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+            IonicModule,KeyboardComponent,KeyboardViewComponent,
+            SplashLoadingComponent,
+            SharedPipesModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   // animations: [ fadeInAnimation ],

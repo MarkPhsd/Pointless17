@@ -12,12 +12,13 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MenuItemCardComponent } from '../../menu/menuitems/menu-item-card/menu-item-card.component';
 
 @Component({
   selector: 'price-schedule-menu-items',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
-
+    MenuItemCardComponent,
   ],
   templateUrl: './price-schedule-menu-items.component.html',
   styleUrls: ['./price-schedule-menu-items.component.scss']

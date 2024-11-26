@@ -40,6 +40,9 @@ import { BrandTypeSelectComponent } from '../_product-edit-parts/brand-type-sele
 import { ProductTypeSelectComponent } from '../_product-edit-parts/product-type-select/product-type-select.component';
 import { RetailProductEditComponent } from '../retail-product-edit/retail-product-edit.component';
 import { CannabisItemEditComponent } from '../cannabis-item-edit/cannabis-item-edit.component';
+import { ItemassociationsComponent } from '../_product-edit-parts/itemassociations/itemassociations.component';
+import { UnitTypeSelectorComponent } from 'src/app/shared/widgets/unit-type-selector/unit-type-selector.component';
+import { PartBuilderSelectorComponent } from '../_product-edit-parts/part-builder-selector/part-builder-selector.component';
 @Component({
   selector: 'app-strain-product-edit',
   standalone: true,
@@ -48,8 +51,8 @@ import { CannabisItemEditComponent } from '../cannabis-item-edit/cannabis-item-e
     PriceCategorySelectComponent,
     PromptGroupSelectComponent,
     ValueFieldsComponent,
+    PartBuilderSelectorComponent,
     MatSelectComponent,
-    FieldValueSelectorComponent,
     UnitTypeSelectComponent,
     MetaTagChipsComponent,
     TagChipsProductsComponent,
@@ -59,8 +62,10 @@ import { CannabisItemEditComponent } from '../cannabis-item-edit/cannabis-item-e
     ProductTypeSelectComponent,
     RetailProductEditComponent,
     CannabisItemEditComponent,
-
-  SharedPipesModule],
+    ItemassociationsComponent,
+    UnitTypeSelectComponent,
+    UnitTypeSelectorComponent,
+    SharedPipesModule],
   templateUrl: './strain-product-edit.component.html',
   styleUrls: ['./strain-product-edit.component.scss']
 })

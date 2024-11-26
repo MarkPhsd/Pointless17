@@ -25,6 +25,9 @@ import { ActivityTogglesMetrcComponent } from '../metrc-inventory-properties/act
 import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
 import { MetrcInventoryPropertiesComponent } from '../metrc-inventory-properties/metrc-inventory-properties.component';
 import { MetrcIndividualPackageComponent } from '../metrc-individual-package/metrc-individual-package.component';
+import { MetrcRequirementsComponent } from '../metrc-requirements/metrc-requirements.component';
+import { MatDateRangeComponent } from 'src/app/shared/widgets/mat-date-range/mat-date-range.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @Component({
   selector: 'app-products-add',
@@ -32,8 +35,9 @@ import { MetrcIndividualPackageComponent } from '../metrc-individual-package/met
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
     MetrcIntakeHeaderComponent,ActivityTogglesMetrcComponent,
     EditButtonsStandardComponent,MetrcInventoryPropertiesComponent,
-    MetrcIndividualPackageComponent,
-
+    MetrcIndividualPackageComponent, MetrcRequirementsComponent,
+    MatDateRangeComponent,
+    NgxJsonViewerModule,
   SharedPipesModule],
   templateUrl: './products-add.component.html',
   styleUrls: ['./products-add.component.scss']

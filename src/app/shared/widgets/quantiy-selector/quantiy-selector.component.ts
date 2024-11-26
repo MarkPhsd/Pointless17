@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { ValueFieldsComponent } from 'src/app/modules/admin/products/productedit/_product-edit-parts/value-fields/value-fields.component';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
@@ -10,6 +10,7 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
   standalone: true,
   imports: [CommonModule,AppMaterialModule,SharedPipesModule,
     ValueFieldsComponent,
+    FormsModule,ReactiveFormsModule,
   ],
   templateUrl: './quantiy-selector.component.html',
   styleUrls: ['./quantiy-selector.component.scss']

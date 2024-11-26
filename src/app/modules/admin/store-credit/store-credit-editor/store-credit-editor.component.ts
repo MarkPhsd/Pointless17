@@ -18,12 +18,14 @@ import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-buttons-standard/edit-buttons-standard.component';
 import { ValueFieldsComponent } from '../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { ClientSearchSelectorComponent } from 'src/app/shared/widgets/client-search-selector/client-search-selector.component';
 
 @Component({
   selector: 'app-store-credit-editor',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
     EditButtonsStandardComponent,ValueFieldsComponent,
+    ClientSearchSelectorComponent,
   SharedPipesModule],
   templateUrl: './store-credit-editor.component.html',
   styleUrls: ['./store-credit-editor.component.scss']

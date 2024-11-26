@@ -30,6 +30,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 // import  * from '@capacitor/capacitor-android-foreground-service';
 // import '@anuradev/capacitor-background-mode';
@@ -48,7 +49,7 @@ import { LogoComponent } from 'src/app/shared/widgets/logo/logo.component';
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
     DCAPResponseMessageComponent,PaymentBalanceComponent,TipEntryComponent,
-    LogoComponent,
+    LogoComponent,NgxJsonViewerModule,
   SharedPipesModule],
   templateUrl: './dsi-emvandroid.component.html',
   styleUrls: ['./dsi-emvandroid.component.scss']

@@ -8,12 +8,13 @@ import { EditButtonsStandardComponent } from 'src/app/shared/widgets/edit-button
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
 
 @Component({
   selector: 'app-psmenu-group-edit',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-  EditButtonsStandardComponent,
+  EditButtonsStandardComponent,UploaderComponent,
   SharedPipesModule],
   templateUrl: './psmenu-group-edit.component.html',
   styleUrls: ['./psmenu-group-edit.component.scss']

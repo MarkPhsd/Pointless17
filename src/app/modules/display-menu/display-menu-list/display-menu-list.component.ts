@@ -14,12 +14,13 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { DisplayMenuTitleComponent } from '../display-menu-title/display-menu-title.component';
+import { MenuSectionComponent } from './menu-section/menu-section.component';
 
 @Component({
   selector: 'display-menu-list',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-    DisplayMenuTitleComponent,
+    DisplayMenuTitleComponent,MenuSectionComponent,
   SharedPipesModule],
   templateUrl: './display-menu-list.component.html',
   styleUrls: ['./display-menu-list.component.scss']

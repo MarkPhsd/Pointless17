@@ -1,5 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component,  Input } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 
 //https://stackoverflow.com/questions/50778659/ag-grid-cellrender-with-button-click
 //https://stackblitz.com/edit/angular-ag-grid-button-renderer?file=src%2Fapp%2Fapp.component.ts
@@ -7,6 +11,10 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
   selector: 'btn-cell-renderer',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+
+  SharedPipesModule],
   template: `
     <button
             class="mat-raised-button"

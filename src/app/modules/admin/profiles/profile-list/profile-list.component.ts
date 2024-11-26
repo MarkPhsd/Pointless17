@@ -21,12 +21,13 @@ import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 import { AgGridModule } from 'ag-grid-angular';
 import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
+import { KeyboardComponent } from 'src/app/shared/widgets/keyboard/keyboard.component';
 
 @Component({
   selector: 'app-profile-list',
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-    AgGridModule,KeyboardEvent,SearchDebounceInputComponent,
+    AgGridModule,KeyboardComponent, SearchDebounceInputComponent,
   SharedPipesModule],
   templateUrl: './profile-list.component.html',
   styleUrls: ['./profile-list.component.scss']

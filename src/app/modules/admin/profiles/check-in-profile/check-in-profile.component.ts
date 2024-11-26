@@ -35,6 +35,8 @@ import { CoachMarksButtonComponent } from 'src/app/shared/widgets/coach-marks-bu
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ProfileBillingAddressComponent } from '../parts/profile-billing-address/profile-billing-address.component';
+import { MatDateRangeComponent } from 'src/app/shared/widgets/mat-date-range/mat-date-range.component';
 
 @Component({
   selector: 'app-check-in-profile',
@@ -50,6 +52,8 @@ import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
      ProfileRolesComponent,
      EmployeeLookupComponent,
      CoachMarksButtonComponent,
+     ProfileBillingAddressComponent,
+     MatDateRangeComponent,
       SharedPipesModule],
   templateUrl: './check-in-profile.component.html',
   styleUrls: ['./check-in-profile.component.scss'],

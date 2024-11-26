@@ -4,8 +4,18 @@ import { Observable, Subject, of, switchMap } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { IPaymentSalesSearchModel, IPaymentSalesSummary, PaymentSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { IReportingSearchModel,  ITaxReport, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
+import { PaymentReportDataComponent } from './payment-report-data/payment-report-data.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/app-material.module';
+import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
 @Component({
   selector: 'payment-report',
+  standalone: true,
+  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
+    PaymentReportDataComponent,
+
+  SharedPipesModule],
   templateUrl: './payment-report.component.html',
   styleUrls: ['./payment-report.component.scss']
 })
@@ -145,13 +155,13 @@ export class PaymentReportComponent implements OnInit, OnChanges {
   }
 
   getSalesReport(employeeID: number) {
-        
+
     let item = {startDate: this.dateFrom, endDate: this.dateTo, zrunID: this.zrunID,
           } as IReportingSearchModel;
 
     if (employeeID != 0) {   item.employeeID = employeeID   }
 
-    this.salesReport = item      
+    this.salesReport = item
 
   }
 

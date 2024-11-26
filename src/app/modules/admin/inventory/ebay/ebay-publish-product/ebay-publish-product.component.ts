@@ -15,13 +15,17 @@ import { EbayAspectsComponent } from './ebay-aspects/ebay-aspects.component';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { ValueFieldsComponent } from '../../../products/productedit/_product-edit-parts/value-fields/value-fields.component';
+import { ImageGalleryComponent } from 'src/app/shared/widgets/image-gallery/image-gallery.component';
+import { NgxJsonViewerComponent, NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @Component({
   selector: 'ebay-publish-product',
 
   standalone: true,
   imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,
-  EbayAspectsComponent,
+  EbayAspectsComponent,ValueFieldsComponent,ImageGalleryComponent,
+  NgxJsonViewerModule,
   SharedPipesModule],
   templateUrl: './ebay-publish-product.component.html',
   styleUrls: ['./ebay-publish-product.component.scss']

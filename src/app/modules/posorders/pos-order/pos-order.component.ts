@@ -69,6 +69,10 @@ import { CoachMarksButtonComponent } from 'src/app/shared/widgets/coach-marks-bu
 import { SearchDebounceInputComponent } from 'src/app/shared/widgets/search-debounce-input/search-debounce-input.component';
 import { FormSelectListComponent } from 'src/app/shared/widgets/formSelectList/form-select-list.component';
 import { PosOrderPriceScheduleInfoComponent } from '../pos-order-price-schedule-info/pos-order-price-schedule-info.component';
+import { RewardsAvailibleComponent } from '../rewards-availible/rewards-availible.component';
+import { MatDateRangeComponent } from 'src/app/shared/widgets/mat-date-range/mat-date-range.component';
+import { LastImageDisplayComponent } from 'src/app/shared/widgets/last-image-display/last-image-display.component';
+import { DSIEMVAndroidPayBtnComponent } from '../pos-payment/dsiemvandroid-pay-btn/dsiemvandroid-pay-btn.component';
 
 @Component({
 selector: 'app-pos-order',
@@ -101,6 +105,10 @@ KeyPadComponent,
 SearchDebounceInputComponent,
 FormSelectListComponent,
 PosOrderPriceScheduleInfoComponent,
+RewardsAvailibleComponent,
+MatDateRangeComponent,
+LastImageDisplayComponent,
+DSIEMVAndroidPayBtnComponent,
 SharedPipesModule],
 templateUrl: './pos-order.component.html',
 styleUrls: ['./pos-order.component.scss'],

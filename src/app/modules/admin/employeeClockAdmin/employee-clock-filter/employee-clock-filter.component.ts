@@ -10,13 +10,15 @@ import { DateHelperService } from 'src/app/_services/reporting/date-helper.servi
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppMaterialModule } from 'src/app/app-material.module';
 import { SharedPipesModule } from 'src/app/shared-pipes/shared-pipes.module';
+import { MatToggleSelectorComponent } from 'src/app/shared/widgets/mat-toggle-selector/mat-toggle-selector.component';
 
 @Component({
   selector: 'employee-clock-filter',
   standalone: true,
-  imports: [CommonModule,AppMaterialModule,FormsModule,ReactiveFormsModule,FormsModule,ReactiveFormsModule,
-
-  SharedPipesModule],
+  imports: [CommonModule,AppMaterialModule,
+            FormsModule,ReactiveFormsModule,
+            MatToggleSelectorComponent,
+            SharedPipesModule],
   templateUrl: './employee-clock-filter.component.html',
   styleUrls: ['./employee-clock-filter.component.scss']
 })
